@@ -1,0 +1,23 @@
+{
+  "runtimeTarget": {
+    "name": "netcoreapp6.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    "netcoreapp6.0": {
+      "Crystalshire.Wrapper/1.0.0": {
+        "runtime": {
+          "Crystalshire.Wrapper.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "Crystalshire.Wrapper/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}
