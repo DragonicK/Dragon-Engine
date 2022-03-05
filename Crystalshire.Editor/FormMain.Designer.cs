@@ -30,6 +30,7 @@
             this.MenuAchievements = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuAchievement = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuAchievementAttribute = new System.Windows.Forms.ToolStripMenuItem();
+            this.MenuConversation = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuEffects = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuEffect = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuEffectAttribute = new System.Windows.Forms.ToolStripMenuItem();
@@ -54,6 +55,7 @@
             this.MenuPassive = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuPassiveAttribute = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuPassiveUpgrade = new System.Windows.Forms.ToolStripMenuItem();
+            this.MenuQuest = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuRecipe = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuTitles = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuTitle = new System.Windows.Forms.ToolStripMenuItem();
@@ -71,7 +73,6 @@
             this.label4 = new System.Windows.Forms.Label();
             this.TextClientOutput = new System.Windows.Forms.TextBox();
             this.TextServerOutput = new System.Windows.Forms.TextBox();
-            this.MenuConversation = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuStrip.SuspendLayout();
             this.GroupProject.SuspendLayout();
             this.GroupOutput.SuspendLayout();
@@ -105,6 +106,7 @@
             this.MenuItem,
             this.MenuNpcs,
             this.MenuPassives,
+            this.MenuQuest,
             this.MenuRecipe,
             this.MenuTitles,
             this.MenuSkill});
@@ -134,6 +136,13 @@
             this.MenuAchievementAttribute.Size = new System.Drawing.Size(137, 22);
             this.MenuAchievementAttribute.Text = "Attribute";
             this.MenuAchievementAttribute.Click += new System.EventHandler(this.MenuAchievementAttribute_Click);
+            // 
+            // MenuConversation
+            // 
+            this.MenuConversation.Name = "MenuConversation";
+            this.MenuConversation.Size = new System.Drawing.Size(186, 22);
+            this.MenuConversation.Text = "Conversation";
+            this.MenuConversation.Click += new System.EventHandler(this.MenuConversation_Click);
             // 
             // MenuEffects
             // 
@@ -319,6 +328,13 @@
             this.MenuPassiveUpgrade.Text = "Upgrade";
             this.MenuPassiveUpgrade.Click += new System.EventHandler(this.MenuPassiveUpgrade_Click);
             // 
+            // MenuQuest
+            // 
+            this.MenuQuest.Name = "MenuQuest";
+            this.MenuQuest.Size = new System.Drawing.Size(186, 22);
+            this.MenuQuest.Text = "Quest";
+            this.MenuQuest.Click += new System.EventHandler(this.MenuQuest_Click);
+            // 
             // MenuRecipe
             // 
             this.MenuRecipe.Name = "MenuRecipe";
@@ -470,13 +486,6 @@
             this.TextServerOutput.Size = new System.Drawing.Size(257, 23);
             this.TextServerOutput.TabIndex = 0;
             // 
-            // MenuConversation
-            // 
-            this.MenuConversation.Name = "MenuConversation";
-            this.MenuConversation.Size = new System.Drawing.Size(186, 22);
-            this.MenuConversation.Text = "Conversation";
-            this.MenuConversation.Click += new System.EventHandler(this.MenuConversation_Click);
-            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -554,5 +563,6 @@
         private ToolStripMenuItem MenuNpcAttribute;
         private ToolStripMenuItem MenuInformationIcon;
         private ToolStripMenuItem MenuConversation;
+        private ToolStripMenuItem MenuQuest;
     }
 }

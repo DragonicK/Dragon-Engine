@@ -1,8 +1,10 @@
 ﻿using Crystalshire.Core.Logs;
 using Crystalshire.Core.Services;
 using Crystalshire.Core.Serialization;
+using Crystalshire.Core.Model.Entity;
 using Crystalshire.Core.Model.BlackMarket;
 
+using Crystalshire.Game.Deaths;
 using Crystalshire.Game.Combat.Formulas;
 
 namespace Crystalshire.Game.Services {
@@ -16,6 +18,9 @@ namespace Crystalshire.Game.Services {
         //private IParry? parry;
         //private IBlock? block;
         //private IResist resist;
+
+        private IEntityDeath? playerDeath;
+        private IEntityDeath? entityDeath;
 
         public void Start() {
 

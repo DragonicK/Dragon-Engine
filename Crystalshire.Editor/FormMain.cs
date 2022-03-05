@@ -3,6 +3,7 @@ using Crystalshire.Core.Serialization;
 
 using Crystalshire.Core.Model.Npcs;
 using Crystalshire.Core.Model.Items;
+using Crystalshire.Core.Model.Quests;
 using Crystalshire.Core.Model.Titles;
 using Crystalshire.Core.Model.Skills;
 using Crystalshire.Core.Model.Recipes;
@@ -17,8 +18,9 @@ using Crystalshire.Core.Model.EquipmentSets;
 using Crystalshire.Core.Model.NotificationIcons;
 
 using Crystalshire.Editor.Npcs;
-using Crystalshire.Editor.Common;
 using Crystalshire.Editor.Items;
+using Crystalshire.Editor.Common;
+using Crystalshire.Editor.Quests;
 using Crystalshire.Editor.Titles;
 using Crystalshire.Editor.Skills;
 using Crystalshire.Editor.Effects;
@@ -60,6 +62,7 @@ namespace Crystalshire.Editor {
         public IDatabase<GroupAttribute> NpcAttributes { get; private set; }
         public IDatabase<NotificationIcon> NotificationIcons { get; private set; }
         public IDatabase<Conversation> Conversations { get; private set; }
+        public IDatabase<Quest> Quests { get; private set; }
 
         public FormMain() {
             InitializeComponent();
@@ -201,6 +204,11 @@ namespace Crystalshire.Editor {
 
             Conversations = new Core.Content.Conversations() {
                 FileName = "Conversations.dat",
+                Folder = "./Content"
+            };
+
+            Quests = new Core.Content.Quests() {
+                FileName = "Quests.dat",
                 Folder = "./Content"
             };
         }
@@ -456,6 +464,18 @@ namespace Crystalshire.Editor {
             Conversations.Load();
 
             var f = new FormConversation(Configuration, Conversations);
+            f.Show();
+        }
+
+        #endregion
+
+        #region Quests
+
+        private void MenuQuest_Click(object sender, EventArgs e) {
+            Quests.Clear();
+            Quests.Load();
+
+            var f = new FormQuest(Configuration, Quests);
             f.Show();
         }
 

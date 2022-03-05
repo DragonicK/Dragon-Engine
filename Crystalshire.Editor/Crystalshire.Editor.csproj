@@ -30,7 +30,6 @@
 
   <ItemGroup>
     <Folder Include="Animation\" />
-    <Folder Include="Quests\" />
   </ItemGroup>
 
 </Project>
