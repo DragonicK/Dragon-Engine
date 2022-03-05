@@ -17,5 +17,9 @@
             Steps = new List<QuestStep>();
             Rewards = new List<QuestReward>();
         }
+
+        public override string ToString() {
+            return Title;
+        }
     }
 }

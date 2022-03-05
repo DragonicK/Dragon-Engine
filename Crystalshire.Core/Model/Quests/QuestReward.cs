@@ -1,5 +1,5 @@
 ﻿namespace Crystalshire.Core.Model.Quests {
-    public struct QuestReward {
+    public class QuestReward {
         public int Id { get; set; }
         public int Value { get; set; }
         public int Level { get; set; }

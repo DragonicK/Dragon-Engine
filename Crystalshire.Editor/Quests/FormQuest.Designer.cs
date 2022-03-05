@@ -74,11 +74,11 @@
             this.ButtonAddStep = new System.Windows.Forms.Button();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.ComboBound = new System.Windows.Forms.ComboBox();
+            this.ComboRewardBound = new System.Windows.Forms.ComboBox();
             this.label20 = new System.Windows.Forms.Label();
-            this.TextUpgradeId = new System.Windows.Forms.TextBox();
+            this.TextRewardUpgradeId = new System.Windows.Forms.TextBox();
             this.label14 = new System.Windows.Forms.Label();
-            this.TextAttributeId = new System.Windows.Forms.TextBox();
+            this.TextRewardAttributeId = new System.Windows.Forms.TextBox();
             this.label15 = new System.Windows.Forms.Label();
             this.TextRewardLevel = new System.Windows.Forms.TextBox();
             this.label16 = new System.Windows.Forms.Label();
@@ -434,6 +434,7 @@
             this.TextRequirementY.Name = "TextRequirementY";
             this.TextRequirementY.Size = new System.Drawing.Size(230, 23);
             this.TextRequirementY.TabIndex = 23;
+            this.TextRequirementY.TextChanged += new System.EventHandler(this.TextRequirementY_TextChanged);
             // 
             // label12
             // 
@@ -450,6 +451,7 @@
             this.TextRequirementX.Name = "TextRequirementX";
             this.TextRequirementX.Size = new System.Drawing.Size(230, 23);
             this.TextRequirementX.TabIndex = 21;
+            this.TextRequirementX.TextChanged += new System.EventHandler(this.TextRequirementX_TextChanged);
             // 
             // label11
             // 
@@ -466,6 +468,7 @@
             this.TextRequirementCount.Name = "TextRequirementCount";
             this.TextRequirementCount.Size = new System.Drawing.Size(230, 23);
             this.TextRequirementCount.TabIndex = 19;
+            this.TextRequirementCount.TextChanged += new System.EventHandler(this.TextRequirementCount_TextChanged);
             // 
             // label10
             // 
@@ -474,7 +477,7 @@
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(49, 15);
             this.label10.TabIndex = 18;
-            this.label10.Text = "Count:";
+            this.label10.Text = "Value:";
             // 
             // TextRequirementEntityId
             // 
@@ -482,6 +485,7 @@
             this.TextRequirementEntityId.Name = "TextRequirementEntityId";
             this.TextRequirementEntityId.Size = new System.Drawing.Size(230, 23);
             this.TextRequirementEntityId.TabIndex = 17;
+            this.TextRequirementEntityId.TextChanged += new System.EventHandler(this.TextRequirementEntityId_TextChanged);
             // 
             // label9
             // 
@@ -500,6 +504,7 @@
             this.ComboActionType.Name = "ComboActionType";
             this.ComboActionType.Size = new System.Drawing.Size(230, 23);
             this.ComboActionType.TabIndex = 15;
+            this.ComboActionType.SelectedIndexChanged += new System.EventHandler(this.ComboActionType_SelectedIndexChanged);
             // 
             // label8
             // 
@@ -526,6 +531,7 @@
             this.TextStepSummary.Name = "TextStepSummary";
             this.TextStepSummary.Size = new System.Drawing.Size(230, 142);
             this.TextStepSummary.TabIndex = 11;
+            this.TextStepSummary.TextChanged += new System.EventHandler(this.TextStepSummary_TextChanged);
             // 
             // TextStepTitle
             // 
@@ -533,6 +539,7 @@
             this.TextStepTitle.Name = "TextStepTitle";
             this.TextStepTitle.Size = new System.Drawing.Size(230, 23);
             this.TextStepTitle.TabIndex = 10;
+            this.TextStepTitle.TextChanged += new System.EventHandler(this.TextStepTitle_TextChanged);
             // 
             // label7
             // 
@@ -561,6 +568,7 @@
             this.ScrollStepIndex.Name = "ScrollStepIndex";
             this.ScrollStepIndex.Size = new System.Drawing.Size(229, 19);
             this.ScrollStepIndex.TabIndex = 8;
+            this.ScrollStepIndex.Scroll += new System.Windows.Forms.ScrollEventHandler(this.ScrollStepIndex_Scroll);
             // 
             // ButtonRemoveStep
             // 
@@ -570,6 +578,7 @@
             this.ButtonRemoveStep.TabIndex = 1;
             this.ButtonRemoveStep.Text = "Remove";
             this.ButtonRemoveStep.UseVisualStyleBackColor = true;
+            this.ButtonRemoveStep.Click += new System.EventHandler(this.ButtonRemoveStep_Click);
             // 
             // ButtonAddStep
             // 
@@ -579,6 +588,7 @@
             this.ButtonAddStep.TabIndex = 0;
             this.ButtonAddStep.Text = "Add";
             this.ButtonAddStep.UseVisualStyleBackColor = true;
+            this.ButtonAddStep.Click += new System.EventHandler(this.ButtonAddStep_Click);
             // 
             // tabPage3
             // 
@@ -593,11 +603,11 @@
             // 
             // groupBox2
             // 
-            this.groupBox2.Controls.Add(this.ComboBound);
+            this.groupBox2.Controls.Add(this.ComboRewardBound);
             this.groupBox2.Controls.Add(this.label20);
-            this.groupBox2.Controls.Add(this.TextUpgradeId);
+            this.groupBox2.Controls.Add(this.TextRewardUpgradeId);
             this.groupBox2.Controls.Add(this.label14);
-            this.groupBox2.Controls.Add(this.TextAttributeId);
+            this.groupBox2.Controls.Add(this.TextRewardAttributeId);
             this.groupBox2.Controls.Add(this.label15);
             this.groupBox2.Controls.Add(this.TextRewardLevel);
             this.groupBox2.Controls.Add(this.label16);
@@ -619,17 +629,18 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Step";
             // 
-            // ComboBound
+            // ComboRewardBound
             // 
-            this.ComboBound.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.ComboBound.FormattingEnabled = true;
-            this.ComboBound.Items.AddRange(new object[] {
+            this.ComboRewardBound.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.ComboRewardBound.FormattingEnabled = true;
+            this.ComboRewardBound.Items.AddRange(new object[] {
             "False",
             "True"});
-            this.ComboBound.Location = new System.Drawing.Point(16, 381);
-            this.ComboBound.Name = "ComboBound";
-            this.ComboBound.Size = new System.Drawing.Size(230, 23);
-            this.ComboBound.TabIndex = 27;
+            this.ComboRewardBound.Location = new System.Drawing.Point(16, 381);
+            this.ComboRewardBound.Name = "ComboRewardBound";
+            this.ComboRewardBound.Size = new System.Drawing.Size(230, 23);
+            this.ComboRewardBound.TabIndex = 27;
+            this.ComboRewardBound.SelectedIndexChanged += new System.EventHandler(this.ComboRewardBound_SelectedIndexChanged);
             // 
             // label20
             // 
@@ -640,12 +651,13 @@
             this.label20.TabIndex = 26;
             this.label20.Text = "Bound:";
             // 
-            // TextUpgradeId
+            // TextRewardUpgradeId
             // 
-            this.TextUpgradeId.Location = new System.Drawing.Point(15, 337);
-            this.TextUpgradeId.Name = "TextUpgradeId";
-            this.TextUpgradeId.Size = new System.Drawing.Size(230, 23);
-            this.TextUpgradeId.TabIndex = 25;
+            this.TextRewardUpgradeId.Location = new System.Drawing.Point(15, 337);
+            this.TextRewardUpgradeId.Name = "TextRewardUpgradeId";
+            this.TextRewardUpgradeId.Size = new System.Drawing.Size(230, 23);
+            this.TextRewardUpgradeId.TabIndex = 25;
+            this.TextRewardUpgradeId.TextChanged += new System.EventHandler(this.TextRewardUpgradeId_TextChanged);
             // 
             // label14
             // 
@@ -656,12 +668,13 @@
             this.label14.TabIndex = 24;
             this.label14.Text = "Upgrade Id:";
             // 
-            // TextAttributeId
+            // TextRewardAttributeId
             // 
-            this.TextAttributeId.Location = new System.Drawing.Point(16, 288);
-            this.TextAttributeId.Name = "TextAttributeId";
-            this.TextAttributeId.Size = new System.Drawing.Size(230, 23);
-            this.TextAttributeId.TabIndex = 23;
+            this.TextRewardAttributeId.Location = new System.Drawing.Point(16, 288);
+            this.TextRewardAttributeId.Name = "TextRewardAttributeId";
+            this.TextRewardAttributeId.Size = new System.Drawing.Size(230, 23);
+            this.TextRewardAttributeId.TabIndex = 23;
+            this.TextRewardAttributeId.TextChanged += new System.EventHandler(this.TextRewardAttributeId_TextChanged);
             // 
             // label15
             // 
@@ -678,6 +691,7 @@
             this.TextRewardLevel.Name = "TextRewardLevel";
             this.TextRewardLevel.Size = new System.Drawing.Size(230, 23);
             this.TextRewardLevel.TabIndex = 21;
+            this.TextRewardLevel.TextChanged += new System.EventHandler(this.TextRewardLevel_TextChanged);
             // 
             // label16
             // 
@@ -694,6 +708,7 @@
             this.TextRewardValue.Name = "TextRewardValue";
             this.TextRewardValue.Size = new System.Drawing.Size(230, 23);
             this.TextRewardValue.TabIndex = 19;
+            this.TextRewardValue.TextChanged += new System.EventHandler(this.TextRewardValue_TextChanged);
             // 
             // label17
             // 
@@ -710,6 +725,7 @@
             this.TextRewardId.Name = "TextRewardId";
             this.TextRewardId.Size = new System.Drawing.Size(230, 23);
             this.TextRewardId.TabIndex = 17;
+            this.TextRewardId.TextChanged += new System.EventHandler(this.TextRewardId_TextChanged);
             // 
             // label18
             // 
@@ -728,6 +744,7 @@
             this.ComboRewardType.Name = "ComboRewardType";
             this.ComboRewardType.Size = new System.Drawing.Size(230, 23);
             this.ComboRewardType.TabIndex = 15;
+            this.ComboRewardType.SelectedIndexChanged += new System.EventHandler(this.ComboRewardType_SelectedIndexChanged);
             // 
             // label19
             // 
@@ -756,6 +773,7 @@
             this.ScrollRewardIndex.Name = "ScrollRewardIndex";
             this.ScrollRewardIndex.Size = new System.Drawing.Size(229, 19);
             this.ScrollRewardIndex.TabIndex = 8;
+            this.ScrollRewardIndex.Scroll += new System.Windows.Forms.ScrollEventHandler(this.ScrollRewardIndex_Scroll);
             // 
             // ButtonRemoveReward
             // 
@@ -765,6 +783,7 @@
             this.ButtonRemoveReward.TabIndex = 1;
             this.ButtonRemoveReward.Text = "Remove";
             this.ButtonRemoveReward.UseVisualStyleBackColor = true;
+            this.ButtonRemoveReward.Click += new System.EventHandler(this.ButtonRemoveReward_Click);
             // 
             // ButtonAddReward
             // 
@@ -774,6 +793,7 @@
             this.ButtonAddReward.TabIndex = 0;
             this.ButtonAddReward.Text = "Add";
             this.ButtonAddReward.UseVisualStyleBackColor = true;
+            this.ButtonAddReward.Click += new System.EventHandler(this.ButtonAddReward_Click);
             // 
             // FormQuest
             // 
@@ -859,9 +879,9 @@
         private TextBox TextRequirementEntityId;
         private Label label9;
         private GroupBox groupBox2;
-        private TextBox TextUpgradeId;
+        private TextBox TextRewardUpgradeId;
         private Label label14;
-        private TextBox TextAttributeId;
+        private TextBox TextRewardAttributeId;
         private Label label15;
         private TextBox TextRewardLevel;
         private Label label16;
@@ -875,7 +895,7 @@
         private HScrollBar ScrollRewardIndex;
         private Button ButtonRemoveReward;
         private Button ButtonAddReward;
-        private ComboBox ComboBound;
+        private ComboBox ComboRewardBound;
         private Label label20;
     }
 }

@@ -6,6 +6,7 @@ using Crystalshire.Core.Model.Npcs;
 using Crystalshire.Core.Model.Maps;
 using Crystalshire.Core.Model.Shops;
 using Crystalshire.Core.Model.Items;
+using Crystalshire.Core.Model.Quests;
 using Crystalshire.Core.Model.Gashas;
 using Crystalshire.Core.Model.Skills;
 using Crystalshire.Core.Model.Titles;
@@ -62,6 +63,7 @@ namespace Crystalshire.Game.Services {
         public IDatabase<Upgrade> Upgrades { get; }
         public IDatabase<Conversation> Conversations { get; }
         public IDatabase<Shop> Shops { get; }
+        public IDatabase<Quest> Quests { get; }
         public ICommandRepository CommandRepository { get; }
         public Experience PlayerExperience { get; }
         public Experience GuildExperience { get; }
@@ -224,6 +226,11 @@ namespace Crystalshire.Game.Services {
                 Folder = "./Server/Shops"
             };
 
+            Quests = new Quests() {
+                Folder = "./Server/Content",
+                FileName = "Quests.dat"
+            };
+
             CommandRepository = new CommandRepository();
 
             PlayerExperience = LoadExperience(new Experience(), "Player");
@@ -269,6 +276,7 @@ namespace Crystalshire.Game.Services {
             Upgrades.Load();
             Conversations.Load();
             Shops.Load();
+            Quests.Load();
 
             LoadInstances();
         }
@@ -307,6 +315,7 @@ namespace Crystalshire.Game.Services {
             Upgrades.Clear();
             Conversations.Clear();
             Shops.Clear();
+            Quests.Clear();
 
             Instances.Clear();
         }
