@@ -52,6 +52,7 @@ End Enum
 Public Font() As CustomFont
 
 Public Sub LoadFonts()
+    
 'Check if we have the device
     If D3DDevice.TestCooperativeLevel <> D3D_OK Then Exit Sub
     ' re-dim the fonts
@@ -74,16 +75,19 @@ Private Sub SetFont(ByVal FontNum As Long, ByVal texName As String, ByVal Size A
     ReDim Data(0 To LOF(f) - 1)
     Get #f, , Data
     Close #f
+    
     ' get size
     Font(FontNum).TextureSize.X = ByteToInt(Data(18), Data(19))
     Font(FontNum).TextureSize.Y = ByteToInt(Data(22), Data(23))
+    
     ' set to struct
     Set Font(FontNum).Texture = D3DX.CreateTextureFromFileInMemoryEx(D3DDevice, Data(0), AryCount(Data), Font(FontNum).TextureSize.X, Font(FontNum).TextureSize.Y, D3DX_DEFAULT, 0, D3DFMT_A8R8G8B8, D3DPOOL_MANAGED, D3DX_FILTER_POINT, D3DX_FILTER_POINT, 0, ByVal 0, ByVal 0)
+    
     Font(FontNum).xOffset = xOffset
     Font(FontNum).yOffset = yOffset
+    
     LoadFontHeader Font(FontNum), texName & ".dat"
 End Sub
-
 
 Public Sub SaveFontHeader(ByVal theFont As Fonts, ByVal FileName As String)
     Dim f As Long

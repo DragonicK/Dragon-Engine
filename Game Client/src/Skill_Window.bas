@@ -206,14 +206,16 @@ End Sub
 Private Sub MovePageUp()
     If SkillPage < SkillPageCount Then
         SkillPage = SkillPage + 1
-        'Windows(WindowIndex).Controls(GetControlIndex("winSkills", "lblPage")).Text = "Página: " & SkillPage & "/" & SkillPageCount
+        
+      '  Windows(WindowIndex).Controls(GetControlIndex("winSkills", "lblPage")).Text = "Página: " & SkillPage & "/" & SkillPageCount
     End If
 End Sub
 
 Private Sub MovePageDown()
     If SkillPage > 1 Then
         SkillPage = SkillPage - 1
-      '  Windows(WindowIndex).Controls(GetControlIndex("winSkills", "lblPage")).Text = "Página: " & SkillPage & "/" & SkillPageCount
+        
+       ' Windows(WindowIndex).Controls(GetControlIndex("winSkills", "lblPage")).Text = "Página: " & SkillPage & "/" & SkillPageCount
     End If
 End Sub
 

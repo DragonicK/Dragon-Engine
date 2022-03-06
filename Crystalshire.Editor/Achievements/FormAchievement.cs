@@ -12,6 +12,9 @@ namespace Crystalshire.Editor.Achievements {
         public Configuration Configuration { get; private set; }
         public int SelectedIndex { get; private set; } = Util.NotSelected;
 
+        private int rewardIndex = Util.NotSelected;
+        private int requirementIndex = Util.NotSelected;
+
         public FormAchievement(Configuration configuration, IDatabase<Achievement> database) {
             InitializeComponent();
 
@@ -23,6 +26,7 @@ namespace Crystalshire.Editor.Achievements {
             Util.FillComboBox<AchievementRewardType>(ComboRewardType);
             Util.FillComboBox<AchievementPrimaryRequirement>(ComboPrimary);
             Util.FillComboBox<AchievementSecondaryRequirement>(ComboSecondary);
+            Util.FillComboBox<AchievementRewardType>(ComboRewardType);
 
             Database = database;
             Configuration = configuration;
@@ -62,22 +66,27 @@ namespace Crystalshire.Editor.Achievements {
                 TextAttributeId.Text = Element.AttributeId.ToString();
                 ComboCategory.SelectedIndex = (int)Element.Category;
 
-                ComboRewardType.SelectedIndex = (int)Element.Reward.Type;
-                TextRewardId.Text = Element.Reward.Id.ToString();
-                TextRewardValue.Text = Element.Reward.Value.ToString();
-                TextRewardLevel.Text = Element.Reward.Level.ToString();
-                TextRewardBound.Text = Element.Reward.Bound.ToString();
-                TextRewardAttributeId.Text = Element.Reward.AttributeId.ToString();
-                TextRewardUpgradeId.Text = Element.Reward.UpgradeId.ToString();
+                if (Element.Rewards.Count > 0) {
+                    rewardIndex = 0;
+                }
+                else {
+                    rewardIndex = Util.NotSelected;
+                }
 
-                ComboPrimary.SelectedIndex = (int)Element.Entry.PrimaryType;
-                ComboSecondary.SelectedIndex = (int)Element.Entry.SecondaryType;
-                ComboRarity.SelectedIndex = (int)Element.Entry.Rarity;
-                ComboEquipment.SelectedIndex = (int)Element.Entry.Equipment;
-                TextRequirementId.Text = Element.Entry.Id.ToString();
-                TextRequirementValue.Text = Element.Entry.Value.ToString();
-                TextRequirementLevel.Text = Element.Entry.Level.ToString();
-                TextRequirementCount.Text = Element.Entry.Count.ToString();
+                if (Element.Requirements.Count > 0) {
+                    requirementIndex = 0;
+                }
+                else {
+                    requirementIndex= Util.NotSelected;
+                }
+
+                UpdateRequirementIndexLabel();
+                UpdateRequirementControls();
+                UpdateRequirementText();
+
+                UpdateRewardIndexLabel();
+                UpdateRewardControls();
+                UpdateRewardText();
             }
         }
 
@@ -93,7 +102,7 @@ namespace Crystalshire.Editor.Achievements {
             TextRewardId.Text = string.Empty;
             TextRewardValue.Text = string.Empty;
             TextRewardLevel.Text = string.Empty;
-            TextRewardBound.Text = string.Empty;
+            ComboRewardBound.SelectedIndex = 0;
             TextRewardAttributeId.Text = string.Empty;
             TextRewardUpgradeId.Text = string.Empty;
 
@@ -246,102 +255,315 @@ namespace Crystalshire.Editor.Achievements {
 
         #region Achievement Reward
 
+        private void ButtonAddReward_Click(object sender, EventArgs e) {
+            if (Element is not null) {
+                Element.Rewards.Add(new AchievementReward());
+
+                if (Element.Rewards.Count == 1) {
+                    if (rewardIndex <= Util.NotSelected) {
+                        rewardIndex = 0;
+
+                        UpdateRewardText();
+                    }
+                }
+
+                UpdateRewardControls();
+                UpdateRewardIndexLabel();
+            }
+        }
+
+        private void ButtonRemoveReward_Click(object sender, EventArgs e) {
+            if (Element is not null) {
+                if (rewardIndex > Util.NotSelected) {
+                    Element.Rewards.RemoveAt(rewardIndex);
+
+                    if (rewardIndex >= Element.Rewards.Count) {
+                        rewardIndex = Element.Rewards.Count - 1;
+                    }
+                }
+
+                UpdateRewardText();
+
+                UpdateRewardControls();
+                UpdateRewardIndexLabel();
+            }
+        }
+
+        private void ScrollRewardIndex_Scroll(object sender, ScrollEventArgs e) {
+            if (Element is not null) {
+                if (Element.Rewards.Count > 0) {
+                    rewardIndex = ScrollRewardIndex.Value;
+                }
+
+                UpdateRewardIndexLabel();
+                UpdateRewardText();
+            }
+        }
+
         private void ComboRewardType_SelectedIndexChanged(object sender, EventArgs e) {
             if (Element is not null) {
-                Element.Reward.Type = (AchievementRewardType)ComboRewardType.SelectedIndex;
+                if (rewardIndex > Util.NotSelected) {
+                    Element.Rewards[rewardIndex].Type = (AchievementRewardType)ComboRewardType.SelectedIndex;
+                }
             }
         }
 
         private void TextRewardId_TextChanged(object sender, EventArgs e) {
             if (Element is not null) {
-                Element.Reward.Id = Util.GetValue(TextRewardId);
+                if (rewardIndex > Util.NotSelected) {
+                    Element.Rewards[rewardIndex].Id = Util.GetValue(TextRewardId);
+                }
             }
         }
 
         private void TextRewardValue_TextChanged(object sender, EventArgs e) {
             if (Element is not null) {
-                Element.Reward.Value = Util.GetValue(TextRewardValue);
+                if (rewardIndex > Util.NotSelected) {
+                    Element.Rewards[rewardIndex].Value = Util.GetValue(TextRewardValue);
+                }
             }
         }
 
         private void TextRewardLevel_TextChanged(object sender, EventArgs e) {
             if (Element is not null) {
-                Element.Reward.Level = Util.GetValue(TextRewardLevel);
+                if (rewardIndex > Util.NotSelected) {
+                    Element.Rewards[rewardIndex].Level = Util.GetValue(TextRewardLevel);
+                }
             }
         }
 
-        private void TextRewardBound_TextChanged(object sender, EventArgs e) {
+        private void ComboRewardBound_SelectedIndexChanged(object sender, EventArgs e) {
             if (Element is not null) {
-                byte activated = 1;
-                byte deactivated = 0;
-
-                var value = Util.GetValue(TextRewardBound);
-
-                Element.Reward.Bound = value >= 1 ? activated : deactivated;
+                if (rewardIndex > Util.NotSelected) {
+                    Element.Rewards[rewardIndex].Bound = Convert.ToBoolean(ComboRewardBound.SelectedIndex);
+                }
             }
         }
 
         private void TextRewardAttributeId_TextChanged(object sender, EventArgs e) {
             if (Element is not null) {
-                Element.Reward.AttributeId = Util.GetValue(TextRewardAttributeId);
+                if (rewardIndex > Util.NotSelected) {
+                    Element.Rewards[rewardIndex].AttributeId = Util.GetValue(TextRewardAttributeId);
+                }
             }
         }
 
         private void TextRewardUpgradeId_TextChanged(object sender, EventArgs e) {
             if (Element is not null) {
-                Element.Reward.UpgradeId = Util.GetValue(TextRewardUpgradeId);
+                if (rewardIndex > Util.NotSelected) {
+                    Element.Rewards[rewardIndex].UpgradeId = Util.GetValue(TextRewardUpgradeId);
+                }
             }
         }
+
+        private void UpdateRewardIndexLabel() {
+            if (Element is not null) {
+                LabelRewardIndex.Text = $"Reward Index: {rewardIndex + 1}/ {Element.Rewards.Count}";
+
+                if (rewardIndex > Util.NotSelected) {
+                    ScrollRewardIndex.Maximum = Element.Rewards.Count - 1;
+
+                    if (rewardIndex == 0) {
+                        ScrollRewardIndex.Value = rewardIndex;
+                    }
+                }
+                else {
+                    ScrollRewardIndex.Value = 0;
+                    ScrollRewardIndex.Maximum = 0;
+                }
+            }
+        }
+
+        private void UpdateRewardControls() {
+            if (Element is not null) {
+                var isEnabled = Element.Rewards.Count > 0;
+
+                ScrollRewardIndex.Enabled = isEnabled;
+                ComboRewardType.Enabled = isEnabled;
+                TextRewardId.Enabled = isEnabled;
+                TextRewardValue.Enabled = isEnabled;
+                TextRewardLevel.Enabled = isEnabled;
+                TextRewardAttributeId.Enabled = isEnabled;
+                TextRewardUpgradeId.Enabled = isEnabled;
+                ComboRewardBound.Enabled = isEnabled;
+            }
+        }
+
+        private void UpdateRewardText() {
+            if (Element is not null) {
+                if (rewardIndex > Util.NotSelected) {
+                    ComboRewardType.SelectedIndex = (int)Element.Rewards[rewardIndex].Type;
+                    TextRewardId.Text = Element.Rewards[rewardIndex].Id.ToString();
+                    TextRewardValue.Text = Element.Rewards[rewardIndex].Value.ToString();
+                    TextRewardLevel.Text = Element.Rewards[rewardIndex].Level.ToString();
+                    TextRewardAttributeId.Text = Element.Rewards[rewardIndex].AttributeId.ToString();
+                    TextRewardUpgradeId.Text = Element.Rewards[rewardIndex].UpgradeId.ToString();
+                    ComboRewardBound.SelectedIndex = Convert.ToInt32(Element.Rewards[rewardIndex].Bound);
+                }
+            }
+        }
+
 
         #endregion
 
         #region Achievement Requirement
 
+
+        private void ScrollRequirementIndex_Scroll(object sender, ScrollEventArgs e) {
+            if (Element is not null) {
+                if (Element.Requirements.Count > 0) {
+                    requirementIndex = ScrollRequirementIndex.Value;
+                }
+
+                UpdateRequirementIndexLabel();
+                UpdateRequirementText();
+            }
+        }
+
+        private void ButtonAddRequirement_Click(object sender, EventArgs e) {
+            if (Element is not null) {
+                Element.Requirements.Add(new AchievementRequirementEntry());
+
+                if (Element.Requirements.Count == 1) {
+                    if (requirementIndex <= Util.NotSelected) {
+                        requirementIndex = 0;
+
+                        UpdateRequirementText();
+                    }
+                }
+
+                UpdateRequirementControls();
+                UpdateRequirementIndexLabel();
+            }
+        }
+
+        private void ButtonRemoveRequirement_Click(object sender, EventArgs e) {
+            if (Element is not null) {
+                if (requirementIndex > Util.NotSelected) {
+                    Element.Requirements.RemoveAt(requirementIndex);
+
+                    if (requirementIndex >= Element.Requirements.Count) {
+                        requirementIndex = Element.Requirements.Count - 1;
+                    }
+                }
+
+                UpdateRequirementText();
+
+                UpdateRequirementControls();
+                UpdateRequirementIndexLabel();
+            }
+        }
+
         private void ComboPrimary_SelectedIndexChanged(object sender, EventArgs e) {
             if (Element is not null) {
-                Element.Entry.PrimaryType = (AchievementPrimaryRequirement)ComboPrimary.SelectedIndex;
+                if (requirementIndex > Util.NotSelected) {
+                    Element.Requirements[requirementIndex].PrimaryType = (AchievementPrimaryRequirement)ComboPrimary.SelectedIndex;
+                }
             }
         }
 
         private void ComboSecondary_SelectedIndexChanged(object sender, EventArgs e) {
             if (Element is not null) {
-                Element.Entry.SecondaryType = (AchievementSecondaryRequirement)ComboSecondary.SelectedIndex;
+                if (requirementIndex > Util.NotSelected) {
+                    Element.Requirements[requirementIndex].SecondaryType = (AchievementSecondaryRequirement)ComboSecondary.SelectedIndex;
+                }
             }
         }
 
         private void ComboRarity_SelectedIndexChanged(object sender, EventArgs e) {
             if (Element is not null) {
-                Element.Entry.Rarity = (Rarity)ComboRarity.SelectedIndex;
+                if (requirementIndex > Util.NotSelected) {
+                    Element.Requirements[requirementIndex].Rarity = (Rarity)ComboRarity.SelectedIndex;
+                }
             }
         }
 
         private void ComboEquipment_SelectedIndexChanged(object sender, EventArgs e) {
             if (Element is not null) {
-                Element.Entry.Equipment = (EquipmentType)ComboEquipment.SelectedIndex;
+                if (requirementIndex > Util.NotSelected) {
+                    Element.Requirements[requirementIndex].Equipment = (EquipmentType)ComboEquipment.SelectedIndex;
+                }
             }
         }
 
         private void TextRequirementId_TextChanged(object sender, EventArgs e) {
             if (Element is not null) {
-                Element.Entry.Id = Util.GetValue(TextRequirementId);
+                if (requirementIndex > Util.NotSelected) {
+                    Element.Requirements[requirementIndex].Id = Util.GetValue(TextRequirementId);
+                }
             }
         }
 
         private void TextRequirementValue_TextChanged(object sender, EventArgs e) {
             if (Element is not null) {
-                Element.Entry.Value = Util.GetValue(TextRequirementValue);
+                if (requirementIndex > Util.NotSelected) {
+                    Element.Requirements[requirementIndex].Value = Util.GetValue(TextRequirementValue);
+                }
             }
         }
 
         private void TextRequirementLevel_TextChanged(object sender, EventArgs e) {
             if (Element is not null) {
-                Element.Entry.Level = Util.GetValue(TextRequirementLevel);
+                if (requirementIndex > Util.NotSelected) {
+                    Element.Requirements[requirementIndex].Level = Util.GetValue(TextRequirementLevel);
+                }
             }
         }
 
         private void TextRequirementCount_TextChanged(object sender, EventArgs e) {
             if (Element is not null) {
-                Element.Entry.Count = Util.GetValue(TextRequirementCount);
+                if (requirementIndex > Util.NotSelected) {
+                    Element.Requirements[requirementIndex].Count = Util.GetValue(TextRequirementCount);
+                }
+            }
+        }
+
+        private void UpdateRequirementIndexLabel() {
+            if (Element is not null) {
+                LabelRequirementIndex.Text = $"Requirement Index: {requirementIndex + 1}/ {Element.Requirements.Count}";
+
+                if (requirementIndex > Util.NotSelected) {
+                    ScrollRequirementIndex.Maximum = Element.Requirements.Count - 1;
+
+                    if (requirementIndex == 0) {
+                        ScrollRequirementIndex.Value = requirementIndex;
+                    }
+                }
+                else {
+                    ScrollRequirementIndex.Value = 0;
+                    ScrollRequirementIndex.Maximum = 0;
+                }
+            }
+        }
+
+        private void UpdateRequirementControls() {
+            if (Element is not null) {
+                var isEnabled = Element.Requirements.Count > 0;
+
+                ScrollRequirementIndex.Enabled = isEnabled;
+                ComboPrimary.Enabled = isEnabled;
+                ComboSecondary.Enabled = isEnabled;
+                ComboRarity.Enabled = isEnabled;
+                ComboEquipment.Enabled = isEnabled;
+                TextRequirementId.Enabled = isEnabled;
+                TextRequirementValue.Enabled = isEnabled;
+                TextRequirementLevel.Enabled = isEnabled;
+                TextRequirementCount.Enabled = isEnabled;
+            }
+        }
+
+        private void UpdateRequirementText() {
+            if (Element is not null) {
+                if (requirementIndex > Util.NotSelected) {
+                    ComboPrimary.SelectedIndex = (int)Element.Requirements[requirementIndex].PrimaryType;
+                    ComboSecondary.SelectedIndex = (int)Element.Requirements[requirementIndex].SecondaryType;
+                    ComboRarity.SelectedIndex = (int)Element.Requirements[requirementIndex].Rarity;
+                    ComboEquipment.SelectedIndex = (int)Element.Requirements[requirementIndex].Equipment;
+                    TextRequirementId.Text = Element.Requirements[requirementIndex].Id.ToString();
+                    TextRequirementValue.Text = Element.Requirements[requirementIndex].Value.ToString();
+                    TextRequirementLevel.Text = Element.Requirements[requirementIndex].Level.ToString();
+                    TextRequirementCount.Text = Element.Requirements[requirementIndex].Count.ToString();
+                }
             }
         }
 

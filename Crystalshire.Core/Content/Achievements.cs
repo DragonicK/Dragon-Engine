@@ -22,9 +22,13 @@ namespace Crystalshire.Core.Content {
                         Rarity = (Rarity)reader.ReadInt32(),
                         Point = reader.ReadInt32(),
                         AttributeId = reader.ReadInt32(),
-                        Category = (AchievementCategory)reader.ReadInt32(),
+                        Category = (AchievementCategory)reader.ReadInt32()
+                    };
 
-                        Entry = new AchievementRequirementEntry() {
+                    var requirementCount = reader.ReadInt32();
+
+                    for (var n = 0; n < requirementCount; ++n) {
+                        var entry = new AchievementRequirementEntry() {
                             Id = reader.ReadInt32(),
                             Value = reader.ReadInt32(),
                             Level = reader.ReadInt32(),
@@ -33,17 +37,25 @@ namespace Crystalshire.Core.Content {
                             Equipment = (EquipmentType)reader.ReadInt32(),
                             PrimaryType = (AchievementPrimaryRequirement)reader.ReadInt32(),
                             SecondaryType = (AchievementSecondaryRequirement)reader.ReadInt32()
-                        },
+                        };
 
-                        Reward = new AchievementReward() {
+                        achievement.Requirements.Add(entry);
+                    }
+
+                    var rewardCount = reader.ReadInt32();
+
+                    for (var n = 0; n < rewardCount; n++) {
+                        var reward = new AchievementReward() {
                             Id = reader.ReadInt32(),
                             Value = reader.ReadInt32(),
                             Level = reader.ReadInt32(),
-                            Bound = reader.ReadByte(),
+                            Bound = reader.ReadBoolean(),
                             AttributeId = reader.ReadInt32(),
                             UpgradeId = reader.ReadInt32(),
-                        }
-                    };
+                        };
+
+                        achievement.Rewards.Add(reward);
+                    }
 
                     values.Add(achievement.Id, achievement);
                 }
@@ -64,8 +76,6 @@ namespace Crystalshire.Core.Content {
 
             for (var i = 0; i < ordered.Count; ++i) {
                 var achievement = ordered[i];
-                var entry = achievement.Entry;
-                var reward = achievement.Reward;
 
                 writer.Write(achievement.Id);
                 writer.Write(achievement.Name);
@@ -75,21 +85,33 @@ namespace Crystalshire.Core.Content {
                 writer.Write(achievement.AttributeId);
                 writer.Write((int)achievement.Category);
 
-                writer.Write(entry.Id);
-                writer.Write(entry.Value);
-                writer.Write(entry.Level);
-                writer.Write(entry.Count);
-                writer.Write((int)entry.Rarity);
-                writer.Write((int)entry.Equipment);
-                writer.Write((int)entry.PrimaryType);
-                writer.Write((int)entry.SecondaryType);
+                writer.Write(achievement.Requirements.Count);
 
-                writer.Write(reward.Id);
-                writer.Write(reward.Value);
-                writer.Write(reward.Level);
-                writer.Write(reward.Bound);
-                writer.Write(reward.AttributeId);
-                writer.Write(reward.UpgradeId);
+                for (var n = 0; n < achievement.Requirements.Count; n++) {
+                    var entry = achievement.Requirements[n];
+
+                    writer.Write(entry.Id);
+                    writer.Write(entry.Value);
+                    writer.Write(entry.Level);
+                    writer.Write(entry.Count);
+                    writer.Write((int)entry.Rarity);
+                    writer.Write((int)entry.Equipment);
+                    writer.Write((int)entry.PrimaryType);
+                    writer.Write((int)entry.SecondaryType);
+                }
+
+                writer.Write(achievement.Rewards.Count);
+
+                for (var n = 0; n < achievement.Rewards.Count; n++) {
+                    var reward = achievement.Rewards[n];
+
+                    writer.Write(reward.Id);
+                    writer.Write(reward.Value);
+                    writer.Write(reward.Level);
+                    writer.Write(reward.Bound);
+                    writer.Write(reward.AttributeId);
+                    writer.Write(reward.UpgradeId);
+                }
             }
         }
     }

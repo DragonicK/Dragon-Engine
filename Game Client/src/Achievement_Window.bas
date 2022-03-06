@@ -41,11 +41,10 @@ Private Const AchievementY As Byte = 45
 
 Private WindowIndex As Long
 
-
 Public Sub CreateWindow_Achievement()
     Dim i As Long
 
-    CreateWindow "winAchievement", "CONQUISTAS", zOrder_Win, 0, 0, 425, 360, 0, False, Fonts.OpenSans_Effect, , 2, 7, DesignTypes.desWin_AincradNorm, DesignTypes.desWin_AincradNorm, DesignTypes.desWin_AincradNorm, , , , , , , , , , , GetAddress(AddressOf DrawAchievement)
+    CreateWindow "winAchievement", "CONQUISTAS", zOrder_Win, 0, 0, 630, 360, 0, False, Fonts.OpenSans_Effect, , 2, 7, DesignTypes.desWin_AincradNorm, DesignTypes.desWin_AincradNorm, DesignTypes.desWin_AincradNorm, , , , , , , , , , , GetAddress(AddressOf DrawAchievement)
     ' Centralise it
     CentraliseWindow WindowCount
 
@@ -54,32 +53,40 @@ Public Sub CreateWindow_Achievement()
 
     CreateButton WindowCount, "btnClose", Windows(WindowCount).Window.Width - 33, 11, 22, 22, , , , , , , Tex_GUI(TextureControl_CloseNormal), Tex_GUI(TextureControl_CloseHover), Tex_GUI(TextureControl_CloseClick), , , , , , GetAddress(AddressOf btnMenu_Achievement)
 
-    CreateButton WindowCount, "btnSummary", 20, 87, 150, 26, "RESUMO", OpenSans_Effect, , , , , , , , DesignTypes.desSteel, DesignTypes.desSteel_Hover, DesignTypes.desSteel_Click, , , GetAddress(AddressOf ChangeCategorySummary)
-    CreateButton WindowCount, "btnCharacter", 20, 119, 150, 26, "PERSONAGEM", OpenSans_Effect, , , , , , , , DesignTypes.desSteel, DesignTypes.desSteel_Hover, DesignTypes.desSteel_Click, , , GetAddress(AddressOf ChangeCategoryCharacter)
-    CreateButton WindowCount, "btnQuest", 20, 151, 150, 26, "MISSÕES", OpenSans_Effect, , , , , , , , DesignTypes.desSteel, DesignTypes.desSteel_Hover, DesignTypes.desSteel_Click, , , GetAddress(AddressOf ChangeCategoryQuest)
-    CreateButton WindowCount, "btnReputation", 20, 183, 150, 26, "REPUTAÇÕES", OpenSans_Effect, , , , , , , , DesignTypes.desSteel, DesignTypes.desSteel_Hover, DesignTypes.desSteel_Click, , , GetAddress(AddressOf ChangeCategoryReputation)
-    CreateButton WindowCount, "btnDungeon", 20, 215, 150, 26, "MASMORRAS", OpenSans_Effect, , , , , , , , DesignTypes.desSteel, DesignTypes.desSteel_Hover, DesignTypes.desSteel_Click, , , GetAddress(AddressOf ChangeCategoryDungeon)
-    CreateButton WindowCount, "btnProfession", 20, 247, 150, 26, "PROFISSÕES", OpenSans_Effect, , , , , , , , DesignTypes.desSteel, DesignTypes.desSteel_Hover, DesignTypes.desSteel_Click, , , GetAddress(AddressOf ChangeCategoryProfession)
-    CreateButton WindowCount, "btnExplore", 20, 279, 150, 26, "EXPLORAÇÃO", OpenSans_Effect, , , , , , , , DesignTypes.desSteel, DesignTypes.desSteel_Hover, DesignTypes.desSteel_Click, , , GetAddress(AddressOf ChangeCategoryExploration)
-    CreateButton WindowCount, "btnPvp", 20, 311, 150, 26, "PVP", OpenSans_Effect, , , , , , , , DesignTypes.desSteel, DesignTypes.desSteel_Hover, DesignTypes.desSteel_Click, , , GetAddress(AddressOf ChangeCategoryPvp)
+    CreateButton WindowCount, "btnSummary", 20, 87, 120, 26, "RESUMO", OpenSans_Effect, , , , , , , , DesignTypes.desSteel, DesignTypes.desSteel_Hover, DesignTypes.desSteel_Click, , , GetAddress(AddressOf ChangeCategorySummary)
+    CreateButton WindowCount, "btnCharacter", 20, 119, 120, 26, "PERSONAGEM", OpenSans_Effect, , , , , , , , DesignTypes.desSteel, DesignTypes.desSteel_Hover, DesignTypes.desSteel_Click, , , GetAddress(AddressOf ChangeCategoryCharacter)
+    CreateButton WindowCount, "btnQuest", 20, 151, 120, 26, "MISSÕES", OpenSans_Effect, , , , , , , , DesignTypes.desSteel, DesignTypes.desSteel_Hover, DesignTypes.desSteel_Click, , , GetAddress(AddressOf ChangeCategoryQuest)
+    CreateButton WindowCount, "btnReputation", 20, 183, 120, 26, "REPUTAÇÕES", OpenSans_Effect, , , , , , , , DesignTypes.desSteel, DesignTypes.desSteel_Hover, DesignTypes.desSteel_Click, , , GetAddress(AddressOf ChangeCategoryReputation)
+    CreateButton WindowCount, "btnDungeon", 20, 215, 120, 26, "MASMORRAS", OpenSans_Effect, , , , , , , , DesignTypes.desSteel, DesignTypes.desSteel_Hover, DesignTypes.desSteel_Click, , , GetAddress(AddressOf ChangeCategoryDungeon)
+    CreateButton WindowCount, "btnProfession", 20, 247, 120, 26, "PROFISSÕES", OpenSans_Effect, , , , , , , , DesignTypes.desSteel, DesignTypes.desSteel_Hover, DesignTypes.desSteel_Click, , , GetAddress(AddressOf ChangeCategoryProfession)
+    CreateButton WindowCount, "btnExplore", 20, 279, 120, 26, "EXPLORAÇÃO", OpenSans_Effect, , , , , , , , DesignTypes.desSteel, DesignTypes.desSteel_Hover, DesignTypes.desSteel_Click, , , GetAddress(AddressOf ChangeCategoryExploration)
+    CreateButton WindowCount, "btnPvp", 20, 311, 120, 26, "PVP", OpenSans_Effect, , , , , , , , DesignTypes.desSteel, DesignTypes.desSteel_Hover, DesignTypes.desSteel_Click, , , GetAddress(AddressOf ChangeCategoryPvp)
 
-    CreateLabel WindowCount, "lblProgress", 190, 90, 220, 50, "RESUMO: 0/30", OpenSans_Effect, White, Alignment.alignCentre
+    CreateLabel WindowCount, "lblProgress", 170, 90, 220, 50, "RESUMO: 0/30", OpenSans_Effect, White, Alignment.alignCentre
 
     For i = 1 To MaxAchievementList
-        CreatePictureBox WindowCount, "picWhiteBox", 190, 70 + AchievementY + ((i - 1) * 32), 220, 26, , , , , , , , DesignTypes.desTextAincrad, DesignTypes.desTextAincrad, DesignTypes.desTextAincrad
+        CreatePictureBox WindowCount, "picWhiteBox", 170, 70 + AchievementY + ((i - 1) * 32), 220, 26, , , , , , , , DesignTypes.desTextAincrad, DesignTypes.desTextAincrad, DesignTypes.desTextAincrad
     Next
 
-    CreateLabel WindowCount, "lblName1", 195, 75 + AchievementY + (0 * 32), 220, 26, "", OpenSans_Regular, White, Alignment.alignCentre, , , , , GetAddress(AddressOf List1_MouseMove), , GetAddress(AddressOf List1_MouseMove)
-    CreateLabel WindowCount, "lblName2", 195, 75 + AchievementY + (1 * 32), 220, 26, "", OpenSans_Regular, White, Alignment.alignCentre, , , , , GetAddress(AddressOf List2_MouseMove), , GetAddress(AddressOf List2_MouseMove)
-    CreateLabel WindowCount, "lblName3", 195, 75 + AchievementY + (2 * 32), 220, 26, "", OpenSans_Regular, White, Alignment.alignCentre, , , , , GetAddress(AddressOf List3_MouseMove), , GetAddress(AddressOf List3_MouseMove)
-    CreateLabel WindowCount, "lblName4", 195, 75 + AchievementY + (3 * 32), 220, 26, "", OpenSans_Regular, White, Alignment.alignCentre, , , , , GetAddress(AddressOf List4_MouseMove), , GetAddress(AddressOf List4_MouseMove)
-    CreateLabel WindowCount, "lblName5", 195, 75 + AchievementY + (4 * 32), 220, 26, "", OpenSans_Regular, White, Alignment.alignCentre, , , , , GetAddress(AddressOf List5_MouseMove), , GetAddress(AddressOf List5_MouseMove)
-    CreateLabel WindowCount, "lblName6", 195, 75 + AchievementY + (5 * 32), 220, 26, "", OpenSans_Regular, White, Alignment.alignCentre, , , , , GetAddress(AddressOf List6_MouseMove), , GetAddress(AddressOf List6_MouseMove)
+    CreateLabel WindowCount, "lblName1", 170, 75 + AchievementY + (0 * 32), 220, 26, "", OpenSans_Regular, White, Alignment.alignCentre, , , , , GetAddress(AddressOf List1_MouseMove), , GetAddress(AddressOf List1_MouseMove)
+    CreateLabel WindowCount, "lblName2", 170, 75 + AchievementY + (1 * 32), 220, 26, "", OpenSans_Regular, White, Alignment.alignCentre, , , , , GetAddress(AddressOf List2_MouseMove), , GetAddress(AddressOf List2_MouseMove)
+    CreateLabel WindowCount, "lblName3", 170, 75 + AchievementY + (2 * 32), 220, 26, "", OpenSans_Regular, White, Alignment.alignCentre, , , , , GetAddress(AddressOf List3_MouseMove), , GetAddress(AddressOf List3_MouseMove)
+    CreateLabel WindowCount, "lblName4", 170, 75 + AchievementY + (3 * 32), 220, 26, "", OpenSans_Regular, White, Alignment.alignCentre, , , , , GetAddress(AddressOf List4_MouseMove), , GetAddress(AddressOf List4_MouseMove)
+    CreateLabel WindowCount, "lblName5", 170, 75 + AchievementY + (4 * 32), 220, 26, "", OpenSans_Regular, White, Alignment.alignCentre, , , , , GetAddress(AddressOf List5_MouseMove), , GetAddress(AddressOf List5_MouseMove)
+    CreateLabel WindowCount, "lblName6", 170, 75 + AchievementY + (5 * 32), 220, 26, "", OpenSans_Regular, White, Alignment.alignCentre, , , , , GetAddress(AddressOf List6_MouseMove), , GetAddress(AddressOf List6_MouseMove)
 
     'Botões setas
-    CreateLabel WindowCount, "lblPage", 240, 315, 120, 50, "Página: 1/2", OpenSans_Effect, White, Alignment.alignCentre
-    CreateButton WindowCount, "btnUp", 355, 315, 15, 15, , , , , , , Tex_GUI(79), Tex_GUI(80), Tex_GUI(81), , , , , , GetAddress(AddressOf MovePageUp)
-    CreateButton WindowCount, "btnDown", 230, 315, 15, 15, , , , , , , Tex_GUI(82), Tex_GUI(83), Tex_GUI(84), , , , , , GetAddress(AddressOf MovePageDown)
+    CreateLabel WindowCount, "lblPage", 170, 315, 220, 50, "Página: 0/0", OpenSans_Effect, White, Alignment.alignCentre
+    CreateButton WindowCount, "btnUp", 335, 315, 15, 15, , , , , , , Tex_GUI(79), Tex_GUI(80), Tex_GUI(81), , , , , , GetAddress(AddressOf MovePageUp)
+    CreateButton WindowCount, "btnDown", 210, 315, 15, 15, , , , , , , Tex_GUI(82), Tex_GUI(83), Tex_GUI(84), , , , , , GetAddress(AddressOf MovePageDown)
+
+    'Arrow
+    CreateButton WindowCount, "btnScrollUp", 590, 80, 15, 15, , , , , , , Tex_GUI(110), Tex_GUI(110), Tex_GUI(110)
+    CreateButton WindowCount, "btnScrollDown", 590, 330, 15, 15, , , , , , , Tex_GUI(111), Tex_GUI(111), Tex_GUI(111)
+
+    'Scroll
+    CreateButton WindowCount, "ScrollUp", 592, 98, 8, 110, , , , , , , , , , DesignTypes.desSteel, DesignTypes.desSteel_Hover, DesignTypes.desSteel_Click
+    CreateButton WindowCount, "ScrollDown", 592, 208, 8, 110, , , , , , , , , , DesignTypes.desSteel, DesignTypes.desSteel_Hover, DesignTypes.desSteel_Click
 
     ' Set the default values
     CategoryIndex = AchievementCategory_Summary
@@ -256,7 +263,6 @@ Private Sub MovePageDown()
     End If
 End Sub
 
-
 Public Sub AllocateAllAchievements()
     Dim i As Long
 
@@ -395,10 +401,19 @@ Private Sub DrawAchievement()
 
     StringWidth = TextWidth(Font(Fonts.OpenSans_Effect), "PONTOS DE CONQUISTA: " & GetPlayerAchievementPoints())
 
-    RenderDesign DesignTypes.desTextAincrad, xO + 180, yO + 87, 2, 250
+    RenderDesign DesignTypes.desTextAincrad, xO + 150, yO + 87, 2, 250
+    RenderDesign DesignTypes.desTextAincrad, xO + 410, yO + 87, 2, 250
     RenderDesign DesignTypes.desWin_AincradMenu, xO, yO + 40, Width, 30
 
     RenderText Font(Fonts.OpenSans_Effect), "PONTOS DE CONQUISTA: " & GetPlayerAchievementPoints(), xO + (Width * 0.5) - (StringWidth * 0.5), yO + 48, Gold
+    
+    Dim TextArray() As String
+    Dim Count As Long
+    
+    
+    
+    
+    
 End Sub
 
 Public Sub CheckAchievement()

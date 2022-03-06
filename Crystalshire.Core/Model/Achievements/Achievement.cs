@@ -7,14 +7,14 @@
         public int Point { get; set; }
         public int AttributeId { get; set; }
         public AchievementCategory Category { get; set; }
-        public AchievementRequirementEntry Entry { get; set; }
-        public AchievementReward Reward { get; set; }
+        public IList<AchievementRequirementEntry> Requirements { get; set; }
+        public IList<AchievementReward> Rewards { get; set; }
 
         public Achievement() {
             Name = string.Empty;
             Description = string.Empty;
-            Reward = new AchievementReward();
-            Entry = new AchievementRequirementEntry();
+            Requirements = new List<AchievementRequirementEntry>();
+            Rewards = new List<AchievementReward>();
         }
 
         public override string ToString() {

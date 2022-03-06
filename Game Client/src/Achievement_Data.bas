@@ -20,7 +20,7 @@ Public Enum AchievementCategory
     AchievementCategory_Count
 End Enum
 
-Private Type AchievementEntryRec
+Private Type AchievementRequirementRec
     Id As Long
     Value As Long
     Level As Long
@@ -48,18 +48,20 @@ Private Type AchievementRec
     Points As Long
     AttributeId As Long
     Category As AchievementCategory
-    Entry As AchievementEntryRec
-    Reward As AchievementRewardRec
+    RewardCount As Long
+    Rewards() As AchievementRewardRec
+    RequirementCount As Long
+    Requirements() As AchievementRequirementRec
 End Type
 
 Public Sub LoadAchievements()
     Dim Index As Long
-    Dim i As Long
+    Dim i As Long, n As Long
     Dim Name As String
     Dim Description As String
 
     Index = GetFileHandler(App.Path & "\Data Files\Data\Achievements.dat")
-    
+
     If Index > 0 Then
         MaxAchievements = ReadInt32(Index)
 
@@ -67,37 +69,57 @@ Public Sub LoadAchievements()
             ReDim Achievement(1 To MaxAchievements)
 
             For i = 1 To MaxAchievements
-                Achievement(i).Id = ReadInt32(Index)
-                
-                Name = String(255, vbNullChar)
-                Description = String(1024, vbNullChar)
-                
-                Call ReadString(Index, Name)
-                Call ReadString(Index, Description)
-                
-                Achievement(i).Name = Replace(Name, vbNullChar, vbNullString)
-                Achievement(i).Description = Replace(Description, vbNullChar, vbNullString)
-                
-                Achievement(i).Rarity = ReadInt32(Index)
-                Achievement(i).Points = ReadInt32(Index)
-                Achievement(i).AttributeId = ReadInt32(Index)
-                Achievement(i).Category = ReadInt32(Index)
+                With Achievement(i)
+                    .Id = ReadInt32(Index)
 
-                Achievement(i).Entry.Id = ReadInt32(Index)
-                Achievement(i).Entry.Value = ReadInt32(Index)
-                Achievement(i).Entry.Level = ReadInt32(Index)
-                Achievement(i).Entry.Count = ReadInt32(Index)
-                Achievement(i).Entry.Rarity = ReadInt32(Index)
-                Achievement(i).Entry.Equipment = ReadInt32(Index)
-                Achievement(i).Entry.PrimaryType = ReadInt32(Index)
-                Achievement(i).Entry.SecondaryType = ReadInt32(Index)
+                    Name = String(255, vbNullChar)
+                    Description = String(1024, vbNullChar)
 
-                Achievement(i).Reward.Id = ReadInt32(Index)
-                Achievement(i).Reward.Value = ReadInt32(Index)
-                Achievement(i).Reward.Level = ReadInt32(Index)
-                Achievement(i).Reward.Bound = ReadByte(Index)
-                Achievement(i).Reward.AttributeId = ReadInt32(Index)
-                Achievement(i).Reward.UpgradeId = ReadInt32(Index)
+                    Call ReadString(Index, Name)
+                    Call ReadString(Index, Description)
+
+                    .Name = Replace(Name, vbNullChar, vbNullString)
+                    .Description = Replace(Description, vbNullChar, vbNullString)
+
+                    .Rarity = ReadInt32(Index)
+                    .Points = ReadInt32(Index)
+                    .AttributeId = ReadInt32(Index)
+                    .Category = ReadInt32(Index)
+
+                    .RequirementCount = ReadInt32(Index)
+
+                    If .RequirementCount > 0 Then
+                        ReDim .Requirements(1 To .RequirementCount)
+
+                        For n = 1 To .RequirementCount
+                            .Requirements(n).Id = ReadInt32(Index)
+                            .Requirements(n).Value = ReadInt32(Index)
+                            .Requirements(n).Level = ReadInt32(Index)
+                            .Requirements(n).Count = ReadInt32(Index)
+                            .Requirements(n).Rarity = ReadInt32(Index)
+                            .Requirements(n).Equipment = ReadInt32(Index)
+                            .Requirements(n).PrimaryType = ReadInt32(Index)
+                            .Requirements(n).SecondaryType = ReadInt32(Index)
+                        Next
+                    End If
+
+                    .RewardCount = ReadInt32(Index)
+
+                    If .RewardCount > 0 Then
+                        ReDim .Rewards(1 To .RewardCount)
+
+                        For n = 1 To .RewardCount
+                            .Rewards(n).Id = ReadInt32(Index)
+                            .Rewards(n).Value = ReadInt32(Index)
+                            .Rewards(n).Level = ReadInt32(Index)
+                            .Rewards(n).Bound = ReadBoolean(Index)
+                            .Rewards(n).AttributeId = ReadInt32(Index)
+                            .Rewards(n).UpgradeId = ReadInt32(Index)
+                        Next
+                    End If
+
+                End With
+
             Next
         End If
     End If

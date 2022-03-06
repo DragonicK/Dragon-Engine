@@ -51,7 +51,11 @@
             this.LabelId = new System.Windows.Forms.Label();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.GroupReward = new System.Windows.Forms.GroupBox();
-            this.TextRewardBound = new System.Windows.Forms.TextBox();
+            this.ComboRewardBound = new System.Windows.Forms.ComboBox();
+            this.LabelRewardIndex = new System.Windows.Forms.Label();
+            this.ScrollRewardIndex = new System.Windows.Forms.HScrollBar();
+            this.ButtonRemoveReward = new System.Windows.Forms.Button();
+            this.ButtonAddReward = new System.Windows.Forms.Button();
             this.label9 = new System.Windows.Forms.Label();
             this.ComboRewardType = new System.Windows.Forms.ComboBox();
             this.label5 = new System.Windows.Forms.Label();
@@ -67,6 +71,10 @@
             this.label8 = new System.Windows.Forms.Label();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.LabelRequirementIndex = new System.Windows.Forms.Label();
+            this.ScrollRequirementIndex = new System.Windows.Forms.HScrollBar();
+            this.ButtonRemoveRequirement = new System.Windows.Forms.Button();
+            this.ButtonAddRequirement = new System.Windows.Forms.Button();
             this.ComboEquipment = new System.Windows.Forms.ComboBox();
             this.label11 = new System.Windows.Forms.Label();
             this.ComboRarity = new System.Windows.Forms.ComboBox();
@@ -364,7 +372,11 @@
             // 
             // GroupReward
             // 
-            this.GroupReward.Controls.Add(this.TextRewardBound);
+            this.GroupReward.Controls.Add(this.ComboRewardBound);
+            this.GroupReward.Controls.Add(this.LabelRewardIndex);
+            this.GroupReward.Controls.Add(this.ScrollRewardIndex);
+            this.GroupReward.Controls.Add(this.ButtonRemoveReward);
+            this.GroupReward.Controls.Add(this.ButtonAddReward);
             this.GroupReward.Controls.Add(this.label9);
             this.GroupReward.Controls.Add(this.ComboRewardType);
             this.GroupReward.Controls.Add(this.label5);
@@ -386,19 +398,63 @@
             this.GroupReward.TabStop = false;
             this.GroupReward.Text = "Reward";
             // 
-            // TextRewardBound
+            // ComboRewardBound
             // 
-            this.TextRewardBound.Location = new System.Drawing.Point(15, 213);
-            this.TextRewardBound.Name = "TextRewardBound";
-            this.TextRewardBound.Size = new System.Drawing.Size(230, 23);
-            this.TextRewardBound.TabIndex = 15;
-            this.TextRewardBound.Text = "0";
-            this.TextRewardBound.TextChanged += new System.EventHandler(this.TextRewardBound_TextChanged);
+            this.ComboRewardBound.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.ComboRewardBound.FormattingEnabled = true;
+            this.ComboRewardBound.Items.AddRange(new object[] {
+            "False",
+            "True"});
+            this.ComboRewardBound.Location = new System.Drawing.Point(19, 288);
+            this.ComboRewardBound.Name = "ComboRewardBound";
+            this.ComboRewardBound.Size = new System.Drawing.Size(230, 23);
+            this.ComboRewardBound.TabIndex = 34;
+            this.ComboRewardBound.SelectedIndexChanged += new System.EventHandler(this.ComboRewardBound_SelectedIndexChanged);
+            // 
+            // LabelRewardIndex
+            // 
+            this.LabelRewardIndex.Location = new System.Drawing.Point(19, 47);
+            this.LabelRewardIndex.Name = "LabelRewardIndex";
+            this.LabelRewardIndex.Size = new System.Drawing.Size(229, 15);
+            this.LabelRewardIndex.TabIndex = 32;
+            this.LabelRewardIndex.Text = "Reward Index: 0/0";
+            this.LabelRewardIndex.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // ScrollRewardIndex
+            // 
+            this.ScrollRewardIndex.Enabled = false;
+            this.ScrollRewardIndex.LargeChange = 1;
+            this.ScrollRewardIndex.Location = new System.Drawing.Point(19, 64);
+            this.ScrollRewardIndex.Maximum = 0;
+            this.ScrollRewardIndex.Name = "ScrollRewardIndex";
+            this.ScrollRewardIndex.Size = new System.Drawing.Size(229, 19);
+            this.ScrollRewardIndex.TabIndex = 33;
+            this.ScrollRewardIndex.Scroll += new System.Windows.Forms.ScrollEventHandler(this.ScrollRewardIndex_Scroll);
+            // 
+            // ButtonRemoveReward
+            // 
+            this.ButtonRemoveReward.Location = new System.Drawing.Point(150, 18);
+            this.ButtonRemoveReward.Name = "ButtonRemoveReward";
+            this.ButtonRemoveReward.Size = new System.Drawing.Size(75, 23);
+            this.ButtonRemoveReward.TabIndex = 31;
+            this.ButtonRemoveReward.Text = "Remove";
+            this.ButtonRemoveReward.UseVisualStyleBackColor = true;
+            this.ButtonRemoveReward.Click += new System.EventHandler(this.ButtonRemoveReward_Click);
+            // 
+            // ButtonAddReward
+            // 
+            this.ButtonAddReward.Location = new System.Drawing.Point(49, 18);
+            this.ButtonAddReward.Name = "ButtonAddReward";
+            this.ButtonAddReward.Size = new System.Drawing.Size(75, 23);
+            this.ButtonAddReward.TabIndex = 30;
+            this.ButtonAddReward.Text = "Add";
+            this.ButtonAddReward.UseVisualStyleBackColor = true;
+            this.ButtonAddReward.Click += new System.EventHandler(this.ButtonAddReward_Click);
             // 
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(15, 195);
+            this.label9.Location = new System.Drawing.Point(19, 272);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(56, 15);
             this.label9.TabIndex = 14;
@@ -408,7 +464,7 @@
             // 
             this.ComboRewardType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.ComboRewardType.FormattingEnabled = true;
-            this.ComboRewardType.Location = new System.Drawing.Point(15, 40);
+            this.ComboRewardType.Location = new System.Drawing.Point(19, 117);
             this.ComboRewardType.Name = "ComboRewardType";
             this.ComboRewardType.Size = new System.Drawing.Size(230, 23);
             this.ComboRewardType.TabIndex = 11;
@@ -417,7 +473,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(15, 22);
+            this.label5.Location = new System.Drawing.Point(19, 99);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(42, 15);
             this.label5.TabIndex = 12;
@@ -425,7 +481,7 @@
             // 
             // TextRewardUpgradeId
             // 
-            this.TextRewardUpgradeId.Location = new System.Drawing.Point(15, 297);
+            this.TextRewardUpgradeId.Location = new System.Drawing.Point(19, 374);
             this.TextRewardUpgradeId.Name = "TextRewardUpgradeId";
             this.TextRewardUpgradeId.Size = new System.Drawing.Size(230, 23);
             this.TextRewardUpgradeId.TabIndex = 17;
@@ -435,7 +491,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(15, 279);
+            this.label3.Location = new System.Drawing.Point(19, 356);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(84, 15);
             this.label3.TabIndex = 10;
@@ -443,7 +499,7 @@
             // 
             // TextRewardAttributeId
             // 
-            this.TextRewardAttributeId.Location = new System.Drawing.Point(15, 255);
+            this.TextRewardAttributeId.Location = new System.Drawing.Point(19, 332);
             this.TextRewardAttributeId.Name = "TextRewardAttributeId";
             this.TextRewardAttributeId.Size = new System.Drawing.Size(230, 23);
             this.TextRewardAttributeId.TabIndex = 16;
@@ -453,7 +509,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(15, 237);
+            this.label4.Location = new System.Drawing.Point(19, 314);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(98, 15);
             this.label4.TabIndex = 8;
@@ -461,7 +517,7 @@
             // 
             // TextRewardLevel
             // 
-            this.TextRewardLevel.Location = new System.Drawing.Point(15, 171);
+            this.TextRewardLevel.Location = new System.Drawing.Point(19, 248);
             this.TextRewardLevel.Name = "TextRewardLevel";
             this.TextRewardLevel.Size = new System.Drawing.Size(230, 23);
             this.TextRewardLevel.TabIndex = 14;
@@ -471,7 +527,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(15, 153);
+            this.label6.Location = new System.Drawing.Point(19, 230);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(49, 15);
             this.label6.TabIndex = 4;
@@ -479,7 +535,7 @@
             // 
             // TextRewardValue
             // 
-            this.TextRewardValue.Location = new System.Drawing.Point(15, 128);
+            this.TextRewardValue.Location = new System.Drawing.Point(19, 205);
             this.TextRewardValue.Name = "TextRewardValue";
             this.TextRewardValue.Size = new System.Drawing.Size(230, 23);
             this.TextRewardValue.TabIndex = 13;
@@ -489,7 +545,7 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(15, 110);
+            this.label7.Location = new System.Drawing.Point(19, 187);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(49, 15);
             this.label7.TabIndex = 2;
@@ -497,7 +553,7 @@
             // 
             // TextRewardId
             // 
-            this.TextRewardId.Location = new System.Drawing.Point(15, 84);
+            this.TextRewardId.Location = new System.Drawing.Point(19, 161);
             this.TextRewardId.Name = "TextRewardId";
             this.TextRewardId.Size = new System.Drawing.Size(230, 23);
             this.TextRewardId.TabIndex = 12;
@@ -507,7 +563,7 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(15, 66);
+            this.label8.Location = new System.Drawing.Point(19, 143);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(28, 15);
             this.label8.TabIndex = 0;
@@ -526,6 +582,10 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.LabelRequirementIndex);
+            this.groupBox1.Controls.Add(this.ScrollRequirementIndex);
+            this.groupBox1.Controls.Add(this.ButtonRemoveRequirement);
+            this.groupBox1.Controls.Add(this.ButtonAddRequirement);
             this.groupBox1.Controls.Add(this.ComboEquipment);
             this.groupBox1.Controls.Add(this.label11);
             this.groupBox1.Controls.Add(this.ComboRarity);
@@ -550,11 +610,51 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Requirement";
             // 
+            // LabelRequirementIndex
+            // 
+            this.LabelRequirementIndex.Location = new System.Drawing.Point(17, 51);
+            this.LabelRequirementIndex.Name = "LabelRequirementIndex";
+            this.LabelRequirementIndex.Size = new System.Drawing.Size(229, 15);
+            this.LabelRequirementIndex.TabIndex = 28;
+            this.LabelRequirementIndex.Text = "Requirement Index: 0/0";
+            this.LabelRequirementIndex.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // ScrollRequirementIndex
+            // 
+            this.ScrollRequirementIndex.Enabled = false;
+            this.ScrollRequirementIndex.LargeChange = 1;
+            this.ScrollRequirementIndex.Location = new System.Drawing.Point(17, 68);
+            this.ScrollRequirementIndex.Maximum = 0;
+            this.ScrollRequirementIndex.Name = "ScrollRequirementIndex";
+            this.ScrollRequirementIndex.Size = new System.Drawing.Size(229, 19);
+            this.ScrollRequirementIndex.TabIndex = 29;
+            this.ScrollRequirementIndex.Scroll += new System.Windows.Forms.ScrollEventHandler(this.ScrollRequirementIndex_Scroll);
+            // 
+            // ButtonRemoveRequirement
+            // 
+            this.ButtonRemoveRequirement.Location = new System.Drawing.Point(148, 22);
+            this.ButtonRemoveRequirement.Name = "ButtonRemoveRequirement";
+            this.ButtonRemoveRequirement.Size = new System.Drawing.Size(75, 23);
+            this.ButtonRemoveRequirement.TabIndex = 27;
+            this.ButtonRemoveRequirement.Text = "Remove";
+            this.ButtonRemoveRequirement.UseVisualStyleBackColor = true;
+            this.ButtonRemoveRequirement.Click += new System.EventHandler(this.ButtonRemoveRequirement_Click);
+            // 
+            // ButtonAddRequirement
+            // 
+            this.ButtonAddRequirement.Location = new System.Drawing.Point(47, 22);
+            this.ButtonAddRequirement.Name = "ButtonAddRequirement";
+            this.ButtonAddRequirement.Size = new System.Drawing.Size(75, 23);
+            this.ButtonAddRequirement.TabIndex = 26;
+            this.ButtonAddRequirement.Text = "Add";
+            this.ButtonAddRequirement.UseVisualStyleBackColor = true;
+            this.ButtonAddRequirement.Click += new System.EventHandler(this.ButtonAddRequirement_Click);
+            // 
             // ComboEquipment
             // 
             this.ComboEquipment.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.ComboEquipment.FormattingEnabled = true;
-            this.ComboEquipment.Location = new System.Drawing.Point(15, 170);
+            this.ComboEquipment.Location = new System.Drawing.Point(17, 255);
             this.ComboEquipment.Name = "ComboEquipment";
             this.ComboEquipment.Size = new System.Drawing.Size(230, 23);
             this.ComboEquipment.TabIndex = 24;
@@ -563,7 +663,7 @@
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(15, 152);
+            this.label11.Location = new System.Drawing.Point(17, 237);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(77, 15);
             this.label11.TabIndex = 25;
@@ -573,7 +673,7 @@
             // 
             this.ComboRarity.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.ComboRarity.FormattingEnabled = true;
-            this.ComboRarity.Location = new System.Drawing.Point(15, 125);
+            this.ComboRarity.Location = new System.Drawing.Point(17, 210);
             this.ComboRarity.Name = "ComboRarity";
             this.ComboRarity.Size = new System.Drawing.Size(230, 23);
             this.ComboRarity.TabIndex = 22;
@@ -582,7 +682,7 @@
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(15, 107);
+            this.label10.Location = new System.Drawing.Point(17, 192);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(56, 15);
             this.label10.TabIndex = 23;
@@ -590,7 +690,7 @@
             // 
             // TextRequirementCount
             // 
-            this.TextRequirementCount.Location = new System.Drawing.Point(15, 343);
+            this.TextRequirementCount.Location = new System.Drawing.Point(17, 428);
             this.TextRequirementCount.Name = "TextRequirementCount";
             this.TextRequirementCount.Size = new System.Drawing.Size(230, 23);
             this.TextRequirementCount.TabIndex = 21;
@@ -600,7 +700,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(15, 325);
+            this.label1.Location = new System.Drawing.Point(17, 410);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(49, 15);
             this.label1.TabIndex = 20;
@@ -610,7 +710,7 @@
             // 
             this.ComboSecondary.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.ComboSecondary.FormattingEnabled = true;
-            this.ComboSecondary.Location = new System.Drawing.Point(15, 82);
+            this.ComboSecondary.Location = new System.Drawing.Point(17, 167);
             this.ComboSecondary.Name = "ComboSecondary";
             this.ComboSecondary.Size = new System.Drawing.Size(230, 23);
             this.ComboSecondary.TabIndex = 18;
@@ -619,7 +719,7 @@
             // label15
             // 
             this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(15, 64);
+            this.label15.Location = new System.Drawing.Point(17, 149);
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(77, 15);
             this.label15.TabIndex = 19;
@@ -629,7 +729,7 @@
             // 
             this.ComboPrimary.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.ComboPrimary.FormattingEnabled = true;
-            this.ComboPrimary.Location = new System.Drawing.Point(15, 40);
+            this.ComboPrimary.Location = new System.Drawing.Point(17, 125);
             this.ComboPrimary.Name = "ComboPrimary";
             this.ComboPrimary.Size = new System.Drawing.Size(230, 23);
             this.ComboPrimary.TabIndex = 11;
@@ -638,7 +738,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(15, 22);
+            this.label2.Location = new System.Drawing.Point(17, 107);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(63, 15);
             this.label2.TabIndex = 12;
@@ -646,7 +746,7 @@
             // 
             // TextRequirementLevel
             // 
-            this.TextRequirementLevel.Location = new System.Drawing.Point(15, 302);
+            this.TextRequirementLevel.Location = new System.Drawing.Point(17, 387);
             this.TextRequirementLevel.Name = "TextRequirementLevel";
             this.TextRequirementLevel.Size = new System.Drawing.Size(230, 23);
             this.TextRequirementLevel.TabIndex = 14;
@@ -656,7 +756,7 @@
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(15, 284);
+            this.label12.Location = new System.Drawing.Point(17, 369);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(49, 15);
             this.label12.TabIndex = 4;
@@ -664,7 +764,7 @@
             // 
             // TextRequirementValue
             // 
-            this.TextRequirementValue.Location = new System.Drawing.Point(15, 259);
+            this.TextRequirementValue.Location = new System.Drawing.Point(17, 344);
             this.TextRequirementValue.Name = "TextRequirementValue";
             this.TextRequirementValue.Size = new System.Drawing.Size(230, 23);
             this.TextRequirementValue.TabIndex = 13;
@@ -674,7 +774,7 @@
             // label13
             // 
             this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(15, 241);
+            this.label13.Location = new System.Drawing.Point(17, 326);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(49, 15);
             this.label13.TabIndex = 2;
@@ -682,7 +782,7 @@
             // 
             // TextRequirementId
             // 
-            this.TextRequirementId.Location = new System.Drawing.Point(15, 215);
+            this.TextRequirementId.Location = new System.Drawing.Point(17, 300);
             this.TextRequirementId.Name = "TextRequirementId";
             this.TextRequirementId.Size = new System.Drawing.Size(230, 23);
             this.TextRequirementId.TabIndex = 12;
@@ -692,7 +792,7 @@
             // label14
             // 
             this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(15, 197);
+            this.label14.Location = new System.Drawing.Point(17, 282);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(28, 15);
             this.label14.TabIndex = 0;
@@ -774,7 +874,6 @@
         private Label label3;
         private ComboBox ComboRewardType;
         private Label label5;
-        private TextBox TextRewardBound;
         private Label label9;
         private TabPage tabPage3;
         private GroupBox groupBox1;
@@ -794,5 +893,14 @@
         private Label label11;
         private ComboBox ComboRarity;
         private Label label10;
+        private Label LabelRequirementIndex;
+        private HScrollBar ScrollRequirementIndex;
+        private Button ButtonRemoveRequirement;
+        private Button ButtonAddRequirement;
+        private Label LabelRewardIndex;
+        private HScrollBar ScrollRewardIndex;
+        private Button ButtonRemoveReward;
+        private Button ButtonAddReward;
+        private ComboBox ComboRewardBound;
     }
 }

@@ -11,7 +11,7 @@ namespace Crystalshire.Game.Configurations.Data {
         public List<LevelRangeExclusion> DeletionLevelRanges { get; set; }
 
         public Character() {
-            Maximum = 5;
+            Maximum = 3;
             Create = true;
             Delete = true;
             DeleteMinimumLevel = 1;
