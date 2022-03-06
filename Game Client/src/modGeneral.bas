@@ -53,6 +53,7 @@ Public Sub Main()
     LoadItems
     ' LoadAnimations
     LoadConversations
+    LoadQuests
 
     InitPlayerAchievementArray
     AllocateAllAchievements

@@ -67,6 +67,8 @@ namespace Crystalshire.Editor.Quests {
                 ComboSelectableReward.SelectedIndex = (int)Element.SelectableReward;
                 TextSelectableRewardCount.Text = Element.SelectableRewardCount.ToString();
 
+                TextSelectableRewardCount.Enabled = Element.SelectableReward == QuestSelectableReward.Optional;
+
                 if (Element.Steps.Count > 0) {
                     stepIndex = 0;
                 }
@@ -234,6 +236,8 @@ namespace Crystalshire.Editor.Quests {
         private void ComboSelectableReward_SelectedIndexChanged(object sender, EventArgs e) {
             if (Element is not null) {
                 Element.SelectableReward = (QuestSelectableReward)((ComboBox)sender).SelectedIndex;
+
+                TextSelectableRewardCount.Enabled = Element.SelectableReward == QuestSelectableReward.Optional;
             }
         }
 

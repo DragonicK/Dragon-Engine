@@ -1,6 +1,5 @@
 ﻿namespace Crystalshire.Core.Model.Quests {
     public enum QuestActionType {
-        None,
         UseItem,
         CollectItem,
         ObtainItem,

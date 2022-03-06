@@ -24,7 +24,9 @@ namespace Crystalshire.Core.Content {
                         SelectableRewardCount = reader.ReadInt32()
                     };
 
-                    for (var x = 0; x < quest.Steps.Count; ++x) {
+                    var stepCount = reader.ReadInt32();
+
+                    for (var x = 0; x < stepCount; ++x) {
                         var step = new QuestStep() {
                             Title = reader.ReadString(),
                             Summary = reader.ReadString(),
@@ -39,10 +41,13 @@ namespace Crystalshire.Core.Content {
                         quest.Steps.Add(step);
                     }
 
-                    for (var y = 0; y < quest.Rewards.Count; y++) {
+                    var rewardCount = reader.ReadInt32();
+
+                    for (var y = 0; y < rewardCount; y++) {
                         var reward = new QuestReward() {
                             Id = reader.ReadInt32(),
                             Value = reader.ReadInt32(),
+                            Level = reader.ReadInt32(),
                             Bound = reader.ReadBoolean(),
                             AttributeId = reader.ReadInt32(),
                             UpgradeId = reader.ReadInt32(),
@@ -80,6 +85,8 @@ namespace Crystalshire.Core.Content {
                 writer.Write((int)quest.Shareable);
                 writer.Write((int)quest.SelectableReward);
                 writer.Write(quest.SelectableRewardCount);
+
+                writer.Write(quest.Steps.Count);
  
                 for (var x = 0; x < quest.Steps.Count; ++x) {
                     writer.Write(quest.Steps[i].Title);
@@ -91,9 +98,12 @@ namespace Crystalshire.Core.Content {
                     writer.Write(quest.Steps[i].Requirement.Y);
                 }
 
+                writer.Write(quest.Rewards.Count);
+
                 for (var y = 0; y < quest.Rewards.Count; y++) {
                     writer.Write(quest.Rewards[i].Id);
                     writer.Write(quest.Rewards[i].Value);
+                    writer.Write(quest.Rewards[i].Level);
                     writer.Write(quest.Rewards[i].Bound);
                     writer.Write(quest.Rewards[i].AttributeId);
                     writer.Write(quest.Rewards[i].UpgradeId);
