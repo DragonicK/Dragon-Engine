@@ -91,6 +91,8 @@
             this.label13 = new System.Windows.Forms.Label();
             this.TextRequirementId = new System.Windows.Forms.TextBox();
             this.label14 = new System.Windows.Forms.Label();
+            this.TextRequirementDescription = new System.Windows.Forms.TextBox();
+            this.label16 = new System.Windows.Forms.Label();
             this.GroupList.SuspendLayout();
             this.MenuStrip.SuspendLayout();
             this.TabAchievement.SuspendLayout();
@@ -113,14 +115,14 @@
             this.GroupList.Location = new System.Drawing.Point(12, 27);
             this.GroupList.Name = "GroupList";
             this.GroupList.Padding = new System.Windows.Forms.Padding(10, 3, 10, 10);
-            this.GroupList.Size = new System.Drawing.Size(218, 576);
+            this.GroupList.Size = new System.Drawing.Size(218, 618);
             this.GroupList.TabIndex = 0;
             this.GroupList.TabStop = false;
             this.GroupList.Text = "Achievements";
             // 
             // ButtonClear
             // 
-            this.ButtonClear.Location = new System.Drawing.Point(13, 538);
+            this.ButtonClear.Location = new System.Drawing.Point(13, 582);
             this.ButtonClear.Name = "ButtonClear";
             this.ButtonClear.Size = new System.Drawing.Size(192, 23);
             this.ButtonClear.TabIndex = 3;
@@ -130,7 +132,7 @@
             // 
             // ButtonDelete
             // 
-            this.ButtonDelete.Location = new System.Drawing.Point(115, 509);
+            this.ButtonDelete.Location = new System.Drawing.Point(115, 553);
             this.ButtonDelete.Name = "ButtonDelete";
             this.ButtonDelete.Size = new System.Drawing.Size(90, 23);
             this.ButtonDelete.TabIndex = 2;
@@ -140,7 +142,7 @@
             // 
             // ButtonAdd
             // 
-            this.ButtonAdd.Location = new System.Drawing.Point(13, 509);
+            this.ButtonAdd.Location = new System.Drawing.Point(13, 553);
             this.ButtonAdd.Name = "ButtonAdd";
             this.ButtonAdd.Size = new System.Drawing.Size(90, 23);
             this.ButtonAdd.TabIndex = 1;
@@ -155,7 +157,7 @@
             this.ListIndex.ItemHeight = 15;
             this.ListIndex.Location = new System.Drawing.Point(13, 22);
             this.ListIndex.Name = "ListIndex";
-            this.ListIndex.Size = new System.Drawing.Size(192, 469);
+            this.ListIndex.Size = new System.Drawing.Size(192, 514);
             this.ListIndex.TabIndex = 0;
             this.ListIndex.Click += new System.EventHandler(this.ListIndex_Click);
             // 
@@ -202,7 +204,7 @@
             this.TabAchievement.Location = new System.Drawing.Point(236, 32);
             this.TabAchievement.Name = "TabAchievement";
             this.TabAchievement.SelectedIndex = 0;
-            this.TabAchievement.Size = new System.Drawing.Size(296, 571);
+            this.TabAchievement.Size = new System.Drawing.Size(296, 617);
             this.TabAchievement.TabIndex = 4;
             // 
             // tabPage1
@@ -575,13 +577,15 @@
             this.tabPage3.Location = new System.Drawing.Point(4, 24);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage3.Size = new System.Drawing.Size(288, 543);
+            this.tabPage3.Size = new System.Drawing.Size(288, 589);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Requirement";
             this.tabPage3.UseVisualStyleBackColor = true;
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.TextRequirementDescription);
+            this.groupBox1.Controls.Add(this.label16);
             this.groupBox1.Controls.Add(this.LabelRequirementIndex);
             this.groupBox1.Controls.Add(this.ScrollRequirementIndex);
             this.groupBox1.Controls.Add(this.ButtonRemoveRequirement);
@@ -605,7 +609,7 @@
             this.groupBox1.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.groupBox1.Location = new System.Drawing.Point(12, 8);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(263, 522);
+            this.groupBox1.Size = new System.Drawing.Size(263, 568);
             this.groupBox1.TabIndex = 6;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Requirement";
@@ -798,11 +802,29 @@
             this.label14.TabIndex = 0;
             this.label14.Text = "Id:";
             // 
+            // TextRequirementDescription
+            // 
+            this.TextRequirementDescription.Location = new System.Drawing.Point(16, 473);
+            this.TextRequirementDescription.Multiline = true;
+            this.TextRequirementDescription.Name = "TextRequirementDescription";
+            this.TextRequirementDescription.Size = new System.Drawing.Size(230, 77);
+            this.TextRequirementDescription.TabIndex = 31;
+            this.TextRequirementDescription.TextChanged += new System.EventHandler(this.TextRequirementDescription_TextChanged);
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Location = new System.Drawing.Point(16, 455);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(91, 15);
+            this.label16.TabIndex = 30;
+            this.label16.Text = "Description:";
+            // 
             // FormAchievement
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(542, 611);
+            this.ClientSize = new System.Drawing.Size(542, 661);
             this.Controls.Add(this.TabAchievement);
             this.Controls.Add(this.MenuStrip);
             this.Controls.Add(this.GroupList);
@@ -902,5 +924,7 @@
         private Button ButtonRemoveReward;
         private Button ButtonAddReward;
         private ComboBox ComboRewardBound;
+        private TextBox TextRequirementDescription;
+        private Label label16;
     }
 }

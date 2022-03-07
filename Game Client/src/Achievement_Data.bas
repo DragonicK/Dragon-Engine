@@ -29,6 +29,7 @@ Private Type AchievementRequirementRec
     Equipment As Long
     PrimaryType As Long
     SecondaryType As Long
+    Description As String
 End Type
 
 Private Type AchievementRewardRec
@@ -100,6 +101,10 @@ Public Sub LoadAchievements()
                             .Requirements(n).Equipment = ReadInt32(Index)
                             .Requirements(n).PrimaryType = ReadInt32(Index)
                             .Requirements(n).SecondaryType = ReadInt32(Index)
+                            
+                             Call ReadString(Index, Description)
+                            
+                            .Requirements(n).Description = Replace(Description, vbNullChar, vbNullString)
                         Next
                     End If
 

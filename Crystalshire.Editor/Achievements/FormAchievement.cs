@@ -114,6 +114,7 @@ namespace Crystalshire.Editor.Achievements {
             TextRequirementValue.Text = string.Empty;
             TextRequirementLevel.Text = string.Empty;
             TextRequirementCount.Text = string.Empty;
+            TextRequirementDescription.Text = string.Empty;
         }
 
         private void SetEnabled(bool enabled) {
@@ -401,6 +402,17 @@ namespace Crystalshire.Editor.Achievements {
                     ComboRewardBound.SelectedIndex = Convert.ToInt32(Element.Rewards[rewardIndex].Bound);
                 }
             }
+
+            if (rewardIndex <= Util.NotSelected) {
+                ComboRewardType.SelectedIndex = 0;
+                TextRewardId.Text = "0";
+                TextRewardValue.Text = "0";
+                TextRewardLevel.Text = "0";
+                TextRewardAttributeId.Text = "0";
+                TextRewardUpgradeId.Text = "0";
+                ComboRewardBound.SelectedIndex = 0;
+            }
+
         }
 
 
@@ -518,6 +530,14 @@ namespace Crystalshire.Editor.Achievements {
             }
         }
 
+        private void TextRequirementDescription_TextChanged(object sender, EventArgs e) {
+            if (Element is not null) {
+                if (requirementIndex > Util.NotSelected) {
+                    Element.Requirements[requirementIndex].Description = TextRequirementDescription.Text;
+                }
+            }
+        }
+
         private void UpdateRequirementIndexLabel() {
             if (Element is not null) {
                 LabelRequirementIndex.Text = $"Requirement Index: {requirementIndex + 1}/ {Element.Requirements.Count}";
@@ -549,6 +569,7 @@ namespace Crystalshire.Editor.Achievements {
                 TextRequirementValue.Enabled = isEnabled;
                 TextRequirementLevel.Enabled = isEnabled;
                 TextRequirementCount.Enabled = isEnabled;
+                TextRequirementDescription.Enabled = isEnabled;
             }
         }
 
@@ -563,11 +584,25 @@ namespace Crystalshire.Editor.Achievements {
                     TextRequirementValue.Text = Element.Requirements[requirementIndex].Value.ToString();
                     TextRequirementLevel.Text = Element.Requirements[requirementIndex].Level.ToString();
                     TextRequirementCount.Text = Element.Requirements[requirementIndex].Count.ToString();
+                    TextRequirementDescription.Text = Element.Requirements[requirementIndex].Description;
                 }
+            }
+
+            if (requirementIndex <= Util.NotSelected) {
+                ComboPrimary.SelectedIndex = 0;
+                ComboSecondary.SelectedIndex = 0;
+                ComboRarity.SelectedIndex = 0;
+                ComboEquipment.SelectedIndex = 0;
+                TextRequirementId.Text = "0";
+                TextRequirementValue.Text = "0";
+                TextRequirementLevel.Text = "0";
+                TextRequirementCount.Text = "0";
+                TextRequirementDescription.Text = string.Empty;
             }
         }
 
         #endregion
+
 
     }
 }

@@ -36,7 +36,8 @@ namespace Crystalshire.Core.Content {
                             Rarity = (Rarity)reader.ReadInt32(),
                             Equipment = (EquipmentType)reader.ReadInt32(),
                             PrimaryType = (AchievementPrimaryRequirement)reader.ReadInt32(),
-                            SecondaryType = (AchievementSecondaryRequirement)reader.ReadInt32()
+                            SecondaryType = (AchievementSecondaryRequirement)reader.ReadInt32(),
+                            Description = reader.ReadString()
                         };
 
                         achievement.Requirements.Add(entry);
@@ -98,6 +99,7 @@ namespace Crystalshire.Core.Content {
                     writer.Write((int)entry.Equipment);
                     writer.Write((int)entry.PrimaryType);
                     writer.Write((int)entry.SecondaryType);
+                    writer.Write(entry.Description);
                 }
 
                 writer.Write(achievement.Rewards.Count);
