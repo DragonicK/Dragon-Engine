@@ -33,11 +33,12 @@ namespace Crystalshire.Game.Server {
 
                 var membership = Configuration!.DatabaseMembership;
                 var factory = DatabaseService!.DatabaseFactory!;
+
                 var handler = factory.GetMembershipHandler(membership);
 
                 await handler.SaveFullAccountAsync(Player.Account);
-
                 await handler.SaveCharacterAsync(Player.Character);
+                await handler.SaveSettings(Player.Settings.GetSettings());
                 await handler.SaveCraftAsync(Player.Craft.GetCharacterCraft());
                 await handler.SaveCurrencyAsync(Player.Currencies.ToList());
                 await handler.SaveInventoryAsync(Player.Inventories.ToList());

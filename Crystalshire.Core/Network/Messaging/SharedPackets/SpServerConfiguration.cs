@@ -1,6 +1,6 @@
 ﻿namespace Crystalshire.Core.Network.Messaging.SharedPackets {
-    public sealed class SpPlayerConfiguration : IMessagePacket {
-        public MessageHeader Header { get; set; } = MessageHeader.PlayerConfiguration;
+    public sealed class SpServerConfiguration : IMessagePacket {
+        public MessageHeader Header { get; set; } = MessageHeader.ServerConfiguration;
         public int MaximumAuras { get; set; }
         public int MaximumHeraldries { get; set; }
         public int MaximumInventories { get; set; }

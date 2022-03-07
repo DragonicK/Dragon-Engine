@@ -44,7 +44,7 @@ namespace Crystalshire.Game.Network {
         public void SendServerConfiguration(IPlayer player) {
             var config = Configuration.Player;
 
-            var packet = new SpPlayerConfiguration() {
+            var packet = new SpServerConfiguration() {
                 MaximumAuras = config.MaximumAuras,
                 MaximumHeraldries = config.MaximumHeraldries,
                 MaximumInventories = config.MaximumInventory,

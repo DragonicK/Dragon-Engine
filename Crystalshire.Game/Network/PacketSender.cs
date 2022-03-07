@@ -1254,6 +1254,19 @@ namespace Crystalshire.Game.Network {
             Writer.Enqueue(msg);
         }
 
+        public void SendSettings(IPlayer player) {
+            var packet = new SpSettings() {
+                ViewEquipment = player.Settings.ViewEquipment
+            };
+
+            var msg = Writer!.CreateMessage(packet);
+
+            msg.DestinationPeers.Add(player.GetConnection().Id);
+            msg.TransmissionTarget = TransmissionTarget.Destination;
+
+            Writer.Enqueue(msg);
+        }
+
         private SpPlayerData CreatePlayerDataPacket(IPlayer player) {
             var character = player.Character;
             var model = character.CostumeModel;

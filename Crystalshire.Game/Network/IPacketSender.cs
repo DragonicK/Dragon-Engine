@@ -114,5 +114,6 @@ namespace Crystalshire.Game.Network {
         void SendCraftOpen(IPlayer player);
         void SendShopOpen(IPlayer player, Shop shop);
         void SendViewEquipment(IPlayer player, IPlayer source);
+        void SendSettings(IPlayer player);
     }
 }

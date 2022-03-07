@@ -178,6 +178,17 @@ namespace Crystalshire.Core.Database.Handler {
             return await Context.SaveChangesAsync();
         }
 
+        public async Task<int> SaveSettings(CharacterSettings settings) {
+            if (settings.Id > 0) {
+                Context.Entry(settings).State = EntityState.Modified;
+            }
+            else {
+                Context.CharacterSettings!.Add(settings);
+            }
+
+            return await Context.SaveChangesAsync();
+        }
+
         public async Task<int> SaveCurrencyAsync(IList<CharacterCurrency> list) {
             for (var i = 0; i < list.Count; i++) {
                 var item = list[i];

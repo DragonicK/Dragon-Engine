@@ -96,6 +96,7 @@ Public Sub InitMessages()
     HandleDataSub(EnginePacket.PCraftOpen) = GetAddress(AddressOf HandleCraftOpen)
     HandleDataSub(EnginePacket.PShopOpen) = GetAddress(AddressOf HandleShopOpen)
     HandleDataSub(EnginePacket.PViewEquipment) = GetAddress(AddressOf HandleViewEquipment)
+    HandleDataSub(EnginePacket.PSettings) = GetAddress(AddressOf HandleSettings)
     
     
     ' HandleDataSub(SNpcAttack) = GetAddress(AddressOf HandleNpcAttack)

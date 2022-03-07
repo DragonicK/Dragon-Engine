@@ -140,6 +140,8 @@ Public Enum EnginePacket
     PShopSellItem
     PRequestViewEquipment
     PViewEquipment
+    PViewEquipmentVisibility
+    PSettings
     
     PPacketCount
 End Enum

@@ -2,10 +2,16 @@
 
 namespace Crystalshire.Game.Players {
     public class PlayerSettings : IPlayerSettings {
-        public bool ViewEquipment { get; set; } = true;
-        
+        public bool ViewEquipment {
+            get {
+                return _settings.ViewEquipment; 
+            }
+            set {
+                _settings.ViewEquipment = value;
+            }
+        }
+   
         private readonly CharacterSettings _settings;
-
 
         public PlayerSettings(long characterId, CharacterSettings settings) {
             _settings = settings;
@@ -15,6 +21,10 @@ namespace Crystalshire.Game.Players {
                     CharacterId = characterId
                 };
             }
+        }
+
+        public CharacterSettings GetSettings() {
+            return _settings;
         }
     }
 }

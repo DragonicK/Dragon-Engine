@@ -58,6 +58,17 @@ Public Sub WriteByte(ByVal nByte As Byte)
     WriteHead = WriteHead + 1
 End Sub
 
+Public Sub WriteBoolean(ByVal nBool As Boolean)
+    Dim Value As Byte
+
+    If nBool Then
+        Value = 1
+    End If
+    
+    Call WriteByte(Value)
+
+End Sub
+
 Public Sub WriteBytes(ByRef nByte() As Byte)
     Dim nLength As Long
     nLength = (UBound(nByte) - LBound(nByte)) + 1

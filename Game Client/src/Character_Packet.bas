@@ -1,6 +1,18 @@
 Attribute VB_Name = "Character_Packet"
 Option Explicit
 
+Public Sub SendViewEquipmentVisibility(ByVal IsVisible As Boolean)
+    Dim Buffer As clsBuffer
+    Set Buffer = New clsBuffer
+
+    Buffer.WriteLong EnginePacket.PViewEquipmentVisibility
+    Buffer.WriteBoolean IsVisible
+
+    SendData Buffer.ToArray()
+
+    Set Buffer = Nothing
+End Sub
+
 Public Sub SendUnequip(ByVal eqNum As Long)
     Dim Buffer As clsBuffer
     Set Buffer = New clsBuffer

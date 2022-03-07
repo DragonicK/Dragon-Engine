@@ -13,7 +13,7 @@
         LoadMap,
         InGame,
         SetPlayerIndex,
-        PlayerConfiguration,
+        ServerConfiguration,
         PlayerData,
         ClearPlayers,
         HighIndex,
@@ -137,6 +137,8 @@
         ShopBuyItem,
         ShopSellItem,
         RequestViewEquipment,
-        ViewEquipment
+        ViewEquipment,
+        ViewEquipmentVisibility,
+        Settings
     }
 }

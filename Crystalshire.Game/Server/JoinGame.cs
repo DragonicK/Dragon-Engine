@@ -119,6 +119,7 @@ namespace Crystalshire.Game.Server {
 
             PacketSender!.SendServerConfiguration(Player!);
             PacketSender!.SendServerRates(Player);
+            PacketSender!.SendSettings(Player!);
 
             WarpToInstance();
 

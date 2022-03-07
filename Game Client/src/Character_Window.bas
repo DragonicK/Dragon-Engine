@@ -69,13 +69,26 @@ Public Sub CreateWindow_Character()
     CreatePictureBox WindowCount, "btnGreyStat_5", 180, 332, 15, 15, False, , , , Tex_GUI(47), Tex_GUI(47), Tex_GUI(47)
     CreatePictureBox WindowCount, "btnGreyStat_6", 180, 352, 15, 15, False, , , , Tex_GUI(47), Tex_GUI(47), Tex_GUI(47)
 
-    CreateCheckbox WindowCount, "chkView", 48, 76, 35, , False, "VISUALIZAR EQUIPAMENTO", OpenSans_Effect, ColorType.Gold, , , , DesignTypes.desChkNorm
+    CreateCheckbox WindowCount, "chkView", 48, 76, 35, , False, "VISUALIZAR EQUIPAMENTO", OpenSans_Effect, ColorType.Gold, , , , DesignTypes.desChkNorm, , , GetAddress(AddressOf Button_ViewVisibility)
 
     AttributePage = DefaultPage
 
     WindowIndex = WindowCount
     SetAllEquipmentPosition
 End Sub
+
+Private Sub Button_ViewVisibility()
+
+    With Windows(WindowIndex).Controls(GetControlIndex("winCharacter", "chkView"))
+        If .Value = 0 Then    ' set as false
+            Call SendViewEquipmentVisibility(False)
+        Else
+            Call SendViewEquipmentVisibility(True)
+        End If
+    End With
+    
+End Sub
+
 
 Private Sub ButtonDefaultPage_Click()
     Dim DefaultIndex As Long
