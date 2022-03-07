@@ -135,6 +135,8 @@
         ShopOpen,
         ShopClose,
         ShopBuyItem,
-        ShopSellItem
+        ShopSellItem,
+        RequestViewEquipment,
+        ViewEquipment
     }
 }

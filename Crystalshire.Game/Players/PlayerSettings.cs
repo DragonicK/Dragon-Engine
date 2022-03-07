@@ -2,7 +2,10 @@
 
 namespace Crystalshire.Game.Players {
     public class PlayerSettings : IPlayerSettings {
+        public bool ViewEquipment { get; set; } = true;
+        
         private readonly CharacterSettings _settings;
+
 
         public PlayerSettings(long characterId, CharacterSettings settings) {
             _settings = settings;

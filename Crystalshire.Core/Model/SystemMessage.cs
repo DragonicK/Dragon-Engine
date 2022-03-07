@@ -61,6 +61,7 @@
         YouJustReceivedMail,
         InsuficientCurrency,
         ItemCannotBeSold,
-        ItemHasBeenSold
+        ItemHasBeenSold,
+        ViewEquipmentIsDisabled
     }
 }

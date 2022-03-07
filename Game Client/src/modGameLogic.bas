@@ -1849,6 +1849,7 @@ Public Sub ShowEqDesc(X As Long, Y As Long, eqNum As Long)
         Inventory.Level = GetPlayerEquipmentLevel(eqNum)
         Inventory.Bound = GetPlayerEquipmentBound(eqNum)
         Inventory.AttributeId = GetPlayerEquipmentAttributeId(eqNum)
+        Inventory.UpgradeId = GetPlayerEquipmentUpgradeId(eqNum)
 
         ShowItemDesc X, Y, Inventory
     End If

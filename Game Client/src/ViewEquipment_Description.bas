@@ -1,4 +1,4 @@
-Attribute VB_Name = "Item_Description"
+Attribute VB_Name = "ViewEquipment_Description"
 Option Explicit
 
 Private Const IncreaseText As String = "Aumento"
@@ -6,7 +6,7 @@ Private Const DecreaseText As String = "Redução"
 Private Color As Long
 Private EnabledEffect As Boolean
 
-Public Sub ShowItemDesc(X As Long, Y As Long, ByRef Inventory As InventoryRec)
+Public Sub ShowViewEquipmentDescription(X As Long, Y As Long, ByRef Inventory As InventoryRec)
     Dim Colour As Long, i As Long
     Dim WindowIndex As Long
     Dim CurrentHeight As Long
@@ -129,9 +129,6 @@ Public Sub ShowItemDesc(X As Long, Y As Long, ByRef Inventory As InventoryRec)
 
     If Item(Inventory.Num).Type = ItemType.ItemType_Equipment Then
         Call AddEquipmentDescValues(Inventory.Num, Inventory.Level, Inventory.AttributeId)
-
-    ElseIf Item(Inventory.Num).Type = ItemType.ItemType_Recipe Then
-        Call AddRecipeDesc(Item(Inventory.Num).RecipeId)
 
     ElseIf Item(Inventory.Num).Type = ItemType.ItemType_Heraldry Then
         If Inventory.AttributeId = 0 Then
@@ -333,151 +330,11 @@ Private Sub AddItemSetEffectDescValues(ByVal EquipmentSetId As Long, ByVal Index
     End If
 End Sub
 
-Public Function GetEquipmentTypeText(ByVal EquipmentType As Byte) As String
-    Select Case EquipmentType
-    Case Equipments.Weapon
-        GetEquipmentTypeText = "Arma"
-    Case Equipments.Armor
-        GetEquipmentTypeText = "Armadura"
-    Case Equipments.Helmet
-        GetEquipmentTypeText = "Elmo"
-    Case Equipments.Shield
-        GetEquipmentTypeText = "Escudo"
-    Case Equipments.Shoulder
-        GetEquipmentTypeText = "Ombreira"
-    Case Equipments.Belt
-        GetEquipmentTypeText = "Cinto"
-    Case Equipments.Gloves
-        GetEquipmentTypeText = "Luvas"
-    Case Equipments.Pants
-        GetEquipmentTypeText = "Calças"
-    Case Equipments.Boot
-        GetEquipmentTypeText = "Botas"
-    Case Equipments.Ring
-        GetEquipmentTypeText = "Anel"
-    Case Equipments.Necklace
-        GetEquipmentTypeText = "Colar"
-    Case Equipments.Earring
-        GetEquipmentTypeText = "Brinco"
-    Case Equipments.Bracelet
-        GetEquipmentTypeText = "Bracelete"
-    Case Equipments.Costume
-        GetEquipmentTypeText = "Costume"
-    End Select
-End Function
-
-Public Function GetItemTypeText(ByVal IType As Byte) As String
-    Select Case IType
-    Case ItemType.ItemType_None
-        GetItemTypeText = "Sem tipo definido"
-    Case ItemType.ItemType_Equipment
-        GetItemTypeText = "Equipamento"
-    Case ItemType.ItemType_Key
-        GetItemTypeText = "Chave"
-    Case ItemType.ItemType_Skill
-        GetItemTypeText = "Habilidade"
-    Case ItemType.ItemType_Food
-        GetItemTypeText = "Comida"
-    Case ItemType.ItemType_Consume
-        GetItemTypeText = "Consumo"
-    Case ItemType.ItemType_Upgrade
-        GetItemTypeText = "Aprimoramento"
-    Case ItemType.ItemType_Supplement
-        GetItemTypeText = "Suplemento"
-    Case ItemType.ItemType_Recipe
-        GetItemTypeText = "Receita"
-    Case ItemType.ItemType_GashaBox
-        GetItemTypeText = "Caixa"
-    Case ItemType.ItemType_Quest
-        GetItemTypeText = "Missão"
-    Case ItemType.ItemType_Heraldry
-        GetItemTypeText = "Brasão"
-    Case ItemType.ItemType_Talisman
-        GetItemTypeText = "Talismã"
-    Case ItemType.ItemType_Material
-        GetItemTypeText = "Material"
-    End Select
-End Function
-
-Public Function GetProficiencyText(ByVal Proficiency As Byte) As String
-    Select Case Proficiency
-    Case Proficiencies.None
-        GetProficiencyText = vbNullString
-    Case Proficiencies.Cloth
-        GetProficiencyText = "Tecido"
-    Case Proficiencies.Leather
-        GetProficiencyText = "Couro"
-    Case Proficiencies.Chain
-        GetProficiencyText = "Malha"
-    Case Proficiencies.Plate
-        GetProficiencyText = "Armadura"
-    Case Proficiencies.Sword
-        GetProficiencyText = "Espada"
-    Case Proficiencies.Dagger
-        GetProficiencyText = "Adaga"
-    Case Proficiencies.Mace
-        GetProficiencyText = "Maça"
-    Case Proficiencies.Bow
-        GetProficiencyText = "Arco"
-    Case Proficiencies.Axe
-        GetProficiencyText = "Machado"
-    Case Proficiencies.Polearm
-        GetProficiencyText = "Polearm"
-    Case Proficiencies.Greatsword
-        GetProficiencyText = "Grande Espada"
-    Case Proficiencies.Staff
-        GetProficiencyText = "Cajado"
-    Case Proficiencies.Spellbook
-        GetProficiencyText = "Livro de Feitiços"
-    Case Proficiencies.Orb
-        GetProficiencyText = "Esfera de Feitiços"
-    Case Proficiencies.Shield
-        GetProficiencyText = "Escudo"
-    End Select
-End Function
-
-Public Function GetItemSetCountText(ByVal Count As EquipmentSetCount) As String
-    Select Case Count
-    Case EquipmentSetCount.EquipmentSetCount_None
-        GetItemSetCountText = vbNullString
-    Case EquipmentSetCount.EquipmentSetCount_One
-        GetItemSetCountText = "1 Parte"
-    Case EquipmentSetCount.EquipmentSetCount_Two
-        GetItemSetCountText = "2 Partes"
-    Case EquipmentSetCount.EquipmentSetCount_Three
-        GetItemSetCountText = "3 Partes"
-    Case EquipmentSetCount.EquipmentSetCount_Four
-        GetItemSetCountText = "4 Partes"
-    Case EquipmentSetCount.EquipmentSetCount_Five
-        GetItemSetCountText = "5 Partes"
-    Case EquipmentSetCount.EquipmentSetCount_Six
-        GetItemSetCountText = "6 Partes"
-    Case EquipmentSetCount.EquipmentSetCount_Seven
-        GetItemSetCountText = "7 Partes"
-    Case EquipmentSetCount.EquipmentSetCount_Eight
-        GetItemSetCountText = "8 Partes"
-    Case EquipmentSetCount.EquipmentSetCount_Nine
-        GetItemSetCountText = "9 Partes"
-    Case EquipmentSetCount.EquipmentSetCount_Ten
-        GetItemSetCountText = "10 Partes"
-    Case EquipmentSetCount.EquipmentSetCount_Eleven
-        GetItemSetCountText = "11 Partes"
-    Case EquipmentSetCount.EquipmentSetCount_Twelven
-        GetItemSetCountText = "12 Partes"
-    Case EquipmentSetCount.EquipmentSetCount_Thirteen
-        GetItemSetCountText = "13 Partes"
-    Case EquipmentSetCount.EquipmentSetCount_Fourteen
-        GetItemSetCountText = "14 Partes"
-    Case EquipmentSetCount.EquipmentSetCount_Fifteen
-        GetItemSetCountText = "15 Partes"
-    End Select
-End Function
-
 Private Function GetPlayerItemSetCount(ByVal EquipmentSetId As Long) As Integer
     Dim i As Long, ItemNum As Long, EquipNum As Long, Count As Integer
 
     For i = 1 To PlayerEquipments.PlayerEquipment_Count - 1
-        ItemNum = GetPlayerEquipmentId(i)
+        ItemNum = GetViewEquipment(i).Num
 
         If ItemNum > 0 Then
             EquipNum = Item(ItemNum).EquipmentId
@@ -486,7 +343,7 @@ Private Function GetPlayerItemSetCount(ByVal EquipmentSetId As Long) As Integer
                 If Equipment(EquipNum).EquipmentSetId = EquipmentSetId Then
 
                     If i = PlayerEquipments.EquipShield Then
-                        If ItemNum <> GetPlayerEquipmentId(EquipWeapon) Then
+                        If ItemNum <> GetViewEquipment(EquipWeapon).Num Then
                             GetPlayerItemSetCount = GetPlayerItemSetCount + 1
                         End If
                     Else
@@ -500,11 +357,3 @@ Private Function GetPlayerItemSetCount(ByVal EquipmentSetId As Long) As Integer
     Next
 
 End Function
-
-Private Sub AddRecipeDesc(ByVal RecipeId As Long)
-    If RecipeId > 0 Then
-
-
-    End If
-End Sub
-

@@ -1026,6 +1026,16 @@ Sub PlayerMenu_Trade()
     SendTradeRequest PlayerMenuIndex
 End Sub
 
+Sub PlayerMenu_ViewEquipment()
+    RightClick_Close
+
+    If PlayerMenuIndex = 0 Or PlayerMenuIndex = MyIndex Then
+        Exit Sub
+    End If
+
+    SendRequestViewEquipment GetPlayerName(PlayerMenuIndex)
+End Sub
+
 Sub PlayerMenu_Guild()
     RightClick_Close
     If PlayerMenuIndex = 0 Then Exit Sub

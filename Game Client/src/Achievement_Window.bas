@@ -64,6 +64,8 @@ Public Sub CreateWindow_Achievement()
 
     CreateLabel WindowCount, "lblProgress", 170, 90, 220, 50, "RESUMO: 0/30", OpenSans_Effect, White, Alignment.alignCentre
 
+    CreateLabel WindowCount, "lblReq", 410, 90, 200, 50, "REQUERIMENTOS", OpenSans_Effect, White, Alignment.alignCentre
+    
     For i = 1 To MaxAchievementList
         CreatePictureBox WindowCount, "picWhiteBox", 170, 70 + AchievementY + ((i - 1) * 32), 220, 26, , , , , , , , DesignTypes.desTextAincrad, DesignTypes.desTextAincrad, DesignTypes.desTextAincrad
     Next
@@ -81,12 +83,12 @@ Public Sub CreateWindow_Achievement()
     CreateButton WindowCount, "btnDown", 210, 315, 15, 15, , , , , , , Tex_GUI(82), Tex_GUI(83), Tex_GUI(84), , , , , , GetAddress(AddressOf MovePageDown)
 
     'Arrow
-    CreateButton WindowCount, "btnScrollUp", 590, 80, 15, 15, , , , , , , Tex_GUI(110), Tex_GUI(110), Tex_GUI(110)
-    CreateButton WindowCount, "btnScrollDown", 590, 330, 15, 15, , , , , , , Tex_GUI(111), Tex_GUI(111), Tex_GUI(111)
+    CreateButton WindowCount, "btnScrollUp", 608, 80, 15, 15, , , , , , , Tex_GUI(110), Tex_GUI(110), Tex_GUI(110)
+    CreateButton WindowCount, "btnScrollDown", 608, 330, 15, 15, , , , , , , Tex_GUI(111), Tex_GUI(111), Tex_GUI(111)
 
     'Scroll
-    CreateButton WindowCount, "ScrollUp", 592, 98, 8, 110, , , , , , , , , , DesignTypes.desSteel, DesignTypes.desSteel_Hover, DesignTypes.desSteel_Click
-    CreateButton WindowCount, "ScrollDown", 592, 208, 8, 110, , , , , , , , , , DesignTypes.desSteel, DesignTypes.desSteel_Hover, DesignTypes.desSteel_Click
+    CreateButton WindowCount, "ScrollUp", 610, 98, 8, 110, , , , , , , , , , DesignTypes.desSteel, DesignTypes.desSteel_Hover, DesignTypes.desSteel_Click
+    CreateButton WindowCount, "ScrollDown", 610, 208, 8, 110, , , , , , , , , , DesignTypes.desSteel, DesignTypes.desSteel_Hover, DesignTypes.desSteel_Click
 
     ' Set the default values
     CategoryIndex = AchievementCategory_Summary
@@ -406,13 +408,6 @@ Private Sub DrawAchievement()
     RenderDesign DesignTypes.desWin_AincradMenu, xO, yO + 40, Width, 30
 
     RenderText Font(Fonts.OpenSans_Effect), "PONTOS DE CONQUISTA: " & GetPlayerAchievementPoints(), xO + (Width * 0.5) - (StringWidth * 0.5), yO + 48, Gold
-    
-    Dim TextArray() As String
-    Dim Count As Long
-    
-    
-    
-    
     
 End Sub
 

@@ -586,10 +586,10 @@ Public Sub HandleKeyPresses(ByVal KeyAscii As Integer)
                 Call SendKick(Command(1))
 
                 ' Respawn request
-           ' Case "/respawn"
+                ' Case "/respawn"
 
-              '  If GetPlayerAccess(MyIndex) < ACCESS_ADMINISTRATOR Then GoTo continue
-              '  SendMapRespawn
+                '  If GetPlayerAccess(MyIndex) < ACCESS_ADMINISTRATOR Then GoTo continue
+                '  SendMapRespawn
 
                 ' Packet debug mode
             Case "/debug"
@@ -604,6 +604,9 @@ Public Sub HandleKeyPresses(ByVal KeyAscii As Integer)
                 If Party.Leader > 0 Then
                     Call SendPartyKick(FindPartyCharacterIndex(Command(1)))
                 End If
+
+            Case "/view"
+                SendRequestViewEquipment Command(1)
 
             Case Else
                 AddText "Não é um comando válido!", HelpColor

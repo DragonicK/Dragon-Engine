@@ -1587,6 +1587,7 @@ Public Sub CreateWindow_PlayerMenu()
     CreateButton WindowCount, "btnTrade", 8, 62, 135, 18, "Pedido de negociação", OpenSans_Effect, White, , , , , , , , DesignTypes.desMenuOption, , , , GetAddress(AddressOf PlayerMenu_Trade)
     CreateButton WindowCount, "btnGuild", 8, 80, 135, 18, "Convite para guild", OpenSans_Effect, White, , , , , , , , DesignTypes.desMenuOption, , , , GetAddress(AddressOf PlayerMenu_Guild)
     CreateButton WindowCount, "btnPM", 8, 98, 135, 18, "Mensagem privada", OpenSans_Effect, White, , , , , , , , DesignTypes.desMenuOption, , , , GetAddress(AddressOf PlayerMenu_PM)
+    CreateButton WindowCount, "btnViewEquipment", 8, 116, 135, 18, "Ver Equipamento", OpenSans_Effect, White, , , , , , , , DesignTypes.desMenuOption, , , , GetAddress(AddressOf PlayerMenu_ViewEquipment)
 End Sub
 
 
@@ -1649,6 +1650,7 @@ Public Sub InitGUI()
     CreateWindow_QuickSlot
     CreateWindow_Inventory
     CreateWindow_Character
+    CreateWindow_ViewEquipment
     CreateWindow_Description
     CreateWindow_DragBox
     CreateWindow_Skills

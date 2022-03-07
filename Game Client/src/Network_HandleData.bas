@@ -95,9 +95,9 @@ Public Sub InitMessages()
     HandleDataSub(EnginePacket.PUpgradeOpen) = GetAddress(AddressOf HandleUpgradeOpen)
     HandleDataSub(EnginePacket.PCraftOpen) = GetAddress(AddressOf HandleCraftOpen)
     HandleDataSub(EnginePacket.PShopOpen) = GetAddress(AddressOf HandleShopOpen)
+    HandleDataSub(EnginePacket.PViewEquipment) = GetAddress(AddressOf HandleViewEquipment)
     
-        
-
+    
     ' HandleDataSub(SNpcAttack) = GetAddress(AddressOf HandleNpcAttack)
     ' HandleDataSub(STarget) = GetAddress(AddressOf HandleTarget)
     ' HandleDataSub(SSound) = GetAddress(AddressOf HandleSound)
@@ -118,7 +118,6 @@ Public Sub InitMessages()
     ' HandleDataSub(SSortLootList) = GetAddress(AddressOf HandleSortLootList)
     ' HandleDataSub(SEnableDropTakeItem) = GetAddress(AddressOf HandleEnableDropTakeItem)
     ' HandleDataSub(SRollDiceItem) = GetAddress(AddressOf HandleRollDiceItem)
-
 
     ' HandleDataSub(SMapKey) = GetAddress(AddressOf HandleMapKey)
     ' HandleDataSub(SDoorAnimation) = GetAddress(AddressOf HandleDoorAnimation)

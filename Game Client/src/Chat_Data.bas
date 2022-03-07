@@ -62,6 +62,7 @@ Public Enum SystemMessage
     InsuficientCurrency
     ItemCannotBeSold
     ItemHasBeenSold
+    ViewEquipmentIsDisabled
 End Enum
 
 Public Function GetSystemMessage(ByVal Header As SystemMessage, ByVal ParamCount As Long, ByRef Parameters() As String) As String
@@ -336,6 +337,10 @@ Public Function GetSystemMessage(ByVal Header As SystemMessage, ByVal ParamCount
                 GetSystemMessage = "Você vendeu " & Value & " itens."
             End If
         End If
+        
+    Case SystemMessage.ViewEquipmentIsDisabled
+        GetSystemMessage = "O jogador desabilitou a visualização de equipmento."
+        
     End Select
 
 End Function

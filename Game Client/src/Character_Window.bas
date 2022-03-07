@@ -16,7 +16,7 @@ Private AttributePage As Long
 Public Sub CreateWindow_Character()
     Dim i As Long
     ' Create window
-    CreateWindow "winCharacter", "PERSONAGEM", zOrder_Win, 0, 0, 260, 420, 0, False, Fonts.OpenSans_Effect, , 2, 6, DesignTypes.desWin_AincradNorm, DesignTypes.desWin_AincradNorm, DesignTypes.desWin_AincradNorm, , , , , GetAddress(AddressOf Character_MouseMove), GetAddress(AddressOf Character_MouseDown), GetAddress(AddressOf Character_MouseMove), GetAddress(AddressOf Character_DoubleClick), , , GetAddress(AddressOf RenderCharacter)
+    CreateWindow "winCharacter", "PERSONAGEM", zOrder_Win, 0, 0, 260, 435, 0, False, Fonts.OpenSans_Effect, , 2, 6, DesignTypes.desWin_AincradNorm, DesignTypes.desWin_AincradNorm, DesignTypes.desWin_AincradNorm, , , , , GetAddress(AddressOf Character_MouseMove), GetAddress(AddressOf Character_MouseDown), GetAddress(AddressOf Character_MouseMove), GetAddress(AddressOf Character_DoubleClick), , , GetAddress(AddressOf RenderCharacter)
     ' Centralise it
     CentraliseWindow WindowCount
 
@@ -34,7 +34,7 @@ Public Sub CreateWindow_Character()
     CreateButton WindowCount, "btnElementalAttribute", 170, 72, 80, 26, "ELEMENTAL", OpenSans_Effect, White, , False, , , , , , , , , , GetAddress(AddressOf ButtonElementalPage_Click)
 
     ' Labels
-    CreateLabel WindowCount, "lblName", 50, 90, 156, 16, "NOME LV. 50", OpenSans_Effect, White, Alignment.alignCentre
+    CreateLabel WindowCount, "lblName", 50, 115, 156, 16, "NOME LV. 50", OpenSans_Effect, White, Alignment.alignCentre
     CreateLabel WindowCount, "lblClass", 50, 170, 156, 16, "PRIEST", OpenSans_Effect, White, Alignment.alignCentre
 
     ' Attributes
@@ -68,6 +68,8 @@ Public Sub CreateWindow_Character()
     CreatePictureBox WindowCount, "btnGreyStat_4", 180, 312, 15, 15, False, , , , Tex_GUI(47), Tex_GUI(47), Tex_GUI(47)
     CreatePictureBox WindowCount, "btnGreyStat_5", 180, 332, 15, 15, False, , , , Tex_GUI(47), Tex_GUI(47), Tex_GUI(47)
     CreatePictureBox WindowCount, "btnGreyStat_6", 180, 352, 15, 15, False, , , , Tex_GUI(47), Tex_GUI(47), Tex_GUI(47)
+
+    CreateCheckbox WindowCount, "chkView", 48, 76, 35, , False, "VISUALIZAR EQUIPAMENTO", OpenSans_Effect, ColorType.Gold, , , , DesignTypes.desChkNorm
 
     AttributePage = DefaultPage
 
@@ -150,9 +152,13 @@ End Sub
 Private Sub ShowCharacter_Click()
     Dim CharacterIndex As Long
     Dim AttributesIndex As Long
+    Dim CheckView As Long
 
+    CheckView = GetControlIndex("winCharacter", "chkView")
     CharacterIndex = GetControlIndex("winCharacter", "btnCharacter")
     AttributesIndex = GetControlIndex("winCharacter", "btnAttributes")
+
+    Windows(WindowIndex).Controls(CheckView).Visible = True
 
     Windows(WindowIndex).Controls(CharacterIndex).textColour = Green
     Windows(WindowIndex).Controls(CharacterIndex).textColour_Click = Green
@@ -161,18 +167,22 @@ Private Sub ShowCharacter_Click()
     Windows(WindowIndex).Controls(AttributesIndex).textColour = White
     Windows(WindowIndex).Controls(AttributesIndex).textColour_Click = White
     Windows(WindowIndex).Controls(AttributesIndex).textColour_Hover = White
-    
+
     Call SetChildWindowVisible(True)
-    
+
     IsShowingAttributes = False
 End Sub
 
 Private Sub ShowAttributes_Click()
     Dim CharacterIndex As Long
     Dim AttributesIndex As Long
+    Dim CheckView As Long
 
+    CheckView = GetControlIndex("winCharacter", "chkView")
     CharacterIndex = GetControlIndex("winCharacter", "btnCharacter")
     AttributesIndex = GetControlIndex("winCharacter", "btnAttributes")
+    
+    Windows(WindowIndex).Controls(CheckView).Visible = False
 
     Windows(WindowIndex).Controls(CharacterIndex).textColour = White
     Windows(WindowIndex).Controls(CharacterIndex).textColour_Click = White
@@ -191,7 +201,7 @@ Private Sub SetAllEquipmentPosition()
     Dim BaseX As Long, BaseY As Long
 
     BaseX = 17
-    BaseY = 90
+    BaseY = 105
 
     Call SetEquipmentPosition(EquipWeapon, BaseX + 75, BaseY + 100)
     Call SetEquipmentPosition(EquipShield, BaseX + 115, BaseY + 100)
@@ -318,7 +328,8 @@ Private Sub RenderCharacter()
     Width = Windows(WindowIndex).Window.Width
 
     RenderDesign DesignTypes.desWin_AincradMenu, xO, yO + 40, Width, 30
-
+    RenderDesign DesignTypes.desWin_AincradMenu, xO, yO + 70, Width, 30
+       
     If Not IsShowingAttributes Then
         For i = 1 To PlayerEquipments.PlayerEquipment_Count - 1
             RenderTexture Tex_GUI(85 + i), xO + EquipmentPosition(i).X, yO + EquipmentPosition(i).Y, 0, 0, 34, 34, 34, 34
@@ -330,8 +341,6 @@ Private Sub RenderCharacter()
             End If
         Next
     Else
-        RenderDesign DesignTypes.desWin_AincradMenu, xO, yO + 70, Width, 30
-    
         xO = xO + 30
         yO = yO + 120
         

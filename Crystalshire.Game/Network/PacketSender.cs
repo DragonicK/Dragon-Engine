@@ -1222,6 +1222,38 @@ namespace Crystalshire.Game.Network {
             Writer.Enqueue(msg);
         }
 
+        public void SendViewEquipment(IPlayer player, IPlayer source) {
+            var equipments = source.Equipments.ToList();
+            var count = equipments.Count;
+
+            var packet = new SpViewEquipment() {
+                Name = source.Character.Name,
+                Level = source.Character.Level,
+                ClassCode = source.Character.ClassCode,
+                Equipments = new DataEquipment[count]
+            };
+
+            for (var i = 0; i < count; ++i) {
+                var equipment = equipments[i];
+
+                packet.Equipments[i] = new DataEquipment() {
+                    Id = equipment.ItemId,
+                    Index = equipment.InventoryIndex,
+                    Level = equipment.Level,
+                    Bound = equipment.Bound,
+                    AttributeId = equipment.AttributeId,
+                    UpgradeId = equipment.UpgradeId
+                };
+            }
+
+            var msg = Writer!.CreateMessage(packet);
+
+            msg.DestinationPeers.Add(player.GetConnection().Id);
+            msg.TransmissionTarget = TransmissionTarget.Destination;
+
+            Writer.Enqueue(msg);
+        }
+
         private SpPlayerData CreatePlayerDataPacket(IPlayer player) {
             var character = player.Character;
             var model = character.CostumeModel;
