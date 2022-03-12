@@ -49,8 +49,8 @@ namespace Crystalshire.Editor.Npcs {
         private void Initialize() {
             if (Element is not null) {
                 TextId.Text = Element.Id.ToString();
-                TextName.Text = Element.Name.ToString();
-                TextDescription.Text = Element.Description.ToString();
+                TextName.Text = Element.Name;
+                TextTitle.Text = Element.Title;
 
                 ComboBehaviour.SelectedIndex = (int)Element.Behaviour;
 
@@ -70,7 +70,7 @@ namespace Crystalshire.Editor.Npcs {
         private void Clear() {
             TextId.Text = "0";
             TextName.Text = string.Empty;
-            TextDescription.Text = string.Empty;
+            TextTitle.Text = string.Empty;
 
             ComboBehaviour.SelectedIndex = 0;
 
@@ -196,9 +196,10 @@ namespace Crystalshire.Editor.Npcs {
             }
         }
 
-        private void TextDescription_TextChanged(object sender, EventArgs e) {
+
+        private void TextTitle_TextChanged(object sender, EventArgs e) {
             if (Element is not null) {
-                Element.Description = TextDescription.Text;
+                Element.Title = TextTitle.Text;
             }
         }
 

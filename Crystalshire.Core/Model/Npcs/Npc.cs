@@ -2,7 +2,7 @@
     public class Npc {
         public int Id { get; set; }
         public string Name { get; set; }
-        public string Description { get; set; } 
+        public string Title { get; set; }
         public string Sound { get; set; }
         public NpcBehaviour Behaviour { get; set; }
         public int ModelId { get; set; }
@@ -14,7 +14,7 @@
 
         public Npc() {
             Name = string.Empty;
-            Description = string.Empty;
+            Title = string.Empty;
             Sound = string.Empty;
             Greetings = string.Empty;
 

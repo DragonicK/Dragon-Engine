@@ -79,7 +79,7 @@ Public Sub DrawPlayerName(ByVal Index As Long)
     Dim i As Long
 
     Text = Trim$(GetPlayerName(Index))
-    TextSize = TextWidth(Font(Fonts.OpenSans_Regular), Text)
+    TextSize = TextWidth(Font(Fonts.OpenSans_Effect), Text)
     Colour = White
 
     If Index = MyIndex Then
@@ -104,18 +104,18 @@ Public Sub DrawPlayerName(ByVal Index As Long)
     TextX = Player(Index).X * PIC_X + Player(Index).xOffset + (PIC_X \ 2) - (TextSize \ 2) - 3
     TextY = Player(Index).Y * PIC_Y + Player(Index).yOffset - 32
 
-    Call RenderText(Font(Fonts.OpenSans_Regular), Text, ConvertMapX(TextX), ConvertMapY(TextY), Colour)
+    Call RenderText(Font(Fonts.OpenSans_Effect), Text, ConvertMapX(TextX), ConvertMapY(TextY), Colour)
 
     If GetPlayerTitle(Index) > 0 And GetPlayerTitle(Index) <= MaxTitles Then
         Text = Trim$(Title(GetPlayerTitle(Index)).Name)
-        TextSize = TextWidth(Font(Fonts.OpenSans_Regular), Text)
+        TextSize = TextWidth(Font(Fonts.OpenSans_Effect), Text)
 
         Colour = GetRarityColor(Title(GetPlayerTitle(Index)).Rarity)
 
         TextX = Player(Index).X * PIC_X + Player(Index).xOffset + (PIC_X \ 2) - (TextSize \ 2)
         TextY = Player(Index).Y * PIC_Y + Player(Index).yOffset - 45
 
-        Call RenderText(Font(Fonts.OpenSans_Regular), Text, ConvertMapX(TextX), ConvertMapY(TextY), Colour)
+        Call RenderText(Font(Fonts.OpenSans_Effect), Text, ConvertMapX(TextX), ConvertMapY(TextY), Colour)
     End If
 
 End Sub
@@ -129,7 +129,7 @@ Public Sub DrawNpcName(ByVal Index As Long)
     NpcNum = MapNpc(Index).Num
     Text = Npc(NpcNum).Name
 
-    TextSize = TextWidth(Font(Fonts.OpenSans_Regular), Text)
+    TextSize = TextWidth(Font(Fonts.OpenSans_Effect), Text)
 
     If Npc(NpcNum).Behaviour = NPC_BEHAVIOUR_MONSTER Or Npc(NpcNum).Behaviour = NPC_BEHAVIOUR_BOSS Then
         ' get the colour
@@ -151,7 +151,7 @@ Public Sub DrawNpcName(ByVal Index As Long)
     TextX = MapNpc(Index).X * PIC_X + MapNpc(Index).xOffset + (PIC_X \ 2) - (TextSize \ 2) - 3
     TextY = MapNpc(Index).Y * PIC_Y + MapNpc(Index).yOffset - 32
 
-    Call RenderText(Font(Fonts.OpenSans_Regular), Text, ConvertMapX(TextX), ConvertMapY(TextY), Colour)
+    Call RenderText(Font(Fonts.OpenSans_Effect), Text, ConvertMapX(TextX), ConvertMapY(TextY), Colour)
 
 End Sub
 

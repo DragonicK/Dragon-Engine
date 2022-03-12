@@ -18,7 +18,7 @@ namespace Crystalshire.Core.Content {
                 var npc = new Npc() {
                     Id = reader.ReadInt32(),
                     Name = reader.ReadString(),
-                    Description = reader.ReadString(),
+                    Title = reader.ReadString(),
                     Sound = reader.ReadString(),
                     Behaviour = (NpcBehaviour)reader.ReadInt32(),
                     ModelId = reader.ReadInt32(),
@@ -53,7 +53,7 @@ namespace Crystalshire.Core.Content {
             for (var i = 0; i < ordered.Count; ++i) {
                 writer.Write(ordered[i].Id);
                 writer.Write(ordered[i].Name);
-                writer.Write(ordered[i].Description);
+                writer.Write(ordered[i].Title);
                 writer.Write(ordered[i].Sound);
                 writer.Write((int)ordered[i].Behaviour);
                 writer.Write(ordered[i].ModelId);

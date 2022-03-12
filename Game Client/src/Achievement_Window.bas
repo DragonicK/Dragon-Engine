@@ -32,8 +32,8 @@ Private ExplorationAchievement As Collection
 Private PvpAchievement As Collection
 
 Private CategoryIndex As AchievementCategory
-Private PageIndex As Integer
-Private PageCount As Integer
+Private PageIndex As Long
+Private PageCount As Long
 
 ' Achievement UI
 Private Const MaxAchievementList As Byte = 6
@@ -44,7 +44,7 @@ Private WindowIndex As Long
 Public Sub CreateWindow_Achievement()
     Dim i As Long
 
-    CreateWindow "winAchievement", "CONQUISTAS", zOrder_Win, 0, 0, 630, 360, 0, False, Fonts.OpenSans_Effect, , 2, 7, DesignTypes.desWin_AincradNorm, DesignTypes.desWin_AincradNorm, DesignTypes.desWin_AincradNorm, , , , , , , , , , , GetAddress(AddressOf DrawAchievement)
+    CreateWindow "winAchievement", "CONQUISTAS", zOrder_Win, 0, 0, 630, 360, 0, False, Fonts.OpenSans_Effect, , 2, 7, DesignTypes.desWin_AincradNorm, DesignTypes.desWin_AincradNorm, DesignTypes.desWin_AincradNorm, , , , , , , , , , , GetAddress(AddressOf RenderAchievement)
     ' Centralise it
     CentraliseWindow WindowCount
 
@@ -70,12 +70,12 @@ Public Sub CreateWindow_Achievement()
         CreatePictureBox WindowCount, "picWhiteBox", 170, 70 + AchievementY + ((i - 1) * 32), 220, 26, , , , , , , , DesignTypes.desTextAincrad, DesignTypes.desTextAincrad, DesignTypes.desTextAincrad
     Next
 
-    CreateLabel WindowCount, "lblName1", 170, 75 + AchievementY + (0 * 32), 220, 26, "", OpenSans_Regular, White, Alignment.alignCentre, , , , , GetAddress(AddressOf List1_MouseMove), , GetAddress(AddressOf List1_MouseMove)
-    CreateLabel WindowCount, "lblName2", 170, 75 + AchievementY + (1 * 32), 220, 26, "", OpenSans_Regular, White, Alignment.alignCentre, , , , , GetAddress(AddressOf List2_MouseMove), , GetAddress(AddressOf List2_MouseMove)
-    CreateLabel WindowCount, "lblName3", 170, 75 + AchievementY + (2 * 32), 220, 26, "", OpenSans_Regular, White, Alignment.alignCentre, , , , , GetAddress(AddressOf List3_MouseMove), , GetAddress(AddressOf List3_MouseMove)
-    CreateLabel WindowCount, "lblName4", 170, 75 + AchievementY + (3 * 32), 220, 26, "", OpenSans_Regular, White, Alignment.alignCentre, , , , , GetAddress(AddressOf List4_MouseMove), , GetAddress(AddressOf List4_MouseMove)
-    CreateLabel WindowCount, "lblName5", 170, 75 + AchievementY + (4 * 32), 220, 26, "", OpenSans_Regular, White, Alignment.alignCentre, , , , , GetAddress(AddressOf List5_MouseMove), , GetAddress(AddressOf List5_MouseMove)
-    CreateLabel WindowCount, "lblName6", 170, 75 + AchievementY + (5 * 32), 220, 26, "", OpenSans_Regular, White, Alignment.alignCentre, , , , , GetAddress(AddressOf List6_MouseMove), , GetAddress(AddressOf List6_MouseMove)
+    CreateLabel WindowCount, "lblName1", 170, 75 + AchievementY + (0 * 32), 220, 26, "", OpenSans_Regular, White, Alignment.alignCentre, , , , , GetAddress(AddressOf List1_MouseMove), GetAddress(AddressOf List1_MouseDown), GetAddress(AddressOf List1_MouseMove)
+    CreateLabel WindowCount, "lblName2", 170, 75 + AchievementY + (1 * 32), 220, 26, "", OpenSans_Regular, White, Alignment.alignCentre, , , , , GetAddress(AddressOf List2_MouseMove), GetAddress(AddressOf List2_MouseDown), GetAddress(AddressOf List2_MouseMove)
+    CreateLabel WindowCount, "lblName3", 170, 75 + AchievementY + (2 * 32), 220, 26, "", OpenSans_Regular, White, Alignment.alignCentre, , , , , GetAddress(AddressOf List3_MouseMove), GetAddress(AddressOf List3_MouseDown), GetAddress(AddressOf List3_MouseMove)
+    CreateLabel WindowCount, "lblName4", 170, 75 + AchievementY + (3 * 32), 220, 26, "", OpenSans_Regular, White, Alignment.alignCentre, , , , , GetAddress(AddressOf List4_MouseMove), GetAddress(AddressOf List4_MouseDown), GetAddress(AddressOf List4_MouseMove)
+    CreateLabel WindowCount, "lblName5", 170, 75 + AchievementY + (4 * 32), 220, 26, "", OpenSans_Regular, White, Alignment.alignCentre, , , , , GetAddress(AddressOf List5_MouseMove), GetAddress(AddressOf List5_MouseDown), GetAddress(AddressOf List5_MouseMove)
+    CreateLabel WindowCount, "lblName6", 170, 75 + AchievementY + (5 * 32), 220, 26, "", OpenSans_Regular, White, Alignment.alignCentre, , , , , GetAddress(AddressOf List6_MouseMove), GetAddress(AddressOf List6_MouseDown), GetAddress(AddressOf List6_MouseMove)
 
     'Botões setas
     CreateLabel WindowCount, "lblPage", 170, 315, 220, 50, "Página: 0/0", OpenSans_Effect, White, Alignment.alignCentre
@@ -97,6 +97,10 @@ Public Sub CreateWindow_Achievement()
     WindowIndex = WindowCount
 End Sub
 
+Private Sub List1_MouseDown()
+
+End Sub
+
 Private Sub List1_MouseMove()
     Dim ItemIndex As Long
     Dim AchievementId As Long
@@ -111,6 +115,11 @@ Private Sub List1_MouseMove()
         Call ShowAchievementDesc(X, Y, AchievementId, GetPlayerAchievement(AchievementId))
     End If
 End Sub
+
+Private Sub List2_MouseDown()
+
+End Sub
+
 Private Sub List2_MouseMove()
     Dim ItemIndex As Long
     Dim AchievementId As Long
@@ -125,6 +134,11 @@ Private Sub List2_MouseMove()
         Call ShowAchievementDesc(X, Y, AchievementId, GetPlayerAchievement(AchievementId))
     End If
 End Sub
+
+Private Sub List3_MouseDown()
+
+End Sub
+
 Private Sub List3_MouseMove()
     Dim ItemIndex As Long
     Dim AchievementId As Long
@@ -139,6 +153,11 @@ Private Sub List3_MouseMove()
         Call ShowAchievementDesc(X, Y, AchievementId, GetPlayerAchievement(AchievementId))
     End If
 End Sub
+
+Private Sub List4_MouseDown()
+
+End Sub
+
 Private Sub List4_MouseMove()
     Dim ItemIndex As Long
     Dim AchievementId As Long
@@ -153,6 +172,11 @@ Private Sub List4_MouseMove()
         Call ShowAchievementDesc(X, Y, AchievementId, GetPlayerAchievement(AchievementId))
     End If
 End Sub
+
+Private Sub List5_MouseDown()
+
+End Sub
+
 Private Sub List5_MouseMove()
     Dim ItemIndex As Long
     Dim AchievementId As Long
@@ -167,6 +191,11 @@ Private Sub List5_MouseMove()
         Call ShowAchievementDesc(X, Y, AchievementId, GetPlayerAchievement(AchievementId))
     End If
 End Sub
+
+Private Sub List6_MouseDown()
+
+End Sub
+
 Private Sub List6_MouseMove()
     Dim ItemIndex As Long
     Dim AchievementId As Long
@@ -392,7 +421,7 @@ Private Function GetProgressText(ByVal Category As AchievementCategory) As Strin
 
 End Function
 
-Private Sub DrawAchievement()
+Private Sub RenderAchievement()
     Dim Width As Long
     Dim StringWidth As Long
     Dim xO As Long, yO As Long
