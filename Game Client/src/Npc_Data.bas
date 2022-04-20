@@ -16,6 +16,7 @@ End Enum
 Public Type NpcRec
     Id As Long
     Name As String
+    Title As String
     Sound As String
     Behaviour As NpcBehaviour
     ModelId As Long
@@ -33,7 +34,7 @@ Public Sub LoadNpcs()
     Dim n As Long
 
     Dim Name As String
-    Dim Description As String
+    Dim Title As String
     Dim Sound As String
     Dim Greetings As String
     Dim Count As Long
@@ -48,13 +49,13 @@ Public Sub LoadNpcs()
 
             For i = 1 To MaximumNpcs
                 Name = String(512, vbNullChar)
-                Description = String(512, vbNullChar)
+                Title = String(512, vbNullChar)
                 Sound = String(512, vbNullChar)
                 Greetings = String(512, vbNullChar)
 
                 Npc(i).Id = ReadInt32(Index)
                 Call ReadString(Index, Name)
-                Call ReadString(Index, Description)
+                Call ReadString(Index, Title)
                 Call ReadString(Index, Sound)
                 Npc(i).Behaviour = ReadInt32(Index)
                 Npc(i).ModelId = ReadInt32(Index)
@@ -63,6 +64,7 @@ Public Sub LoadNpcs()
                 Npc(i).Experience = ReadInt32(Index)
 
                 Npc(i).Name = Replace$(Name, vbNullChar, vbNullString)
+                Npc(i).Title = Replace$(Title, vbNullChar, vbNullString)
                 Npc(i).Sound = Replace$(Sound, vbNullChar, vbNullString)
 
                 Call ReadString(Index, Greetings)
