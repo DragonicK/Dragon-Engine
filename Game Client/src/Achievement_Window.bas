@@ -34,12 +34,23 @@ Private PvpAchievement As Collection
 Private CategoryIndex As AchievementCategory
 Private PageIndex As Long
 Private PageCount As Long
+Private SelectedAchievementId As Long
 
 ' Achievement UI
-Private Const MaxAchievementList As Byte = 6
-Private Const AchievementY As Byte = 45
+Private Const MaxAchievementList As Long = 6
+Private Const AchievementY As Long = 45
+Private Const MaxDescriptionLines As Long = 200
 
 Private WindowIndex As Long
+
+Private Type RequirementDescriptionRec
+    LineCount As Long
+    LineColor(1 To MaxDescriptionLines) As Long
+    Lines(1 To MaxDescriptionLines) As String
+    LineIndex As Long
+End Type
+
+Private Descriptions As RequirementDescriptionRec
 
 Public Sub CreateWindow_Achievement()
     Dim i As Long
@@ -65,7 +76,7 @@ Public Sub CreateWindow_Achievement()
     CreateLabel WindowCount, "lblProgress", 170, 90, 220, 50, "RESUMO: 0/30", OpenSans_Effect, White, Alignment.alignCentre
 
     CreateLabel WindowCount, "lblReq", 410, 90, 200, 50, "REQUERIMENTOS", OpenSans_Effect, White, Alignment.alignCentre
-    
+
     For i = 1 To MaxAchievementList
         CreatePictureBox WindowCount, "picWhiteBox", 170, 70 + AchievementY + ((i - 1) * 32), 220, 26, , , , , , , , DesignTypes.desTextAincrad, DesignTypes.desTextAincrad, DesignTypes.desTextAincrad
     Next
@@ -83,143 +94,201 @@ Public Sub CreateWindow_Achievement()
     CreateButton WindowCount, "btnDown", 210, 315, 15, 15, , , , , , , Tex_GUI(82), Tex_GUI(83), Tex_GUI(84), , , , , , GetAddress(AddressOf MovePageDown)
 
     'Arrow
-    CreateButton WindowCount, "btnScrollUp", 608, 80, 15, 15, , , , , , , Tex_GUI(110), Tex_GUI(110), Tex_GUI(110)
-    CreateButton WindowCount, "btnScrollDown", 608, 330, 15, 15, , , , , , , Tex_GUI(111), Tex_GUI(111), Tex_GUI(111)
+    CreateButton WindowCount, "btnScrollUp", 608, 80, 15, 15, , , , , , , Tex_GUI(110), Tex_GUI(110), Tex_GUI(110), , , , , , GetAddress(AddressOf Scroll_RequirementUp)
+    CreateButton WindowCount, "btnScrollDown", 608, 330, 15, 15, , , , , , , Tex_GUI(111), Tex_GUI(111), Tex_GUI(111), , , , , , GetAddress(AddressOf Scroll_RequirementDown)
 
     'Scroll
-    CreateButton WindowCount, "ScrollUp", 610, 98, 8, 110, , , , , , , , , , DesignTypes.desSteel, DesignTypes.desSteel_Hover, DesignTypes.desSteel_Click
-    CreateButton WindowCount, "ScrollDown", 610, 208, 8, 110, , , , , , , , , , DesignTypes.desSteel, DesignTypes.desSteel_Hover, DesignTypes.desSteel_Click
+    CreateButton WindowCount, "ScrollUp", 610, 98, 8, 110, , , , , , , , , , DesignTypes.desSteel, DesignTypes.desSteel_Hover, DesignTypes.desSteel_Click, , , GetAddress(AddressOf Scroll_RequirementUp)
+    CreateButton WindowCount, "ScrollDown", 610, 208, 8, 110, , , , , , , , , , DesignTypes.desSteel, DesignTypes.desSteel_Hover, DesignTypes.desSteel_Click, , , GetAddress(AddressOf Scroll_RequirementDown)
 
     ' Set the default values
     CategoryIndex = AchievementCategory_Summary
     PageIndex = 1
+    
+    Descriptions.LineIndex = 1
+    Descriptions.LineCount = 1
 
     WindowIndex = WindowCount
 End Sub
 
-Private Sub List1_MouseDown()
+Private Sub Scroll_RequirementUp()
+    If Descriptions.LineIndex > 1 Then
+        Descriptions.LineIndex = Descriptions.LineIndex - 1
+    End If
+End Sub
 
+Private Sub Scroll_RequirementDown()
+     If Descriptions.LineIndex < Descriptions.LineCount Then
+        Descriptions.LineIndex = Descriptions.LineIndex + 1
+     End If
+End Sub
+
+Private Sub List1_MouseDown()
+    Dim ItemIndex As Long
+
+    ItemIndex = ((PageIndex - 1) * MaxAchievementList) + 1
+
+    If CanDrawPageItem(CategoryIndex, ItemIndex) Then
+        SelectedAchievementId = GetAchievementByCategory(CategoryIndex, ItemIndex)
+        Call BuildAchievementRequirementDescription(SelectedAchievementId)
+    End If
 End Sub
 
 Private Sub List1_MouseMove()
     Dim ItemIndex As Long
     Dim AchievementId As Long
-    Dim X As Long, Y As Long
+    Dim x As Long, Y As Long
 
     ItemIndex = ((PageIndex - 1) * MaxAchievementList) + 1
 
     If CanDrawPageItem(CategoryIndex, ItemIndex) Then
         AchievementId = GetAchievementByCategory(CategoryIndex, ItemIndex)
 
-        Call SetWinDescriptionPosition(X, Y)
-        Call ShowAchievementDesc(X, Y, AchievementId, GetPlayerAchievement(AchievementId))
+        Call SetWinDescriptionPosition(x, Y)
+        Call ShowAchievementDesc(x, Y, AchievementId, GetPlayerAchievement(AchievementId))
     End If
 End Sub
 
 Private Sub List2_MouseDown()
+    Dim ItemIndex As Long
+
+    ItemIndex = ((PageIndex - 1) * MaxAchievementList) + 2
+
+    If CanDrawPageItem(CategoryIndex, ItemIndex) Then
+        SelectedAchievementId = GetAchievementByCategory(CategoryIndex, ItemIndex)
+        Call BuildAchievementRequirementDescription(SelectedAchievementId)
+    End If
 
 End Sub
 
 Private Sub List2_MouseMove()
     Dim ItemIndex As Long
     Dim AchievementId As Long
-    Dim X As Long, Y As Long
+    Dim x As Long, Y As Long
 
     ItemIndex = ((PageIndex - 1) * MaxAchievementList) + 2
 
     If CanDrawPageItem(CategoryIndex, ItemIndex) Then
         AchievementId = GetAchievementByCategory(CategoryIndex, ItemIndex)
 
-        Call SetWinDescriptionPosition(X, Y)
-        Call ShowAchievementDesc(X, Y, AchievementId, GetPlayerAchievement(AchievementId))
+        Call SetWinDescriptionPosition(x, Y)
+        Call ShowAchievementDesc(x, Y, AchievementId, GetPlayerAchievement(AchievementId))
     End If
 End Sub
 
 Private Sub List3_MouseDown()
+    Dim ItemIndex As Long
 
+    ItemIndex = ((PageIndex - 1) * MaxAchievementList) + 3
+
+    If CanDrawPageItem(CategoryIndex, ItemIndex) Then
+        SelectedAchievementId = GetAchievementByCategory(CategoryIndex, ItemIndex)
+        Call BuildAchievementRequirementDescription(SelectedAchievementId)
+    End If
 End Sub
 
 Private Sub List3_MouseMove()
     Dim ItemIndex As Long
     Dim AchievementId As Long
-    Dim X As Long, Y As Long
+    Dim x As Long, Y As Long
 
     ItemIndex = ((PageIndex - 1) * MaxAchievementList) + 3
 
     If CanDrawPageItem(CategoryIndex, ItemIndex) Then
         AchievementId = GetAchievementByCategory(CategoryIndex, ItemIndex)
 
-        Call SetWinDescriptionPosition(X, Y)
-        Call ShowAchievementDesc(X, Y, AchievementId, GetPlayerAchievement(AchievementId))
+        Call SetWinDescriptionPosition(x, Y)
+        Call ShowAchievementDesc(x, Y, AchievementId, GetPlayerAchievement(AchievementId))
     End If
 End Sub
 
 Private Sub List4_MouseDown()
+    Dim ItemIndex As Long
 
+    ItemIndex = ((PageIndex - 1) * MaxAchievementList) + 4
+
+    If CanDrawPageItem(CategoryIndex, ItemIndex) Then
+        SelectedAchievementId = GetAchievementByCategory(CategoryIndex, ItemIndex)
+        Call BuildAchievementRequirementDescription(SelectedAchievementId)
+    End If
 End Sub
 
 Private Sub List4_MouseMove()
     Dim ItemIndex As Long
     Dim AchievementId As Long
-    Dim X As Long, Y As Long
+    Dim x As Long, Y As Long
 
     ItemIndex = ((PageIndex - 1) * MaxAchievementList) + 4
 
     If CanDrawPageItem(CategoryIndex, ItemIndex) Then
         AchievementId = GetAchievementByCategory(CategoryIndex, ItemIndex)
 
-        Call SetWinDescriptionPosition(X, Y)
-        Call ShowAchievementDesc(X, Y, AchievementId, GetPlayerAchievement(AchievementId))
+        Call SetWinDescriptionPosition(x, Y)
+        Call ShowAchievementDesc(x, Y, AchievementId, GetPlayerAchievement(AchievementId))
     End If
 End Sub
 
 Private Sub List5_MouseDown()
+    Dim ItemIndex As Long
 
+    ItemIndex = ((PageIndex - 1) * MaxAchievementList) + 5
+
+    If CanDrawPageItem(CategoryIndex, ItemIndex) Then
+        SelectedAchievementId = GetAchievementByCategory(CategoryIndex, ItemIndex)
+        Call BuildAchievementRequirementDescription(SelectedAchievementId)
+    End If
 End Sub
 
 Private Sub List5_MouseMove()
     Dim ItemIndex As Long
     Dim AchievementId As Long
-    Dim X As Long, Y As Long
+    Dim x As Long, Y As Long
 
     ItemIndex = ((PageIndex - 1) * MaxAchievementList) + 5
 
     If CanDrawPageItem(CategoryIndex, ItemIndex) Then
         AchievementId = GetAchievementByCategory(CategoryIndex, ItemIndex)
 
-        Call SetWinDescriptionPosition(X, Y)
-        Call ShowAchievementDesc(X, Y, AchievementId, GetPlayerAchievement(AchievementId))
+        Call SetWinDescriptionPosition(x, Y)
+        Call ShowAchievementDesc(x, Y, AchievementId, GetPlayerAchievement(AchievementId))
     End If
 End Sub
 
 Private Sub List6_MouseDown()
+    Dim ItemIndex As Long
 
+    ItemIndex = ((PageIndex - 1) * MaxAchievementList) + 6
+
+    If CanDrawPageItem(CategoryIndex, ItemIndex) Then
+        SelectedAchievementId = GetAchievementByCategory(CategoryIndex, ItemIndex)
+        Call BuildAchievementRequirementDescription(SelectedAchievementId)
+    End If
 End Sub
 
 Private Sub List6_MouseMove()
     Dim ItemIndex As Long
     Dim AchievementId As Long
-    Dim X As Long, Y As Long
+    Dim x As Long, Y As Long
 
     ItemIndex = ((PageIndex - 1) * MaxAchievementList) + 6
 
     If CanDrawPageItem(CategoryIndex, ItemIndex) Then
         AchievementId = GetAchievementByCategory(CategoryIndex, ItemIndex)
 
-        Call SetWinDescriptionPosition(X, Y)
-        Call ShowAchievementDesc(X, Y, AchievementId, GetPlayerAchievement(AchievementId))
+        Call SetWinDescriptionPosition(x, Y)
+        Call ShowAchievementDesc(x, Y, AchievementId, GetPlayerAchievement(AchievementId))
     End If
 End Sub
 
-Private Sub SetWinDescriptionPosition(ByRef X As Long, ByRef Y As Long)
+Private Sub SetWinDescriptionPosition(ByRef x As Long, ByRef Y As Long)
 ' calc position
-    X = Windows(WindowIndex).Window.Left - Windows(GetWindowIndex("winDescription")).Window.Width - 2
+    x = Windows(WindowIndex).Window.Left - Windows(GetWindowIndex("winDescription")).Window.Width - 2
     Y = Windows(WindowIndex).Window.Top
 
     ' offscreen?
-    If X < 0 Then
+    If x < 0 Then
         ' switch to right
-        X = Windows(WindowIndex).Window.Left + Windows(WindowIndex).Window.Width + 2
+        x = Windows(WindowIndex).Window.Left + Windows(WindowIndex).Window.Width + 2
     End If
 End Sub
 
@@ -227,46 +296,55 @@ Private Sub ChangeCategoryGeneral()
     CategoryIndex = AchievementCategory_General
     Call SetPageIndexAndPageCount(GeneralCount)
     CheckAchievement
+    ClearDescriptions
 End Sub
 Private Sub ChangeCategorySummary()
     CategoryIndex = AchievementCategory_Summary
     Call SetPageIndexAndPageCount(SummaryCount)
     CheckAchievement
+    ClearDescriptions
 End Sub
 Private Sub ChangeCategoryCharacter()
     CategoryIndex = AchievementCategory_Character
     Call SetPageIndexAndPageCount(CharacterCount)
     CheckAchievement
+    ClearDescriptions
 End Sub
 Private Sub ChangeCategoryQuest()
     CategoryIndex = AchievementCategory_Quest
     Call SetPageIndexAndPageCount(QuestCount)
     CheckAchievement
+    ClearDescriptions
 End Sub
 Private Sub ChangeCategoryReputation()
     CategoryIndex = AchievementCategory_Reputation
     Call SetPageIndexAndPageCount(ReputationCount)
     CheckAchievement
+    ClearDescriptions
 End Sub
 Private Sub ChangeCategoryDungeon()
     CategoryIndex = AchievementCategory_Dungeon
     Call SetPageIndexAndPageCount(DungeonCount)
     CheckAchievement
+   ClearDescriptions
 End Sub
 Private Sub ChangeCategoryProfession()
     CategoryIndex = AchievementCategory_Profession
     Call SetPageIndexAndPageCount(ProfessionCount)
     CheckAchievement
+    ClearDescriptions
 End Sub
 Private Sub ChangeCategoryExploration()
     CategoryIndex = AchievementCategory_Exploration
     Call SetPageIndexAndPageCount(ExplorationCount)
     CheckAchievement
+    ClearDescriptions
 End Sub
 Private Sub ChangeCategoryPvp()
     CategoryIndex = AchievementCategory_Pvp
     Call SetPageIndexAndPageCount(PvpCount)
     CheckAchievement
+    ClearDescriptions
 End Sub
 
 Private Sub SetPageIndexAndPageCount(ByVal Count As Long)
@@ -284,6 +362,7 @@ Private Sub MovePageUp()
         PageIndex = PageIndex + 1
 
         Call CheckAchievement
+        Call ClearDescriptions
     End If
 End Sub
 Private Sub MovePageDown()
@@ -291,6 +370,7 @@ Private Sub MovePageDown()
         PageIndex = PageIndex - 1
 
         Call CheckAchievement
+        Call ClearDescriptions
     End If
 End Sub
 
@@ -425,6 +505,7 @@ Private Sub RenderAchievement()
     Dim Width As Long
     Dim StringWidth As Long
     Dim xO As Long, yO As Long
+    Dim i As Long, Y As Long
 
     xO = Windows(WindowIndex).Window.Left
     yO = Windows(WindowIndex).Window.Top
@@ -437,7 +518,14 @@ Private Sub RenderAchievement()
     RenderDesign DesignTypes.desWin_AincradMenu, xO, yO + 40, Width, 30
 
     RenderText Font(Fonts.OpenSans_Effect), "PONTOS DE CONQUISTA: " & GetPlayerAchievementPoints(), xO + (Width * 0.5) - (StringWidth * 0.5), yO + 48, Gold
-    
+
+    RenderText Font(Fonts.OpenSans_Effect), "XOXOTA", xO + (Width * 0.9) - (StringWidth * 0.5), yO + 48, Gold
+
+    For i = Descriptions.LineIndex To Descriptions.LineCount
+        RenderText Font(Fonts.OpenSans_Effect), Descriptions.Lines(i), xO + (Width * 0.8) - (StringWidth * 0.5), yO + 115 + Y, Descriptions.LineColor(i)
+        Y = Y + 20
+    Next
+
 End Sub
 
 Public Sub CheckAchievement()
@@ -517,3 +605,432 @@ Private Function CanDrawPageItem(ByVal Category As AchievementCategory, ByVal It
 
 End Function
 
+Private Sub BuildAchievementRequirementDescription(ByVal Id As Long)
+    Dim i As Long
+    Dim RequirementCount As Long
+    Dim RewardCount As Long
+
+    Call ClearDescriptions
+
+    If Id > 0 And Id <= MaxAchievements Then
+        RequirementCount = Achievement(Id).RequirementCount
+        RewardCount = Achievement(Id).RewardCount
+
+        If RequirementCount > 0 Then
+            For i = 1 To RequirementCount
+                With Achievement(Id).Requirements(i)
+
+                    Select Case .PrimaryType
+                    Case AchievementPrimaryRequirement_Location
+                        Call DrawRequirement_Location(Descriptions.LineCount, Id, i)
+
+                    Case AchievementPrimaryRequirement_Kill
+                        Call DrawRequirement_Kill(Descriptions.LineCount, Id, i)
+
+                    Case AchievementPrimaryRequirement_Quest
+                        Call DrawRequirement_Quest(Descriptions.LineCount, Id, i)
+
+                    Case AchievementPrimaryRequirement_LevelUp
+                        Call DrawRequirement_LevelUp(Descriptions.LineCount, Id, i)
+
+                    Case AchievementPrimaryRequirement_Instance
+                        Call DrawRequirement_Instance(Descriptions.LineCount, Id, i)
+
+                    Case AchievementPrimaryRequirement_Acquire
+                        Call DrawRequirement_Acquire(Descriptions.LineCount, Id, i)
+
+                    Case AchievementPrimaryRequirement_UseItem
+                        Call DrawRequirement_UseItem(Descriptions.LineCount, Id, i)
+
+                    Case AchievementPrimaryRequirement_EquipItem
+                        Call DrawRequirement_EquipItem(Descriptions.LineCount, Id, i)
+
+                    Case AchievementPrimaryRequirement_ItemUpgrade
+                        Call DrawRequirement_ItemUpgrade(Descriptions.LineCount, Id, i)
+
+                    Case AchievementPrimaryRequirement_Casting
+                        Call DrawRequirement_Casting(Descriptions.LineCount, Id, i)
+
+                    End Select
+                End With
+            Next
+        End If
+
+        If RewardCount > 0 Then
+            For i = 1 To RewardCount
+                With Achievement(Id).Rewards(i)
+                    Select Case .Type
+                    Case AchievementRewardType_Item
+                    Case AchievementRewardType_Title
+                    Case AchievementRewardType_Currency
+                    End Select
+                End With
+            Next
+        End If
+    End If
+
+End Sub
+
+Private Sub DrawRequirement_Location(ByRef LineCount As Long, ByVal Id As Long, ByVal RequirementIndex As Long)
+    With Achievement(Id).Requirements(RequirementIndex)
+
+        If .Id > 0 Then
+            Descriptions.Lines(LineCount) = "Ir para o mapa " & .Id
+            Descriptions.LineColor(LineCount) = ColorType.Gold
+
+            LineCount = LineCount + 1
+
+            Call AddRequirementDescription(LineCount, .Description)
+        End If
+
+    End With
+End Sub
+
+Private Sub DrawRequirement_Kill(ByRef LineCount As Long, ByVal Id As Long, ByVal RequirementIndex As Long)
+    With Achievement(Id).Requirements(RequirementIndex)
+
+        If .Id > 0 Then
+
+            Select Case .SecondaryType
+            Case AchievementSecondaryRequirement_DestroyNpc
+                Descriptions.Lines(LineCount) = "Matar ... "
+                Descriptions.LineColor(LineCount) = ColorType.Gold
+
+                LineCount = LineCount + 1
+
+                Call AddRequirementDescription(LineCount, .Description)
+
+            Case AchievementSecondaryRequirement_DestroyObject
+                Descriptions.Lines(LineCount) = "Destruir ... "
+                Descriptions.LineColor(LineCount) = ColorType.Gold
+
+                LineCount = LineCount + 1
+
+                Call AddRequirementDescription(LineCount, .Description)
+
+            Case AchievementSecondaryRequirement_DestroyPlayer
+                Descriptions.Lines(LineCount) = "Matar ... "
+                Descriptions.LineColor(LineCount) = ColorType.Gold
+
+                LineCount = LineCount + 1
+
+                Call AddRequirementDescription(LineCount, .Description)
+
+            End Select
+
+        End If
+
+    End With
+End Sub
+
+Private Sub DrawRequirement_Quest(ByRef LineCount As Long, ByVal Id As Long, ByVal RequirementIndex As Long)
+    With Achievement(Id).Requirements(RequirementIndex)
+
+        If .Id > 0 Then
+
+            Select Case .SecondaryType
+            Case AchievementSecondaryRequirement_QuestDoneById
+                Descriptions.Lines(LineCount) = "Concluir missão ... "
+                Descriptions.LineColor(LineCount) = ColorType.Gold
+
+                LineCount = LineCount + 1
+
+                Call AddRequirementDescription(LineCount, .Description)
+
+            End Select
+
+        End If
+
+    End With
+End Sub
+
+
+Private Sub DrawRequirement_LevelUp(ByRef LineCount As Long, ByVal Id As Long, ByVal RequirementIndex As Long)
+    With Achievement(Id).Requirements(RequirementIndex)
+
+        If .Id > 0 Then
+
+            Select Case .SecondaryType
+            Case AchievementSecondaryRequirement_LevelUpByCharacter
+                Descriptions.Lines(LineCount) = "Atingir level ... "
+                Descriptions.LineColor(LineCount) = ColorType.Gold
+
+                LineCount = LineCount + 1
+
+                Call AddRequirementDescription(LineCount, .Description)
+
+            Case AchievementSecondaryRequirement_LevelUpBySkill
+                Descriptions.Lines(LineCount) = "Atingir level ... "
+                Descriptions.LineColor(LineCount) = ColorType.Gold
+
+                LineCount = LineCount + 1
+
+                Call AddRequirementDescription(LineCount, .Description)
+
+            Case AchievementSecondaryRequirement_LevelUpByParty
+                Descriptions.Lines(LineCount) = "Atingir level ... "
+                Descriptions.LineColor(LineCount) = ColorType.Gold
+
+                LineCount = LineCount + 1
+
+                Call AddRequirementDescription(LineCount, .Description)
+
+            Case AchievementSecondaryRequirement_LevelUpByCraft
+                Descriptions.Lines(LineCount) = "Atingir level ... "
+                Descriptions.LineColor(LineCount) = ColorType.Gold
+
+                LineCount = LineCount + 1
+
+                Call AddRequirementDescription(LineCount, .Description)
+
+            End Select
+
+        End If
+
+    End With
+End Sub
+
+Private Sub DrawRequirement_Instance(ByRef LineCount As Long, ByVal Id As Long, ByVal RequirementIndex As Long)
+    With Achievement(Id).Requirements(RequirementIndex)
+
+        If .Id > 0 Then
+
+            Select Case .SecondaryType
+            Case AchievementSecondaryRequirement_InstanceEnter
+                Descriptions.Lines(LineCount) = "Entrar na dungeon ... "
+                Descriptions.LineColor(LineCount) = ColorType.Gold
+
+                LineCount = LineCount + 1
+
+                Call AddRequirementDescription(LineCount, .Description)
+
+            Case AchievementSecondaryRequirement_InstanceCompleted
+                Descriptions.Lines(LineCount) = "Entrar na dungeon ... "
+                Descriptions.LineColor(LineCount) = ColorType.Gold
+
+                LineCount = LineCount + 1
+
+                Call AddRequirementDescription(LineCount, .Description)
+
+            End Select
+
+        End If
+
+    End With
+End Sub
+
+Private Sub DrawRequirement_Acquire(ByRef LineCount As Long, ByVal Id As Long, ByVal RequirementIndex As Long)
+    With Achievement(Id).Requirements(RequirementIndex)
+
+        If .Id > 0 Then
+
+            Select Case .SecondaryType
+            Case AchievementSecondaryRequirement_AcquireItem
+
+                If .Id > 0 And .Id <= MaximumItems Then
+                    Dim Text As String
+
+                    Text = Item(.Id).Name
+
+                    Descriptions.Lines(LineCount) = "Coletar item ... " & Text
+                    Descriptions.LineColor(LineCount) = ColorType.Gold
+
+                    LineCount = LineCount + 1
+
+                    Call AddRequirementDescription(LineCount, .Description)
+
+                End If
+
+            Case AchievementSecondaryRequirement_AcquireCurrency
+                Descriptions.Lines(LineCount) = "Coletar moeda ... "
+                Descriptions.LineColor(LineCount) = ColorType.Gold
+
+                LineCount = LineCount + 1
+
+                Call AddRequirementDescription(LineCount, .Description)
+
+            End Select
+
+        End If
+
+    End With
+End Sub
+
+Private Sub DrawRequirement_UseItem(ByRef LineCount As Long, ByVal Id As Long, ByVal RequirementIndex As Long)
+    With Achievement(Id).Requirements(RequirementIndex)
+
+        If .Id > 0 And .Id <= MaximumItems Then
+            Dim Text As String
+
+            Text = Item(.Id).Name
+
+            Select Case .SecondaryType
+            Case AchievementSecondaryRequirement_UseItemById
+                Descriptions.Lines(LineCount) = "Usar item ... " & Text
+                Descriptions.LineColor(LineCount) = ColorType.Gold
+
+                LineCount = LineCount + 1
+
+                Call AddRequirementDescription(LineCount, .Description)
+            End Select
+
+        End If
+
+    End With
+End Sub
+
+Private Sub DrawRequirement_Casting(ByRef LineCount As Long, ByVal Id As Long, ByVal RequirementIndex As Long)
+    With Achievement(Id).Requirements(RequirementIndex)
+        If .Id > 0 And .Id <= MaximumSkills Then
+            Dim Text As String
+            
+            Text = Skill(.Id).Name
+            
+            Descriptions.Lines(LineCount) = "Usar habilidade ... " & Text
+            Descriptions.LineColor(LineCount) = ColorType.Gold
+
+            LineCount = LineCount + 1
+
+            Call AddRequirementDescription(LineCount, .Description)
+        End If
+    End With
+End Sub
+
+Private Sub DrawRequirement_ItemUpgrade(ByRef LineCount As Long, ByVal Id As Long, ByVal RequirementIndex As Long)
+    With Achievement(Id).Requirements(RequirementIndex)
+
+        If .Id > 0 And .Id <= MaximumItems Then
+            Dim Text As String
+
+            Text = Item(.Id).Name
+
+            Select Case .SecondaryType
+            Case AchievementSecondaryRequirement_ItemUpgradeByFailed
+                Descriptions.Lines(LineCount) = "Falhar em aprimorar ... " & Text
+                Descriptions.LineColor(LineCount) = ColorType.Gold
+
+                LineCount = LineCount + 1
+
+                Call AddRequirementDescription(LineCount, .Description)
+
+            Case AchievementSecondaryRequirement_ItemUpgradeById
+                Descriptions.Lines(LineCount) = "Sucesso em aprimorar ... " & Text
+                Descriptions.LineColor(LineCount) = ColorType.Gold
+
+                LineCount = LineCount + 1
+
+                Call AddRequirementDescription(LineCount, .Description)
+
+            Case AchievementSecondaryRequirement_ItemUpgradeByLevel
+                Descriptions.Lines(LineCount) = "Sucesso em aprimorar ... " & Text
+                Descriptions.LineColor(LineCount) = ColorType.Gold
+
+                LineCount = LineCount + 1
+
+                Call AddRequirementDescription(LineCount, .Description)
+
+            Case AchievementSecondaryRequirement_ItemUpgradeByRarity
+                Descriptions.Lines(LineCount) = "Sucesso em aprimorar ... " & Text
+                Descriptions.LineColor(LineCount) = ColorType.Gold
+
+                LineCount = LineCount + 1
+
+                Call AddRequirementDescription(LineCount, .Description)
+
+            Case AchievementSecondaryRequirement_ItemUpgradeByType
+                Descriptions.Lines(LineCount) = "Sucesso em aprimorar ... " & Text
+                Descriptions.LineColor(LineCount) = ColorType.Gold
+
+                LineCount = LineCount + 1
+
+                Call AddRequirementDescription(LineCount, .Description)
+
+            End Select
+
+        End If
+
+    End With
+End Sub
+
+Private Sub DrawRequirement_EquipItem(ByRef LineCount As Long, ByVal Id As Long, ByVal RequirementIndex As Long)
+    With Achievement(Id).Requirements(RequirementIndex)
+
+        If .Id > 0 And .Id <= MaximumItems Then
+            Dim Text As String
+            
+            Text = Item(.Id).Name
+
+            Select Case .SecondaryType
+            Case AchievementSecondaryRequirement_EquipItemById
+                Descriptions.Lines(LineCount) = "Equipar item " & Text
+                Descriptions.LineColor(LineCount) = ColorType.Gold
+
+                LineCount = LineCount + 1
+
+                Call AddRequirementDescription(LineCount, .Description)
+
+            Case AchievementSecondaryRequirement_EquipItemByLevel
+                Descriptions.Lines(LineCount) = "Equipar item " & Text
+                Descriptions.LineColor(LineCount) = ColorType.Gold
+
+                LineCount = LineCount + 1
+
+                Call AddRequirementDescription(LineCount, .Description)
+
+            Case AchievementSecondaryRequirement_EquipItemRarity
+                Descriptions.Lines(LineCount) = "Equipar item " & Text
+                Descriptions.LineColor(LineCount) = ColorType.Gold
+
+                LineCount = LineCount + 1
+
+                Call AddRequirementDescription(LineCount, .Description)
+
+            Case AchievementSecondaryRequirement_EquipItemByType
+                Descriptions.Lines(LineCount) = "Equipar item " & Text
+                Descriptions.LineColor(LineCount) = ColorType.Gold
+
+                LineCount = LineCount + 1
+
+                Call AddRequirementDescription(LineCount, .Description)
+
+            End Select
+
+        End If
+
+    End With
+End Sub
+
+Private Sub AddRequirementDescription(ByRef LineCount As Long, ByVal Description As String)
+    If LenB(Description) > 0 Then
+        Dim TextArray() As String
+        Dim Width As Long
+        Dim Count As Long
+        Dim i As Long
+
+        Width = 200
+
+        WordWrap_Array Description, Width, TextArray()
+
+        Count = UBound(TextArray)
+
+        For i = 1 To Count
+            Descriptions.Lines(LineCount) = TextArray(i)
+            Descriptions.LineColor(LineCount) = ColorType.White
+
+            LineCount = LineCount + 1
+        Next
+    End If
+End Sub
+
+Private Sub ClearDescriptions()
+    Dim i As Long
+
+    Descriptions.LineCount = 1
+    Descriptions.LineIndex = 1
+
+    For i = 1 To MaxDescriptionLines
+        Descriptions.Lines(i) = vbNullString
+        Descriptions.LineColor(i) = ColorType.White
+    Next
+
+End Sub

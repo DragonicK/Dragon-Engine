@@ -47,6 +47,7 @@ namespace Crystalshire.Core.Content {
 
                     for (var n = 0; n < rewardCount; n++) {
                         var reward = new AchievementReward() {
+                            Type = (AchievementRewardType)reader.ReadInt32(),
                             Id = reader.ReadInt32(),
                             Value = reader.ReadInt32(),
                             Level = reader.ReadInt32(),
@@ -106,7 +107,7 @@ namespace Crystalshire.Core.Content {
 
                 for (var n = 0; n < achievement.Rewards.Count; n++) {
                     var reward = achievement.Rewards[n];
-
+                    writer.Write((int)reward.Type);
                     writer.Write(reward.Id);
                     writer.Write(reward.Value);
                     writer.Write(reward.Level);

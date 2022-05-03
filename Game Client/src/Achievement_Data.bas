@@ -20,6 +20,53 @@ Public Enum AchievementCategory
     AchievementCategory_Count
 End Enum
 
+Public Enum AchievementRewardType
+    AchievementRewardType_None
+    AchievementRewardType_Item
+    AchievementRewardType_Title
+    AchievementRewardType_Currency
+End Enum
+
+Public Enum AchievementPrimaryRequirement
+    AchievementPrimaryRequirement_None
+    AchievementPrimaryRequirement_Location
+    AchievementPrimaryRequirement_Kill
+    AchievementPrimaryRequirement_Quest
+    AchievementPrimaryRequirement_LevelUp
+    AchievementPrimaryRequirement_Instance
+    AchievementPrimaryRequirement_Acquire
+    AchievementPrimaryRequirement_UseItem
+    AchievementPrimaryRequirement_EquipItem
+    AchievementPrimaryRequirement_ItemUpgrade
+    AchievementPrimaryRequirement_Casting
+End Enum
+
+Public Enum AchievementSecondaryRequirement
+    AchievementSecondaryRequirement_None
+    AchievementSecondaryRequirement_AcquireItem '= &H1
+    AchievementSecondaryRequirement_AcquireCurrency '= &H2
+    AchievementSecondaryRequirement_DestroyNpc '= &H4
+    AchievementSecondaryRequirement_DestroyObject '= &H8
+    AchievementSecondaryRequirement_DestroyPlayer '= &H10
+    AchievementSecondaryRequirement_EquipItemById '= &H20
+    AchievementSecondaryRequirement_EquipItemByLevel '= &H40
+    AchievementSecondaryRequirement_EquipItemRarity '= &H80
+    AchievementSecondaryRequirement_EquipItemByType '= &H100
+    AchievementSecondaryRequirement_InstanceEnter '= &H200
+    AchievementSecondaryRequirement_InstanceCompleted '= &H400
+    AchievementSecondaryRequirement_ItemUpgradeByFailed '= &H800
+    AchievementSecondaryRequirement_ItemUpgradeById '= &H1000
+    AchievementSecondaryRequirement_ItemUpgradeByLevel '= &H2000
+    AchievementSecondaryRequirement_ItemUpgradeByRarity '= &H4000
+    AchievementSecondaryRequirement_ItemUpgradeByType '= &H8000
+    AchievementSecondaryRequirement_LevelUpByCharacter '= &H10000
+    AchievementSecondaryRequirement_LevelUpBySkill '= &H20000
+    AchievementSecondaryRequirement_LevelUpByParty '= &H40000
+    AchievementSecondaryRequirement_LevelUpByCraft '= &H80000
+    AchievementSecondaryRequirement_QuestDoneById '= &H100000
+    AchievementSecondaryRequirement_UseItemById '= &H200000
+End Enum
+
 Private Type AchievementRequirementRec
     Id As Long
     Value As Long
@@ -27,12 +74,13 @@ Private Type AchievementRequirementRec
     Count As Long
     Rarity As RarityType
     Equipment As Long
-    PrimaryType As Long
-    SecondaryType As Long
+    PrimaryType As AchievementPrimaryRequirement
+    SecondaryType As AchievementSecondaryRequirement
     Description As String
 End Type
 
 Private Type AchievementRewardRec
+    Type As AchievementRewardType
     Id As Long
     Value As Long
     Level As Long
@@ -101,9 +149,9 @@ Public Sub LoadAchievements()
                             .Requirements(n).Equipment = ReadInt32(Index)
                             .Requirements(n).PrimaryType = ReadInt32(Index)
                             .Requirements(n).SecondaryType = ReadInt32(Index)
-                            
-                             Call ReadString(Index, Description)
-                            
+
+                            Call ReadString(Index, Description)
+
                             .Requirements(n).Description = Replace(Description, vbNullChar, vbNullString)
                         Next
                     End If
@@ -114,6 +162,7 @@ Public Sub LoadAchievements()
                         ReDim .Rewards(1 To .RewardCount)
 
                         For n = 1 To .RewardCount
+                            .Rewards(n).Type = ReadInt32(Index)
                             .Rewards(n).Id = ReadInt32(Index)
                             .Rewards(n).Value = ReadInt32(Index)
                             .Rewards(n).Level = ReadInt32(Index)

@@ -26,7 +26,6 @@ namespace Crystalshire.Editor.Achievements {
             Util.FillComboBox<AchievementRewardType>(ComboRewardType);
             Util.FillComboBox<AchievementPrimaryRequirement>(ComboPrimary);
             Util.FillComboBox<AchievementSecondaryRequirement>(ComboSecondary);
-            Util.FillComboBox<AchievementRewardType>(ComboRewardType);
 
             Database = database;
             Configuration = configuration;
