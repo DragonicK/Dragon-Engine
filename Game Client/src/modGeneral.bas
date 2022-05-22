@@ -191,9 +191,6 @@ Public Sub LogoutGame()
     SpellBuffer = 0
     SpellBufferTimer = 0
 
-    ' unload editors
-    Unload frmFont_Editor
-
     ' clear chat
     For i = 1 To ChatLines
         Chat(i).Text = vbNullString

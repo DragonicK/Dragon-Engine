@@ -63,7 +63,6 @@ Private Sub Form_KeyUp(KeyCode As Integer, Shift As Integer)
 
         '  If GetPlayerAccess(MyIndex) >= ACCESS_ADMINISTRATOR Then
         '     frmAdminPanel.Show
-        frmFont_Editor.Show
         '  End If
     End If
 

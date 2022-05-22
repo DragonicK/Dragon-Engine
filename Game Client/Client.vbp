@@ -17,7 +17,6 @@ Module=Audio_Implementation; src\Audio_Implementation.bas
 Module=Interface_Implementation; src\Interface_Implementation.bas
 Module=InterfaceEvents_Implementation; src\InterfaceEvents_Implementation.bas
 Module=modPlayer; src\modPlayer.bas
-Form=src\frmFont_Editor.frm
 Class=clsMd5; src\clsMd5.cls
 Module=modAnimation; src\modAnimation.bas
 Module=modTarget; src\modTarget.bas

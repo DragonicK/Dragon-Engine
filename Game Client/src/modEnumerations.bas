@@ -88,7 +88,6 @@ Public Enum ChatChannel
     Channel_Count
 End Enum
 
-
 Public Enum DialogueType
     TypeName = 0
     TypeTRADE

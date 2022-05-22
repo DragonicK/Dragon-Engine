@@ -32,6 +32,13 @@ Public Type TextureDataStruct
     Data() As Byte
 End Type
 
+Public Type GeomRec
+    Top As Long
+    Left As Long
+    Height As Long
+    Width As Long
+End Type
+
 Public Type Vertex
     X As Single
     Y As Single

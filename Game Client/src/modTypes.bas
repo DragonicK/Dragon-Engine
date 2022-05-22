@@ -64,10 +64,5 @@ Private Type TempTileRec
 End Type
 
 
-Public Type GeomRec
-    Top As Long
-    Left As Long
-    Height As Long
-    Width As Long
-End Type
+
 
