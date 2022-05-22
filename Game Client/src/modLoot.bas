@@ -168,12 +168,12 @@ Private Sub ShowLootDescription(ByVal Index As Long)
         Call ShowItemDesc(X, Y, Inventory)
 
     ElseIf LootType = ItemLootType.ItemLootType_Currency Then
-        Dim CurrencyValue As Long, CurrencyType As Byte
+        Dim CurrencyValue As Long, CurType As CurrencyType
 
-        CurrencyType = ItemLoot(Index).CurrencyType
+        CurType = ItemLoot(Index).CurrencyType
         CurrencyValue = ItemLoot(Index).Value
 
-        ShowCurrencyDesc X, Y, CurrencyType, CurrencyValue
+        ShowCurrencyDesc X, Y, CurType, CurrencyValue
     End If
 
 End Sub

@@ -106,7 +106,7 @@ Public Sub DrawPlayerName(ByVal Index As Long)
 
     Call RenderText(Font(Fonts.OpenSans_Effect), Text, ConvertMapX(TextX), ConvertMapY(TextY), Colour)
 
-    If GetPlayerTitle(Index) > 0 And GetPlayerTitle(Index) <= MaxTitles Then
+    If GetPlayerTitle(Index) > 0 And GetPlayerTitle(Index) <= MaximumTitles Then
         Text = Trim$(Title(GetPlayerTitle(Index)).Name)
         TextSize = TextWidth(Font(Fonts.OpenSans_Effect), Text)
 

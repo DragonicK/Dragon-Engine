@@ -4,6 +4,7 @@ Option Explicit
 ' Moedas e Tokens
 Public Enum CurrencyType
     Currency_Gold
+    Currency_Count
 End Enum
 
 ' Quantidade máxima de moedas ou tokens na conta do usuário.
@@ -20,6 +21,7 @@ End Type
 Public Type CurrencyRec
     Id As CurrencyType
     Name As String
+    ' Icone a partir dos items.
     IconId As Long
 End Type
 
@@ -37,10 +39,12 @@ Public Function GetCurrencyData(ByVal Id As Long) As CurrencyRec
     For i = 0 To MaximumCurrency
         If CurrencyData(i).Id = Id Then
             GetCurrencyData = CurrencyData(i)
-            
             Exit For
         End If
     Next
+    
+    ' Se não houver nenhum, retorna apenas o gold.
+    GetCurrencyData = CurrencyData(0)
 
 End Function
 

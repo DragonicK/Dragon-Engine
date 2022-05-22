@@ -15,8 +15,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Animation\**" />
     <Compile Remove="obj\**" />
+    <EmbeddedResource Remove="Animation\**" />
     <EmbeddedResource Remove="obj\**" />
+    <None Remove="Animation\**" />
     <None Remove="obj\**" />
   </ItemGroup>
 
@@ -26,10 +29,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Crystalshire.Core\Crystalshire.Core.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Animation\" />
   </ItemGroup>
 
 </Project>

@@ -138,7 +138,7 @@ Private Sub Draw_Title()
             Colour = ColorType.White
         End If
 
-        If TitleNum > 0 And TitleNum <= MaxTitles Then
+        If TitleNum > 0 And TitleNum <= MaximumTitles Then
             RenderText Font(Fonts.OpenSans_Regular), Title(TitleNum).Name, xO + ListX + 7, yO + ListY + 5 + (ListOffsetY * i), Colour
         End If
     Next
@@ -157,7 +157,7 @@ Private Sub PicList1_MouseMove()
 
     Id = GetTitle(1 + TitleListIndex)
 
-    If Id >= 1 And Id <= MaxTitles Then
+    If Id >= 1 And Id <= MaximumTitles Then
         Dim X As Long, Y As Long
 
         Call SetWinDescriptionPosition(X, Y)
@@ -176,7 +176,7 @@ Private Sub PicList2_MouseMove()
 
     Id = GetTitle(2 + TitleListIndex)
 
-    If Id >= 1 And Id <= MaxTitles Then
+    If Id >= 1 And Id <= MaximumTitles Then
         Dim X As Long, Y As Long
 
         Call SetWinDescriptionPosition(X, Y)
@@ -195,7 +195,7 @@ Private Sub PicList3_MouseMove()
 
     Id = GetTitle(3 + TitleListIndex)
 
-    If Id >= 1 And Id <= MaxTitles Then
+    If Id >= 1 And Id <= MaximumTitles Then
         Dim X As Long, Y As Long
 
         Call SetWinDescriptionPosition(X, Y)
@@ -215,7 +215,7 @@ Private Sub PicList4_MouseMove()
 
     Id = GetTitle(4 + TitleListIndex)
 
-    If Id >= 1 And Id <= MaxTitles Then
+    If Id >= 1 And Id <= MaximumTitles Then
         Dim X As Long, Y As Long
 
         Call SetWinDescriptionPosition(X, Y)
@@ -235,7 +235,7 @@ Private Sub PicList5_MouseMove()
 
     Id = GetTitle(5 + TitleListIndex)
 
-    If Id >= 1 And Id <= MaxTitles Then
+    If Id >= 1 And Id <= MaximumTitles Then
         Dim X As Long, Y As Long
 
         Call SetWinDescriptionPosition(X, Y)
@@ -255,7 +255,7 @@ Private Sub PicList6_MouseMove()
 
     Id = GetTitle(6 + TitleListIndex)
 
-    If Id >= 1 And Id <= MaxTitles Then
+    If Id >= 1 And Id <= MaximumTitles Then
         Dim X As Long, Y As Long
 
         Call SetWinDescriptionPosition(X, Y)
@@ -275,7 +275,7 @@ Private Sub PicList7_MouseMove()
 
     Id = GetTitle(7 + TitleListIndex)
 
-    If Id >= 1 And Id <= MaxTitles Then
+    If Id >= 1 And Id <= MaximumTitles Then
         Dim X As Long, Y As Long
 
         Call SetWinDescriptionPosition(X, Y)
@@ -295,7 +295,7 @@ Private Sub PicList8_MouseMove()
 
     Id = GetTitle(8 + TitleListIndex)
 
-    If Id >= 1 And Id <= MaxTitles Then
+    If Id >= 1 And Id <= MaximumTitles Then
         Dim X As Long, Y As Long
 
         Call SetWinDescriptionPosition(X, Y)
@@ -315,7 +315,7 @@ Private Sub PicList9_MouseMove()
 
     Id = GetTitle(9 + TitleListIndex)
 
-    If Id >= 1 And Id <= MaxTitles Then
+    If Id >= 1 And Id <= MaximumTitles Then
         Dim X As Long, Y As Long
 
         Call SetWinDescriptionPosition(X, Y)
@@ -335,7 +335,7 @@ Private Sub PicList10_MouseMove()
 
     Id = GetTitle(10 + TitleListIndex)
 
-    If Id >= 1 And Id <= MaxTitles Then
+    If Id >= 1 And Id <= MaximumTitles Then
         Dim X As Long, Y As Long
 
         Call SetWinDescriptionPosition(X, Y)
@@ -401,7 +401,7 @@ Public Sub UpdateActiveTitle(ByVal TitleNum As Long)
     ControlIndex = GetControlIndex("winTitle", "lblTitleActivated")
     Colour = White
 
-    If TitleNum >= 1 And TitleNum <= MaxTitles Then
+    If TitleNum >= 1 And TitleNum <= MaximumTitles Then
         Colour = ColorType.Gold
         Name = Title(TitleNum).Name
     Else

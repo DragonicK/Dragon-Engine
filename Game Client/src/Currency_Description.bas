@@ -1,7 +1,7 @@
 Attribute VB_Name = "Currency_Description"
 Option Explicit
 
-Public Sub ShowCurrencyDesc(ByRef X As Long, ByRef Y As Long, ByVal CurrencyType As Byte, ByVal CurrencyValue As Long)
+Public Sub ShowCurrencyDesc(ByRef X As Long, ByRef Y As Long, ByVal CurType As CurrencyType, ByVal CurrencyValue As Long)
     Dim Colour As Long, i As Long
     Dim WindowIndex As Long
     Dim CurrentHeight As Long
@@ -48,7 +48,7 @@ Public Sub ShowCurrencyDesc(ByRef X As Long, ByRef Y As Long, ByVal CurrencyType
 
     With Windows(WindowIndex)
         ControlIndex = GetControlIndex("winDescription", "lblName")
-       ' .Controls(ControlIndex).Text = Trim$(CurrencyData(CurrencyType).Name)
+        .Controls(ControlIndex).Text = GetCurrencyData(CurType).Name
         .Controls(ControlIndex).textColour = Gold
         .Controls(ControlIndex).Width = 225
         .Controls(ControlIndex).align = Alignment.alignCentre

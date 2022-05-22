@@ -67,7 +67,7 @@ Public Enum AchievementSecondaryRequirement
     AchievementSecondaryRequirement_UseItemById '= &H200000
 End Enum
 
-Private Type AchievementRequirementRec
+Public Type AchievementRequirementRec
     Id As Long
     Value As Long
     Level As Long
@@ -79,7 +79,7 @@ Private Type AchievementRequirementRec
     Description As String
 End Type
 
-Private Type AchievementRewardRec
+Public Type AchievementRewardRec
     Type As AchievementRewardType
     Id As Long
     Value As Long
@@ -89,7 +89,7 @@ Private Type AchievementRewardRec
     UpgradeId As Long
 End Type
 
-Private Type AchievementRec
+Public Type AchievementRec
     Id As Long
     Name As String
     Description As String

@@ -1,7 +1,7 @@
 Attribute VB_Name = "Title_Data"
 Option Explicit
 
-Public MaxTitles As Long
+Public MaximumTitles As Long
 Public MaxTitlesAttributes As Long
 
 Public Title() As TitleRec
@@ -24,12 +24,12 @@ Public Sub LoadTitles()
     Index = GetFileHandler(App.Path & "\Data Files\Data\Titles.dat")
 
     If Index > 0 Then
-        MaxTitles = ReadInt32(Index)
+        MaximumTitles = ReadInt32(Index)
 
-        If MaxTitles > 0 Then
-            ReDim Title(1 To MaxTitles)
+        If MaximumTitles > 0 Then
+            ReDim Title(1 To MaximumTitles)
             
-            For i = 1 To MaxTitles
+            For i = 1 To MaximumTitles
                 Name = String(512, vbNullChar)
                 Description = String(512, vbNullChar)
                 
