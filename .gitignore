@@ -19,20 +19,27 @@ mono_crash.*
 # Build results
 [Bb]uild/Core/
 
-# GAME DEBUG
+# Game Debug
 [Bb]uild/Game/Debug/net7.0/runtimes/
 [Bb]uild/Game/Debug/net7.0/*.*
-# GAME RELEASE
+# Game Release
 [Bb]uild/Game/Release/net7.0/runtimes/
 [Bb]uild/Game/Release/net7.0/*.*
-# LOGIN DEBUG
+# Login Debug
 [Bb]uild/Login/Debug/net7.0/runtimes/
 [Bb]uild/Login/Debug/net7.0/*.*
-# LOGIN RELEASE
+# Login Release
 [Bb]uild/Login/Release/net7.0/runtimes/
 [Bb]uild/Login/Release/net7.0/*.*
+# Editor Debug
+[Bb]uild/Editor/Debug/net7.0-windows/*.*
+[Bb]uild/Editor/Debug/net7.0-windows/runtimes/
+![Bb]uild/Editor/Debug/net7.0-windows/Configuration.json
+# Editor Release
+[Bb]uild/Editor/Release/net7.0-windows/*.*
+[Bb]uild/Editor/Release/net7.0-windows/runtimes/
+![Bb]uild/Editor/Release/net7.0-windows/Configuration.json
 
-[Bb]uild/Editor/
 [Bb]uild/Wrapper/
 [Bb]uild/Model/
 [Dd]ebugPublic/
