@@ -64,18 +64,5 @@ namespace Crystalshire.Core.Content {
 
             values.Add(map.Id, map);
         }
-
-        private string[]? GetFolders(string root) {
-            return Directory.GetDirectories(root);
-        }
-
-        private string[]? GetFiles(string folder) {
-            if (Directory.Exists(folder)) {
-                return Directory.GetFiles(folder);
-            }
-
-            return null;
-        }
-
     }
 }

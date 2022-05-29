@@ -24,12 +24,12 @@
         public List<AccountService>? AccountService { get; set; }
 
         public Account() {
-            Username = String.Empty;
-            Passphrase = String.Empty;
-            Email = String.Empty;
-            AccountKey = String.Empty;
-            LastLoginIp = String.Empty;
-            CurrentIp = String.Empty;
+            Username = string.Empty;
+            Passphrase = string.Empty;
+            Email = string.Empty;
+            AccountKey = string.Empty;
+            LastLoginIp = string.Empty;
+            CurrentIp = string.Empty;
         }
     }
 }

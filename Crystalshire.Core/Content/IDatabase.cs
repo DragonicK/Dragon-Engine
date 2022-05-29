@@ -11,5 +11,7 @@
         virtual void Load() { }
         virtual void Save() { }
         IEnumerator<KeyValuePair<int, T>> GetEnumerator();
+        string[]? GetFolders(string root);
+        string[]? GetFiles(string folder);
     }
 }

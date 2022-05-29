@@ -11,11 +11,9 @@
         }
 
         public void Create() {
-            for (var i = 0; i < directory.Count; i++) {
-                if (!Directory.Exists(directory[i])) {
-                    Directory.CreateDirectory(directory[i]);
-                }
-            }
+            directory.ForEach(path =>  {
+                Directory.CreateDirectory(path);
+            });
         }
     }
 }

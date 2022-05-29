@@ -5,29 +5,30 @@ using Crystalshire.Core.Serialization;
 namespace Crystalshire.Core.Content {
     public class Premiums : Database<Premium> {
 
-        private int ProcessedFiles = 0;
-
         public override void Load() {
             var files = Directory.GetFiles(Folder);
+            var processed = 0;
 
             if (files.Length > 0) {
-                LoadPremiums(files);
+                processed += LoadPremiums(files);
             }
 
             var folders = GetFolders(Folder);
 
             if (folders?.Length > 0) {
                 foreach (var folder in folders) {
-                    LoadPremiums(GetFiles(folder));
+                    processed += LoadPremiums(GetFiles(folder));
                 }
             }
 
-            if (ProcessedFiles == 0) { 
+            if (processed == 0) { 
                 SaveDefault();
             }
         }
 
-        private void LoadPremiums(string[]? files) {
+        private int LoadPremiums(string[]? files) {
+            var count = 0;
+
             if (files is not null) {
                 foreach (var file in files) {
                     if (Json.FileExists(file)) {
@@ -40,22 +41,12 @@ namespace Crystalshire.Core.Content {
                             }
                         }
 
-                        ProcessedFiles++;
+                        count++;
                     }
                 }
             }
-        }
 
-        private string[]? GetFolders(string root) {
-            return Directory.GetDirectories(root);
-        }
-
-        private string[]? GetFiles(string folder) {
-            if (Directory.Exists(folder)) {
-                return Directory.GetFiles(folder);
-            }
-
-            return null;
+            return count;
         }
 
         private void SaveDefault() {

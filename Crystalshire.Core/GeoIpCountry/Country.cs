@@ -1,5 +1,5 @@
 ﻿namespace Crystalshire.Core.GeoIpCountry {
-    public class Country {
+    public sealed class Country {
         public string IpFrom { get; set; }
         public string IpTo { get; set; }
         public long NumberMin { get; set; }
@@ -8,10 +8,10 @@
         public string Name { get; set; }
 
         public Country() {
-            IpFrom = String.Empty;
-            IpTo = String.Empty;
-            Code = String.Empty;
-            Name = String.Empty;
+            IpFrom = string.Empty;
+            IpTo = string.Empty;
+            Code = string.Empty;
+            Name = string.Empty;
         }
     }
 }

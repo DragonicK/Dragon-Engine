@@ -9,7 +9,6 @@ namespace Crystalshire.Core.Cryptography {
             return sha.ComputeHash(Encoding.Unicode.GetBytes(data));
         }
 
-
         public static string ComputeToHex(string data) {
             var sha = SHA256.Create();
             var buffer = sha.ComputeHash(Encoding.Unicode.GetBytes(data));

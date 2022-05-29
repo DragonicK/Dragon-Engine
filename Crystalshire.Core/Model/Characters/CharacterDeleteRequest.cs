@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Crystalshire.Core.Model.Characters {
+﻿namespace Crystalshire.Core.Model.Characters {
     public class CharacterDeleteRequest {
         public long Id { get; set; }
         public string Name { get; set; }
@@ -11,5 +9,11 @@ namespace Crystalshire.Core.Model.Characters {
         public DateTime? RequestDate { get; set; }
         public DateTime? ExclusionDate { get; set; }
         public bool IsActive { get; set; }
+
+        public CharacterDeleteRequest() {
+            Name = string.Empty;
+            MachineId = string.Empty;
+            IpAddress = string.Empty;
+        }
     }
 }

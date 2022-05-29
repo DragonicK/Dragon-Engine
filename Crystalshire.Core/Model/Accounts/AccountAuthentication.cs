@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Crystalshire.Core.Model.Accounts {
+﻿namespace Crystalshire.Core.Model.Accounts {
     public class AccountAuthentication {
         public long Id { get; set; }
         public long AccountId { get; set; }
@@ -9,5 +7,9 @@ namespace Crystalshire.Core.Model.Accounts {
         public int AuthLockFlag { get; set; }
         public int AuthFailCount { get; set; }
         public DateTime? RegistrationDate { get; set; }
+
+        public AccountAuthentication() {
+            AuthPassphrase = string.Empty;
+        }
     }
 }

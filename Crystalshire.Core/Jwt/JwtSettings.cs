@@ -5,8 +5,8 @@
         public int ExpirationMinutes { get; set; }
 
         public JwtSettings() {
-            SecurityKey = String.Empty;
-            DataSecurityKey = String.Empty;
+            SecurityKey = string.Empty;
+            DataSecurityKey = string.Empty;
         }
     }
 }

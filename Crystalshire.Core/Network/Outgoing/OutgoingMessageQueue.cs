@@ -5,8 +5,8 @@ namespace Crystalshire.Core.Network.Outgoing {
     public class OutgoingMessageQueue : IOutgoingMessageQueue {
         private const int BufferSize = 4096;
 
-        private RingBuffer<RingBufferByteArray> ringbuffer;
-        private Disruptor<RingBufferByteArray> disruptor;
+        private RingBuffer<RingBufferByteArray>? ringbuffer;
+        private readonly Disruptor<RingBufferByteArray> disruptor;
 
         public IOutgoingMessageEventHandler OutgoingMessageEventHandler { get; }
 
@@ -29,7 +29,7 @@ namespace Crystalshire.Core.Network.Outgoing {
         }
 
         public void Enqueue(RingBufferByteArray buffer) {
-            var sequence = ringbuffer.Next();
+            var sequence = ringbuffer!.Next();
             var entry = ringbuffer[sequence];
 
             var bytes = new byte[buffer.Length];

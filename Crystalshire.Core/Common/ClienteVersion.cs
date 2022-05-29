@@ -1,6 +1,4 @@
-﻿using Crystalshire.Core.Network.Messaging;
-
-namespace Crystalshire.Core.Common {
+﻿namespace Crystalshire.Core.Common {
     public struct ClientVersion {
         
         public int ClientMajor { get; set; }

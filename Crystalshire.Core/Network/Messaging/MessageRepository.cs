@@ -3,7 +3,7 @@
 namespace Crystalshire.Core.Network.Messaging {
     public class MessageRepository : IMessageRepository<MessageHeader> {
 
-        public Dictionary<MessageHeader, Type> Messages { get; private set; }
+        public IDictionary<MessageHeader, Type> Messages { get; private set; }
 
         public MessageRepository() {
             Messages = new Dictionary<MessageHeader, Type>();

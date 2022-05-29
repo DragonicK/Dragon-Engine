@@ -4,29 +4,30 @@ using Crystalshire.Core.Model.Classes;
 namespace Crystalshire.Core.Content {
     public class Classes : Database<IClass> {
 
-        private int ProcessedFiles = 0;
-
         public override void Load() {
             var files = Directory.GetFiles(Folder);
+            var processed = 0;
 
             if (files.Length > 0) {
-                LoadClasses(files);
+                processed += LoadClasses(files);
             }
 
             var folders = GetFolders(Folder);
 
             if (folders?.Length > 0) {
                 foreach (var folder in folders) {
-                    LoadClasses(GetFiles(folder));
+                    processed += LoadClasses(GetFiles(folder));
                 }
             }
 
-            if (ProcessedFiles == 0) {
+            if (processed == 0) {
                 SaveDefault();
             }
         }
 
-        private void LoadClasses(string[]? files) {
+        private int LoadClasses(string[]? files) {
+            var count = 0;
+
             if (files is not null) {
                 foreach (var file in files) {
                     if (Json.FileExists(file)) {
@@ -37,22 +38,12 @@ namespace Crystalshire.Core.Content {
                             Json.Save(file, classe);
                         }
 
-                        ProcessedFiles++;
+                        count++;
                     }
                 }
             }
-        }
 
-        private string[]? GetFolders(string root) {
-            return Directory.GetDirectories(root);
-        }
-
-        private string[]? GetFiles(string folder) {
-            if (Directory.Exists(folder)) {
-                return Directory.GetFiles(folder);
-            }
-
-            return null;
+            return count;
         }
 
         private void SaveDefault() {

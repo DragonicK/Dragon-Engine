@@ -37,8 +37,8 @@
         public Class() {
             Name = string.Empty;
 
-            FemaleSprites = new int[] { 1 };
-            MaleSprites = new int[] { 1 };
+            FemaleSprites = Array.Empty<int>();
+            MaleSprites = Array.Empty<int>();
 
             Vital = new Dictionary<Vital, int>();
             Primary = new Dictionary<PrimaryAttribute, int>();

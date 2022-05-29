@@ -6,6 +6,15 @@
 
         public Passphrase() {
             HexPassword = string.Empty;
+            Key = Array.Empty<byte>();
+            Iv = Array.Empty<byte>();
+        }
+
+        public Passphrase(byte[] key, byte[] iv) {
+            Key = key;
+            Iv = iv;
+         
+            HexPassword = string.Empty;
         }
     }
 }

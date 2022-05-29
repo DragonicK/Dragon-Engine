@@ -9,5 +9,12 @@
         public Weather Weather { get; set; }
         public Moral Moral { get; set; }
         public Tile[,] Tile { get; set; }
+
+        public Map() {
+            Name = string.Empty;
+            Music = string.Empty;
+            Ambience = string.Empty;
+            Tile = new Tile[0, 0];
+        }
     }
 }

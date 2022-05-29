@@ -4,29 +4,30 @@ using Crystalshire.Core.Serialization;
 namespace Crystalshire.Core.Content {
     public class Gashas : Database<Gasha> {
 
-        private int ProcessedFiles = 0;
-
         public override void Load() {
             var files = Directory.GetFiles(Folder);
+            var processed = 0;
 
             if (files.Length > 0) {
-                LoadGashas(files);
+                processed += LoadGashas(files);
             }
 
             var folders = GetFolders(Folder);
 
             if (folders?.Length > 0) {
                 foreach (var folder in folders) {
-                    LoadGashas(GetFiles(folder));
+                    processed += LoadGashas(GetFiles(folder));
                 }
             }
 
-            if (ProcessedFiles == 0) {
+            if (processed == 0) {
                 SaveDefault();
             }
         }
 
-        private void LoadGashas(string[]? files) {
+        private int LoadGashas(string[]? files) {
+            var count = 0;
+
             if (files is not null) {
                 foreach (var file in files) {
                     if (Json.FileExists(file)) {
@@ -39,22 +40,12 @@ namespace Crystalshire.Core.Content {
                             }
                         }
 
-                        ProcessedFiles++;
+                        count++;
                     }
                 }
             }
-        }
 
-        private string[]? GetFolders(string root) {
-            return Directory.GetDirectories(root);
-        }
-
-        private string[]? GetFiles(string folder) {
-            if (Directory.Exists(folder)) {
-                return Directory.GetFiles(folder);
-            }
-
-            return null;
+            return count;
         }
 
         private void SaveDefault() {

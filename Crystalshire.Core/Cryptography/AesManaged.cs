@@ -53,7 +53,6 @@ namespace Crystalshire.Core.Cryptography {
             }
             catch {
                 return null;
-  
             }
 
             return encryptedBytes;

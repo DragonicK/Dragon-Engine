@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Crystalshire.Core.Model.Characters {
+﻿namespace Crystalshire.Core.Model.Characters {
     public class CharacterScreen {
         public long CharacterId { get; set; }
         public long AccountId { get; set; }
@@ -17,5 +15,10 @@ namespace Crystalshire.Core.Model.Characters {
         public DateTime ExclusionDate { get; set; }
         public string ExclusionIpAddress { get; set; }
         public bool IsDeleted { get; set; }
+
+        public CharacterScreen() {
+            Name = string.Empty;
+            ExclusionIpAddress = string.Empty;
+        }
     }
 }

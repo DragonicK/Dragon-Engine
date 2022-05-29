@@ -93,7 +93,7 @@ namespace Crystalshire.Core.Network {
         }
 
         public bool ReadBoolean(bool peek = true) {
-            return ReadByte(peek) == 1 ? true : false;
+            return ReadByte(peek) == 1;
         }
 
         public byte[] ReadBytes(int length, bool peek = true) {
@@ -146,7 +146,7 @@ namespace Crystalshire.Core.Network {
         }
 
         public string ReadString(bool peek = true) {
-          //  try {
+            try {
                 var length = ReadInt32(peek);
                 var s = new StringBuilder(length);
 
@@ -165,10 +165,10 @@ namespace Crystalshire.Core.Network {
                 }
 
                 return s.ToString();
-         //   }
-          //  catch {
+            }
+            catch {
                 return string.Empty;
-          //  }
+            }
         }
     }
 }

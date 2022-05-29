@@ -4,28 +4,29 @@ using Crystalshire.Core.Model.Shops;
 namespace Crystalshire.Core.Content {
     public class Shops : Database<Shop> {
 
-        private int ProcessedFiles = 0;
-
         public override void Load() {
             var files = Directory.GetFiles(Folder);
+            var processed = 0;
 
             if (files.Length > 0) {
-                LoadShopItem(files);
+                processed += LoadShopItem(files);
             }
 
             var folders = GetFolders(Folder);
 
             if (folders?.Length > 0) {
                 foreach (var folder in folders) {
-                    LoadShopItem(GetFiles(folder));
+                    processed += LoadShopItem(GetFiles(folder));
                 }
             }
-            if (ProcessedFiles == 0) {
+            if (processed == 0) {
                 SaveDefault();
             }
         }
 
-        private void LoadShopItem(string[]? files) {
+        private int LoadShopItem(string[]? files) {
+            var count = 0;
+
             if (files is not null) {
                 foreach (var file in files) {
                     if (Json.FileExists(file)) {
@@ -33,17 +34,17 @@ namespace Crystalshire.Core.Content {
 
                         if (item is not null) {
                             if (item.Id != 0 && item.ShopId != 0) {
-
                                 AddShopItem(item);
-
                                 Json.Save(file, item);
                             }
                         }
 
-                        ProcessedFiles++;
+                        count++;
                     }
                 }
             }
+
+            return count;
         }
 
         private void AddShopItem(ShopItem item) {
@@ -59,18 +60,6 @@ namespace Crystalshire.Core.Content {
             var shop = values[shopId];
 
             shop.Items.Add(item);
-        }
-
-        private string[]? GetFolders(string root) {
-            return Directory.GetDirectories(root);
-        }
-
-        private string[]? GetFiles(string folder) {
-            if (Directory.Exists(folder)) {
-                return Directory.GetFiles(folder);
-            }
-
-            return null;
         }
 
         private void SaveDefault() {

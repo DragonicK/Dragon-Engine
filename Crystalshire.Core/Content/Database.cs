@@ -52,5 +52,17 @@
         public IEnumerator<KeyValuePair<int, T>> GetEnumerator() {
             return values.GetEnumerator();
         }
+
+        public string[]? GetFolders(string root) {
+            return Directory.GetDirectories(root);
+        }
+
+        public string[]? GetFiles(string folder) {
+            if (Directory.Exists(folder)) {
+                return Directory.GetFiles(folder);
+            }
+
+            return null;
+        }
     }
 }

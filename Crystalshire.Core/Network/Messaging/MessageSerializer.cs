@@ -15,7 +15,7 @@ namespace Crystalshire.Core.Network.Messaging {
 
         public object Deserialize(byte[] buffer, Type type) {
             var _buffer = new ByteBuffer(buffer);
-            var t = Activator.CreateInstance(type);
+            var t = Activator.CreateInstance(type)!;
 
             ReadClass(t, _buffer);
 
@@ -110,7 +110,7 @@ namespace Crystalshire.Core.Network.Messaging {
         }
 
         private void WriteArray(Array array, ByteBuffer buffer) {
-            buffer.Write((int)array.Length);
+            buffer.Write(array.Length);
 
             for (var i = 0; i < array.Length; i++) {
                 var item = array.GetValue(i);
@@ -147,9 +147,9 @@ namespace Crystalshire.Core.Network.Messaging {
         }
 
         private void ReadArray<T>(PropertyInfo propertyInfo, T obj, ByteBuffer buffer) {
-            var array = (Array)propertyInfo.GetValue(obj, null);
+            var array = propertyInfo.GetValue(obj, null) as Array;
 
-            var arrayType = array.GetType().GetElementType();
+            var arrayType = array!.GetType().GetElementType()!;
 
             int length = buffer.ReadInt32();
 
@@ -169,7 +169,7 @@ namespace Crystalshire.Core.Network.Messaging {
                     array.SetValue(buffer.ReadInt32(), i);
                 }
                 else if (arrayType == typeof(string)) {
-                    array.SetValue( buffer.ReadString(), i);
+                    array.SetValue(buffer.ReadString(), i);
                 }
                 else if (arrayType.IsEnum) {
                     array.SetValue(buffer.ReadInt32(), i);
@@ -217,10 +217,7 @@ namespace Crystalshire.Core.Network.Messaging {
         }
 
         private IEnumerable<PropertyInfo> GetOrderedProperties<T>(T obj) {
-            return obj!.GetType().GetRuntimeProperties();
-
-                //.Where(prop => prop.GetCustomAttributes(typeof(MessageSerializable), false).Any());
-               // .OrderBy(prop => ((MessageSerializable)prop.GetCustomAttributes(typeof(MessageSerializable), false).First()).Index);
+            return obj!.GetType().GetRuntimeProperties();      
         }
     }
 }
