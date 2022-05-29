@@ -23,7 +23,10 @@ namespace Crystalshire.Game {
 
         public void Stop() {
             Services.Stop();
+
             running = false;
+
+            thread.Join(3000);
         }
 
         private void CheckDirectory() {

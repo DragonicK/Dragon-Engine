@@ -31,11 +31,11 @@ namespace Crystalshire.Game.Services {
             ServerListener = new EngineListener() {
                 MaximumConnections = Configuration!.MaximumConnections,
                 Port = Configuration.GameServer.Port,
-                IncomingMessageQueue = incomingMessage,
-                OutgoingMessageWriter = outgoingWriter,
-                ConnectionRepository = repository,
-                IndexGenerator = generator,
-                GeoIpAddress = geoIp,
+                IncomingMessageQueue = incomingMessage!,
+                OutgoingMessageWriter = outgoingWriter!,
+                ConnectionRepository = repository!,
+                IndexGenerator = generator!,
+                GeoIpAddress = geoIp!,
             };
 
             ServerListener.ConnectionApprovalEvent += WriteFromConnectionApproval;
@@ -52,7 +52,10 @@ namespace Crystalshire.Game.Services {
 
         public void Stop() {
             IsRunning = false;
+
             ServerListener?.Stop();
+
+            t.Join(3000);
         }
 
         private void WriteFromConnectionApproval(object? sender, IConnection connection) {
@@ -67,11 +70,11 @@ namespace Crystalshire.Game.Services {
 
         private void WriteFromConnectionRefuse(object? sender, IConnection connection) {
             var join = new LeftServer() {
-                ConnectionRepository = ConnectionService.ConnectionRepository,
+                ConnectionRepository = ConnectionService!.ConnectionRepository,
                 PlayerRepository = ConnectionService.PlayerRepository,
                 IndexGenerator = ConnectionService.IndexGenerator,
-                GeoIpAddress = GeoIpService.GeoIpAddress,
-                Logger = LoggerService.ConnectionLogger,
+                GeoIpAddress = GeoIpService!.GeoIpAddress,
+                Logger = LoggerService!.ConnectionLogger,
                 Configuration = Configuration,
                 Connection = connection
             };
@@ -81,12 +84,12 @@ namespace Crystalshire.Game.Services {
 
         private void WriteFromConnectionDisconnect(object? sender, IConnection connection) {
             var left = new LeftServer() {
-                ConnectionRepository = ConnectionService.ConnectionRepository,
+                ConnectionRepository = ConnectionService!.ConnectionRepository,
                 PlayerRepository = ConnectionService.PlayerRepository,
                 IndexGenerator = ConnectionService.IndexGenerator,
                 PacketSenderService = PacketSenderService,
-                GeoIpAddress = GeoIpService.GeoIpAddress,
-                Logger = LoggerService.ConnectionLogger,
+                GeoIpAddress = GeoIpService!.GeoIpAddress,
+                Logger = LoggerService!.ConnectionLogger,
                 DatabaseService = DatabaseService,
                 Configuration = Configuration,
                 Connection = connection

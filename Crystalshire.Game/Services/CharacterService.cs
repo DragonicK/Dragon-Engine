@@ -97,13 +97,15 @@ namespace Crystalshire.Game.Services {
         private void ProcessRequests() {
             var count = requests?.Count;
 
-            for (var i = 0; i < count; ++i) {
-                var request = requests[i];
+            if (requests is not null) {
+                for (var i = 0; i < count; ++i) {
+                    var request = requests[i];
 
-                request.Decrease();
+                    request.Decrease();
 
-                if (request.CanDelete()) {
-                    completed?.Add(request);
+                    if (request.CanDelete()) {
+                        completed?.Add(request);
+                    }
                 }
             }
         }

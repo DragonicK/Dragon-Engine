@@ -12,10 +12,10 @@ namespace Crystalshire.Game.Services {
         public IOutgoingMessageWriter? OutgoingMessageWriter { get; private set; }
         public ISerializer? Serializer { get; private set; }
         public ConnectionService? ConnectionService { get; private set; }
-        public ConfigurationService Configuration { get; private set; }
+        public ConfigurationService? Configuration { get; private set; }
 
         public void Start() {
-            var repository = ConnectionService.ConnectionRepository;
+            var repository = ConnectionService!.ConnectionRepository!;
 
             Serializer = new MessageSerializer();
 
