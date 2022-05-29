@@ -9,8 +9,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Crystalshire.Game", "Crysta
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Crystalshire.Core", "Crystalshire.Core\Crystalshire.Core.csproj", "{FB88A136-F14F-4E3C-8E0D-68FEE58CEA91}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Crystalshire.Test", "Crystalshire.Test\Crystalshire.Test.csproj", "{DBB6C3DC-C144-427E-AFE0-0A458A63F005}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Crystalshire.Editor", "Crystalshire.Editor\Crystalshire.Editor.csproj", "{B82781BE-D14E-42F5-8E5E-E47E5BD0D3AF}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Crystalshire.Model", "Crystalshire.Model\Crystalshire.Model.csproj", "{D85B056B-F8B9-482D-B716-D45035E371A2}"
@@ -63,18 +61,6 @@ Global
 		{FB88A136-F14F-4E3C-8E0D-68FEE58CEA91}.Release|x64.Build.0 = Release|Any CPU
 		{FB88A136-F14F-4E3C-8E0D-68FEE58CEA91}.Release|x86.ActiveCfg = Release|Any CPU
 		{FB88A136-F14F-4E3C-8E0D-68FEE58CEA91}.Release|x86.Build.0 = Release|Any CPU
-		{DBB6C3DC-C144-427E-AFE0-0A458A63F005}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DBB6C3DC-C144-427E-AFE0-0A458A63F005}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DBB6C3DC-C144-427E-AFE0-0A458A63F005}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{DBB6C3DC-C144-427E-AFE0-0A458A63F005}.Debug|x64.Build.0 = Debug|Any CPU
-		{DBB6C3DC-C144-427E-AFE0-0A458A63F005}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{DBB6C3DC-C144-427E-AFE0-0A458A63F005}.Debug|x86.Build.0 = Debug|Any CPU
-		{DBB6C3DC-C144-427E-AFE0-0A458A63F005}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DBB6C3DC-C144-427E-AFE0-0A458A63F005}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DBB6C3DC-C144-427E-AFE0-0A458A63F005}.Release|x64.ActiveCfg = Release|Any CPU
-		{DBB6C3DC-C144-427E-AFE0-0A458A63F005}.Release|x64.Build.0 = Release|Any CPU
-		{DBB6C3DC-C144-427E-AFE0-0A458A63F005}.Release|x86.ActiveCfg = Release|Any CPU
-		{DBB6C3DC-C144-427E-AFE0-0A458A63F005}.Release|x86.Build.0 = Release|Any CPU
 		{B82781BE-D14E-42F5-8E5E-E47E5BD0D3AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B82781BE-D14E-42F5-8E5E-E47E5BD0D3AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B82781BE-D14E-42F5-8E5E-E47E5BD0D3AF}.Debug|x64.ActiveCfg = Debug|Any CPU

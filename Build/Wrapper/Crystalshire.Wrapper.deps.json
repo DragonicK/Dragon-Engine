@@ -1,11 +1,11 @@
 {
   "runtimeTarget": {
-    "name": "netcoreapp6.0",
+    "name": "netcoreapp7.0",
     "signature": ""
   },
   "compilationOptions": {},
   "targets": {
-    "netcoreapp6.0": {
+    "netcoreapp7.0": {
       "Crystalshire.Wrapper/1.0.0": {
         "runtime": {
           "Crystalshire.Wrapper.dll": {}
