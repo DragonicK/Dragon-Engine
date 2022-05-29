@@ -50,7 +50,7 @@
     <RootNamespace>CrystalshireNetWrapper</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
     <ProjectName>Crystalshire.Wrapper</ProjectName>
-    <TargetFramework>netcoreapp6.0</TargetFramework>
+    <TargetFramework>netcoreapp7.0</TargetFramework>
     <TargetFrameworkVersion>6.0</TargetFrameworkVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
