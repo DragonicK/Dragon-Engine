@@ -1,0 +1,23 @@
+{
+  "Id": 1,
+  "Name": "DIAMANTE",
+  "Character": 4,
+  "Party": 3,
+  "Guild": 2,
+  "Skill": 1,
+  "Craft": 1,
+  "Quest": 6,
+  "Pet": 4,
+  "GoldChance": 2,
+  "GoldIncrease": 3,
+  "ItemDrops": {
+    "Common": 1,
+    "Uncommon": 2,
+    "Rare": 3,
+    "Epic": 4,
+    "Mythic": 5,
+    "Ancient": 6,
+    "Legendary": 7,
+    "Ethereal": 8
+  }
+}

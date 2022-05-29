@@ -1,0 +1,12 @@
+{
+  "ShopId": 1,
+  "ShopName": "NOME",
+  "Id": 2,
+  "Value": 1,
+  "Level": 1,
+  "Bound": false,
+  "AttributeId": 1,
+  "UpgradeId": 1,
+  "CurrencyId": 0,
+  "Price": 1000
+}

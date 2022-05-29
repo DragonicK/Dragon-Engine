@@ -1,0 +1,366 @@
+{
+  "Date": "2022年5月22日 14:38:07",
+  "Name": "Connection Approval",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "2022年5月22日 15:15:55",
+  "Name": "Connection Approval",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "2022年5月22日 15:16:03",
+  "Name": "Connection Disconnected",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "2022年5月22日 15:22:09",
+  "Name": "Connection Approval",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "2022年5月22日 15:22:19",
+  "Name": "Connection Disconnected",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "2022年5月22日 15:45:18",
+  "Name": "Connection Approval",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "2022年5月22日 15:45:28",
+  "Name": "Connection Disconnected",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "2022年5月22日 15:49:16",
+  "Name": "Connection Approval",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "2022年5月22日 15:49:24",
+  "Name": "Connection Disconnected",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "2022年5月22日 15:49:50",
+  "Name": "Connection Approval",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "2022年5月22日 15:49:59",
+  "Name": "Connection Disconnected",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "2022年5月22日 16:11:33",
+  "Name": "Connection Approval",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "2022年5月22日 16:11:43",
+  "Name": "Connection Disconnected",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "2022年5月22日 16:14:42",
+  "Name": "Connection Approval",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "2022年5月22日 16:14:49",
+  "Name": "Connection Disconnected",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "2022年5月22日 16:17:41",
+  "Name": "Connection Approval",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "2022年5月22日 16:17:49",
+  "Name": "Connection Disconnected",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "2022年5月22日 16:20:27",
+  "Name": "Connection Approval",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "2022年5月22日 16:20:35",
+  "Name": "Connection Disconnected",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "2022年5月22日 16:41:25",
+  "Name": "Connection Approval",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "2022年5月22日 16:41:34",
+  "Name": "Connection Disconnected",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "2022年5月22日 16:45:42",
+  "Name": "Connection Approval",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "2022年5月22日 16:45:50",
+  "Name": "Connection Disconnected",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "2022年5月22日 16:47:06",
+  "Name": "Connection Approval",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "2022年5月22日 16:47:15",
+  "Name": "Connection Disconnected",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "2022年5月22日 16:48:35",
+  "Name": "Connection Approval",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "2022年5月22日 16:48:40",
+  "Name": "Connection Disconnected",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "2022年5月22日 17:12:58",
+  "Name": "Connection Approval",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "2022年5月22日 17:13:05",
+  "Name": "Connection Disconnected",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "2022年5月22日 17:14:48",
+  "Name": "Connection Approval",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "2022年5月22日 17:14:55",
+  "Name": "Connection Disconnected",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "2022年5月22日 17:17:39",
+  "Name": "Connection Approval",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "2022年5月22日 17:17:46",
+  "Name": "Connection Disconnected",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "2022年5月22日 17:24:06",
+  "Name": "Connection Approval",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "2022年5月22日 17:24:12",
+  "Name": "Connection Disconnected",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "2022年5月22日 17:26:28",
+  "Name": "Connection Approval",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "2022年5月22日 17:26:38",
+  "Name": "Connection Disconnected",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "2022年5月22日 17:33:20",
+  "Name": "Connection Approval",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "2022年5月22日 17:33:29",
+  "Name": "Connection Disconnected",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "2022年5月22日 19:12:11",
+  "Name": "Connection Approval",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "2022年5月22日 19:12:18",
+  "Name": "Connection Disconnected",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "2022年5月22日 19:27:55",
+  "Name": "Connection Approval",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "2022年5月22日 19:28:01",
+  "Name": "Connection Disconnected",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "2022年5月22日 19:32:41",
+  "Name": "Connection Approval",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "2022年5月22日 19:32:47",
+  "Name": "Connection Disconnected",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "2022年5月22日 19:33:29",
+  "Name": "Connection Approval",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "2022年5月22日 19:33:37",
+  "Name": "Connection Disconnected",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "2022年5月22日 19:36:58",
+  "Name": "Connection Approval",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "2022年5月22日 19:37:07",
+  "Name": "Connection Disconnected",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "2022年5月22日 19:44:21",
+  "Name": "Connection Approval",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "2022年5月22日 19:44:29",
+  "Name": "Connection Disconnected",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "2022年5月22日 19:47:52",
+  "Name": "Connection Approval",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "2022年5月22日 19:47:59",
+  "Name": "Connection Disconnected",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "2022年5月22日 19:49:02",
+  "Name": "Connection Approval",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "2022年5月22日 19:49:10",
+  "Name": "Connection Disconnected",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "2022年5月22日 19:55:17",
+  "Name": "Connection Approval",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "2022年5月22日 19:55:26",
+  "Name": "Connection Disconnected",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "2022年5月22日 20:01:00",
+  "Name": "Connection Approval",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "2022年5月22日 20:01:07",
+  "Name": "Connection Disconnected",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "2022年5月22日 23:05:20",
+  "Name": "Connection Approval",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "2022年5月22日 23:05:30",
+  "Name": "Connection Disconnected",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}

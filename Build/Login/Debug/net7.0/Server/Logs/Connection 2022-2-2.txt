@@ -1,0 +1,96 @@
+{
+  "Date": "quarta-feira, 2 de fevereiro de 2022 00:26:36",
+  "Name": "Connection Approval",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "quarta-feira, 2 de fevereiro de 2022 00:26:48",
+  "Name": "Connection Disconnected",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "quarta-feira, 2 de fevereiro de 2022 00:34:00",
+  "Name": "Connection Approval",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "quarta-feira, 2 de fevereiro de 2022 00:34:09",
+  "Name": "Connection Disconnected",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "quarta-feira, 2 de fevereiro de 2022 00:35:10",
+  "Name": "Connection Approval",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "quarta-feira, 2 de fevereiro de 2022 00:35:19",
+  "Name": "Connection Disconnected",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "quarta-feira, 2 de fevereiro de 2022 00:48:56",
+  "Name": "Connection Approval",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "quarta-feira, 2 de fevereiro de 2022 00:49:02",
+  "Name": "Connection Disconnected",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "quarta-feira, 2 de fevereiro de 2022 15:25:30",
+  "Name": "Connection Approval",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "quarta-feira, 2 de fevereiro de 2022 15:25:41",
+  "Name": "Connection Disconnected",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "quarta-feira, 2 de fevereiro de 2022 15:30:12",
+  "Name": "Connection Approval",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "quarta-feira, 2 de fevereiro de 2022 15:30:21",
+  "Name": "Connection Disconnected",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "quarta-feira, 2 de fevereiro de 2022 18:30:32",
+  "Name": "Connection Approval",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "quarta-feira, 2 de fevereiro de 2022 18:30:40",
+  "Name": "Connection Disconnected",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "quarta-feira, 2 de fevereiro de 2022 18:34:54",
+  "Name": "Connection Approval",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "quarta-feira, 2 de fevereiro de 2022 18:35:01",
+  "Name": "Connection Disconnected",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}

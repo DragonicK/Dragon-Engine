@@ -1,0 +1,210 @@
+{
+  "Date": "quinta-feira, 3 de fevereiro de 2022 01:43:01",
+  "Name": "Authentication Result",
+  "Message": "Authentication Result: Success ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "quinta-feira, 3 de fevereiro de 2022 01:46:47",
+  "Name": "Authentication Result",
+  "Message": "Authentication Result: Success ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "quinta-feira, 3 de fevereiro de 2022 06:23:58",
+  "Name": "Authentication Result",
+  "Message": "Authentication Result: Success ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "quinta-feira, 3 de fevereiro de 2022 06:28:40",
+  "Name": "Authentication Result",
+  "Message": "Authentication Result: Success ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "quinta-feira, 3 de fevereiro de 2022 06:30:22",
+  "Name": "Authentication Result",
+  "Message": "Authentication Result: Success ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "quinta-feira, 3 de fevereiro de 2022 06:45:56",
+  "Name": "Authentication Result",
+  "Message": "Authentication Result: Success ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "quinta-feira, 3 de fevereiro de 2022 06:48:25",
+  "Name": "Authentication Result",
+  "Message": "Authentication Result: Success ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "quinta-feira, 3 de fevereiro de 2022 06:49:06",
+  "Name": "Authentication Result",
+  "Message": "Authentication Result: Success ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "quinta-feira, 3 de fevereiro de 2022 06:50:07",
+  "Name": "Authentication Result",
+  "Message": "Authentication Result: Success ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "quinta-feira, 3 de fevereiro de 2022 06:51:42",
+  "Name": "Authentication Result",
+  "Message": "Authentication Result: Success ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "quinta-feira, 3 de fevereiro de 2022 06:55:10",
+  "Name": "Authentication Result",
+  "Message": "Authentication Result: Success ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "quinta-feira, 3 de fevereiro de 2022 06:58:15",
+  "Name": "Authentication Result",
+  "Message": "Authentication Result: Success ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "quinta-feira, 3 de fevereiro de 2022 15:34:31",
+  "Name": "Authentication Result",
+  "Message": "Authentication Result: Success ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "quinta-feira, 3 de fevereiro de 2022 16:24:59",
+  "Name": "Authentication Result",
+  "Message": "Authentication Result: Success ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "quinta-feira, 3 de fevereiro de 2022 16:34:11",
+  "Name": "Authentication Result",
+  "Message": "Authentication Result: Success ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "quinta-feira, 3 de fevereiro de 2022 16:42:14",
+  "Name": "Authentication Result",
+  "Message": "Authentication Result: Success ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "quinta-feira, 3 de fevereiro de 2022 16:54:09",
+  "Name": "Authentication Result",
+  "Message": "Authentication Result: Success ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "quinta-feira, 3 de fevereiro de 2022 16:57:07",
+  "Name": "Authentication Result",
+  "Message": "Authentication Result: Success ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "quinta-feira, 3 de fevereiro de 2022 17:00:42",
+  "Name": "Authentication Result",
+  "Message": "Authentication Result: Success ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "sexta-feira, 4 de fevereiro de 2022 03:10:00",
+  "Name": "Authentication Result",
+  "Message": "Authentication Result: Success ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "sexta-feira, 4 de fevereiro de 2022 03:10:34",
+  "Name": "Authentication Result",
+  "Message": "Authentication Result: Success ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "sexta-feira, 4 de fevereiro de 2022 03:12:17",
+  "Name": "Authentication Result",
+  "Message": "Authentication Result: Success ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "sexta-feira, 4 de fevereiro de 2022 03:12:20",
+  "Name": "Authentication Result",
+  "Message": "Authentication Result: Success ConnectionId: 2 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "sexta-feira, 4 de fevereiro de 2022 03:28:12",
+  "Name": "Authentication Result",
+  "Message": "Authentication Result: Success ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "sexta-feira, 4 de fevereiro de 2022 03:28:21",
+  "Name": "Authentication Result",
+  "Message": "Authentication Result: Success ConnectionId: 2 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "sexta-feira, 4 de fevereiro de 2022 03:31:30",
+  "Name": "Authentication Result",
+  "Message": "Authentication Result: Success ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "sexta-feira, 4 de fevereiro de 2022 03:31:49",
+  "Name": "Authentication Result",
+  "Message": "Authentication Result: Success ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "sexta-feira, 4 de fevereiro de 2022 03:35:14",
+  "Name": "Authentication Result",
+  "Message": "Authentication Result: Success ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "sexta-feira, 4 de fevereiro de 2022 03:35:57",
+  "Name": "Authentication Result",
+  "Message": "Authentication Result: Success ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "sexta-feira, 4 de fevereiro de 2022 03:41:25",
+  "Name": "Authentication Result",
+  "Message": "Authentication Result: Success ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "sexta-feira, 4 de fevereiro de 2022 04:22:40",
+  "Name": "Authentication Result",
+  "Message": "Authentication Result: Success ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "sexta-feira, 4 de fevereiro de 2022 04:28:15",
+  "Name": "Authentication Result",
+  "Message": "Authentication Result: Success ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "sexta-feira, 4 de fevereiro de 2022 05:11:33",
+  "Name": "Authentication Result",
+  "Message": "Authentication Result: Success ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "sexta-feira, 4 de fevereiro de 2022 05:19:21",
+  "Name": "Authentication Result",
+  "Message": "Authentication Result: Success ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "sexta-feira, 4 de fevereiro de 2022 05:24:17",
+  "Name": "Authentication Result",
+  "Message": "Authentication Result: Success ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}

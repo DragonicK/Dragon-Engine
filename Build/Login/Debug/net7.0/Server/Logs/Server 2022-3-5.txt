@@ -1,0 +1,6 @@
+{
+  "Date": "sábado, 5 de março de 2022 19:13:36",
+  "Name": "Authentication Result",
+  "Message": "Authentication Result: Success ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}

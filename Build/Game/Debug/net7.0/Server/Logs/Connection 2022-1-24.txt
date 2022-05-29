@@ -1,0 +1,312 @@
+{
+  "Date": "segunda-feira, 24 de janeiro de 2022 03:27:40",
+  "Name": "Connection Approval",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "segunda-feira, 24 de janeiro de 2022 03:28:09",
+  "Name": "Connection Disconnected",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "segunda-feira, 24 de janeiro de 2022 03:28:09",
+  "Name": "Left Game",
+  "Message": "",
+  "Warning": "Success"
+}
+{
+  "Date": "segunda-feira, 24 de janeiro de 2022 03:45:02",
+  "Name": "Connection Approval",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "segunda-feira, 24 de janeiro de 2022 04:00:54",
+  "Name": "Connection Approval",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "segunda-feira, 24 de janeiro de 2022 04:02:33",
+  "Name": "Connection Disconnected",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "segunda-feira, 24 de janeiro de 2022 04:02:33",
+  "Name": "Left Game",
+  "Message": "",
+  "Warning": "Success"
+}
+{
+  "Date": "segunda-feira, 24 de janeiro de 2022 04:09:09",
+  "Name": "Connection Approval",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "segunda-feira, 24 de janeiro de 2022 04:10:35",
+  "Name": "Connection Disconnected",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "segunda-feira, 24 de janeiro de 2022 04:10:35",
+  "Name": "Left Game",
+  "Message": "",
+  "Warning": "Success"
+}
+{
+  "Date": "segunda-feira, 24 de janeiro de 2022 14:06:03",
+  "Name": "Connection Approval",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "segunda-feira, 24 de janeiro de 2022 14:31:34",
+  "Name": "Connection Approval",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "segunda-feira, 24 de janeiro de 2022 14:32:56",
+  "Name": "Connection Disconnected",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "segunda-feira, 24 de janeiro de 2022 14:32:56",
+  "Name": "Left Game",
+  "Message": "",
+  "Warning": "Success"
+}
+{
+  "Date": "segunda-feira, 24 de janeiro de 2022 14:59:57",
+  "Name": "Connection Approval",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "segunda-feira, 24 de janeiro de 2022 15:01:10",
+  "Name": "Connection Approval",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "segunda-feira, 24 de janeiro de 2022 15:01:38",
+  "Name": "Connection Disconnected",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "segunda-feira, 24 de janeiro de 2022 15:01:39",
+  "Name": "Left Game",
+  "Message": "",
+  "Warning": "Success"
+}
+{
+  "Date": "segunda-feira, 24 de janeiro de 2022 15:02:22",
+  "Name": "Connection Approval",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "segunda-feira, 24 de janeiro de 2022 15:03:24",
+  "Name": "Connection Disconnected",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "segunda-feira, 24 de janeiro de 2022 15:03:24",
+  "Name": "Left Game",
+  "Message": "",
+  "Warning": "Success"
+}
+{
+  "Date": "segunda-feira, 24 de janeiro de 2022 15:04:30",
+  "Name": "Connection Approval",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "segunda-feira, 24 de janeiro de 2022 15:04:49",
+  "Name": "Connection Disconnected",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "segunda-feira, 24 de janeiro de 2022 15:04:49",
+  "Name": "Left Game",
+  "Message": "",
+  "Warning": "Success"
+}
+{
+  "Date": "segunda-feira, 24 de janeiro de 2022 15:10:04",
+  "Name": "Connection Approval",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "segunda-feira, 24 de janeiro de 2022 15:11:34",
+  "Name": "Connection Disconnected",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "segunda-feira, 24 de janeiro de 2022 15:11:34",
+  "Name": "Left Game",
+  "Message": "",
+  "Warning": "Success"
+}
+{
+  "Date": "segunda-feira, 24 de janeiro de 2022 15:16:21",
+  "Name": "Connection Approval",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "segunda-feira, 24 de janeiro de 2022 15:20:55",
+  "Name": "Connection Disconnected",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "segunda-feira, 24 de janeiro de 2022 15:20:55",
+  "Name": "Left Game",
+  "Message": "",
+  "Warning": "Success"
+}
+{
+  "Date": "segunda-feira, 24 de janeiro de 2022 15:21:38",
+  "Name": "Connection Approval",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "segunda-feira, 24 de janeiro de 2022 15:24:41",
+  "Name": "Connection Disconnected",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "segunda-feira, 24 de janeiro de 2022 15:24:41",
+  "Name": "Left Game",
+  "Message": "",
+  "Warning": "Success"
+}
+{
+  "Date": "segunda-feira, 24 de janeiro de 2022 16:08:58",
+  "Name": "Connection Approval",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "segunda-feira, 24 de janeiro de 2022 16:09:33",
+  "Name": "Connection Disconnected",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "segunda-feira, 24 de janeiro de 2022 16:09:33",
+  "Name": "Left Game",
+  "Message": "",
+  "Warning": "Success"
+}
+{
+  "Date": "segunda-feira, 24 de janeiro de 2022 16:09:41",
+  "Name": "Connection Approval",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "segunda-feira, 24 de janeiro de 2022 16:12:38",
+  "Name": "Connection Disconnected",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "segunda-feira, 24 de janeiro de 2022 16:12:38",
+  "Name": "Left Game",
+  "Message": "",
+  "Warning": "Success"
+}
+{
+  "Date": "segunda-feira, 24 de janeiro de 2022 19:54:18",
+  "Name": "Connection Approval",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "segunda-feira, 24 de janeiro de 2022 19:59:36",
+  "Name": "Connection Approval",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "segunda-feira, 24 de janeiro de 2022 20:01:43",
+  "Name": "Connection Approval",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "segunda-feira, 24 de janeiro de 2022 20:03:33",
+  "Name": "Connection Approval",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "segunda-feira, 24 de janeiro de 2022 20:04:45",
+  "Name": "Connection Approval",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "segunda-feira, 24 de janeiro de 2022 20:08:13",
+  "Name": "Connection Disconnected",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "segunda-feira, 24 de janeiro de 2022 20:08:13",
+  "Name": "Left Game",
+  "Message": "",
+  "Warning": "Success"
+}
+{
+  "Date": "segunda-feira, 24 de janeiro de 2022 20:10:32",
+  "Name": "Connection Approval",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "segunda-feira, 24 de janeiro de 2022 20:28:37",
+  "Name": "Connection Disconnected",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "segunda-feira, 24 de janeiro de 2022 20:28:37",
+  "Name": "Left Game",
+  "Message": "",
+  "Warning": "Success"
+}
+{
+  "Date": "segunda-feira, 24 de janeiro de 2022 20:38:21",
+  "Name": "Connection Approval",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "segunda-feira, 24 de janeiro de 2022 20:41:15",
+  "Name": "Connection Disconnected",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "segunda-feira, 24 de janeiro de 2022 20:41:15",
+  "Name": "Left Game",
+  "Message": "",
+  "Warning": "Success"
+}

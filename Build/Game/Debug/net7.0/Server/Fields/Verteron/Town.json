@@ -1,0 +1,53 @@
+{
+  "Id": 1,
+  "MapId": 1,
+  "Type": 1,
+  "Link": {
+    "Up": 0,
+    "Left": 0,
+    "Right": 0,
+    "Down": 0
+  },
+  "Entities": [
+    {
+      "Id": 1,
+      "X": 1,
+      "Y": 1,
+      "Direction": 0,
+      "SpawnWait": 0,
+      "MaximumRangeX": 0,
+      "MaximumRangeY": 0,
+      "IsFixed": false
+    },
+    {
+      "Id": 1,
+      "X": 10,
+      "Y": 10,
+      "Direction": 0,
+      "SpawnWait": 0,
+      "MaximumRangeX": 0,
+      "MaximumRangeY": 0,
+      "IsFixed": false
+    },
+    {
+      "Id": 1,
+      "X": 15,
+      "Y": 15,
+      "Direction": 0,
+      "SpawnWait": 0,
+      "MaximumRangeX": 0,
+      "MaximumRangeY": 0,
+      "IsFixed": false
+    },
+    {
+      "Id": 2,
+      "X": 5,
+      "Y": 10,
+      "Direction": 0,
+      "SpawnWait": 0,
+      "MaximumRangeX": 0,
+      "MaximumRangeY": 0,
+      "IsFixed": false
+    }
+  ]
+}

@@ -1,0 +1,6 @@
+{
+  "Date": "2021年12月27日 4:06:28",
+  "Name": "Authentication Result",
+  "Message": "Authentication Result: Success ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}

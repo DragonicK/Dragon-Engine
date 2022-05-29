@@ -1,0 +1,18 @@
+{
+  "Date": "terça-feira, 22 de fevereiro de 2022 20:24:14",
+  "Name": "Connection Approval",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "terça-feira, 22 de fevereiro de 2022 20:25:07",
+  "Name": "Connection Approval",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "terça-feira, 22 de fevereiro de 2022 20:27:21",
+  "Name": "Connection Approval",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}

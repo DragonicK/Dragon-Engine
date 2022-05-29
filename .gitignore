@@ -17,10 +17,25 @@
 mono_crash.*
 
 # Build results
-[Dd]ebug/
+[Bb]uild/Core/
+
+# GAME DEBUG
+[Bb]uild/Game/Debug/net7.0/runtimes/
+[Bb]uild/Game/Debug/net7.0/*.*
+# GAME RELEASE
+[Bb]uild/Game/Release/net7.0/runtimes/
+[Bb]uild/Game/Release/net7.0/*.*
+# LOGIN DEBUG
+[Bb]uild/Login/Debug/net7.0/runtimes/
+[Bb]uild/Login/Debug/net7.0/*.*
+# LOGIN RELEASE
+[Bb]uild/Login/Release/net7.0/runtimes/
+[Bb]uild/Login/Release/net7.0/*.*
+
+[Bb]uild/Editor/
+[Bb]uild/Wrapper/
+[Bb]uild/Model/
 [Dd]ebugPublic/
-[Rr]elease/
-[Rr]eleases/
 x64/
 x86/
 [Ww][Ii][Nn]32/
@@ -329,6 +344,8 @@ __pycache__/
 *.btm.cs
 *.odx.cs
 *.xsd.cs
+
+*.tlog
 
 # OpenCover UI analysis results
 OpenCover/

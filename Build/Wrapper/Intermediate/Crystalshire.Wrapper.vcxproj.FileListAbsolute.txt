@@ -1,5 +1,0 @@
-C:\Users\DragonicK\Desktop\Crystalshire\Build\Wrapper\Intermediate\Crystalshire.Wrapper.vcxproj.AssemblyReference.cache
-C:\Users\DragonicK\Desktop\Crystalshire\Build\Wrapper\Ijwhost.dll
-C:\Users\DragonicK\Desktop\Crystalshire\Build\Wrapper\Crystalshire.Wrapper.deps.json
-C:\Users\DragonicK\Desktop\Crystalshire\Build\Wrapper\Intermediate\Crystalshire.Wrapper.genruntimeconfig.cache
-C:\Users\DragonicK\Desktop\Crystalshire\Build\Wrapper\Crystalshire.Wrapper.runtimeconfig.json

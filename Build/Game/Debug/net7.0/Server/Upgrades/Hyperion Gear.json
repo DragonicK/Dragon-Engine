@@ -1,0 +1,166 @@
+{
+  "Id": 1,
+  "MaximumLevel": 10,
+  "ContentLevel": {
+    "1": {
+      "Requirements": [
+        {
+          "Id": 1,
+          "Amount": 1
+        },
+        {
+          "Id": 2,
+          "Amount": 1
+        }
+      ],
+      "Success": 10,
+      "Break": 0,
+      "Reduce": 0,
+      "Cost": 250
+    },
+    "2": {
+      "Requirements": [
+        {
+          "Id": 1,
+          "Amount": 2
+        },
+        {
+          "Id": 2,
+          "Amount": 2
+        }
+      ],
+      "Success": 20,
+      "Break": 0,
+      "Reduce": 0,
+      "Cost": 500
+    },
+    "3": {
+      "Requirements": [
+        {
+          "Id": 1,
+          "Amount": 3
+        },
+        {
+          "Id": 2,
+          "Amount": 3
+        }
+      ],
+      "Success": 30,
+      "Break": 0,
+      "Reduce": 0,
+      "Cost": 750
+    },
+    "4": {
+      "Requirements": [
+        {
+          "Id": 1,
+          "Amount": 4
+        },
+        {
+          "Id": 2,
+          "Amount": 4
+        }
+      ],
+      "Success": 40,
+      "Break": 0,
+      "Reduce": 0,
+      "Cost": 1000
+    },
+    "5": {
+      "Requirements": [
+        {
+          "Id": 1,
+          "Amount": 5
+        },
+        {
+          "Id": 2,
+          "Amount": 5
+        }
+      ],
+      "Success": 50,
+      "Break": 0,
+      "Reduce": 0,
+      "Cost": 1250
+    },
+    "6": {
+      "Requirements": [
+        {
+          "Id": 1,
+          "Amount": 6
+        },
+        {
+          "Id": 2,
+          "Amount": 6
+        }
+      ],
+      "Success": 60,
+      "Break": 0,
+      "Reduce": 0,
+      "Cost": 1500
+    },
+    "7": {
+      "Requirements": [
+        {
+          "Id": 1,
+          "Amount": 7
+        },
+        {
+          "Id": 2,
+          "Amount": 7
+        }
+      ],
+      "Success": 70,
+      "Break": 0,
+      "Reduce": 0,
+      "Cost": 1750
+    },
+    "8": {
+      "Requirements": [
+        {
+          "Id": 1,
+          "Amount": 8
+        },
+        {
+          "Id": 2,
+          "Amount": 8
+        }
+      ],
+      "Success": 80,
+      "Break": 0,
+      "Reduce": 0,
+      "Cost": 2000
+    },
+    "9": {
+      "Requirements": [
+        {
+          "Id": 1,
+          "Amount": 9
+        },
+        {
+          "Id": 2,
+          "Amount": 9
+        }
+      ],
+      "Success": 90,
+      "Break": 0,
+      "Reduce": 0,
+      "Cost": 2250
+    },
+    "10": {
+      "Requirements": [
+        {
+          "Id": 1,
+          "Amount": 10
+        },
+        {
+          "Id": 2,
+          "Amount": 10
+        }
+      ],
+      "Success": 100,
+      "Break": 0,
+      "Reduce": 0,
+      "Cost": 2500
+    }
+  }
+}

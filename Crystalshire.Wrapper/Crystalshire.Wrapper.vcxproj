@@ -109,8 +109,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>$(SolutionDir)Build\Wrapper\</OutDir>
-    <IntDir>$(SolutionDir)Build\Wrapper\Intermediate\</IntDir>
+    <OutDir>$(SolutionDir)Build\Wrapper\Release\</OutDir>
+    <IntDir>$(SolutionDir)Build\Wrapper\Intermediate\Release\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>

@@ -1,0 +1,13 @@
+{
+  "Id": 7,
+  "Price": 10,
+  "Category": 0,
+  "ItemId": 12,
+  "Level": 0,
+  "Bound": true,
+  "AttributeId": 0,
+  "UpgradeId": 0,
+  "MaximumStack": 0,
+  "PurchaseLimit": 1,
+  "CouldSendGift": true
+}

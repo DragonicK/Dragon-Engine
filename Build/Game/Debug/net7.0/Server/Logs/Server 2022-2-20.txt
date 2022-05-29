@@ -1,0 +1,12 @@
+{
+  "Date": "domingo, 20 de fevereiro de 2022 23:27:53",
+  "Name": "Character Load Excpetion",
+  "Message": "An error ocurred by akaruz ... The expression \u0027(x.Expired == False)\u0027 is invalid inside an \u0027Include\u0027 operation, since it does not represent a property access: \u0027t =\u003E t.MyProperty\u0027. To target navigations declared on derived types, use casting (\u0027t =\u003E ((Derived)t).MyProperty\u0027) or the \u0027as\u0027 operator (\u0027t =\u003E (t as Derived).MyProperty\u0027). Collection navigation access can be filtered by composing Where, OrderBy(Descending), ThenBy(Descending), Skip or Take operations. For more information on including related data, see http://go.microsoft.com/fwlink/?LinkID=746393.",
+  "Warning": "Error"
+}
+{
+  "Date": "domingo, 20 de fevereiro de 2022 23:29:25",
+  "Name": "Character Load Excpetion",
+  "Message": "An error ocurred by akaruz ... The expression \u0027Not(x.Expired)\u0027 is invalid inside an \u0027Include\u0027 operation, since it does not represent a property access: \u0027t =\u003E t.MyProperty\u0027. To target navigations declared on derived types, use casting (\u0027t =\u003E ((Derived)t).MyProperty\u0027) or the \u0027as\u0027 operator (\u0027t =\u003E (t as Derived).MyProperty\u0027). Collection navigation access can be filtered by composing Where, OrderBy(Descending), ThenBy(Descending), Skip or Take operations. For more information on including related data, see http://go.microsoft.com/fwlink/?LinkID=746393.",
+  "Warning": "Error"
+}

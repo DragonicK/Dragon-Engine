@@ -1,0 +1,72 @@
+{
+  "Date": "sábado, 19 de fevereiro de 2022 09:46:09",
+  "Name": "Character Load Excpetion",
+  "Message": "An error ocurred by akaruz ... Invalid column name \u0027MailAttachItemId\u0027.\r\nInvalid column name \u0027MailAttachItemId\u0027.",
+  "Warning": "Error"
+}
+{
+  "Date": "sábado, 19 de fevereiro de 2022 09:46:10",
+  "Name": "Character Load Excpetion",
+  "Message": "An error ocurred by akaruz ... Invalid column name \u0027MailAttachItemId\u0027.\r\nInvalid column name \u0027MailAttachItemId\u0027.",
+  "Warning": "Error"
+}
+{
+  "Date": "sábado, 19 de fevereiro de 2022 09:47:07",
+  "Name": "Character Load Excpetion",
+  "Message": "An error ocurred by akaruz ... Invalid column name \u0027MailAttachItemId\u0027.\r\nInvalid column name \u0027MailAttachItemId\u0027.",
+  "Warning": "Error"
+}
+{
+  "Date": "sábado, 19 de fevereiro de 2022 09:51:09",
+  "Name": "Character Load Excpetion",
+  "Message": "An error ocurred by akaruz ... Invalid column name \u0027MailAttachItemId\u0027.",
+  "Warning": "Error"
+}
+{
+  "Date": "sábado, 19 de fevereiro de 2022 18:58:01",
+  "Name": "Character Load Excpetion",
+  "Message": "An error ocurred by sereste ... Array dimensions exceeded supported range.",
+  "Warning": "Error"
+}
+{
+  "Date": "sábado, 19 de fevereiro de 2022 19:00:29",
+  "Name": "Character Load Excpetion",
+  "Message": "An error ocurred by sereste ... Array dimensions exceeded supported range.",
+  "Warning": "Error"
+}
+{
+  "Date": "sábado, 19 de fevereiro de 2022 19:02:15",
+  "Name": "Character Load Excpetion",
+  "Message": "An error ocurred by sereste ... Array dimensions exceeded supported range.",
+  "Warning": "Error"
+}
+{
+  "Date": "sábado, 19 de fevereiro de 2022 19:03:57",
+  "Name": "Character Load Excpetion",
+  "Message": "An error ocurred by sereste ... Array dimensions exceeded supported range.",
+  "Warning": "Error"
+}
+{
+  "Date": "sábado, 19 de fevereiro de 2022 19:05:48",
+  "Name": "Character Load Excpetion",
+  "Message": "An error ocurred by sereste ... Array dimensions exceeded supported range.",
+  "Warning": "Error"
+}
+{
+  "Date": "sábado, 19 de fevereiro de 2022 19:07:49",
+  "Name": "Character Load Excpetion",
+  "Message": "An error ocurred by sereste ... Array dimensions exceeded supported range.",
+  "Warning": "Error"
+}
+{
+  "Date": "sábado, 19 de fevereiro de 2022 19:08:54",
+  "Name": "Character Load Excpetion",
+  "Message": "An error ocurred by sereste ... Array dimensions exceeded supported range.",
+  "Warning": "Error"
+}
+{
+  "Date": "sábado, 19 de fevereiro de 2022 19:09:56",
+  "Name": "Character Load Excpetion",
+  "Message": "An error ocurred by sereste ... Array dimensions exceeded supported range.",
+  "Warning": "Error"
+}

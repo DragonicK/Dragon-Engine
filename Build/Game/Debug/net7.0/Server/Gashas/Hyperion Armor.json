@@ -1,0 +1,57 @@
+{
+  "Id": 1,
+  "Count": 3,
+  "Items": [
+    {
+      "Id": 1,
+      "Value": 100,
+      "Level": 0,
+      "Bound": false,
+      "AttributeId": 0,
+      "UpgradeId": 0,
+      "Chance": 0.5,
+      "Charge": 0,
+      "IsPacked": 0,
+      "WrappableCount": 0,
+      "FusionedItemId": 0,
+      "Socket": 0,
+      "FusionedSocket": 0,
+      "ActivationCount": 0,
+      "ItemSkinId": 0
+    },
+    {
+      "Id": 2,
+      "Value": 1,
+      "Level": 0,
+      "Bound": false,
+      "AttributeId": 0,
+      "UpgradeId": 0,
+      "Chance": 0.7,
+      "Charge": 0,
+      "IsPacked": 0,
+      "WrappableCount": 0,
+      "FusionedItemId": 0,
+      "Socket": 0,
+      "FusionedSocket": 0,
+      "ActivationCount": 0,
+      "ItemSkinId": 0
+    },
+    {
+      "Id": 8,
+      "Value": 100,
+      "Level": 0,
+      "Bound": false,
+      "AttributeId": 0,
+      "UpgradeId": 0,
+      "Chance": 1,
+      "Charge": 0,
+      "IsPacked": 0,
+      "WrappableCount": 0,
+      "FusionedItemId": 0,
+      "Socket": 0,
+      "FusionedSocket": 0,
+      "ActivationCount": 0,
+      "ItemSkinId": 0
+    }
+  ]
+}

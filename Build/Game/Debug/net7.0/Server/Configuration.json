@@ -1,0 +1,192 @@
+{
+  "Priority": 0,
+  "JwtSettings": {
+    "SecurityKey": "7c8f9ad03beee8a2fe4275af8bb52c2e4559eca9",
+    "DataSecurityKey": "db2f8f86e94c225ddcc9fd04b40491c3",
+    "ExpirationMinutes": 1
+  },
+  "Debug": true,
+  "ServerLogs": true,
+  "ConnectionLogs": true,
+  "MaximumConnections": 1000,
+  "TimeOut": 0,
+  "Delay": 45,
+  "GameServer": {
+    "Ip": "0.0.0.0",
+    "Port": 7002
+  },
+  "DatabaseMembership": {
+    "DataSource": "DRAGONICK-PC\\SQLEXPRESS",
+    "Port": 1433,
+    "UserId": "sa",
+    "Password": "dwHandle",
+    "Database": "CrystalshireMembership",
+    "MinPoolSize": 10,
+    "MaxPoolSize": 100
+  },
+  "DatabaseServer": {
+    "DataSource": "DRAGONICK-PC\\SQLEXPRESS",
+    "Port": 1433,
+    "UserId": "sa",
+    "Password": "dwHandle",
+    "Database": "CrystalshireServer",
+    "MinPoolSize": 10,
+    "MaxPoolSize": 100
+  },
+  "DatabaseGame": {
+    "DataSource": "DRAGONICK-PC\\SQLEXPRESS",
+    "Port": 1433,
+    "UserId": "sa",
+    "Password": "dwHandle",
+    "Database": "CrystalshireGame",
+    "MinPoolSize": 10,
+    "MaxPoolSize": 100
+  },
+  "BlockedCountry": {
+    "Countries": [
+      "CH",
+      "JP",
+      "RU"
+    ]
+  },
+  "BlackMarket": {
+    "Enabled": true,
+    "MaximumItemPerPage": 6,
+    "Sender": "Black Market",
+    "PurchaseTitle": "Item Purchase",
+    "PurchaseMessage": "Item Purchase",
+    "GiftTitle": "New Message",
+    "GiftMessage": "You received a gift from {NAME}."
+  },
+  "Rates": {
+    "Character": 1,
+    "Party": 1,
+    "Guild": 1,
+    "Skill": 1,
+    "Craft": 1,
+    "Quest": 1,
+    "Pet": 1,
+    "GoldChance": 1,
+    "GoldIncrease": 1,
+    "ItemDrops": {
+      "Common": 1,
+      "Uncommon": 1,
+      "Rare": 1,
+      "Epic": 1,
+      "Mythic": 1,
+      "Ancient": 1,
+      "Legendary": 1,
+      "Ethereal": 1
+    }
+  },
+  "Character": {
+    "Maximum": 3,
+    "Create": true,
+    "Delete": true,
+    "DeleteMinimumLevel": 1,
+    "DeleteMaximumLevel": 50,
+    "MinimumNameLength": 4,
+    "MaximumNameLength": 15,
+    "DeletionLevelRanges": [
+      {
+        "Minimum": 1,
+        "Maximum": 50,
+        "Minutes": 1
+      }
+    ]
+  },
+  "Corpse": {
+    "MaximumItems": 20,
+    "ObjectDuration": 180,
+    "MonsterDuration": 180,
+    "BossDuration": 600,
+    "RollDiceDuration": 30,
+    "WinnerTimeLimit": 60
+  },
+  "Craft": {
+    "MaximumLevel": 20
+  },
+  "Guild": {
+    "Create": true,
+    "Delete": true,
+    "MaximumMembers": 100
+  },
+  "Loot": {
+    "MaximumItems": 0,
+    "ObjectDuration": 0,
+    "MonsterDuration": 0,
+    "BossDuration": 0,
+    "RollDiceDuration": 0,
+    "WinnerTimeLimit": 0
+  },
+  "Map": {
+    "MaximumNpcs": 255,
+    "MaximumPlayers": 255,
+    "MaximumCorpses": 255
+  },
+  "Mail": {
+    "Enabled": true,
+    "MaximumAttachment": 1,
+    "MaximumGold": 0,
+    "MaximumMailPerDay": 0,
+    "MaximumMail": 20,
+    "TimeLimitInDays": 30
+  },
+  "Party": {
+    "Maximum": 255,
+    "MaximumLevel": 50,
+    "MaximumMembers": 0,
+    "InviteTimeOut": 15,
+    "DisconnectionTimeOut": 300,
+    "AdditionalExperiencePerMember": 0.1,
+    "AdditionalExperiencePerLevel": 0.01
+  },
+  "Ressurrection": {
+    "MaximumAcceptTimeOut": 360,
+    "ReduceExperience": 0
+  },
+  "Trade": {
+    "Maximum": 1000,
+    "AcceptTimeOut": 15,
+    "CheckIntegrityTimeOut": 3,
+    "MaximumTradeItems": 15
+  },
+  "Player": {
+    "PersonalShop": true,
+    "MaximumNameLength": 32,
+    "MaximumAuras": 10,
+    "MaximumHeraldries": 17,
+    "MaximumRecipes": 25,
+    "MaximumSkills": 35,
+    "MaximumTitles": 30,
+    "MaximumLevel": 20,
+    "MaximumWarehouse": 50,
+    "MaximumInventory": 175,
+    "MaximumEffects": 30,
+    "MaximumMails": 30,
+    "InitialInventorySize": 35,
+    "InitialWarehouseSize": 20,
+    "AutomaticSave": true,
+    "SaveTimeInMinutes": 15
+  },
+  "ProhibitedNames": {
+    "Names": [
+      "Admin",
+      "GameMaster",
+      "Administrator",
+      "Administrador"
+    ]
+  },
+  "Messages": {
+    "MaximumLength": 255,
+    "SayCooldown": 0,
+    "SayInterval": 0,
+    "SayCount": 0,
+    "WorldCooldown": 0,
+    "WorldInterval": 0,
+    "WorldCount": 0,
+    "PrivateCooldown": 0,
+    "PrivateInterval": 0,
+    "PrivateCount": 0
+  }
+}
