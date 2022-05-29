@@ -15,24 +15,24 @@ namespace Crystalshire.Login.Services {
         public GeoIpService? GeoIpService { get; private set; }
         public bool IsRunning { get; private set; } = false;
 
-        private Thread t;
+        private Thread? t;
 
         public void Start() {
-            var repository = ConnectionService.ConnectionRepository;
-            var queue = IncomingMessageService.IncomingMessageQueue;
-            var geoIp = GeoIpService.GeoIpAddress;
+            var repository = ConnectionService!.ConnectionRepository;
+            var queue = IncomingMessageService!.IncomingMessageQueue;
+            var geoIp = GeoIpService!.GeoIpAddress;
             var generator = ConnectionService.IndexGenerator;
             var incomingMessage = IncomingMessageService.IncomingMessageQueue;
-            var outgoingWriter = OutgoingMessageService.OutgoingMessageWriter;
+            var outgoingWriter = OutgoingMessageService!.OutgoingMessageWriter;
 
             ServerListener = new EngineListener() {
-                MaximumConnections = Configuration.MaximumConnections,
+                MaximumConnections = Configuration!.MaximumConnections,
                 Port = Configuration.LoginServer.Port,
-                IncomingMessageQueue = incomingMessage,
-                OutgoingMessageWriter = outgoingWriter,
-                ConnectionRepository = repository,
-                IndexGenerator = generator,
-                GeoIpAddress = geoIp
+                IncomingMessageQueue = incomingMessage!,
+                OutgoingMessageWriter = outgoingWriter!,
+                ConnectionRepository = repository!,
+                IndexGenerator = generator!,
+                GeoIpAddress = geoIp!
             };
 
             ServerListener.ConnectionApprovalEvent += WriteFromConnectionApproval;
@@ -49,12 +49,15 @@ namespace Crystalshire.Login.Services {
 
         public void Stop() {
             IsRunning = false;
+
             ServerListener?.Stop();
+
+            t?.Join(3000);
         }
 
         private void WriteFromConnectionApproval(object? sender, IConnection connection) {
             var join = new JoinServer() {
-                Logger = LoggerService.ConnectionLogger,
+                Logger = LoggerService!.ConnectionLogger,
                 Configuration = Configuration,
                 Connection = connection
             };
@@ -64,9 +67,9 @@ namespace Crystalshire.Login.Services {
 
         private void WriteFromConnectionRefuse(object? sender, IConnection connection) {
             var left = new LeftServer() {
-                ConnectionRepository = ConnectionService.ConnectionRepository,
-                GeoIpAddress = GeoIpService.GeoIpAddress,
-                Logger = LoggerService.ConnectionLogger,
+                ConnectionRepository = ConnectionService!.ConnectionRepository,
+                GeoIpAddress = GeoIpService!.GeoIpAddress,
+                Logger = LoggerService!.ConnectionLogger,
                 Configuration = Configuration,
                 Connection = connection
             };
@@ -76,10 +79,10 @@ namespace Crystalshire.Login.Services {
 
         private void WriteFromConnectionDisconnect(object? sender, IConnection connection) {
             var left = new LeftServer() {
-                ConnectionRepository = ConnectionService.ConnectionRepository,
+                ConnectionRepository = ConnectionService!.ConnectionRepository,
                 IndexGenerator = ConnectionService.IndexGenerator,
-                GeoIpAddress = GeoIpService.GeoIpAddress,
-                Logger = LoggerService.ConnectionLogger,
+                GeoIpAddress = GeoIpService!.GeoIpAddress,
+                Logger = LoggerService!.ConnectionLogger,
                 Configuration = Configuration,
                 Connection = connection
             };

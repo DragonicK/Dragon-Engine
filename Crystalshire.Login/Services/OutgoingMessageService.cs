@@ -14,7 +14,7 @@ namespace Crystalshire.Login.Services {
         public ConnectionService? ConnectionService { get; private set; }
 
         public void Start() {
-            var repository = ConnectionService.ConnectionRepository;
+            var repository = ConnectionService!.ConnectionRepository!;
 
             Serializer = new MessageSerializer();
 

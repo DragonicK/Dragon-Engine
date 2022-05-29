@@ -26,7 +26,7 @@ namespace Crystalshire.Login.Services {
             CreatePacketRouter();
 
             IncomingMessageParser = new IncomingMessageParser() {
-                ConnectionRepository = ConnectionService.ConnectionRepository,
+                ConnectionRepository = ConnectionService!.ConnectionRepository,
                 PacketRouter = PacketRouter
             };
 
@@ -42,12 +42,12 @@ namespace Crystalshire.Login.Services {
 
         private void CreatePacketRouter() {
             var types = GetTypes();
-            var messages = MessageRepository.Messages;
+            var messages = MessageRepository!.Messages;
 
-            PacketRouter = new PacketRouter(Services);
+            PacketRouter = new PacketRouter(Services!);
 
             foreach (var (_, type) in messages) {
-                AddTypeThatHasProperty(types, type);
+                AddTypeThatHasProperty(types!, type);
             }
         }
 
