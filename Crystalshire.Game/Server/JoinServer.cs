@@ -1,5 +1,6 @@
-﻿using Crystalshire.Core.Logs;
-using Crystalshire.Core.Network;
+﻿using Crystalshire.Network;
+
+using Crystalshire.Core.Logs;
 
 using Crystalshire.Game.Configurations;
 

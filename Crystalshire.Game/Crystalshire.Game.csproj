@@ -24,6 +24,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Crystalshire.Core\Crystalshire.Core.csproj" />
+    <ProjectReference Include="..\Crystalshire.Network\Crystalshire.Network.csproj" />
   </ItemGroup>
 
 </Project>

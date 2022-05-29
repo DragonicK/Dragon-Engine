@@ -1,8 +1,9 @@
-﻿using Crystalshire.Core.Logs;
+﻿using Crystalshire.Network;
+using Crystalshire.Network.Messaging.SharedPackets;
+
+using Crystalshire.Core.Logs;
 using Crystalshire.Core.Model;
-using Crystalshire.Core.Network;
 using Crystalshire.Core.Model.Characters;
-using Crystalshire.Core.Network.Messaging.SharedPackets;
 
 using Crystalshire.Game.Players;
 using Crystalshire.Game.Repository;

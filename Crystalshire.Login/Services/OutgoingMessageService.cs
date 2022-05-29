@@ -1,7 +1,8 @@
-﻿using Crystalshire.Core.Services;
+﻿using Crystalshire.Network.Outgoing;
+using Crystalshire.Network.Messaging;
+
+using Crystalshire.Core.Services;
 using Crystalshire.Core.Serialization;
-using Crystalshire.Core.Network.Outgoing;
-using Crystalshire.Core.Network.Messaging;
 
 namespace Crystalshire.Login.Services {
     public class OutgoingMessageService : IService {

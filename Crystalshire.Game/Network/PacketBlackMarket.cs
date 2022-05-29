@@ -1,6 +1,7 @@
-﻿using Crystalshire.Core.Network;
+﻿using Crystalshire.Network;
+using Crystalshire.Network.Messaging.SharedPackets;
+
 using Crystalshire.Core.Model.BlackMarket;
-using Crystalshire.Core.Network.Messaging.SharedPackets;
 
 using Crystalshire.Game.Players;
 

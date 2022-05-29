@@ -1,5 +1,5 @@
-﻿using Crystalshire.Core.Network;
-using Crystalshire.Core.Network.Messaging.SharedPackets;
+﻿using Crystalshire.Network;
+using Crystalshire.Network.Messaging.SharedPackets;
 
 using Crystalshire.Game.Manager;
 using Crystalshire.Game.Services;

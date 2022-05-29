@@ -1,10 +1,6 @@
 ﻿using System.Text.Json;
-using System.Text.Json.Serialization;
-using System.Text.Json.Serialization.Metadata;
 using System.Text.Unicode;
 using System.Text.Encodings.Web;
-
-using Crystalshire.Core.Model.Classes;
 
 namespace Crystalshire.Core.Serialization {
     public static class Json {
@@ -42,33 +38,5 @@ namespace Crystalshire.Core.Serialization {
             using var writer = new StreamWriter(stream);
             writer.Write(result);
         }
-
-        //public static IClass? GetClass<IClass>(string file) {
-        //    var options = new JsonSerializerOptions {
-        //        Encoder = JavaScriptEncoder.Create(UnicodeRanges.All),
-        //        WriteIndented = true
-        //    };
-
-        //    var converters = options.Converters;
-        //    converters.Add(new SerializerMappingConverter<IClass>());
-
-        //    return JsonSerializer.Deserialize<IClass>(File.ReadAllText(file), options);
-        //}
-
-        //public static void SaveClass<IClass>(string file, IClass item) {
-        //    var options = new JsonSerializerOptions {
-        //        Encoder = JavaScriptEncoder.Create(UnicodeRanges.All),
-        //        WriteIndented = true
-        //    };
-
-        //    var converters = options.Converters;
-        //    converters.Add(new SerializerMappingConverter<IClass>());
-
-        //    var result = JsonSerializer.Serialize<IClass>(item, options);
-
-        //    using var stream = new FileStream(file, FileMode.Create, FileAccess.Write);
-        //    using var writer = new StreamWriter(stream);
-        //    writer.Write(result);
-        //}
     }
 }

@@ -1,5 +1,5 @@
-﻿using Crystalshire.Core.Jwt;
-using Crystalshire.Core.Network;
+﻿using Crystalshire.Network;
+using Crystalshire.Core.Jwt;
 using Crystalshire.Game.Players;
 
 namespace Crystalshire.Game.Repository {

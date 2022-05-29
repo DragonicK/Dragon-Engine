@@ -1,7 +1,7 @@
 ﻿using System.Reflection;
 
+using Crystalshire.Network;
 using Crystalshire.Core.Jwt;
-using Crystalshire.Core.Network;
 using Crystalshire.Core.Services;
 using Crystalshire.Core.Database;
 using Crystalshire.Core.GeoIpCountry;

@@ -1,8 +1,9 @@
 ﻿using System.Reflection;
 
-using Crystalshire.Core.Network;
-using Crystalshire.Core.Network.Incoming;
-using Crystalshire.Core.Network.Messaging;
+using Crystalshire.Network;
+using Crystalshire.Network.Incoming;
+using Crystalshire.Network.Messaging;
+
 using Crystalshire.Core.Serialization;
 using Crystalshire.Core.Services;
 using Crystalshire.Game.Network;

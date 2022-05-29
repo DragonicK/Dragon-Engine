@@ -1,8 +1,9 @@
-﻿using Crystalshire.Core.Jwt;
+﻿using Crystalshire.Network;
+using Crystalshire.Network.Messaging.SharedPackets;
+
+using Crystalshire.Core.Jwt;
 using Crystalshire.Core.Logs;
-using Crystalshire.Core.Network;
 using Crystalshire.Core.Model;
-using Crystalshire.Core.Network.Messaging.SharedPackets;
 
 using Crystalshire.Game.Network;
 using Crystalshire.Game.Services;

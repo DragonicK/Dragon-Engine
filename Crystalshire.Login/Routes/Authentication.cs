@@ -1,14 +1,15 @@
-﻿using Crystalshire.Core.Jwt;
+﻿using Crystalshire.Network;
+using Crystalshire.Network.Outgoing;
+using Crystalshire.Network.Messaging.SharedPackets;
+
+using Crystalshire.Core.Jwt;
 using Crystalshire.Core.Logs;
 using Crystalshire.Core.Model;
 using Crystalshire.Core.Common;
-using Crystalshire.Core.Network;
 using Crystalshire.Core.Database;
 using Crystalshire.Core.Cryptography;
 using Crystalshire.Core.Model.Accounts;
 using Crystalshire.Core.Database.Handler;
-using Crystalshire.Core.Network.Outgoing;
-using Crystalshire.Core.Network.Messaging.SharedPackets;
 
 using Crystalshire.Login.Services;
 

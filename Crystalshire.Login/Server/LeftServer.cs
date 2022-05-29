@@ -1,5 +1,5 @@
-﻿using Crystalshire.Core.Logs;
-using Crystalshire.Core.Network;
+﻿using Crystalshire.Network;
+using Crystalshire.Core.Logs;
 using Crystalshire.Core.GeoIpCountry;
 
 using Crystalshire.Login.Configurations;

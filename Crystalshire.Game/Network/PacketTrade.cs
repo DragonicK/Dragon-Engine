@@ -1,11 +1,12 @@
-﻿using Crystalshire.Core.Model;
-using Crystalshire.Core.Network;
+﻿using Crystalshire.Network;
+using Crystalshire.Network.Outgoing;
+using Crystalshire.Network.Messaging.DTO;
+using Crystalshire.Network.Messaging.SharedPackets;
+
+using Crystalshire.Core.Model;
 using Crystalshire.Core.Model.Maps;
 using Crystalshire.Core.Model.DisplayIcon;
 using Crystalshire.Core.Model.Characters;
-using Crystalshire.Core.Network.Outgoing;
-using Crystalshire.Core.Network.Messaging.DTO;
-using Crystalshire.Core.Network.Messaging.SharedPackets;
 
 using Crystalshire.Game.Manager;
 using Crystalshire.Game.Players;

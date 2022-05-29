@@ -1,5 +1,5 @@
-﻿using Crystalshire.Core.Network;
-using Crystalshire.Core.Network.Incoming;
+﻿using Crystalshire.Network;
+using Crystalshire.Network.Incoming;
 
 namespace Crystalshire.Game.Network {
     public class IncomingMessageParser : IIncomingMessageParser {

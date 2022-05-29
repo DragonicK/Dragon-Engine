@@ -1,4 +1,4 @@
-﻿using Crystalshire.Core.Network;
+﻿using Crystalshire.Network;
 using Crystalshire.Core.Services;
 
 namespace Crystalshire.Game.Network {

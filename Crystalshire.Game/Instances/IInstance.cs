@@ -1,4 +1,4 @@
-﻿using Crystalshire.Core.Network;
+﻿using Crystalshire.Network;
 using Crystalshire.Game.Players;
 using Crystalshire.Game.Regions;
 using Crystalshire.Game.Configurations;

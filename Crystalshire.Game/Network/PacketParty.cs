@@ -1,7 +1,8 @@
-﻿using Crystalshire.Core.Model;
-using Crystalshire.Core.Network;
-using Crystalshire.Core.Network.Messaging.DTO;
-using Crystalshire.Core.Network.Messaging.SharedPackets;
+﻿using Crystalshire.Network;
+using Crystalshire.Network.Messaging.DTO;
+using Crystalshire.Network.Messaging.SharedPackets;
+
+using Crystalshire.Core.Model;
 
 using Crystalshire.Game.Manager;
 using Crystalshire.Game.Players;

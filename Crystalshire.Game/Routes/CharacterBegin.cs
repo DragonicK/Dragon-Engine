@@ -1,9 +1,10 @@
-﻿using Crystalshire.Core.Logs;
+﻿using Crystalshire.Network;
+using Crystalshire.Network.Outgoing;
+using Crystalshire.Network.Messaging.SharedPackets;
+
+using Crystalshire.Core.Logs;
 using Crystalshire.Core.Model;
-using Crystalshire.Core.Network;
 using Crystalshire.Core.Model.Maps;
-using Crystalshire.Core.Network.Outgoing;
-using Crystalshire.Core.Network.Messaging.SharedPackets;
 
 using Crystalshire.Game.Server;
 using Crystalshire.Game.Network;
