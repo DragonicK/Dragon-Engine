@@ -1,6 +1,6 @@
-﻿using Crystalshire.Core.Database.Context;
+﻿using Crystalshire.Database.Context;
 
-namespace Crystalshire.Core.Database.Handler {
+namespace Crystalshire.Database.Handler {
     public class GameHandler : IDisposable {
         private readonly GameContext Context;
         private bool disposed = false;

@@ -1,6 +1,7 @@
-﻿using Crystalshire.Core.Logs;
+﻿using Crystalshire.Database;
+
+using Crystalshire.Core.Logs;
 using Crystalshire.Core.Services;
-using Crystalshire.Core.Database;
 using Crystalshire.Core.Model.Characters;
 
 using Crystalshire.Game.Players;

@@ -1,4 +1,5 @@
-﻿using Crystalshire.Core.Database;
+﻿using Crystalshire.Database;
+
 using Crystalshire.Core.Model;
 using Crystalshire.Core.Model.Mailing;
 using Crystalshire.Core.Model.Characters;

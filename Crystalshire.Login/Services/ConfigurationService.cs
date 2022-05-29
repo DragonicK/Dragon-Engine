@@ -1,10 +1,12 @@
 ﻿using System.Reflection;
 
 using Crystalshire.Network;
+
+using Crystalshire.Database;
+
 using Crystalshire.Core.Jwt;
 using Crystalshire.Core.Smtp;
 using Crystalshire.Core.Common;
-using Crystalshire.Core.Database;
 using Crystalshire.Core.Services;
 using Crystalshire.Core.GeoIpCountry;
 using Crystalshire.Core.Serialization;

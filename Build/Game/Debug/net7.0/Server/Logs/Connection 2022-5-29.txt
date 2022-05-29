@@ -52,3 +52,9 @@
   "Message": "",
   "Warning": "Success"
 }
+{
+  "Date": "2022年5月29日 18:58:45",
+  "Name": "Connection Approval",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}

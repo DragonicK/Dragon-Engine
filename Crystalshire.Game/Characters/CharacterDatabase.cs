@@ -1,5 +1,5 @@
-﻿using Crystalshire.Core.Database;
-using Crystalshire.Core.Database.Handler;
+﻿using Crystalshire.Database;
+using Crystalshire.Database.Handler;
 using Crystalshire.Core.Model.Characters;
 
 using Crystalshire.Game.Configurations;

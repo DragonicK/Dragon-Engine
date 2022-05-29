@@ -1,7 +1,7 @@
-﻿using Crystalshire.Core.Database.Handler;
-using Crystalshire.Core.Database.Context;
+﻿using Crystalshire.Database.Handler;
+using Crystalshire.Database.Context;
 
-namespace Crystalshire.Core.Database {
+namespace Crystalshire.Database {
     public class DatabaseFactory : IDatabaseFactory {
         public MembershipHandler GetMembershipHandler(DBConfiguration dBConfiguration) {
             var options = ContextOptions.GetMembershipOptions(dBConfiguration);

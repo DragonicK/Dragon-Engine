@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Crystalshire.Core.Database.Context;
+using Crystalshire.Database.Context;
 
-namespace Crystalshire.Core.Database {
+namespace Crystalshire.Database {
     public static class ContextOptions {
         public static DbContextOptions<MembershipContext> GetMembershipOptions(DBConfiguration configuration) {
             var builder = new DbContextOptionsBuilder<MembershipContext>();

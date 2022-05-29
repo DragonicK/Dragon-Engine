@@ -1,8 +1,10 @@
 ﻿using Crystalshire.Network;
+
+using Crystalshire.Database;
+
 using Crystalshire.Core.Jwt;
 using Crystalshire.Core.Smtp;
 using Crystalshire.Core.Common;
-using Crystalshire.Core.Database;
 using Crystalshire.Core.GeoIpCountry;
 
 namespace Crystalshire.Login.Configurations {

@@ -16,3 +16,9 @@
   "Message": "Authentication Result: Success ConnectionId: 1 IpAddress: 127.0.0.1",
   "Warning": "Success"
 }
+{
+  "Date": "2022年5月29日 18:58:45",
+  "Name": "Authentication Result",
+  "Message": "Authentication Result: Success ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}

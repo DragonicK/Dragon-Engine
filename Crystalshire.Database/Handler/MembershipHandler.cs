@@ -2,9 +2,10 @@
 
 using Crystalshire.Core.Model.Accounts;
 using Crystalshire.Core.Model.Characters;
-using Crystalshire.Core.Database.Context;
 
-namespace Crystalshire.Core.Database.Handler {
+using Crystalshire.Database.Context;
+
+namespace Crystalshire.Database.Handler {
     public class MembershipHandler : IDisposable {
         private readonly MembershipContext Context;
         private bool disposed = false;

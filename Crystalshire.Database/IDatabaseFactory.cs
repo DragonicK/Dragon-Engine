@@ -1,6 +1,6 @@
-﻿using Crystalshire.Core.Database.Handler;
+﻿using Crystalshire.Database.Handler;
 
-namespace Crystalshire.Core.Database {
+namespace Crystalshire.Database {
     public interface IDatabaseFactory {
         MembershipHandler GetMembershipHandler(DBConfiguration dBConfiguration);
         ServerHandler GetServerHandler(DBConfiguration dBConfiguration);

@@ -1,6 +1,8 @@
-﻿using Crystalshire.Core.Logs;
-using Crystalshire.Core.Database;
+﻿using Crystalshire.Database;
+
+using Crystalshire.Core.Logs;
 using Crystalshire.Core.Services;
+
 using Crystalshire.Game.Configurations;
 
 namespace Crystalshire.Game.Services {

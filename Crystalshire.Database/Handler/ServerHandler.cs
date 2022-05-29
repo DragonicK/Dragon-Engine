@@ -1,8 +1,6 @@
-﻿using System;
+﻿using Crystalshire.Database.Context;
 
-using Crystalshire.Core.Database.Context;
-
-namespace Crystalshire.Core.Database.Handler {
+namespace Crystalshire.Database.Handler {
     public class ServerHandler : IDisposable {
         private readonly ServerContext Context;
         private bool disposed = false;

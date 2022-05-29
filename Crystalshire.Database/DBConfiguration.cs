@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace Crystalshire.Core.Database {
+namespace Crystalshire.Database {
     public class DBConfiguration {
         public string DataSource { get; set; }
         public int Port { get; set; }

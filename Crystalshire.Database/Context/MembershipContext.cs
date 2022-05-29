@@ -3,7 +3,7 @@
 using Crystalshire.Core.Model.Accounts;
 using Crystalshire.Core.Model.Characters;
 
-namespace Crystalshire.Core.Database.Context {
+namespace Crystalshire.Database.Context {
     public class MembershipContext : DbContext {
         public DbSet<Account>? Accounts { get; set; }
         public DbSet<AccountAuthentication>? AccountAuthentication { get; set; }
