@@ -1,30 +1,30 @@
 ﻿using Crystalshire.Database.Context;
 
-namespace Crystalshire.Database.Handler {
-    public class GameHandler : IDisposable {
-        private readonly GameContext Context;
-        private bool disposed = false;
+namespace Crystalshire.Database.Handler;
 
-        public GameHandler(GameContext context) {
-            Context = context;
-        }
+public class GameHandler : IDisposable {
+    private readonly GameContext Context;
+    private bool disposed = false;
 
-        public bool CanConnect() {
-            return Context.Database.CanConnect();
-        }
+    public GameHandler(GameContext context) {
+        Context = context;
+    }
 
-        public void Dispose() {
-            Dispose(true);
-        }
+    public bool CanConnect() {
+        return Context.Database.CanConnect();
+    }
 
-        private void Dispose(bool disposing) {
-            if (!disposed) {
-                if (disposing) {
-                    Context.Dispose();
-                }
+    public void Dispose() {
+        Dispose(true);
+    }
 
-                disposed = true;
+    private void Dispose(bool disposing) {
+        if (!disposed) {
+            if (disposing) {
+                Context.Dispose();
             }
+
+            disposed = true;
         }
     }
 }
