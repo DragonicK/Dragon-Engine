@@ -126,10 +126,8 @@ public partial class FormProperty : Form {
     #region Name
 
     private void TextName_TextChanged(object sender, EventArgs e) {
-        if (_property is not null) {
-            _property.Name = TextName.Text.Trim();
-            _main.ChangeSelectedMapName(_property.Name);
-        }
+        _property.Name = TextName.Text.Trim();
+        _main.ChangeSelectedMapName(_property.Name);
     }
 
     #endregion
@@ -137,43 +135,35 @@ public partial class FormProperty : Form {
     #region Link
 
     private void TextUp_TextChanged(object sender, EventArgs e) {
-        if (_property is not null) {
-            var link = _property.Link;
+        var link = _property.Link;
 
-            link.Up = GetValue(TextUp);
+        link.Up = GetValue(TextUp);
 
-            _property.Link = link;
-        }
+        _property.Link = link;
     }
 
     private void TextLeft_TextChanged(object sender, EventArgs e) {
-        if (_property is not null) {
-            var link = _property.Link;
+        var link = _property.Link;
 
-            link.Left = GetValue(TextLeft);
+        link.Left = GetValue(TextLeft);
 
-            _property.Link = link;
-        }
+        _property.Link = link;
     }
 
     private void TextRight_TextChanged(object sender, EventArgs e) {
-        if (_property is not null) {
-            var link = _property.Link;
+        var link = _property.Link;
 
-            link.Right = GetValue(TextRight);
+        link.Right = GetValue(TextRight);
 
-            _property.Link = link;
-        }
+        _property.Link = link;
     }
 
     private void TextDown_TextChanged(object sender, EventArgs e) {
-        if (_property is not null) {
-            var link = _property.Link;
+        var link = _property.Link;
 
-            link.Down = GetValue(TextDown);
+        link.Down = GetValue(TextDown);
 
-            _property.Link = link;
-        }
+        _property.Link = link;
     }
 
     #endregion
@@ -181,9 +171,7 @@ public partial class FormProperty : Form {
     #region Moral
 
     private void ComboMoral_SelectedIndexChanged(object sender, EventArgs e) {
-        if (_property is not null) {
-            _property.Moral = (Moral)ComboMoral.SelectedIndex;
-        }
+        _property.Moral = (Moral)ComboMoral.SelectedIndex;
     }
 
     #endregion
@@ -191,9 +179,7 @@ public partial class FormProperty : Form {
     #region Weather
 
     private void ComboWeather_SelectedIndexChanged(object sender, EventArgs e) {
-        if (_property is not null) {
-            _property.Weather = (Weather)ComboWeather.SelectedIndex;
-        }
+        _property.Weather = (Weather)ComboWeather.SelectedIndex;
     }
 
     #endregion
@@ -201,33 +187,27 @@ public partial class FormProperty : Form {
     #region Boot
 
     private void TextBootId_TextChanged(object sender, EventArgs e) {
-        if (_property is not null) {
-            var boot = _property.Boot;
+        var boot = _property.Boot;
 
-            boot.Id = GetValue(TextBootId);
+        boot.Id = GetValue(TextBootId);
 
-            _property.Boot = boot;
-        }
+        _property.Boot = boot;
     }
 
     private void TextBootX_TextChanged(object sender, EventArgs e) {
-        if (_property is not null) {
-            var boot = _property.Boot;
+        var boot = _property.Boot;
 
-            boot.X = GetValue(TextBootX);
+        boot.X = GetValue(TextBootX);
 
-            _property.Boot = boot;
-        }
+        _property.Boot = boot;
     }
 
     private void TextBootY_TextChanged(object sender, EventArgs e) {
-        if (_property is not null) {
-            var boot = _property.Boot;
+        var boot = _property.Boot;
 
-            boot.Y = GetValue(TextBootY);
+        boot.Y = GetValue(TextBootY);
 
-            _property.Boot = boot;
-        }
+        _property.Boot = boot;
     }
 
     #endregion
@@ -235,15 +215,11 @@ public partial class FormProperty : Form {
     #region Sound
 
     private void TextMusic_TextChanged(object sender, EventArgs e) {
-        if (_property is not null) {
-            _property.Music = TextMusic.Text.Trim();
-        }
+        _property.Music = TextMusic.Text.Trim();
     }
 
     private void TextAmbience_TextChanged(object sender, EventArgs e) {
-        if (_property is not null) {
-            _property.Ambience = TextAmbience.Text.Trim();
-        }
+        _property.Ambience = TextAmbience.Text.Trim();
     }
 
     #endregion
@@ -251,19 +227,15 @@ public partial class FormProperty : Form {
     #region Size
 
     private void TextWidth_TextChanged(object sender, EventArgs e) {
-        if (_property is not null) {
-            var value = GetValue(TextWidth);
+        var value = GetValue(TextWidth);
 
-            _property.Width = (value > 0) ? value : 1; 
-        }
+        _property.Width = (value > 0) ? value : 1;
     }
 
     private void TextHeight_TextChanged(object sender, EventArgs e) {
-        if (_property is not null) {
-            var value = GetValue(TextHeight);
+        var value = GetValue(TextHeight);
 
-            _property.Height = (value > 0) ? value : 1;
-        }
+        _property.Height = (value > 0) ? value : 1;
     }
 
     #endregion
@@ -271,21 +243,15 @@ public partial class FormProperty : Form {
     #region Password
 
     private void TextKeyA_TextChanged(object sender, EventArgs e) {
-        if (_property is not null) {
-            _property.KeyA = TextKeyA.Text.Trim();
-        }
+        _property.KeyA = TextKeyA.Text.Trim();
     }
 
     private void TextKeyB_TextChanged(object sender, EventArgs e) {
-        if (_property is not null) {
-            _property.KeyB = TextKeyB.Text.Trim();
-        }
+        _property.KeyB = TextKeyB.Text.Trim();
     }
 
     private void TextKeyC_TextChanged(object sender, EventArgs e) {
-        if (_property is not null) {
-            _property.KeyC = TextKeyC.Text.Trim();
-        }
+        _property.KeyC = TextKeyC.Text.Trim();
     }
 
     #endregion
@@ -293,71 +259,59 @@ public partial class FormProperty : Form {
     #region Fog
 
     private void TextFogId_TextChanged(object sender, EventArgs e) {
-        if (_property is not null) {
-            var fog = _property.Fog;
+        var fog = _property.Fog;
 
-            fog.Id = GetValue(TextFogId);
+        fog.Id = GetValue(TextFogId);
 
-            _property.Fog = fog;
-        }
+        _property.Fog = fog;
     }
 
     private void ComboBlending_SelectedIndexChanged(object sender, EventArgs e) {
-        if (_property is not null) {
-            var fog = _property.Fog;
+        var fog = _property.Fog;
 
-            fog.Blending = (Blending)ComboBlending.SelectedIndex;
+        fog.Blending = (Blending)ComboBlending.SelectedIndex;
 
-            _property.Fog = fog;
-        }
+        _property.Fog = fog;
     }
 
     private void ScrollOpacity_Scroll(object sender, ScrollEventArgs e) {
-        if (_property is not null) {
-            var fog = _property.Fog;
+        var fog = _property.Fog;
 
-            fog.Opacity = (byte)ScrollOpacity.Value;
+        fog.Opacity = (byte)ScrollOpacity.Value;
 
-            _property.Fog = fog;
+        _property.Fog = fog;
 
-            LabelOpacity.Text = $"Opacity: {fog.Opacity}";
-        }
+        LabelOpacity.Text = $"Opacity: {fog.Opacity}";
     }
 
     private void ScrollRed_Scroll(object sender, ScrollEventArgs e) {
-        if (_property is not null) {
-            var fog = _property.Fog;
+        var fog = _property.Fog;
 
-            fog.Red = (byte)ScrollRed.Value;
+        fog.Red = (byte)ScrollRed.Value;
 
-            _property.Fog = fog;
+        _property.Fog = fog;
 
-            LabelRed.Text = $"Red: {fog.Red}";
-        }
+        LabelRed.Text = $"Red: {fog.Red}";
     }
 
     private void ScrollGreen_Scroll(object sender, ScrollEventArgs e) {
-        if (_property is not null) {
-            var fog = _property.Fog;
+        var fog = _property.Fog;
 
-            fog.Green = (byte)ScrollGreen.Value;
+        fog.Green = (byte)ScrollGreen.Value;
 
-            _property.Fog = fog;
+        _property.Fog = fog;
 
-            LabelRed.Text = $"Green: {fog.Green}";
-        }
+        LabelRed.Text = $"Green: {fog.Green}";
     }
 
     private void ScrollBlue_Scroll(object sender, ScrollEventArgs e) {
-        if (_property is not null) {
-            var fog = _property.Fog;
+        var fog = _property.Fog;
 
-            fog.Blue = (byte)ScrollBlue.Value;
+        fog.Blue = (byte)ScrollBlue.Value;
 
-            _property.Fog = fog;
+        _property.Fog = fog;
 
-            LabelRed.Text = $"Blue: {fog.Blue}";
-        }
+        LabelRed.Text = $"Blue: {fog.Blue}";
     }
 
     #endregion

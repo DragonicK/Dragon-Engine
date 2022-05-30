@@ -17,8 +17,7 @@ public partial class FormMain : Form {
     }
 
     private void button1_Click(object sender, EventArgs e) {
-        var f = new FormProperty(JetBrainsMono, null, this);
-        f.ShowDialog();
+
     }
 
     public void UpdateMapSize() {
