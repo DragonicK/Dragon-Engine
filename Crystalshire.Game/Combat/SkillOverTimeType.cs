@@ -1,6 +1,6 @@
-﻿namespace Crystalshire.Game.Combat {
-    public enum SkillOverTimeType {
-        DamageOverTime,
-        HealOverTime,
-    }
+﻿namespace Crystalshire.Game.Combat;
+
+public enum SkillOverTimeType {
+    DamageOverTime,
+    HealOverTime,
 }

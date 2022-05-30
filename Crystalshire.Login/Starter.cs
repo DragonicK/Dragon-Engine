@@ -1,31 +1,31 @@
 ﻿using Crystalshire.Core.Common;
 using Crystalshire.Core.Services;
 
-namespace Crystalshire.Login {
-    public sealed class Starter {
-        public ServiceBroker Services { get; set; }
+namespace Crystalshire.Login;
 
-        public Starter() {
-            Services = new ServiceBroker();
-        }
+public sealed class Starter {
+    public ServiceBroker Services { get; set; }
 
-        public void Start() {
-            CheckDirectory();
+    public Starter() {
+        Services = new ServiceBroker();
+    }
 
-            Services.Start();
-        }
+    public void Start() {
+        CheckDirectory();
 
-        public void Stop() {
-            Services.Stop();
-        }
+        Services.Start();
+    }
 
-        private static void CheckDirectory() {
-            var dir = new EngineDirectory();
+    public void Stop() {
+        Services.Stop();
+    }
 
-            dir.Add("./Server");
-            dir.Add("./Server/Logs");
+    private static void CheckDirectory() {
+        var dir = new EngineDirectory();
 
-            dir.Create();
-        }
+        dir.Add("./Server");
+        dir.Add("./Server/Logs");
+
+        dir.Create();
     }
 }

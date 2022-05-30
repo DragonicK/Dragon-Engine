@@ -7,176 +7,176 @@ using Crystalshire.Core.Model.Characters;
 using Crystalshire.Game.Players;
 using Crystalshire.Game.Network;
 
-namespace Crystalshire.Game.Manager {
-    public class ShopManager {
-        public IPlayer? Player { get; init; }
-        public IDatabase<Shop>? Shops { get; init; } 
-        public IDatabase<Item>? Items { get; init; }
-        public IPacketSender? PacketSender { get; init; }
+namespace Crystalshire.Game.Manager;
 
-        private const int SingleItemAmount = 1;
+public class ShopManager {
+    public IPlayer? Player { get; init; }
+    public IDatabase<Shop>? Shops { get; init; }
+    public IDatabase<Item>? Items { get; init; }
+    public IPacketSender? PacketSender { get; init; }
 
-        public void ProcessBuyRequest(int index, int amount) {
-            var id = Player!.ShopId;
-            var shop = GetShop(id);
+    private const int SingleItemAmount = 1;
 
-            if (shop is not null) {
-                index--;
+    public void ProcessBuyRequest(int index, int amount) {
+        var id = Player!.ShopId;
+        var shop = GetShop(id);
 
-                if (index < shop.Items.Count) {
-                    var item = shop.Items[index];
+        if (shop is not null) {
+            index--;
 
-                    ContinueBuyRequest(item, amount);
-                }
-            }       
-        }
+            if (index < shop.Items.Count) {
+                var item = shop.Items[index];
 
-        private void ContinueBuyRequest(ShopItem shopItem, int amount) {
-            var currency = shopItem.CurrencyId;
-            var price = shopItem.Price;
-
-            amount = amount <= 0 ? SingleItemAmount : amount;
-
-            var total = Player!.Currencies.Get(currency) - price * amount;
-
-            if (total < 0) {
-                PacketSender!.SendMessage(SystemMessage.InsuficientCurrency, QbColor.BrigthRed, Player!);
+                ContinueBuyRequest(item, amount);
             }
-            else {
-                var item = GetItem(shopItem.Id);
+        }
+    }
 
-                if (item is not null) {
-                    CharacterInventory? inventory;
+    private void ContinueBuyRequest(ShopItem shopItem, int amount) {
+        var currency = shopItem.CurrencyId;
+        var price = shopItem.Price;
 
-                    if (item.MaximumStack > 0) {
-                        inventory = AddStack(shopItem, amount);
-                    }
-                    else {
-                        inventory = AddItem(shopItem, SingleItemAmount);
-                    }
+        amount = amount <= 0 ? SingleItemAmount : amount;
 
-                    if (inventory is not null) {
-                        var parameters = new string[] {
+        var total = Player!.Currencies.Get(currency) - price * amount;
+
+        if (total < 0) {
+            PacketSender!.SendMessage(SystemMessage.InsuficientCurrency, QbColor.BrigthRed, Player!);
+        }
+        else {
+            var item = GetItem(shopItem.Id);
+
+            if (item is not null) {
+                CharacterInventory? inventory;
+
+                if (item.MaximumStack > 0) {
+                    inventory = AddStack(shopItem, amount);
+                }
+                else {
+                    inventory = AddItem(shopItem, SingleItemAmount);
+                }
+
+                if (inventory is not null) {
+                    var parameters = new string[] {
                             item.Id.ToString(),
                             amount.ToString()
                         };
 
-                        Player!.Currencies.Subtract(currency, price * amount);
+                    Player!.Currencies.Subtract(currency, price * amount);
 
-                        PacketSender!.SendCurrencyUpdate(Player!, currency);
-                        PacketSender!.SendInventoryUpdate(Player!, inventory.InventoryIndex);
+                    PacketSender!.SendCurrencyUpdate(Player!, currency);
+                    PacketSender!.SendInventoryUpdate(Player!, inventory.InventoryIndex);
 
-                        PacketSender!.SendMessage(SystemMessage.YouObtainedItem, QbColor.BrigthGreen, Player!, parameters);
-                    }
-                    else {          
-                        PacketSender!.SendMessage(SystemMessage.InventoryFull, QbColor.BrigthRed, Player!);
-                    }
-                }
-            }
-        }
-
-        private CharacterInventory? AddStack(ShopItem item, int amount) {
-            var inventory = Player!.Inventories.FindByItemId(item.Id);
-            
-            if (inventory is not null) {
-                inventory.Value += amount;
-            }
-            else {
-                inventory = AddItem(item, amount);
-            }
-
-            return inventory;
-        }
-
-        private CharacterInventory? AddItem(ShopItem item, int amount) {
-            var maximum = Player!.Character.MaximumInventories;
-
-            var inventory = Player!.Inventories.FindFreeInventory(maximum);
-
-            if (inventory is not null) {
-                inventory.ItemId = item.Id;
-                inventory.Value = amount;
-                inventory.Level = item.Level;
-                inventory.Bound = item.Bound;
-                inventory.AttributeId = item.AttributeId;
-                inventory.UpgradeId = item.UpgradeId;
-            }
-
-            return inventory;
-        }
-
-        public void ProcessSellRequest(int index, int amount) {
-            var shop = GetShop(Player!.ShopId);
-
-            if (shop is not null) {
-                var inventory = Player!.Inventories.FindByIndex(index);
-
-                if (inventory is not null) {
-                    var item = GetItem(inventory.ItemId);
-
-                    if (item is not null) {
-                        if (item.Price <= 0) {
-                            PacketSender!.SendMessage(SystemMessage.ItemCannotBeSold, QbColor.BrigthRed, Player!);
-                        }
-                        else {
-                            ContinueSellRequest(inventory, item, amount);
-                        }
-                    }
-                }
-            }
-        }
-
-        private void ContinueSellRequest(CharacterInventory inventory, Item item, int amount) {
-            var index = inventory.InventoryIndex;
-
-            amount = amount <= 0 ? SingleItemAmount : amount;
-
-            var price = item.Price * amount;
-
-            if (Player!.Currencies.Add(CurrencyType.Gold, price)) {
-                if (item.MaximumStack > 0) {
-                    inventory.Value -= amount;
-
-                    if (inventory.Value <= 0) {
-                        inventory.Clear();
-                    }
+                    PacketSender!.SendMessage(SystemMessage.YouObtainedItem, QbColor.BrigthGreen, Player!, parameters);
                 }
                 else {
-                    amount = 1;
+                    PacketSender!.SendMessage(SystemMessage.InventoryFull, QbColor.BrigthRed, Player!);
+                }
+            }
+        }
+    }
 
+    private CharacterInventory? AddStack(ShopItem item, int amount) {
+        var inventory = Player!.Inventories.FindByItemId(item.Id);
+
+        if (inventory is not null) {
+            inventory.Value += amount;
+        }
+        else {
+            inventory = AddItem(item, amount);
+        }
+
+        return inventory;
+    }
+
+    private CharacterInventory? AddItem(ShopItem item, int amount) {
+        var maximum = Player!.Character.MaximumInventories;
+
+        var inventory = Player!.Inventories.FindFreeInventory(maximum);
+
+        if (inventory is not null) {
+            inventory.ItemId = item.Id;
+            inventory.Value = amount;
+            inventory.Level = item.Level;
+            inventory.Bound = item.Bound;
+            inventory.AttributeId = item.AttributeId;
+            inventory.UpgradeId = item.UpgradeId;
+        }
+
+        return inventory;
+    }
+
+    public void ProcessSellRequest(int index, int amount) {
+        var shop = GetShop(Player!.ShopId);
+
+        if (shop is not null) {
+            var inventory = Player!.Inventories.FindByIndex(index);
+
+            if (inventory is not null) {
+                var item = GetItem(inventory.ItemId);
+
+                if (item is not null) {
+                    if (item.Price <= 0) {
+                        PacketSender!.SendMessage(SystemMessage.ItemCannotBeSold, QbColor.BrigthRed, Player!);
+                    }
+                    else {
+                        ContinueSellRequest(inventory, item, amount);
+                    }
+                }
+            }
+        }
+    }
+
+    private void ContinueSellRequest(CharacterInventory inventory, Item item, int amount) {
+        var index = inventory.InventoryIndex;
+
+        amount = amount <= 0 ? SingleItemAmount : amount;
+
+        var price = item.Price * amount;
+
+        if (Player!.Currencies.Add(CurrencyType.Gold, price)) {
+            if (item.MaximumStack > 0) {
+                inventory.Value -= amount;
+
+                if (inventory.Value <= 0) {
                     inventory.Clear();
                 }
+            }
+            else {
+                amount = 1;
 
-                PacketSender!.SendInventoryUpdate(Player!, index);
-                PacketSender!.SendCurrencyUpdate(Player!, CurrencyType.Gold);
+                inventory.Clear();
+            }
 
-                var parameters = new string[] {
+            PacketSender!.SendInventoryUpdate(Player!, index);
+            PacketSender!.SendCurrencyUpdate(Player!, CurrencyType.Gold);
+
+            var parameters = new string[] {
                     item.Id.ToString(),
                     amount.ToString()
                 };
 
-                PacketSender!.SendMessage(SystemMessage.ItemHasBeenSold, QbColor.BrigthGreen, Player!, parameters);
-            }
-            else {
-                PacketSender!.SendMessage(SystemMessage.TheCurrencyCannotBeAdded, QbColor.BrigthGreen, Player!);
-            }
+            PacketSender!.SendMessage(SystemMessage.ItemHasBeenSold, QbColor.BrigthGreen, Player!, parameters);
         }
-
-        private Shop? GetShop(int id) {
-            if (Shops is not null) {
-                return Shops[id];
-            }
-
-            return null;
+        else {
+            PacketSender!.SendMessage(SystemMessage.TheCurrencyCannotBeAdded, QbColor.BrigthGreen, Player!);
         }
-
-        private Item? GetItem(int id) {
-            if (Items is not null) {
-                return Items[id];
-            }
-
-            return null;
-        }
-
     }
+
+    private Shop? GetShop(int id) {
+        if (Shops is not null) {
+            return Shops[id];
+        }
+
+        return null;
+    }
+
+    private Item? GetItem(int id) {
+        if (Items is not null) {
+            return Items[id];
+        }
+
+        return null;
+    }
+
 }

@@ -1,10 +1,10 @@
-﻿namespace Crystalshire.Game.Configurations.Data {
-    public class Ressurrection {
-        public int MaximumAcceptTimeOut { get; set; }
-        public float ReduceExperience { get; set; }
+﻿namespace Crystalshire.Game.Configurations.Data;
 
-        public Ressurrection() {
-            MaximumAcceptTimeOut = 360;
-        }
+public class Ressurrection {
+    public int MaximumAcceptTimeOut { get; set; }
+    public float ReduceExperience { get; set; }
+
+    public Ressurrection() {
+        MaximumAcceptTimeOut = 360;
     }
 }

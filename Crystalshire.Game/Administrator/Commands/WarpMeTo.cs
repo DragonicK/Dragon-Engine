@@ -5,59 +5,59 @@ using Crystalshire.Game.Manager;
 using Crystalshire.Game.Players;
 using Crystalshire.Game.Services;
 
-namespace Crystalshire.Game.Administrator.Commands {
-    public sealed class WarpMeTo : IAdministratorCommand {
-        public AdministratorCommands Command { get; } = AdministratorCommands.WarpMeTo;
-        public IPlayer? Administrator { get; set; }
-        public IPacketSender? PacketSender { get; set; }
-        public InstanceService? InstanceService { get; set; }
-        public ConfigurationService? Configuration { get; set; }
-        public ConnectionService? ConnectionService { get; set; }
-        public ContentService? ContentService { get; set; }
+namespace Crystalshire.Game.Administrator.Commands;
 
-        private const int MaximumParameters = 1;
+public sealed class WarpMeTo : IAdministratorCommand {
+    public AdministratorCommands Command { get; } = AdministratorCommands.WarpMeTo;
+    public IPlayer? Administrator { get; set; }
+    public IPacketSender? PacketSender { get; set; }
+    public InstanceService? InstanceService { get; set; }
+    public ConfigurationService? Configuration { get; set; }
+    public ConnectionService? ConnectionService { get; set; }
+    public ContentService? ContentService { get; set; }
 
-        public void Process(string[]? parameters) {
-            if (parameters is not null) {
-                if (parameters.Length >= MaximumParameters) {
-                    if (Administrator is not null) {
-                        if (Administrator.AccountLevel >= AccountLevel.Monitor) {
-                            var repository = ConnectionService!.PlayerRepository;
-                            var destination = repository!.FindByName(parameters[0].Trim());
+    private const int MaximumParameters = 1;
 
-                            MoveToDestination(destination);
-                        }
+    public void Process(string[]? parameters) {
+        if (parameters is not null) {
+            if (parameters.Length >= MaximumParameters) {
+                if (Administrator is not null) {
+                    if (Administrator.AccountLevel >= AccountLevel.Monitor) {
+                        var repository = ConnectionService!.PlayerRepository;
+                        var destination = repository!.FindByName(parameters[0].Trim());
+
+                        MoveToDestination(destination);
                     }
                 }
             }
         }
+    }
 
-        private void MoveToDestination(IPlayer? destination) {
-            if (destination is not null) {
-                var instances = InstanceService!.Instances;
+    private void MoveToDestination(IPlayer? destination) {
+        if (destination is not null) {
+            var instances = InstanceService!.Instances;
 
-                var instanceId = destination.Character.Map;
-                var x = destination.Character.X;
-                var y = destination.Character.Y;
+            var instanceId = destination.Character.Map;
+            var x = destination.Character.X;
+            var y = destination.Character.Y;
 
-                if (instances.ContainsKey(instanceId)) {
-                    var instance = instances[instanceId];
+            if (instances.ContainsKey(instanceId)) {
+                var instance = instances[instanceId];
 
-                    var warper = new WarperManager() {
-                        Player = Administrator,
-                        InstanceService = InstanceService,
-                        PacketSender = PacketSender
-                    };
+                var warper = new WarperManager() {
+                    Player = Administrator,
+                    InstanceService = InstanceService,
+                    PacketSender = PacketSender
+                };
 
-                    Administrator!.Character.X = x > instance.MaximumX ? instance.MaximumX : x;
-                    Administrator!.Character.Y = y > instance.MaximumY ? instance.MaximumY : y;
+                Administrator!.Character.X = x > instance.MaximumX ? instance.MaximumX : x;
+                Administrator!.Character.Y = y > instance.MaximumY ? instance.MaximumY : y;
 
-                    warper.Warp(instance, Administrator.Character.X, Administrator.Character.Y);
-                }
+                warper.Warp(instance, Administrator.Character.X, Administrator.Character.Y);
             }
-            else {
-                PacketSender!.SendMessage(SystemMessage.PlayerIsNotOnline, QbColor.Red, Administrator!);
-            }
+        }
+        else {
+            PacketSender!.SendMessage(SystemMessage.PlayerIsNotOnline, QbColor.Red, Administrator!);
         }
     }
 }

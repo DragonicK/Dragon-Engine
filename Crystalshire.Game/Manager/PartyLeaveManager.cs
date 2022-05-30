@@ -4,87 +4,87 @@ using Crystalshire.Game.Players;
 using Crystalshire.Game.Network;
 using Crystalshire.Game.Parties;
 
-namespace Crystalshire.Game.Manager {
-    public class PartyLeaveManager {
-        public IPacketSender? PacketSender { get; init; }
+namespace Crystalshire.Game.Manager;
 
-        private const int MinimumPartyMember = 2;
+public class PartyLeaveManager {
+    public IPacketSender? PacketSender { get; init; }
 
-        public void ProcessLeaveRequest(PartyManager party, IPlayer player) {
-            var members = party.Members;
+    private const int MinimumPartyMember = 2;
 
-            var id = player.Character.CharacterId;
+    public void ProcessLeaveRequest(PartyManager party, IPlayer player) {
+        var members = party.Members;
 
-            var member = members.FirstOrDefault(p => p.CharacterId == id);
+        var id = player.Character.CharacterId;
 
-            if (member is not null) {
-                if (member.Index == party.LeaderIndex) {
-                    // Find next leader.
-                    var index = GetNextLeader(party);
+        var member = members.FirstOrDefault(p => p.CharacterId == id);
 
-                    if (index > 0) {
-                        party.LeaderIndex = index;
+        if (member is not null) {
+            if (member.Index == party.LeaderIndex) {
+                // Find next leader.
+                var index = GetNextLeader(party);
 
-                        Leave(party, member, player);
-                    }
-                    else {
-                        party.Disband();
-                    }
-                }
-                else {
+                if (index > 0) {
+                    party.LeaderIndex = index;
+
                     Leave(party, member, player);
                 }
+                else {
+                    party.Disband();
+                }
+            }
+            else {
+                Leave(party, member, player);
+            }
+        }
+    }
+
+    private void Leave(PartyManager party, PartyMember member, IPlayer player) {
+        var members = party.Members;
+
+        player.PartyId = 0;
+        player.PartyInvitedId = 0;
+
+        members.Remove(member);
+
+        var parameters = new string[] { player.Character.Name };
+
+        foreach (var _member in members) {
+            if (_member.Player is not null) {
+                PacketSender!.SendMessage(SystemMessage.PlayerLeftParty, QbColor.BrigthRed, _member.Player, parameters);
             }
         }
 
-        private void Leave(PartyManager party, PartyMember member, IPlayer player) {
-            var members = party.Members;
+        PacketSender!.SendPartyLeave(player);
+        PacketSender!.SendMessage(SystemMessage.YouLeftParty, QbColor.BrigthRed, player);
 
-            player.PartyId = 0;
-            player.PartyInvitedId = 0;
+        if (party.IsEverybodyDisconnected()) {
+            party.Disband();
+        }
 
-            members.Remove(member);
-
-            var parameters = new string[] { player.Character.Name };
-
-            foreach (var _member in members) {
-                if (_member.Player is not null) {
-                    PacketSender!.SendMessage(SystemMessage.PlayerLeftParty, QbColor.BrigthRed, _member.Player, parameters);
+        if (party is not null) {
+            if (party.State != PartyState.Disbanded) {
+                if (members.Count >= MinimumPartyMember) {
+                    PacketSender!.SendParty(party);
+                }
+                else {
+                    party.Disband();
                 }
             }
+        }
+    }
 
-            PacketSender!.SendPartyLeave(player);
-            PacketSender!.SendMessage(SystemMessage.YouLeftParty, QbColor.BrigthRed, player);
+    private int GetNextLeader(PartyManager party) {
+        var members = party.Members;
+        var leader = party.LeaderIndex;
 
-            if (party.IsEverybodyDisconnected()) {
-                party.Disband();
-            }
-
-            if (party is not null) {
-                if (party.State != PartyState.Disbanded) {
-                    if (members.Count >= MinimumPartyMember) {
-                        PacketSender!.SendParty(party);
-                    }
-                    else {
-                        party.Disband();
-                    }
+        if (members.Count > MinimumPartyMember) {
+            foreach (var member in members) {
+                if (member.Index != leader) {
+                    return member.Index;
                 }
             }
         }
 
-        private int GetNextLeader(PartyManager party) {
-            var members = party.Members;
-            var leader = party.LeaderIndex;
-
-            if (members.Count > MinimumPartyMember) {
-                foreach (var member in members) {
-                    if (member.Index != leader) {
-                        return member.Index;
-                    }
-                }
-            }
-
-            return 0;
-        }
+        return 0;
     }
 }

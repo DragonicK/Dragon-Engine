@@ -3,32 +3,32 @@ using Crystalshire.Network.Messaging.SharedPackets;
 
 using Crystalshire.Game.Services;
 
-namespace Crystalshire.Game.Routes {
-    public sealed class AttributePoint {
-        public IConnection? Connection { get; set; }
-        public CpUseAttributePoint? Packet { get; set; }
-        public ConnectionService? ConnectionService { get; init; }
-        public PacketSenderService? PacketSenderService { get; init; }
+namespace Crystalshire.Game.Routes;
 
-        public void Process() {
-            var sender = PacketSenderService!.PacketSender;
-            var repository = ConnectionService!.PlayerRepository;
+public sealed class AttributePoint {
+    public IConnection? Connection { get; set; }
+    public CpUseAttributePoint? Packet { get; set; }
+    public ConnectionService? ConnectionService { get; init; }
+    public PacketSenderService? PacketSenderService { get; init; }
 
-            if (Connection is not null) {
-                var player = repository!.FindByConnectionId(Connection.Id);
+    public void Process() {
+        var sender = PacketSenderService!.PacketSender;
+        var repository = ConnectionService!.PlayerRepository;
 
-                if (player is not null) {
-                    var index = Packet!.Attribute;
+        if (Connection is not null) {
+            var player = repository!.FindByConnectionId(Connection.Id);
 
-                    if (player.Character.Points > 0) {
-                        player.PrimaryAttributes.Add(index, 1);
+            if (player is not null) {
+                var index = Packet!.Attribute;
 
-                        player.Character.Points--;
+                if (player.Character.Points > 0) {
+                    player.PrimaryAttributes.Add(index, 1);
 
-                        player.AllocateAttributes();
+                    player.Character.Points--;
 
-                        sender?.SendAttributes(player);
-                    }
+                    player.AllocateAttributes();
+
+                    sender?.SendAttributes(player);
                 }
             }
         }

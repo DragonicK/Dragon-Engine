@@ -3,102 +3,102 @@ using Crystalshire.Core.Services;
 
 using Crystalshire.Login.Server;
 
-namespace Crystalshire.Login.Services {
-    public class ListenerService : IService {
-        public ServicePriority Priority => ServicePriority.Low;
-        public IEngineListener? ServerListener { get; private set; }
-        public ConnectionService? ConnectionService { get; private set; }
-        public IncomingMessageService? IncomingMessageService { get; private set; }
-        public OutgoingMessageService? OutgoingMessageService { get; private set; }
-        public ConfigurationService? Configuration { get; private set; }
-        public LoggerService? LoggerService { get; private set; }
-        public GeoIpService? GeoIpService { get; private set; }
-        public bool IsRunning { get; private set; } = false;
+namespace Crystalshire.Login.Services;
 
-        private Thread? t;
+public class ListenerService : IService {
+    public ServicePriority Priority => ServicePriority.Low;
+    public IEngineListener? ServerListener { get; private set; }
+    public ConnectionService? ConnectionService { get; private set; }
+    public IncomingMessageService? IncomingMessageService { get; private set; }
+    public OutgoingMessageService? OutgoingMessageService { get; private set; }
+    public ConfigurationService? Configuration { get; private set; }
+    public LoggerService? LoggerService { get; private set; }
+    public GeoIpService? GeoIpService { get; private set; }
+    public bool IsRunning { get; private set; } = false;
 
-        public void Start() {
-            var repository = ConnectionService!.ConnectionRepository;
-            var queue = IncomingMessageService!.IncomingMessageQueue;
-            var geoIp = GeoIpService!.GeoIpAddress;
-            var generator = ConnectionService.IndexGenerator;
-            var incomingMessage = IncomingMessageService.IncomingMessageQueue;
-            var outgoingWriter = OutgoingMessageService!.OutgoingMessageWriter;
+    private Thread? t;
 
-            ServerListener = new EngineListener() {
-                MaximumConnections = Configuration!.MaximumConnections,
-                Port = Configuration.LoginServer.Port,
-                IncomingMessageQueue = incomingMessage!,
-                OutgoingMessageWriter = outgoingWriter!,
-                ConnectionRepository = repository!,
-                IndexGenerator = generator!,
-                GeoIpAddress = geoIp!
-            };
+    public void Start() {
+        var repository = ConnectionService!.ConnectionRepository;
+        var queue = IncomingMessageService!.IncomingMessageQueue;
+        var geoIp = GeoIpService!.GeoIpAddress;
+        var generator = ConnectionService.IndexGenerator;
+        var incomingMessage = IncomingMessageService.IncomingMessageQueue;
+        var outgoingWriter = OutgoingMessageService!.OutgoingMessageWriter;
 
-            ServerListener.ConnectionApprovalEvent += WriteFromConnectionApproval;
-            ServerListener.ConnectionDisconnectEvent += WriteFromConnectionDisconnect;
-            ServerListener.ConnectionRefuseEvent += WriteFromConnectionRefuse;
+        ServerListener = new EngineListener() {
+            MaximumConnections = Configuration!.MaximumConnections,
+            Port = Configuration.LoginServer.Port,
+            IncomingMessageQueue = incomingMessage!,
+            OutgoingMessageWriter = outgoingWriter!,
+            ConnectionRepository = repository!,
+            IndexGenerator = generator!,
+            GeoIpAddress = geoIp!
+        };
 
-            ServerListener.Start();
+        ServerListener.ConnectionApprovalEvent += WriteFromConnectionApproval;
+        ServerListener.ConnectionDisconnectEvent += WriteFromConnectionDisconnect;
+        ServerListener.ConnectionRefuseEvent += WriteFromConnectionRefuse;
 
-            IsRunning = true;
+        ServerListener.Start();
 
-            t = new Thread(Receive);
-            t.Start();
-        }
+        IsRunning = true;
 
-        public void Stop() {
-            IsRunning = false;
+        t = new Thread(Receive);
+        t.Start();
+    }
 
-            ServerListener?.Stop();
+    public void Stop() {
+        IsRunning = false;
 
-            t?.Join(3000);
-        }
+        ServerListener?.Stop();
 
-        private void WriteFromConnectionApproval(object? sender, IConnection connection) {
-            var join = new JoinServer() {
-                Logger = LoggerService!.ConnectionLogger,
-                Configuration = Configuration,
-                Connection = connection
-            };
+        t?.Join(3000);
+    }
 
-            join.AcceptConnection();
-        }
+    private void WriteFromConnectionApproval(object? sender, IConnection connection) {
+        var join = new JoinServer() {
+            Logger = LoggerService!.ConnectionLogger,
+            Configuration = Configuration,
+            Connection = connection
+        };
 
-        private void WriteFromConnectionRefuse(object? sender, IConnection connection) {
-            var left = new LeftServer() {
-                ConnectionRepository = ConnectionService!.ConnectionRepository,
-                GeoIpAddress = GeoIpService!.GeoIpAddress,
-                Logger = LoggerService!.ConnectionLogger,
-                Configuration = Configuration,
-                Connection = connection
-            };
+        join.AcceptConnection();
+    }
 
-            left.RefuseConnection();
-        }
+    private void WriteFromConnectionRefuse(object? sender, IConnection connection) {
+        var left = new LeftServer() {
+            ConnectionRepository = ConnectionService!.ConnectionRepository,
+            GeoIpAddress = GeoIpService!.GeoIpAddress,
+            Logger = LoggerService!.ConnectionLogger,
+            Configuration = Configuration,
+            Connection = connection
+        };
 
-        private void WriteFromConnectionDisconnect(object? sender, IConnection connection) {
-            var left = new LeftServer() {
-                ConnectionRepository = ConnectionService!.ConnectionRepository,
-                IndexGenerator = ConnectionService.IndexGenerator,
-                GeoIpAddress = GeoIpService!.GeoIpAddress,
-                Logger = LoggerService!.ConnectionLogger,
-                Configuration = Configuration,
-                Connection = connection
-            };
+        left.RefuseConnection();
+    }
 
-            left.DisconnectConnection();
-        }
+    private void WriteFromConnectionDisconnect(object? sender, IConnection connection) {
+        var left = new LeftServer() {
+            ConnectionRepository = ConnectionService!.ConnectionRepository,
+            IndexGenerator = ConnectionService.IndexGenerator,
+            GeoIpAddress = GeoIpService!.GeoIpAddress,
+            Logger = LoggerService!.ConnectionLogger,
+            Configuration = Configuration,
+            Connection = connection
+        };
 
-        private async void Receive() {
-            var delay = Configuration!.Delay;
+        left.DisconnectConnection();
+    }
 
-            while (IsRunning) {
-                ServerListener!.Accept();
-                ServerListener!.Receive();
+    private async void Receive() {
+        var delay = Configuration!.Delay;
 
-                await Task.Delay(delay);
-            }
+        while (IsRunning) {
+            ServerListener!.Accept();
+            ServerListener!.Receive();
+
+            await Task.Delay(delay);
         }
     }
 }

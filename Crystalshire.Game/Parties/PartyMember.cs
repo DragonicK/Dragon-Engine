@@ -1,34 +1,34 @@
 ﻿using Crystalshire.Game.Players;
 
-namespace Crystalshire.Game.Parties {
-    public class PartyMember {
-        public int Index { get; set; }
-        public int Model { get; set; }
-        public long CharacterId { get; set; }
-        public string Character { get; set; }
-        public bool Disconnected { get; set; }
-        public IPlayer? Player { get; set; }
-        public int DisconnectionTimeOut { get; set; }
+namespace Crystalshire.Game.Parties;
 
-        public PartyMember() {
-            Character = string.Empty;
-        }
+public class PartyMember {
+    public int Index { get; set; }
+    public int Model { get; set; }
+    public long CharacterId { get; set; }
+    public string Character { get; set; }
+    public bool Disconnected { get; set; }
+    public IPlayer? Player { get; set; }
+    public int DisconnectionTimeOut { get; set; }
 
-        public void Clear() {
-            Index = 0;
-            Model = 0;
-            CharacterId = 0;
-            Character = string.Empty;
-            Disconnected = false;
-            Player = default;
-        }
+    public PartyMember() {
+        Character = string.Empty;
+    }
 
-        public PartyMember Clone() {
-            var clone = (PartyMember)MemberwiseClone();
+    public void Clear() {
+        Index = 0;
+        Model = 0;
+        CharacterId = 0;
+        Character = string.Empty;
+        Disconnected = false;
+        Player = default;
+    }
 
-            clone.Player = Player;
+    public PartyMember Clone() {
+        var clone = (PartyMember)MemberwiseClone();
 
-            return clone;
-        }
+        clone.Player = Player;
+
+        return clone;
     }
 }

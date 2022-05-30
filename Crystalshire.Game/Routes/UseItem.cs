@@ -5,44 +5,44 @@ using Crystalshire.Game.Services;
 using Crystalshire.Game.Players;
 using Crystalshire.Game.Manager;
 
-namespace Crystalshire.Game.Routes {
-    public sealed class UseItem {
-        public IConnection? Connection { get; set; }
-        public CpUseItem? Packet { get; set; }
-        public LoggerService? LoggerService { get; init; }
-        public ContentService? ContentService { get; init; }
-        public ConfigurationService? Configuration { get; init; }
-        public ConnectionService? ConnectionService { get; init; }
-        public PacketSenderService? PacketSenderService { get; init; }
+namespace Crystalshire.Game.Routes;
 
-        public void Process() {
-            var sender = PacketSenderService!.PacketSender;
-            var instances = PacketSenderService!.InstanceService;
-            var repository = ConnectionService!.PlayerRepository;
+public sealed class UseItem {
+    public IConnection? Connection { get; set; }
+    public CpUseItem? Packet { get; set; }
+    public LoggerService? LoggerService { get; init; }
+    public ContentService? ContentService { get; init; }
+    public ConfigurationService? Configuration { get; init; }
+    public ConnectionService? ConnectionService { get; init; }
+    public PacketSenderService? PacketSenderService { get; init; }
 
-            if (Connection is not null) {
-                var player = repository!.FindByConnectionId(Connection.Id);
+    public void Process() {
+        var sender = PacketSenderService!.PacketSender;
+        var instances = PacketSenderService!.InstanceService;
+        var repository = ConnectionService!.PlayerRepository;
 
-                if (player is not null) {
-                    var index = Packet!.InventoryIndex;
+        if (Connection is not null) {
+            var player = repository!.FindByConnectionId(Connection.Id);
 
-                    if (IsValidInventory(player, index)) {
-                        var manager = new ItemManager() {
-                            Player = player,
-                            PacketSender = sender,
-                            InstanceService = instances,
-                            Configuration = Configuration,
-                            ContentService = ContentService
-                        };
+            if (player is not null) {
+                var index = Packet!.InventoryIndex;
 
-                        manager.UseItem(index);
-                    }
+                if (IsValidInventory(player, index)) {
+                    var manager = new ItemManager() {
+                        Player = player,
+                        PacketSender = sender,
+                        InstanceService = instances,
+                        Configuration = Configuration,
+                        ContentService = ContentService
+                    };
+
+                    manager.UseItem(index);
                 }
             }
         }
+    }
 
-        private static bool IsValidInventory(IPlayer player, int index) {
-            return index >= 1 && index <= player.Character.MaximumInventories;
-        }
+    private static bool IsValidInventory(IPlayer player, int index) {
+        return index >= 1 && index <= player.Character.MaximumInventories;
     }
 }

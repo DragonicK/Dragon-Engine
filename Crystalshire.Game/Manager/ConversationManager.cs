@@ -8,197 +8,197 @@ using Crystalshire.Game.Network;
 using Crystalshire.Game.Services;
 using Crystalshire.Game.Instances;
 
-namespace Crystalshire.Game.Manager {
-    public class ConversationManager {
-        public IPlayer? Player { get; init; }
-        public IDatabase<Shop>? Shops { get; init; }
-        public IDatabase<Effect>? Effects { get; init; }
-        public IDatabase<Conversation>? Conversations { get; init; }
-        public IPacketSender? PacketSender { get; init; }
-        public InstanceService? InstanceService { get; init; }
+namespace Crystalshire.Game.Manager;
 
-        private const int FirstChatIndex = 0;
+public class ConversationManager {
+    public IPlayer? Player { get; init; }
+    public IDatabase<Shop>? Shops { get; init; }
+    public IDatabase<Effect>? Effects { get; init; }
+    public IDatabase<Conversation>? Conversations { get; init; }
+    public IPacketSender? PacketSender { get; init; }
+    public InstanceService? InstanceService { get; init; }
 
-        public void ProcessOptions(int id, int chatIndex, int option) {
-            var conversation = GetConversation(id);
+    private const int FirstChatIndex = 0;
 
-            if (conversation is not null) {
-                var count = conversation.ChatCount;
+    public void ProcessOptions(int id, int chatIndex, int option) {
+        var conversation = GetConversation(id);
 
-                if (count > 0 && chatIndex <= count) {
-                    chatIndex--;
+        if (conversation is not null) {
+            var count = conversation.ChatCount;
 
-                    var chat = conversation.Chats[chatIndex];
+            if (count > 0 && chatIndex <= count) {
+                chatIndex--;
 
-                    if (option != 0) {
-                        ContinueNextChatOptions(conversation, chat, id, option);
-                    } 
-                    else {
-                        ProcessFirstChat(chat, id);
-                    }                           
+                var chat = conversation.Chats[chatIndex];
+
+                if (option != 0) {
+                    ContinueNextChatOptions(conversation, chat, id, option);
+                }
+                else {
+                    ProcessFirstChat(chat, id);
                 }
             }
         }
+    }
 
-        private void ProcessFirstChat(Chat chat, int id) {
+    private void ProcessFirstChat(Chat chat, int id) {
+        if (chat.Event != ConversationEvent.Close) {
+            ExecuteEventAndCanMoveToNextChat(chat);
+
+            PacketSender!.SendConversationOption(Player!, id, FirstChatIndex);
+        }
+        else {
+            PacketSender!.SendConversationClose(Player!);
+        }
+    }
+
+    private void ContinueNextChatOptions(Conversation conversation, Chat chat, int id, int option) {
+        if (IsInRange(chat, option)) {
+            option--;
+
+            var chatIndex = GetNextChatIndex(chat, option);
+
+            chat = conversation.Chats[chatIndex];
+
             if (chat.Event != ConversationEvent.Close) {
-                ExecuteEventAndCanMoveToNextChat(chat);
-
-                PacketSender!.SendConversationOption(Player!, id, FirstChatIndex);
+                if (ExecuteEventAndCanMoveToNextChat(chat)) {
+                    PacketSender!.SendConversationOption(Player!, id, chatIndex);
+                }
             }
             else {
                 PacketSender!.SendConversationClose(Player!);
             }
         }
+    }
 
-        private void ContinueNextChatOptions(Conversation conversation, Chat chat, int id, int option) {
-            if (IsInRange(chat, option)) {
-                option--;
-                
-                var chatIndex = GetNextChatIndex(chat, option);
+    private bool ExecuteEventAndCanMoveToNextChat(Chat chat) {
+        var id = chat.Data1;
+        var param1 = chat.Data2;
+        var param2 = chat.Data3;
 
-                chat = conversation.Chats[chatIndex];
+        switch (chat.Event) {
+            case ConversationEvent.OpenShop:
+                PacketSender!.SendConversationClose(Player!);
 
-                if (chat.Event != ConversationEvent.Close) {
-                    if (ExecuteEventAndCanMoveToNextChat(chat)) {
-                        PacketSender!.SendConversationOption(Player!, id, chatIndex);
-                    }
+                var shop = GetShop(id);
+
+                if (shop is not null) {
+                    Player!.ShopId = id;
+                    PacketSender!.SendShopOpen(Player!, shop);
                 }
-                else {
-                    PacketSender!.SendConversationClose(Player!);
-                }
-            }
+
+                break;
+
+            case ConversationEvent.OpenBank:
+                Player!.IsWarehouseOpen = true;
+                PacketSender!.SendConversationClose(Player!);
+                PacketSender!.SendWarehouseOpen(Player!);
+
+                return false;
+
+            case ConversationEvent.OpenCraft:
+                PacketSender!.SendConversationClose(Player!);
+                PacketSender!.SendCraftOpen(Player!);
+
+                return false;
+
+            case ConversationEvent.OpenUpgrade:
+                PacketSender!.SendConversationClose(Player!);
+                PacketSender!.SendUpgradeOpen(Player!);
+
+                return false;
+
+            case ConversationEvent.GiveItem:
+
+                return false;
+
+            case ConversationEvent.GiveEffect:
+                PacketSender!.SendConversationClose(Player!);
+
+                ExecuteEffect(id, param1, param2);
+
+                return false;
+
+            case ConversationEvent.LearnCraft:
+                PacketSender!.SendConversationClose(Player!);
+
+                return false;
+
+            case ConversationEvent.StartQuest:
+                PacketSender!.SendConversationClose(Player!);
+
+                return false;
+
+            case ConversationEvent.ShowQuestReward:
+
+                return true;
+
+            case ConversationEvent.Teleport:
+                PacketSender!.SendConversationClose(Player!);
+
+                ExecuteWarp(id, param1, param2);
+
+                return false;
         }
 
-        private bool ExecuteEventAndCanMoveToNextChat(Chat chat) {
-            var id = chat.Data1;
-            var param1 = chat.Data2;
-            var param2 = chat.Data3;
+        return true;
+    }
 
-            switch (chat.Event) {
-                case ConversationEvent.OpenShop:
-                    PacketSender!.SendConversationClose(Player!);
+    private void ExecuteEffect(int id, int level, int duration) {
+        var manager = new GiveEffectManager() {
+            Effects = Effects,
+            PacketSender = PacketSender,
+            InstanceService = InstanceService
+        };
 
-                    var shop = GetShop(id);
+        manager.GiveEffect(Player!, id, level, duration);
+    }
 
-                    if (shop is not null) {
-                        Player!.ShopId = id;
-                        PacketSender!.SendShopOpen(Player!, shop);
-                    }
+    private void ExecuteWarp(int id, int x, int y) {
+        var instance = GetInstance(id);
 
-                    break;
-
-                case ConversationEvent.OpenBank:
-                    Player!.IsWarehouseOpen = true;
-                    PacketSender!.SendConversationClose(Player!);
-                    PacketSender!.SendWarehouseOpen(Player!);
-
-                    return false;
-
-                case ConversationEvent.OpenCraft:
-                    PacketSender!.SendConversationClose(Player!);
-                    PacketSender!.SendCraftOpen(Player!);
-
-                    return false;
-
-                case ConversationEvent.OpenUpgrade:
-                    PacketSender!.SendConversationClose(Player!);
-                    PacketSender!.SendUpgradeOpen(Player!);
-
-                    return false;
-
-                case ConversationEvent.GiveItem:
-
-                    return false;
-
-                case ConversationEvent.GiveEffect:
-                    PacketSender!.SendConversationClose(Player!);
-
-                    ExecuteEffect(id, param1, param2);
-
-                    return false;
-
-                case ConversationEvent.LearnCraft:
-                    PacketSender!.SendConversationClose(Player!);
-
-                    return false;
-
-                case ConversationEvent.StartQuest:
-                    PacketSender!.SendConversationClose(Player!);
-
-                    return false;
-
-                case ConversationEvent.ShowQuestReward:
-
-                    return true;
-
-                case ConversationEvent.Teleport:
-                    PacketSender!.SendConversationClose(Player!);
-
-                    ExecuteWarp(id, param1, param2);
-
-                    return false;        
-            }
-
-            return true;
-        }
-
-        private void ExecuteEffect(int id, int level, int duration) {
-            var manager = new GiveEffectManager() {
-                Effects = Effects,
+        if (instance is not null) {
+            var warper = new WarperManager() {
+                InstanceService = InstanceService,
                 PacketSender = PacketSender,
-                InstanceService = InstanceService
+                Player = Player
             };
 
-            manager.GiveEffect(Player!, id, level, duration);
+            warper.Warp(instance, x, y);
+        }
+    }
+
+    private bool IsInRange(Chat chat, int option) {
+        return option >= 1 && option <= chat.Reply.Count;
+    }
+
+    private int GetNextChatIndex(Chat chat, int option) {
+        return chat.Reply[option].Target - 1;
+    }
+
+    private Conversation? GetConversation(int id) {
+        if (Conversations is not null) {
+            return Conversations[id];
         }
 
-        private void ExecuteWarp(int id, int x, int y) {
-            var instance = GetInstance(id);
+        return null;
+    }
 
-            if (instance is not null) {
-                var warper = new WarperManager() {
-                    InstanceService = InstanceService,
-                    PacketSender = PacketSender,
-                    Player = Player
-                };
-
-                warper.Warp(instance, x, y);
-            }
+    private Shop? GetShop(int id) {
+        if (Shops is not null) {
+            return Shops[id];
         }
 
-        private bool IsInRange(Chat chat, int option) {
-            return option >= 1 && option <= chat.Reply.Count;
+        return null;
+    }
+
+    private IInstance? GetInstance(int instanceId) {
+        var instances = InstanceService!.Instances;
+
+        if (instances.ContainsKey(instanceId)) {
+            return instances[instanceId];
         }
 
-        private int GetNextChatIndex(Chat chat, int option) {
-            return chat.Reply[option].Target - 1;
-        }
-
-        private Conversation? GetConversation(int id) {
-            if (Conversations is not null) {
-                return Conversations[id];
-            }
-
-            return null;
-        }
-
-        private Shop? GetShop(int id) {
-            if (Shops is not null) {
-                return Shops[id];
-            }
-
-            return null;
-        }
-
-        private IInstance? GetInstance(int instanceId) {
-            var instances = InstanceService!.Instances;
-
-            if (instances.ContainsKey(instanceId)) {
-                return instances[instanceId];
-            }
-
-            return null;
-        }
+        return null;
     }
 }

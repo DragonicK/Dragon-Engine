@@ -1,7 +1,7 @@
-﻿using Crystalshire.Core.Model.Entity ;
+﻿using Crystalshire.Core.Model.Entity;
 
-namespace Crystalshire.Game.Combat.Formulas {
-    public interface IMathDodge {
-        bool CanDodgeAttack(IEntity attacker, IEntity receiver);
-    }
+namespace Crystalshire.Game.Combat.Formulas;
+
+public interface IMathDodge {
+    bool CanDodgeAttack(IEntity attacker, IEntity receiver);
 }

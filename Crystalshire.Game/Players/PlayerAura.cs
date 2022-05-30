@@ -1,49 +1,49 @@
 ﻿using Crystalshire.Core.Model.Characters;
 
-namespace Crystalshire.Game.Players {
-    public class PlayerAura : IPlayerAura {
-        public int Count => _auras.Count;
+namespace Crystalshire.Game.Players;
 
-        private const int Capacity = 32;
+public class PlayerAura : IPlayerAura {
+    public int Count => _auras.Count;
 
-        private readonly IList<CharacterAura> _auras;
+    private const int Capacity = 32;
 
-        public PlayerAura() {
-            _auras = new List<CharacterAura>(Capacity);
+    private readonly IList<CharacterAura> _auras;
+
+    public PlayerAura() {
+        _auras = new List<CharacterAura>(Capacity);
+    }
+
+    public void Add(int id, int level, int range) {
+        if (!Contains(id)) {
+            _auras.Add(new CharacterAura() {
+                Id = id,
+                Level = level,
+                Range = range
+            });
         }
+    }
 
-        public void Add(int id, int level, int range) {
-            if (!Contains(id)) {
-                _auras.Add(new CharacterAura() {
-                    Id = id,
-                    Level = level,
-                    Range = range
-                });
+    public bool Contains(int id) {
+        foreach (var aura in _auras) {
+            if (aura.Id == id) {
+                return true;
             }
         }
 
-        public bool Contains(int id) {
-            foreach (var aura in _auras) {
-                if (aura.Id == id) {
-                    return true;
-                }
-            }
+        return false;
+    }
 
-            return false;
-        }
+    public void Remove(int id) {
+        foreach (var aura in _auras) {
+            if (aura.Id == id) {
+                _auras.Remove(aura);
 
-        public void Remove(int id) {
-            foreach (var aura in _auras) {
-                if (aura.Id == id) {
-                    _auras.Remove(aura);
-
-                    break;
-                }
+                break;
             }
         }
+    }
 
-        public IList<CharacterAura> ToList() {
-            return _auras;
-        }
+    public IList<CharacterAura> ToList() {
+        return _auras;
     }
 }

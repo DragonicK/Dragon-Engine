@@ -5,45 +5,45 @@ using Crystalshire.Game.Services;
 using Crystalshire.Game.Players;
 using Crystalshire.Game.Manager;
 
-namespace Crystalshire.Game.Routes {
-    public sealed class WithdrawItem {
-        public IConnection? Connection { get; set; }
-        public CpWithdrawItem? Packet { get; set; }
-        public LoggerService? LoggerService { get; init; }
-        public ContentService? ContentService { get; init; }
-        public ConfigurationService? Configuration { get; init; }
-        public ConnectionService? ConnectionService { get; init; }
-        public PacketSenderService? PacketSenderService { get; init; }
+namespace Crystalshire.Game.Routes;
 
-        public void Process() {
-            if (Packet!.Amount <= 0) {
-                return;
-            }
+public sealed class WithdrawItem {
+    public IConnection? Connection { get; set; }
+    public CpWithdrawItem? Packet { get; set; }
+    public LoggerService? LoggerService { get; init; }
+    public ContentService? ContentService { get; init; }
+    public ConfigurationService? Configuration { get; init; }
+    public ConnectionService? ConnectionService { get; init; }
+    public PacketSenderService? PacketSenderService { get; init; }
 
-            var sender = PacketSenderService!.PacketSender;
-            var repository = ConnectionService!.PlayerRepository;
+    public void Process() {
+        if (Packet!.Amount <= 0) {
+            return;
+        }
 
-            if (Connection is not null) {
-                var player = repository!.FindByConnectionId(Connection.Id);
+        var sender = PacketSenderService!.PacketSender;
+        var repository = ConnectionService!.PlayerRepository;
 
-                if (player is not null) {
-                    var index = Packet!.WarehouseIndex;
+        if (Connection is not null) {
+            var player = repository!.FindByConnectionId(Connection.Id);
 
-                    if (IsValidInventory(player, index)) {
-                        var manager = new WarehouseManager() {
-                            Player = player,
-                            PacketSender = sender,
-                            Items = ContentService!.Items
-                        };
+            if (player is not null) {
+                var index = Packet!.WarehouseIndex;
 
-                        manager.Withdraw(index, Packet!.Amount);
-                    }
+                if (IsValidInventory(player, index)) {
+                    var manager = new WarehouseManager() {
+                        Player = player,
+                        PacketSender = sender,
+                        Items = ContentService!.Items
+                    };
+
+                    manager.Withdraw(index, Packet!.Amount);
                 }
             }
         }
+    }
 
-        private static bool IsValidInventory(IPlayer player, int index) {
-            return index >= 1 && index <= player.Character.MaximumWarehouse;
-        }
+    private static bool IsValidInventory(IPlayer player, int index) {
+        return index >= 1 && index <= player.Character.MaximumWarehouse;
     }
 }

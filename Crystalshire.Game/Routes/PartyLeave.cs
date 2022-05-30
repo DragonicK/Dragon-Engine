@@ -5,45 +5,45 @@ using Crystalshire.Game.Players;
 using Crystalshire.Game.Manager;
 using Crystalshire.Game.Services;
 
-namespace Crystalshire.Game.Routes {
-    public sealed class PartyLeave {
-        public IConnection? Connection { get; set; }
-        public PacketPartyLeave? Packet { get; set; }
-        public InstanceService? InstanceService { get; set; }
-        public PacketSenderService? PacketSenderService { get; set; }
-        public ConnectionService? ConnectionService { get; set; }
+namespace Crystalshire.Game.Routes;
 
-        public void Process() {
-            var sender = PacketSenderService!.PacketSender;
-            var repository = ConnectionService!.PlayerRepository;
+public sealed class PartyLeave {
+    public IConnection? Connection { get; set; }
+    public PacketPartyLeave? Packet { get; set; }
+    public InstanceService? InstanceService { get; set; }
+    public PacketSenderService? PacketSenderService { get; set; }
+    public ConnectionService? ConnectionService { get; set; }
 
-            if (Connection is not null) {
-                var player = repository!.FindByConnectionId(Connection.Id);
+    public void Process() {
+        var sender = PacketSenderService!.PacketSender;
+        var repository = ConnectionService!.PlayerRepository;
 
-                if (player is not null) {
-                    var party = GetPartyManager(player);
+        if (Connection is not null) {
+            var player = repository!.FindByConnectionId(Connection.Id);
 
-                    if (party is not null) {
+            if (player is not null) {
+                var party = GetPartyManager(player);
 
-                        var manager = new PartyLeaveManager() {
-                            PacketSender = sender
-                        };
+                if (party is not null) {
 
-                        manager.ProcessLeaveRequest(party, player);
-                    }
+                    var manager = new PartyLeaveManager() {
+                        PacketSender = sender
+                    };
+
+                    manager.ProcessLeaveRequest(party, player);
                 }
             }
         }
+    }
 
-        private PartyManager? GetPartyManager(IPlayer player) {
-            var id = player.PartyId;
-            var parties = InstanceService!.Parties;
+    private PartyManager? GetPartyManager(IPlayer player) {
+        var id = player.PartyId;
+        var parties = InstanceService!.Parties;
 
-            if (parties.ContainsKey(id)) {
-                return parties[id];
-            }
-
-            return null;
+        if (parties.ContainsKey(id)) {
+            return parties[id];
         }
+
+        return null;
     }
 }

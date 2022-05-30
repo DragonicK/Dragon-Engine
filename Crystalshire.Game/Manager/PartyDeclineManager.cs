@@ -4,38 +4,38 @@ using Crystalshire.Game.Players;
 using Crystalshire.Game.Network;
 using Crystalshire.Game.Parties;
 
-namespace Crystalshire.Game.Manager {
-    public class PartyDeclineManager {
-        public IPacketSender? PacketSender { get; init; }
+namespace Crystalshire.Game.Manager;
 
-        public void ProcessDeclineRequest(PartyManager party, IPlayer player) {
-            var leader = party.GetLeader();
+public class PartyDeclineManager {
+    public IPacketSender? PacketSender { get; init; }
 
-            if (leader is not null) {
-                var parameters = new string[] { player.Character.Name };
+    public void ProcessDeclineRequest(PartyManager party, IPlayer player) {
+        var leader = party.GetLeader();
 
-                PacketSender!.SendMessage(SystemMessage.PlayerDeclinedPartyRequest, QbColor.BrigthRed, leader, parameters);
+        if (leader is not null) {
+            var parameters = new string[] { player.Character.Name };
 
-                if (party.InvitedMembers.Count == 1 && party.State == PartyState.Waiting) {
-                    party.State = PartyState.Disbanded;
+            PacketSender!.SendMessage(SystemMessage.PlayerDeclinedPartyRequest, QbColor.BrigthRed, leader, parameters);
 
-                    leader.PartyId = 0;
-                    leader.PartyInvitedId = 0;
-                }
+            if (party.InvitedMembers.Count == 1 && party.State == PartyState.Waiting) {
+                party.State = PartyState.Disbanded;
+
+                leader.PartyId = 0;
+                leader.PartyInvitedId = 0;
             }
-
-            for (var i = 0; i < party.InvitedMembers.Count; ++i) {
-                var member = party.InvitedMembers[i];
-
-                if (member.Player == player) {
-                    member.CouldBeRemoved = true;
-                } 
-            }
-
-            player.PartyId = 0;
-            player.PartyInvitedId = 0;
-
-            PacketSender!.SendMessage(SystemMessage.YouDeclinedPartyRequest, QbColor.BrigthRed, player);
         }
+
+        for (var i = 0; i < party.InvitedMembers.Count; ++i) {
+            var member = party.InvitedMembers[i];
+
+            if (member.Player == player) {
+                member.CouldBeRemoved = true;
+            }
+        }
+
+        player.PartyId = 0;
+        player.PartyInvitedId = 0;
+
+        PacketSender!.SendMessage(SystemMessage.YouDeclinedPartyRequest, QbColor.BrigthRed, player);
     }
 }

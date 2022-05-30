@@ -1,43 +1,43 @@
 ﻿using Crystalshire.Core.Logs;
 using Crystalshire.Core.Services;
 
-namespace Crystalshire.Login.Services {
-    public class LoggerService : IService {
-        public ServicePriority Priority => ServicePriority.High;
-        public ILogger? ConnectionLogger { get; private set; }
-        public ILogger? ServerLogger { get; private set; }
-        public ConfigurationService? Configuration { get; private set; }
+namespace Crystalshire.Login.Services;
 
-        public void Start() {
-            const string Folder = "./Server/Logs/";
+public class LoggerService : IService {
+    public ServicePriority Priority => ServicePriority.High;
+    public ILogger? ConnectionLogger { get; private set; }
+    public ILogger? ServerLogger { get; private set; }
+    public ConfigurationService? Configuration { get; private set; }
 
-            var connection = Configuration is not null && Configuration.ConnectionLogs;
-            var server = Configuration is not null && Configuration.ServerLogs;
+    public void Start() {
+        const string Folder = "./Server/Logs/";
 
-            ConnectionLogger = new Logger("Connection", Folder, connection);
+        var connection = Configuration is not null && Configuration.ConnectionLogs;
+        var server = Configuration is not null && Configuration.ServerLogs;
 
-            if (connection) {
-                var error = ConnectionLogger.Open();
+        ConnectionLogger = new Logger("Connection", Folder, connection);
 
-                if (!ConnectionLogger.Opened) {
-                    OutputLog.Write(error);
-                }
-            }
+        if (connection) {
+            var error = ConnectionLogger.Open();
 
-            ServerLogger = new Logger("Server", Folder, server);
-
-            if (server) {
-                var error = ServerLogger.Open();
-
-                if (!ServerLogger.Opened) {
-                    OutputLog.Write(error);
-                }
+            if (!ConnectionLogger.Opened) {
+                OutputLog.Write(error);
             }
         }
 
-        public void Stop() {
-            ConnectionLogger?.Close();
-            ServerLogger?.Close();
+        ServerLogger = new Logger("Server", Folder, server);
+
+        if (server) {
+            var error = ServerLogger.Open();
+
+            if (!ServerLogger.Opened) {
+                OutputLog.Write(error);
+            }
         }
+    }
+
+    public void Stop() {
+        ConnectionLogger?.Close();
+        ServerLogger?.Close();
     }
 }

@@ -1,15 +1,15 @@
-﻿namespace Crystalshire.Network {
-    public class NodeIpAddress : IpAddress {
-        public int Id { get; set; }
-        public string Name { get; set; }
+﻿namespace Crystalshire.Network;
 
-        public NodeIpAddress() : base() {
-            Name = string.Empty;
-        }
+public class NodeIpAddress : IpAddress {
+    public int Id { get; set; }
+    public string Name { get; set; }
 
-        public NodeIpAddress(int id, string name, string ipAddress, int port) : base(ipAddress, port) {
-            Id = id;
-            Name = name;
-        }
+    public NodeIpAddress() : base() {
+        Name = string.Empty;
+    }
+
+    public NodeIpAddress(int id, string name, string ipAddress, int port) : base(ipAddress, port) {
+        Id = id;
+        Name = name;
     }
 }

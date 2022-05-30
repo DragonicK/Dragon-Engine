@@ -2,37 +2,37 @@
 
 using System.Reflection;
 
-namespace Crystalshire.Game.Administrator {
-    public class CommandRepository : ICommandRepository {
-        private readonly Dictionary<AdministratorCommands, Type> commands;
+namespace Crystalshire.Game.Administrator;
 
-        public Type? GetType(AdministratorCommands command) {
-            if (commands.ContainsKey(command)) {
-                return commands[command];
-            }
+public class CommandRepository : ICommandRepository {
+    private readonly Dictionary<AdministratorCommands, Type> commands;
 
-            return null;
+    public Type? GetType(AdministratorCommands command) {
+        if (commands.ContainsKey(command)) {
+            return commands[command];
         }
 
-        public CommandRepository() {
-            commands = new Dictionary<AdministratorCommands, Type>();
+        return null;
+    }
 
-            var assembly = Assembly.GetExecutingAssembly();
+    public CommandRepository() {
+        commands = new Dictionary<AdministratorCommands, Type>();
 
-            var types = assembly
-                .GetTypes()
-                .Where(t => t.GetInterface("IAdministratorCommand") is not null)
-                .ToArray();
+        var assembly = Assembly.GetExecutingAssembly();
 
-            foreach (var type in types) {
-                var instance = Activator.CreateInstance(type) as IAdministratorCommand;
+        var types = assembly
+            .GetTypes()
+            .Where(t => t.GetInterface("IAdministratorCommand") is not null)
+            .ToArray();
 
-                if (instance is not null) {
-                    var header = type.GetRuntimeProperty("Command")?.GetValue(instance);
+        foreach (var type in types) {
+            var instance = Activator.CreateInstance(type) as IAdministratorCommand;
 
-                    if (header is not null) {
-                        commands.Add((AdministratorCommands)header, type);
-                    }
+            if (instance is not null) {
+                var header = type.GetRuntimeProperty("Command")?.GetValue(instance);
+
+                if (header is not null) {
+                    commands.Add((AdministratorCommands)header, type);
                 }
             }
         }

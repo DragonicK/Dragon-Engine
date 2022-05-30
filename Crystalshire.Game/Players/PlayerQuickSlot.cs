@@ -1,56 +1,56 @@
 ﻿using Crystalshire.Core.Model;
 using Crystalshire.Core.Model.Characters;
 
-namespace Crystalshire.Game.Players {
-    public class PlayerQuickSlot : IPlayerQuickSlot {
-        private readonly IList<CharacterQuickSlot> _slots;
-        private readonly long _characterId;
+namespace Crystalshire.Game.Players;
 
-        public PlayerQuickSlot(long characterId, IList<CharacterQuickSlot> slots) {
-            _slots = slots;
-            _characterId = characterId;
+public class PlayerQuickSlot : IPlayerQuickSlot {
+    private readonly IList<CharacterQuickSlot> _slots;
+    private readonly long _characterId;
+
+    public PlayerQuickSlot(long characterId, IList<CharacterQuickSlot> slots) {
+        _slots = slots;
+        _characterId = characterId;
+    }
+
+    public void Change(int index, QuickSlotType type, int value) {
+        var slot = Get(index);
+
+        if (slot is null) {
+            slot = new CharacterQuickSlot() {
+                CharacterId = _characterId,
+            };
+
+            _slots.Add(slot);
         }
 
-        public void Change(int index, QuickSlotType type, int value) {
-            var slot = Get(index);
+        slot.QuickSlotIndex = index;
+        slot.ObjectType = type;
+        slot.ObjectValue = value;
+    }
 
-            if (slot is null) {
-                slot = new CharacterQuickSlot() {
-                    CharacterId = _characterId,
+    public void Swap(int source, int destination) {
+        var _source = Get(source);
+        var _destination = Get(destination);
+
+        if (_source is not null) {
+            if (_destination is null) {
+                _destination = new CharacterQuickSlot() {
+                    CharacterId = _characterId
                 };
 
-                _slots.Add(slot);
+                _slots.Add(_destination);
             }
 
-            slot.QuickSlotIndex = index;
-            slot.ObjectType = type;
-            slot.ObjectValue = value;
+            _source.QuickSlotIndex = destination;
+            _destination.QuickSlotIndex = source;
         }
+    }
 
-        public void Swap(int source, int destination) {
-            var _source = Get(source);
-            var _destination = Get(destination);
+    public CharacterQuickSlot? Get(int index) {
+        return _slots.FirstOrDefault(p => p.QuickSlotIndex == index);
+    }
 
-            if (_source is not null) {
-                if (_destination is null) {
-                    _destination = new CharacterQuickSlot() {
-                        CharacterId = _characterId
-                    };
-
-                    _slots.Add(_destination);
-                }
-
-                _source.QuickSlotIndex = destination;
-                _destination.QuickSlotIndex = source;
-            }
-        }
-
-        public CharacterQuickSlot? Get(int index) {
-            return _slots.FirstOrDefault(p => p.QuickSlotIndex == index);
-        }
-
-        public IList<CharacterQuickSlot> ToList() {
-            return _slots;
-        }
+    public IList<CharacterQuickSlot> ToList() {
+        return _slots;
     }
 }

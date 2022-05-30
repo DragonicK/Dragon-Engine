@@ -1,75 +1,75 @@
 ﻿using Crystalshire.Model.Models;
 
-namespace Crystalshire.Model.Forms {
-    public partial class FormDirection : Form {
-        public  Directions Directions { get; }
-        public FormFrames UpFrames { get; private set; }
-        public FormFrames DownFrames { get; private set; }
-        public FormFrames LeftFrames { get; private set; }
-        public FormFrames RightFrames { get; private set; }
+namespace Crystalshire.Model.Forms;
 
-        public FormDirection(Directions directions, bool isDefault) {
-            InitializeComponent();
+public partial class FormDirection : Form {
+    public Directions Directions { get; }
+    public FormFrames UpFrames { get; private set; }
+    public FormFrames DownFrames { get; private set; }
+    public FormFrames LeftFrames { get; private set; }
+    public FormFrames RightFrames { get; private set; }
 
-            Directions = directions;    
+    public FormDirection(Directions directions, bool isDefault) {
+        InitializeComponent();
 
-            if (isDefault) {
-                TextId.Enabled = false;
-                TextName.Enabled = false;
-            }
+        Directions = directions;
 
-            TextId.Text = directions.Id.ToString();
-            TextName.Text = directions.Name;
-            GroupDirections.Text = directions.Name;
-
-            UpFrames = new FormFrames(directions.Up);
-            DownFrames = new FormFrames(directions.Down);
-            LeftFrames = new FormFrames(directions.Left);
-            RightFrames = new FormFrames(directions.Right);
+        if (isDefault) {
+            TextId.Enabled = false;
+            TextName.Enabled = false;
         }
 
-        private void ButtonUp_Click(object sender, EventArgs e) {
-            if (UpFrames.IsDisposed) {
-                UpFrames = new FormFrames(Directions.Up);
-            }
+        TextId.Text = directions.Id.ToString();
+        TextName.Text = directions.Name;
+        GroupDirections.Text = directions.Name;
 
-            UpFrames.Show();
+        UpFrames = new FormFrames(directions.Up);
+        DownFrames = new FormFrames(directions.Down);
+        LeftFrames = new FormFrames(directions.Left);
+        RightFrames = new FormFrames(directions.Right);
+    }
+
+    private void ButtonUp_Click(object sender, EventArgs e) {
+        if (UpFrames.IsDisposed) {
+            UpFrames = new FormFrames(Directions.Up);
         }
 
-        private void ButtonLeft_Click(object sender, EventArgs e) {
-            if (LeftFrames.IsDisposed) {
-                LeftFrames = new FormFrames(Directions.Left);
-            }
+        UpFrames.Show();
+    }
 
-            LeftFrames.Show();
+    private void ButtonLeft_Click(object sender, EventArgs e) {
+        if (LeftFrames.IsDisposed) {
+            LeftFrames = new FormFrames(Directions.Left);
         }
 
-        private void ButtonRight_Click(object sender, EventArgs e) {
-            if (RightFrames.IsDisposed) {
-                RightFrames = new FormFrames(Directions.Right);
-            }
+        LeftFrames.Show();
+    }
 
-            RightFrames.Show();
+    private void ButtonRight_Click(object sender, EventArgs e) {
+        if (RightFrames.IsDisposed) {
+            RightFrames = new FormFrames(Directions.Right);
         }
 
-        private void ButtonDown_Click(object sender, EventArgs e) {
-            if (DownFrames.IsDisposed) {
-                DownFrames = new FormFrames(Directions.Down);
-            }
+        RightFrames.Show();
+    }
 
-            DownFrames.Show();
+    private void ButtonDown_Click(object sender, EventArgs e) {
+        if (DownFrames.IsDisposed) {
+            DownFrames = new FormFrames(Directions.Down);
         }
 
-        private void TextId_TextChanged(object sender, EventArgs e) {
-            if (Directions is not null) {
-                Directions.Id = Util.GetValue((TextBox)sender);
-            }
-        }
+        DownFrames.Show();
+    }
 
-        private void TextName_TextChanged(object sender, EventArgs e) {
-            if (Directions is not null) {
-                Directions.Name = ((TextBox)sender).Text;
-            }
+    private void TextId_TextChanged(object sender, EventArgs e) {
+        if (Directions is not null) {
+            Directions.Id = Util.GetValue((TextBox)sender);
+        }
+    }
+
+    private void TextName_TextChanged(object sender, EventArgs e) {
+        if (Directions is not null) {
+            Directions.Name = ((TextBox)sender).Text;
         }
     }
 }

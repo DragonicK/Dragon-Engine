@@ -4,60 +4,60 @@ using Crystalshire.Game.Parties;
 using Crystalshire.Game.Players;
 using Crystalshire.Game.Network;
 
-namespace Crystalshire.Game.Manager {
-    public class PartyAcceptManager {
-        public IPacketSender? PacketSender { get; init; }
+namespace Crystalshire.Game.Manager;
 
-        public void ProcessAcceptRequest(PartyManager party, IPlayer player) {
-            var invitation = FindInvitation(party, player);
+public class PartyAcceptManager {
+    public IPacketSender? PacketSender { get; init; }
 
-            if (invitation is not null) {
-                party.State = PartyState.Created;
+    public void ProcessAcceptRequest(PartyManager party, IPlayer player) {
+        var invitation = FindInvitation(party, player);
 
-                invitation.CouldBeRemoved = true;
+        if (invitation is not null) {
+            party.State = PartyState.Created;
 
-                if (party.Members.Count == 1) {
-                    var leader = party.GetLeader();
+            invitation.CouldBeRemoved = true;
 
-                    if (leader is not null) {
-                        PacketSender!.SendMessage(SystemMessage.PartyCreated, QbColor.BrigthGreen, leader);
-                    }
-                }
+            if (party.Members.Count == 1) {
+                var leader = party.GetLeader();
 
-                var index = party.Members.Count + 1;
-
-                party.Members.Add(new PartyMember() {
-                    Character = player.Character.Name,
-                    CharacterId = player.Character.CharacterId,
-                    Model = player.Character.Model,
-                    Player = player,
-                    Index = index
-                });
-
-                player.PartyId = party.Id;
-                player.PartyInvitedId = 0;
-
-                PacketSender!.SendMessage(SystemMessage.YouJoinedParty, QbColor.BrigthGreen, player);
-                PacketSender!.SendParty(party);
-
-                foreach (var member in party.Members) {
-                    if (member.Player is not null) {
-                        PacketSender!.SendPartyDisplayIcons(member.Player);
-                    }
-                }
-            }
-        }
-
-        private PartyInvitedMember? FindInvitation(PartyManager party, IPlayer player) {
-            for (var i = 0; i < party.InvitedMembers.Count; ++i) {
-                var member = party.InvitedMembers[i];
-
-                if (member.Player == player) {
-                    return member;
+                if (leader is not null) {
+                    PacketSender!.SendMessage(SystemMessage.PartyCreated, QbColor.BrigthGreen, leader);
                 }
             }
 
-            return null;
+            var index = party.Members.Count + 1;
+
+            party.Members.Add(new PartyMember() {
+                Character = player.Character.Name,
+                CharacterId = player.Character.CharacterId,
+                Model = player.Character.Model,
+                Player = player,
+                Index = index
+            });
+
+            player.PartyId = party.Id;
+            player.PartyInvitedId = 0;
+
+            PacketSender!.SendMessage(SystemMessage.YouJoinedParty, QbColor.BrigthGreen, player);
+            PacketSender!.SendParty(party);
+
+            foreach (var member in party.Members) {
+                if (member.Player is not null) {
+                    PacketSender!.SendPartyDisplayIcons(member.Player);
+                }
+            }
         }
+    }
+
+    private PartyInvitedMember? FindInvitation(PartyManager party, IPlayer player) {
+        for (var i = 0; i < party.InvitedMembers.Count; ++i) {
+            var member = party.InvitedMembers[i];
+
+            if (member.Player == player) {
+                return member;
+            }
+        }
+
+        return null;
     }
 }

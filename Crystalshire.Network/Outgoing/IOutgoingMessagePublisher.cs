@@ -1,8 +1,7 @@
-﻿
-namespace Crystalshire.Network.Outgoing {
-    public interface IOutgoingMessagePublisher {
-        IConnectionRepository ConnectionRepository { get; }
+﻿namespace Crystalshire.Network.Outgoing;
 
-        void Broadcast(TransmissionTarget transmissionPeer, IList<int> destination, int exceptDestination, byte[] buffer);
-    }
+public interface IOutgoingMessagePublisher {
+    IConnectionRepository ConnectionRepository { get; }
+
+    void Broadcast(TransmissionTarget transmissionPeer, IList<int> destination, int exceptDestination, byte[] buffer);
 }

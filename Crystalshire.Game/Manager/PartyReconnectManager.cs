@@ -5,50 +5,50 @@ using Crystalshire.Game.Network;
 using Crystalshire.Game.Services;
 using Crystalshire.Game.Parties;
 
-namespace Crystalshire.Game.Manager {
-    public class PartyReconnectManager {
-        public IPacketSender? PacketSender { get; init; }
-        public InstanceService? InstanceService { get; init; }
-        public IPlayer? Player { get; init; }
+namespace Crystalshire.Game.Manager;
 
-        public void Reconnect() {
-            if (Player is not null) {
-                var parties = InstanceService!.Parties;
+public class PartyReconnectManager {
+    public IPacketSender? PacketSender { get; init; }
+    public InstanceService? InstanceService { get; init; }
+    public IPlayer? Player { get; init; }
 
-                foreach (var (id, party) in parties) {
-                    var member = party.FindDisconnectedMember(Player);
+    public void Reconnect() {
+        if (Player is not null) {
+            var parties = InstanceService!.Parties;
 
-                    if (member is not null) {
-                        Player.PartyId = id;
+            foreach (var (id, party) in parties) {
+                var member = party.FindDisconnectedMember(Player);
 
-                        member.Player = Player;
-                        member.Disconnected = false;
-                        member.DisconnectionTimeOut = 0;
+                if (member is not null) {
+                    Player.PartyId = id;
 
-                        PacketSender!.SendParty(party);
+                    member.Player = Player;
+                    member.Disconnected = false;
+                    member.DisconnectionTimeOut = 0;
 
-                        foreach (var _member in party.Members) {
-                            if (_member.Player is not null) {
-                                PacketSender!.SendPartyDisplayIcons(_member.Player);
-                            }
+                    PacketSender!.SendParty(party);
+
+                    foreach (var _member in party.Members) {
+                        if (_member.Player is not null) {
+                            PacketSender!.SendPartyDisplayIcons(_member.Player);
                         }
-
-                        SendReconnectedMessage(party, member);
                     }
+
+                    SendReconnectedMessage(party, member);
                 }
             }
-        } 
+        }
+    }
 
-        private void SendReconnectedMessage(PartyManager party, PartyMember except) {
-            var parameters = new string[] { except.Character };
+    private void SendReconnectedMessage(PartyManager party, PartyMember except) {
+        var parameters = new string[] { except.Character };
 
-            var members = party.Members;
+        var members = party.Members;
 
-            foreach (var member in members) {
-                if (member != except) {
-                    if (member.Player is not null) {
-                        PacketSender!.SendMessage(SystemMessage.PlayerPartyReconnected, QbColor.BrigthGreen, member.Player, parameters);
-                    }
+        foreach (var member in members) {
+            if (member != except) {
+                if (member.Player is not null) {
+                    PacketSender!.SendMessage(SystemMessage.PlayerPartyReconnected, QbColor.BrigthGreen, member.Player, parameters);
                 }
             }
         }

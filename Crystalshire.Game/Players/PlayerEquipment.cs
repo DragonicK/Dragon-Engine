@@ -7,221 +7,221 @@ using Crystalshire.Core.Model.Equipments;
 using Crystalshire.Core.Model.Attributes;
 using Crystalshire.Core.Model.EquipmentSets;
 
-namespace Crystalshire.Game.Players {
-    public class PlayerEquipment : IPlayerEquipment {
-        public IEntityAttribute Attributes { get; }
-        public IDatabase<Item>? Items { get; set; }
-        public IDatabase<Equipment>? Equipments { get; set; }
-        public IDatabase<GroupAttribute>? EquipmentAttributes { get; set; }
-        public IDatabase<GroupAttribute>? EquipmentUpgrades { get; set; }
-        public IDatabase<EquipmentSet>? EquipmentSets { get; set; }
-        public IDatabase<GroupAttribute>? EquipmentSetAttributes { get; set; }
+namespace Crystalshire.Game.Players;
 
-        private readonly IList<CharacterEquipment> _equipments;
-        private readonly Dictionary<int, EquipmentSetCount> _equipmentSets;
-        private readonly long _characterId;
+public class PlayerEquipment : IPlayerEquipment {
+    public IEntityAttribute Attributes { get; }
+    public IDatabase<Item>? Items { get; set; }
+    public IDatabase<Equipment>? Equipments { get; set; }
+    public IDatabase<GroupAttribute>? EquipmentAttributes { get; set; }
+    public IDatabase<GroupAttribute>? EquipmentUpgrades { get; set; }
+    public IDatabase<EquipmentSet>? EquipmentSets { get; set; }
+    public IDatabase<GroupAttribute>? EquipmentSetAttributes { get; set; }
 
-        public PlayerEquipment(long characterId, IList<CharacterEquipment> equipments) {
-            _equipments = equipments;
-            _characterId = characterId;
+    private readonly IList<CharacterEquipment> _equipments;
+    private readonly Dictionary<int, EquipmentSetCount> _equipmentSets;
+    private readonly long _characterId;
 
-            _equipmentSets = new Dictionary<int, EquipmentSetCount>();
+    public PlayerEquipment(long characterId, IList<CharacterEquipment> equipments) {
+        _equipments = equipments;
+        _characterId = characterId;
 
-            Attributes = new EntityAttribute();
+        _equipmentSets = new Dictionary<int, EquipmentSetCount>();
+
+        Attributes = new EntityAttribute();
+    }
+
+    public CharacterEquipment? Get(PlayerEquipmentType index) {
+        var selected = _equipments.FirstOrDefault(p => p.InventoryIndex == index);
+
+        if (selected is null) {
+            selected = new CharacterEquipment() {
+                InventoryIndex = index,
+                CharacterId = _characterId
+            };
+
+            _equipments.Add(selected);
         }
 
-        public CharacterEquipment? Get(PlayerEquipmentType index) {
-            var selected = _equipments.FirstOrDefault(p => p.InventoryIndex == index);
+        return selected;
+    }
 
-            if (selected is null) {
-                selected = new CharacterEquipment() {
-                    InventoryIndex = index,
-                    CharacterId = _characterId
-                };
+    public bool IsEquipped(PlayerEquipmentType index) {
+        var selected = _equipments.FirstOrDefault(p => p.InventoryIndex == index);
 
-                _equipments.Add(selected);
-            }
-
-            return selected;
+        if (selected is not null) {
+            return selected.ItemId > 0;
         }
 
-        public bool IsEquipped(PlayerEquipmentType index) {
-            var selected = _equipments.FirstOrDefault(p => p.InventoryIndex == index);
+        return false;
+    }
 
-            if (selected is not null) {
-                return selected.ItemId > 0;
-            }
+    public void Equip(PlayerEquipmentType index, CharacterInventory inventory) {
+        var selected = _equipments.FirstOrDefault(p => p.InventoryIndex == index);
 
-            return false;
+        if (selected is null) {
+            selected = new CharacterEquipment();
+            _equipments.Add(selected);
         }
 
-        public void Equip(PlayerEquipmentType index, CharacterInventory inventory) {
-            var selected = _equipments.FirstOrDefault(p => p.InventoryIndex == index);
+        selected.Apply(inventory);
 
-            if (selected is null) {
-                selected = new CharacterEquipment();
-                _equipments.Add(selected);
-            }
+        selected.InventoryIndex = index;
+        selected.CharacterId = _characterId;
 
-            selected.Apply(inventory);
+        CheckForBindItem(selected);
 
-            selected.InventoryIndex = index;
-            selected.CharacterId = _characterId;
+        IncreaseEquipmentSet(selected);
 
-            CheckForBindItem(selected);
+        Attributes.Clear();
 
-            IncreaseEquipmentSet(selected);
+        UpdateEquipmentSetAttributes();
+        UpdateEquipmentAttributes();
+    }
+
+    public void Unequip(PlayerEquipmentType index) {
+        var selected = _equipments.FirstOrDefault(p => p.InventoryIndex == index);
+
+        if (selected is not null) {
+            DecreaseEquipmentSet(selected);
+
+            selected.Clear();
 
             Attributes.Clear();
 
             UpdateEquipmentSetAttributes();
             UpdateEquipmentAttributes();
         }
+    }
 
-        public void Unequip(PlayerEquipmentType index) {
-            var selected = _equipments.FirstOrDefault(p => p.InventoryIndex == index);
+    public void UpdateAttributes() {
+        Attributes.Clear();
 
-            if (selected is not null) {
-                DecreaseEquipmentSet(selected);
-
-                selected.Clear();
-         
-                Attributes.Clear();
-
-                UpdateEquipmentSetAttributes();
-                UpdateEquipmentAttributes();
-            }
+        foreach (var equipment in _equipments) {
+            IncreaseEquipmentSet(equipment);
         }
 
-        public void UpdateAttributes() {
-            Attributes.Clear();
+        UpdateEquipmentSetAttributes();
+        UpdateEquipmentAttributes();
+    }
 
-            foreach (var equipment in _equipments) {
-                IncreaseEquipmentSet(equipment);
+    private void IncreaseEquipmentSet(CharacterEquipment inventory) {
+        var item = Items![inventory.ItemId];
+        var equipmentId = item!.EquipmentId;
+
+        if (Equipments!.Contains(equipmentId)) {
+            var equipment = Equipments[equipmentId]!;
+            var id = equipment.EquipmentSetId;
+
+            if (id > 0) {
+                IncreaseEquipmentSet(id);
             }
-
-            UpdateEquipmentSetAttributes();
-            UpdateEquipmentAttributes();
         }
+    }
 
-        private void IncreaseEquipmentSet(CharacterEquipment inventory) {
-            var item = Items![inventory.ItemId];
-            var equipmentId = item!.EquipmentId;
+    private void DecreaseEquipmentSet(CharacterEquipment inventory) {
+        var item = Items![inventory.ItemId];
+        var equipmentId = item!.EquipmentId;
 
-            if (Equipments!.Contains(equipmentId)) {
-                var equipment = Equipments[equipmentId]!;
-                var id = equipment.EquipmentSetId;
+        if (Equipments!.Contains(equipmentId)) {
+            var equipment = Equipments[equipmentId]!;
+            var id = equipment.EquipmentSetId;
 
-                if (id > 0) {
-                    IncreaseEquipmentSet(id);
+            if (id > 0) {
+                DecreaseEquipmentSet(id);
+            }
+        }
+    }
+
+    private void IncreaseEquipmentSet(int id) {
+        if (_equipmentSets.ContainsKey(id)) {
+            var value = _equipmentSets[id];
+            _equipmentSets[id] = ++value;
+        }
+        else {
+            _equipmentSets[id] = EquipmentSetCount.One;
+        }
+    }
+
+    private void DecreaseEquipmentSet(int id) {
+        if (_equipmentSets.ContainsKey(id)) {
+            var value = _equipmentSets[id];
+
+            if (value > EquipmentSetCount.None) {
+                _equipmentSets[id] = --value;
+
+                if (_equipmentSets[id] == EquipmentSetCount.None) {
+                    _equipmentSets.Remove(id);
                 }
             }
         }
+    }
 
-        private void DecreaseEquipmentSet(CharacterEquipment inventory) {
-            var item = Items![inventory.ItemId];
-            var equipmentId = item!.EquipmentId;
+    private void UpdateEquipmentSetAttributes() {
+        foreach (var (id, count) in _equipmentSets) {
+            if (EquipmentSets!.Contains(id)) {
+                var equipmentSet = EquipmentSets[id]!;
 
-            if (Equipments!.Contains(equipmentId)) {
-                var equipment = Equipments[equipmentId]!;
-                var id = equipment.EquipmentSetId;
+                foreach (var (required, effect) in equipmentSet.Sets) {
 
-                if (id > 0) {
-                    DecreaseEquipmentSet(id);
-                }
-            }
-        }
+                    if (count >= required) {
+                        var attributeId = effect.AttributeId;
 
-        private void IncreaseEquipmentSet(int id) {
-            if (_equipmentSets.ContainsKey(id)) {
-                var value = _equipmentSets[id];
-                _equipmentSets[id] = ++value;
-            }
-            else {
-                _equipmentSets[id] = EquipmentSetCount.One;
-            }
-        }
+                        if (EquipmentSetAttributes!.Contains(attributeId)) {
+                            var attribute = EquipmentSetAttributes[attributeId]!;
 
-        private void DecreaseEquipmentSet(int id) {
-            if (_equipmentSets.ContainsKey(id)) {
-                var value = _equipmentSets[id];
-
-                if (value > EquipmentSetCount.None) {
-                    _equipmentSets[id] = --value;
-
-                    if (_equipmentSets[id] == EquipmentSetCount.None) {
-                        _equipmentSets.Remove(id);
-                    }
-                }
-            }
-        }
-
-        private void UpdateEquipmentSetAttributes() {
-            foreach (var (id, count) in _equipmentSets) {
-                if (EquipmentSets!.Contains(id)) {
-                    var equipmentSet = EquipmentSets[id]!;
-
-                    foreach (var (required, effect) in equipmentSet.Sets) {
-                      
-                        if (count >= required) {
-                            var attributeId = effect.AttributeId;
-                            
-                            if (EquipmentSetAttributes!.Contains(attributeId)) {
-                                var attribute = EquipmentSetAttributes[attributeId]!;
-
-                                Attributes.Add(1, attribute, GroupAttribute.Empty);
-                            }                 
+                            Attributes.Add(1, attribute, GroupAttribute.Empty);
                         }
                     }
                 }
             }
         }
+    }
 
-        private void UpdateEquipmentAttributes() {
-            foreach (var equipment in _equipments) {
-                if (equipment.ItemId > 0) {
-                    var attributes = GetAttribute(equipment.AttributeId);
+    private void UpdateEquipmentAttributes() {
+        foreach (var equipment in _equipments) {
+            if (equipment.ItemId > 0) {
+                var attributes = GetAttribute(equipment.AttributeId);
 
-                    if (attributes is not null) {
-                        var upgrade = GetUpgrade(equipment.UpgradeId);
+                if (attributes is not null) {
+                    var upgrade = GetUpgrade(equipment.UpgradeId);
 
-                        Attributes.Add(equipment.Level, attributes, upgrade);
-                    }
+                    Attributes.Add(equipment.Level, attributes, upgrade);
                 }
             }
         }
+    }
 
-        public IList<CharacterEquipment> ToList() {
-            return _equipments;
+    public IList<CharacterEquipment> ToList() {
+        return _equipments;
+    }
+
+    private GroupAttribute? GetAttribute(int id) {
+        if (EquipmentAttributes is not null) {
+            if (EquipmentAttributes!.Contains(id)) {
+                return EquipmentAttributes[id];
+            }
         }
 
-        private GroupAttribute? GetAttribute(int id) {
-            if (EquipmentAttributes is not null) {
-                if (EquipmentAttributes!.Contains(id)) {
-                    return EquipmentAttributes[id];
-                }
-            }
+        return null;
+    }
 
-            return null;
+    private GroupAttribute GetUpgrade(int id) {
+        if (EquipmentUpgrades is not null) {
+            if (EquipmentUpgrades.Contains(id)) {
+                return EquipmentUpgrades[id]!;
+            }
         }
 
-        private GroupAttribute GetUpgrade(int id) {
-            if (EquipmentUpgrades is not null) {
-                if (EquipmentUpgrades.Contains(id)) {
-                    return EquipmentUpgrades[id]!;
-                }
-            }
+        return GroupAttribute.Empty;
+    }
 
-            return GroupAttribute.Empty;
-        } 
+    private void CheckForBindItem(CharacterEquipment equipment) {
+        var item = Items![equipment.ItemId];
 
-        private void CheckForBindItem(CharacterEquipment equipment) {
-            var item = Items![equipment.ItemId];
-
-            if (item is not null) {
-                if (item.Bind == BindType.Equipped) {
-                    equipment.Bound = true;
-                }
+        if (item is not null) {
+            if (item.Bind == BindType.Equipped) {
+                equipment.Bound = true;
             }
         }
     }

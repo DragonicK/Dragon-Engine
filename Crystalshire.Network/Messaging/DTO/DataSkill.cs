@@ -1,6 +1,6 @@
-﻿namespace Crystalshire.Network.Messaging.DTO {
-    public struct DataSkill {
-        public int Id { get; set; }
-        public int Level { get; set; }
-    }
+﻿namespace Crystalshire.Network.Messaging.DTO;
+
+public struct DataSkill {
+    public int Id { get; set; }
+    public int Level { get; set; }
 }

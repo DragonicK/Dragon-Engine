@@ -7,79 +7,79 @@ using Crystalshire.Game.Services;
 using Crystalshire.Game.Manager;
 using Crystalshire.Game.Players;
 
-namespace Crystalshire.Game.Routes {
-    public sealed class QuickSlotUse {
-        public IConnection? Connection { get; set; }
-        public CpQuickSlotUse? Packet { get; set; }
-        public LoggerService? LoggerService { get; init; }
-        public ContentService? ContentService { get; init; }
-        public ConfigurationService? Configuration { get; init; }
-        public ConnectionService? ConnectionService { get; init; }
-        public PacketSenderService? PacketSenderService { get; init; }
+namespace Crystalshire.Game.Routes;
 
-        private const int MaximumQuickSlots = 12;
+public sealed class QuickSlotUse {
+    public IConnection? Connection { get; set; }
+    public CpQuickSlotUse? Packet { get; set; }
+    public LoggerService? LoggerService { get; init; }
+    public ContentService? ContentService { get; init; }
+    public ConfigurationService? Configuration { get; init; }
+    public ConnectionService? ConnectionService { get; init; }
+    public PacketSenderService? PacketSenderService { get; init; }
 
-        public void Process() {
-            var repository = ConnectionService!.PlayerRepository;
+    private const int MaximumQuickSlots = 12;
 
-            if (Connection is not null) {
-                var player = repository!.FindByConnectionId(Connection.Id);
+    public void Process() {
+        var repository = ConnectionService!.PlayerRepository;
 
-                if (player is not null) {
-                    if (IsValidPacket()) {
-                        var index = Packet!.Index;
-                        var quick = player.QuickSlots.Get(index);
+        if (Connection is not null) {
+            var player = repository!.FindByConnectionId(Connection.Id);
 
-                        if (quick is not null) {
-                            var type = quick.ObjectType;
-                            var id = quick.ObjectValue;
+            if (player is not null) {
+                if (IsValidPacket()) {
+                    var index = Packet!.Index;
+                    var quick = player.QuickSlots.Get(index);
 
-                            switch (type) {
-                                case QuickSlotType.Item:
-                                    UseItem(player, id);
-                                    break;
+                    if (quick is not null) {
+                        var type = quick.ObjectType;
+                        var id = quick.ObjectValue;
 
-                                    case QuickSlotType.Skill:
-                                    UseSkill(player, id);
-                                    break;
-                            }
+                        switch (type) {
+                            case QuickSlotType.Item:
+                                UseItem(player, id);
+                                break;
+
+                            case QuickSlotType.Skill:
+                                UseSkill(player, id);
+                                break;
                         }
                     }
                 }
             }
         }
+    }
 
-        private void UseItem(IPlayer player, int id) {
-            var items = ContentService!.Items;
+    private void UseItem(IPlayer player, int id) {
+        var items = ContentService!.Items;
 
-            if (items.Contains(id)) {
-                var inventory = player.Inventories.FindByItemId(id);
+        if (items.Contains(id)) {
+            var inventory = player.Inventories.FindByItemId(id);
 
-                if (inventory is not null) {
-                    var sender = PacketSenderService!.PacketSender;
-                    var instances = PacketSenderService!.InstanceService;
+            if (inventory is not null) {
+                var sender = PacketSenderService!.PacketSender;
+                var instances = PacketSenderService!.InstanceService;
 
-                    var manager = new ItemManager() {
-                        Player = player,
-                        PacketSender = sender,
-                        InstanceService = instances,
-                        Configuration = Configuration,
-                        ContentService = ContentService
-                    };
+                var manager = new ItemManager() {
+                    Player = player,
+                    PacketSender = sender,
+                    InstanceService = instances,
+                    Configuration = Configuration,
+                    ContentService = ContentService
+                };
 
-                    manager.UseItem(inventory.InventoryIndex);
-                }
+                manager.UseItem(inventory.InventoryIndex);
             }
         }
+    }
 
-        private void UseSkill(IPlayer player, int id) {
+    private void UseSkill(IPlayer player, int id) {
 
-        }
+    }
 
-        private bool IsValidPacket() {
-            var index = Packet!.Index;
+    private bool IsValidPacket() {
+        var index = Packet!.Index;
 
-            return index >= 1 && index <= MaximumQuickSlots;
-        }
+        return index >= 1 && index <= MaximumQuickSlots;
     }
 }

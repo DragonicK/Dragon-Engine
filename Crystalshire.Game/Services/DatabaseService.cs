@@ -5,71 +5,71 @@ using Crystalshire.Core.Services;
 
 using Crystalshire.Game.Configurations;
 
-namespace Crystalshire.Game.Services {
-    public class DatabaseService : IService {
-        public ServicePriority Priority => ServicePriority.High;
-        public IDatabaseFactory? DatabaseFactory { get; private set; }
-        public ConfigurationService? Configuration { get; private set; }
+namespace Crystalshire.Game.Services;
 
-        public void Start() {
-            DatabaseFactory = new DatabaseFactory();
+public class DatabaseService : IService {
+    public ServicePriority Priority => ServicePriority.High;
+    public IDatabaseFactory? DatabaseFactory { get; private set; }
+    public ConfigurationService? Configuration { get; private set; }
 
-            CheckMembershipDatabase(Configuration);
-            CheckServerpDatabase(Configuration);
+    public void Start() {
+        DatabaseFactory = new DatabaseFactory();
+
+        CheckMembershipDatabase(Configuration);
+        CheckServerpDatabase(Configuration);
+    }
+
+    public void Stop() {
+
+    }
+
+    private void CheckMembershipDatabase(IConfiguration? configuration) {
+        OutputLog.Write("Checking Membership database");
+
+        if (configuration is not null) {
+            CheckMembershipConnection(DatabaseFactory, configuration);
         }
-
-        public void Stop() {
-
+        else {
+            OutputLog.Write("Configuration not found");
         }
+    }
 
-        private void CheckMembershipDatabase(IConfiguration? configuration) {
-            OutputLog.Write("Checking Membership database");
+    private void CheckServerpDatabase(IConfiguration? configuration) {
+        OutputLog.Write("Checking Server database");
 
-            if (configuration is not null) {
-                CheckMembershipConnection(DatabaseFactory, configuration);
-            }
-            else {
-                OutputLog.Write("Configuration not found");
-            }
+        if (configuration is not null) {
+            CheckServerConnection(DatabaseFactory, configuration);
         }
-
-        private void CheckServerpDatabase(IConfiguration? configuration) {
-            OutputLog.Write("Checking Server database");
-
-            if (configuration is not null) {
-                CheckServerConnection(DatabaseFactory, configuration);
-            }
-            else {
-                OutputLog.Write("Configuration not found");
-            }
+        else {
+            OutputLog.Write("Configuration not found");
         }
+    }
 
-        private void CheckServerConnection(IDatabaseFactory? factory, IConfiguration configuration) {
-            if (factory is not null) {
-                var handler = factory.GetServerHandler(configuration.DatabaseServer);
-                var result = handler.CanConnect();
+    private void CheckServerConnection(IDatabaseFactory? factory, IConfiguration configuration) {
+        if (factory is not null) {
+            var handler = factory.GetServerHandler(configuration.DatabaseServer);
+            var result = handler.CanConnect();
 
-                handler.Dispose();
+            handler.Dispose();
 
-                OutputLog.Write($"Server database is {(result ? "" : "not ")}connected");
-            }
-            else {
-                OutputLog.Write($"Database factory not found");
-            }
+            OutputLog.Write($"Server database is {(result ? "" : "not ")}connected");
         }
+        else {
+            OutputLog.Write($"Database factory not found");
+        }
+    }
 
-        private void CheckMembershipConnection(IDatabaseFactory? factory, IConfiguration configuration) {
-            if (factory is not null) {
-                var handler = factory.GetMembershipHandler(configuration.DatabaseServer);
-                var result = handler.CanConnect();
+    private void CheckMembershipConnection(IDatabaseFactory? factory, IConfiguration configuration) {
+        if (factory is not null) {
+            var handler = factory.GetMembershipHandler(configuration.DatabaseServer);
+            var result = handler.CanConnect();
 
-                handler.Dispose();
+            handler.Dispose();
 
-                OutputLog.Write($"Membership database is {(result ? "" : "not ")}connected");
-            }
-            else {
-                OutputLog.Write($"Database factory not found");
-            }
+            OutputLog.Write($"Membership database is {(result ? "" : "not ")}connected");
+        }
+        else {
+            OutputLog.Write($"Database factory not found");
         }
     }
 }

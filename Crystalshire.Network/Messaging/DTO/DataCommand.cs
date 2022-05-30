@@ -1,9 +1,9 @@
-﻿namespace Crystalshire.Network.Messaging.DTO {
-    public struct DataCommand {
-        public string Command { get; set; }
+﻿namespace Crystalshire.Network.Messaging.DTO;
 
-        public DataCommand() {
-            Command = string.Empty;
-        }
+public struct DataCommand {
+    public string Command { get; set; }
+
+    public DataCommand() {
+        Command = string.Empty;
     }
 }

@@ -5,42 +5,42 @@ using Crystalshire.Core.Model.Mailing;
 
 using Crystalshire.Game.Services;
 
-namespace Crystalshire.Game.Routes {
-    public sealed class DeleteMail {
-        public IConnection? Connection { get; set; }
-        public PacketDeleteMail? Packet { get; set; }
-        public ConnectionService? ConnectionService { get; set; }
-        public PacketSenderService? PacketSenderService { get; set; }
+namespace Crystalshire.Game.Routes;
 
-        public void Process() {
-            var sender = PacketSenderService!.PacketSender;
-            var repository = ConnectionService!.PlayerRepository;
+public sealed class DeleteMail {
+    public IConnection? Connection { get; set; }
+    public PacketDeleteMail? Packet { get; set; }
+    public ConnectionService? ConnectionService { get; set; }
+    public PacketSenderService? PacketSenderService { get; set; }
 
-            if (Connection is not null) {
-                var player = repository!.FindByConnectionId(Connection.Id);
+    public void Process() {
+        var sender = PacketSenderService!.PacketSender;
+        var repository = ConnectionService!.PlayerRepository;
 
-                if (player is not null) {
+        if (Connection is not null) {
+            var player = repository!.FindByConnectionId(Connection.Id);
 
-                    var isDeleted = true;
+            if (player is not null) {
 
-                    var list = new List<int>(Packet!.Id.Length);
+                var isDeleted = true;
 
-                    foreach (var id in Packet!.Id) {
-                        var code = player.Mails.Delete(id);
+                var list = new List<int>(Packet!.Id.Length);
 
-                        if (code == MailingOperationCode.Deleted) {
-                            list.Add(id);
-                        }
-                        else if (code == MailingOperationCode.AttachedNotReceived) {
-                            isDeleted = false;
-                        }
+                foreach (var id in Packet!.Id) {
+                    var code = player.Mails.Delete(id);
+
+                    if (code == MailingOperationCode.Deleted) {
+                        list.Add(id);
                     }
-
-                    sender!.SendDeleteMail(player, list.ToArray());
-
-                    if (!isDeleted) {
-                        sender!.SendMailOperationResult(player, MailingOperationCode.AttachedNotReceived);
+                    else if (code == MailingOperationCode.AttachedNotReceived) {
+                        isDeleted = false;
                     }
+                }
+
+                sender!.SendDeleteMail(player, list.ToArray());
+
+                if (!isDeleted) {
+                    sender!.SendMailOperationResult(player, MailingOperationCode.AttachedNotReceived);
                 }
             }
         }

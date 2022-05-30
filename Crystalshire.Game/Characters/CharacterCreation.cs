@@ -2,116 +2,116 @@
 using Crystalshire.Game.Configurations;
 using Crystalshire.Game.Players;
 
-namespace Crystalshire.Game.Characters {
-    public class CharacterCreation : ICharacterCreation {
-        public IPlayer Player { get; private set; }
-        public IConfiguration Configuration { get; }
-        public ICharacterValidation Validated { get; }
+namespace Crystalshire.Game.Characters;
 
-        public CharacterCreation(IPlayer player, IConfiguration configuration, ICharacterValidation validated) {
-            Player = player;
-            Configuration = configuration;
-            Validated = validated;
-        }
+public class CharacterCreation : ICharacterCreation {
+    public IPlayer Player { get; private set; }
+    public IConfiguration Configuration { get; }
+    public ICharacterValidation Validated { get; }
 
-        public Character CreateCharacter() {
-            var classe = Validated.CharacterClass;
+    public CharacterCreation(IPlayer player, IConfiguration configuration, ICharacterValidation validated) {
+        Player = player;
+        Configuration = configuration;
+        Validated = validated;
+    }
 
-            return  new Character {
-                AccountId = Player.AccountId,
-                Name = Validated.CharacterName,
-                CharacterIndex = (short)Validated.CharacterIndex,
-                Gender = (short)Validated.Gender,
-                Model = Validated.Model,
-                Map = classe.MapId,
-                X = classe.X,
-                Y = classe.Y,
-                ClassCode = (short)classe.Id,
-                Level = classe.Level,
-                Experience = classe.Experience,
-                Points = classe.AttributePoint,
-                MaximumWarehouse = (short)Configuration.Player.InitialWarehouseSize,
-                MaximumInventories = (short)Configuration.Player.InitialInventorySize
-            };
-        }
+    public Character CreateCharacter() {
+        var classe = Validated.CharacterClass;
 
-        public IList<CharacterEquipment> CreateEquipments(Character character) {
-            var classe = Validated.CharacterClass;
-            var list = new List<CharacterEquipment>();
+        return new Character {
+            AccountId = Player.AccountId,
+            Name = Validated.CharacterName,
+            CharacterIndex = (short)Validated.CharacterIndex,
+            Gender = (short)Validated.Gender,
+            Model = Validated.Model,
+            Map = classe.MapId,
+            X = classe.X,
+            Y = classe.Y,
+            ClassCode = (short)classe.Id,
+            Level = classe.Level,
+            Experience = classe.Experience,
+            Points = classe.AttributePoint,
+            MaximumWarehouse = (short)Configuration.Player.InitialWarehouseSize,
+            MaximumInventories = (short)Configuration.Player.InitialInventorySize
+        };
+    }
 
-            for (var i = 0; i < classe.Equipments.Count; ++i) {
-                var equipment = classe.Equipments[i];
+    public IList<CharacterEquipment> CreateEquipments(Character character) {
+        var classe = Validated.CharacterClass;
+        var list = new List<CharacterEquipment>();
 
-                if (equipment.Id > 0) {
-                    list.Add(new CharacterEquipment() {
-                        CharacterId = character.CharacterId,
-                    });
-                }
+        for (var i = 0; i < classe.Equipments.Count; ++i) {
+            var equipment = classe.Equipments[i];
+
+            if (equipment.Id > 0) {
+                list.Add(new CharacterEquipment() {
+                    CharacterId = character.CharacterId,
+                });
             }
-
-            return list;
         }
 
-        public IList<CharacterInventory> CreateInventories(Character character) {
-            var classe = Validated.CharacterClass;
-            var list = new List<CharacterInventory>();
+        return list;
+    }
 
-            for (var i = 0; i < classe.Inventories.Count; ++i) {
-                var inventory = classe.Inventories[i];
+    public IList<CharacterInventory> CreateInventories(Character character) {
+        var classe = Validated.CharacterClass;
+        var list = new List<CharacterInventory>();
 
-                if (inventory.Id > 0) {
-                    list.Add(new CharacterInventory() {
-                        CharacterId = character.CharacterId,
-                        InventoryIndex = i + 1,
-                        ItemId = inventory.Id,
-                        Value = inventory.Value,
-                        Level = inventory.Level,
-                        Bound = inventory.Bound,
-                        AttributeId = inventory.AttributeId,
-                        UpgradeId = inventory.UpgradeId,
-                        UniqueSerial = string.Empty,
-                    });
-                }
+        for (var i = 0; i < classe.Inventories.Count; ++i) {
+            var inventory = classe.Inventories[i];
+
+            if (inventory.Id > 0) {
+                list.Add(new CharacterInventory() {
+                    CharacterId = character.CharacterId,
+                    InventoryIndex = i + 1,
+                    ItemId = inventory.Id,
+                    Value = inventory.Value,
+                    Level = inventory.Level,
+                    Bound = inventory.Bound,
+                    AttributeId = inventory.AttributeId,
+                    UpgradeId = inventory.UpgradeId,
+                    UniqueSerial = string.Empty,
+                });
             }
-            return list;
         }
+        return list;
+    }
 
-        public IList<CharacterPassive> CreatePassives(Character character) {
-            var classe = Validated.CharacterClass;
-            var list = new List<CharacterPassive>();
+    public IList<CharacterPassive> CreatePassives(Character character) {
+        var classe = Validated.CharacterClass;
+        var list = new List<CharacterPassive>();
 
-            for (var i = 0; i < classe.Passives.Count; ++i) {
-                var passive = classe.Passives[i];
+        for (var i = 0; i < classe.Passives.Count; ++i) {
+            var passive = classe.Passives[i];
 
-                if (passive.Id > 0) {
-                    list.Add(new CharacterPassive() {
-                        CharacterId = character.CharacterId,
-                        PassiveId = passive.Id,
-                        PassiveLevel = passive.Level
-                    });
-                }
+            if (passive.Id > 0) {
+                list.Add(new CharacterPassive() {
+                    CharacterId = character.CharacterId,
+                    PassiveId = passive.Id,
+                    PassiveLevel = passive.Level
+                });
             }
-
-            return list;
         }
 
-        public IList<CharacterSkill> CreateSkills(Character character) {
-            var classe = Validated.CharacterClass;
-            var list = new List<CharacterSkill>();
+        return list;
+    }
 
-            for (var i = 0; i < classe.Skills.Count; ++i) {
-                var skill = classe.Skills[i];
+    public IList<CharacterSkill> CreateSkills(Character character) {
+        var classe = Validated.CharacterClass;
+        var list = new List<CharacterSkill>();
 
-                if (skill.Id > 0) {
-                    list.Add(new CharacterSkill() {
-                        CharacterId = character.CharacterId,
-                        SkillId = skill.Id,
-                        SkillLevel = skill.Level
-                    });
-                }
+        for (var i = 0; i < classe.Skills.Count; ++i) {
+            var skill = classe.Skills[i];
+
+            if (skill.Id > 0) {
+                list.Add(new CharacterSkill() {
+                    CharacterId = character.CharacterId,
+                    SkillId = skill.Id,
+                    SkillLevel = skill.Level
+                });
             }
-
-            return list;
         }
+
+        return list;
     }
 }

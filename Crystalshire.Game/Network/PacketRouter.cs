@@ -1,31 +1,31 @@
 ﻿using Crystalshire.Network;
 using Crystalshire.Core.Services;
 
-namespace Crystalshire.Game.Network {
-    public class PacketRouter : IPacketRouter {
-        private readonly Dictionary<Type, Type> routes;
-        private readonly IServiceInjector injector;
+namespace Crystalshire.Game.Network;
 
-        public PacketRouter(IServiceContainer container) {
-            routes = new Dictionary<Type, Type>();
-            injector = new ServiceInjector(container);
-        }
+public class PacketRouter : IPacketRouter {
+    private readonly Dictionary<Type, Type> routes;
+    private readonly IServiceInjector injector;
 
-        public void Add(Type key, Type value) => routes.Add(key, value);
+    public PacketRouter(IServiceContainer container) {
+        routes = new Dictionary<Type, Type>();
+        injector = new ServiceInjector(container);
+    }
 
-        private bool Contains(dynamic packet) => routes.ContainsKey(packet.GetType());
+    public void Add(Type key, Type value) => routes.Add(key, value);
 
-        public void Process(IConnection connection, dynamic packet) {
-            if (Contains(packet)) {
-                dynamic created = Activator.CreateInstance(routes[packet.GetType()]);
+    private bool Contains(dynamic packet) => routes.ContainsKey(packet.GetType());
 
-                injector.Inject(created);
+    public void Process(IConnection connection, dynamic packet) {
+        if (Contains(packet)) {
+            dynamic created = Activator.CreateInstance(routes[packet.GetType()]);
 
-                created.Connection = connection;
-                created.Packet = packet;
+            injector.Inject(created);
 
-                created.Process();
-            }
+            created.Connection = connection;
+            created.Packet = packet;
+
+            created.Process();
         }
     }
 }

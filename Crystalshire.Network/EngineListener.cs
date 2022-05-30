@@ -6,149 +6,149 @@ using Crystalshire.Network.Incoming;
 using Crystalshire.Network.Outgoing;
 using Crystalshire.Network.Messaging.SharedPackets;
 
-namespace Crystalshire.Network {
-    public class EngineListener : IEngineListener {
-        public int Port { get; set; }
-        public int MaximumConnections { get; set; }
-        public IGeoIpAddress GeoIpAddress { get; init; }
-        public IIndexGenerator IndexGenerator { get; init; }
-        public IConnectionRepository ConnectionRepository { get; init; }
-        public IIncomingMessageQueue IncomingMessageQueue { get; init; }
-        public IOutgoingMessageWriter OutgoingMessageWriter { get; init; }
-        public EventHandler<IConnection> ConnectionApprovalEvent { get; set; }
-        public EventHandler<IConnection> ConnectionRefuseEvent { get; set; }
-        public EventHandler<IConnection> ConnectionDisconnectEvent { get; set; }
+namespace Crystalshire.Network;
 
-        private const int IpAddressArraySplit = 4;
-        private const int PingTicket = 5000;
+public class EngineListener : IEngineListener {
+    public int Port { get; set; }
+    public int MaximumConnections { get; set; }
+    public IGeoIpAddress GeoIpAddress { get; init; }
+    public IIndexGenerator IndexGenerator { get; init; }
+    public IConnectionRepository ConnectionRepository { get; init; }
+    public IIncomingMessageQueue IncomingMessageQueue { get; init; }
+    public IOutgoingMessageWriter OutgoingMessageWriter { get; init; }
+    public EventHandler<IConnection> ConnectionApprovalEvent { get; set; }
+    public EventHandler<IConnection> ConnectionRefuseEvent { get; set; }
+    public EventHandler<IConnection> ConnectionDisconnectEvent { get; set; }
 
-        private TcpListener? listener = null;
-        private bool accepting = false;
-        private long lastTick;
+    private const int IpAddressArraySplit = 4;
+    private const int PingTicket = 5000;
 
-        public void Start() {
-            if (listener is null) {
-                listener = new TcpListener(IPAddress.Any, Port);
-            }
+    private TcpListener? listener = null;
+    private bool accepting = false;
+    private long lastTick;
 
-            listener.Start();
-            accepting = true;
+    public void Start() {
+        if (listener is null) {
+            listener = new TcpListener(IPAddress.Any, Port);
         }
 
-        public void Stop() {
-            accepting = false;
+        listener.Start();
+        accepting = true;
+    }
 
-            listener?.Stop();
-        }
+    public void Stop() {
+        accepting = false;
 
-        public void Accept() {
-            if (accepting) {
-                if (listener is not null) {
-                    if (listener.Pending()) {
-                        var socket = listener.AcceptTcpClient();
-                        var ipAddress = socket.Client.RemoteEndPoint.ToString();
+        listener?.Stop();
+    }
 
-                        ipAddress = ipAddress!.Remove(ipAddress.IndexOf(':'));
+    public void Accept() {
+        if (accepting) {
+            if (listener is not null) {
+                if (listener.Pending()) {
+                    var socket = listener.AcceptTcpClient();
+                    var ipAddress = socket.Client.RemoteEndPoint.ToString();
 
-                        if (CanAccept(ipAddress)) {
-                            var index = IndexGenerator.GetNextIndex();
-                            var connection = ConnectionRepository.AddClientFromId(index);
+                    ipAddress = ipAddress!.Remove(ipAddress.IndexOf(':'));
 
-                            if (connection is null) {
-                                ConnectionRepository.RemoveFromId(index);
-                                connection = ConnectionRepository.AddClientFromId(index);
-                            }
+                    if (CanAccept(ipAddress)) {
+                        var index = IndexGenerator.GetNextIndex();
+                        var connection = ConnectionRepository.AddClientFromId(index);
 
-                            connection.Socket = socket;
-                            connection.IpAddress = ipAddress;
-                            connection.IncomingMessageQueue = IncomingMessageQueue;
-                            connection.OnDisconnect += OnConnectionDisconnected;
-
-                            RaiseConnectionApproval(connection);
+                        if (connection is null) {
+                            ConnectionRepository.RemoveFromId(index);
+                            connection = ConnectionRepository.AddClientFromId(index);
                         }
-                        else {
-                            socket.Close();
-                        }
+
+                        connection.Socket = socket;
+                        connection.IpAddress = ipAddress;
+                        connection.IncomingMessageQueue = IncomingMessageQueue;
+                        connection.OnDisconnect += OnConnectionDisconnected;
+
+                        RaiseConnectionApproval(connection);
+                    }
+                    else {
+                        socket.Close();
                     }
                 }
             }
         }
+    }
 
-        public void Receive() {
-            if (ConnectionRepository is not null) {
-                foreach (var (_, connection) in ConnectionRepository) {
-                    if (connection is not null) {
-                        connection.Receive();
-                    }
+    public void Receive() {
+        if (ConnectionRepository is not null) {
+            foreach (var (_, connection) in ConnectionRepository) {
+                if (connection is not null) {
+                    connection.Receive();
                 }
+            }
 
-                #region Check Ping For Disconnection 
+            #region Check Ping For Disconnection 
 
-                if (OutgoingMessageWriter is not null) {
-                    var tick = Environment.TickCount64;
+            if (OutgoingMessageWriter is not null) {
+                var tick = Environment.TickCount64;
 
-                    if (tick >= lastTick) {
-                        lastTick = tick + PingTicket;
+                if (tick >= lastTick) {
+                    lastTick = tick + PingTicket;
 
-                        var packet = OutgoingMessageWriter.CreateMessage(new PacketPing());
+                    var packet = OutgoingMessageWriter.CreateMessage(new PacketPing());
 
-                        packet.TransmissionTarget = TransmissionTarget.Broadcast;
+                    packet.TransmissionTarget = TransmissionTarget.Broadcast;
 
-                        OutgoingMessageWriter.Enqueue(packet);
-                    }
+                    OutgoingMessageWriter.Enqueue(packet);
                 }
-
-                #endregion
-            }
-        }
-
-        private void RaiseConnectionApproval(IConnection connection) {
-            ConnectionApprovalEvent?.Invoke(null, connection);
-        }
-
-        private void RaiseConnectionRefuse(string ipAddress) {
-            ConnectionRefuseEvent?.Invoke(null, new Connection() { IpAddress = ipAddress });
-        }
-
-        private void RaiseConnectionDisconnect(string ipAddress) {
-            ConnectionDisconnectEvent?.Invoke(null, new Connection() { IpAddress = ipAddress });
-        }
-
-        private void OnConnectionDisconnected(object? sender, IConnection connection) {
-            ConnectionDisconnectEvent?.Invoke(null, connection);
-        }
-
-        private bool IsValidIpAddress(string ipAddress) {
-            if (string.IsNullOrWhiteSpace(ipAddress) || string.IsNullOrEmpty(ipAddress)) {
-                return false;
             }
 
-            var values = ipAddress.Split('.');
-            if (values.Length != IpAddressArraySplit) {
-                return false;
-            }
+            #endregion
+        }
+    }
 
-            return values.All(r => byte.TryParse(r, out byte parsing));
+    private void RaiseConnectionApproval(IConnection connection) {
+        ConnectionApprovalEvent?.Invoke(null, connection);
+    }
+
+    private void RaiseConnectionRefuse(string ipAddress) {
+        ConnectionRefuseEvent?.Invoke(null, new Connection() { IpAddress = ipAddress });
+    }
+
+    private void RaiseConnectionDisconnect(string ipAddress) {
+        ConnectionDisconnectEvent?.Invoke(null, new Connection() { IpAddress = ipAddress });
+    }
+
+    private void OnConnectionDisconnected(object? sender, IConnection connection) {
+        ConnectionDisconnectEvent?.Invoke(null, connection);
+    }
+
+    private bool IsValidIpAddress(string ipAddress) {
+        if (string.IsNullOrWhiteSpace(ipAddress) || string.IsNullOrEmpty(ipAddress)) {
+            return false;
         }
 
-        private bool CanAccept(string ipAddress) {
-            if (ipAddress is null || !IsValidIpAddress(ipAddress)) {
-                RaiseConnectionDisconnect(ipAddress);
-
-                return false;
-            }
-
-            if (IsIpAddressBlocked(ipAddress)) {
-                RaiseConnectionRefuse(ipAddress);
-
-                return false;
-            }
-
-            return true;
+        var values = ipAddress.Split('.');
+        if (values.Length != IpAddressArraySplit) {
+            return false;
         }
 
-        private bool IsIpAddressBlocked(string ipAddress) {
-            return GeoIpAddress.IsCountryBlocked(ipAddress);
+        return values.All(r => byte.TryParse(r, out byte parsing));
+    }
+
+    private bool CanAccept(string ipAddress) {
+        if (ipAddress is null || !IsValidIpAddress(ipAddress)) {
+            RaiseConnectionDisconnect(ipAddress);
+
+            return false;
         }
+
+        if (IsIpAddressBlocked(ipAddress)) {
+            RaiseConnectionRefuse(ipAddress);
+
+            return false;
+        }
+
+        return true;
+    }
+
+    private bool IsIpAddressBlocked(string ipAddress) {
+        return GeoIpAddress.IsCountryBlocked(ipAddress);
     }
 }

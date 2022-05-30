@@ -7,78 +7,78 @@ using Crystalshire.Game.Players;
 using Crystalshire.Game.Instances;
 using Crystalshire.Game.Network;
 
-namespace Crystalshire.Game.Manager {
-    public class TargetManager {
-        public IPlayer? Player { get; init; }
-        public InstanceService? InstanceService { get; init; }
-        public ContentService? ContentService { get; init; }
-        public IPacketSender? PacketSender { get; init; }
+namespace Crystalshire.Game.Manager;
 
-        public void ProcessTarget(int index, TargetType targetType) {
-            Player!.TargetType = targetType;
-            Player!.Target = targetType == TargetType.None ? null : GetEntity(index, targetType);
+public class TargetManager {
+    public IPlayer? Player { get; init; }
+    public InstanceService? InstanceService { get; init; }
+    public ContentService? ContentService { get; init; }
+    public IPacketSender? PacketSender { get; init; }
 
-            if (Player!.IsWarehouseOpen) {
-                return;
-            }
+    public void ProcessTarget(int index, TargetType targetType) {
+        Player!.TargetType = targetType;
+        Player!.Target = targetType == TargetType.None ? null : GetEntity(index, targetType);
 
-            if (Player!.ShopId > 0) {
-                return;
-            }
+        if (Player!.IsWarehouseOpen) {
+            return;
+        }
 
-            if (Player!.TargetType == TargetType.Npc) {
-                var entity = Player!.Target;
+        if (Player!.ShopId > 0) {
+            return;
+        }
 
-                if (entity is not null) {
-                    var npc = GetNpc(entity.Id);
+        if (Player!.TargetType == TargetType.Npc) {
+            var entity = Player!.Target;
 
-                    if (npc is not null) {
-                        if (npc.Behaviour != NpcBehaviour.Monster && npc.Behaviour != NpcBehaviour.Boss) {
-                            if (npc.Conversations.Count > 0) {
-                                PacketSender!.SendConversation(Player!, npc.Id);
-                            }
+            if (entity is not null) {
+                var npc = GetNpc(entity.Id);
+
+                if (npc is not null) {
+                    if (npc.Behaviour != NpcBehaviour.Monster && npc.Behaviour != NpcBehaviour.Boss) {
+                        if (npc.Conversations.Count > 0) {
+                            PacketSender!.SendConversation(Player!, npc.Id);
                         }
                     }
                 }
             }
         }
+    }
 
-        private IEntity? GetEntity(int index, TargetType targetType) {
-            var instance = GetInstance();
+    private IEntity? GetEntity(int index, TargetType targetType) {
+        var instance = GetInstance();
 
-            if (instance is not null) {
-                if (targetType == TargetType.Player) {
-                    return instance.Get(index) as IEntity;
-                }
-                else if (targetType == TargetType.Npc) {
-                    index--;
-
-                    return instance.Entities[index] as IEntity;
-                }
+        if (instance is not null) {
+            if (targetType == TargetType.Player) {
+                return instance.Get(index) as IEntity;
             }
+            else if (targetType == TargetType.Npc) {
+                index--;
 
-            return null;
+                return instance.Entities[index] as IEntity;
+            }
         }
 
-        private IInstance? GetInstance() {
-            var instanceId = Player!.Character.Map;
-            var instances = InstanceService!.Instances;
+        return null;
+    }
 
-            if (instances.ContainsKey(instanceId)) {
-                return instances[instanceId];
-            }
+    private IInstance? GetInstance() {
+        var instanceId = Player!.Character.Map;
+        var instances = InstanceService!.Instances;
 
-            return null;
+        if (instances.ContainsKey(instanceId)) {
+            return instances[instanceId];
         }
 
-        private Npc? GetNpc(int id) {
-            var npcs = ContentService!.Npcs;
+        return null;
+    }
 
-            if (npcs is not null) {
-                return npcs[id];
-            }
+    private Npc? GetNpc(int id) {
+        var npcs = ContentService!.Npcs;
 
-            return null;
+        if (npcs is not null) {
+            return npcs[id];
         }
+
+        return null;
     }
 }

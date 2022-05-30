@@ -1,17 +1,17 @@
 ﻿using Crystalshire.Network;
 using Crystalshire.Network.Incoming;
 
-namespace Crystalshire.Game.Network {
-    public class IncomingMessageParser : IIncomingMessageParser {
-        public IConnectionRepository? ConnectionRepository { get; init; }
-        public IPacketRouter? PacketRouter { get; init; }
+namespace Crystalshire.Game.Network;
 
-        public void Process(int id, dynamic packet) {
-            var connection = ConnectionRepository?.GetFromId(id);
+public class IncomingMessageParser : IIncomingMessageParser {
+    public IConnectionRepository? ConnectionRepository { get; init; }
+    public IPacketRouter? PacketRouter { get; init; }
 
-            if (connection is not null) {
-                PacketRouter?.Process(connection, packet);
-            }
+    public void Process(int id, dynamic packet) {
+        var connection = ConnectionRepository?.GetFromId(id);
+
+        if (connection is not null) {
+            PacketRouter?.Process(connection, packet);
         }
     }
 }

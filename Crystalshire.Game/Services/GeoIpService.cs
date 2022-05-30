@@ -2,29 +2,29 @@
 using Crystalshire.Core.Services;
 using Crystalshire.Core.GeoIpCountry;
 
-namespace Crystalshire.Game.Services {
-    public class GeoIpService : IService {
-        public ServicePriority Priority => ServicePriority.High;
-        public IGeoIpAddress? GeoIpAddress { get; private set; }
-        public ConfigurationService? Configuration { get; private set; }
+namespace Crystalshire.Game.Services;
 
-        public void Start() {
-            const string File = "./Server/GeoIPCountryWhois.csv";
+public class GeoIpService : IService {
+    public ServicePriority Priority => ServicePriority.High;
+    public IGeoIpAddress? GeoIpAddress { get; private set; }
+    public ConfigurationService? Configuration { get; private set; }
 
-            if (Configuration is not null) {
-                GeoIpAddress = new GeoIpAddress(Configuration.BlockedCountry);
+    public void Start() {
+        const string File = "./Server/GeoIPCountryWhois.csv";
 
-                var reader = new GeoIpAddressReader(GeoIpAddress);
-                var success = reader.Read(File);
+        if (Configuration is not null) {
+            GeoIpAddress = new GeoIpAddress(Configuration.BlockedCountry);
 
-                if (!success) {
-                    OutputLog.Write("Failed to read GeoIPCountryWhois");
-                }
+            var reader = new GeoIpAddressReader(GeoIpAddress);
+            var success = reader.Read(File);
+
+            if (!success) {
+                OutputLog.Write("Failed to read GeoIPCountryWhois");
             }
         }
+    }
 
-        public void Stop() {
-            GeoIpAddress?.Clear();
-        }
+    public void Stop() {
+        GeoIpAddress?.Clear();
     }
 }

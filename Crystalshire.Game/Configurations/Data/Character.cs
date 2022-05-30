@@ -1,37 +1,37 @@
 ﻿
-namespace Crystalshire.Game.Configurations.Data {
-    public class Character {
-        public int Maximum { get; set; }
-        public bool Create { get; set; }
-        public bool Delete { get; set; }
-        public int DeleteMinimumLevel { get; set; }
-        public int DeleteMaximumLevel { get; set; }
-        public int MinimumNameLength { get; set; }
-        public int MaximumNameLength { get; set; }
-        public List<LevelRangeExclusion> DeletionLevelRanges { get; set; }
+namespace Crystalshire.Game.Configurations.Data;
 
-        public Character() {
-            Maximum = 3;
-            Create = true;
-            Delete = true;
-            DeleteMinimumLevel = 1;
-            DeleteMaximumLevel = 50;
+public class Character {
+    public int Maximum { get; set; }
+    public bool Create { get; set; }
+    public bool Delete { get; set; }
+    public int DeleteMinimumLevel { get; set; }
+    public int DeleteMaximumLevel { get; set; }
+    public int MinimumNameLength { get; set; }
+    public int MaximumNameLength { get; set; }
+    public List<LevelRangeExclusion> DeletionLevelRanges { get; set; }
 
-            MinimumNameLength = 4;
-            MaximumNameLength = 15;
+    public Character() {
+        Maximum = 3;
+        Create = true;
+        Delete = true;
+        DeleteMinimumLevel = 1;
+        DeleteMaximumLevel = 50;
 
-            DeletionLevelRanges = new List<LevelRangeExclusion>() {
+        MinimumNameLength = 4;
+        MaximumNameLength = 15;
+
+        DeletionLevelRanges = new List<LevelRangeExclusion>() {
                 new LevelRangeExclusion() {
                     Minimum = 1,
                     Maximum = 50,
                     Minutes = 5
                 }
             };
-        }
+    }
 
-        public LevelRangeExclusion GetDeletionRange(int level) {
-            return DeletionLevelRanges
-                .FirstOrDefault(x => level >= x.Minimum && level <= x.Maximum);
-        }
+    public LevelRangeExclusion GetDeletionRange(int level) {
+        return DeletionLevelRanges
+            .FirstOrDefault(x => level >= x.Minimum && level <= x.Maximum);
     }
 }

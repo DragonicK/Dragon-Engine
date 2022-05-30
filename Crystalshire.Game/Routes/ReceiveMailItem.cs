@@ -4,31 +4,31 @@ using Crystalshire.Network.Messaging.SharedPackets;
 using Crystalshire.Game.Manager;
 using Crystalshire.Game.Services;
 
-namespace Crystalshire.Game.Routes {
-    public sealed class ReceiveMailItem {
-        public IConnection? Connection { get; set; }
-        public CpReceiveMailItem? Packet { get; set; }
-        public ConnectionService? ConnectionService { get; set; }
-        public PacketSenderService? PacketSenderService { get; set; }
-        public ContentService? ContentService { get; set; }
+namespace Crystalshire.Game.Routes;
 
-        public void Process() {
-            var sender = PacketSenderService!.PacketSender;
-            var repository = ConnectionService!.PlayerRepository;
+public sealed class ReceiveMailItem {
+    public IConnection? Connection { get; set; }
+    public CpReceiveMailItem? Packet { get; set; }
+    public ConnectionService? ConnectionService { get; set; }
+    public PacketSenderService? PacketSenderService { get; set; }
+    public ContentService? ContentService { get; set; }
 
-            if (Connection is not null) {
-                var player = repository!.FindByConnectionId(Connection.Id);
+    public void Process() {
+        var sender = PacketSenderService!.PacketSender;
+        var repository = ConnectionService!.PlayerRepository;
 
-                if (player is not null) {
+        if (Connection is not null) {
+            var player = repository!.FindByConnectionId(Connection.Id);
 
-                    var manager = new ReceiveFromMailManager() {
-                        Player = player,
-                        PacketSender = sender,
-                        ContentService = ContentService
-                    };
+            if (player is not null) {
 
-                    manager.ReceiveItem(Packet!.Id);
-                }
+                var manager = new ReceiveFromMailManager() {
+                    Player = player,
+                    PacketSender = sender,
+                    ContentService = ContentService
+                };
+
+                manager.ReceiveItem(Packet!.Id);
             }
         }
     }

@@ -10,192 +10,192 @@ using Crystalshire.Game.Repository;
 using Crystalshire.Game.Services;
 using Crystalshire.Game.Characters;
 
-namespace Crystalshire.Game.Routes {
-    public sealed class CharacterCreate {
-        public IConnection? Connection { get; set; }
-        public CpCharacterCreate? Packet { get; set; }
-        public LoggerService? LoggerService { get; init; }
-        public ContentService? ContentService { get; init; }
-        public DatabaseService? DatabaseService { get; init; }
-        public CharacterService? CharacterService { get; init; }
-        public ConfigurationService? Configuration { get; init; }
-        public ConnectionService? ConnectionService { get; init; }
-        public PacketSenderService? PacketSenderService { get; init; }
+namespace Crystalshire.Game.Routes;
 
-        private ICharacterValidation? validation;
+public sealed class CharacterCreate {
+    public IConnection? Connection { get; set; }
+    public CpCharacterCreate? Packet { get; set; }
+    public LoggerService? LoggerService { get; init; }
+    public ContentService? ContentService { get; init; }
+    public DatabaseService? DatabaseService { get; init; }
+    public CharacterService? CharacterService { get; init; }
+    public ConfigurationService? Configuration { get; init; }
+    public ConnectionService? ConnectionService { get; init; }
+    public PacketSenderService? PacketSenderService { get; init; }
 
-        public async void Process() {
-            var player = GetPlayerRepository().FindByConnectionId(Connection.Id);
+    private ICharacterValidation? validation;
+
+    public async void Process() {
+        var player = GetPlayerRepository().FindByConnectionId(Connection.Id);
+        var sender = GetSender();
+
+        if (!Configuration.Character.Create) {
+            sender?.SendAlertMessage(Connection, AlertMessageType.CharacterCreation, MenuResetType.Characters);
+            return;
+        }
+
+        if (player.Characters.Count >= Configuration.Character.Maximum) {
+            sender?.SendAlertMessage(Connection, AlertMessageType.Connection, MenuResetType.Characters);
+            return;
+        }
+
+        if (IsDataValidated()) {
+            var result = await CouldCreateCharacter(player);
+
+            if (result) {
+                sender?.SendCharacters(player);
+            }
+        }
+    }
+
+    private async Task<bool> CouldCreateCharacter(IPlayer player) {
+        ICharacterDatabase? database = null;
+        ICharacterCreation creation;
+
+        var exists = false;
+        var isCreated = 0;
+
+        try {
+            database = new CharacterDatabase(Configuration, DatabaseService.DatabaseFactory);
+            exists = await database.ExistCharacterAsync(validation.CharacterName);
+
+            if (!exists) {
+                creation = new CharacterCreation(player, Configuration, validation);
+
+                var character = creation.CreateCharacter();
+
+                isCreated = await database.AddCharacter(character);
+
+                if (isCreated > 0) {
+                    var skills = creation.CreateSkills(character);
+                    var inventories = creation.CreateInventories(character);
+                    var passives = creation.CreatePassives(character);
+                    var equipments = creation.CreateEquipments(character);
+
+                    await database.AddSkills(skills);
+                    await database.AddPassives(passives);
+                    await database.AddInventories(inventories);
+                    await database.AddEquipments(equipments);
+                }
+
+                player.Characters = await database.GetCharactersPreviewAsync(player.AccountId);
+            }
+        }
+        catch (Exception ex) {
+            await WriteExceptionLog(player.Username, ex.Message);
+        }
+        finally {
+            database?.Dispose();
+        }
+
+        if (exists) {
             var sender = GetSender();
 
-            if (!Configuration.Character.Create) {
-                sender?.SendAlertMessage(Connection, AlertMessageType.CharacterCreation, MenuResetType.Characters);
-                return;
-            }
+            sender?.SendAlertMessage(player, AlertMessageType.NameTaken, MenuResetType.Characters);
 
-            if (player.Characters.Count >= Configuration.Character.Maximum) {
-                sender?.SendAlertMessage(Connection, AlertMessageType.Connection, MenuResetType.Characters);
-                return;
-            }
-     
-            if (IsDataValidated()) {
-                var result = await CouldCreateCharacter(player);
-
-                if (result) {
-                    sender?.SendCharacters(player);
-                }
-            }
+            return false;
         }
 
-        private async Task<bool> CouldCreateCharacter(IPlayer player) {
-            ICharacterDatabase? database = null;
-            ICharacterCreation creation;
+        return isCreated > 0;
+    }
 
-            var exists = false;
-            var isCreated = 0;
+    private bool IsDataValidated() {
+        var name = Packet.Name;
+        var gender = Packet.Gender;
+        var classIndex = Packet.ClassIndex;
+        var model = Packet.ModelIndex;
+        var index = Packet.CharacterIndex;
 
-            try {
-                database = new CharacterDatabase(Configuration, DatabaseService.DatabaseFactory);
-                exists = await database.ExistCharacterAsync(validation.CharacterName);
+        validation = new CharacterValidation(ContentService.Classes, Configuration);
 
-                if (!exists) {
-                    creation = new CharacterCreation(player, Configuration, validation);
+        var validated = validation.ValidateName(name);
 
-                    var character = creation.CreateCharacter();
-
-                    isCreated = await database.AddCharacter(character);
-
-                    if (isCreated > 0) {
-                        var skills = creation.CreateSkills(character);
-                        var inventories = creation.CreateInventories(character);
-                        var passives = creation.CreatePassives(character);
-                        var equipments = creation.CreateEquipments(character);
-
-                        await database.AddSkills(skills);
-                        await database.AddPassives(passives);
-                        await database.AddInventories(inventories);
-                        await database.AddEquipments(equipments);
-                    }
-
-                    player.Characters = await database.GetCharactersPreviewAsync(player.AccountId);
-                }
-            }
-            catch (Exception ex) {
-                await WriteExceptionLog(player.Username, ex.Message);
-            }
-            finally {
-                database?.Dispose();
-            }
-
-            if (exists) {
-                var sender = GetSender();
-
-                sender?.SendAlertMessage(player, AlertMessageType.NameTaken, MenuResetType.Characters);
-
-                return false;
-            }
-
-            return isCreated > 0;
+        if (!CanValidateNext(validated)) {
+            SendValidationResult(validated);
+            DisconnectWhenNeeded(validated);
+            return false;
         }
 
-        private bool IsDataValidated() {
-            var name = Packet.Name;
-            var gender = Packet.Gender;
-            var classIndex = Packet.ClassIndex;
-            var model = Packet.ModelIndex;
-            var index = Packet.CharacterIndex;
+        validated = validation.ValidateGender(gender);
 
-            validation = new CharacterValidation(ContentService.Classes, Configuration);
-
-            var validated = validation.ValidateName(name);
-
-            if (!CanValidateNext(validated)) {
-                SendValidationResult(validated);
-                DisconnectWhenNeeded(validated);
-                return false;
-            }
-
-            validated = validation.ValidateGender(gender);
-
-            if (!CanValidateNext(validated)) {
-                SendValidationResult(validated);
-                DisconnectWhenNeeded(validated);
-                return false;
-            }
-
-            validated = validation.ValidateClass(classIndex);
-
-            if (!CanValidateNext(validated)) {
-                SendValidationResult(validated);
-                DisconnectWhenNeeded(validated);
-                return false;
-            }
-
-            validated = validation.ValidateModel(model);
-
-            if (!CanValidateNext(validated)) {
-                SendValidationResult(validated);
-                DisconnectWhenNeeded(validated);
-                return false;
-            }
-
-            validated = validation.ValidateCharacterIndex(index);
-
-            if (!CanValidateNext(validated)) {
-                SendValidationResult(validated);
-                DisconnectWhenNeeded(validated);
-                return false;
-            }
-
-            return true;
+        if (!CanValidateNext(validated)) {
+            SendValidationResult(validated);
+            DisconnectWhenNeeded(validated);
+            return false;
         }
 
-        private void DisconnectWhenNeeded(CharacterValidationResult validationResult) {
-            if (validationResult.Disconnect) {
-                Connection.Disconnect();
-            }
+        validated = validation.ValidateClass(classIndex);
+
+        if (!CanValidateNext(validated)) {
+            SendValidationResult(validated);
+            DisconnectWhenNeeded(validated);
+            return false;
         }
 
-        private bool CanValidateNext(CharacterValidationResult validationResult) {
-            return validationResult.AlertMessageType == AlertMessageType.None;
+        validated = validation.ValidateModel(model);
+
+        if (!CanValidateNext(validated)) {
+            SendValidationResult(validated);
+            DisconnectWhenNeeded(validated);
+            return false;
         }
 
-        private void SendValidationResult(CharacterValidationResult validationResult) {
-            var sender = GetSender();
+        validated = validation.ValidateCharacterIndex(index);
 
-            sender?.SendAlertMessage(Connection,                
-                validationResult.AlertMessageType,
-                validationResult.MenuResetType,
-                validationResult.Disconnect
-                );
+        if (!CanValidateNext(validated)) {
+            SendValidationResult(validated);
+            DisconnectWhenNeeded(validated);
+            return false;
         }
 
-        private IPlayerRepository? GetPlayerRepository() {
-            return ConnectionService?.PlayerRepository;
+        return true;
+    }
+
+    private void DisconnectWhenNeeded(CharacterValidationResult validationResult) {
+        if (validationResult.Disconnect) {
+            Connection.Disconnect();
         }
+    }
 
-        private ILogger? GetLogger() {
-            return LoggerService?.ServerLogger;
-        }
+    private bool CanValidateNext(CharacterValidationResult validationResult) {
+        return validationResult.AlertMessageType == AlertMessageType.None;
+    }
 
-        private Task WriteExceptionLog(string username, string message) {
-            var logger = GetLogger();
+    private void SendValidationResult(CharacterValidationResult validationResult) {
+        var sender = GetSender();
 
-            var description = new Description() {
-                Name = "Character Creation Excpetion",
-                WarningCode = WarningCode.Error,
-                Message = $"An error ocurred by {username} ... {message}",
-            };
+        sender?.SendAlertMessage(Connection,
+            validationResult.AlertMessageType,
+            validationResult.MenuResetType,
+            validationResult.Disconnect
+            );
+    }
 
-            logger?.Write(description);
+    private IPlayerRepository? GetPlayerRepository() {
+        return ConnectionService?.PlayerRepository;
+    }
 
-            OutputLog.Write($"Character Creation throw an exception ... ");
+    private ILogger? GetLogger() {
+        return LoggerService?.ServerLogger;
+    }
 
-            return Task.CompletedTask;
-        }
+    private Task WriteExceptionLog(string username, string message) {
+        var logger = GetLogger();
 
-        private IPacketSender? GetSender() {
-            return PacketSenderService?.PacketSender;
-        }
+        var description = new Description() {
+            Name = "Character Creation Excpetion",
+            WarningCode = WarningCode.Error,
+            Message = $"An error ocurred by {username} ... {message}",
+        };
+
+        logger?.Write(description);
+
+        OutputLog.Write($"Character Creation throw an exception ... ");
+
+        return Task.CompletedTask;
+    }
+
+    private IPacketSender? GetSender() {
+        return PacketSenderService?.PacketSender;
     }
 }

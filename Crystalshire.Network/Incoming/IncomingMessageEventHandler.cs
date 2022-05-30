@@ -1,44 +1,43 @@
-﻿using Crystalshire.Core.Serialization;
-using Crystalshire.Network.Messaging;
+﻿using Crystalshire.Network.Messaging;
 
-namespace Crystalshire.Network.Incoming {
-    public class IncomingMessageEventHandler : IIncomingMessageEventHandler {
-        public IMessageRepository<MessageHeader> MessageRepository { get; }
-        public IIncomingMessageParser IncomingMessageParser { get; }
-        public ISerializer Serializer { get; }
+namespace Crystalshire.Network.Incoming;
 
-        // Todo Add ICryptography.
+public class IncomingMessageEventHandler : IIncomingMessageEventHandler {
+    public IMessageRepository<MessageHeader> MessageRepository { get; }
+    public IIncomingMessageParser IncomingMessageParser { get; }
+    public ISerializer Serializer { get; }
 
-        public IncomingMessageEventHandler(
-            IMessageRepository<MessageHeader> messageRepository,
-            IIncomingMessageParser incomingMessageParser,
-            ISerializer serializer) {
+    // Todo Add ICryptography.
 
-            MessageRepository = messageRepository;
-            IncomingMessageParser = incomingMessageParser;
-            Serializer = serializer;
-        }
+    public IncomingMessageEventHandler(
+        IMessageRepository<MessageHeader> messageRepository,
+        IIncomingMessageParser incomingMessageParser,
+        ISerializer serializer) {
 
-        public void OnEvent(RingBufferByteArray buffer, long sequence, bool endOfBatch) {
-            var id = buffer.FromId;
-            var bytes = new byte[buffer.Length];
+        MessageRepository = messageRepository;
+        IncomingMessageParser = incomingMessageParser;
+        Serializer = serializer;
+    }
 
-            buffer.GetContent(ref bytes);
-            buffer.Reset();
+    public void OnEvent(RingBufferByteArray buffer, long sequence, bool endOfBatch) {
+        var id = buffer.FromId;
+        var bytes = new byte[buffer.Length];
 
-            // Todo Decrypt bytes
+        buffer.GetContent(ref bytes);
+        buffer.Reset();
 
-            var value = BitConverter.ToInt32(bytes, 0);
+        // Todo Decrypt bytes
 
-            if (Enum.IsDefined(typeof(MessageHeader), value)) {
-                var header = (MessageHeader)value;
-    
-                if (MessageRepository.Contains(header)) {
-                    var type = MessageRepository.GetMessage(header);
-                    dynamic packet = Serializer.Deserialize(bytes, type);
+        var value = BitConverter.ToInt32(bytes, 0);
 
-                    IncomingMessageParser.Process(id, packet);
-                }
+        if (Enum.IsDefined(typeof(MessageHeader), value)) {
+            var header = (MessageHeader)value;
+
+            if (MessageRepository.Contains(header)) {
+                var type = MessageRepository.GetMessage(header);
+                dynamic packet = Serializer.Deserialize(bytes, type);
+
+                IncomingMessageParser.Process(id, packet);
             }
         }
     }

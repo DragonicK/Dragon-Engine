@@ -1,100 +1,100 @@
 ﻿using Crystalshire.Core.Model.Mailing;
 using Crystalshire.Core.Model.Characters;
 
-namespace Crystalshire.Game.Players {
-    public class PlayerMail : IPlayerMail {
-        public int Count => _mails.Count;
+namespace Crystalshire.Game.Players;
 
-        private const int MaximumIndexes = byte.MaxValue;
+public class PlayerMail : IPlayerMail {
+    public int Count => _mails.Count;
 
-        private readonly IList<CharacterMail> _mails;
-        private readonly long _characterId;
+    private const int MaximumIndexes = byte.MaxValue;
 
-        private readonly HashSet<int> indexes;
+    private readonly IList<CharacterMail> _mails;
+    private readonly long _characterId;
 
-        public PlayerMail(long characterId, IList<CharacterMail> mails) {
-            _mails = mails;
-            _characterId = characterId;
+    private readonly HashSet<int> indexes;
 
-            if (mails is null) {
-                _mails = new List<CharacterMail>();
-            }
+    public PlayerMail(long characterId, IList<CharacterMail> mails) {
+        _mails = mails;
+        _characterId = characterId;
 
-            indexes = new HashSet<int>(MaximumIndexes);
+        if (mails is null) {
+            _mails = new List<CharacterMail>();
+        }
 
-            for (var i = 0; i < _mails.Count; ++i) {
-                var index = i + 1;
+        indexes = new HashSet<int>(MaximumIndexes);
 
-                _mails[i].Index = index;
+        for (var i = 0; i < _mails.Count; ++i) {
+            var index = i + 1;
 
-                indexes.Add(index);
+            _mails[i].Index = index;
+
+            indexes.Add(index);
+        }
+    }
+
+    public void Add(CharacterMail mail) {
+        mail.ReceiverCharacterId = _characterId;
+
+        for (var i = 1; i <= MaximumIndexes; ++i) {
+            if (!indexes.Contains(i)) {
+                mail.Index = i;
+
+                indexes.Add(i);
+
+                break;
             }
         }
 
-        public void Add(CharacterMail mail) {
-            mail.ReceiverCharacterId = _characterId;
+        _mails.Add(mail);
+    }
 
-            for (var i = 1; i <= MaximumIndexes; ++i) {
-                if (!indexes.Contains(i)) {
-                    mail.Index = i;
+    public MailingOperationCode Delete(int index) {
+        var selected = _mails.FirstOrDefault(x => x.Index == index);
 
-                    indexes.Add(i);
+        if (selected is not null) {
+            if (IsSomethingAttached(selected)) {
+                var currency = selected.AttachCurrency;
+                var receivedCurrency = selected.AttachCurrencyReceiveFlag;
+                var receivedItem = selected.AttachItemReceiveFlag;
 
-                    break;
+                if (!receivedItem) {
+                    return MailingOperationCode.AttachedNotReceived;
+                }
+
+                if (!receivedCurrency && currency > 0) {
+                    return MailingOperationCode.AttachedNotReceived;
                 }
             }
 
-            _mails.Add(mail);
+            selected.DeleteFlag = true;
+            selected.DeleteDate = DateTime.Now;
+            selected.Index = 0;
+
+            indexes.Remove(index);
+
+            return MailingOperationCode.Deleted;
         }
 
-        public MailingOperationCode Delete(int index) {
-            var selected = _mails.FirstOrDefault(x => x.Index == index);
+        return MailingOperationCode.Invalid;
+    }
 
-            if (selected is not null) {
-                if (IsSomethingAttached(selected)) {
-                    var currency = selected.AttachCurrency;
-                    var receivedCurrency = selected.AttachCurrencyReceiveFlag;
-                    var receivedItem = selected.AttachItemReceiveFlag;
+    public void UpdateReadFlag(int index) {
+        var selected = _mails.FirstOrDefault(x => x.Index == index);
 
-                    if (!receivedItem) {
-                        return MailingOperationCode.AttachedNotReceived;
-                    }
-
-                    if (!receivedCurrency && currency > 0) {
-                        return MailingOperationCode.AttachedNotReceived;
-                    }
-                }
-
-                selected.DeleteFlag = true;
-                selected.DeleteDate = DateTime.Now;
-                selected.Index = 0;
-
-                indexes.Remove(index);
-
-                return MailingOperationCode.Deleted;
-            }
-
-            return MailingOperationCode.Invalid;
+        if (selected is not null) {
+            selected.ReadFlag = true;
         }
+    }
 
-        public void UpdateReadFlag(int index) {
-            var selected = _mails.FirstOrDefault(x => x.Index == index);
+    public CharacterMail? Get(int index) {
+        return _mails.FirstOrDefault(x => x.Index == index); ;
+    }
 
-            if (selected is not null) {
-                selected.ReadFlag = true;
-            }
-        }
+    public IList<CharacterMail> ToList() {
+        return _mails;
+    }
 
-        public CharacterMail? Get(int index) {
-            return _mails.FirstOrDefault(x => x.Index == index); ;
-        }
-
-        public IList<CharacterMail> ToList() {
-            return _mails;
-        }
-
-        private bool IsSomethingAttached(CharacterMail mail) {
-            return mail.AttachItemFlag || mail.AttachCurrency > 0;
-        }
+    private bool IsSomethingAttached(CharacterMail mail) {
+        return mail.AttachItemFlag || mail.AttachCurrency > 0;
     }
 }

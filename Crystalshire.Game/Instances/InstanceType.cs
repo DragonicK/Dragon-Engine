@@ -1,7 +1,6 @@
-﻿namespace Crystalshire.Game.Instances {
-    public enum InstanceType {
-        Raid,
-        Field,
-        Dungeon
-    }
+﻿namespace Crystalshire.Game.Instances;
+public enum InstanceType {
+    Raid,
+    Field,
+    Dungeon
 }

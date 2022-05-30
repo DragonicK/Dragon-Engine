@@ -7,57 +7,57 @@ using Crystalshire.Game.Players;
 using Crystalshire.Game.Network;
 using Crystalshire.Game.Configurations;
 
-namespace Crystalshire.Game.Manager {
-    public class RecipeManager {
-        public IPlayer? Player { get; init; }
-        public IDatabase<Item>? Items { get; init; }
-        public IDatabase<Recipe>? Recipes { get; init; }
-        public IPacketSender? PacketSender { get; init; }
-        public IConfiguration? Configuration { get; init; }
+namespace Crystalshire.Game.Manager;
 
-        public void UseRecipe(int index, Item item) {
-            if (Recipes is null) {
-                return;
-            }
+public class RecipeManager {
+    public IPlayer? Player { get; init; }
+    public IDatabase<Item>? Items { get; init; }
+    public IDatabase<Recipe>? Recipes { get; init; }
+    public IPacketSender? PacketSender { get; init; }
+    public IConfiguration? Configuration { get; init; }
 
-            var recipeId = item.RecipeId;
+    public void UseRecipe(int index, Item item) {
+        if (Recipes is null) {
+            return;
+        }
 
-            if (Recipes.Contains(recipeId)) {
-                var recipe = Recipes[recipeId]!;
-                var profession = Player!.Craft.Profession;
+        var recipeId = item.RecipeId;
 
-                if (profession == recipe.CraftType) {
+        if (Recipes.Contains(recipeId)) {
+            var recipe = Recipes[recipeId]!;
+            var profession = Player!.Craft.Profession;
 
-                    if (Player.Recipes.Add(recipeId)) {
-                        PacketSender!.SendAddRecipe(Player, recipeId);
+            if (profession == recipe.CraftType) {
 
-                        var inventory = Player.Inventories.FindByIndex(index);
+                if (Player.Recipes.Add(recipeId)) {
+                    PacketSender!.SendAddRecipe(Player, recipeId);
 
-                        if (inventory is not null) {
-                            if (item.MaximumStack > 0) {
-                                inventory.Value--;
+                    var inventory = Player.Inventories.FindByIndex(index);
 
-                                if (inventory.Value <= 0) {
-                                    inventory.Clear();
-                                }
-                            }
-                            else {
+                    if (inventory is not null) {
+                        if (item.MaximumStack > 0) {
+                            inventory.Value--;
+
+                            if (inventory.Value <= 0) {
                                 inventory.Clear();
                             }
-
-                            PacketSender!.SendInventoryUpdate(Player, index);
                         }
-                    }
-                    else {
-                        if (Player.Recipes.Count >= Configuration!.Player.MaximumRecipes) {
-                            PacketSender!.SendMessage(SystemMessage.RecipeListIsFull, QbColor.BrigthRed, Player!);
+                        else {
+                            inventory.Clear();
                         }
-                    }
 
+                        PacketSender!.SendInventoryUpdate(Player, index);
+                    }
                 }
                 else {
-                    PacketSender!.SendMessage(SystemMessage.InvalidProfession, QbColor.BrigthRed, Player!);
+                    if (Player.Recipes.Count >= Configuration!.Player.MaximumRecipes) {
+                        PacketSender!.SendMessage(SystemMessage.RecipeListIsFull, QbColor.BrigthRed, Player!);
+                    }
                 }
+
+            }
+            else {
+                PacketSender!.SendMessage(SystemMessage.InvalidProfession, QbColor.BrigthRed, Player!);
             }
         }
     }

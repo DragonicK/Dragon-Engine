@@ -1,4 +1,4 @@
-﻿namespace Crystalshire.Game.Players {
-    public interface IPlayerAchievementProgress {
-    }
+﻿namespace Crystalshire.Game.Players;
+
+public interface IPlayerAchievementProgress {
 }

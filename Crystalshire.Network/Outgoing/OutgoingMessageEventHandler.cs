@@ -1,33 +1,32 @@
-﻿namespace Crystalshire.Network.Outgoing {
-    public class OutgoingMessageEventHandler : IOutgoingMessageEventHandler {
+﻿namespace Crystalshire.Network.Outgoing;
+public class OutgoingMessageEventHandler : IOutgoingMessageEventHandler {
 
-        public IOutgoingMessagePublisher OutgoingMessagePublisher { get; }
-        
-        // Todo Add ICryptography
+    public IOutgoingMessagePublisher OutgoingMessagePublisher { get; }
 
-        public OutgoingMessageEventHandler(IOutgoingMessagePublisher outgoingMessagePublisher) {
-            OutgoingMessagePublisher = outgoingMessagePublisher;
-        }
+    // Todo Add ICryptography
 
-        public void OnEvent(RingBufferByteArray buffer, long sequence, bool endOfBatch) {
-            var bytes = new byte[buffer.Length];
+    public OutgoingMessageEventHandler(IOutgoingMessagePublisher outgoingMessagePublisher) {
+        OutgoingMessagePublisher = outgoingMessagePublisher;
+    }
 
-            buffer.GetContent(ref bytes);
+    public void OnEvent(RingBufferByteArray buffer, long sequence, bool endOfBatch) {
+        var bytes = new byte[buffer.Length];
 
-            // Encrypt Bytes
+        buffer.GetContent(ref bytes);
 
-            var msg = new ByteBuffer(buffer.Length + 4);
-            msg.Write(bytes.Length);
-            msg.Write(bytes);
- 
-            OutgoingMessagePublisher.Broadcast(
-                buffer.TransmissionTarget,
-                buffer.DestinationPeers,
-                buffer.ExceptDestination,
-                msg.ToArray()
-                );
+        // Encrypt Bytes
 
-            buffer.Reset();
-        }
+        var msg = new ByteBuffer(buffer.Length + 4);
+        msg.Write(bytes.Length);
+        msg.Write(bytes);
+
+        OutgoingMessagePublisher.Broadcast(
+            buffer.TransmissionTarget,
+            buffer.DestinationPeers,
+            buffer.ExceptDestination,
+            msg.ToArray()
+            );
+
+        buffer.Reset();
     }
 }

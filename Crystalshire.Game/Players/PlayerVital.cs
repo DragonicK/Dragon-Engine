@@ -2,73 +2,73 @@
 using Crystalshire.Core.Model.Entity;
 using Crystalshire.Core.Model.Characters;
 
-namespace Crystalshire.Game.Players {
-    public class PlayerVital : IEntityVital, IPlayerVital {
-        private readonly CharacterVital _vital;
+namespace Crystalshire.Game.Players;
 
-        private readonly int[] maximum; 
+public class PlayerVital : IEntityVital, IPlayerVital {
+    private readonly CharacterVital _vital;
 
-        public PlayerVital(long characterId, CharacterVital vital) {
-            _vital = vital;
+    private readonly int[] maximum;
 
-            if (_vital is null) {
-                _vital = new CharacterVital() {
-                    CharacterId = characterId
-                };
-            }
+    public PlayerVital(long characterId, CharacterVital vital) {
+        _vital = vital;
 
-            maximum = new int[Enum.GetValues<Vital>().Length];
+        if (_vital is null) {
+            _vital = new CharacterVital() {
+                CharacterId = characterId
+            };
         }
 
-        public int Get(Vital vital) {
-            int value = _vital.Health;
+        maximum = new int[Enum.GetValues<Vital>().Length];
+    }
 
-            if (vital == Vital.MP) {
-                value = _vital.Mana;
-            }
-            else if (vital == Vital.Special) {
-                value = _vital.Special;
-            }   
+    public int Get(Vital vital) {
+        int value = _vital.Health;
 
-            return value;
+        if (vital == Vital.MP) {
+            value = _vital.Mana;
+        }
+        else if (vital == Vital.Special) {
+            value = _vital.Special;
         }
 
-        public int GetMaximum(Vital vital) {
-            return maximum[(int)vital];
+        return value;
+    }
+
+    public int GetMaximum(Vital vital) {
+        return maximum[(int)vital];
+    }
+
+    public void Set(Vital vital, int value) {
+        if (vital == Vital.HP) {
+            _vital.Health = value;
         }
-
-        public void Set(Vital vital, int value) {
-            if (vital == Vital.HP) {
-                _vital.Health = value;
-            }
-            else if (vital == Vital.MP) {
-                _vital.Mana = value;
-            }
-            else if (vital == Vital.Special) {
-                _vital.Special = value;
-            }
+        else if (vital == Vital.MP) {
+            _vital.Mana = value;
         }
-
-        public void SetMaximum(Vital vital, int value) {
-            if (Get(vital) == maximum[(int)vital]) {
-                Set(vital, value);
-            }
-
-            maximum[(int)vital] = value;
+        else if (vital == Vital.Special) {
+            _vital.Special = value;
         }
+    }
 
-        public void Add(Vital vital, int value) {
-            value = Get(vital) + value;
-
-            if (value > GetMaximum(vital)) {
-                value = GetMaximum(vital);
-            }
-
+    public void SetMaximum(Vital vital, int value) {
+        if (Get(vital) == maximum[(int)vital]) {
             Set(vital, value);
         }
 
-        public CharacterVital Get() {
-            return _vital;
+        maximum[(int)vital] = value;
+    }
+
+    public void Add(Vital vital, int value) {
+        value = Get(vital) + value;
+
+        if (value > GetMaximum(vital)) {
+            value = GetMaximum(vital);
         }
+
+        Set(vital, value);
+    }
+
+    public CharacterVital Get() {
+        return _vital;
     }
 }

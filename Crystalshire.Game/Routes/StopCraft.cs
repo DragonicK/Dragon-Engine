@@ -5,25 +5,25 @@ using Crystalshire.Core.Model.Crafts;
 
 using Crystalshire.Game.Services;
 
-namespace Crystalshire.Game.Routes {
-    public sealed class StopCraft {
-        public IConnection? Connection { get; set; }
-        public CpStopCraft? Packet { get; set; }
-        public LoggerService? LoggerService { get; init; }
-        public ConfigurationService? Configuration { get; init; }
-        public ConnectionService? ConnectionService { get; init; }
-        public PacketSenderService? PacketSenderService { get; init; }
+namespace Crystalshire.Game.Routes;
 
-        public void Process() {
-            var repository = ConnectionService!.PlayerRepository;
+public sealed class StopCraft {
+    public IConnection? Connection { get; set; }
+    public CpStopCraft? Packet { get; set; }
+    public LoggerService? LoggerService { get; init; }
+    public ConfigurationService? Configuration { get; init; }
+    public ConnectionService? ConnectionService { get; init; }
+    public PacketSenderService? PacketSenderService { get; init; }
 
-            if (Connection is not null) {
-                var player = repository!.FindByConnectionId(Connection.Id);
+    public void Process() {
+        var repository = ConnectionService!.PlayerRepository;
 
-                if (player is not null) {
-                    player.Craft.ProcessingRecipeId = 0;
-                    player.Craft.State = CraftState.Stopped;
-                }
+        if (Connection is not null) {
+            var player = repository!.FindByConnectionId(Connection.Id);
+
+            if (player is not null) {
+                player.Craft.ProcessingRecipeId = 0;
+                player.Craft.State = CraftState.Stopped;
             }
         }
     }

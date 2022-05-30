@@ -1,6 +1,5 @@
-﻿namespace Crystalshire.Model.Serialization {
+﻿namespace Crystalshire.Model.Serialization;
 
-    public class Project : Serializer {
+public class Project : Serializer {
 
-    }
 }

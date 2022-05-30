@@ -1,5 +1,5 @@
-﻿namespace Crystalshire.Network.Messaging.SharedPackets {
-    public sealed class CpShopClose : IMessagePacket {
-        public MessageHeader Header { get; set; } = MessageHeader.ShopClose;
-    }
+﻿namespace Crystalshire.Network.Messaging.SharedPackets;
+
+public sealed class CpShopClose : IMessagePacket {
+    public MessageHeader Header { get; set; } = MessageHeader.ShopClose;
 }

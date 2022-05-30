@@ -1,66 +1,66 @@
 ﻿using Crystalshire.Core.Common;
 using Crystalshire.Core.Services;
 
-namespace Crystalshire.Game {
-    public sealed class Starter {
-        public ServiceBroker Services { get; set; }
+namespace Crystalshire.Game;
 
-        private readonly Thread thread;
-        private bool running;
+public sealed class Starter {
+    public ServiceBroker Services { get; set; }
 
-        public Starter() {
-            Services = new ServiceBroker();
-            thread = new Thread(Update);
-        }
+    private readonly Thread thread;
+    private bool running;
 
-        public void Start() {
-            CheckDirectory();
+    public Starter() {
+        Services = new ServiceBroker();
+        thread = new Thread(Update);
+    }
 
-            Services.Start();
+    public void Start() {
+        CheckDirectory();
 
-            thread.Start();
-        }
+        Services.Start();
 
-        public void Stop() {
-            Services.Stop();
+        thread.Start();
+    }
 
-            running = false;
+    public void Stop() {
+        Services.Stop();
 
-            thread.Join(3000);
-        }
+        running = false;
 
-        private void CheckDirectory() {
-            var dir = new EngineDirectory();
+        thread.Join(3000);
+    }
 
-            dir.Add("./Server");
-            dir.Add("./Server/Logs");
-            dir.Add("./Server/Shops");
-            dir.Add("./Server/Fields");
-            dir.Add("./Server/Gashas");
-            dir.Add("./Server/Content");
-            dir.Add("./Server/Upgrades");
-            dir.Add("./Server/Premiums");
-            dir.Add("./Server/Instances");
-            dir.Add("./Server/BlackMarket");
-            dir.Add("./Server/Experiences");
+    private void CheckDirectory() {
+        var dir = new EngineDirectory();
 
-            dir.Create();
-        }
+        dir.Add("./Server");
+        dir.Add("./Server/Logs");
+        dir.Add("./Server/Shops");
+        dir.Add("./Server/Fields");
+        dir.Add("./Server/Gashas");
+        dir.Add("./Server/Content");
+        dir.Add("./Server/Upgrades");
+        dir.Add("./Server/Premiums");
+        dir.Add("./Server/Instances");
+        dir.Add("./Server/BlackMarket");
+        dir.Add("./Server/Experiences");
 
-        private async void Update() {
-            const int Delay = 999;
+        dir.Create();
+    }
 
-            var services = Services.GetContainer().GetUpdatableServices();
+    private async void Update() {
+        const int Delay = 999;
 
-            running = true;
+        var services = Services.GetContainer().GetUpdatableServices();
 
-            while (running) {
-                var count = services.Length;
+        running = true;
 
-                Parallel.For(0, count, index => services[index].Update(Delay)); 
+        while (running) {
+            var count = services.Length;
 
-                await Task.Delay(Delay);
-            }
+            Parallel.For(0, count, index => services[index].Update(Delay));
+
+            await Task.Delay(Delay);
         }
     }
 }

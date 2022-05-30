@@ -1,15 +1,15 @@
-﻿namespace Crystalshire.Network {
-    public class IpAddress {
-        public string Ip { get; set; }
-        public int Port { get; set; }
+﻿namespace Crystalshire.Network;
 
-        public IpAddress() {
-            Ip = "0.0.0.0";
-        }
+public class IpAddress {
+    public string Ip { get; set; }
+    public int Port { get; set; }
 
-        public IpAddress(string ipAddress, int port) {
-            Ip = ipAddress;
-            Port = port;
-        }
+    public IpAddress() {
+        Ip = "0.0.0.0";
+    }
+
+    public IpAddress(string ipAddress, int port) {
+        Ip = ipAddress;
+        Port = port;
     }
 }

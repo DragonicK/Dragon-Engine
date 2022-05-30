@@ -2,25 +2,25 @@
 
 using Crystalshire.Game.Network;
 
-namespace Crystalshire.Game.Services {
-    public class PacketSenderService : IService {
-        public ServicePriority Priority => ServicePriority.Last;
-        public IPacketSender? PacketSender { get; private set; }
-        public ConfigurationService? ConfigurationService { get; private set; }
-        public OutgoingMessageService? OutgoingMessageService { get; private set; }
-        public InstanceService? InstanceService { get; private set; }
+namespace Crystalshire.Game.Services;
 
-        public void Start() {
-            PacketSender = new PacketSender() {
-                InstanceService = InstanceService,
-                Configuration = ConfigurationService,
-                Passphrases = InstanceService!.Passphrases,
-                Writer = OutgoingMessageService!.OutgoingMessageWriter
-            };
-        }
+public class PacketSenderService : IService {
+    public ServicePriority Priority => ServicePriority.Last;
+    public IPacketSender? PacketSender { get; private set; }
+    public ConfigurationService? ConfigurationService { get; private set; }
+    public OutgoingMessageService? OutgoingMessageService { get; private set; }
+    public InstanceService? InstanceService { get; private set; }
 
-        public void Stop() {
+    public void Start() {
+        PacketSender = new PacketSender() {
+            InstanceService = InstanceService,
+            Configuration = ConfigurationService,
+            Passphrases = InstanceService!.Passphrases,
+            Writer = OutgoingMessageService!.OutgoingMessageWriter
+        };
+    }
 
-        }
+    public void Stop() {
+
     }
 }

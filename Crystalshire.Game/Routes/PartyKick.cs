@@ -5,46 +5,46 @@ using Crystalshire.Game.Players;
 using Crystalshire.Game.Manager;
 using Crystalshire.Game.Services;
 
-namespace Crystalshire.Game.Routes {
-    public sealed class PartyKick {
-        public IConnection? Connection { get; set; }
-        public CpPartyKick? Packet { get; set; }
-        public InstanceService? InstanceService { get; set; }
-        public PacketSenderService? PacketSenderService { get; set; }
-        public ConnectionService? ConnectionService { get; set; }
+namespace Crystalshire.Game.Routes;
 
-        public void Process() {
-            var sender = PacketSenderService!.PacketSender;
-            var repository = ConnectionService!.PlayerRepository;
+public sealed class PartyKick {
+    public IConnection? Connection { get; set; }
+    public CpPartyKick? Packet { get; set; }
+    public InstanceService? InstanceService { get; set; }
+    public PacketSenderService? PacketSenderService { get; set; }
+    public ConnectionService? ConnectionService { get; set; }
 
-            if (Connection is not null) {
-                var player = repository!.FindByConnectionId(Connection.Id);
+    public void Process() {
+        var sender = PacketSenderService!.PacketSender;
+        var repository = ConnectionService!.PlayerRepository;
 
-                if (player is not null) {
-                    var party = GetPartyManager(player);
+        if (Connection is not null) {
+            var player = repository!.FindByConnectionId(Connection.Id);
 
-                    if (party is not null) {
+            if (player is not null) {
+                var party = GetPartyManager(player);
 
-                        var manager = new PartyKickManager() {
-                            PacketSender = sender
-                        };
+                if (party is not null) {
 
-                        manager.ProcessKickRequest(party, player, Packet!.MemberIndex);
+                    var manager = new PartyKickManager() {
+                        PacketSender = sender
+                    };
 
-                    }
+                    manager.ProcessKickRequest(party, player, Packet!.MemberIndex);
+
                 }
             }
         }
+    }
 
-        private PartyManager? GetPartyManager(IPlayer player) {
-            var id = player.PartyId;
-            var parties = InstanceService!.Parties;
+    private PartyManager? GetPartyManager(IPlayer player) {
+        var id = player.PartyId;
+        var parties = InstanceService!.Parties;
 
-            if (parties.ContainsKey(id)) {
-                return parties[id];
-            }
-
-            return null;
+        if (parties.ContainsKey(id)) {
+            return parties[id];
         }
+
+        return null;
     }
 }

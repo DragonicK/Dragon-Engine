@@ -4,35 +4,35 @@ using Crystalshire.Network.Messaging.SharedPackets;
 using Crystalshire.Game.Services;
 using Crystalshire.Game.Manager;
 
-namespace Crystalshire.Game.Routes {
-    public sealed class CompletedCraft {
-        public IConnection? Connection { get; set; }
-        public CpCompletedCraft? Packet { get; set; }
-        public LoggerService? LoggerService { get; init; }
-        public ContentService? ContentService { get; init; }
-        public ConfigurationService? Configuration { get; init; }
-        public ConnectionService? ConnectionService { get; init; }
-        public PacketSenderService? PacketSenderService { get; init; }
+namespace Crystalshire.Game.Routes;
 
-        public void Process() {
-            var sender = PacketSenderService!.PacketSender;
-            var repository = ConnectionService!.PlayerRepository;
+public sealed class CompletedCraft {
+    public IConnection? Connection { get; set; }
+    public CpCompletedCraft? Packet { get; set; }
+    public LoggerService? LoggerService { get; init; }
+    public ContentService? ContentService { get; init; }
+    public ConfigurationService? Configuration { get; init; }
+    public ConnectionService? ConnectionService { get; init; }
+    public PacketSenderService? PacketSenderService { get; init; }
 
-            if (Connection is not null) {
-                var player = repository!.FindByConnectionId(Connection.Id);
+    public void Process() {
+        var sender = PacketSenderService!.PacketSender;
+        var repository = ConnectionService!.PlayerRepository;
 
-                if (player is not null) {
-                    var manager = new CraftManager() {
-                        Player = player,
-                        PacketSender = sender,
-                        Configuration = Configuration,
-                        Items = ContentService!.Items,
-                        Recipes = ContentService!.Recipes,
-                        Experience = ContentService!.CraftExperience
-                    };
+        if (Connection is not null) {
+            var player = repository!.FindByConnectionId(Connection.Id);
 
-                    manager.Conclude();
-                }
+            if (player is not null) {
+                var manager = new CraftManager() {
+                    Player = player,
+                    PacketSender = sender,
+                    Configuration = Configuration,
+                    Items = ContentService!.Items,
+                    Recipes = ContentService!.Recipes,
+                    Experience = ContentService!.CraftExperience
+                };
+
+                manager.Conclude();
             }
         }
     }

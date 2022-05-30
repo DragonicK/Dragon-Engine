@@ -1,13 +1,13 @@
-﻿namespace Crystalshire.Game.Configurations.Data {
-    public class Map {
-        public int MaximumNpcs { get; set; }
-        public int MaximumPlayers { get; set; }
-        public int MaximumCorpses { get; set; }
+﻿namespace Crystalshire.Game.Configurations.Data;
 
-        public Map() {
-            MaximumNpcs = 255;
-            MaximumPlayers = 255;
-            MaximumCorpses = 255;
-        }
+public class Map {
+    public int MaximumNpcs { get; set; }
+    public int MaximumPlayers { get; set; }
+    public int MaximumCorpses { get; set; }
+
+    public Map() {
+        MaximumNpcs = 255;
+        MaximumPlayers = 255;
+        MaximumCorpses = 255;
     }
 }

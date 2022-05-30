@@ -5,50 +5,50 @@ using Crystalshire.Game.Players;
 using Crystalshire.Game.Manager;
 using Crystalshire.Game.Services;
 
-namespace Crystalshire.Game.Routes {
-    public sealed class SelectedItemToUpgrade {
-        public IConnection? Connection { get; set; }
-        public CpSelectedItemToUpgrade? Packet { get; set; }
-        public ConfigurationService? Configuration { get; set; }
-        public ContentService? ContentService { get; set; }
-        public PacketSenderService? PacketSenderService { get; set; }
-        public ConnectionService? ConnectionService { get; set; }
+namespace Crystalshire.Game.Routes;
 
-        public void Process() {
-            var sender = PacketSenderService!.PacketSender;
-            var repository = ConnectionService!.PlayerRepository;
+public sealed class SelectedItemToUpgrade {
+    public IConnection? Connection { get; set; }
+    public CpSelectedItemToUpgrade? Packet { get; set; }
+    public ConfigurationService? Configuration { get; set; }
+    public ContentService? ContentService { get; set; }
+    public PacketSenderService? PacketSenderService { get; set; }
+    public ConnectionService? ConnectionService { get; set; }
 
-            if (Connection is not null) {
-                var player = repository!.FindByConnectionId(Connection.Id);
+    public void Process() {
+        var sender = PacketSenderService!.PacketSender;
+        var repository = ConnectionService!.PlayerRepository;
 
-                if (player is not null) {
-                    if (IsValidInventory(player)) {
+        if (Connection is not null) {
+            var player = repository!.FindByConnectionId(Connection.Id);
 
-                        var manager = new UpgradeManager() {
-                            Configuration = Configuration,
-                            ContentService = ContentService,
-                            PacketSender = sender,
-                            Player = player
-                        };
+            if (player is not null) {
+                if (IsValidInventory(player)) {
 
-                        manager.SendUpgradeData(Packet!.InventoryIndex);
+                    var manager = new UpgradeManager() {
+                        Configuration = Configuration,
+                        ContentService = ContentService,
+                        PacketSender = sender,
+                        Player = player
+                    };
 
-                    }
+                    manager.SendUpgradeData(Packet!.InventoryIndex);
+
                 }
             }
         }
+    }
 
-        private bool IsValidInventory(IPlayer player) {
-            var inventoryIndex = Packet!.InventoryIndex;
+    private bool IsValidInventory(IPlayer player) {
+        var inventoryIndex = Packet!.InventoryIndex;
 
-            if (inventoryIndex < 1) {
-                return false;
-            }
-            if (inventoryIndex > player.Character.MaximumInventories) {
-                return false;
-            }
-
-            return true;
+        if (inventoryIndex < 1) {
+            return false;
         }
+        if (inventoryIndex > player.Character.MaximumInventories) {
+            return false;
+        }
+
+        return true;
     }
 }

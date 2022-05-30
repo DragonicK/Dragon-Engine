@@ -13,135 +13,135 @@ using Crystalshire.Core.Serialization;
 
 using Crystalshire.Login.Configurations;
 
-namespace Crystalshire.Login.Services {
-    public class ConfigurationService : IService, IConfiguration {
-        public ServicePriority Priority => ServicePriority.First;
-        public JwtSettings JwtSettings { get; set; }
-        public bool Maintenance { get; set; }
-        public bool Debug { get; set; }
-        public bool ServerLogs { get; set; }
-        public bool ConnectionLogs { get; set; }
-        public int MaximumConnections { get; set; }
-        public bool UseEmailAsLogin { get; set; }
-        public bool UseGeoIp { get; set; }
-        public bool UseClientCheckSum { get; set; }
-        public bool IpBlock { get; set; }
-        public int IpBlockLifeTime { get; set; }
-        public int FilterCheckAccessTime { get; set; }
-        public int FilterIpLifeTime { get; set; }
-        public int IpMaxAttempt { get; set; }
-        public int IpMaxAccessCount { get; set; }
-        public int Delay { get; set; }
-        public IpAddress LoginServer { get; set; }
-        public IpAddress ChatServer { get; set; }
-        public IpAddress GameServer { get; set; }
-        public ClientVersion ClientVersion { get; set; }
-        public SmtpConfiguration Smtp { get; set; }
-        public DBConfiguration DatabaseMembership { get; set; }
-        public DBConfiguration DatabaseServer { get; set; }
-        public BlockedCountry BlockedCountry { get; set; }
+namespace Crystalshire.Login.Services;
 
-        public ConfigurationService() {
-            ServerLogs = true;
-            ConnectionLogs = true;
+public class ConfigurationService : IService, IConfiguration {
+    public ServicePriority Priority => ServicePriority.First;
+    public JwtSettings JwtSettings { get; set; }
+    public bool Maintenance { get; set; }
+    public bool Debug { get; set; }
+    public bool ServerLogs { get; set; }
+    public bool ConnectionLogs { get; set; }
+    public int MaximumConnections { get; set; }
+    public bool UseEmailAsLogin { get; set; }
+    public bool UseGeoIp { get; set; }
+    public bool UseClientCheckSum { get; set; }
+    public bool IpBlock { get; set; }
+    public int IpBlockLifeTime { get; set; }
+    public int FilterCheckAccessTime { get; set; }
+    public int FilterIpLifeTime { get; set; }
+    public int IpMaxAttempt { get; set; }
+    public int IpMaxAccessCount { get; set; }
+    public int Delay { get; set; }
+    public IpAddress LoginServer { get; set; }
+    public IpAddress ChatServer { get; set; }
+    public IpAddress GameServer { get; set; }
+    public ClientVersion ClientVersion { get; set; }
+    public SmtpConfiguration Smtp { get; set; }
+    public DBConfiguration DatabaseMembership { get; set; }
+    public DBConfiguration DatabaseServer { get; set; }
+    public BlockedCountry BlockedCountry { get; set; }
 
-            JwtSettings = new JwtSettings() {
-                SecurityKey = "7c8f9ad03beee8a2fe4275af8bb52c2e4559eca9",
-                DataSecurityKey = "db2f8f86e94c225ddcc9fd04b40491c3",
-                ExpirationMinutes = 1
-            };
+    public ConfigurationService() {
+        ServerLogs = true;
+        ConnectionLogs = true;
 
-            LoginServer = new IpAddress() {
-                Port = 7001
-            };
+        JwtSettings = new JwtSettings() {
+            SecurityKey = "7c8f9ad03beee8a2fe4275af8bb52c2e4559eca9",
+            DataSecurityKey = "db2f8f86e94c225ddcc9fd04b40491c3",
+            ExpirationMinutes = 1
+        };
 
-            GameServer = new IpAddress() {
-                Ip = "127.0.0.1",
-                Port = 7002,
-            };
+        LoginServer = new IpAddress() {
+            Port = 7001
+        };
 
-            ChatServer = new IpAddress() {
-                Ip = "127.0.0.1",
-                Port = 7003,
-            };
+        GameServer = new IpAddress() {
+            Ip = "127.0.0.1",
+            Port = 7002,
+        };
 
-            ClientVersion = new ClientVersion();
+        ChatServer = new IpAddress() {
+            Ip = "127.0.0.1",
+            Port = 7003,
+        };
 
-            Smtp = new SmtpConfiguration();
+        ClientVersion = new ClientVersion();
 
-            DatabaseMembership = new DBConfiguration() {
-                Database = "EngineMembership"
-            };
+        Smtp = new SmtpConfiguration();
 
-            DatabaseServer = new DBConfiguration() {
-                Database = "EngineServer"
-            };
+        DatabaseMembership = new DBConfiguration() {
+            Database = "EngineMembership"
+        };
 
-            BlockedCountry = new BlockedCountry();
-            BlockedCountry.Add("CH");
-            BlockedCountry.Add("JP");
-            BlockedCountry.Add("RU");
+        DatabaseServer = new DBConfiguration() {
+            Database = "EngineServer"
+        };
 
-            MaximumConnections = 1000;
-            IpMaxAttempt = 20;
-            IpMaxAccessCount = 20;
+        BlockedCountry = new BlockedCountry();
+        BlockedCountry.Add("CH");
+        BlockedCountry.Add("JP");
+        BlockedCountry.Add("RU");
 
-            IpBlockLifeTime = 600000;
-            FilterCheckAccessTime = 3000;
-            FilterIpLifeTime = 120000;
+        MaximumConnections = 1000;
+        IpMaxAttempt = 20;
+        IpMaxAccessCount = 20;
 
-            Delay = 45;
-        }
+        IpBlockLifeTime = 600000;
+        FilterCheckAccessTime = 3000;
+        FilterIpLifeTime = 120000;
 
-        public void Start() {
-            const string File = "./Server/Configuration.json";
+        Delay = 45;
+    }
 
-            if (!Json.FileExists(File)) {
-                Json.Save(File, this);
-            }
-            else {
-                var configuration = Json.Get<ConfigurationService>(File);
+    public void Start() {
+        const string File = "./Server/Configuration.json";
 
-                if (configuration is not null) {
-                    InjectObject(configuration);
-                }
-            }
-
+        if (!Json.FileExists(File)) {
             Json.Save(File, this);
         }
+        else {
+            var configuration = Json.Get<ConfigurationService>(File);
 
-        public void Stop() {
-
+            if (configuration is not null) {
+                InjectObject(configuration);
+            }
         }
 
-        internal void InjectObject(IConfiguration configuration) {
-            var targetType = GetType();
-            var properties = targetType.GetRuntimeProperties();
+        Json.Save(File, this);
+    }
 
-            var pairs = GetProperties(configuration);
-            var values = properties.Select(p => p.Name).ToArray();
+    public void Stop() {
 
-            foreach (var name in values) {
-                var property = properties.Where(p => p.Name == name).First();
+    }
 
-                if (pairs.ContainsKey(name)) {
-                    if (name.CompareTo("Priority") != 0) {
-                        property.SetValue(this, pairs[name].GetValue(configuration));
-                    }
+    internal void InjectObject(IConfiguration configuration) {
+        var targetType = GetType();
+        var properties = targetType.GetRuntimeProperties();
+
+        var pairs = GetProperties(configuration);
+        var values = properties.Select(p => p.Name).ToArray();
+
+        foreach (var name in values) {
+            var property = properties.Where(p => p.Name == name).First();
+
+            if (pairs.ContainsKey(name)) {
+                if (name.CompareTo("Priority") != 0) {
+                    property.SetValue(this, pairs[name].GetValue(configuration));
                 }
             }
         }
+    }
 
-        internal Dictionary<string, PropertyInfo> GetProperties(IConfiguration configuration) {
-            var pairs = new Dictionary<string, PropertyInfo>();
-            var properties = configuration.GetType().GetRuntimeProperties();
-            var values = properties.Select(p => p.Name).ToArray();
+    internal Dictionary<string, PropertyInfo> GetProperties(IConfiguration configuration) {
+        var pairs = new Dictionary<string, PropertyInfo>();
+        var properties = configuration.GetType().GetRuntimeProperties();
+        var values = properties.Select(p => p.Name).ToArray();
 
-            foreach (var name in values) {
-                pairs.Add(name, properties.Where(p => p.Name == name).First());
-            }
-
-            return pairs;
+        foreach (var name in values) {
+            pairs.Add(name, properties.Where(p => p.Name == name).First());
         }
+
+        return pairs;
     }
 }

@@ -3,32 +3,32 @@ using Crystalshire.Core.Services;
 
 using Crystalshire.Game.Repository;
 
-namespace Crystalshire.Game.Services {
-    public class ConnectionService : IService, IUpdatableService {
-        public ServicePriority Priority => ServicePriority.High;
-        public IConnectionRepository? ConnectionRepository { get; private set; }
-        public IPlayerRepository? PlayerRepository { get; private set; }
-        public IIndexGenerator? IndexGenerator { get; private set; }
-        public ConfigurationService? ConfigurationService { get; private set; }
+namespace Crystalshire.Game.Services;
 
-        public void Start() {
-            ConnectionRepository = new ConnectionRepository();
+public class ConnectionService : IService, IUpdatableService {
+    public ServicePriority Priority => ServicePriority.High;
+    public IConnectionRepository? ConnectionRepository { get; private set; }
+    public IPlayerRepository? PlayerRepository { get; private set; }
+    public IIndexGenerator? IndexGenerator { get; private set; }
+    public ConfigurationService? ConfigurationService { get; private set; }
 
-            if (ConfigurationService is not null) {
-                var maximum = ConfigurationService.MaximumConnections;
+    public void Start() {
+        ConnectionRepository = new ConnectionRepository();
 
-                IndexGenerator = new IndexGenerator(maximum);
-                PlayerRepository = new PlayerRepository(maximum);
-            }
+        if (ConfigurationService is not null) {
+            var maximum = ConfigurationService.MaximumConnections;
+
+            IndexGenerator = new IndexGenerator(maximum);
+            PlayerRepository = new PlayerRepository(maximum);
         }
+    }
 
-        public void Stop() {
-            ConnectionRepository?.Clear();
-        }
+    public void Stop() {
+        ConnectionRepository?.Clear();
+    }
 
-        public void Update(int deltaTime) {
+    public void Update(int deltaTime) {
 
 
-        }
     }
 }

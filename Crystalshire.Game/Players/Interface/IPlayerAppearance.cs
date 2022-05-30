@@ -1,6 +1,5 @@
-﻿
-namespace Crystalshire.Game.Players {
-    public interface IPlayerAppearance {
+﻿namespace Crystalshire.Game.Players;
 
-    }
+public interface IPlayerAppearance {
+
 }

@@ -4,50 +4,50 @@ using Crystalshire.Network.Messaging.SharedPackets;
 using Crystalshire.Game.Services;
 using Crystalshire.Game.Manager;
 
-namespace Crystalshire.Game.Routes {
-    public sealed class ConversationOptions {
-        public IConnection? Connection { get; set; }
-        public PacketConversationOption? Packet { get; set; }
-        public PacketSenderService? PacketSenderService { get; init; }
-        public ConnectionService? ConnectionService { get; init; }
-        public LoggerService? LoggerService { get; init; }
-        public ContentService? ContentService { get; init; }
-        public InstanceService? InstanceService { get; init; }
+namespace Crystalshire.Game.Routes;
 
-        public void Process() {
-            if (IsValidPacket()) {
-                var repository = ConnectionService!.PlayerRepository;
-                var sender = PacketSenderService!.PacketSender;
+public sealed class ConversationOptions {
+    public IConnection? Connection { get; set; }
+    public PacketConversationOption? Packet { get; set; }
+    public PacketSenderService? PacketSenderService { get; init; }
+    public ConnectionService? ConnectionService { get; init; }
+    public LoggerService? LoggerService { get; init; }
+    public ContentService? ContentService { get; init; }
+    public InstanceService? InstanceService { get; init; }
 
-                if (Connection is not null) {
-                    var player = repository!.FindByConnectionId(Connection.Id);
+    public void Process() {
+        if (IsValidPacket()) {
+            var repository = ConnectionService!.PlayerRepository;
+            var sender = PacketSenderService!.PacketSender;
 
-                    if (player is not null) {
-                        var manager = new ConversationManager() {
-                            Player = player,
-                            PacketSender = sender,
-                            Shops = ContentService!.Shops,
-                            Effects = ContentService!.Effects,
-                            InstanceService = InstanceService,
-                            Conversations = ContentService!.Conversations
-                        };
+            if (Connection is not null) {
+                var player = repository!.FindByConnectionId(Connection.Id);
 
-                        manager.ProcessOptions(Packet!.ConversationId, Packet.ChatIndex, Packet.Option);
-                    }
+                if (player is not null) {
+                    var manager = new ConversationManager() {
+                        Player = player,
+                        PacketSender = sender,
+                        Shops = ContentService!.Shops,
+                        Effects = ContentService!.Effects,
+                        InstanceService = InstanceService,
+                        Conversations = ContentService!.Conversations
+                    };
+
+                    manager.ProcessOptions(Packet!.ConversationId, Packet.ChatIndex, Packet.Option);
                 }
             }
         }
+    }
 
-        private bool IsValidPacket() {
-            if (Packet!.ConversationId <= 0) {
-                return false;
-            }
-
-            if (Packet!.ChatIndex <=  0) {
-                return false;
-            }
-
-            return true;
+    private bool IsValidPacket() {
+        if (Packet!.ConversationId <= 0) {
+            return false;
         }
+
+        if (Packet!.ChatIndex <= 0) {
+            return false;
+        }
+
+        return true;
     }
 }

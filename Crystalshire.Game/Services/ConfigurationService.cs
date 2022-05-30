@@ -11,138 +11,138 @@ using Crystalshire.Core.Serialization;
 using Crystalshire.Game.Configurations;
 using Crystalshire.Game.Configurations.Data;
 
-namespace Crystalshire.Game.Services {
-    public class ConfigurationService : IService, IConfiguration {
-        public ServicePriority Priority { get; private set; } = ServicePriority.First;
-        public JwtSettings JwtSettings { get; set; }
-        public bool Debug { get; set; }
-        public bool ServerLogs { get; set; }
-        public bool ConnectionLogs { get; set; }
-        public int MaximumConnections { get; set; }
-        public int TimeOut { get; set; }
-        public int Delay { get; set; }
-        public IpAddress GameServer { get; set; }
-        public DBConfiguration DatabaseMembership { get; set; }
-        public DBConfiguration DatabaseServer { get; set; }
-        public DBConfiguration DatabaseGame { get; set; }
-        public BlockedCountry BlockedCountry { get; set; }
+namespace Crystalshire.Game.Services;
 
-        public BlackMarket BlackMarket { get; set; }
-        public Rate Rates { get; set; }
-        public Character Character { get; set; }
-        public Corpse Corpse { get; set; }
-        public Craft Craft { get; set; }
-        public Guild Guild { get; set; }
-        public Loot Loot { get; set; }
-        public Map Map { get; set; }
-        public Mail Mail { get; set; }
-        public Party Party { get; set; }
-        public Ressurrection Ressurrection { get; set; }
-        public Trade Trade { get; set; }
-        public Player Player { get; set; }
-        public ProhibitedNames ProhibitedNames { get; set; }
-        public Message Messages { get; set; }
-     
-        public ConfigurationService() {
-            BlackMarket = new BlackMarket();
-            Character = new Character();
-            Corpse = new Corpse();
-            Craft = new Craft();
-            Guild = new Guild();
-            Mail = new Mail();
-            Map = new Map();
-            Loot = new Loot();
-            Party = new Party();
-            Player = new Player();
-            Rates = new Rate();
-            Ressurrection = new Ressurrection();
-            Trade = new Trade();
-            ProhibitedNames = new ProhibitedNames();
-            Messages = new Message();
+public class ConfigurationService : IService, IConfiguration {
+    public ServicePriority Priority { get; private set; } = ServicePriority.First;
+    public JwtSettings JwtSettings { get; set; }
+    public bool Debug { get; set; }
+    public bool ServerLogs { get; set; }
+    public bool ConnectionLogs { get; set; }
+    public int MaximumConnections { get; set; }
+    public int TimeOut { get; set; }
+    public int Delay { get; set; }
+    public IpAddress GameServer { get; set; }
+    public DBConfiguration DatabaseMembership { get; set; }
+    public DBConfiguration DatabaseServer { get; set; }
+    public DBConfiguration DatabaseGame { get; set; }
+    public BlockedCountry BlockedCountry { get; set; }
 
-            JwtSettings = new JwtSettings() {
-                SecurityKey = "7c8f9ad03beee8a2fe4275af8bb52c2e4559eca9",
-                DataSecurityKey = "db2f8f86e94c225ddcc9fd04b40491c3",
-                ExpirationMinutes = 1
-            };
+    public BlackMarket BlackMarket { get; set; }
+    public Rate Rates { get; set; }
+    public Character Character { get; set; }
+    public Corpse Corpse { get; set; }
+    public Craft Craft { get; set; }
+    public Guild Guild { get; set; }
+    public Loot Loot { get; set; }
+    public Map Map { get; set; }
+    public Mail Mail { get; set; }
+    public Party Party { get; set; }
+    public Ressurrection Ressurrection { get; set; }
+    public Trade Trade { get; set; }
+    public Player Player { get; set; }
+    public ProhibitedNames ProhibitedNames { get; set; }
+    public Message Messages { get; set; }
 
-            GameServer = new IpAddress() {
-                Ip = "0.0.0.0",
-                Port = 7002
-            };
+    public ConfigurationService() {
+        BlackMarket = new BlackMarket();
+        Character = new Character();
+        Corpse = new Corpse();
+        Craft = new Craft();
+        Guild = new Guild();
+        Mail = new Mail();
+        Map = new Map();
+        Loot = new Loot();
+        Party = new Party();
+        Player = new Player();
+        Rates = new Rate();
+        Ressurrection = new Ressurrection();
+        Trade = new Trade();
+        ProhibitedNames = new ProhibitedNames();
+        Messages = new Message();
 
-            DatabaseMembership = new DBConfiguration() {
-                Database = "EngineMembership"
-            };
+        JwtSettings = new JwtSettings() {
+            SecurityKey = "7c8f9ad03beee8a2fe4275af8bb52c2e4559eca9",
+            DataSecurityKey = "db2f8f86e94c225ddcc9fd04b40491c3",
+            ExpirationMinutes = 1
+        };
 
-            DatabaseServer = new DBConfiguration() {
-                Database = "EngineServer"
-            };
+        GameServer = new IpAddress() {
+            Ip = "0.0.0.0",
+            Port = 7002
+        };
 
-            DatabaseGame = new DBConfiguration() {
-                Database = "EngineGame"
-            };
+        DatabaseMembership = new DBConfiguration() {
+            Database = "EngineMembership"
+        };
 
-            BlockedCountry = new BlockedCountry();
-            BlockedCountry.Add("CH");
-            BlockedCountry.Add("JP");
-            BlockedCountry.Add("RU");
+        DatabaseServer = new DBConfiguration() {
+            Database = "EngineServer"
+        };
 
-            TimeOut = 30;
-            MaximumConnections = 1000;
+        DatabaseGame = new DBConfiguration() {
+            Database = "EngineGame"
+        };
 
-            Delay = 45;
-        }
+        BlockedCountry = new BlockedCountry();
+        BlockedCountry.Add("CH");
+        BlockedCountry.Add("JP");
+        BlockedCountry.Add("RU");
 
-        public void Start() {
-            const string File = "./Server/Configuration.json";
+        TimeOut = 30;
+        MaximumConnections = 1000;
 
-            if (!Json.FileExists(File)) {
-                Json.Save(File, this);
-            }
-            else {
-                var configuration = Json.Get<ConfigurationService>(File);
+        Delay = 45;
+    }
 
-                if (configuration is not null) {
-                    InjectObject(configuration);
-                }
-            }
+    public void Start() {
+        const string File = "./Server/Configuration.json";
 
+        if (!Json.FileExists(File)) {
             Json.Save(File, this);
         }
+        else {
+            var configuration = Json.Get<ConfigurationService>(File);
 
-        public void Stop() {
-
+            if (configuration is not null) {
+                InjectObject(configuration);
+            }
         }
 
-        internal void InjectObject(IConfiguration configuration) {
-            var targetType = GetType();
-            var properties = targetType.GetRuntimeProperties();
+        Json.Save(File, this);
+    }
 
-            var pairs = GetProperties(configuration);
-            var values = properties.Select(p => p.Name).ToArray();
+    public void Stop() {
 
-            foreach (var name in values) {
-                var property = properties.Where(p => p.Name == name).First();
+    }
 
-                if (pairs.ContainsKey(name)) {
-                    if (name.CompareTo("Priority") != 0) {
-                        property.SetValue(this, pairs[name].GetValue(configuration));
-                    }
+    internal void InjectObject(IConfiguration configuration) {
+        var targetType = GetType();
+        var properties = targetType.GetRuntimeProperties();
+
+        var pairs = GetProperties(configuration);
+        var values = properties.Select(p => p.Name).ToArray();
+
+        foreach (var name in values) {
+            var property = properties.Where(p => p.Name == name).First();
+
+            if (pairs.ContainsKey(name)) {
+                if (name.CompareTo("Priority") != 0) {
+                    property.SetValue(this, pairs[name].GetValue(configuration));
                 }
             }
         }
+    }
 
-        internal IDictionary<string, PropertyInfo> GetProperties(IConfiguration configuration) {
-            var pairs = new Dictionary<string, PropertyInfo>();
-            var properties = configuration.GetType().GetRuntimeProperties();
-            var values = properties.Select(p => p.Name).ToArray();
+    internal IDictionary<string, PropertyInfo> GetProperties(IConfiguration configuration) {
+        var pairs = new Dictionary<string, PropertyInfo>();
+        var properties = configuration.GetType().GetRuntimeProperties();
+        var values = properties.Select(p => p.Name).ToArray();
 
-            foreach (var name in values) {
-                pairs.Add(name, properties.Where(p => p.Name == name).First());
-            }
-
-            return pairs;
+        foreach (var name in values) {
+            pairs.Add(name, properties.Where(p => p.Name == name).First());
         }
+
+        return pairs;
     }
 }

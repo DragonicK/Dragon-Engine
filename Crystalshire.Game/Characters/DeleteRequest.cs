@@ -1,18 +1,18 @@
-﻿namespace Crystalshire.Game.Characters {
-    public class DeleteRequest : IDeleteRequest {
-        public long Id { get; set; }
-        public string Name { get; set; }
-        public long AccountId { get; set; }
-        public long CharacterId { get; set; }
-        public DateTime? RequestDate { get; set; }
-        public DateTime? ExclusionDate { get; set; }
-        public int RemainingSeconds { get; set; }
+﻿namespace Crystalshire.Game.Characters;
 
-        public DeleteRequest() {
-            Name = string.Empty;
-        }
+public class DeleteRequest : IDeleteRequest {
+    public long Id { get; set; }
+    public string Name { get; set; }
+    public long AccountId { get; set; }
+    public long CharacterId { get; set; }
+    public DateTime? RequestDate { get; set; }
+    public DateTime? ExclusionDate { get; set; }
+    public int RemainingSeconds { get; set; }
 
-        public void Decrease() => RemainingSeconds--;
-        public bool CanDelete() => RemainingSeconds <= 0;
+    public DeleteRequest() {
+        Name = string.Empty;
     }
+
+    public void Decrease() => RemainingSeconds--;
+    public bool CanDelete() => RemainingSeconds <= 0;
 }

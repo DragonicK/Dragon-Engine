@@ -1,53 +1,52 @@
-﻿using System;
-using Crystalshire.Core.Logs;
+﻿using Crystalshire.Core.Logs;
 
-namespace Crystalshire.Login {
-    public class Program {
-        static Starter? Server { get; set; }
+namespace Crystalshire.Login;
 
-        static void Main(string[] args) {
-            Start();
+public class Program {
+    static Starter? Server { get; set; }
 
-            while (true) {
-                var input = Console.ReadLine();
+    static void Main(string[] args) {
+        Start();
 
-                Process(input);
+        while (true) {
+            var input = Console.ReadLine();
 
-                if (IsExit(input)) {
-                    break;
-                }
+            Process(input);
+
+            if (IsExit(input)) {
+                break;
             }
-
-            Stop();
         }
 
-        private static void Start() {
-            OutputLog.Write("Starting Server");
+        Stop();
+    }
 
-            Server = new Starter();
-            Server.Start();
+    private static void Start() {
+        OutputLog.Write("Starting Server");
 
-            OutputLog.Write("Server Started");
+        Server = new Starter();
+        Server.Start();
+
+        OutputLog.Write("Server Started");
+    }
+
+    private static void Stop() {
+        Server?.Stop();
+
+        OutputLog.Write("Server Stoped");
+    }
+
+    private static bool IsExit(string? input) {
+        if (input is null) {
+            return false;
         }
 
-        private static void Stop() {
-            Server?.Stop();
+        return input == "exit";
+    }
 
-            OutputLog.Write("Server Stoped");
-        }
+    private static void Process(string? input) {
+        if (input is not null) {
 
-        private static bool IsExit(string? input) {
-            if (input is null) {
-                return false;
-            }
-
-            return input == "exit";
-        }
-
-        private static void Process(string? input) {
-            if (input is not null) {
-
-            }
         }
     }
 }

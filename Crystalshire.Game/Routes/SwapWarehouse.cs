@@ -4,47 +4,47 @@ using Crystalshire.Network.Messaging.SharedPackets;
 using Crystalshire.Game.Services;
 using Crystalshire.Game.Players;
 
-namespace Crystalshire.Game.Routes {
-    public sealed class SwapWarehouse {
-        public IConnection? Connection { get; set; }
-        public CpSwapWarehouse? Packet { get; set; }
-        public LoggerService? LoggerService { get; init; }
-        public ConfigurationService? Configuration { get; init; }
-        public ConnectionService? ConnectionService { get; init; }
-        public PacketSenderService? PacketSenderService { get; init; }
+namespace Crystalshire.Game.Routes;
 
-        public void Process() {
-            var sender = PacketSenderService!.PacketSender;
-            var repository = ConnectionService!.PlayerRepository;
+public sealed class SwapWarehouse {
+    public IConnection? Connection { get; set; }
+    public CpSwapWarehouse? Packet { get; set; }
+    public LoggerService? LoggerService { get; init; }
+    public ConfigurationService? Configuration { get; init; }
+    public ConnectionService? ConnectionService { get; init; }
+    public PacketSenderService? PacketSenderService { get; init; }
 
-            if (Connection is not null) {
-                var player = repository!.FindByConnectionId(Connection.Id);
+    public void Process() {
+        var sender = PacketSenderService!.PacketSender;
+        var repository = ConnectionService!.PlayerRepository;
 
-                if (player is not null) {
-                    var source = Packet!.OldIndex;
-                    var destination = Packet!.NewIndex;
+        if (Connection is not null) {
+            var player = repository!.FindByConnectionId(Connection.Id);
 
-                    if (CanSwap(player, source, destination)) {
-                        player.Warehouse.Swap(source, destination);
+            if (player is not null) {
+                var source = Packet!.OldIndex;
+                var destination = Packet!.NewIndex;
 
-                        sender?.SendWarehouseUpdate(player, source);
-                        sender?.SendWarehouseUpdate(player, destination);
-                    }
+                if (CanSwap(player, source, destination)) {
+                    player.Warehouse.Swap(source, destination);
+
+                    sender?.SendWarehouseUpdate(player, source);
+                    sender?.SendWarehouseUpdate(player, destination);
                 }
             }
         }
+    }
 
-        private bool CanSwap(IPlayer player, int source, int destination) {
-            if (source < 1 || destination < 1) {
-                return false;
-            }
-
-            if (source > player.Character.MaximumWarehouse || destination > player.Character.MaximumWarehouse) {
-                return false;
-            }
-
-            return true;
+    private bool CanSwap(IPlayer player, int source, int destination) {
+        if (source < 1 || destination < 1) {
+            return false;
         }
 
+        if (source > player.Character.MaximumWarehouse || destination > player.Character.MaximumWarehouse) {
+            return false;
+        }
+
+        return true;
     }
+
 }
