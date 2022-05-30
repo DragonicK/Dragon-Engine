@@ -6,17 +6,22 @@
     <Nullable>enable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
-    <ApplicationIcon>_model.ico</ApplicationIcon>
-    <BaseOutputPath>..\Build\Model</BaseOutputPath>
+    <BaseOutputPath>..\Build\Maps</BaseOutputPath>
+    <BaseIntermediateOutputPath></BaseIntermediateOutputPath>
+    <ApplicationIcon>_maps.ico</ApplicationIcon>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="_model.ico" />
+    <Content Include="_maps.ico" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Crystalshire.Core\Crystalshire.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Common\" />
   </ItemGroup>
 
   <ItemGroup>
