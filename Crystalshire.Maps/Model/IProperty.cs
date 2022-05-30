@@ -1,7 +1,6 @@
 ﻿using Crystalshire.Core.Model.Maps;
-using Crystalshire.Maps.Model;
 
-namespace Crystalshire.Maps.Editor;
+namespace Crystalshire.Maps.Model;
 public interface IProperty {
     string Name { get; set; }
     string Music { get; set; }
@@ -16,7 +15,6 @@ public interface IProperty {
     string KeyA { get; set; }
     string KeyB { get; set; }
     string KeyC { get; set; }
-    string KeyD { get; set; }
 
     string GetHashText();
     byte[] GetHash();
