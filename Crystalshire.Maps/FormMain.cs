@@ -15,4 +15,17 @@ public partial class FormMain : Form {
 
         JetBrainsMono = new JetBrainsMono(FontLoader);
     }
+
+    private void button1_Click(object sender, EventArgs e) {
+        var f = new FormProperty(JetBrainsMono, null, this);
+        f.ShowDialog();
+    }
+
+    public void UpdateMapSize() {
+
+    }
+
+    public void ChangeSelectedMapName(string name) {
+
+    }
 }
