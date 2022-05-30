@@ -3,304 +3,304 @@ using Crystalshire.Core.Model.Npcs;
 
 using Crystalshire.Editor.Common;
 
-namespace Crystalshire.Editor.Npcs {
-    public partial class FormNpc : Form {
-        public IDatabase<Npc> Database { get; }
-        public Npc? Element { get; private set; }
-        public Configuration Configuration { get; private set; }
-        public int SelectedIndex { get; private set; } = Util.NotSelected;
+namespace Crystalshire.Editor.Npcs;
 
-        public FormNpc(Configuration configuration, IDatabase<Npc> database) {
-            InitializeComponent();
+public partial class FormNpc : Form {
+    public IDatabase<Npc> Database { get; }
+    public Npc? Element { get; private set; }
+    public Configuration Configuration { get; private set; }
+    public int SelectedIndex { get; private set; } = Util.NotSelected;
 
-            SetEnabled(false);
+    public FormNpc(Configuration configuration, IDatabase<Npc> database) {
+        InitializeComponent();
 
-            Util.FillComboBox<NpcBehaviour>(ComboBehaviour);
+        SetEnabled(false);
 
-            Database = database;
-            Configuration = configuration;
-            Element = null;
+        Util.FillComboBox<NpcBehaviour>(ComboBehaviour);
 
-            Util.UpdateList(Database, ListIndex);
+        Database = database;
+        Configuration = configuration;
+        Element = null;
+
+        Util.UpdateList(Database, ListIndex);
+    }
+
+    private void MenuSave_Click(object sender, EventArgs e) {
+        var folder = Database.Folder;
+
+        Database.Save();
+
+        Database.Folder = Configuration.OutputClientPath;
+
+        Database.Save();
+
+        Database.Folder = Configuration.OutputServerPath;
+
+        Database.Save();
+
+        Database.Folder = folder;
+
+        MessageBox.Show("Saved");
+    }
+
+    private void MenuExit_Click(object sender, EventArgs e) {
+        Close();
+    }
+
+    private void Initialize() {
+        if (Element is not null) {
+            TextId.Text = Element.Id.ToString();
+            TextName.Text = Element.Name;
+            TextTitle.Text = Element.Title;
+
+            ComboBehaviour.SelectedIndex = (int)Element.Behaviour;
+
+            TextModelId.Text = Element.ModelId.ToString();
+            TextLevel.Text = Element.Level.ToString();
+            TextAttributeId.Text = Element.AttributeId.ToString();
+            TextExperience.Text = Element.Experience.ToString();
+            TextSound.Text = Element.Sound.ToString();
+
+            UpdateConversationList();
+
+            TextGreetings.Text = Element.Greetings;
+            TextConversationId.Text = "0";
         }
+    }
 
-        private void MenuSave_Click(object sender, EventArgs e) {
-            var folder = Database.Folder;
+    private void Clear() {
+        TextId.Text = "0";
+        TextName.Text = string.Empty;
+        TextTitle.Text = string.Empty;
 
-            Database.Save();
+        ComboBehaviour.SelectedIndex = 0;
 
-            Database.Folder = Configuration.OutputClientPath;
+        TextModelId.Text = "0";
+        TextLevel.Text = "0";
+        TextAttributeId.Text = "0";
+        TextExperience.Text = "0";
+        TextSound.Text = "None.";
 
-            Database.Save();
+        TextGreetings.Text = string.Empty;
+        TextConversationId.Text = "0";
+        ListConversation.Items.Clear();
+    }
 
-            Database.Folder = Configuration.OutputServerPath;
+    private void SetEnabled(bool enabled) {
+        TabAchievement.Enabled = enabled;
+    }
 
-            Database.Save();
+    #region Add, Delete, Clear
 
-            Database.Folder = folder;
+    private void ButtonAdd_Click(object sender, EventArgs e) {
+        for (var i = 1; i <= int.MaxValue; i++) {
+            if (!Database.Contains(i)) {
 
-            MessageBox.Show("Saved");
-        }
+                Database.Add(i, new Npc() { Id = i });
 
-        private void MenuExit_Click(object sender, EventArgs e) {
-            Close();
-        }
+                Util.UpdateList(Database, ListIndex);
 
-        private void Initialize() {
-            if (Element is not null) {
-                TextId.Text = Element.Id.ToString();
-                TextName.Text = Element.Name;
-                TextTitle.Text = Element.Title;
-
-                ComboBehaviour.SelectedIndex = (int)Element.Behaviour;
-
-                TextModelId.Text = Element.ModelId.ToString();
-                TextLevel.Text = Element.Level.ToString();
-                TextAttributeId.Text = Element.AttributeId.ToString();
-                TextExperience.Text = Element.Experience.ToString();
-                TextSound.Text = Element.Sound.ToString();
-
-                UpdateConversationList();
-
-                TextGreetings.Text = Element.Greetings;
-                TextConversationId.Text = "0";
+                return;
             }
         }
+    }
 
-        private void Clear() {
-            TextId.Text = "0";
-            TextName.Text = string.Empty;
-            TextTitle.Text = string.Empty;
+    private void ButtonDelete_Click(object sender, EventArgs e) {
+        if (Element is not null) {
+            if (Element.Id > 0) {
+                Database.Remove(Element.Id);
 
-            ComboBehaviour.SelectedIndex = 0;
+                SetEnabled(false);
+                Element = null;
 
-            TextModelId.Text = "0";
-            TextLevel.Text = "0";
-            TextAttributeId.Text = "0";
-            TextExperience.Text = "0";
-            TextSound.Text = "None.";
+                Clear();
 
-            TextGreetings.Text = string.Empty;
-            TextConversationId.Text = "0";
-            ListConversation.Items.Clear();
+                SelectedIndex = Util.NotSelected;
+
+                Util.UpdateList(Database, ListIndex);
+            }
         }
+    }
 
-        private void SetEnabled(bool enabled) {
-            TabAchievement.Enabled = enabled;
+    private void ButtonClear_Click(object sender, EventArgs e) {
+        SelectedIndex = Util.NotSelected;
+        ListIndex.Items.Clear();
+        SetEnabled(false);
+        Database.Clear();
+        Element = null;
+        Clear();
+    }
+
+    #endregion
+
+    #region List Index
+
+    private void ListIndex_Click(object sender, EventArgs e) {
+        if (ListIndex.Items.Count > 0) {
+            var index = ListIndex.SelectedIndex;
+
+            if (index > Util.NotSelected) {
+                var selected = ListIndex.Items[index].ToString();
+
+                if (selected is not null) {
+                    var id = Util.GetListSelectedId(selected);
+
+                    if (id > 0) {
+                        SelectedIndex = index;
+                        Element = Database[id];
+                        SetEnabled(true);
+                        Initialize();
+                    }
+                }
+            }
         }
+    }
 
-        #region Add, Delete, Clear
+    #endregion
 
-        private void ButtonAdd_Click(object sender, EventArgs e) {
-            for (var i = 1; i <= int.MaxValue; i++) {
-                if (!Database.Contains(i)) {
+    #region Npc Data
 
-                    Database.Add(i, new Npc() { Id = i });
+    private void TextId_Validated(object sender, EventArgs e) {
+        if (Element is not null) {
+            var lastId = Element.Id;
+            var id = Util.GetValue(TextId);
 
-                    Util.UpdateList(Database, ListIndex);
-
+            if (id > 0) {
+                if (id == lastId) {
                     return;
                 }
-            }
-        }
 
-        private void ButtonDelete_Click(object sender, EventArgs e) {
-            if (Element is not null) {
-                if (Element.Id > 0) {
+                if (Database.Contains(id)) {
+                    MessageBox.Show($"The Id {id} is already in use.");
+                }
+                else {
                     Database.Remove(Element.Id);
-
-                    SetEnabled(false);
-                    Element = null;
-
-                    Clear();
-
-                    SelectedIndex = Util.NotSelected;
+                    Element.Id = id;
+                    Database.Add(id, Element);
 
                     Util.UpdateList(Database, ListIndex);
                 }
             }
-        }
-
-        private void ButtonClear_Click(object sender, EventArgs e) {
-            SelectedIndex = Util.NotSelected;
-            ListIndex.Items.Clear();
-            SetEnabled(false);
-            Database.Clear();
-            Element = null;
-            Clear();
-        }
-
-        #endregion
-
-        #region List Index
-
-        private void ListIndex_Click(object sender, EventArgs e) {
-            if (ListIndex.Items.Count > 0) {
-                var index = ListIndex.SelectedIndex;
-
-                if (index > Util.NotSelected) {
-                    var selected = ListIndex.Items[index].ToString();
-
-                    if (selected is not null) {
-                        var id = Util.GetListSelectedId(selected);
-
-                        if (id > 0) {
-                            SelectedIndex = index;
-                            Element = Database[id];
-                            SetEnabled(true);
-                            Initialize();
-                        }
-                    }
-                }
+            else {
+                MessageBox.Show($"Maybe failed to get Id. Any Id cannot be zero.");
             }
         }
+    }
 
-        #endregion
+    private void TextName_TextChanged(object sender, EventArgs e) {
+        if (Element is not null) {
+            Element.Name = TextName.Text;
 
-        #region Npc Data
-
-        private void TextId_Validated(object sender, EventArgs e) {
-            if (Element is not null) {
-                var lastId = Element.Id;
-                var id = Util.GetValue(TextId);
-
-                if (id > 0) {
-                    if (id == lastId) {
-                        return;
-                    }
-
-                    if (Database.Contains(id)) {
-                        MessageBox.Show($"The Id {id} is already in use.");
-                    }
-                    else {
-                        Database.Remove(Element.Id);
-                        Element.Id = id;
-                        Database.Add(id, Element);
-
-                        Util.UpdateList(Database, ListIndex);
-                    }
-                }
-                else {
-                    MessageBox.Show($"Maybe failed to get Id. Any Id cannot be zero.");
-                }
+            if (SelectedIndex > Util.NotSelected) {
+                ListIndex.Items[SelectedIndex] = $"{Element.Id}: {Element.Name}";
             }
         }
+    }
 
-        private void TextName_TextChanged(object sender, EventArgs e) {
-            if (Element is not null) {
-                Element.Name = TextName.Text;
 
-                if (SelectedIndex > Util.NotSelected) {
-                    ListIndex.Items[SelectedIndex] = $"{Element.Id}: {Element.Name}";
-                }
-            }
+    private void TextTitle_TextChanged(object sender, EventArgs e) {
+        if (Element is not null) {
+            Element.Title = TextTitle.Text;
         }
+    }
 
-
-        private void TextTitle_TextChanged(object sender, EventArgs e) {
-            if (Element is not null) {
-                Element.Title = TextTitle.Text;
-            }
+    private void ComboBehaviour_SelectedIndexChanged(object sender, EventArgs e) {
+        if (Element is not null) {
+            Element.Behaviour = (NpcBehaviour)ComboBehaviour.SelectedIndex;
         }
+    }
 
-        private void ComboBehaviour_SelectedIndexChanged(object sender, EventArgs e) {
-            if (Element is not null) {
-                Element.Behaviour = (NpcBehaviour)ComboBehaviour.SelectedIndex;
-            }
+    private void TextModelId_TextChanged(object sender, EventArgs e) {
+        if (Element is not null) {
+            Element.ModelId = Util.GetValue((TextBox)sender);
         }
+    }
 
-        private void TextModelId_TextChanged(object sender, EventArgs e) {
-            if (Element is not null) {
-                Element.ModelId = Util.GetValue((TextBox)sender);
-            }
+    private void TextLevel_TextChanged(object sender, EventArgs e) {
+        if (Element is not null) {
+            Element.Level = Util.GetValue((TextBox)sender);
         }
+    }
 
-        private void TextLevel_TextChanged(object sender, EventArgs e) {
-            if (Element is not null) {
-                Element.Level = Util.GetValue((TextBox)sender);
-            }
+    private void TextAttributeId_TextChanged(object sender, EventArgs e) {
+        if (Element is not null) {
+            Element.AttributeId = Util.GetValue((TextBox)sender);
         }
+    }
 
-        private void TextAttributeId_TextChanged(object sender, EventArgs e) {
-            if (Element is not null) {
-                Element.AttributeId = Util.GetValue((TextBox)sender);
-            }
+    private void TextExperience_TextChanged(object sender, EventArgs e) {
+        if (Element is not null) {
+            Element.Experience = Util.GetValue((TextBox)sender);
         }
+    }
 
-        private void TextExperience_TextChanged(object sender, EventArgs e) {
-            if (Element is not null) {
-                Element.Experience = Util.GetValue((TextBox)sender);
-            }
+    private void TextSound_TextChanged(object sender, EventArgs e) {
+        if (Element is not null) {
+            Element.Sound = TextSound.Text;
         }
+    }
 
-        private void TextSound_TextChanged(object sender, EventArgs e) {
-            if (Element is not null) {
-                Element.Sound = TextSound.Text;
-            }
+    #endregion
+
+    #region Npc Conversation
+
+    private void ButtonClearConversation_Click(object sender, EventArgs e) {
+        if (Element is not null) {
+            Element.Conversations.Clear();
+
+            UpdateConversationList();
         }
+    }
 
-        #endregion
+    private void ButtonRemoveConversation_Click(object sender, EventArgs e) {
+        if (Element is not null) {
 
-        #region Npc Conversation
+            var index = ListConversation.SelectedIndex;
 
-        private void ButtonClearConversation_Click(object sender, EventArgs e) {
-            if (Element is not null) {
-                Element.Conversations.Clear();
+            if (index > Util.NotSelected) {
+                Element.Conversations.RemoveAt(index);
 
                 UpdateConversationList();
             }
         }
-
-        private void ButtonRemoveConversation_Click(object sender, EventArgs e) {
-            if (Element is not null) {
-
-                var index = ListConversation.SelectedIndex;
-
-                if (index > Util.NotSelected) {
-                    Element.Conversations.RemoveAt(index);
-
-                    UpdateConversationList();
-                }
-            }
-        }
-
-        private void ButtonAddConversation_Click(object sender, EventArgs e) {
-            if (Element is not null) {
-                var value = Util.GetValue(TextConversationId);
-
-                if (value > 0) {
-                    Element.Conversations.Add(value);
-
-                    UpdateConversationList();
-                }
-
-                TextConversationId.Text = "0";
-            }
-        }
-
-        private void TextGreetings_TextChanged(object sender, EventArgs e) {
-            if (Element is not null) {
-                Element.Greetings = TextGreetings.Text;
-            }
-        }
-
-        private void UpdateConversationList() {
-            ListConversation.BeginUpdate();
-
-            ListConversation.Items.Clear();
-
-            if (Element is not null) {
-                var array = Element.Conversations.ToArray();
-
-                for (var i = 0; i < array.Length; ++i) {
-                    ListConversation.Items.Add(array[i]);
-                }
-            }
-
-            ListConversation.EndUpdate();
-        }
-
-        #endregion
-
     }
+
+    private void ButtonAddConversation_Click(object sender, EventArgs e) {
+        if (Element is not null) {
+            var value = Util.GetValue(TextConversationId);
+
+            if (value > 0) {
+                Element.Conversations.Add(value);
+
+                UpdateConversationList();
+            }
+
+            TextConversationId.Text = "0";
+        }
+    }
+
+    private void TextGreetings_TextChanged(object sender, EventArgs e) {
+        if (Element is not null) {
+            Element.Greetings = TextGreetings.Text;
+        }
+    }
+
+    private void UpdateConversationList() {
+        ListConversation.BeginUpdate();
+
+        ListConversation.Items.Clear();
+
+        if (Element is not null) {
+            var array = Element.Conversations.ToArray();
+
+            for (var i = 0; i < array.Length; ++i) {
+                ListConversation.Items.Add(array[i]);
+            }
+        }
+
+        ListConversation.EndUpdate();
+    }
+
+    #endregion
+
 }

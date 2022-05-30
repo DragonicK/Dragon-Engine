@@ -3,267 +3,266 @@ using Crystalshire.Core.Model.Effects;
 
 using Crystalshire.Editor.Common;
 
-namespace Crystalshire.Editor.Effects {
-    public partial class FormEffect : Form {
-        public IDatabase<Effect> Database { get; }
-        public Effect? Element { get; private set; }
-        public Configuration Configuration { get; private set; }
-        public int SelectedIndex { get; private set; } = Util.NotSelected;
+namespace Crystalshire.Editor.Effects;
 
-        public FormEffect(Configuration configuration, IDatabase<Effect> database) {
-            InitializeComponent();
+public partial class FormEffect : Form {
+    public IDatabase<Effect> Database { get; }
+    public Effect? Element { get; private set; }
+    public Configuration Configuration { get; private set; }
+    public int SelectedIndex { get; private set; } = Util.NotSelected;
 
-            SetEnabled(false);
+    public FormEffect(Configuration configuration, IDatabase<Effect> database) {
+        InitializeComponent();
 
-            Util.FillComboBox<EffectType>(ComboType);
-            Util.FillComboBox<EffectOverride>(ComboOverride);
+        SetEnabled(false);
 
-            Database = database;
-            Configuration = configuration;
-            Element = null;
+        Util.FillComboBox<EffectType>(ComboType);
+        Util.FillComboBox<EffectOverride>(ComboOverride);
 
-            Util.UpdateList(Database, ListIndex);
+        Database = database;
+        Configuration = configuration;
+        Element = null;
+
+        Util.UpdateList(Database, ListIndex);
+    }
+
+    private void MenuSave_Click(object sender, EventArgs e) {
+        var folder = Database.Folder;
+
+        Database.Save();
+
+        Database.Folder = Configuration.OutputClientPath;
+
+        Database.Save();
+
+        Database.Folder = Configuration.OutputServerPath;
+
+        Database.Save();
+
+        Database.Folder = folder;
+
+        MessageBox.Show("Saved");
+    }
+
+    private void MenuExit_Click(object sender, EventArgs e) {
+        Close();
+    }
+
+    private void Initialize() {
+        if (Element is not null) {
+            TextId.Text = Element.Id.ToString();
+            TextName.Text = Element.Name;
+            TextDescription.Text = Element.Description;
+
+            ComboType.SelectedIndex = (int)Element.EffectType;
+            ComboOverride.SelectedIndex = (int)Element.Override;
+
+            CheckRemoveOnDeath.Checked = Element.RemoveOnDeath;
+            CheckDispellable.Checked = Element.Dispellable;
+            CheckUnlimited.Checked = Element.Unlimited;
+
+            TextIconId.Text = Element.IconId.ToString();
+            TextDuration.Text = Element.Duration.ToString();
+
+            TextAttributeId.Text = Element.AttributeId.ToString();
+            TextUpgradeId.Text = Element.UpgradeId.ToString();
         }
+    }
 
-        private void MenuSave_Click(object sender, EventArgs e) {
-            var folder = Database.Folder;
+    private void Clear() {
+        TextId.Text = "0";
+        TextName.Text = string.Empty;
+        TextDescription.Text = string.Empty;
 
-            Database.Save();
+        ComboType.SelectedIndex = 0;
+        ComboOverride.SelectedIndex = 0;
 
-            Database.Folder = Configuration.OutputClientPath;
+        CheckRemoveOnDeath.Checked = false;
+        CheckDispellable.Checked = false;
+        CheckUnlimited.Checked = false;
 
-            Database.Save();
+        TextIconId.Text = "0";
+        TextDuration.Text = "0";
 
-            Database.Folder = Configuration.OutputServerPath;
+        TextAttributeId.Text = "0";
+        TextUpgradeId.Text = "0";
+    }
 
-            Database.Save();
+    private void SetEnabled(bool enabled) {
+        TabEffect.Enabled = enabled;
+    }
 
-            Database.Folder = folder;
+    #region Add, Delete, Clear
 
-            MessageBox.Show("Saved");
-        }
+    private void ButtonAdd_Click(object sender, EventArgs e) {
+        for (var i = 1; i <= int.MaxValue; i++) {
+            if (!Database.Contains(i)) {
 
-        private void MenuExit_Click(object sender, EventArgs e) {
-            Close();
-        }
+                Database.Add(i, new Effect() { Id = i });
 
-        private void Initialize() {
-            if (Element is not null) {
-                TextId.Text = Element.Id.ToString();
-                TextName.Text = Element.Name;
-                TextDescription.Text = Element.Description;
+                Util.UpdateList(Database, ListIndex);
 
-                ComboType.SelectedIndex = (int)Element.EffectType;
-                ComboOverride.SelectedIndex = (int)Element.Override;
-
-                CheckRemoveOnDeath.Checked = Element.RemoveOnDeath;
-                CheckDispellable.Checked = Element.Dispellable;
-                CheckUnlimited.Checked = Element.Unlimited;
-
-                TextIconId.Text = Element.IconId.ToString();
-                TextDuration.Text = Element.Duration.ToString();
-
-                TextAttributeId.Text = Element.AttributeId.ToString();
-                TextUpgradeId.Text = Element.UpgradeId.ToString();
+                return;
             }
         }
+    }
 
-        private void Clear() {
-            TextId.Text = "0";
-            TextName.Text = string.Empty;
-            TextDescription.Text = string.Empty;
+    private void ButtonDelete_Click(object sender, EventArgs e) {
+        if (Element is not null) {
+            if (Element.Id > 0) {
+                Database.Remove(Element.Id);
 
-            ComboType.SelectedIndex = 0;
-            ComboOverride.SelectedIndex = 0;
+                SetEnabled(false);
+                Element = null;
 
-            CheckRemoveOnDeath.Checked = false;
-            CheckDispellable.Checked = false;
-            CheckUnlimited.Checked = false;
+                Clear();
 
-            TextIconId.Text = "0";
-            TextDuration.Text = "0";
+                SelectedIndex = Util.NotSelected;
 
-            TextAttributeId.Text = "0";
-            TextUpgradeId.Text = "0";
+                Util.UpdateList(Database, ListIndex);
+            }
         }
+    }
 
-        private void SetEnabled(bool enabled) {
-            TabEffect.Enabled = enabled;
+    private void ButtonClear_Click(object sender, EventArgs e) {
+        SelectedIndex = Util.NotSelected;
+        ListIndex.Items.Clear();
+        SetEnabled(false);
+        Database.Clear();
+        Element = null;
+        Clear();
+    }
+
+    #endregion
+
+    #region List Index
+
+    private void ListIndex_Click(object sender, EventArgs e) {
+        if (ListIndex.Items.Count > 0) {
+            var index = ListIndex.SelectedIndex;
+
+            if (index > Util.NotSelected) {
+                var selected = ListIndex.Items[index].ToString();
+
+                if (selected is not null) {
+                    var id = Util.GetListSelectedId(selected);
+
+                    if (id > 0) {
+                        SelectedIndex = index;
+                        Element = Database[id];
+                        SetEnabled(true);
+                        Initialize();
+                    }
+                }
+            }
         }
+    }
 
-        #region Add, Delete, Clear
+    #endregion
 
-        private void ButtonAdd_Click(object sender, EventArgs e) {
-            for (var i = 1; i <= int.MaxValue; i++) {
-                if (!Database.Contains(i)) {
+    #region Effect Data
 
-                    Database.Add(i, new Effect() { Id = i });
+    private void TextId_Validated(object sender, EventArgs e) {
+        if (Element is not null) {
+            var lastId = Element.Id;
+            var id = Util.GetValue(TextId);
 
-                    Util.UpdateList(Database, ListIndex);
-
+            if (id > 0) {
+                if (id == lastId) {
                     return;
                 }
-            }
-        }
 
-        private void ButtonDelete_Click(object sender, EventArgs e) {
-            if (Element is not null) {
-                if (Element.Id > 0) {
+                if (Database.Contains(id)) {
+                    MessageBox.Show($"The Id {id} is already in use.");
+                }
+                else {
                     Database.Remove(Element.Id);
-
-                    SetEnabled(false);
-                    Element = null;
-
-                    Clear();
-
-                    SelectedIndex = Util.NotSelected;
+                    Element.Id = id;
+                    Database.Add(id, Element);
 
                     Util.UpdateList(Database, ListIndex);
                 }
             }
-        }
-
-        private void ButtonClear_Click(object sender, EventArgs e) {
-            SelectedIndex = Util.NotSelected;
-            ListIndex.Items.Clear();
-            SetEnabled(false);
-            Database.Clear();
-            Element = null;
-            Clear();
-        }
-
-        #endregion
-
-        #region List Index
-
-        private void ListIndex_Click(object sender, EventArgs e) {
-            if (ListIndex.Items.Count > 0) {
-                var index = ListIndex.SelectedIndex;
-
-                if (index > Util.NotSelected) {
-                    var selected = ListIndex.Items[index].ToString();
-
-                    if (selected is not null) {
-                        var id = Util.GetListSelectedId(selected);
-
-                        if (id > 0) {
-                            SelectedIndex = index;
-                            Element = Database[id];
-                            SetEnabled(true);
-                            Initialize();
-                        }
-                    }
-                }
+            else {
+                MessageBox.Show($"Maybe failed to get Id. Any Id cannot be zero.");
             }
         }
-
-        #endregion
-
-        #region Effect Data
-
-        private void TextId_Validated(object sender, EventArgs e) {
-            if (Element is not null) {
-                var lastId = Element.Id;
-                var id = Util.GetValue(TextId);
-
-                if (id > 0) {
-                    if (id == lastId) {
-                        return;
-                    }
-
-                    if (Database.Contains(id)) {
-                        MessageBox.Show($"The Id {id} is already in use.");
-                    }
-                    else {
-                        Database.Remove(Element.Id);
-                        Element.Id = id;
-                        Database.Add(id, Element);
-
-                        Util.UpdateList(Database, ListIndex);
-                    }
-                }
-                else {
-                    MessageBox.Show($"Maybe failed to get Id. Any Id cannot be zero.");
-                }
-            }
-        }
-
-        private void TextName_TextChanged(object sender, EventArgs e) {
-            if (Element is not null) {
-                Element.Name = TextName.Text;
-
-                if (SelectedIndex > Util.NotSelected) {
-                    ListIndex.Items[SelectedIndex] = $"{Element.Id}: {Element.Name}";
-                }
-            }
-        }
-
-        private void TextDescription_TextChanged(object sender, EventArgs e) {
-            if (Element is not null) {
-                Element.Description = TextDescription.Text;
-            }
-        }
-
-        private void ComboType_SelectedIndexChanged(object sender, EventArgs e) {
-            if (Element is not null) {
-                Element.EffectType = (EffectType)ComboType.SelectedIndex;
-            }
-        }
-
-        private void CheckRemoveOnDeath_Click(object sender, EventArgs e) {
-            if (Element is not null) {
-                Element.RemoveOnDeath = CheckRemoveOnDeath.Checked;
-            }
-        }
-
-        private void CheckDispellable_Click(object sender, EventArgs e) {
-            if (Element is not null) {
-                Element.Dispellable = CheckDispellable.Checked;
-            }
-        }
-
-        private void CheckUnlimited_Click(object sender, EventArgs e) {
-            if (Element is not null) {
-                Element.Unlimited = CheckUnlimited.Checked;
-            }
-        }
-
-        private void TextIconId_TextChanged(object sender, EventArgs e) {
-            if (Element is not null) {
-                Element.IconId = Util.GetValue((TextBox)sender);
-            }
-        }
-
-        private void TextDuration_TextChanged(object sender, EventArgs e) {
-            if (Element is not null) {
-                Element.Duration = Util.GetValue((TextBox)sender);
-            }
-        }
-
-        private void ComboOverride_SelectedIndexChanged(object sender, EventArgs e) {
-            if (Element is not null) {
-                Element.Override = (EffectOverride)ComboOverride.SelectedIndex;
-            }
-        }
-
-        #endregion
-
-        #region Effect Attribute
-
-        private void TextAttributeId_TextChanged(object sender, EventArgs e) {
-            if (Element is not null) {
-                Element.AttributeId = Util.GetValue((TextBox)sender);
-            }
-        }
-
-        private void TextUpgradeId_TextChanged(object sender, EventArgs e) {
-            if (Element is not null) {
-                Element.UpgradeId = Util.GetValue((TextBox)sender);
-            }
-        }
-
-        #endregion
-
-
     }
+
+    private void TextName_TextChanged(object sender, EventArgs e) {
+        if (Element is not null) {
+            Element.Name = TextName.Text;
+
+            if (SelectedIndex > Util.NotSelected) {
+                ListIndex.Items[SelectedIndex] = $"{Element.Id}: {Element.Name}";
+            }
+        }
+    }
+
+    private void TextDescription_TextChanged(object sender, EventArgs e) {
+        if (Element is not null) {
+            Element.Description = TextDescription.Text;
+        }
+    }
+
+    private void ComboType_SelectedIndexChanged(object sender, EventArgs e) {
+        if (Element is not null) {
+            Element.EffectType = (EffectType)ComboType.SelectedIndex;
+        }
+    }
+
+    private void CheckRemoveOnDeath_Click(object sender, EventArgs e) {
+        if (Element is not null) {
+            Element.RemoveOnDeath = CheckRemoveOnDeath.Checked;
+        }
+    }
+
+    private void CheckDispellable_Click(object sender, EventArgs e) {
+        if (Element is not null) {
+            Element.Dispellable = CheckDispellable.Checked;
+        }
+    }
+
+    private void CheckUnlimited_Click(object sender, EventArgs e) {
+        if (Element is not null) {
+            Element.Unlimited = CheckUnlimited.Checked;
+        }
+    }
+
+    private void TextIconId_TextChanged(object sender, EventArgs e) {
+        if (Element is not null) {
+            Element.IconId = Util.GetValue((TextBox)sender);
+        }
+    }
+
+    private void TextDuration_TextChanged(object sender, EventArgs e) {
+        if (Element is not null) {
+            Element.Duration = Util.GetValue((TextBox)sender);
+        }
+    }
+
+    private void ComboOverride_SelectedIndexChanged(object sender, EventArgs e) {
+        if (Element is not null) {
+            Element.Override = (EffectOverride)ComboOverride.SelectedIndex;
+        }
+    }
+
+    #endregion
+
+    #region Effect Attribute
+
+    private void TextAttributeId_TextChanged(object sender, EventArgs e) {
+        if (Element is not null) {
+            Element.AttributeId = Util.GetValue((TextBox)sender);
+        }
+    }
+
+    private void TextUpgradeId_TextChanged(object sender, EventArgs e) {
+        if (Element is not null) {
+            Element.UpgradeId = Util.GetValue((TextBox)sender);
+        }
+    }
+
+    #endregion
+
 }
