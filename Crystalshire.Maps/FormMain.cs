@@ -63,7 +63,7 @@ public partial class FormMain : Form {
 
     private string[]? GetFilesToOpen() {
         var dialog = new OpenFileDialog() {
-            InitialDirectory = Application.StartupPath + "/Projects/",
+            InitialDirectory = Application.StartupPath + "Projects",
             Filter = "Engine Maps (*.mps) | *.mps",
             CheckFileExists = true,
             CheckPathExists = true,
@@ -82,8 +82,9 @@ public partial class FormMain : Form {
 
     private string? GetPathToSave() {
         var dialog = new SaveFileDialog() {
-            InitialDirectory = Application.StartupPath + "/Projects/",
+            InitialDirectory = Application.StartupPath + "Projects",
             Filter = "Engine Maps (*.mps) | *.mps",
+            CheckPathExists = true,
             FilterIndex = 0
         };
 
@@ -414,9 +415,10 @@ public partial class FormMain : Form {
 
     private string? GetPathToExport(string additionalpath, string extension, string description) {
         var dialog = new SaveFileDialog() {
-            InitialDirectory = Application.StartupPath + "/Exported/" + additionalpath + @"/",
+            InitialDirectory = Application.StartupPath + @"Exported\" + additionalpath,
             Filter = $"{description} (*.{extension}) | *.{extension}",
-            FilterIndex = 0
+            FilterIndex = 0,
+            CheckPathExists = true
         };
 
         var result = dialog.ShowDialog();
