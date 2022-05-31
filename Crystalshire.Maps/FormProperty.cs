@@ -71,6 +71,7 @@ public partial class FormProperty : Form {
     }
 
     private void UpdateProperties() {
+        TextId.Text = _property.Id.ToString();
         TextName.Text = _property.Name;
 
         TextUp.Text = _property.Link.Up.ToString();
@@ -310,6 +311,14 @@ public partial class FormProperty : Form {
         _property.Fog = fog;
 
         LabelRed.Text = $"Blue: {fog.Blue}";
+    }
+
+    #endregion
+
+    #region Id
+
+    private void TextId_TextChanged(object sender, EventArgs e) {
+        _property.Id = GetValue(TextId);
     }
 
     #endregion

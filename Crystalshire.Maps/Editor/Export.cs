@@ -312,6 +312,7 @@ public class Export {
         using var fs = new FileStream(fileName, FileMode.Create, FileAccess.Write);
         using var writer = new BinaryWriter(fs);
 
+        writer.Write(property.Id);
         writer.Write(property.Name);
         writer.Write(property.Music);
         writer.Write(property.Ambience);

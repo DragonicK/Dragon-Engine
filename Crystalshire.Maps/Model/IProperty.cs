@@ -1,8 +1,7 @@
-﻿using Crystalshire.Core.Model.Maps;
-
-namespace Crystalshire.Maps.Model;
+﻿namespace Crystalshire.Maps.Model;
 
 public interface IProperty {
+    int Id { get; set; }
     string Name { get; set; }
     string Music { get; set; }
     string Ambience { get; set; }

@@ -5,6 +5,7 @@ using Crystalshire.Core.Cryptography;
 namespace Crystalshire.Maps.Model;
 
 public class Property : IProperty {
+    public int Id { get; set; }
     public string Name { get; set; }
     public string Music { get; set; }
     public string Ambience { get; set; }

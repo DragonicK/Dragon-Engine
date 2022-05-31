@@ -12,6 +12,7 @@ public class Project {
         using var f = new FileStream(file, FileMode.Create, FileAccess.Write);
         using var writer = new BinaryWriter(f);
 
+        writer.Write(property.Id);
         writer.Write(property.Name);
         writer.Write(property.Music);
         writer.Write(property.Ambience);
@@ -61,6 +62,7 @@ public class Project {
         using var f = new FileStream(file, FileMode.Open, FileAccess.Read);
         using var reader = new BinaryReader(f);
 
+        property.Id = reader.ReadInt32();
         property.Name = reader.ReadString();
         property.Music = reader.ReadString();
         property.Ambience = reader.ReadString();
