@@ -2,58 +2,59 @@
 using Crystalshire.Core.Model.Premiums;
 using Crystalshire.Core.Serialization;
 
-namespace Crystalshire.Core.Content {
-    public class Premiums : Database<Premium> {
+namespace Crystalshire.Core.Content;
 
-        public override void Load() {
-            var files = Directory.GetFiles(Folder);
-            var processed = 0;
+public class Premiums : Database<Premium> {
 
-            if (files.Length > 0) {
-                processed += LoadPremiums(files);
-            }
+    public override void Load() {
+        var files = Directory.GetFiles(Folder);
+        var processed = 0;
 
-            var folders = GetFolders(Folder);
+        if (files.Length > 0) {
+            processed += LoadPremiums(files);
+        }
 
-            if (folders?.Length > 0) {
-                foreach (var folder in folders) {
-                    processed += LoadPremiums(GetFiles(folder));
-                }
-            }
+        var folders = GetFolders(Folder);
 
-            if (processed == 0) { 
-                SaveDefault();
+        if (folders?.Length > 0) {
+            foreach (var folder in folders) {
+                processed += LoadPremiums(GetFiles(folder));
             }
         }
 
-        private int LoadPremiums(string[]? files) {
-            var count = 0;
+        if (processed == 0) {
+            SaveDefault();
+        }
+    }
 
-            if (files is not null) {
-                foreach (var file in files) {
-                    if (Json.FileExists(file)) {
-                        var premium = Json.Get<Premium>(file);
+    private int LoadPremiums(string[]? files) {
+        var count = 0;
 
-                        if (premium is not null) {
-                            if (premium.Id != 0) {
-                                Add(premium.Id, premium);
-                                Json.Save(file, premium);
-                            }
+        if (files is not null) {
+            foreach (var file in files) {
+                if (Json.FileExists(file)) {
+                    var premium = Json.Get<Premium>(file);
+
+                    if (premium is not null) {
+                        if (premium.Id != 0) {
+                            Add(premium.Id, premium);
+                            Json.Save(file, premium);
                         }
-
-                        count++;
                     }
+
+                    count++;
                 }
             }
-
-            return count;
         }
 
-        private void SaveDefault() {
-            var premium = new Premium() {
-                Id = 0,
-                Name = "Example",
-                ItemDrops = new Dictionary<Rarity, float>() {
+        return count;
+    }
+
+    private void SaveDefault() {
+        var premium = new Premium() {
+            Id = 0,
+            Name = "Example",
+            ItemDrops = new Dictionary<Rarity, float>() {
                 { Rarity.Common, 1f },
                 { Rarity.Uncommon, 0.9f },
                 { Rarity.Rare, 0.8f },
@@ -63,9 +64,8 @@ namespace Crystalshire.Core.Content {
                 { Rarity.Legendary, 0.4f },
                 { Rarity.Ethereal, 0.3f }
                 }
-            };
+        };
 
-            Json.Save($"{Folder}/default.json", premium);
-        }
+        Json.Save($"{Folder}/default.json", premium);
     }
 }

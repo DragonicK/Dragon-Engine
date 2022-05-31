@@ -1,7 +1,7 @@
-﻿namespace Crystalshire.Core.Model.Equipments {
-    public enum EquipmentHandStyle {
-        None,
-        OneHanded,
-        TwoHanded
-    }
+﻿namespace Crystalshire.Core.Model.Equipments;
+
+public enum EquipmentHandStyle {
+    None,
+    OneHanded,
+    TwoHanded
 }

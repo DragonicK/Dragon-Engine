@@ -1,7 +1,7 @@
-﻿namespace Crystalshire.Core.Model {
-    public enum CurrencyType {
-        Gold,
-        Honor,
-        Crystal
-    }
+﻿namespace Crystalshire.Core.Model;
+
+public enum CurrencyType {
+    Gold,
+    Honor,
+    Crystal
 }

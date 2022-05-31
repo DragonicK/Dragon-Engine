@@ -1,6 +1,6 @@
-﻿namespace Crystalshire.Core.Model.Effects {
-    public enum EffectType {
-        Increase,
-        Decrease
-    }
+﻿namespace Crystalshire.Core.Model.Effects;
+
+public enum EffectType {
+    Increase,
+    Decrease
 }

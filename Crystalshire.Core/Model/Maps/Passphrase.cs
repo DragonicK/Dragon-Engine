@@ -1,20 +1,20 @@
-﻿namespace Crystalshire.Core.Model.Maps {
-    public class Passphrase {
-        public string HexPassword { get; set; }
-        public byte[] Key { get; set; }
-        public byte[] Iv { get; set; }
+﻿namespace Crystalshire.Core.Model.Maps;
 
-        public Passphrase() {
-            HexPassword = string.Empty;
-            Key = Array.Empty<byte>();
-            Iv = Array.Empty<byte>();
-        }
+public class Passphrase {
+    public string HexPassword { get; set; }
+    public byte[] Key { get; set; }
+    public byte[] Iv { get; set; }
 
-        public Passphrase(byte[] key, byte[] iv) {
-            Key = key;
-            Iv = iv;
-         
-            HexPassword = string.Empty;
-        }
+    public Passphrase() {
+        HexPassword = string.Empty;
+        Key = Array.Empty<byte>();
+        Iv = Array.Empty<byte>();
+    }
+
+    public Passphrase(byte[] key, byte[] iv) {
+        Key = key;
+        Iv = iv;
+
+        HexPassword = string.Empty;
     }
 }

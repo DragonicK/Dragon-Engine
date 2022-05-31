@@ -1,28 +1,28 @@
-﻿namespace Crystalshire.Core.Model.Npcs {
-    public class Npc {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public string Title { get; set; }
-        public string Sound { get; set; }
-        public NpcBehaviour Behaviour { get; set; }
-        public int ModelId { get; set; }
-        public int Level { get; set; }
-        public int Experience { get; set; }
-        public int AttributeId { get; set; }
-        public string Greetings { get; set; }
-        public IList<int> Conversations { get; set; }
+﻿namespace Crystalshire.Core.Model.Npcs;
 
-        public Npc() {
-            Name = string.Empty;
-            Title = string.Empty;
-            Sound = string.Empty;
-            Greetings = string.Empty;
+public class Npc {
+    public int Id { get; set; }
+    public string Name { get; set; }
+    public string Title { get; set; }
+    public string Sound { get; set; }
+    public NpcBehaviour Behaviour { get; set; }
+    public int ModelId { get; set; }
+    public int Level { get; set; }
+    public int Experience { get; set; }
+    public int AttributeId { get; set; }
+    public string Greetings { get; set; }
+    public IList<int> Conversations { get; set; }
 
-            Conversations = new List<int>();
-        }
+    public Npc() {
+        Name = string.Empty;
+        Title = string.Empty;
+        Sound = string.Empty;
+        Greetings = string.Empty;
 
-        public override string ToString() {
-            return Name;
-        }
+        Conversations = new List<int>();
+    }
+
+    public override string ToString() {
+        return Name;
     }
 }

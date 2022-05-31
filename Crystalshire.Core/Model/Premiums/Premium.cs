@@ -1,22 +1,23 @@
-﻿namespace Crystalshire.Core.Model.Premiums {
-    public class Premium {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public float Character { get; set; }
-        public float Party { get; set; }
-        public float Guild { get; set; }
-        public float Skill { get; set; }
-        public float Craft { get; set; }
-        public float Quest { get; set; }
-        public float Pet { get; set; }
-        public float GoldChance { get; set; }
-        public float GoldIncrease { get; set; }
-        public IDictionary<Rarity, float> ItemDrops { get; set; }
+﻿namespace Crystalshire.Core.Model.Premiums;
 
-        public Premium() {
-            Name = string.Empty;
+public class Premium {
+    public int Id { get; set; }
+    public string Name { get; set; }
+    public float Character { get; set; }
+    public float Party { get; set; }
+    public float Guild { get; set; }
+    public float Skill { get; set; }
+    public float Craft { get; set; }
+    public float Quest { get; set; }
+    public float Pet { get; set; }
+    public float GoldChance { get; set; }
+    public float GoldIncrease { get; set; }
+    public IDictionary<Rarity, float> ItemDrops { get; set; }
 
-            ItemDrops = new Dictionary<Rarity, float>() {
+    public Premium() {
+        Name = string.Empty;
+
+        ItemDrops = new Dictionary<Rarity, float>() {
                 { Rarity.Common, 0f },
                 { Rarity.Uncommon, 0f },
                 { Rarity.Rare, 0f },
@@ -26,6 +27,5 @@
                 { Rarity.Legendary, 0f },
                 { Rarity.Ethereal, 0f },
             };
-        }
     }
 }

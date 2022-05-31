@@ -1,5 +1,5 @@
-﻿namespace Crystalshire.Core.Services {
-    public interface IUpdatableService {
-        void Update(int deltaTime);
-    }
+﻿namespace Crystalshire.Core.Services;
+
+public interface IUpdatableService {
+    void Update(int deltaTime);
 }

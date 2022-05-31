@@ -1,74 +1,74 @@
 ﻿using Crystalshire.Core.Model.Gashas;
 using Crystalshire.Core.Serialization;
 
-namespace Crystalshire.Core.Content {
-    public class Gashas : Database<Gasha> {
+namespace Crystalshire.Core.Content;
 
-        public override void Load() {
-            var files = Directory.GetFiles(Folder);
-            var processed = 0;
+public class Gashas : Database<Gasha> {
 
-            if (files.Length > 0) {
-                processed += LoadGashas(files);
-            }
+    public override void Load() {
+        var files = Directory.GetFiles(Folder);
+        var processed = 0;
 
-            var folders = GetFolders(Folder);
+        if (files.Length > 0) {
+            processed += LoadGashas(files);
+        }
 
-            if (folders?.Length > 0) {
-                foreach (var folder in folders) {
-                    processed += LoadGashas(GetFiles(folder));
-                }
-            }
+        var folders = GetFolders(Folder);
 
-            if (processed == 0) {
-                SaveDefault();
+        if (folders?.Length > 0) {
+            foreach (var folder in folders) {
+                processed += LoadGashas(GetFiles(folder));
             }
         }
 
-        private int LoadGashas(string[]? files) {
-            var count = 0;
+        if (processed == 0) {
+            SaveDefault();
+        }
+    }
 
-            if (files is not null) {
-                foreach (var file in files) {
-                    if (Json.FileExists(file)) {
-                        var gasha = Json.Get<Gasha>(file);
+    private int LoadGashas(string[]? files) {
+        var count = 0;
 
-                        if (gasha is not null) {
-                            if (gasha.Id != 0) {
-                                Add(gasha.Id, gasha);
-                                Json.Save(file, gasha);
-                            }
+        if (files is not null) {
+            foreach (var file in files) {
+                if (Json.FileExists(file)) {
+                    var gasha = Json.Get<Gasha>(file);
+
+                    if (gasha is not null) {
+                        if (gasha.Id != 0) {
+                            Add(gasha.Id, gasha);
+                            Json.Save(file, gasha);
                         }
-
-                        count++;
                     }
+
+                    count++;
                 }
             }
-
-            return count;
         }
 
-        private void SaveDefault() {
-            var gasha = new Gasha() {
-                Id = 1
-            };
+        return count;
+    }
 
-            gasha.Items.Add(new GashaItem() {
-                Id = 1,
-                Value = 1
-            });
+    private void SaveDefault() {
+        var gasha = new Gasha() {
+            Id = 1
+        };
 
-            gasha.Items.Add(new GashaItem() {
-                Id = 2,
-                Value = 1
-            });
+        gasha.Items.Add(new GashaItem() {
+            Id = 1,
+            Value = 1
+        });
 
-            gasha.Items.Add(new GashaItem() {
-                Id = 8,
-                Value = 100
-            });
+        gasha.Items.Add(new GashaItem() {
+            Id = 2,
+            Value = 1
+        });
 
-            Json.Save($"{Folder}/default.json", gasha);
-        }
+        gasha.Items.Add(new GashaItem() {
+            Id = 8,
+            Value = 100
+        });
+
+        Json.Save($"{Folder}/default.json", gasha);
     }
 }

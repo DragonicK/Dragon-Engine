@@ -1,6 +1,6 @@
-﻿namespace Crystalshire.Core.Model {
-    public enum ActionMessageFontType {
-        Damage,
-        Alphabet
-    }
+﻿namespace Crystalshire.Core.Model;
+
+public enum ActionMessageFontType {
+    Damage,
+    Alphabet
 }

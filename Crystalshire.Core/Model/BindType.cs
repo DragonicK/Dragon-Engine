@@ -1,7 +1,7 @@
-﻿namespace Crystalshire.Core.Model {
-    public enum BindType {
-        None,
-        Obtained,
-        Equipped
-    }
+﻿namespace Crystalshire.Core.Model;
+
+public enum BindType {
+    None,
+    Obtained,
+    Equipped
 }

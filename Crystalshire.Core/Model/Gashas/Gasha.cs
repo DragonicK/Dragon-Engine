@@ -1,19 +1,19 @@
-﻿namespace Crystalshire.Core.Model.Gashas {
-    public class Gasha {
-        public int Id { get; set; }
+﻿namespace Crystalshire.Core.Model.Gashas;
 
-        public int Count {
-            get => Items.Count;
-        }
+public class Gasha {
+    public int Id { get; set; }
 
-        public IList<GashaItem> Items { get; set; }
+    public int Count {
+        get => Items.Count;
+    }
 
-        public GashaItem this[int index] {
-            get => Items[index];
-        }
+    public IList<GashaItem> Items { get; set; }
 
-        public Gasha() {
-            Items = new List<GashaItem>();
-        }
+    public GashaItem this[int index] {
+        get => Items[index];
+    }
+
+    public Gasha() {
+        Items = new List<GashaItem>();
     }
 }

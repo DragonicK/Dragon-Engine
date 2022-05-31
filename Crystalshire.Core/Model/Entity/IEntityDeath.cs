@@ -1,5 +1,5 @@
-﻿namespace Crystalshire.Core.Model.Entity {
-    public interface IEntityDeath {
-        void Execute(IEntity? attacker, IEntity receiver);
-    }
+﻿namespace Crystalshire.Core.Model.Entity;
+
+public interface IEntityDeath {
+    void Execute(IEntity? attacker, IEntity receiver);
 }

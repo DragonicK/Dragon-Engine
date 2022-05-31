@@ -1,43 +1,43 @@
 ﻿using Crystalshire.Core.Model.Classes;
 using Crystalshire.Core.Model.Attributes;
 
-namespace Crystalshire.Core.Model.Entity {
-    public interface IEntityAttribute {
-        int Get(Vital vital);
-        float GetPercentage(Vital vital);
+namespace Crystalshire.Core.Model.Entity;
 
-        int Get(PrimaryAttribute attribute);
-        float GetPercentage(PrimaryAttribute attribute);
+public interface IEntityAttribute {
+    int Get(Vital vital);
+    float GetPercentage(Vital vital);
 
-        int Get(SecondaryAttribute attribute);
-        float GetPercentage(SecondaryAttribute attribute);
+    int Get(PrimaryAttribute attribute);
+    float GetPercentage(PrimaryAttribute attribute);
 
-        int GetElementAttack(ElementAttribute attribute);
-        float GetElementAttackPercentage(ElementAttribute attribute);
-        int GetElementDefense(ElementAttribute attribute);
-        float GetElementDefensePercentage(ElementAttribute attribute);
+    int Get(SecondaryAttribute attribute);
+    float GetPercentage(SecondaryAttribute attribute);
 
-        float Get(UniqueAttribute attribute);
+    int GetElementAttack(ElementAttribute attribute);
+    float GetElementAttackPercentage(ElementAttribute attribute);
+    int GetElementDefense(ElementAttribute attribute);
+    float GetElementDefensePercentage(ElementAttribute attribute);
 
-        void Add(Vital vital, int value);
-        void AddPercentage(Vital vital, float value);
-        void Add(PrimaryAttribute attribute, int value);
-        void AddPercentage(PrimaryAttribute attribute, float value);
-        void Add(SecondaryAttribute attribute, int value);
-        void AddPercentage(SecondaryAttribute attribute, float value);
+    float Get(UniqueAttribute attribute);
 
-        void AddElementAttack(ElementAttribute attribute, int value);
-        void AddElementAttackPercentage(ElementAttribute attribute, float value);
-        void AddElementDefense(ElementAttribute attribute, int value);
-        void AddElementDefensePercentage(ElementAttribute attribute, float value);
+    void Add(Vital vital, int value);
+    void AddPercentage(Vital vital, float value);
+    void Add(PrimaryAttribute attribute, int value);
+    void AddPercentage(PrimaryAttribute attribute, float value);
+    void Add(SecondaryAttribute attribute, int value);
+    void AddPercentage(SecondaryAttribute attribute, float value);
 
-        void Add(UniqueAttribute attribute, float value);
+    void AddElementAttack(ElementAttribute attribute, int value);
+    void AddElementAttackPercentage(ElementAttribute attribute, float value);
+    void AddElementDefense(ElementAttribute attribute, int value);
+    void AddElementDefensePercentage(ElementAttribute attribute, float value);
 
-        void Clear();
-        void Calculate();
-        void Calculate(int playerLevel, IClass _class);
-        void Add(IEntityAttribute attribute);
-        void Add(int level, GroupAttribute attribute, GroupAttribute upgrade);
-        void Subtract(int level, GroupAttribute attribute, GroupAttribute upgrade);
-    }
+    void Add(UniqueAttribute attribute, float value);
+
+    void Clear();
+    void Calculate();
+    void Calculate(int playerLevel, IClass _class);
+    void Add(IEntityAttribute attribute);
+    void Add(int level, GroupAttribute attribute, GroupAttribute upgrade);
+    void Subtract(int level, GroupAttribute attribute, GroupAttribute upgrade);
 }

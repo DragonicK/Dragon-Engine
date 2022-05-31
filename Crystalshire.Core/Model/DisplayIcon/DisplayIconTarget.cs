@@ -1,7 +1,7 @@
-﻿namespace Crystalshire.Core.Model.DisplayIcon {
-    public enum DisplayIconTarget {
-        Npc,
-        Party,
-        Player,
-    }
+﻿namespace Crystalshire.Core.Model.DisplayIcon;
+
+public enum DisplayIconTarget {
+    Npc,
+    Party,
+    Player,
 }

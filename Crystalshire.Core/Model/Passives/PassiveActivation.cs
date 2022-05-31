@@ -1,6 +1,6 @@
-﻿namespace Crystalshire.Core.Model.Passives {
-    public enum PassiveActivation {
-        WhenTarget,
-        WhenPlayer
-    }
+﻿namespace Crystalshire.Core.Model.Passives;
+
+public enum PassiveActivation {
+    WhenTarget,
+    WhenPlayer
 }

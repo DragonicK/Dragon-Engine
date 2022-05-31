@@ -1,6 +1,6 @@
-﻿namespace Crystalshire.Core.Model {
-    public enum AttributeSignal {
-        Negative = -1,
-        Positive = 1
-    }
+﻿namespace Crystalshire.Core.Model;
+
+public enum AttributeSignal {
+    Negative = -1,
+    Positive = 1
 }

@@ -1,26 +1,26 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace Crystalshire.Core.GeoIpCountry {
-    public class BlockedCountry {
-        public List<string> Countries { get; set; }
+namespace Crystalshire.Core.GeoIpCountry;
 
-        [JsonIgnore]
-        private const int InitialCapacity = 320;
+public class BlockedCountry {
+    public List<string> Countries { get; set; }
 
-        public BlockedCountry() {
-            Countries = new List<string>(InitialCapacity);
-        }
+    [JsonIgnore]
+    private const int InitialCapacity = 320;
 
-        public void Add(string code) {
-            Countries.Add(code);
-        }
+    public BlockedCountry() {
+        Countries = new List<string>(InitialCapacity);
+    }
 
-        public void Clear() {
-            Countries.Clear();
-        }
+    public void Add(string code) {
+        Countries.Add(code);
+    }
 
-        public bool IsBlocked(string code) {
-            return (Countries.FirstOrDefault(x => x.CompareTo(code) == 0) is not null);
-        }
+    public void Clear() {
+        Countries.Clear();
+    }
+
+    public bool IsBlocked(string code) {
+        return (Countries.FirstOrDefault(x => x.CompareTo(code) == 0) is not null);
     }
 }

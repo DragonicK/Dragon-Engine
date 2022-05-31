@@ -1,47 +1,47 @@
 ﻿using System.Text;
 using System.Security.Cryptography;
 
-namespace Crystalshire.Core.Cryptography {
-    public static class Hash {
+namespace Crystalshire.Core.Cryptography;
 
-        public static byte[] Compute(string data) {
-            var sha = SHA256.Create();
-            return sha.ComputeHash(Encoding.Unicode.GetBytes(data));
+public static class Hash {
+
+    public static byte[] Compute(string data) {
+        var sha = SHA256.Create();
+        return sha.ComputeHash(Encoding.Unicode.GetBytes(data));
+    }
+
+    public static string ComputeToHex(string data) {
+        var sha = SHA256.Create();
+        var buffer = sha.ComputeHash(Encoding.Unicode.GetBytes(data));
+
+        var hash = new StringBuilder(buffer.Length * 2);
+
+        sha.Dispose();
+
+        foreach (var bytes in buffer) {
+            hash.Append(bytes.ToString("x2"));
         }
 
-        public static string ComputeToHex(string data) {
-            var sha = SHA256.Create();
-            var buffer = sha.ComputeHash(Encoding.Unicode.GetBytes(data));
+        return hash.ToString();
+    }
 
-            var hash = new StringBuilder(buffer.Length * 2);
+    public static byte[] Compute(byte[] data, int length, bool reverse) {
+        var hash = new byte[length];
+        var copy = new byte[data.Length];
 
-            sha.Dispose();
+        Array.Copy(data, 0, copy, 0, data.Length);
 
-            foreach (var bytes in buffer) {
-                hash.Append(bytes.ToString("x2"));
-            }
-
-            return hash.ToString();
+        if (reverse) {
+            Array.Reverse(copy);
         }
 
-        public static byte[] Compute(byte[] data, int length, bool reverse) {
-            var hash = new byte[length];
-            var copy = new byte[data.Length];
+        var sha = SHA256.Create();
+        var buffer = sha.ComputeHash(copy);
 
-            Array.Copy(data, 0, copy, 0, data.Length);
+        sha.Dispose();
 
-            if (reverse) {
-                Array.Reverse(copy);
-            }
+        Array.Copy(buffer, 0, hash, 0, length);
 
-            var sha = SHA256.Create();
-            var buffer = sha.ComputeHash(copy);
-
-            sha.Dispose();
-
-            Array.Copy(buffer, 0, hash, 0, length);
-
-            return hash;
-        }
+        return hash;
     }
 }

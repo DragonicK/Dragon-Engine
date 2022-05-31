@@ -1,6 +1,6 @@
-﻿namespace Crystalshire.Core.Model.Quests {
-	public enum QuestSelectableReward {
-		Fixed,
-		Optional
-	}
+﻿namespace Crystalshire.Core.Model.Quests;
+
+public enum QuestSelectableReward {
+    Fixed,
+    Optional
 }

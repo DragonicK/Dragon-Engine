@@ -1,6 +1,6 @@
-﻿namespace Crystalshire.Core.Model.Passives {
-    public enum PassiveEffectChange {
-        Increase,
-        Remove
-    }
+﻿namespace Crystalshire.Core.Model.Passives;
+
+public enum PassiveEffectChange {
+    Increase,
+    Remove
 }

@@ -1,4 +1,3 @@
-﻿namespace Crystalshire.Core.Model.Characters {
-    public interface ICharacterInventory {
-    }
+﻿namespace Crystalshire.Core.Model.Characters;
+public interface ICharacterInventory {
 }

@@ -1,20 +1,20 @@
-﻿namespace Crystalshire.Core.Model.Conversations {
-    public class Chat {
-        public IList<ChatReply> Reply { get; set; }
-        public ConversationEvent Event { get; set; }
-        public int Data1 { get; set; }
-        public int Data2 { get; set; }
-        public int Data3 { get; set; }
-        public string Text { get; set; }
+﻿namespace Crystalshire.Core.Model.Conversations;
 
-        public Chat(int maximumReplies) {
-            Text = string.Empty;
+public class Chat {
+    public IList<ChatReply> Reply { get; set; }
+    public ConversationEvent Event { get; set; }
+    public int Data1 { get; set; }
+    public int Data2 { get; set; }
+    public int Data3 { get; set; }
+    public string Text { get; set; }
 
-            Reply = new List<ChatReply>(maximumReplies);
+    public Chat(int maximumReplies) {
+        Text = string.Empty;
 
-            for (var i = 0; i < maximumReplies; ++i) {
-                Reply.Add(new ChatReply());
-            }
+        Reply = new List<ChatReply>(maximumReplies);
+
+        for (var i = 0; i < maximumReplies; ++i) {
+            Reply.Add(new ChatReply());
         }
     }
 }

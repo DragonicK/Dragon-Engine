@@ -1,81 +1,81 @@
 ﻿using Crystalshire.Core.Serialization;
 using Crystalshire.Core.Model.Shops;
 
-namespace Crystalshire.Core.Content {
-    public class Shops : Database<Shop> {
+namespace Crystalshire.Core.Content;
 
-        public override void Load() {
-            var files = Directory.GetFiles(Folder);
-            var processed = 0;
+public class Shops : Database<Shop> {
 
-            if (files.Length > 0) {
-                processed += LoadShopItem(files);
-            }
+    public override void Load() {
+        var files = Directory.GetFiles(Folder);
+        var processed = 0;
 
-            var folders = GetFolders(Folder);
-
-            if (folders?.Length > 0) {
-                foreach (var folder in folders) {
-                    processed += LoadShopItem(GetFiles(folder));
-                }
-            }
-            if (processed == 0) {
-                SaveDefault();
-            }
+        if (files.Length > 0) {
+            processed += LoadShopItem(files);
         }
 
-        private int LoadShopItem(string[]? files) {
-            var count = 0;
+        var folders = GetFolders(Folder);
 
-            if (files is not null) {
-                foreach (var file in files) {
-                    if (Json.FileExists(file)) {
-                        var item = Json.Get<ShopItem>(file);
+        if (folders?.Length > 0) {
+            foreach (var folder in folders) {
+                processed += LoadShopItem(GetFiles(folder));
+            }
+        }
+        if (processed == 0) {
+            SaveDefault();
+        }
+    }
 
-                        if (item is not null) {
-                            if (item.Id != 0 && item.ShopId != 0) {
-                                AddShopItem(item);
-                                Json.Save(file, item);
-                            }
+    private int LoadShopItem(string[]? files) {
+        var count = 0;
+
+        if (files is not null) {
+            foreach (var file in files) {
+                if (Json.FileExists(file)) {
+                    var item = Json.Get<ShopItem>(file);
+
+                    if (item is not null) {
+                        if (item.Id != 0 && item.ShopId != 0) {
+                            AddShopItem(item);
+                            Json.Save(file, item);
                         }
-
-                        count++;
                     }
+
+                    count++;
                 }
             }
-
-            return count;
         }
 
-        private void AddShopItem(ShopItem item) {
-            var shopId = item.ShopId;
+        return count;
+    }
 
-            if (!Contains(shopId)) {
-                values.Add(shopId, new Shop() {
-                    Id = item.ShopId,
-                    Name = item.ShopName
-                });
-            }
+    private void AddShopItem(ShopItem item) {
+        var shopId = item.ShopId;
 
-            var shop = values[shopId];
-
-            shop.Items.Add(item);
+        if (!Contains(shopId)) {
+            values.Add(shopId, new Shop() {
+                Id = item.ShopId,
+                Name = item.ShopName
+            });
         }
 
-        private void SaveDefault() {
-            var item = new ShopItem() {
-                Id = 2,
-                Value = 1,
-                Level = 1,
-                Bound = false,
-                AttributeId = 1,
-                UpgradeId = 1,
-                ShopId = 1,
-                ShopName = "NOME",
-                Price = 1000,
-            };
+        var shop = values[shopId];
 
-            Json.Save($"{Folder}/default.json", item);
-        }
+        shop.Items.Add(item);
+    }
+
+    private void SaveDefault() {
+        var item = new ShopItem() {
+            Id = 2,
+            Value = 1,
+            Level = 1,
+            Bound = false,
+            AttributeId = 1,
+            UpgradeId = 1,
+            ShopId = 1,
+            ShopName = "NOME",
+            Price = 1000,
+        };
+
+        Json.Save($"{Folder}/default.json", item);
     }
 }

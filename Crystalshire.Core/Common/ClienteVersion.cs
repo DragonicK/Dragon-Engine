@@ -1,46 +1,46 @@
-﻿namespace Crystalshire.Core.Common {
-    public struct ClientVersion {
-        
-        public int ClientMajor { get; set; }
-        
-        public int ClientMinor { get; set; }
-        
-        public int ClientRevision { get; set; }
+﻿namespace Crystalshire.Core.Common;
 
-        private bool Compare(ClientVersion version) {
-            if (ClientMajor != version.ClientMajor) {
-                return false;
-            }
+public struct ClientVersion {
 
-            if (ClientMinor != version.ClientMinor) {
-                return false;
-            }
+    public int ClientMajor { get; set; }
 
-            if (ClientRevision != version.ClientRevision) {
-                return false;
-            }
+    public int ClientMinor { get; set; }
 
-            return true;
-        }
+    public int ClientRevision { get; set; }
 
-        public override bool Equals(object? obj) {
-            if (obj is ClientVersion version) {
-                return Compare(version);
-            }
-
+    private bool Compare(ClientVersion version) {
+        if (ClientMajor != version.ClientMajor) {
             return false;
         }
 
-        public static bool operator ==(ClientVersion left, ClientVersion right) {
-            return left.Equals(right);
+        if (ClientMinor != version.ClientMinor) {
+            return false;
         }
 
-        public static bool operator !=(ClientVersion left, ClientVersion right) {
-            return !(left == right);
+        if (ClientRevision != version.ClientRevision) {
+            return false;
         }
 
-        public override int GetHashCode() {
-            return HashCode.Combine(ClientMajor, ClientMinor, ClientRevision);
+        return true;
+    }
+
+    public override bool Equals(object? obj) {
+        if (obj is ClientVersion version) {
+            return Compare(version);
         }
+
+        return false;
+    }
+
+    public static bool operator ==(ClientVersion left, ClientVersion right) {
+        return left.Equals(right);
+    }
+
+    public static bool operator !=(ClientVersion left, ClientVersion right) {
+        return !(left == right);
+    }
+
+    public override int GetHashCode() {
+        return HashCode.Combine(ClientMajor, ClientMinor, ClientRevision);
     }
 }

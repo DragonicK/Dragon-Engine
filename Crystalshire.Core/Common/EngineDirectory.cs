@@ -1,19 +1,19 @@
-﻿namespace Crystalshire.Core.Common {
-    public class EngineDirectory {
-        private readonly List<string> directory;
+﻿namespace Crystalshire.Core.Common;
 
-        public EngineDirectory() {
-            directory = new List<string>();
-        }
+public class EngineDirectory {
+    private readonly List<string> directory;
 
-        public void Add(string folder) {
-            directory.Add(folder);
-        }
+    public EngineDirectory() {
+        directory = new List<string>();
+    }
 
-        public void Create() {
-            directory.ForEach(path =>  {
-                Directory.CreateDirectory(path);
-            });
-        }
+    public void Add(string folder) {
+        directory.Add(folder);
+    }
+
+    public void Create() {
+        directory.ForEach(path => {
+            Directory.CreateDirectory(path);
+        });
     }
 }

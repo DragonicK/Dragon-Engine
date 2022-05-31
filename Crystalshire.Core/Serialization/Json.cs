@@ -2,41 +2,41 @@
 using System.Text.Unicode;
 using System.Text.Encodings.Web;
 
-namespace Crystalshire.Core.Serialization {
-    public static class Json {
-        public static bool FileExists(string json) {
-            return File.Exists(json);
-        }
+namespace Crystalshire.Core.Serialization;
 
-        public static T? Get<T>(string file) {
-            var options = new JsonSerializerOptions {
-                Encoder = JavaScriptEncoder.Create(UnicodeRanges.All),
-                WriteIndented = true
-            };
+public static class Json {
+    public static bool FileExists(string json) {
+        return File.Exists(json);
+    }
 
-            return JsonSerializer.Deserialize<T>(File.ReadAllText(file), options);
-        }
+    public static T? Get<T>(string file) {
+        var options = new JsonSerializerOptions {
+            Encoder = JavaScriptEncoder.Create(UnicodeRanges.All),
+            WriteIndented = true
+        };
 
-        public static T? GetFromText<T>(string text) {
-            var options = new JsonSerializerOptions {
-                Encoder = JavaScriptEncoder.Create(UnicodeRanges.All),
-                WriteIndented = true
-            };
+        return JsonSerializer.Deserialize<T>(File.ReadAllText(file), options);
+    }
 
-            return JsonSerializer.Deserialize<T>(text, options);
-        }
+    public static T? GetFromText<T>(string text) {
+        var options = new JsonSerializerOptions {
+            Encoder = JavaScriptEncoder.Create(UnicodeRanges.All),
+            WriteIndented = true
+        };
 
-        public static void Save<T>(string file, T item) {
-            var options = new JsonSerializerOptions {
-                Encoder = JavaScriptEncoder.Create(UnicodeRanges.All),
-                WriteIndented = true
-            };
+        return JsonSerializer.Deserialize<T>(text, options);
+    }
 
-            var result = JsonSerializer.Serialize<T>(item, options);
+    public static void Save<T>(string file, T item) {
+        var options = new JsonSerializerOptions {
+            Encoder = JavaScriptEncoder.Create(UnicodeRanges.All),
+            WriteIndented = true
+        };
 
-            using var stream = new FileStream(file, FileMode.Create, FileAccess.Write);
-            using var writer = new StreamWriter(stream);
-            writer.Write(result);
-        }
+        var result = JsonSerializer.Serialize<T>(item, options);
+
+        using var stream = new FileStream(file, FileMode.Create, FileAccess.Write);
+        using var writer = new StreamWriter(stream);
+        writer.Write(result);
     }
 }

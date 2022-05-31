@@ -1,60 +1,61 @@
 ﻿using Crystalshire.Core.Model.Upgrades;
 using Crystalshire.Core.Serialization;
 
-namespace Crystalshire.Core.Content {
-    public class Upgrades : Database<Upgrade> {
+namespace Crystalshire.Core.Content;
 
-        public override void Load() {
-            var files = Directory.GetFiles(Folder);
-            var processed = 0;
+public class Upgrades : Database<Upgrade> {
 
-            if (files.Length > 0) {
-                processed += LoadUpgrades(files);
-            }
+    public override void Load() {
+        var files = Directory.GetFiles(Folder);
+        var processed = 0;
 
-            var folders = GetFolders(Folder);
+        if (files.Length > 0) {
+            processed += LoadUpgrades(files);
+        }
 
-            if (folders?.Length > 0) {
-                foreach (var folder in folders) {
-                    processed += LoadUpgrades(GetFiles(folder));
-                }
-            }
+        var folders = GetFolders(Folder);
 
-            if (processed == 0) {
-                SaveDefault();
+        if (folders?.Length > 0) {
+            foreach (var folder in folders) {
+                processed += LoadUpgrades(GetFiles(folder));
             }
         }
 
-        private int LoadUpgrades(string[]? files) {
-            var count = 0;
+        if (processed == 0) {
+            SaveDefault();
+        }
+    }
 
-            if (files is not null) {
-                foreach (var file in files) {
-                    if (Json.FileExists(file)) {
-                        var upgrade = Json.Get<Upgrade>(file);
+    private int LoadUpgrades(string[]? files) {
+        var count = 0;
 
-                        if (upgrade is not null) {
-                            if (upgrade.Id != 0) {
-                                Add(upgrade.Id, upgrade);
-                                Json.Save(file, upgrade);
-                            }
+        if (files is not null) {
+            foreach (var file in files) {
+                if (Json.FileExists(file)) {
+                    var upgrade = Json.Get<Upgrade>(file);
+
+                    if (upgrade is not null) {
+                        if (upgrade.Id != 0) {
+                            Add(upgrade.Id, upgrade);
+                            Json.Save(file, upgrade);
                         }
-
-                        count++;
                     }
+
+                    count++;
                 }
             }
-
-            return count;
         }
 
-        private void SaveDefault() {
-            var upgrade = new Upgrade() {
-                Id = 0
-            };
-            
-            for (var i = 1; i <= 10; ++i) {
-                var list = new List<UpgradeRequirement>(2) {
+        return count;
+    }
+
+    private void SaveDefault() {
+        var upgrade = new Upgrade() {
+            Id = 0
+        };
+
+        for (var i = 1; i <= 10; ++i) {
+            var list = new List<UpgradeRequirement>(2) {
                     new UpgradeRequirement() {
                         Id = 1,
                         Amount = i
@@ -65,16 +66,15 @@ namespace Crystalshire.Core.Content {
                     }
                 };
 
-                upgrade.ContentLevel.Add(i, new UpgradeLevel() {
-                    Break = 0,
-                    Reduce = 0,
-                    Success = i * 10,
-                    Cost = i * 250,
-                    Requirements = list
-                });
-            }
-
-            Json.Save($"{Folder}/default.json", upgrade);
+            upgrade.ContentLevel.Add(i, new UpgradeLevel() {
+                Break = 0,
+                Reduce = 0,
+                Success = i * 10,
+                Cost = i * 250,
+                Requirements = list
+            });
         }
+
+        Json.Save($"{Folder}/default.json", upgrade);
     }
 }

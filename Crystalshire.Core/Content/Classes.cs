@@ -1,53 +1,53 @@
 ﻿using Crystalshire.Core.Serialization;
 using Crystalshire.Core.Model.Classes;
 
-namespace Crystalshire.Core.Content {
-    public class Classes : Database<IClass> {
+namespace Crystalshire.Core.Content;
 
-        public override void Load() {
-            var files = Directory.GetFiles(Folder);
-            var processed = 0;
+public class Classes : Database<IClass> {
 
-            if (files.Length > 0) {
-                processed += LoadClasses(files);
-            }
+    public override void Load() {
+        var files = Directory.GetFiles(Folder);
+        var processed = 0;
 
-            var folders = GetFolders(Folder);
+        if (files.Length > 0) {
+            processed += LoadClasses(files);
+        }
 
-            if (folders?.Length > 0) {
-                foreach (var folder in folders) {
-                    processed += LoadClasses(GetFiles(folder));
-                }
-            }
+        var folders = GetFolders(Folder);
 
-            if (processed == 0) {
-                SaveDefault();
+        if (folders?.Length > 0) {
+            foreach (var folder in folders) {
+                processed += LoadClasses(GetFiles(folder));
             }
         }
 
-        private int LoadClasses(string[]? files) {
-            var count = 0;
+        if (processed == 0) {
+            SaveDefault();
+        }
+    }
 
-            if (files is not null) {
-                foreach (var file in files) {
-                    if (Json.FileExists(file)) {
-                        var classe = Json.Get<IClass>(file);
+    private int LoadClasses(string[]? files) {
+        var count = 0;
 
-                        if (classe is not null) {
-                            Add(classe.Id, classe);
-                            Json.Save(file, classe);
-                        }
+        if (files is not null) {
+            foreach (var file in files) {
+                if (Json.FileExists(file)) {
+                    var classe = Json.Get<IClass>(file);
 
-                        count++;
+                    if (classe is not null) {
+                        Add(classe.Id, classe);
+                        Json.Save(file, classe);
                     }
+
+                    count++;
                 }
             }
-
-            return count;
         }
 
-        private void SaveDefault() {
-            Json.Save($"{Folder}/default.json", new Class() {  Id = 1 });
-        }
+        return count;
+    }
+
+    private void SaveDefault() {
+        Json.Save($"{Folder}/default.json", new Class() { Id = 1 });
     }
 }
