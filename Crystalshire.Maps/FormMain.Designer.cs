@@ -467,7 +467,6 @@ partial class FormMain {
             this.RadioWarp.Name = "RadioWarp";
             this.RadioWarp.Size = new System.Drawing.Size(53, 19);
             this.RadioWarp.TabIndex = 4;
-            this.RadioWarp.TabStop = true;
             this.RadioWarp.Text = "Warp";
             this.RadioWarp.UseVisualStyleBackColor = true;
             // 
@@ -478,7 +477,6 @@ partial class FormMain {
             this.RadioChat.Name = "RadioChat";
             this.RadioChat.Size = new System.Drawing.Size(53, 19);
             this.RadioChat.TabIndex = 3;
-            this.RadioChat.TabStop = true;
             this.RadioChat.Text = "Chat";
             this.RadioChat.UseVisualStyleBackColor = true;
             // 
@@ -489,7 +487,6 @@ partial class FormMain {
             this.RadioTrap.Name = "RadioTrap";
             this.RadioTrap.Size = new System.Drawing.Size(53, 19);
             this.RadioTrap.TabIndex = 2;
-            this.RadioTrap.TabStop = true;
             this.RadioTrap.Text = "Trap";
             this.RadioTrap.UseVisualStyleBackColor = true;
             // 
@@ -500,13 +497,13 @@ partial class FormMain {
             this.RadioAvoid.Name = "RadioAvoid";
             this.RadioAvoid.Size = new System.Drawing.Size(88, 19);
             this.RadioAvoid.TabIndex = 1;
-            this.RadioAvoid.TabStop = true;
             this.RadioAvoid.Text = "Npc Avoid";
             this.RadioAvoid.UseVisualStyleBackColor = true;
             // 
             // RadioBlock
             // 
             this.RadioBlock.AutoSize = true;
+            this.RadioBlock.Checked = true;
             this.RadioBlock.Location = new System.Drawing.Point(28, 32);
             this.RadioBlock.Name = "RadioBlock";
             this.RadioBlock.Size = new System.Drawing.Size(60, 19);
@@ -550,7 +547,6 @@ partial class FormMain {
             this.RadioDirection.Name = "RadioDirection";
             this.RadioDirection.Size = new System.Drawing.Size(88, 19);
             this.RadioDirection.TabIndex = 6;
-            this.RadioDirection.TabStop = true;
             this.RadioDirection.Text = "Direction";
             this.RadioDirection.UseVisualStyleBackColor = true;
             this.RadioDirection.CheckedChanged += new System.EventHandler(this.RadioLayer_CheckedChanged);
@@ -562,7 +558,6 @@ partial class FormMain {
             this.RadioAttributes.Name = "RadioAttributes";
             this.RadioAttributes.Size = new System.Drawing.Size(88, 19);
             this.RadioAttributes.TabIndex = 5;
-            this.RadioAttributes.TabStop = true;
             this.RadioAttributes.Text = "Attribute";
             this.RadioAttributes.UseVisualStyleBackColor = true;
             this.RadioAttributes.CheckedChanged += new System.EventHandler(this.RadioLayer_CheckedChanged);
@@ -574,7 +569,6 @@ partial class FormMain {
             this.RadioFringe2.Name = "RadioFringe2";
             this.RadioFringe2.Size = new System.Drawing.Size(81, 19);
             this.RadioFringe2.TabIndex = 4;
-            this.RadioFringe2.TabStop = true;
             this.RadioFringe2.Text = "Fringe 2";
             this.RadioFringe2.UseVisualStyleBackColor = true;
             this.RadioFringe2.CheckedChanged += new System.EventHandler(this.RadioLayer_CheckedChanged);
@@ -586,7 +580,6 @@ partial class FormMain {
             this.RadioFringe1.Name = "RadioFringe1";
             this.RadioFringe1.Size = new System.Drawing.Size(81, 19);
             this.RadioFringe1.TabIndex = 3;
-            this.RadioFringe1.TabStop = true;
             this.RadioFringe1.Text = "Fringe 1";
             this.RadioFringe1.UseVisualStyleBackColor = true;
             this.RadioFringe1.CheckedChanged += new System.EventHandler(this.RadioLayer_CheckedChanged);
@@ -598,7 +591,6 @@ partial class FormMain {
             this.RadioMask2.Name = "RadioMask2";
             this.RadioMask2.Size = new System.Drawing.Size(67, 19);
             this.RadioMask2.TabIndex = 2;
-            this.RadioMask2.TabStop = true;
             this.RadioMask2.Text = "Mask 2";
             this.RadioMask2.UseVisualStyleBackColor = true;
             this.RadioMask2.CheckedChanged += new System.EventHandler(this.RadioLayer_CheckedChanged);
@@ -610,7 +602,6 @@ partial class FormMain {
             this.RadioMask1.Name = "RadioMask1";
             this.RadioMask1.Size = new System.Drawing.Size(67, 19);
             this.RadioMask1.TabIndex = 1;
-            this.RadioMask1.TabStop = true;
             this.RadioMask1.Text = "Mask 1";
             this.RadioMask1.UseVisualStyleBackColor = true;
             this.RadioMask1.CheckedChanged += new System.EventHandler(this.RadioLayer_CheckedChanged);
@@ -618,6 +609,7 @@ partial class FormMain {
             // RadioGround
             // 
             this.RadioGround.AutoSize = true;
+            this.RadioGround.Checked = true;
             this.RadioGround.Location = new System.Drawing.Point(28, 36);
             this.RadioGround.Name = "RadioGround";
             this.RadioGround.Size = new System.Drawing.Size(67, 19);

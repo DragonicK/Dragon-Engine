@@ -1,4 +1,4 @@
-﻿namespace Crystalshire.Maps.Export;
+﻿namespace Crystalshire.Maps.Editor;
 
 public class ExportData {
     public int Id { get; set; }

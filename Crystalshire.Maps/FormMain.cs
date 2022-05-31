@@ -1,3 +1,5 @@
+using Crystalshire.Core.Cryptography;
+
 using Crystalshire.Maps.Model;
 using Crystalshire.Maps.Common;
 using Crystalshire.Maps.Editor;
@@ -40,6 +42,192 @@ public partial class FormMain : Form {
     private void ChangeFontStye(Control control) {
         control.Font = JetBrainsMono.GetFont(FontStyle.Regular);
     }
+
+    #region Project 
+
+    private string[]? GetFilesToOpen() {
+        var dialog = new OpenFileDialog() {
+            InitialDirectory = "./Project",
+            Filter = "Engine Maps (*.mps) | *.mps",
+            CheckFileExists = true,
+            CheckPathExists = true,
+            Multiselect = true,
+            FilterIndex = 0
+        };
+
+        var result = dialog.ShowDialog();
+
+        if (result == DialogResult.OK) {
+            return dialog.FileNames;
+        }
+
+        return null;
+    }
+
+    private string? GetPathToSave() {
+        var dialog = new SaveFileDialog() {
+            InitialDirectory = "./Project",
+            Filter = "Engine Maps (*.mps) | *.mps",
+            FilterIndex = 0
+        };
+
+        var result = dialog.ShowDialog();
+
+        if (result == DialogResult.OK) {
+            return dialog.FileName;
+        }
+
+        return null;
+    }
+
+    private void CloseProject() {
+        const string Message = "Deseja salvar?";
+        const string Title = "Aviso";
+
+        var result = MessageBox.Show(Message, Title, MessageBoxButtons.YesNo);
+
+        if (result == DialogResult.Yes) {
+            SaveProject();
+            RemoveMap();
+        }
+        else {
+            RemoveMap();
+        }
+    }
+
+    private void RemoveMap() {
+        var map = Maps[SelectedMapIndex];
+
+        Maps.Remove(map);
+
+        TabMaps.TabPages.RemoveAt(SelectedMapIndex);
+
+        SelectedMapIndex = TabMaps.SelectedIndex;
+
+        PictureMap.Invalidate();
+    }
+
+    private void OpenProject() {
+        var files = GetFilesToOpen();
+
+        if (files != null) {
+            foreach (var file in files) {
+                OpenProjectAndPreserveLastPath(file);
+            }
+
+            UpdateMapSize();
+        }
+    }
+
+    private void OpenProjectAsNew() {
+        var files = GetFilesToOpen();
+
+        if (files != null) {
+            foreach (var file in files) {
+                OpenProjectAsNew(file);
+            }
+
+            UpdateMapSize();
+        }
+    }
+
+    private void SaveProject() {
+        if (SelectedMapIndex != NoMapSelected) {
+            var map = Maps[SelectedMapIndex];
+
+            if (string.IsNullOrEmpty(map.LastPath)) {
+                var file = GetPathToSave();
+
+                if (file != null) {
+                    SaveAndPreserveLastPath(file);
+                }
+            }
+            else {
+                SaveFromLastPath();
+            }
+        }
+    }
+
+    private void SaveProjectAs() {
+        if (SelectedMapIndex != NoMapSelected) {
+            var file = GetPathToSave();
+
+            if (file != null) {
+                SaveWithoutLastPath(file);
+            }
+        }
+    }
+
+    private void OpenProjectAndPreserveLastPath(string file) {
+        var project = new Project();
+        var map = project.Open(file);
+
+        if (IsMapOpened(file)) {
+            const string Message = "Este mapa já está aberto. Use a opção Open As New para abrir como uma nova cópia.";
+            const string Title = "Abrir Mapa";
+
+            MessageBox.Show(Message, Title);
+        }
+        else {
+            if (map is not null) {
+                map.LastPath = file;
+
+                Maps.Add(map);
+
+                SelectedMapIndex = Maps.Count - 1;
+
+                TabMaps.TabPages.Add(map.Property.Name);
+                TabMaps.SelectedIndex = SelectedMapIndex;
+            }
+        }
+    }
+
+    private void OpenProjectAsNew(string file) {
+        var project = new Project();
+        var map = project.Open(file);
+
+        if (map is not null) {
+            map.Property.Name += " Copy";
+
+            Maps.Add(map);
+
+            SelectedMapIndex = Maps.Count - 1;
+
+            TabMaps.TabPages.Add(map.Property.Name);
+            TabMaps.SelectedIndex = SelectedMapIndex;
+        }
+    }
+
+    private void SaveAndPreserveLastPath(string file) {
+        var project = new Project();
+
+        var map = Maps[SelectedMapIndex];
+
+        map.LastPath = file;
+
+        project.Save(map, file);
+    }
+
+    private void SaveWithoutLastPath(string file) {
+        var project = new Project();
+
+        var map = Maps[SelectedMapIndex];
+
+        project.Save(map, file);
+    }
+
+    private void SaveFromLastPath() {
+        var project = new Project();
+        var map = Maps[SelectedMapIndex];
+
+        project.Save(map, map.LastPath);
+    }
+
+    private bool IsMapOpened(string path) {
+        return Maps.FirstOrDefault(x => x.LastPath == path) != null;
+    }
+
+    #endregion
 
     #region Button Color 
 
@@ -111,19 +299,19 @@ public partial class FormMain : Form {
     }
 
     private void MenuFileOpen_Click(object sender, EventArgs e) {
-
+        OpenProject();
     }
 
     private void MenuFileOpenAs_Click(object sender, EventArgs e) {
-
+        OpenProjectAsNew();
     }
 
     private void MenuFileSave_Click(object sender, EventArgs e) {
-
+        SaveProject();
     }
 
     private void MenuFileSaveAs_Click(object sender, EventArgs e) {
-
+        SaveProjectAs();
     }
 
     private void MenuFileSaveAll_Click(object sender, EventArgs e) {
@@ -131,7 +319,7 @@ public partial class FormMain : Form {
     }
 
     private void MenuFileClose_Click(object sender, EventArgs e) {
-
+        CloseProject();
     }
 
     private void MenuFileExit_Click(object sender, EventArgs e) {
@@ -177,11 +365,51 @@ public partial class FormMain : Form {
     #region Menu Export
 
     private void MenuExportEngine_Click(object sender, EventArgs e) {
+        const int KeySize = 16;
 
+        if (SelectedMapIndex != NoMapSelected) {
+            var path = GetPathToExport("Engine", "Maps", "Exported Engine Maps");
+
+            if (path != null) {
+                var hash = Maps[SelectedMapIndex].Property.GetHash();
+                var text = Maps[SelectedMapIndex].Property.GetHashText();
+
+                Clipboard.SetText(text);
+
+                var key = Hash.Compute(hash, KeySize, false);
+                var iv = Hash.Compute(hash, KeySize, true);
+
+                var export = new Export();
+                export.ExportToEngine(Maps[SelectedMapIndex], key, iv, path);
+            }
+        }
     }
 
     private void MenuExportPng_Click(object sender, EventArgs e) {
+        if (SelectedMapIndex != NoMapSelected) {
+            var path = GetPathToExport("Png", "png", "Image Files");
 
+            if (path != null) {
+                var export = new Export();
+                export.ExportToPng(Maps[SelectedMapIndex], path);
+            }
+        }
+    }
+
+    private string? GetPathToExport(string additionalpath, string extension, string description) {
+        var dialog = new SaveFileDialog() {
+            InitialDirectory = Environment.CurrentDirectory + @"\Exported\" + additionalpath + @"\",
+            Filter = $"{description} (*.{extension}) | *.{extension}",
+            FilterIndex = 0
+        };
+
+        var result = dialog.ShowDialog();
+
+        if (result == DialogResult.OK) {
+            return dialog.FileName;
+        }
+
+        return null;
     }
 
     #endregion
@@ -298,76 +526,6 @@ public partial class FormMain : Form {
                     map.Attribute[x, y] = attribute;
                 }
             }
-
-            PictureMap.Invalidate();
-        }
-    }
-
-    #endregion
-
-    #region Map
-
-    private void AddMap() {
-        var map = new Map();
-
-        Maps.Add(map);
-
-        SelectedMapIndex = Maps.Count - 1;
-
-        TabMaps.TabPages.Add(map.Property.Name);
-
-        var property = Maps[SelectedMapIndex].Property;
-
-        new FormProperty(JetBrainsMono, property, this).ShowDialog();
-    }
-
-    public void UpdateMapSize() {
-        if (SelectedMapIndex != NoMapSelected) {
-            var map = Maps[SelectedMapIndex];
-
-            map.UpdateSize();
-
-            var width = map.Property.Width;
-            var height = map.Property.Height;
-
-            Grid.Update(width, height);
-            UpdateMapScrollBars();
-
-            PictureMap.Invalidate();
-        }
-    }
-
-    public void ChangeSelectedMapName(string name) {
-        if (Maps.Count > 0) {
-            if (SelectedMapIndex != NoMapSelected) {
-                TabMaps.TabPages[SelectedMapIndex].Text = name;
-            }
-        }
-    }
-
-    private void UpdateMapScrollBars() {
-        if (SelectedMapIndex != NoMapSelected) {
-            var map = Maps[SelectedMapIndex];
-
-            var block = Constants.TileSize;
-
-            var width = map.Property.Width * block;
-            var height = map.Property.Height * block;
-
-            var x = Convert.ToInt32(Math.Abs(PictureMap.Width - width) / block);
-
-            ScrollMapX.Maximum = x;
-            ScrollMapX.Minimum = 0;
-            ScrollMapX.Value = 0;
-
-            var y = Convert.ToInt32(Math.Abs(PictureMap.Height - height) / block);
-
-            ScrollMapY.Maximum = y;
-            ScrollMapY.Minimum = 0;
-            ScrollMapY.Value = 0;
-
-            LabelMapX.Text = "Scroll X: " + ScrollMapX.Value;
-            LabelMapY.Text = "Scroll Y: " + ScrollMapY.Value;
 
             PictureMap.Invalidate();
         }
@@ -521,13 +679,83 @@ public partial class FormMain : Form {
 
         SelectedTileRectangle = new Rectangle(0, 0, size, size);
 
+        ChangeFont(Controls[0]);
+
         UpdateTilesets();
         UpdateTileScrollBars();
+
+        PictureMap.Invalidate();
     }
 
     #endregion
 
     #region Map
+
+    private void AddMap() {
+        var map = new Map();
+
+        Maps.Add(map);
+
+        SelectedMapIndex = Maps.Count - 1;
+
+        TabMaps.TabPages.Add(map.Property.Name);
+
+        var property = Maps[SelectedMapIndex].Property;
+
+        new FormProperty(JetBrainsMono, property, this).ShowDialog();
+    }
+
+    public void UpdateMapSize() {
+        if (SelectedMapIndex != NoMapSelected) {
+            var map = Maps[SelectedMapIndex];
+
+            map.UpdateSize();
+
+            var width = map.Property.Width;
+            var height = map.Property.Height;
+
+            Grid.Update(width, height);
+            UpdateMapScrollBars();
+
+            PictureMap.Invalidate();
+        }
+    }
+
+    public void ChangeSelectedMapName(string name) {
+        if (Maps.Count > 0) {
+            if (SelectedMapIndex != NoMapSelected) {
+                TabMaps.TabPages[SelectedMapIndex].Text = name;
+            }
+        }
+    }
+
+    private void UpdateMapScrollBars() {
+        if (SelectedMapIndex != NoMapSelected) {
+            var map = Maps[SelectedMapIndex];
+
+            var block = Constants.TileSize;
+
+            var width = map.Property.Width * block;
+            var height = map.Property.Height * block;
+
+            var x = Convert.ToInt32(Math.Abs(PictureMap.Width - width) / block);
+
+            ScrollMapX.Maximum = x;
+            ScrollMapX.Minimum = 0;
+            ScrollMapX.Value = 0;
+
+            var y = Convert.ToInt32(Math.Abs(PictureMap.Height - height) / block);
+
+            ScrollMapY.Maximum = y;
+            ScrollMapY.Minimum = 0;
+            ScrollMapY.Value = 0;
+
+            LabelMapX.Text = "Scroll X: " + ScrollMapX.Value;
+            LabelMapY.Text = "Scroll Y: " + ScrollMapY.Value;
+
+            PictureMap.Invalidate();
+        }
+    }
 
     private void PictureMap_Paint(object sender, PaintEventArgs e) {
         var g = e.Graphics;
@@ -574,6 +802,7 @@ public partial class FormMain : Form {
 
             if (MenuViewGrid.Checked) {
                 g.DrawImage(Grid.GetGrid(), new Rectangle(0, 0, PictureMap.Width, PictureMap.Height), new Rectangle(startx * block, starty * block, PictureMap.Width, PictureMap.Height), GraphicsUnit.Pixel);
+                g.DrawRectangle(Grid.Pen, new Rectangle(0, 0, Grid.GetGrid().Width, Grid.GetGrid().Height));
             }
         }
     }
