@@ -47,7 +47,7 @@ public partial class FormMain : Form {
 
     private string[]? GetFilesToOpen() {
         var dialog = new OpenFileDialog() {
-            InitialDirectory = "./Projects",
+            InitialDirectory = Application.StartupPath + "/Projects/",
             Filter = "Engine Maps (*.mps) | *.mps",
             CheckFileExists = true,
             CheckPathExists = true,
@@ -66,7 +66,7 @@ public partial class FormMain : Form {
 
     private string? GetPathToSave() {
         var dialog = new SaveFileDialog() {
-            InitialDirectory = "./Projects",
+            InitialDirectory = Application.StartupPath + "/Projects/",
             Filter = "Engine Maps (*.mps) | *.mps",
             FilterIndex = 0
         };
@@ -376,8 +376,8 @@ public partial class FormMain : Form {
 
                 Clipboard.SetText(text);
 
-                var key = Hash.Compute(hash, KeySize, false);
-                var iv = Hash.Compute(hash, KeySize, true);
+                var key = Hash.Compute(hash, KeySize, true);
+                var iv = Hash.Compute(hash, KeySize, false);
 
                 var export = new Export();
                 export.ExportToEngine(Maps[SelectedMapIndex], key, iv, path);
@@ -398,7 +398,7 @@ public partial class FormMain : Form {
 
     private string? GetPathToExport(string additionalpath, string extension, string description) {
         var dialog = new SaveFileDialog() {
-            InitialDirectory = Environment.CurrentDirectory + @"\Exported\" + additionalpath + @"\",
+            InitialDirectory = Application.StartupPath + "/Exported/" + additionalpath + @"/",
             Filter = $"{description} (*.{extension}) | *.{extension}",
             FilterIndex = 0
         };

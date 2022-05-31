@@ -8,13 +8,14 @@ namespace Crystalshire.Maps.Editor;
 
 public class Export {
 
+    const int SizeIndex = 4;
     const int VersionSavedBytes = 16;
     const int DateTimeSavedBytes = 20;
-    const int PropertySavedBytes = 399;
+    const int PropertySavedBytes = 383;
     const int AttributesSavedBytes = 22;
 
-    private List<ExportData> listGround;
-    private List<ExportData> listFringe;
+    private IList<ExportData> listGround;
+    private IList<ExportData> listFringe;
 
     public Export() {
         listGround = new List<ExportData>();
@@ -196,6 +197,7 @@ public class Export {
         var attributes = (property.Width * property.Height) * AttributesSavedBytes;
 
         totalBytes += attributes;
+        totalBytes += SizeIndex;
         totalBytes += VersionSavedBytes;
         totalBytes += DateTimeSavedBytes;
         totalBytes += PropertySavedBytes;
@@ -227,14 +229,10 @@ public class Export {
     }
 
     private void Write(BinaryWriter writer, IProperty property) {
+        writer.Write(property.Id);
         writer.Write(ConvertTextToBytes(property.Name, Constants.MaximumNameLength));
         writer.Write(ConvertTextToBytes(property.Music, Constants.MaximumNameLength));
         writer.Write(ConvertTextToBytes(property.Ambience, Constants.MaximumNameLength));
-
-        writer.Write(property.Link.Up);
-        writer.Write(property.Link.Down);
-        writer.Write(property.Link.Left);
-        writer.Write(property.Link.Right);
 
         writer.Write((byte)property.Moral);
         writer.Write((byte)property.Weather);
@@ -271,7 +269,7 @@ public class Export {
         writer.Write(attributes.DirBlock);
     }
 
-    private void Write(BinaryWriter writer, List<ExportData> list) {
+    private void Write(BinaryWriter writer, IList<ExportData> list) {
         writer.Write(list.Count);
 
         for (var i = 0; i < list.Count; i++) {
@@ -317,17 +315,8 @@ public class Export {
         writer.Write(property.Music);
         writer.Write(property.Ambience);
 
-        writer.Write(property.Link.Up);
-        writer.Write(property.Link.Down);
-        writer.Write(property.Link.Left);
-        writer.Write(property.Link.Right);
-
         writer.Write((byte)property.Moral);
         writer.Write((byte)property.Weather);
-
-        writer.Write(property.Boot.Id);
-        writer.Write(property.Boot.X);
-        writer.Write(property.Boot.Y);
 
         writer.Write(property.Width);
         writer.Write(property.Height);

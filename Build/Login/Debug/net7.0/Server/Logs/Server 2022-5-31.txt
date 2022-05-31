@@ -1,0 +1,36 @@
+{
+  "Date": "2022年5月31日 10:22:17",
+  "Name": "Authentication Result",
+  "Message": "Authentication Result: Success ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "2022年5月31日 10:31:02",
+  "Name": "Authentication Result",
+  "Message": "Authentication Result: Success ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "2022年5月31日 10:34:20",
+  "Name": "Authentication Result",
+  "Message": "Authentication Result: Success ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "2022年5月31日 10:35:39",
+  "Name": "Authentication Result",
+  "Message": "Authentication Result: Success ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "2022年5月31日 11:06:20",
+  "Name": "Authentication Result",
+  "Message": "Authentication Result: Success ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "2022年5月31日 11:15:17",
+  "Name": "Authentication Result",
+  "Message": "Authentication Result: Success ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}

@@ -1,0 +1,72 @@
+{
+  "Date": "2022年5月31日 10:22:17",
+  "Name": "Connection Approval",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "2022年5月31日 10:22:31",
+  "Name": "Connection Disconnected",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "2022年5月31日 10:22:32",
+  "Name": "Left Game",
+  "Message": "",
+  "Warning": "Success"
+}
+{
+  "Date": "2022年5月31日 10:31:02",
+  "Name": "Connection Approval",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "2022年5月31日 10:31:12",
+  "Name": "Connection Disconnected",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "2022年5月31日 10:31:12",
+  "Name": "Left Game",
+  "Message": "",
+  "Warning": "Success"
+}
+{
+  "Date": "2022年5月31日 10:34:20",
+  "Name": "Connection Approval",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "2022年5月31日 10:35:39",
+  "Name": "Connection Approval",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "2022年5月31日 11:06:20",
+  "Name": "Connection Approval",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "2022年5月31日 11:15:17",
+  "Name": "Connection Approval",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "2022年5月31日 11:16:18",
+  "Name": "Connection Disconnected",
+  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
+  "Warning": "Success"
+}
+{
+  "Date": "2022年5月31日 11:16:18",
+  "Name": "Left Game",
+  "Message": "",
+  "Warning": "Success"
+}
