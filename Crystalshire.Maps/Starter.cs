@@ -10,7 +10,7 @@ using Crystalshire.Maps.Images;
 namespace Crystalshire.Maps;
 
 public class Starter {
-    public FontLoader? FontLoader { get; set; }
+    public JetBrainsMonoLoader? FontLoader { get; set; }
     public JetBrainsMono? JetBrainsMono { get; set; }
     public IGrid? Grid { get; set; }
     public ITileset? Tiles { get; set; }
@@ -20,7 +20,7 @@ public class Starter {
     public Point[]? DirectionPosition { get; set; }
 
     public void Start() {
-        FontLoader = new FontLoader();
+        FontLoader = new JetBrainsMonoLoader();
 
         FontLoader.LoadFromResource();
 

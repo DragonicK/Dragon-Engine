@@ -1,11 +1,11 @@
 ﻿using System.Drawing.Text;
 
-namespace Crystalshire.Maps.Editor;
+namespace Crystalshire.Editor;
 
-public class FontLoader {
+public class JetBrainsMonoLoader {
     readonly PrivateFontCollection _collection;
 
-    public FontLoader() {
+    public JetBrainsMonoLoader() {
         _collection = new PrivateFontCollection();
     }
 

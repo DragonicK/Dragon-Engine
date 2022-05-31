@@ -34,13 +34,29 @@ public partial class FormMain : Form {
 
         ChangeFontStye(control);
 
+        if (control is MenuStrip) {
+            var menu = control as MenuStrip;
+
+            if (menu is not null) {
+                foreach (ToolStripItem item in menu.Items) {
+                    ChangeFontStye(item);
+                }
+            }
+        }
+
         foreach (Control _control in controls) {
-            ChangeFontStye(_control);
+            ChangeFont(_control);
         }
     }
 
     private void ChangeFontStye(Control control) {
         control.Font = JetBrainsMono.GetFont(FontStyle.Regular);
+    }
+
+    private void ChangeFontStye(ToolStripItem control) {
+        if (JetBrainsMono is not null) {
+            control.Font = JetBrainsMono.GetFont(FontStyle.Regular);
+        }
     }
 
     #region Project 
@@ -679,7 +695,7 @@ public partial class FormMain : Form {
 
         SelectedTileRectangle = new Rectangle(0, 0, size, size);
 
-        ChangeFont(Controls[0]);
+        ChangeFont(this);
 
         UpdateTilesets();
         UpdateTileScrollBars();

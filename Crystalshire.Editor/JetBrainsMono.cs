@@ -1,4 +1,4 @@
-﻿namespace Crystalshire.Maps.Editor;
+﻿namespace Crystalshire.Editor;
 
 public class JetBrainsMono {
     private readonly JetBrainsMonoLoader _loader;

@@ -37,6 +37,7 @@ using Crystalshire.Editor.NotificationIcons;
 namespace Crystalshire.Editor;
 
 public partial class FormMain : Form {
+    public JetBrainsMono? JetBrainsMono { get; set; }
     public Configuration Configuration { get; }
     public IDatabase<Achievement> Achievements { get; private set; }
     public IDatabase<GroupAttribute> AchievementAttributes { get; private set; }
@@ -225,6 +226,9 @@ public partial class FormMain : Form {
         Achievements.Load();
 
         var f = new FormAchievement(Configuration, Achievements);
+
+        ChangeFont(f);
+
         f.Show();
     }
 
@@ -233,6 +237,9 @@ public partial class FormMain : Form {
         AchievementAttributes.Load();
 
         var f = new FormAttribute(Configuration, AchievementAttributes);
+
+        ChangeFont(f);
+
         f.Show();
     }
 
@@ -245,6 +252,9 @@ public partial class FormMain : Form {
         Titles.Load();
 
         var f = new FormTitle(Configuration, Titles);
+
+        ChangeFont(f);
+
         f.Show();
     }
 
@@ -253,6 +263,9 @@ public partial class FormMain : Form {
         TitleAttributes.Load();
 
         var f = new FormAttribute(Configuration, TitleAttributes);
+
+        ChangeFont(f);
+
         f.Show();
     }
 
@@ -265,6 +278,9 @@ public partial class FormMain : Form {
         Effects.Load();
 
         var f = new FormEffect(Configuration, Effects);
+
+        ChangeFont(f);
+
         f.Show();
     }
 
@@ -273,6 +289,9 @@ public partial class FormMain : Form {
         EffectAttributes.Load();
 
         var f = new FormAttribute(Configuration, EffectAttributes);
+
+        ChangeFont(f);
+
         f.Show();
     }
 
@@ -281,6 +300,9 @@ public partial class FormMain : Form {
         EffectUpgrades.Load();
 
         var f = new FormAttribute(Configuration, EffectUpgrades);
+
+        ChangeFont(f);
+
         f.Show();
     }
 
@@ -293,6 +315,9 @@ public partial class FormMain : Form {
         Recipes.Load();
 
         var f = new FormRecipe(Configuration, Recipes);
+
+        ChangeFont(f);
+
         f.Show();
     }
 
@@ -305,6 +330,9 @@ public partial class FormMain : Form {
         Passives.Load();
 
         var f = new FormPassive(Configuration, Passives);
+
+        ChangeFont(f);
+
         f.Show();
     }
 
@@ -313,6 +341,9 @@ public partial class FormMain : Form {
         PassiveAttributes.Load();
 
         var f = new FormAttribute(Configuration, PassiveAttributes);
+
+        ChangeFont(f);
+
         f.Show();
     }
 
@@ -321,6 +352,9 @@ public partial class FormMain : Form {
         PassiveUpgrades.Load();
 
         var f = new FormAttribute(Configuration, PassiveUpgrades);
+
+        ChangeFont(f);
+
         f.Show();
     }
 
@@ -333,6 +367,9 @@ public partial class FormMain : Form {
         EquipmentSets.Load();
 
         var f = new FormEquipmentSet(Configuration, EquipmentSets);
+
+        ChangeFont(f);
+
         f.Show();
     }
 
@@ -341,6 +378,9 @@ public partial class FormMain : Form {
         EquipmentSetAttributes.Load();
 
         var f = new FormAttribute(Configuration, EquipmentSetAttributes);
+
+        ChangeFont(f);
+
         f.Show();
     }
 
@@ -353,6 +393,9 @@ public partial class FormMain : Form {
         Heraldries.Load();
 
         var f = new FormHeraldry(Configuration, Heraldries);
+
+        ChangeFont(f);
+
         f.Show();
     }
 
@@ -361,6 +404,9 @@ public partial class FormMain : Form {
         HeraldryAttributes.Load();
 
         var f = new FormAttribute(Configuration, HeraldryAttributes);
+
+        ChangeFont(f);
+
         f.Show();
     }
 
@@ -369,6 +415,9 @@ public partial class FormMain : Form {
         HeraldryUpgrades.Load();
 
         var f = new FormAttribute(Configuration, HeraldryUpgrades);
+
+        ChangeFont(f);
+
         f.Show();
     }
 
@@ -381,6 +430,9 @@ public partial class FormMain : Form {
         Equipments.Load();
 
         var f = new FormEquipment(Configuration, Equipments);
+
+        ChangeFont(f);
+
         f.Show();
     }
 
@@ -389,6 +441,9 @@ public partial class FormMain : Form {
         EquipmentAttributes.Load();
 
         var f = new FormAttribute(Configuration, EquipmentAttributes);
+
+        ChangeFont(f);
+
         f.Show();
     }
 
@@ -397,6 +452,9 @@ public partial class FormMain : Form {
         EquipmentUpgrades.Load();
 
         var f = new FormAttribute(Configuration, EquipmentUpgrades);
+
+        ChangeFont(f);
+
         f.Show();
     }
 
@@ -409,6 +467,9 @@ public partial class FormMain : Form {
         Skills.Load();
 
         var f = new FormSkill(Configuration, Skills);
+
+        ChangeFont(f);
+
         f.Show();
     }
 
@@ -421,6 +482,9 @@ public partial class FormMain : Form {
         Items.Load();
 
         var f = new FormItem(Configuration, Items);
+
+        ChangeFont(f);
+
         f.Show();
     }
 
@@ -433,6 +497,9 @@ public partial class FormMain : Form {
         Npcs.Load();
 
         var f = new FormNpc(Configuration, Npcs);
+
+        ChangeFont(f);
+
         f.Show();
     }
 
@@ -441,6 +508,9 @@ public partial class FormMain : Form {
         NpcAttributes.Load();
 
         var f = new FormAttribute(Configuration, NpcAttributes);
+
+        ChangeFont(f);
+
         f.Show();
     }
 
@@ -453,6 +523,9 @@ public partial class FormMain : Form {
         NotificationIcons.Load();
 
         var f = new FormNotificationIcon(Configuration, NotificationIcons);
+
+        ChangeFont(f);
+
         f.Show();
     }
 
@@ -465,6 +538,9 @@ public partial class FormMain : Form {
         Conversations.Load();
 
         var f = new FormConversation(Configuration, Conversations);
+
+        ChangeFont(f);
+
         f.Show();
     }
 
@@ -477,8 +553,47 @@ public partial class FormMain : Form {
         Quests.Load();
 
         var f = new FormQuest(Configuration, Quests);
+
+        ChangeFont(f);
+
         f.Show();
     }
 
     #endregion
+
+    private void ChangeFont(Control control) {
+        var controls = control.Controls;
+
+        ChangeFontStye(control);
+
+        if (control is MenuStrip) {
+            var menu = control as MenuStrip;
+
+            if (menu is not null) {
+                foreach (ToolStripItem item in menu.Items) {
+                    ChangeFontStye(item);
+                }
+            }
+        }
+
+        foreach (Control _control in controls) {
+            ChangeFont(_control);
+        }
+    }
+
+    private void ChangeFontStye(Control control) {
+        if (JetBrainsMono is not null) {
+            control.Font = JetBrainsMono.GetFont(FontStyle.Regular);
+        }
+    }
+
+    private void ChangeFontStye(ToolStripItem control) {
+        if (JetBrainsMono is not null) {
+            control.Font = JetBrainsMono.GetFont(FontStyle.Regular);
+        }
+    }
+
+    private void FormMain_Load(object sender, EventArgs e) {
+        ChangeFont(this);
+    }
 }

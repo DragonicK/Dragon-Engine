@@ -18,8 +18,10 @@ mono_crash.*
 
 # Build results
 [Bb]uild/Core/
-# Map Debug
+# Map
 [Bb]uild/Maps/
+# Packer 
+[Bb]uild/Packer/
 # Game Debug
 [Bb]uild/Game/Debug/net7.0/runtimes/
 [Bb]uild/Game/Debug/net7.0/*.*
