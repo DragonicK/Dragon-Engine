@@ -71,6 +71,86 @@ namespace Crystalshire.Model.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] JetBrainsMono_Bold {
+            get {
+                object obj = ResourceManager.GetObject("JetBrainsMono-Bold", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] JetBrainsMono_Bold_Italic {
+            get {
+                object obj = ResourceManager.GetObject("JetBrainsMono-Bold-Italic", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] JetBrainsMono_ExtraBold {
+            get {
+                object obj = ResourceManager.GetObject("JetBrainsMono-ExtraBold", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] JetBrainsMono_ExtraBold_Italic {
+            get {
+                object obj = ResourceManager.GetObject("JetBrainsMono-ExtraBold-Italic", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] JetBrainsMono_Italic {
+            get {
+                object obj = ResourceManager.GetObject("JetBrainsMono-Italic", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] JetBrainsMono_Medium {
+            get {
+                object obj = ResourceManager.GetObject("JetBrainsMono-Medium", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] JetBrainsMono_Medium_Italic {
+            get {
+                object obj = ResourceManager.GetObject("JetBrainsMono-Medium-Italic", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] JetBrainsMono_Regular {
+            get {
+                object obj = ResourceManager.GetObject("JetBrainsMono-Regular", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap PictureClear {

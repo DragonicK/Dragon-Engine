@@ -136,4 +136,28 @@
   <data name="PictureClear" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\PictureClear.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="JetBrainsMono-Bold" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\JetBrainsMono-Bold.ttf;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="JetBrainsMono-Bold-Italic" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\JetBrainsMono-Bold-Italic.ttf;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="JetBrainsMono-ExtraBold" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\JetBrainsMono-ExtraBold.ttf;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="JetBrainsMono-ExtraBold-Italic" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\JetBrainsMono-ExtraBold-Italic.ttf;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="JetBrainsMono-Italic" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\JetBrainsMono-Italic.ttf;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="JetBrainsMono-Medium" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\JetBrainsMono-Medium.ttf;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="JetBrainsMono-Medium-Italic" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\JetBrainsMono-Medium-Italic.ttf;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="JetBrainsMono-Regular" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\JetBrainsMono-Regular.ttf;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
 </root>

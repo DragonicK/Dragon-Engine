@@ -4,6 +4,7 @@ using Crystalshire.Model.Serialization;
 
 namespace Crystalshire.Model;
 public partial class FormMain : Form {
+    public JetBrainsMono? JetBrainsMono { get; set; }
     public Class? Model { get; set; }
 
     private FormDirection attack;
@@ -196,64 +197,96 @@ public partial class FormMain : Form {
 
     private void MenuAttack_Click(object sender, EventArgs e) {
         if (attack.IsDisposed) {
-            attack = new FormDirection(Model!.Attack, true);
+            attack = new FormDirection(Model!.Attack, true) {
+                JetBrainsMono = JetBrainsMono
+            };
         }
+
+        ChangeFont(attack);
 
         attack.Show();
     }
 
     private void MenuDeath_Click(object sender, EventArgs e) {
         if (death.IsDisposed) {
-            death = new FormDirection(Model!.Death, true);
+            death = new FormDirection(Model!.Death, true) {
+                JetBrainsMono = JetBrainsMono
+            };
         }
+
+        ChangeFont(death);
 
         death.Show();
     }
 
     private void MenuGathering_Click(object sender, EventArgs e) {
         if (gathering.IsDisposed) {
-            gathering = new FormDirection(Model!.Gathering, true);
+            gathering = new FormDirection(Model!.Gathering, true) {
+                JetBrainsMono = JetBrainsMono
+            };
         }
+
+        ChangeFont(gathering);
 
         gathering.Show();
     }
 
     private void MenuIdle_Click(object sender, EventArgs e) {
         if (idle.IsDisposed) {
-            idle = new FormDirection(Model!.Idle, true);
+            idle = new FormDirection(Model!.Idle, true) {
+                JetBrainsMono = JetBrainsMono
+            };
         }
+
+        ChangeFont(idle);
 
         idle.Show();
     }
 
     private void MenuRunning_Click(object sender, EventArgs e) {
         if (running.IsDisposed) {
-            running = new FormDirection(Model!.Running, true);
+            running = new FormDirection(Model!.Running, true) {
+                JetBrainsMono = JetBrainsMono
+            };
         }
+
+        ChangeFont(running);
 
         running.Show();
     }
 
     private void MenuRessurrection_Click(object sender, EventArgs e) {
         if (ressurrection.IsDisposed) {
-            ressurrection = new FormDirection(Model!.Ressurrection, true);
+            ressurrection = new FormDirection(Model!.Ressurrection, true) {
+                JetBrainsMono = JetBrainsMono
+            };
         }
+
+        ChangeFont(ressurrection);
 
         ressurrection.Show();
     }
 
     private void MenuTalk_Click(object sender, EventArgs e) {
         if (talking.IsDisposed) {
-            talking = new FormDirection(Model!.Talk, true);
+            talking = new FormDirection(Model!.Talk, true) {
+                JetBrainsMono = JetBrainsMono
+            };
         }
+
+        ChangeFont(talking);
 
         talking.Show();
     }
 
     private void MenuWalking_Click(object sender, EventArgs e) {
         if (walking.IsDisposed) {
-            walking = new FormDirection(Model!.Walking, true);
+            walking = new FormDirection(Model!.Walking, true) {
+                JetBrainsMono = JetBrainsMono
+            };
         }
+
+        ChangeFont(walking);
 
         walking.Show();
     }
@@ -345,5 +378,41 @@ public partial class FormMain : Form {
                 export.Save(Model!, save.FileName);
             }
         }
+    }
+
+    private void ChangeFont(Control control) {
+        var controls = control.Controls;
+
+        ChangeFontStye(control);
+
+        if (control is MenuStrip) {
+            var menu = control as MenuStrip;
+
+            if (menu is not null) {
+                foreach (ToolStripItem item in menu.Items) {
+                    ChangeFontStye(item);
+                }
+            }
+        }
+
+        foreach (Control _control in controls) {
+            ChangeFont(_control);
+        }
+    }
+
+    private void ChangeFontStye(Control control) {
+        if (JetBrainsMono is not null) {
+            control.Font = JetBrainsMono.GetFont(FontStyle.Regular);
+        }
+    }
+
+    private void ChangeFontStye(ToolStripItem control) {
+        if (JetBrainsMono is not null) {
+            control.Font = JetBrainsMono.GetFont(FontStyle.Regular);
+        }
+    }
+
+    private void FormMain_Load(object sender, EventArgs e) {
+        ChangeFont(this);
     }
 }

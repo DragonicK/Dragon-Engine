@@ -3,6 +3,7 @@
 namespace Crystalshire.Model.Forms;
 
 public partial class FormDirection : Form {
+    public JetBrainsMono? JetBrainsMono { get; set; }
     public Directions Directions { get; }
     public FormFrames UpFrames { get; private set; }
     public FormFrames DownFrames { get; private set; }
@@ -34,6 +35,8 @@ public partial class FormDirection : Form {
             UpFrames = new FormFrames(Directions.Up);
         }
 
+        ChangeFont(UpFrames);
+
         UpFrames.Show();
     }
 
@@ -41,6 +44,8 @@ public partial class FormDirection : Form {
         if (LeftFrames.IsDisposed) {
             LeftFrames = new FormFrames(Directions.Left);
         }
+
+        ChangeFont(LeftFrames);
 
         LeftFrames.Show();
     }
@@ -50,6 +55,8 @@ public partial class FormDirection : Form {
             RightFrames = new FormFrames(Directions.Right);
         }
 
+        ChangeFont(RightFrames);
+
         RightFrames.Show();
     }
 
@@ -57,6 +64,8 @@ public partial class FormDirection : Form {
         if (DownFrames.IsDisposed) {
             DownFrames = new FormFrames(Directions.Down);
         }
+
+        ChangeFont(DownFrames);
 
         DownFrames.Show();
     }
@@ -70,6 +79,38 @@ public partial class FormDirection : Form {
     private void TextName_TextChanged(object sender, EventArgs e) {
         if (Directions is not null) {
             Directions.Name = ((TextBox)sender).Text;
+        }
+    }
+
+    private void ChangeFont(Control control) {
+        var controls = control.Controls;
+
+        ChangeFontStye(control);
+
+        if (control is MenuStrip) {
+            var menu = control as MenuStrip;
+
+            if (menu is not null) {
+                foreach (ToolStripItem item in menu.Items) {
+                    ChangeFontStye(item);
+                }
+            }
+        }
+
+        foreach (Control _control in controls) {
+            ChangeFont(_control);
+        }
+    }
+
+    private void ChangeFontStye(Control control) {
+        if (JetBrainsMono is not null) {
+            control.Font = JetBrainsMono.GetFont(FontStyle.Regular);
+        }
+    }
+
+    private void ChangeFontStye(ToolStripItem control) {
+        if (JetBrainsMono is not null) {
+            control.Font = JetBrainsMono.GetFont(FontStyle.Regular);
         }
     }
 }
