@@ -393,6 +393,7 @@ partial class FormMain {
             this.GroupAttributes.Controls.Add(this.RadioTrap);
             this.GroupAttributes.Controls.Add(this.RadioAvoid);
             this.GroupAttributes.Controls.Add(this.RadioBlock);
+            this.GroupAttributes.Enabled = false;
             this.GroupAttributes.Location = new System.Drawing.Point(796, 277);
             this.GroupAttributes.Name = "GroupAttributes";
             this.GroupAttributes.Size = new System.Drawing.Size(175, 209);
@@ -532,6 +533,7 @@ partial class FormMain {
             // 
             // ButtonClearDirection
             // 
+            this.ButtonClearDirection.Enabled = false;
             this.ButtonClearDirection.Location = new System.Drawing.Point(20, 211);
             this.ButtonClearDirection.Name = "ButtonClearDirection";
             this.ButtonClearDirection.Size = new System.Drawing.Size(133, 23);

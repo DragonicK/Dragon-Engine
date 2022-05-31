@@ -47,7 +47,7 @@ public partial class FormMain : Form {
 
     private string[]? GetFilesToOpen() {
         var dialog = new OpenFileDialog() {
-            InitialDirectory = "./Project",
+            InitialDirectory = "./Projects",
             Filter = "Engine Maps (*.mps) | *.mps",
             CheckFileExists = true,
             CheckPathExists = true,
@@ -66,7 +66,7 @@ public partial class FormMain : Form {
 
     private string? GetPathToSave() {
         var dialog = new SaveFileDialog() {
-            InitialDirectory = "./Project",
+            InitialDirectory = "./Projects",
             Filter = "Engine Maps (*.mps) | *.mps",
             FilterIndex = 0
         };

@@ -191,7 +191,6 @@ Public Sub LoadMapParallax(ByVal MapNum As Long, ByRef Key() As Byte, ByRef IV()
     Dim Count As Long
     Dim Index As Long
     Dim X As Long, Y As Long
-     
 
     ' dump tile data
     FileName = App.Path & MAP_PATH & "Map" & MapNum & ".maps"
