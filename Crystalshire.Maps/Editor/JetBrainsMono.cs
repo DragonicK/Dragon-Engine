@@ -1,4 +1,5 @@
 ﻿namespace Crystalshire.Maps.Editor;
+
 public class JetBrainsMono {
     private readonly FontLoader _loader;
 
@@ -19,7 +20,7 @@ public class JetBrainsMono {
 
     private Font GetRegular() {
         if (_regular is null) {
-            _regular = _loader.GetFont(FontStyle.Regular);
+            _regular = _loader.GetFont(FontStyle.Regular, 12f);
         }
 
         return _regular;
@@ -27,7 +28,7 @@ public class JetBrainsMono {
 
     private Font GetBold() {
         if (_bold is null) {
-            _bold = _loader.GetFont(FontStyle.Bold);
+            _bold = _loader.GetFont(FontStyle.Bold, 12f);
         }
 
         return _bold;
@@ -35,7 +36,7 @@ public class JetBrainsMono {
 
     private Font GetItalic() {
         if (_italic is null) {
-            _italic = _loader.GetFont(FontStyle.Italic);
+            _italic = _loader.GetFont(FontStyle.Italic, 12f);
         }
 
         return _italic;

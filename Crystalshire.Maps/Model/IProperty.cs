@@ -1,6 +1,7 @@
 ﻿using Crystalshire.Core.Model.Maps;
 
 namespace Crystalshire.Maps.Model;
+
 public interface IProperty {
     string Name { get; set; }
     string Music { get; set; }

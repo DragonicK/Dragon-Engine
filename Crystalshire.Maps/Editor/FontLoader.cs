@@ -1,6 +1,7 @@
 ﻿using System.Drawing.Text;
 
 namespace Crystalshire.Maps.Editor;
+
 public class FontLoader {
     readonly PrivateFontCollection _collection;
 
@@ -19,8 +20,8 @@ public class FontLoader {
         LoadFromResource(Properties.Resources.JetBrainsMono_Medium_Italic);
     }
 
-    public Font GetFont(FontStyle style) {
-        return new Font(_collection.Families[0], 12f, style, GraphicsUnit.Pixel, 0);
+    public Font GetFont(FontStyle style, float size) {
+        return new Font(_collection.Families[0], size, style, GraphicsUnit.Pixel, 0);
     }
 
     private void LoadFromResource(byte[] buffer) {

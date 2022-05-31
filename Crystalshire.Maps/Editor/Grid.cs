@@ -3,7 +3,7 @@
 namespace Crystalshire.Maps.Editor;
 
 public class Grid : IGrid {
-    public Pen Pen { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+    public Pen Pen { get; set; }
 
     private Bitmap _grid;
     private int _width;

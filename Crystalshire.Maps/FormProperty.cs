@@ -1,8 +1,6 @@
 ﻿using Crystalshire.Maps.Model;
 using Crystalshire.Maps.Editor;
 
-using Crystalshire.Core.Model.Maps;
-
 namespace Crystalshire.Maps;
 
 public partial class FormProperty : Form {
