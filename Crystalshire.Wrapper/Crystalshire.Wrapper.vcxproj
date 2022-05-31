@@ -104,19 +104,23 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>$(SolutionDir)Build\Wrapper\Debug\</OutDir>
-    <IntDir>$(SolutionDir)Build\Wrapper\Intermediate\Debug\</IntDir>
+    <OutDir>$(SolutionDir)Build\Wrapper\Debug\x86\</OutDir>
+    <IntDir>$(SolutionDir)Build\Wrapper\Intermediate\Debug\x86\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>$(SolutionDir)Build\Wrapper\Release\</OutDir>
-    <IntDir>$(SolutionDir)Build\Wrapper\Intermediate\Release\</IntDir>
+    <OutDir>$(SolutionDir)Build\Wrapper\Release\x86\</OutDir>
+    <IntDir>$(SolutionDir)Build\Wrapper\Intermediate\Release\x86\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
+    <OutDir>$(SolutionDir)Build\Wrapper\Debug\x64\</OutDir>
+    <IntDir>$(SolutionDir)Build\Wrapper\Intermediate\Debug\x64\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(SolutionDir)Build\Wrapper\Release\x64\</OutDir>
+    <IntDir>$(SolutionDir)Build\Wrapper\Intermediate\Release\x64\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
