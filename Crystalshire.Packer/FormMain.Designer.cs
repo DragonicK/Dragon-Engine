@@ -24,6 +24,7 @@ partial class FormMain {
     ///  the contents of this method with the code editor.
     /// </summary>
     private void InitializeComponent() {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMain));
             this.MenuMain = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -59,9 +60,11 @@ partial class FormMain {
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.Controls.Add(this.MenuMain);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.MenuMain;
             this.Name = "FormMain";
-            this.Text = "Form1";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Text = "Dragon Engine - Resource Packer";
             this.Load += new System.EventHandler(this.FormMain_Load);
             this.MenuMain.ResumeLayout(false);
             this.MenuMain.PerformLayout();
