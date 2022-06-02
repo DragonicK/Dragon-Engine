@@ -755,6 +755,7 @@ partial class FormMain {
             this.ClientSize = new System.Drawing.Size(1008, 651);
             this.Controls.Add(this.GroupMap);
             this.Controls.Add(this.Menu);
+            this.DoubleBuffered = true;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.KeyPreview = true;
             this.MainMenuStrip = this.Menu;
