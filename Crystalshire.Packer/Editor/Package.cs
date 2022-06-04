@@ -96,6 +96,14 @@ public class Package : IPackage {
         return _files;
     }
 
+    public List<IPackageFile> ToList(int[] indexes) {
+        var list = new List<IPackageFile>(indexes.Length);
+
+        list.AddRange(GetFiles(indexes));
+
+        return list;
+    }
+
     private IPackageFile[] GetFiles(int[] indexes) {
         var length = indexes.Length;
         var array = new IPackageFile[indexes.Length];

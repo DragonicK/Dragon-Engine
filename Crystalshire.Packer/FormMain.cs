@@ -74,19 +74,18 @@ public partial class FormMain : Form {
         return extension.Remove(0, 1);
     }
 
-    private string GetExportPath() {
+    private string GetPathToExport() {
         var path = string.Empty;
 
         if (_package.Count > 0) {
-
             var dialog = new FolderBrowserDialog() {
                 ShowNewFolderButton = true,
                 RootFolder = Environment.SpecialFolder.MyComputer
             };
 
-            var result = dialog.ShowDialog();
+            var r = dialog.ShowDialog();
 
-            if (result == DialogResult.OK) {
+            if (r == DialogResult.OK) {
                 path = dialog.SelectedPath;
             }
         }
@@ -108,25 +107,25 @@ public partial class FormMain : Form {
         var r = dialog.ShowDialog();
 
         if (r == DialogResult.OK) {
-            var op = PackageOperation.Success;
+            var operation = PackageOperation.Success;
             var file = dialog.FileName;
 
             if (!IsValidPassphrase()) {
-                op = PackageOperation.PassphraseEmpty;
+                operation = PackageOperation.PassphraseEmpty;
             }
             else {
-                AllowEnableMenu(false);
+                AllowMenu(false);
 
                 var handler = new PackageHandler(OnProgressChanged);
 
                 await Task.Run(() =>
-                    op = handler.Open(file, GetPassphrase(), _package)
+                    operation = handler.Open(file, GetPassphrase(), _package)
                 );
             }
 
             UpdateList();
-            ShowMessage(op);
-            AllowEnableMenu(true);
+            ShowMessage(operation);
+            AllowMenu(true);
         }
     }
 
@@ -140,33 +139,33 @@ public partial class FormMain : Form {
         var r = dialog.ShowDialog();
 
         if (r == DialogResult.OK) {
-            var op = PackageOperation.Success;
+            var operation = PackageOperation.Success;
             var file = dialog.FileName;
 
             if (!IsValidPassphrase()) {
-                op = PackageOperation.PassphraseEmpty;
+                operation = PackageOperation.PassphraseEmpty;
             }
             else {
-                AllowEnableMenu(false);
+                AllowMenu(false);
 
                 var handler = new PackageHandler(OnProgressChanged);
 
                 await Task.Run(() =>
-                    op = handler.Save(file, GetPassphrase(), _package)
+                    operation = handler.Save(file, GetPassphrase(), _package)
                 );
             }
 
-            ShowMessage(op);
-            AllowEnableMenu(true);
+            ShowMessage(operation);
+            AllowMenu(true);
         }
     }
 
     private void MenuExportSelected_Click(object sender, EventArgs e) {
-
+        ExportSelectedIndexes();
     }
 
     private void MenuExportAll_Click(object sender, EventArgs e) {
-
+        ExportAll();
     }
 
     private void MenuFileExit_Click(object sender, EventArgs e) {
@@ -251,7 +250,7 @@ public partial class FormMain : Form {
 
     private void MenuContextMoveTo_Click(object sender, EventArgs e) {
         if (SelectedIndexes is not null) {
-            var index = ShowInputBox();
+            var index = GetResponseFromInputBox();
 
             if (index > InvalidPosition) {
                 if (_package.MoveTo(ref index, SelectedIndexes)) {
@@ -283,15 +282,60 @@ public partial class FormMain : Form {
     private void MenuContextReplace_Click(object sender, EventArgs e) {
 
     }
-    private void MenuContextExportSelected_Click(object sender, EventArgs e) {
 
+    private void MenuContextExportSelected_Click(object sender, EventArgs e) {
+        ExportSelectedIndexes();
     }
 
     private void MenuContextExportAll_Click(object sender, EventArgs e) {
-
+        ExportAll();
     }
 
     #endregion
+
+    #region Export 
+
+    private async void ExportAll() {
+        if (_package.Count > 0) {
+            var path = GetPathToExport();
+
+            if (!string.IsNullOrEmpty(path)) {
+                AllowMenu(false);
+
+                var handler = new PackageExporter(OnProgressChanged);
+
+                await Task.Run(() =>
+                    handler.Export(path, _package)
+                );
+
+                AllowMenu(true);
+            }
+        }
+    }
+
+    private async void ExportSelectedIndexes() {
+        if (SelectedIndexes is not null) {
+            if (SelectedIndexes.Length > 0) {
+                var path = GetPathToExport();
+
+                if (!string.IsNullOrEmpty(path)) {
+                    AllowMenu(false);
+
+                    var handler = new PackageExporter(OnProgressChanged);
+
+                    await Task.Run(() =>
+                        handler.Export(path, SelectedIndexes, _package)
+                    );
+
+                    AllowMenu(true);
+                }
+            }
+        }
+    }
+
+    #endregion
+
+    #region Add
 
     private async void AddFile(int index) {
         var dialog = new OpenFileDialog {
@@ -305,32 +349,16 @@ public partial class FormMain : Form {
         var r = dialog.ShowDialog();
 
         if (r == DialogResult.OK) {
-            AllowEnableMenu(false);
+            AllowMenu(false);
 
             await Task.Run(() => ParseFileNames(index, dialog.FileNames, dialog.SafeFileNames));
 
             UpdateList();
 
-            AllowEnableMenu(true);
+            AllowMenu(true);
+
+            CheckForAllowExtraMenu();
         }
-    }
-
-    private void RemoveSelectedIndexes() {
-        if (SelectedIndexes is not null) {
-            var length = SelectedIndexes.Length;
-
-            if (length > 0) {
-                _package.Remove(SelectedIndexes);
-            }
-
-            SelectedIndexes = null;
-        }
-    }
-
-    private void Clear() {
-        SelectedIndexes = null;
-        _package.Clear();
-        UpdateList();
     }
 
     private int ParseFileNames(int index, string[] fileNames, string[] safeNames) {
@@ -378,54 +406,7 @@ public partial class FormMain : Form {
         return ExitSuccess;
     }
 
-    private int[] IncrementIndexPosition(int increment) {
-        if (SelectedIndexes is not null) {
-            var positions = new int[SelectedIndexes.Length];
-
-            for (var i = 0; i < positions.Length; i++) {
-                positions[i] = SelectedIndexes[i] + increment;
-            }
-
-            return positions;
-        }
-
-        return Array.Empty<int>();
-    }
-
-    private int[] CreateNewIndexPositionFrom(int index) {
-        if (SelectedIndexes is not null) {
-            var positions = new int[SelectedIndexes.Length];
-
-            for (var i = 0; i < positions.Length; i++) {
-                positions[i] = index++;
-            }
-            return positions;
-        }
-
-        return Array.Empty<int>();
-    }
-
-    private bool IsValidPassphrase() {
-        return TextPassword.Text.Length > 0;
-    }
-
-    private string GetPassphrase() {
-        return TextPassword.Text.Trim();
-    }
-
-    private void AllowEnableMenu(bool enabled) {
-        MenuFile.Enabled = enabled;
-        MenuEdit.Enabled = enabled;
-    }
-
-    private void OnProgressChanged(object? sender, IPackageArgs args) {
-        var count = args.Count;
-        var maximum = args.Maximum;
-
-        var percent = Util.GetProgressPercentage(count, maximum);
-
-        LabelStatus.Text = $"Processed {percent}% {count}/{maximum} : {args.Name}";
-    }
+    #endregion
 
     #region List Pack
 
@@ -448,7 +429,6 @@ public partial class FormMain : Form {
             MenuContextMoveDown.Enabled = false;
             MenuContextMoveTo.Enabled = false;
             MenuContextInsert.Enabled = false;
-            MenuContextReplace.Enabled = false;
 
             ContextMenuMain.Show(ListPack, e.Location);
         }
@@ -459,14 +439,13 @@ public partial class FormMain : Form {
             SelectedIndexes = null;
         }
 
-        var isAllowed = CouldAllowContext();
+        var isAllowed = CouldAllowMenu();
 
         MenuContextRemove.Enabled = isAllowed;
         MenuContextExport.Enabled = isAllowed;
         MenuContextMoveUp.Enabled = isAllowed;
         MenuContextMoveDown.Enabled = isAllowed;
         MenuContextMoveTo.Enabled = isAllowed;
-        MenuContextReplace.Enabled = isAllowed;
 
         if (SelectedIndexes is not null && SelectedIndexes.Length == 1 && ListPack.Items.Count > 0) {
             MenuContextInsert.Enabled = true;
@@ -504,7 +483,7 @@ public partial class FormMain : Form {
         ListPack.EndUpdate();
     }
 
-    private bool CouldAllowContext() {
+    private bool CouldAllowMenu() {
         if (SelectedIndexes is not null) {
             if (SelectedIndexes.Length > 0) {
                 if (ListPack.Items.Count > 0) {
@@ -518,9 +497,88 @@ public partial class FormMain : Form {
 
     #endregion
 
-    public int ShowInputBox() {
-        int index;
+    private void RemoveSelectedIndexes() {
+        if (SelectedIndexes is not null) {
+            var length = SelectedIndexes.Length;
 
+            if (length > 0) {
+                _package.Remove(SelectedIndexes);
+            }
+
+            SelectedIndexes = null;
+        }
+
+        CheckForAllowExtraMenu();
+    }
+
+    private void Clear() {
+        SelectedIndexes = null;
+
+        _package.Clear();
+
+        UpdateList();
+
+        CheckForAllowExtraMenu();
+    }
+
+    private int[] IncrementIndexPosition(int increment) {
+        if (SelectedIndexes is not null) {
+            var positions = new int[SelectedIndexes.Length];
+
+            for (var i = 0; i < positions.Length; i++) {
+                positions[i] = SelectedIndexes[i] + increment;
+            }
+
+            return positions;
+        }
+
+        return Array.Empty<int>();
+    }
+
+    private int[] CreateNewIndexPositionFrom(int index) {
+        if (SelectedIndexes is not null) {
+            var positions = new int[SelectedIndexes.Length];
+
+            for (var i = 0; i < positions.Length; i++) {
+                positions[i] = index++;
+            }
+            return positions;
+        }
+
+        return Array.Empty<int>();
+    }
+
+    private bool IsValidPassphrase() {
+        return TextPassword.Text.Length > 0;
+    }
+
+    private string GetPassphrase() {
+        return TextPassword.Text.Trim();
+    }
+
+    private void AllowMenu(bool enabled) {
+        MenuFile.Enabled = enabled;
+        MenuEdit.Enabled = enabled;
+    }
+
+    private void CheckForAllowExtraMenu() {
+        var allowed = _package.Count > 0;
+
+        MenuFileExport.Enabled = allowed;
+        MenuEditClear.Enabled = allowed;
+        MenuEditRemove.Enabled = allowed;
+    }
+
+    private void OnProgressChanged(object? sender, IPackageArgs args) {
+        var count = args.Count;
+        var maximum = args.Maximum;
+
+        var percent = Util.GetProgressPercentage(count, maximum);
+
+        LabelStatus.Text = $"Processed {percent}% {count}/{maximum} : {args.Name}";
+    }
+
+    public int GetResponseFromInputBox() {
         var input = new InputBoxDialog {
             Caption = "Move To Position ... ",
             Input = "0"
@@ -532,7 +590,7 @@ public partial class FormMain : Form {
 
         var response = input.Response;
 
-        var r = int.TryParse(response, out index);
+        var r = int.TryParse(response, out var index);
 
         return r ? index : InvalidPosition;
     }

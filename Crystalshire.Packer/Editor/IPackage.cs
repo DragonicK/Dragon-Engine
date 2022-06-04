@@ -11,4 +11,5 @@ public interface IPackage {
     bool MoveDown(int[] indexes);
     bool MoveTo(ref int index, int[] indexes);
     List<IPackageFile> ToList();
+    List<IPackageFile> ToList(int[] indexes);
 }

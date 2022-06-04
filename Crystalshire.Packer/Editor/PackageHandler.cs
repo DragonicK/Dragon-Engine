@@ -150,7 +150,7 @@ public class PackageHandler : IPackageHandler {
         return decrypted is not null;
     }
 
-    private bool CheckEquality(byte[] first, byte[] second) {
+    private static bool CheckEquality(byte[] first, byte[] second) {
         return Enumerable.SequenceEqual(first, second);
     }
 

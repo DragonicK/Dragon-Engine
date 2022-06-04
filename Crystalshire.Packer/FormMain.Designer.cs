@@ -38,7 +38,6 @@ partial class FormMain {
             this.MenuEditAdd = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuEditClear = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuEditRemove = new System.Windows.Forms.ToolStripMenuItem();
-            this.MenuEditReplace = new System.Windows.Forms.ToolStripMenuItem();
             this.LabelPassword = new System.Windows.Forms.Label();
             this.ListPack = new System.Windows.Forms.ListView();
             this.ColumnIndex = new System.Windows.Forms.ColumnHeader();
@@ -56,7 +55,6 @@ partial class FormMain {
             this.MenuContextMoveTo = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuContextInsert = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuContextRemove = new System.Windows.Forms.ToolStripMenuItem();
-            this.MenuContextReplace = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuContextExport = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuContextExportSelected = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuContextExportAll = new System.Windows.Forms.ToolStripMenuItem();
@@ -106,6 +104,7 @@ partial class FormMain {
             this.MenuFileExport.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.MenuExportSelected,
             this.MenuExportAll});
+            this.MenuFileExport.Enabled = false;
             this.MenuFileExport.Name = "MenuFileExport";
             this.MenuFileExport.Size = new System.Drawing.Size(108, 22);
             this.MenuFileExport.Text = "Export";
@@ -136,8 +135,7 @@ partial class FormMain {
             this.MenuEdit.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.MenuEditAdd,
             this.MenuEditClear,
-            this.MenuEditRemove,
-            this.MenuEditReplace});
+            this.MenuEditRemove});
             this.MenuEdit.Name = "MenuEdit";
             this.MenuEdit.Size = new System.Drawing.Size(39, 20);
             this.MenuEdit.Text = "Edit";
@@ -145,30 +143,25 @@ partial class FormMain {
             // MenuEditAdd
             // 
             this.MenuEditAdd.Name = "MenuEditAdd";
-            this.MenuEditAdd.Size = new System.Drawing.Size(116, 22);
+            this.MenuEditAdd.Size = new System.Drawing.Size(180, 22);
             this.MenuEditAdd.Text = "Add";
             this.MenuEditAdd.Click += new System.EventHandler(this.MenuEditAdd_Click);
             // 
             // MenuEditClear
             // 
+            this.MenuEditClear.Enabled = false;
             this.MenuEditClear.Name = "MenuEditClear";
-            this.MenuEditClear.Size = new System.Drawing.Size(116, 22);
+            this.MenuEditClear.Size = new System.Drawing.Size(180, 22);
             this.MenuEditClear.Text = "Clear";
             this.MenuEditClear.Click += new System.EventHandler(this.MenuEditClear_Click);
             // 
             // MenuEditRemove
             // 
+            this.MenuEditRemove.Enabled = false;
             this.MenuEditRemove.Name = "MenuEditRemove";
-            this.MenuEditRemove.Size = new System.Drawing.Size(116, 22);
+            this.MenuEditRemove.Size = new System.Drawing.Size(180, 22);
             this.MenuEditRemove.Text = "Remove";
             this.MenuEditRemove.Click += new System.EventHandler(this.MenuEditRemove_Click);
-            // 
-            // MenuEditReplace
-            // 
-            this.MenuEditReplace.Name = "MenuEditReplace";
-            this.MenuEditReplace.Size = new System.Drawing.Size(116, 22);
-            this.MenuEditReplace.Text = "Replace";
-            this.MenuEditReplace.Click += new System.EventHandler(this.MenuEditReplace_Click);
             // 
             // LabelPassword
             // 
@@ -268,59 +261,51 @@ partial class FormMain {
             this.MenuContextMoveTo,
             this.MenuContextInsert,
             this.MenuContextRemove,
-            this.MenuContextReplace,
             this.MenuContextExport});
             this.ContextMenuMain.Name = "ContextMenuMain";
-            this.ContextMenuMain.Size = new System.Drawing.Size(139, 180);
+            this.ContextMenuMain.Size = new System.Drawing.Size(181, 180);
             // 
             // MenuContextAdd
             // 
             this.MenuContextAdd.Name = "MenuContextAdd";
-            this.MenuContextAdd.Size = new System.Drawing.Size(138, 22);
+            this.MenuContextAdd.Size = new System.Drawing.Size(180, 22);
             this.MenuContextAdd.Text = "Add";
             this.MenuContextAdd.Click += new System.EventHandler(this.MenuContextAdd_Click);
             // 
             // MenuContextMoveUp
             // 
             this.MenuContextMoveUp.Name = "MenuContextMoveUp";
-            this.MenuContextMoveUp.Size = new System.Drawing.Size(138, 22);
+            this.MenuContextMoveUp.Size = new System.Drawing.Size(180, 22);
             this.MenuContextMoveUp.Text = "Move Up";
             this.MenuContextMoveUp.Click += new System.EventHandler(this.MenuContextMoveUp_Click);
             // 
             // MenuContextMoveDown
             // 
             this.MenuContextMoveDown.Name = "MenuContextMoveDown";
-            this.MenuContextMoveDown.Size = new System.Drawing.Size(138, 22);
+            this.MenuContextMoveDown.Size = new System.Drawing.Size(180, 22);
             this.MenuContextMoveDown.Text = "Move Down";
             this.MenuContextMoveDown.Click += new System.EventHandler(this.MenuContextMoveDown_Click);
             // 
             // MenuContextMoveTo
             // 
             this.MenuContextMoveTo.Name = "MenuContextMoveTo";
-            this.MenuContextMoveTo.Size = new System.Drawing.Size(138, 22);
+            this.MenuContextMoveTo.Size = new System.Drawing.Size(180, 22);
             this.MenuContextMoveTo.Text = "Move To";
             this.MenuContextMoveTo.Click += new System.EventHandler(this.MenuContextMoveTo_Click);
             // 
             // MenuContextInsert
             // 
             this.MenuContextInsert.Name = "MenuContextInsert";
-            this.MenuContextInsert.Size = new System.Drawing.Size(138, 22);
+            this.MenuContextInsert.Size = new System.Drawing.Size(180, 22);
             this.MenuContextInsert.Text = "Insert";
             this.MenuContextInsert.Click += new System.EventHandler(this.MenuContextInsert_Click);
             // 
             // MenuContextRemove
             // 
             this.MenuContextRemove.Name = "MenuContextRemove";
-            this.MenuContextRemove.Size = new System.Drawing.Size(138, 22);
+            this.MenuContextRemove.Size = new System.Drawing.Size(180, 22);
             this.MenuContextRemove.Text = "Remove";
             this.MenuContextRemove.Click += new System.EventHandler(this.MenuContextRemove_Click);
-            // 
-            // MenuContextReplace
-            // 
-            this.MenuContextReplace.Name = "MenuContextReplace";
-            this.MenuContextReplace.Size = new System.Drawing.Size(138, 22);
-            this.MenuContextReplace.Text = "Replace";
-            this.MenuContextReplace.Click += new System.EventHandler(this.MenuContextReplace_Click);
             // 
             // MenuContextExport
             // 
@@ -328,20 +313,20 @@ partial class FormMain {
             this.MenuContextExportSelected,
             this.MenuContextExportAll});
             this.MenuContextExport.Name = "MenuContextExport";
-            this.MenuContextExport.Size = new System.Drawing.Size(138, 22);
+            this.MenuContextExport.Size = new System.Drawing.Size(180, 22);
             this.MenuContextExport.Text = "Export";
             // 
             // MenuContextExportSelected
             // 
             this.MenuContextExportSelected.Name = "MenuContextExportSelected";
-            this.MenuContextExportSelected.Size = new System.Drawing.Size(144, 22);
+            this.MenuContextExportSelected.Size = new System.Drawing.Size(180, 22);
             this.MenuContextExportSelected.Text = "Selected Files";
             this.MenuContextExportSelected.Click += new System.EventHandler(this.MenuContextExportSelected_Click);
             // 
             // MenuContextExportAll
             // 
             this.MenuContextExportAll.Name = "MenuContextExportAll";
-            this.MenuContextExportAll.Size = new System.Drawing.Size(144, 22);
+            this.MenuContextExportAll.Size = new System.Drawing.Size(180, 22);
             this.MenuContextExportAll.Text = "All Files";
             this.MenuContextExportAll.Click += new System.EventHandler(this.MenuContextExportAll_Click);
             // 
@@ -397,7 +382,6 @@ partial class FormMain {
     private ColumnHeader ColumnSize;
     private ToolStripMenuItem MenuExportSelected;
     private ToolStripMenuItem MenuExportAll;
-    private ToolStripMenuItem MenuEditReplace;
     private ContextMenuStrip ContextMenuMain;
     private ToolStripMenuItem MenuContextAdd;
     private ToolStripMenuItem MenuContextMoveUp;
@@ -405,7 +389,6 @@ partial class FormMain {
     private ToolStripMenuItem MenuContextMoveTo;
     private ToolStripMenuItem MenuContextInsert;
     private ToolStripMenuItem MenuContextRemove;
-    private ToolStripMenuItem MenuContextReplace;
     private ToolStripMenuItem MenuContextExport;
     private ToolStripMenuItem MenuContextExportSelected;
     private ToolStripMenuItem MenuContextExportAll;
