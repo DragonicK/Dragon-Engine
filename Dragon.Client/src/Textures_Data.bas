@@ -77,7 +77,7 @@ Public Function LoadTexturePack(ByRef Counter As Long, ByRef Path As String) As 
             Dim Settings As AesSettings
 
             Settings.CipherMode = AesCipherMode.AesCipherMode_CBC
-            Settings.PaddingMode = AesPaddingMode.AesPaddingMode_Zeros
+            Settings.PaddingMode = AesPaddingMode.AesPaddingMode_PKCS7
             Settings.KeyBitSize = AesBitSize.AesBitSize_128
 
             CreateKey Password, ByVal VarPtr(Settings.Key(0))
@@ -168,7 +168,7 @@ Private Function CheckFilePassword(ByVal FileHandlerIndex As Long, ByVal Passwor
     Call ReadBytes(FileHandlerIndex, ByVal VarPtr(Encrypted(0)), EncryptedLength)
 
     Settings.CipherMode = AesCipherMode.AesCipherMode_CBC
-    Settings.PaddingMode = AesPaddingMode.AesPaddingMode_Zeros
+    Settings.PaddingMode = AesPaddingMode.AesPaddingMode_PKCS7
     Settings.KeyBitSize = AesBitSize.AesBitSize_128
 
     CreateKey Password, ByVal VarPtr(Settings.Key(0))
