@@ -574,8 +574,9 @@ public partial class FormMain : Form {
         var maximum = args.Maximum;
 
         var percent = Util.GetProgressPercentage(count, maximum);
+        var text = $"Processed {percent}% {count}/{maximum} : {args.Name}";
 
-        LabelStatus.Text = $"Processed {percent}% {count}/{maximum} : {args.Name}";
+        StatusStrip.Invoke(() => LabelStatus.Text = text);
     }
 
     public int GetResponseFromInputBox() {
