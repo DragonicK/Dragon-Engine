@@ -12,8 +12,6 @@ public class PackageHandler : IPackageHandler {
 
     private readonly AES _aes;
 
-
-
     public PackageHandler(EventHandler<IPackageArgs> onProgressChanged) {
         _aes = new AES() {
             CipherMode = CipherMode.CBC,
@@ -24,7 +22,15 @@ public class PackageHandler : IPackageHandler {
     }
 
     public PackageOperation Open(string file, string passphrase, IPackage package) {
-        package.Clear();
+        using var stream = new FileStream(file, FileMode.Open, FileAccess.Read);
+        using var reader = new BinaryReader(stream);
+
+        if (!CheckPassphrase(passphrase, reader)) {
+            return PackageOperation.WrongPassphrase;
+        }
+        else {
+            ReadFiles(passphrase, package, reader);
+        }
 
         return PackageOperation.Success;
     }
@@ -66,6 +72,44 @@ public class PackageHandler : IPackageHandler {
         writer.Write(encrypted);
 
         UpdateProgress(file.Name, ++counter, maximum);
+    }
+
+    private void ReadFiles(string passphrase, IPackage package, BinaryReader reader) {
+        var maximum = reader.ReadInt32();
+        var counter = 0;
+
+        package.Clear();
+
+        for (var i = 0; i < maximum; ++i) {
+            package.Add(ReadFile(ref counter, maximum, passphrase, reader));
+        }
+    }
+
+    private IPackageFile ReadFile(ref int counter, int maximum, string passphrase, BinaryReader reader) {
+        var hash = Hash.Compute(passphrase + SecurityText);
+        var key = Hash.Compute(hash, AES.KeyLength, true);
+        var iv = Hash.Compute(hash, AES.KeyLength, false);
+
+        var name = reader.ReadString();
+        var extension = reader.ReadString();
+        var width = reader.ReadInt32();
+        var height = reader.ReadInt32();
+
+        var length = reader.ReadInt32();
+        var encrypted = reader.ReadBytes(length);
+
+        var decrypted = _aes.Encrypt(encrypted, key, iv);
+
+        UpdateProgress(name, ++counter, maximum);
+
+        return new PackageFile() {
+            Name = name,
+            Extension = extension,
+            Width = width,
+            Height = height,
+            Length = decrypted.Length,
+            Bytes = decrypted
+        };
     }
 
     private void WritePassword(string passphrase, BinaryWriter writer) {

@@ -177,11 +177,16 @@ public partial class FormMain : Form {
     }
 
     private void MenuEditClear_Click(object sender, EventArgs e) {
-
+        Clear();
     }
 
     private void MenuEditRemove_Click(object sender, EventArgs e) {
-
+        if (SelectedIndexes is not null) {
+            if (SelectedIndexes.Length > 0) {
+                RemoveSelectedIndexes();
+                UpdateList();
+            }
+        }
     }
 
     private void MenuEditReplace_Click(object sender, EventArgs e) {
@@ -197,15 +202,47 @@ public partial class FormMain : Form {
     }
 
     private void MenuContextMoveUp_Click(object sender, EventArgs e) {
+        if (SelectedIndexes is not null) {
+            if (ListPack.SelectedIndices.Count > 0) {
+                if (_package.MoveUp(SelectedIndexes)) {
+                    UpdateList();
 
+                    ListPack.EnsureVisible(SelectedIndexes[0] - 1);
+
+                    SelectItem(IncrementIndexPosition(MoveUp));
+                }
+            }
+        }
     }
 
     private void MenuContextMoveDown_Click(object sender, EventArgs e) {
+        if (SelectedIndexes is not null) {
+            if (ListPack.SelectedIndices.Count > 0) {
+                if (_package.MoveDown(SelectedIndexes)) {
+                    UpdateList();
 
+                    ListPack.EnsureVisible(SelectedIndexes[0] + 1);
+
+                    SelectItem(IncrementIndexPosition(MoveDown));
+                }
+            }
+        }
     }
 
     private void MenuContextMoveTo_Click(object sender, EventArgs e) {
+        if (SelectedIndexes is not null) {
+            var index = ShowInputBox();
 
+            if (index > InvalidPosition) {
+                if (_package.MoveTo(index, SelectedIndexes)) {
+                    UpdateList();
+
+                    ListPack.EnsureVisible(index);
+
+                    SelectItem(CreateNewIndexPositionFrom(index));
+                }
+            }
+        }
     }
 
     private void MenuContextInsert_Click(object sender, EventArgs e) {
@@ -215,7 +252,12 @@ public partial class FormMain : Form {
     }
 
     private void MenuContextRemove_Click(object sender, EventArgs e) {
-
+        if (SelectedIndexes is not null) {
+            if (SelectedIndexes.Length > 0) {
+                RemoveSelectedIndexes();
+                UpdateList();
+            }
+        }
     }
 
     private void MenuContextReplace_Click(object sender, EventArgs e) {
@@ -252,6 +294,24 @@ public partial class FormMain : Form {
 
             AllowEnableMenu(true);
         }
+    }
+
+    private void RemoveSelectedIndexes() {
+        if (SelectedIndexes is not null) {
+            var length = SelectedIndexes.Length;
+
+            if (length > 0) {
+                _package.Remove(SelectedIndexes);
+            }
+
+            SelectedIndexes = null;
+        }
+    }
+
+    private void Clear() {
+        SelectedIndexes = null;
+        _package.Clear();
+        UpdateList();
     }
 
     private int ParseFileNames(int index, string[] fileNames, string[] safeNames) {
@@ -299,26 +359,31 @@ public partial class FormMain : Form {
         return ExitSuccess;
     }
 
-
-
     private int[] IncrementIndexPosition(int increment) {
-        var positions = new int[SelectedIndexes.Length];
+        if (SelectedIndexes is not null) {
+            var positions = new int[SelectedIndexes.Length];
 
-        for (var i = 0; i < positions.Length; i++) {
-            positions[i] = SelectedIndexes[i] + increment;
+            for (var i = 0; i < positions.Length; i++) {
+                positions[i] = SelectedIndexes[i] + increment;
+            }
+
+            return positions;
         }
 
-        return positions;
+        return Array.Empty<int>();
     }
 
     private int[] CreateNewIndexPositionFrom(int index) {
-        var positions = new int[SelectedIndexes.Length];
+        if (SelectedIndexes is not null) {
+            var positions = new int[SelectedIndexes.Length];
 
-        for (var i = 0; i < positions.Length; i++) {
-            positions[i] = index++;
+            for (var i = 0; i < positions.Length; i++) {
+                positions[i] = index++;
+            }
+            return positions;
         }
 
-        return positions;
+        return Array.Empty<int>();
     }
 
     private bool IsValidPassphrase() {
@@ -434,4 +499,21 @@ public partial class FormMain : Form {
     }
 
     #endregion
+
+    public int ShowInputBox() {
+        var input = new InputBoxDialog {
+            Caption = "Move To Position ... ",
+            Input = "0"
+        };
+
+        input.ShowDialog();
+
+        var response = input.Response;
+
+        input.Close();
+
+        var r = int.TryParse(response, out var result);
+
+        return r ? result : InvalidPosition;
+    }
 }

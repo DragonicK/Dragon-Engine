@@ -178,7 +178,7 @@ partial class FormMain {
             this.LabelPassword.Name = "LabelPassword";
             this.LabelPassword.Size = new System.Drawing.Size(507, 22);
             this.LabelPassword.TabIndex = 1;
-            this.LabelPassword.Text = "Password";
+            this.LabelPassword.Text = "Passphrase";
             this.LabelPassword.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // ListPack
