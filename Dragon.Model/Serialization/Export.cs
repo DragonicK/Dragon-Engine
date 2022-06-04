@@ -10,12 +10,12 @@ public class Export : Serializer {
 
         var aes = new AES() {
             CipherMode = System.Security.Cryptography.CipherMode.CBC,
-            PaddingMode = System.Security.Cryptography.PaddingMode.PKCS7,
-            KeySize = 128,
+            PaddingMode = System.Security.Cryptography.PaddingMode.PKCS7
         };
 
-        var key = aes.CreateKey(Passphrase);
-        var iv = aes.CreateIv(Passphrase);
+        var hash = Hash.Compute(Passphrase);
+        var key = Hash.Compute(hash, AES.KeyLength, true);
+        var iv = Hash.Compute(hash, AES.KeyLength, false);
 
         return aes.Encrypt(buffer, key, iv);
     }
