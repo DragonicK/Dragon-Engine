@@ -1,0 +1,35 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <BaseOutputPath>..\Build\Game</BaseOutputPath>
+    <BaseIntermediateOutputPath></BaseIntermediateOutputPath>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+    <StartupObject>Dragon.Game.Program</StartupObject>
+    <ApplicationIcon>_game.ico</ApplicationIcon>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="obj\**" />
+    <EmbeddedResource Remove="obj\**" />
+    <None Remove="obj\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="_game.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.DotNet.ILCompiler" Version="7.0.0-preview.6.22301.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Dragon.Core\Dragon.Core.csproj" />
+    <ProjectReference Include="..\Dragon.Database\Dragon.Database.csproj" />
+    <ProjectReference Include="..\Dragon.Network\Dragon.Network.csproj" />
+  </ItemGroup>
+
+</Project>
