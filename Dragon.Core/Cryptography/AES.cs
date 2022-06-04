@@ -58,26 +58,4 @@ public class AES {
 
         return encryptedBytes;
     }
-
-    public byte[] CreateKey(string passphrase) {
-        var key = new byte[KeyLength];
-        var hash = Hash.Compute(passphrase);
-
-        for (var i = 0; i < KeyLength; ++i) {
-            key[i] = (byte)hash[i % hash.Length];
-        }
-
-        return key;
-    }
-
-    public byte[] CreateIv(string passphrase) {
-        var key = new byte[KeyLength];
-        var hash = Hash.Compute(passphrase);
-
-        for (var i = KeyLength - 1; i >= 0; --i) {
-            key[i] = (byte)hash[i % hash.Length];
-        }
-
-        return key;
-    }
 }
