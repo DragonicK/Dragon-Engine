@@ -191,7 +191,9 @@ partial class FormMain {
             this.ColumnName,
             this.ColumnType,
             this.ColumnSize});
+            this.ListPack.FullRowSelect = true;
             this.ListPack.GridLines = true;
+            this.ListPack.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.ListPack.Location = new System.Drawing.Point(12, 78);
             this.ListPack.Name = "ListPack";
             this.ListPack.Size = new System.Drawing.Size(483, 431);

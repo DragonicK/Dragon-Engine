@@ -32,17 +32,23 @@ public class Package : IPackage {
                 return false;
             }
 
-            return MoveTo(indexes[0] + 1, indexes);
+            var index = indexes[0] + 1;
+
+            return MoveTo(ref index, indexes);
         }
 
         return false;
     }
 
-    public bool MoveTo(int index, int[] indexes) {
+    public bool MoveTo(ref int index, int[] indexes) {
         if (indexes.Length > 0) {
 
             if (index + indexes.Length > Count) {
-                return false;
+                index = Count - 1;
+
+                if (index < 0) {
+                    return false;
+                }
             }
 
             var copy = GetFiles(indexes);
@@ -66,7 +72,9 @@ public class Package : IPackage {
                 return false;
             }
 
-            return MoveTo(indexes[0] - 1, indexes);
+            var index = indexes[0] - 1;
+
+            return MoveTo(ref index, indexes);
         }
 
         return false;

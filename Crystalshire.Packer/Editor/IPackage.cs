@@ -9,6 +9,6 @@ public interface IPackage {
     void Remove(int[] indexes);
     bool MoveUp(int[] indexes);
     bool MoveDown(int[] indexes);
-    bool MoveTo(int index, int[] indexes);
+    bool MoveTo(ref int index, int[] indexes);
     List<IPackageFile> ToList();
 }

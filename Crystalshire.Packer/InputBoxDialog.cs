@@ -9,13 +9,15 @@ public partial class InputBoxDialog : Form {
         InitializeComponent();
     }
 
-    public void ShowInput() {
+    public DialogResult ShowInput() {
         TextInput.Text = Input;
         LabelTitle.Text = Caption;
 
         TextInput.SelectionStart = 0;
         TextInput.SelectionLength = TextInput.Text.Length;
         TextInput.Focus();
+
+        return ShowDialog();
     }
 
     private void TextInput_KeyDown(object sender, KeyEventArgs e) {

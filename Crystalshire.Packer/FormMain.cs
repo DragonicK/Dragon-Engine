@@ -74,6 +74,26 @@ public partial class FormMain : Form {
         return extension.Remove(0, 1);
     }
 
+    private string GetExportPath() {
+        var path = string.Empty;
+
+        if (_package.Count > 0) {
+
+            var dialog = new FolderBrowserDialog() {
+                ShowNewFolderButton = true,
+                RootFolder = Environment.SpecialFolder.MyComputer
+            };
+
+            var result = dialog.ShowDialog();
+
+            if (result == DialogResult.OK) {
+                path = dialog.SelectedPath;
+            }
+        }
+
+        return path;
+    }
+
     #region Menu File
 
     private async void MenuFileOpen_Click(object sender, EventArgs e) {
@@ -234,7 +254,7 @@ public partial class FormMain : Form {
             var index = ShowInputBox();
 
             if (index > InvalidPosition) {
-                if (_package.MoveTo(index, SelectedIndexes)) {
+                if (_package.MoveTo(ref index, SelectedIndexes)) {
                     UpdateList();
 
                     ListPack.EnsureVisible(index);
@@ -263,7 +283,6 @@ public partial class FormMain : Form {
     private void MenuContextReplace_Click(object sender, EventArgs e) {
 
     }
-
     private void MenuContextExportSelected_Click(object sender, EventArgs e) {
 
     }
@@ -408,7 +427,6 @@ public partial class FormMain : Form {
         LabelStatus.Text = $"Processed {percent}% {count}/{maximum} : {args.Name}";
     }
 
-
     #region List Pack
 
     private void SelectItem(int[] selected) {
@@ -501,19 +519,21 @@ public partial class FormMain : Form {
     #endregion
 
     public int ShowInputBox() {
+        int index;
+
         var input = new InputBoxDialog {
             Caption = "Move To Position ... ",
             Input = "0"
         };
 
-        input.ShowDialog();
+        ChangeFont(input);
+
+        input.ShowInput();
 
         var response = input.Response;
 
-        input.Close();
+        var r = int.TryParse(response, out index);
 
-        var r = int.TryParse(response, out var result);
-
-        return r ? result : InvalidPosition;
+        return r ? index : InvalidPosition;
     }
 }
