@@ -14,6 +14,7 @@ namespace Dragon::Wrapper::Cryptography {
 		}
 
 		array<unsigned char>^ Compute(System::String^ data);
+		array<unsigned char>^ Compute(array<unsigned char>^ buffer, int length, bool reverse);
 		System::String^ ConvertToHexadecimal(array<unsigned char>^ buffer);
 
 	private:

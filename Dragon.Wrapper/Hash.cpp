@@ -1,4 +1,7 @@
 #include "Hash.h"
+#include "AESKeyLength.h"
+
+using namespace System::Security::Cryptography;
 
 namespace Dragon::Wrapper::Cryptography {
 
@@ -6,6 +9,24 @@ namespace Dragon::Wrapper::Cryptography {
 		auto sha = SHA256::Create();
 
 		return sha->ComputeHash(Encoding::Unicode->GetBytes(data));
+	}
+
+	array<unsigned char>^ Hash::Compute(array<unsigned char>^ data, int length, bool reverse) {
+		auto hash = gcnew array<unsigned char>(KeyLength);
+		auto copy = gcnew array<unsigned char>(length);
+
+		System::Array::Copy(data, copy, length);
+
+		if (reverse) {
+			System::Array::Reverse(copy);
+		}
+
+		auto sha = SHA256::Create();
+		auto buffer = sha->ComputeHash(copy);
+
+		System::Array::Copy(buffer, 0, hash, 0, KeyLength);
+
+		return hash;
 	}
 
 	System::String^ Hash::ConvertToHexadecimal(array<unsigned char>^ buffer) {
@@ -17,5 +38,4 @@ namespace Dragon::Wrapper::Cryptography {
 
 		return sb->ToString();
 	}
-
 }

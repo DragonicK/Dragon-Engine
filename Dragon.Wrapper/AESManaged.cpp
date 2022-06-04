@@ -98,24 +98,12 @@ namespace Dragon::Wrapper::Cryptography {
 	array<unsigned char>^ AESManaged::CreateKey(Hash^ hash, System::String^ passphrase) {
 		auto computed = hash->Compute(passphrase);
 
-		auto key = gcnew array<unsigned char>(KeyLength);
-
-		for (auto i = 0; i < KeyLength; ++i) {
-			key[i] = computed[i % computed->Length];
-		}
-
-		return key;
+		return hash->Compute(computed, computed->Length, true);
 	}
 
 	array<unsigned char>^ AESManaged::CreateIv(Hash^ hash, System::String^ passphrase) {
 		auto computed = hash->Compute(passphrase);
 
-		auto iv = gcnew array<unsigned char>(KeyLength);
-
-		for (auto i = KeyLength - 1; i >= 0; --i) {
-			iv[i] = computed[i % computed->Length];
-		}
-
-		return iv;
+		return hash->Compute(computed, computed->Length, false);
 	}
 }
