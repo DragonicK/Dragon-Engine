@@ -1,4 +1,6 @@
-﻿using Crystalshire.Core.Cryptography;
+﻿using System.Security.Cryptography;
+
+using Crystalshire.Core.Cryptography;
 
 namespace Crystalshire.Packer.Editor;
 
@@ -8,10 +10,16 @@ public class PackageHandler : IPackageHandler {
     private const string DefaultText = "This is a text!";
     private const string SecurityText = "This is a complement";
 
-    private readonly AesManaged _aes;
+    private readonly AES _aes;
+
+
 
     public PackageHandler(EventHandler<IPackageArgs> onProgressChanged) {
-        _aes = new AesManaged();
+        _aes = new AES() {
+            CipherMode = CipherMode.CBC,
+            PaddingMode = PaddingMode.PKCS7,
+        };
+
         OnProgressChanged = onProgressChanged;
     }
 
@@ -22,8 +30,8 @@ public class PackageHandler : IPackageHandler {
     }
 
     public PackageOperation Save(string file, string passphrase, IPackage package) {
-        var stream = new FileStream(file, FileMode.Create, FileAccess.Write);
-        var writer = new BinaryWriter(stream);
+        using var stream = new FileStream(file, FileMode.Create, FileAccess.Write);
+        using var writer = new BinaryWriter(stream);
 
         WritePassword(passphrase, writer);
         WriteFiles(passphrase, package, writer);
@@ -44,8 +52,8 @@ public class PackageHandler : IPackageHandler {
 
     private void WriteFile(ref int counter, int maximum, string passphrase, IPackageFile file, BinaryWriter writer) {
         var hash = Hash.Compute(passphrase + SecurityText);
-        var key = Hash.Compute(hash, hash.Length, true);
-        var iv = Hash.Compute(hash, hash.Length, false);
+        var key = Hash.Compute(hash, AES.KeyLength, true);
+        var iv = Hash.Compute(hash, AES.KeyLength, false);
 
         var encrypted = _aes.Encrypt(file.Bytes, key, iv);
 
@@ -64,8 +72,8 @@ public class PackageHandler : IPackageHandler {
         var hash = Hash.Compute(DefaultText);
 
         var _passphrase = Hash.Compute(passphrase + SecurityText);
-        var key = Hash.Compute(_passphrase, hash.Length, true);
-        var iv = Hash.Compute(_passphrase, hash.Length, false);
+        var key = Hash.Compute(_passphrase, AES.KeyLength, true);
+        var iv = Hash.Compute(_passphrase, AES.KeyLength, false);
 
         var encrypted = _aes.Encrypt(hash, key, iv);
 
@@ -78,8 +86,8 @@ public class PackageHandler : IPackageHandler {
         var encrypted = reader.ReadBytes(length);
 
         var hash = Hash.Compute(passphrase + SecurityText);
-        var key = Hash.Compute(hash, hash.Length, true);
-        var iv = Hash.Compute(hash, hash.Length, false);
+        var key = Hash.Compute(hash, AES.KeyLength, true);
+        var iv = Hash.Compute(hash, AES.KeyLength, false);
 
         var decrypted = _aes.Decrypt(encrypted, key, iv);
 

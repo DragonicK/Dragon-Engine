@@ -2,13 +2,13 @@
 
 namespace Crystalshire.Core.Cryptography;
 
-public class AesManaged {
+public class AES {
     public int KeySize { get; set; } = 128;
     public CipherMode CipherMode { get; set; }
     public PaddingMode PaddingMode { get; set; }
 
-    private const int KeyLength = 16;
-    private const int BlockSize = 128;
+    public static int KeyLength { get; } = 16;
+    public static int BlockSize { get; } = 128;
 
     public byte[] Encrypt(byte[] bytesToBeEncrypted, byte[] key, byte[] iv) {
         using var ms = new MemoryStream();

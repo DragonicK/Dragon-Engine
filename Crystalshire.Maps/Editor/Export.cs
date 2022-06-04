@@ -123,7 +123,7 @@ public class Export {
         var parallaxSize = Constants.ParallaxSize;
         var tileSize = Constants.TileSize;
 
-        var aes = new AesManaged() {
+        var aes = new AES() {
             CipherMode = System.Security.Cryptography.CipherMode.CBC,
             PaddingMode = System.Security.Cryptography.PaddingMode.PKCS7,
         };

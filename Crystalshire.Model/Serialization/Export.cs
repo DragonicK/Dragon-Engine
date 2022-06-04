@@ -8,7 +8,7 @@ public class Export : Serializer {
     protected override byte[] GetBytes(Bitmap image) {
         var buffer = base.GetBytes(image);
 
-        var aes = new AesManaged() {
+        var aes = new AES() {
             CipherMode = System.Security.Cryptography.CipherMode.CBC,
             PaddingMode = System.Security.Cryptography.PaddingMode.PKCS7,
             KeySize = 128,
