@@ -61,7 +61,7 @@ public class ListenerService : IService {
 
     private void WriteFromConnectionApproval(object? sender, IConnection connection) {
         var join = new JoinServer() {
-            Logger = LoggerService!.ConnectionLogger,
+            Logger = LoggerService!.Logger,
             Configuration = Configuration,
             Connection = connection
         };
@@ -75,7 +75,7 @@ public class ListenerService : IService {
             PlayerRepository = ConnectionService.PlayerRepository,
             IndexGenerator = ConnectionService.IndexGenerator,
             GeoIpAddress = GeoIpService!.GeoIpAddress,
-            Logger = LoggerService!.ConnectionLogger,
+            Logger = LoggerService!.Logger,
             Configuration = Configuration,
             Connection = connection
         };
@@ -90,7 +90,7 @@ public class ListenerService : IService {
             IndexGenerator = ConnectionService.IndexGenerator,
             PacketSenderService = PacketSenderService,
             GeoIpAddress = GeoIpService!.GeoIpAddress,
-            Logger = LoggerService!.ConnectionLogger,
+            Logger = LoggerService!.Logger,
             DatabaseService = DatabaseService,
             Configuration = Configuration,
             Connection = connection

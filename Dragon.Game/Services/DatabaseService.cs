@@ -10,66 +10,55 @@ namespace Dragon.Game.Services;
 public class DatabaseService : IService {
     public ServicePriority Priority => ServicePriority.High;
     public IDatabaseFactory? DatabaseFactory { get; private set; }
+    public LoggerService? LoggerService { get; private set; }
     public ConfigurationService? Configuration { get; private set; }
 
     public void Start() {
         DatabaseFactory = new DatabaseFactory();
 
-        CheckMembershipDatabase(Configuration);
-        CheckServerpDatabase(Configuration);
+        var logger = LoggerService?.Logger;
+
+        CheckMembershipDatabase(logger, Configuration);
+        CheckServerDatabase(logger, Configuration);
     }
 
     public void Stop() {
 
     }
 
-    private void CheckMembershipDatabase(IConfiguration? configuration) {
-        OutputLog.Write("Checking Membership database");
+    private void CheckMembershipDatabase(ILogger? logger, IConfiguration? configuration) {
+        logger?.Info("DatabaseService", "Checking Membership database");
 
         if (configuration is not null) {
-            CheckMembershipConnection(DatabaseFactory, configuration);
+            CheckDatabaseConnection("Membership", logger, DatabaseFactory, configuration.DatabaseMembership);
         }
         else {
-            OutputLog.Write("Configuration not found");
+            logger?.Error("DatabaseService", "Membership configuration not found");
         }
     }
 
-    private void CheckServerpDatabase(IConfiguration? configuration) {
-        OutputLog.Write("Checking Server database");
+    private void CheckServerDatabase(ILogger? logger, IConfiguration? configuration) {
+        logger?.Info("DatabaseService", "Checking Server database");
 
         if (configuration is not null) {
-            CheckServerConnection(DatabaseFactory, configuration);
+            CheckDatabaseConnection("Server", logger, DatabaseFactory, configuration.DatabaseServer);
         }
         else {
-            OutputLog.Write("Configuration not found");
+            logger?.Error("DatabaseService", "Server configuration not found");
         }
     }
 
-    private void CheckServerConnection(IDatabaseFactory? factory, IConfiguration configuration) {
+    private void CheckDatabaseConnection(string name, ILogger? logger, IDatabaseFactory? factory, DBConfiguration configuration) {
         if (factory is not null) {
-            var handler = factory.GetServerHandler(configuration.DatabaseServer);
+            var handler = factory.GetServerHandler(configuration);
             var result = handler.CanConnect();
 
             handler.Dispose();
 
-            OutputLog.Write($"Server database is {(result ? "" : "not ")}connected");
+            logger?.Info("DatabaseService", $"{name} database is {(result ? "" : "not ")}connected");
         }
         else {
-            OutputLog.Write($"Database factory not found");
-        }
-    }
-
-    private void CheckMembershipConnection(IDatabaseFactory? factory, IConfiguration configuration) {
-        if (factory is not null) {
-            var handler = factory.GetMembershipHandler(configuration.DatabaseServer);
-            var result = handler.CanConnect();
-
-            handler.Dispose();
-
-            OutputLog.Write($"Membership database is {(result ? "" : "not ")}connected");
-        }
-        else {
-            OutputLog.Write($"Database factory not found");
+            logger?.Error("DatabaseService", "Database factory not found");
         }
     }
 }

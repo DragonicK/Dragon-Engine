@@ -60,7 +60,7 @@ public class LeftGame {
 
         DisconnectParty();
 
-        WriteDisconnectedLog();
+        Logger?.Info("LeftGame", $"{Player!.Username} Left Game");
 
 
         // TODO
@@ -94,19 +94,5 @@ public class LeftGame {
         };
 
         party.ProcessDisconnect();
-    }
-
-    private void WriteDisconnectedLog() {
-        var description = new Description() {
-            Name = "Left Game",
-            WarningCode = WarningLevel.Success,
-            Message = $"",
-        };
-
-        Logger!.Write(description);
-
-        if (Configuration!.Debug) {
-            OutputLog.Write($"{Player!.Username} Left Game");
-        }
     }
 }

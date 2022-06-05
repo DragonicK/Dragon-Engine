@@ -24,12 +24,14 @@ public sealed class Authentication {
     public LoggerService? LoggerService { get; init; }
 
     public async void Process() {
-        var jwtToken = Packet.Token;
+        var logger = GetLogger();
+        var jwtToken = Packet!.Token;
         var jwtTokenData = GetValidatedData(jwtToken);
 
         if (jwtTokenData.AccountId == 0) {
-            Disconnect(Connection, AlertMessageType.Connection);
-            WriteOutputLog($"Authentication Failed {jwtToken}");
+            Disconnect(Connection!, AlertMessageType.Connection);
+
+            logger?.Warning("Authentication", $"Authentication Failed {jwtToken}");
 
             return;
         }
@@ -40,13 +42,13 @@ public sealed class Authentication {
         var player = FindDuplicated(accountId);
         var repository = GetPlayerRepository();
 
-        WriteOutputLog($"Authenticated {username} {jwtToken}");
+        logger?.Warning("Authentication", $"Authenticated {username}");
 
         if (player is not null) {
-            Disconnect(Connection, AlertMessageType.DuplicatedLogin);
+            Disconnect(Connection!, AlertMessageType.DuplicatedLogin);
             Disconnect(player.GetConnection(), AlertMessageType.TryingToLogin);
 
-            WriteOutputLog($"Duplicated Entry {username} {jwtToken}");
+            logger?.Error("Authentication", $"Duplicated Entry {username}");
 
             // Wait about 1 second before disconnect.
             await Task.Delay(1000);
@@ -56,7 +58,7 @@ public sealed class Authentication {
             repository!.Remove(player);
         }
         else {
-            player = repository.Add(jwtTokenData, Connection);
+            player = repository!.Add(jwtTokenData, Connection!);
 
             try {
                 var database = new CharacterDatabase(Configuration, DatabaseService.DatabaseFactory);
@@ -75,16 +77,16 @@ public sealed class Authentication {
                 var sender = GetSender();
                 sender?.SendCharacters(player);
 
-                WriteOutputLog($"Sending Characters -> {username}");
+                logger?.Info("Authentication", $"Sending characters User: {username}");
             }
             else {
-                WriteOutputLog("Failed to load characters");
+                logger?.Info("Authentication", $"Failed to load characterrs User: {username}");
             }
         }
     }
 
     private ILogger? GetLogger() {
-        return LoggerService?.ServerLogger;
+        return LoggerService?.Logger;
     }
 
     private IPlayerRepository? GetPlayerRepository() {
@@ -99,14 +101,6 @@ public sealed class Authentication {
 
     private IPlayer? FindDuplicated(long accountId) {
         return ConnectionService?.PlayerRepository?.FindByAccountId(accountId);
-    }
-
-    private void WriteOutputLog(string log) {
-        if (Configuration is not null) {
-            if (Configuration.Debug) {
-                OutputLog.Write(log);
-            }
-        }
     }
 
     private void AddDeleteRequest(IPlayer player) {
@@ -129,15 +123,7 @@ public sealed class Authentication {
     private Task WriteExceptionLog(string username, string message) {
         var logger = GetLogger();
 
-        var description = new Description() {
-            Name = "Authentication Excpetion",
-            WarningCode = WarningLevel.Error,
-            Message = $"An error ocurred by {username} ... {message}",
-        };
-
-        logger?.Write(description);
-
-        OutputLog.Write($"Authentication throw an exception ... ");
+        logger?.Error("Authentication", $"Authentication: An error ocurred by {username} ... {message}");
 
         return Task.CompletedTask;
     }

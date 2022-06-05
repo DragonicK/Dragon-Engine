@@ -176,21 +176,13 @@ public sealed class CharacterCreate {
     }
 
     private ILogger? GetLogger() {
-        return LoggerService?.ServerLogger;
+        return LoggerService?.Logger;
     }
 
     private Task WriteExceptionLog(string username, string message) {
         var logger = GetLogger();
 
-        var description = new Description() {
-            Name = "Character Creation Excpetion",
-            WarningCode = WarningLevel.Error,
-            Message = $"An error ocurred by {username} ... {message}",
-        };
-
-        logger?.Write(description);
-
-        OutputLog.Write($"Character Creation throw an exception ... ");
+        logger?.Error("CharacterCreate", $"Character: An error ocurred by {username} ... {message}");
 
         return Task.CompletedTask;
     }

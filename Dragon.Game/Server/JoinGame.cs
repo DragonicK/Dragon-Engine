@@ -156,6 +156,8 @@ public class JoinGame {
         PacketSender!.SendInGame(Player);
 
         Player.InGame = true;
+
+        Logger?.Info("JoinGame", $"{Player!.Username} Joined Game");
     }
 
     private IClass? GetClass() {

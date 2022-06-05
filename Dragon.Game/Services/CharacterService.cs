@@ -34,7 +34,7 @@ public class CharacterService : IService, IUpdatableService {
 
         Repository = ConnectionService!.PlayerRepository!;
         Factory = DatabaseService!.DatabaseFactory!;
-        Logger = LoggerService!.ServerLogger!;
+        Logger = LoggerService!.Logger;
     }
 
     public void Stop() {

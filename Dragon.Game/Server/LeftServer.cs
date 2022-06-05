@@ -23,15 +23,7 @@ public sealed class LeftServer {
     public void DisconnectConnection() {
         var (id, ipAddress) = GetIdAndIpAddress();
 
-        var description = new Description() {
-            Name = "Connection Disconnected",
-            WarningCode = WarningLevel.Success,
-            Message = $"ConnectionId: {id} IpAddress: {ipAddress}"
-        };
-
-        Logger?.Write(description);
-
-        WriteOutputLog($"Connection Disconnect: {id} {ipAddress}");
+        Logger?.Info("LeftServer", $"Disconnected Id: {id} IpAddress: {ipAddress}");
 
         ConnectionRepository?.RemoveFromId(id);
         IndexGenerator?.Remove(id);
@@ -56,29 +48,13 @@ public sealed class LeftServer {
         var country = GetBlockedCountry(ipAddress);
         var text = country is not null ? $"{country.Name}-{country.Code}" : string.Empty;
 
-        var description = new Description() {
-            Name = "Connection Refuse",
-            WarningCode = WarningLevel.Warning,
-            Message = $"From {text} IpAddress: {ipAddress} Id: {id}"
-        };
-
-        Logger?.Write(description);
-
         if (id > 0) {
             ConnectionRepository?.RemoveFromId(id);
             IndexGenerator?.Remove(id);
             PlayerRepository?.RemoveFromConnectionId(id);
         }
 
-        WriteOutputLog($"{description.Name}: {description.Message}");
-    }
-
-    private void WriteOutputLog(string description) {
-        if (Configuration is not null) {
-            if (Configuration.Debug) {
-                OutputLog.Write(description);
-            }
-        }
+        Logger?.Info("LeftServer", $"Refused From {text} IpAddress: {ipAddress} Id: {id}");
     }
 
     private Country? GetBlockedCountry(string ipAddress) {

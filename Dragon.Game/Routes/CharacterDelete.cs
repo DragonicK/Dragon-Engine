@@ -26,6 +26,7 @@ public sealed class CharacterDelete {
             return;
         }
 
+        var logger = GetLogger();
         var index = Packet.Index;
         var repository = GetPlayerRepository();
         var player = repository.FindByConnectionId(Connection.Id);
@@ -34,12 +35,12 @@ public sealed class CharacterDelete {
             if (IsValidIndex(player, index)) {
                 var character = player.Characters[index];
 
-                WriteLog($"Requesting Character Exclusion Id {character.CharacterId}");
+                logger?.Warning("CharacterDelete", $"Requesting Exclusion From Id {character.CharacterId}");
 
                 if (CanDelete(character)) {
                     ExecuteExclusion(character, player);
 
-                    WriteLog($"Executing Character Exclusion Id {character.CharacterId}");
+                    logger?.Warning("CharacterDelete", $"Executing Exclusion From Id {character.CharacterId}");
                 }
             }
         }
@@ -92,37 +93,7 @@ public sealed class CharacterDelete {
     private void WriteInvalidPlayerLog() {
         var logger = GetLogger();
 
-        var description = new Description() {
-            Name = "Character Exclusion",
-            WarningCode = WarningLevel.Warning,
-            Message = "Player not found"
-        };
-
-        logger?.Write(description);
-
-        WriteOutputLog("Character Exclusion: Player not found");
-    }
-
-    private void WriteLog(string log) {
-        var logger = GetLogger();
-
-        var description = new Description() {
-            Name = "Character Exclusion",
-            WarningCode = WarningLevel.Warning,
-            Message = "Player not found"
-        };
-
-        logger?.Write(description);
-
-        WriteOutputLog(log);
-    }
-
-    private void WriteOutputLog(string log) {
-        if (Configuration is not null) {
-            if (Configuration.Debug) {
-                OutputLog.Write(log);
-            }
-        }
+        logger?.Warning("CharacterDelete", "Character Exclusion: Player not found");
     }
 
     private IPlayerRepository? GetPlayerRepository() {
@@ -130,7 +101,7 @@ public sealed class CharacterDelete {
     }
 
     private ILogger? GetLogger() {
-        return LoggerService?.ConnectionLogger;
+        return LoggerService?.Logger;
     }
 
     private void SendCharacterDeleteIsDisabled() {

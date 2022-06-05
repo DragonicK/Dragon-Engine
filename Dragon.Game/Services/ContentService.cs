@@ -33,6 +33,7 @@ namespace Dragon.Game.Services;
 public class ContentService : IService {
     public ServicePriority Priority => ServicePriority.Mid;
     public ConfigurationService? Configuration { get; init; }
+    public LoggerService? LoggerService { get; init; }
     public IDatabase<IClass> Classes { get; }
     public IDatabase<IMap> Maps { get; set; }
     public IDatabase<Achievement> Achievements { get; }
@@ -244,7 +245,9 @@ public class ContentService : IService {
     }
 
     public void Start() {
-        OutputLog.Write("Loading game content");
+        var logger = GetLogger();
+
+        logger?.Info("ContentService", "Loading game content");
 
         Classes.Load();
         Maps.Load();
@@ -283,7 +286,9 @@ public class ContentService : IService {
     }
 
     public void Stop() {
-        OutputLog.Write("Cleaning game content");
+        var logger = GetLogger();
+
+        logger?.Info("ContentService", "Cleaning game content");
 
         Classes.Clear();
         Maps.Clear();
@@ -344,5 +349,9 @@ public class ContentService : IService {
         loader.LoadInstances();
 
         Instances = loader.Instances;
+    }
+
+    private ILogger? GetLogger() {
+        return LoggerService!.Logger;
     }
 }

@@ -90,7 +90,7 @@ public sealed class CharacterBegin {
     }
 
     private ILogger? GetLogger() {
-        return LoggerService?.ServerLogger;
+        return LoggerService?.Logger;
     }
 
     private MapPassphrase? GetMapPassphrase() {
@@ -100,15 +100,7 @@ public sealed class CharacterBegin {
     private Task WriteExceptionLog(string username, string message) {
         var logger = GetLogger();
 
-        var description = new Description() {
-            Name = "Character Load Excpetion",
-            WarningCode = WarningLevel.Error,
-            Message = $"An error ocurred by {username} ... {message}",
-        };
-
-        logger?.Write(description);
-
-        OutputLog.Write($"Character Load throw an exception ... ");
+        logger?.Error("CharacterBegin", $"Character: An error ocurred by {username} ... {message}");
 
         return Task.CompletedTask;
     }
