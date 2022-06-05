@@ -184,7 +184,7 @@ public sealed class CharacterCreate {
 
         var description = new Description() {
             Name = "Character Creation Excpetion",
-            WarningCode = WarningCode.Error,
+            WarningCode = WarningLevel.Error,
             Message = $"An error ocurred by {username} ... {message}",
         };
 

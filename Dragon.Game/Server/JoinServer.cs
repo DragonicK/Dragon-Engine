@@ -17,7 +17,7 @@ public sealed class JoinServer {
 
         var description = new Description() {
             Name = "Connection Approval",
-            WarningCode = WarningCode.Success,
+            WarningCode = WarningLevel.Success,
             Message = $"ConnectionId: {id} IpAddress: {ipAddress}"
         };
 

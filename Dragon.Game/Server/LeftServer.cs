@@ -25,7 +25,7 @@ public sealed class LeftServer {
 
         var description = new Description() {
             Name = "Connection Disconnected",
-            WarningCode = WarningCode.Success,
+            WarningCode = WarningLevel.Success,
             Message = $"ConnectionId: {id} IpAddress: {ipAddress}"
         };
 
@@ -58,7 +58,7 @@ public sealed class LeftServer {
 
         var description = new Description() {
             Name = "Connection Refuse",
-            WarningCode = WarningCode.Warning,
+            WarningCode = WarningLevel.Warning,
             Message = $"From {text} IpAddress: {ipAddress} Id: {id}"
         };
 

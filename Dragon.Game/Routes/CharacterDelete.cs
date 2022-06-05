@@ -94,7 +94,7 @@ public sealed class CharacterDelete {
 
         var description = new Description() {
             Name = "Character Exclusion",
-            WarningCode = WarningCode.Warning,
+            WarningCode = WarningLevel.Warning,
             Message = "Player not found"
         };
 
@@ -108,7 +108,7 @@ public sealed class CharacterDelete {
 
         var description = new Description() {
             Name = "Character Exclusion",
-            WarningCode = WarningCode.Warning,
+            WarningCode = WarningLevel.Warning,
             Message = "Player not found"
         };
 

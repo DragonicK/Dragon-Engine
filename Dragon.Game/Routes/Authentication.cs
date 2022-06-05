@@ -131,7 +131,7 @@ public sealed class Authentication {
 
         var description = new Description() {
             Name = "Authentication Excpetion",
-            WarningCode = WarningCode.Error,
+            WarningCode = WarningLevel.Error,
             Message = $"An error ocurred by {username} ... {message}",
         };
 

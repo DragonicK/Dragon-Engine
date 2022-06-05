@@ -99,7 +99,7 @@ public class LeftGame {
     private void WriteDisconnectedLog() {
         var description = new Description() {
             Name = "Left Game",
-            WarningCode = WarningCode.Success,
+            WarningCode = WarningLevel.Success,
             Message = $"",
         };
 

@@ -102,7 +102,7 @@ public sealed class CharacterBegin {
 
         var description = new Description() {
             Name = "Character Load Excpetion",
-            WarningCode = WarningCode.Error,
+            WarningCode = WarningLevel.Error,
             Message = $"An error ocurred by {username} ... {message}",
         };
 
