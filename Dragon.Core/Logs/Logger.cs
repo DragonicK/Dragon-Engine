@@ -1,77 +1,125 @@
 ﻿using System.Text.Json;
 using System.Text.Unicode;
 using System.Text.Encodings.Web;
+using System.Collections.Concurrent;
 
 namespace Dragon.Core.Logs;
 
 public class Logger : ILogger {
     public bool Enabled { get; set; }
-    public bool Opened => isOpen;
 
-    private readonly JsonSerializerOptions? options;
+    readonly JsonSerializerOptions? options;
+    readonly ConcurrentQueue<(WarningLevel, Description)> queue;
+    readonly Thread thread;
+    readonly SemaphoreSlim semaphore;
+    readonly StreamWriter writer;
 
-    private readonly string folder = string.Empty;
-    private readonly string file = string.Empty;
+    bool running;
 
-    private StreamWriter? writer;
-    private FileStream? stream;
+    public Logger(string path) {
+        options = new JsonSerializerOptions {
+            Encoder = JavaScriptEncoder.Create(UnicodeRanges.All),
+            WriteIndented = true
+        };
 
-    private bool isOpen;
+        queue = new ConcurrentQueue<(WarningLevel, Description)>();
+        thread = new Thread(Loop);
+        semaphore = new SemaphoreSlim(0);
 
-    public Logger(string name, string folder, bool enabled) {
-        var date = DateTime.Today;
-        Enabled = enabled;
-
-        if (Enabled) {
-            this.folder = folder;
-            file = $"{name} {date.Year}-{date.Month}-{date.Day}.txt";
-
-            options = new JsonSerializerOptions {
-                Encoder = JavaScriptEncoder.Create(UnicodeRanges.All),
-                WriteIndented = true
-            };
+        if (!Directory.Exists(path)) {
+            Directory.CreateDirectory(path);
         }
+
+        var fileName = $"{DateTime.Now:yyyy-MM-dd}.txt";
+
+        writer = File.AppendText(Path.Combine(path, fileName));
+        writer.AutoFlush = true;
     }
 
-    public string Open() {
-        if (Enabled) {
-            try {
-                if (!Directory.Exists(folder)) {
-                    Directory.CreateDirectory(folder);
+    public void Start() {
+        running = true;
+        thread.Start();
+    }
+
+    public void Stop() {
+        running = false;
+        semaphore.Release();
+        thread.Join();
+    }
+
+    public void Info(string header, string message) => Write(WarningLevel.Info, header, message);
+
+    public void Debug(string header, string message) => Write(WarningLevel.Debug, header, message);
+
+    public void Warning(string header, string message) => Write(WarningLevel.Warning, header, message);
+
+    public void Error(string header, string message) => Write(WarningLevel.Error, header, message);
+
+    public void Write(WarningLevel level, string header, string message) {
+        var desc = new Description() {
+            Level = GetWarningLevelName(level),
+            Message = message,
+            Name = header
+        };
+
+        queue.Enqueue((level, desc));
+
+        semaphore.Release();
+    }
+
+    private void Serialize(Description description) {
+        writer.Write(JsonSerializer.Serialize(description, options));
+        writer.Write(",");
+        writer.Write(Environment.NewLine);
+    }
+
+    private void Loop() {
+        while (running) {
+            semaphore.Wait();
+
+            while (!queue.IsEmpty) {
+                if (!queue.TryDequeue(out (WarningLevel Level, Description Description) item)) {
+                    continue;
                 }
 
-                stream = new FileStream($"{folder}/{file}", FileMode.Append, FileAccess.Write);
-                writer = new StreamWriter(stream) {
-                    AutoFlush = true
-                };
-            }
-            catch (Exception ex) {
-                isOpen = false;
-                return ex.Message;
-            }
+                var level = item.Level;
+                var message = item.Description.Message;
 
-            isOpen = true;
-        }
+                Serialize(item.Description);
 
-        return string.Empty;
-    }
-
-    public void Close() {
-        if (Enabled) {
-            writer?.Dispose();
-            stream?.Dispose();
-            isOpen = false;
-        }
-    }
-
-    public void Write(Description description) {
-        if (Enabled && isOpen) {
-            if (writer is not null) {
-                writer.Write(JsonSerializer.Serialize(description, options));
-                writer.Write("\n");
-
-                writer.Flush();
+                ConsoleWrite(level, message);
             }
         }
     }
+
+    private void ConsoleWrite(WarningLevel level, string message) {
+        var color = GetColor(level);
+        var name = GetWarningLevelName(level);
+        var lastColor = Console.ForegroundColor;
+
+        Console.Write("[");
+        Console.Write(DateTime.Now.ToString("HH:mm:ss"));
+        Console.Write("]");
+        Console.ForegroundColor = color;
+        Console.Write($" {name} ");
+        Console.ForegroundColor = lastColor;
+        Console.Write(message);
+        Console.Write(Environment.NewLine);
+    }
+
+    private ConsoleColor GetColor(WarningLevel level) => level switch {
+        WarningLevel.Info => ConsoleColor.White,
+        WarningLevel.Error => ConsoleColor.Red,
+        WarningLevel.Warning => ConsoleColor.Yellow,
+        WarningLevel.Debug => ConsoleColor.Blue,
+        _ => ConsoleColor.White
+    };
+
+    private string GetWarningLevelName(WarningLevel level) => level switch {
+        WarningLevel.Info => "[INFO]",
+        WarningLevel.Error => "[ERROR]",
+        WarningLevel.Warning => "[WARNING]",
+        WarningLevel.Debug => "[DEBUG]",
+        _ => "[UNKNOWN]"
+    };
 }
