@@ -6,8 +6,6 @@ using System.Collections.Concurrent;
 namespace Dragon.Core.Logs;
 
 public class Logger : ILogger {
-    public bool Enabled { get; set; }
-
     readonly JsonSerializerOptions? options;
     readonly ConcurrentQueue<(WarningLevel, Description)> queue;
     readonly Thread thread;
