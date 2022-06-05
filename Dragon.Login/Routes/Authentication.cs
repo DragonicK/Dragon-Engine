@@ -29,6 +29,8 @@ public sealed class Authentication {
     private Account? account;
 
     public async void Process() {
+        var logger = GetLogger();
+
         if (Packet is not null) {
             var token = string.Empty;
             var version = Packet.Version;
@@ -59,9 +61,7 @@ public sealed class Authentication {
             }
         }
         else {
-            if (Configuration!.Debug) {
-                OutputLog.Write("Packet Failed: Authentication Login");
-            }
+            logger?.Error("Authentication", "Packet Failed: Authentication Login");
         }
     }
 
@@ -183,22 +183,10 @@ public sealed class Authentication {
     }
 
     private Task WriteTokenLog(AuthenticationResult result, string username, string uniqueKey) {
+        var logger = GetLogger();
+
         if (uniqueKey.Length > 0) {
-            var logger = GetLogger();
-
-            var description = new Description() {
-                Name = "Authentication Result",
-                WarningCode = WarningCode.Success,
-                Message = $"Authentication Result: {result} ConnectionId: {Connection?.Id} IpAddress: {Connection?.IpAddress}",
-            };
-
-            logger?.Write(description);
-
-            if (Configuration is not null) {
-                if (Configuration.Debug) {
-                    OutputLog.Write($"Authentication Result: {GetString(result)} {username} {uniqueKey}");
-                }
-            }
+            logger?.Warning("Authentication", $"Authentication: {GetString(result)} {username}");
         }
 
         return Task.CompletedTask;
@@ -207,19 +195,7 @@ public sealed class Authentication {
     private Task WriteExceptionLog(string username, string message) {
         var logger = GetLogger();
 
-        var description = new Description() {
-            Name = "Authentication Excpetion",
-            WarningCode = WarningCode.Error,
-            Message = $"An error ocurred by {username} ... {message}",
-        };
-
-        logger?.Write(description);
-
-        if (Configuration is not null) {
-            if (Configuration.Debug) {
-                OutputLog.Write($"Authentication throw an exception ... ");
-            }
-        }
+        logger?.Error("Authentication", $"Authentication: An error ocurred by {username} ... {message}");
 
         return Task.CompletedTask;
     }
@@ -228,12 +204,12 @@ public sealed class Authentication {
         return DatabaseService!.DatabaseFactory!;
     }
 
-    private IOutgoingMessageWriter GetMessageWriter() {
-        return OutgoingMessageService!.OutgoingMessageWriter!;
+    private ILogger? GetLogger() {
+        return LoggerService!.Logger;
     }
 
-    private ILogger GetLogger() {
-        return LoggerService!.ServerLogger!;
+    private IOutgoingMessageWriter GetMessageWriter() {
+        return OutgoingMessageService!.OutgoingMessageWriter!;
     }
 
     public static AlertMessageType GetAlertMessage(AuthenticationResult authentication) => authentication switch {
@@ -252,7 +228,7 @@ public sealed class Authentication {
         AuthenticationResult.Failed => "Failed",
         AuthenticationResult.Success => "Success",
         AuthenticationResult.Maintenance => "Maintenance",
-        AuthenticationResult.VersionOutdated => "VersionOutdated",
+        AuthenticationResult.VersionOutdated => "Version Outdated",
         AuthenticationResult.WrongUserData => "Wrong User Data",
         _ => string.Empty
     };

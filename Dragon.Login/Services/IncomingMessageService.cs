@@ -4,7 +4,6 @@ using Dragon.Network;
 using Dragon.Network.Incoming;
 using Dragon.Network.Messaging;
 
-using Dragon.Core.Serialization;
 using Dragon.Core.Services;
 using Dragon.Login.Network;
 
@@ -19,6 +18,7 @@ public class IncomingMessageService : IService {
     public IPacketRouter? PacketRouter { get; private set; }
     public IServiceContainer? Services { get; private set; }
     public ISerializer? Serializer { get; private set; }
+    public LoggerService? LoggerService { get; private set; }
     public ConnectionService? ConnectionService { get; private set; }
 
     public void Start() {

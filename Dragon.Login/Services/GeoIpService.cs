@@ -1,5 +1,4 @@
-﻿using Dragon.Core.Logs;
-using Dragon.Core.Services;
+﻿using Dragon.Core.Services;
 using Dragon.Core.GeoIpCountry;
 
 namespace Dragon.Login.Services;
@@ -7,6 +6,7 @@ namespace Dragon.Login.Services;
 public class GeoIpService : IService {
     public ServicePriority Priority => ServicePriority.High;
     public IGeoIpAddress? GeoIpAddress { get; private set; }
+    public LoggerService? LoggerService { get; private set; }
     public ConfigurationService? Configuration { get; private set; }
 
     public void Start() {
@@ -18,8 +18,10 @@ public class GeoIpService : IService {
             var reader = new GeoIpAddressReader(GeoIpAddress);
             var success = reader.Read(File);
 
+            var logger = LoggerService?.Logger;
+
             if (!success) {
-                OutputLog.Write("Failed to read GeoIPCountryWhois");
+                logger?.Error("GeoIpService", "Failed to read GeoIPCountryWhois");
             }
         }
     }

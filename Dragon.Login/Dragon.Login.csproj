@@ -23,10 +23,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.DotNet.ILCompiler" Version="7.0.0-preview.6.22301.4" />
-	</ItemGroup>
-
-	<ItemGroup>
 		<ProjectReference Include="..\Dragon.Core\Dragon.Core.csproj" />
 		<ProjectReference Include="..\Dragon.Database\Dragon.Database.csproj" />
 		<ProjectReference Include="..\Dragon.Network\Dragon.Network.csproj" />

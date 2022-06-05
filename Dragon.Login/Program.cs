@@ -1,6 +1,4 @@
-﻿using Dragon.Core.Logs;
-
-namespace Dragon.Login;
+﻿namespace Dragon.Login;
 
 public class Program {
     static Starter? Server { get; set; }
@@ -22,18 +20,18 @@ public class Program {
     }
 
     private static void Start() {
-        OutputLog.Write("Starting Server");
+        ConsoleWrite("Starting Server");
 
         Server = new Starter();
         Server.Start();
 
-        OutputLog.Write("Server Started");
+        ConsoleWrite("Server Started");
     }
 
     private static void Stop() {
         Server?.Stop();
 
-        OutputLog.Write("Server Stoped");
+        ConsoleWrite("Server Stoped");
     }
 
     private static bool IsExit(string? input) {
@@ -48,5 +46,14 @@ public class Program {
         if (input is not null) {
 
         }
+    }
+
+    private static void ConsoleWrite(string message) {
+        Console.Write("[");
+        Console.Write(DateTime.Now.ToString("HH:mm:ss"));
+        Console.Write("]");
+        Console.Write($" [INFO] ");
+        Console.Write(message);
+        Console.Write(Environment.NewLine);
     }
 }
