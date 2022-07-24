@@ -32,7 +32,6 @@ public class ConfigurationService : IService, IConfiguration {
     public int FilterIpLifeTime { get; set; }
     public int IpMaxAttempt { get; set; }
     public int IpMaxAccessCount { get; set; }
-    public int Delay { get; set; }
     public IpAddress LoginServer { get; set; }
     public IpAddress ChatServer { get; set; }
     public IpAddress GameServer { get; set; }
@@ -90,8 +89,6 @@ public class ConfigurationService : IService, IConfiguration {
         IpBlockLifeTime = 600000;
         FilterCheckAccessTime = 3000;
         FilterIpLifeTime = 120000;
-
-        Delay = 45;
     }
 
     public void Start() {

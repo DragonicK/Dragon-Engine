@@ -25,7 +25,6 @@ public interface IConfiguration {
     int FilterIpLifeTime { get; }
     int IpMaxAttempt { get; }
     int IpMaxAccessCount { get; }
-    int Delay { get; }
     IpAddress LoginServer { get; }
     IpAddress ChatServer { get; }
     IpAddress GameServer { get; }

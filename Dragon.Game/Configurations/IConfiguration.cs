@@ -15,7 +15,6 @@ public interface IConfiguration {
     bool ConnectionLogs { get; set; }
     int MaximumConnections { get; set; }
     int TimeOut { get; set; }
-    int Delay { get; set; }
     IpAddress GameServer { get; set; }
     DBConfiguration DatabaseMembership { get; set; }
     DBConfiguration DatabaseServer { get; set; }

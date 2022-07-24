@@ -21,7 +21,6 @@ public class ConfigurationService : IService, IConfiguration {
     public bool ConnectionLogs { get; set; }
     public int MaximumConnections { get; set; }
     public int TimeOut { get; set; }
-    public int Delay { get; set; }
     public IpAddress GameServer { get; set; }
     public DBConfiguration DatabaseMembership { get; set; }
     public DBConfiguration DatabaseServer { get; set; }
@@ -91,8 +90,6 @@ public class ConfigurationService : IService, IConfiguration {
 
         TimeOut = 30;
         MaximumConnections = 1000;
-
-        Delay = 45;
     }
 
     public void Start() {
