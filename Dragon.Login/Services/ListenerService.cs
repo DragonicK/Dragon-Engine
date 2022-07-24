@@ -16,8 +16,6 @@ public class ListenerService : IService {
     public GeoIpService? GeoIpService { get; private set; }
     public bool IsRunning { get; private set; } = false;
 
-    private Thread? t;
-
     public void Start() {
         var repository = ConnectionService!.ConnectionRepository;
         var queue = IncomingMessageService!.IncomingMessageQueue;
@@ -43,17 +41,12 @@ public class ListenerService : IService {
         ServerListener.Start();
 
         IsRunning = true;
-
-        t = new Thread(Receive);
-        t.Start();
     }
 
     public void Stop() {
         IsRunning = false;
 
         ServerListener?.Stop();
-
-        t?.Join(3000);
     }
 
     private void WriteFromConnectionApproval(object? sender, IConnection connection) {
@@ -89,16 +82,5 @@ public class ListenerService : IService {
         };
 
         left.DisconnectConnection();
-    }
-
-    private async void Receive() {
-        var delay = Configuration!.Delay;
-
-        while (IsRunning) {
-            ServerListener!.Accept();
-            ServerListener!.Receive();
-
-            await Task.Delay(delay);
-        }
     }
 }

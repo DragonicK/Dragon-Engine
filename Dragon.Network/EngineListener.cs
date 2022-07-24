@@ -4,12 +4,12 @@ using System.Net.Sockets;
 using Dragon.Core.GeoIpCountry;
 using Dragon.Network.Incoming;
 using Dragon.Network.Outgoing;
-using Dragon.Network.Messaging.SharedPackets;
 
 namespace Dragon.Network;
 
 public class EngineListener : IEngineListener {
     public int Port { get; set; }
+    public int BackLog { get; set; }
     public int MaximumConnections { get; set; }
     public IGeoIpAddress GeoIpAddress { get; init; }
     public IIndexGenerator IndexGenerator { get; init; }
@@ -21,85 +21,61 @@ public class EngineListener : IEngineListener {
     public EventHandler<IConnection> ConnectionDisconnectEvent { get; set; }
 
     private const int IpAddressArraySplit = 4;
-    private const int PingTicket = 5000;
 
-    private TcpListener? listener = null;
-    private bool accepting = false;
-    private long lastTick;
+    private Socket? listener;
+    private bool accepting;
 
     public void Start() {
-        if (listener is null) {
-            listener = new TcpListener(IPAddress.Any, Port);
-        }
+        listener = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
-        listener.Start();
+        listener.Bind(new IPEndPoint(IPAddress.Any, Port));
+        listener.Listen(BackLog);
+        listener.BeginAccept(OnAccept, null);
+
         accepting = true;
     }
 
     public void Stop() {
         accepting = false;
-
-        listener?.Stop();
+        listener?.Close();
     }
 
-    public void Accept() {
-        if (accepting) {
-            if (listener is not null) {
-                if (listener.Pending()) {
-                    var socket = listener.AcceptTcpClient();
-                    var ipAddress = socket.Client.RemoteEndPoint.ToString();
+    private void OnAccept(IAsyncResult ar) {
+        var socket = listener!.EndAccept(ar);
 
-                    ipAddress = ipAddress!.Remove(ipAddress.IndexOf(':'));
+        if (socket is not null) {
+            var ipAddress = socket.RemoteEndPoint!.ToString();
 
-                    if (CanAccept(ipAddress)) {
-                        var index = IndexGenerator.GetNextIndex();
-                        var connection = ConnectionRepository.AddClientFromId(index);
+            ipAddress = ipAddress!.Remove(ipAddress.IndexOf(':'));
 
-                        if (connection is null) {
-                            ConnectionRepository.RemoveFromId(index);
-                            connection = ConnectionRepository.AddClientFromId(index);
-                        }
+            if (CanAccept(ipAddress)) {
+                var index = IndexGenerator.GetNextIndex();
+                var connection = ConnectionRepository.AddClientFromId(index);
 
-                        connection.Socket = socket;
-                        connection.IpAddress = ipAddress;
-                        connection.IncomingMessageQueue = IncomingMessageQueue;
-                        connection.OnDisconnect += OnConnectionDisconnected;
-
-                        RaiseConnectionApproval(connection);
-                    }
-                    else {
-                        socket.Close();
-                    }
+                if (connection is null) {
+                    ConnectionRepository.RemoveFromId(index);
+                    connection = ConnectionRepository.AddClientFromId(index);
                 }
+
+                socket.Blocking = false;
+                socket.NoDelay = true;
+
+                connection.Socket = socket;
+                connection.IpAddress = ipAddress;
+                connection.IncomingMessageQueue = IncomingMessageQueue;
+                connection.OnDisconnect += OnConnectionDisconnected;
+
+                connection.StartBeginReceive();
+
+                RaiseConnectionApproval(connection);
+            }
+            else {
+                socket.Close();
             }
         }
-    }
 
-    public void Receive() {
-        if (ConnectionRepository is not null) {
-            foreach (var (_, connection) in ConnectionRepository) {
-                if (connection is not null) {
-                    connection.Receive();
-                }
-            }
-
-            #region Check Ping For Disconnection 
-
-            if (OutgoingMessageWriter is not null) {
-                var tick = Environment.TickCount64;
-
-                if (tick >= lastTick) {
-                    lastTick = tick + PingTicket;
-
-                    var packet = OutgoingMessageWriter.CreateMessage(new PacketPing());
-
-                    packet.TransmissionTarget = TransmissionTarget.Broadcast;
-
-                    OutgoingMessageWriter.Enqueue(packet);
-                }
-            }
-
-            #endregion
+        if (accepting) {
+            listener.BeginAccept(OnAccept, null);
         }
     }
 

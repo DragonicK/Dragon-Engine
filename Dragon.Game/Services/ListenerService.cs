@@ -19,8 +19,6 @@ public class ListenerService : IService {
     public DatabaseService? DatabaseService { get; private set; }
     public bool IsRunning { get; private set; } = false;
 
-    private Thread? t;
-
     public void Start() {
         var repository = ConnectionService!.ConnectionRepository;
         var queue = IncomingMessageService!.IncomingMessageQueue;
@@ -46,17 +44,12 @@ public class ListenerService : IService {
         ServerListener.Start();
 
         IsRunning = true;
-
-        t = new Thread(Receive);
-        t.Start();
     }
 
     public void Stop() {
         IsRunning = false;
 
         ServerListener?.Stop();
-
-        t.Join(3000);
     }
 
     private void WriteFromConnectionApproval(object? sender, IConnection connection) {
@@ -97,18 +90,5 @@ public class ListenerService : IService {
         };
 
         left.DisconnectConnection();
-    }
-
-    private void Receive() {
-        var delay = Configuration!.Delay;
-
-        while (IsRunning) {
-            ServerListener?.Accept();
-            ServerListener?.Receive();
-
-            if (delay > 0) {
-                Thread.Sleep(delay);
-            }
-        }
     }
 }

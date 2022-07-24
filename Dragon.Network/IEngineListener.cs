@@ -6,6 +6,7 @@ namespace Dragon.Network;
 
 public interface IEngineListener {
     int Port { get; set; }
+    int BackLog { get; set; }
     int MaximumConnections { get; set; }
     IGeoIpAddress GeoIpAddress { get; init; }
     IIndexGenerator IndexGenerator { get; init; }
@@ -17,6 +18,4 @@ public interface IEngineListener {
     EventHandler<IConnection>? ConnectionDisconnectEvent { get; set; }
     void Start();
     void Stop();
-    void Accept();
-    void Receive();
 }

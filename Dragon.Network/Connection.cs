@@ -7,16 +7,7 @@ public class Connection : IConnection {
     public int Id { get; set; }
     public bool Authenticated { get; set; }
     public string IpAddress { get; set; }
-    public TcpClient Socket {
-        get {
-            return socket;
-        }
-
-        set {
-            socket = value;
-            socket.NoDelay = true;
-        }
-    }
+    public Socket? Socket { get; set; }
     public bool Connected => connected;
     public IIncomingMessageQueue? IncomingMessageQueue { get; set; }
     public EventHandler<IConnection>? OnDisconnect { get; set; }
@@ -33,7 +24,6 @@ public class Connection : IConnection {
 
     private const int BufferSize = 1024;
 
-    private TcpClient? socket;
     private readonly ByteBuffer msg;
     private readonly byte[] buffer;
     private bool connected = false;
@@ -55,86 +45,62 @@ public class Connection : IConnection {
         OnDisconnect?.Invoke(null, this);
     }
 
-    public void Receive() {
-        if (socket!.Client is null) {
-            return;
-        }
+    public void Send(byte[] buffer) {
+        Socket?.BeginSend(buffer, 0, buffer.Length, SocketFlags.None, OnSend, null);
+    }
 
-        var size = socket.Available;
+    public void StartBeginReceive() {
+        Socket?.BeginReceive(buffer, 0, BufferSize, SocketFlags.None, OnReceive, null);
+    }
 
-        if (size == 0) {
-            return;
-        }
+    private void OnReceive(IAsyncResult ar) {
+        var length = Socket!.EndReceive(ar);
 
-        if (size > BufferSize) {
-            size = BufferSize;
-        }
-
-        if (socket.Client.Poll(ReceiveTimeOut, SelectMode.SelectRead)) {
-            try {
-                socket.Client.Receive(buffer, size, SocketFlags.None);
-            }
-            catch {
-                Disconnect();
-                return;
-            }
+        if (length == 0) {
+            Disconnect();
         }
         else {
-            Disconnect();
-            return;
-        }
+            var pLength = 0;
 
-        var pLength = 0;
+            msg.Write(buffer, length);
 
-        msg.Write(buffer, size);
-
-        Array.Clear(buffer, 0, size);
-
-        if (msg.Length() >= 4) {
-            pLength = msg.ReadInt32(false);
-
-            if (pLength <= 0) {
-                return;
-            }
-        }
-
-        while (pLength > 0 && pLength <= msg.Length() - 4) {
-            if (pLength <= msg.Length() - 4) {
-                // Remove the first packet (Size of Packet).
-                msg.ReadInt32();
-
-                IncomingMessageQueue?.Enqueue(Id, msg.ReadBytes(pLength));
-            }
-
-            pLength = 0;
+            Array.Clear(buffer, 0, length);
 
             if (msg.Length() >= 4) {
                 pLength = msg.ReadInt32(false);
 
-                if (pLength < 0) {
+                if (pLength <= 0) {
                     return;
                 }
             }
-        }
 
-        msg.Trim();
+            while (pLength > 0 && pLength <= msg.Length() - 4) {
+                if (pLength <= msg.Length() - 4) {
+                    // Remove the first packet (Size of Packet).
+                    msg.ReadInt32();
+
+                    IncomingMessageQueue?.Enqueue(Id, msg.ReadBytes(pLength));
+                }
+
+                pLength = 0;
+
+                if (msg.Length() >= 4) {
+                    pLength = msg.ReadInt32(false);
+
+                    if (pLength < 0) {
+                        return;
+                    }
+                }
+            }
+
+            msg.Trim();
+
+            Socket.BeginReceive(buffer, 0, BufferSize, SocketFlags.None, OnReceive, null);
+        }
     }
 
-    public void Send(byte[] buffer) {
-        if (socket!.Client is null) {
-            return;
-        }
-
-        if (socket.Client.Poll(SendTimeOut, SelectMode.SelectWrite)) {
-            try {
-                socket.Client.Send(buffer, SocketFlags.None);
-            }
-            catch {
-                Disconnect();
-            }
-        }
-        else {
-            Disconnect();
-        }
+    private void OnSend(IAsyncResult ar) {
+        Socket?.EndSend(ar);
     }
+     
 }
