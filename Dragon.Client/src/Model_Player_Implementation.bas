@@ -56,39 +56,12 @@ Public Sub ProcessMovement(ByVal Index As Long)
 
         If Player(Index).xOffset > 0 Then Player(Index).xOffset = 0
 
-    Case DIR_UP_LEFT
-        Player(Index).yOffset = Player(Index).yOffset - MovementSpeed
-        If Player(Index).yOffset < 0 Then Player(Index).yOffset = 0
-
-        Player(Index).xOffset = Player(Index).xOffset - MovementSpeed
-        If Player(Index).xOffset < 0 Then Player(Index).xOffset = 0
-
-    Case DIR_UP_RIGHT
-        Player(Index).yOffset = Player(Index).yOffset - MovementSpeed
-        If Player(Index).yOffset < 0 Then Player(Index).yOffset = 0
-
-        Player(Index).xOffset = Player(Index).xOffset + MovementSpeed
-        If Player(Index).xOffset > 0 Then Player(Index).xOffset = 0
-
-    Case DIR_DOWN_LEFT
-        Player(Index).yOffset = Player(Index).yOffset + MovementSpeed
-        If Player(Index).yOffset > 0 Then Player(Index).yOffset = 0
-
-        Player(Index).xOffset = Player(Index).xOffset - MovementSpeed
-        If Player(Index).xOffset < 0 Then Player(Index).xOffset = 0
-
-    Case DIR_DOWN_RIGHT
-        Player(Index).yOffset = Player(Index).yOffset + MovementSpeed
-        If Player(Index).yOffset > 0 Then Player(Index).yOffset = 0
-
-        Player(Index).xOffset = Player(Index).xOffset + MovementSpeed
-        If Player(Index).xOffset > 0 Then Player(Index).xOffset = 0
 
     End Select
 
     ' Check if completed walking over to the next tile
     If Player(Index).Moving > 0 Then
-        If GetPlayerDir(Index) = DIR_RIGHT Or GetPlayerDir(Index) = DIR_DOWN Or GetPlayerDir(Index) = DIR_DOWN_LEFT Or GetPlayerDir(Index) = DIR_DOWN_RIGHT Then
+        If GetPlayerDir(Index) = DIR_RIGHT Or GetPlayerDir(Index) = DIR_DOWN Then
             If (Player(Index).xOffset >= 0) And (Player(Index).yOffset >= 0) Then
                 Player(Index).Moving = 0
 
@@ -331,32 +304,7 @@ Private Sub ProcessPlayerMoving(ByVal Index As Long)
         Else
             Anim = 2
         End If
-    Case DIR_UP_LEFT
-        If (Player(Index).yOffset > 16) And (Player(Index).xOffset > 16) Then
-            Anim = 1
-        Else
-            Anim = 2
-        End If
-    Case DIR_UP_RIGHT
-        If (Player(Index).yOffset > 16) And (Player(Index).xOffset < -16) Then
-            Anim = 1
-        Else
-            Anim = 2
-        End If
 
-    Case DIR_DOWN_LEFT
-        If (Player(Index).yOffset < -16) And (Player(Index).xOffset > 16) Then
-            Anim = 1
-        Else
-            Anim = 2
-        End If
-
-    Case DIR_DOWN_RIGHT
-        If (Player(Index).yOffset < -16) And (Player(Index).xOffset < -16) Then
-            Anim = 1
-        Else
-            Anim = 2
-        End If
     End Select
 
     ' Calculate the X
@@ -405,7 +353,7 @@ Private Function CheckForResetAnim(ByVal Dir As Byte, ByRef FrameIndex As Long, 
     CheckForResetAnim = False
 
     Select Case Dir
-    Case DIR_UP, DIR_UP_LEFT, DIR_UP_RIGHT
+    Case DIR_UP
         If FrameIndex > Movement.Up.Count Then
             FrameIndex = 0
             CheckForResetAnim = True
@@ -417,7 +365,7 @@ Private Function CheckForResetAnim(ByVal Dir As Byte, ByRef FrameIndex As Long, 
             CheckForResetAnim = True
         End If
 
-    Case DIR_DOWN, DIR_DOWN_LEFT, DIR_DOWN_RIGHT
+    Case DIR_DOWN
         If FrameIndex > Movement.Down.Count Then
             FrameIndex = 0
             CheckForResetAnim = True

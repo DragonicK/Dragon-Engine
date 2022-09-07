@@ -55,9 +55,9 @@ public class Buff : ISkill {
 
         switch (targetType) {
             case SkillTargetType.Caster:
-                if (CouldApplyEffect((IEntity)Player!)) {
+                if (CouldApplyEffect(Player!)) {
                     list.Add(new Target() {
-                        Entity = (IEntity)Player!
+                        Entity = Player!
                     });
                 }
 
@@ -68,7 +68,7 @@ public class Buff : ISkill {
                 }
                 else {
                     list.Add(new Target() {
-                        Entity = (IEntity)Player!,
+                        Entity = Player!,
                         Type = TargetType.Player
                     });
                 }
@@ -84,7 +84,7 @@ public class Buff : ISkill {
                 break;
             case SkillTargetType.Group:
                 list.Add(new Target() {
-                    Entity = (IEntity)Player!,
+                    Entity = Player!,
                     Type = TargetType.Player
                 });
 
@@ -140,14 +140,14 @@ public class Buff : ISkill {
             foreach (var player in players) {
                 if (player is not null) {
                     if (player != primary.Entity) {
-                        if (CouldApplyEffect((IEntity)player)) {
+                        if (CouldApplyEffect(player)) {
 
                             x2 = player.Character.X;
                             y2 = player.Character.Y;
 
                             if (IsInRange(range, x1, y1, x2, y2)) {
                                 list.Add(new Target() {
-                                    Entity = (IEntity)player,
+                                    Entity = player,
                                     Type = TargetType.Player
                                 });
                             }
@@ -210,7 +210,7 @@ public class Buff : ISkill {
 
                     if (IsInRange(range, x1, y1, x2, y2)) {
                         list.Add(new Target() {
-                            Entity = (IEntity)member.Player,
+                            Entity = member.Player,
                             Type = TargetType.Player
                         });
                     }

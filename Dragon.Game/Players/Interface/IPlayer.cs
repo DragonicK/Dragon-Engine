@@ -8,7 +8,7 @@ using Dragon.Core.Model.Characters;
 
 namespace Dragon.Game.Players;
 
-public interface IPlayer {
+public interface IPlayer : IEntity {
     Account Account { get; set; }
     long AccountId { get; set; }
     string Username { get; set; }

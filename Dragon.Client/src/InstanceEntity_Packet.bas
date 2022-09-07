@@ -167,22 +167,7 @@ Public Sub HandleInstanceEntityMove(ByVal Index As Long, ByRef Data() As Byte, B
 
         Case DIR_RIGHT
             .xOffset = PIC_X * -1
-
-        Case DIR_UP_LEFT
-            .yOffset = PIC_Y
-            .xOffset = PIC_X
-
-        Case DIR_UP_RIGHT
-            .yOffset = PIC_Y
-            .xOffset = PIC_X * -1
-
-        Case DIR_DOWN_LEFT
-            .yOffset = PIC_Y * -1
-            .xOffset = PIC_X
-
-        Case DIR_DOWN_RIGHT
-            .yOffset = PIC_Y * -1
-            .xOffset = PIC_X * -1
+            
         End Select
 
     End With

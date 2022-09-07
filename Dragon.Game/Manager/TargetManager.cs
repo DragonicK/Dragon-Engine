@@ -49,7 +49,7 @@ public class TargetManager {
 
         if (instance is not null) {
             if (targetType == TargetType.Player) {
-                return instance.Get(index) as IEntity;
+                return instance.Get(index);
             }
             else if (targetType == TargetType.Npc) {
                 index--;

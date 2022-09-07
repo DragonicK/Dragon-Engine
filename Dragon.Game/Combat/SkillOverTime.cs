@@ -1,6 +1,5 @@
 ﻿namespace Dragon.Game.Combat;
 
-
 public struct SkillOverTime {
     public int Id { get; set; }
     public int Value { get; set; }

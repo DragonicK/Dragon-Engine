@@ -27,7 +27,7 @@ End Function
 Public Sub RenderMovementLower(ByVal Dir As Byte, ByVal Anim As Long, ByVal X As Long, ByVal Y As Long, ByRef Directions As DirectionRec, Optional ByVal Color As Long = -1)
 
     Select Case Dir
-    Case DIR_UP, DIR_UP_LEFT, DIR_UP_RIGHT
+    Case DIR_UP
         Call RenderParallaxTexture(Directions.Up.Frames(Anim).Texture, _
                                    ConvertMapX(X), _
                                    ConvertMapY(Y) + MODEL_HALF_HEIGHT, _
@@ -51,8 +51,8 @@ Public Sub RenderMovementLower(ByVal Dir As Byte, ByVal Anim As Long, ByVal X As
                                    MODEL_HALF_HEIGHT, _
                                    Color)
 
-    Case DIR_DOWN, DIR_DOWN_LEFT, DIR_DOWN_RIGHT
-        Call RenderParallaxTexture(Directions.Down.Frames(Anim).Texture, _
+    Case DIR_DOWN
+    Call RenderParallaxTexture(Directions.Down.Frames(Anim).Texture, _
                                    ConvertMapX(X), _
                                    ConvertMapY(Y) + MODEL_HALF_HEIGHT, _
                                    0, _
@@ -81,7 +81,7 @@ End Sub
 Public Sub RenderMovementUpper(ByVal Dir As Byte, ByVal Anim As Long, ByVal X As Long, ByVal Y As Long, ByRef Directions As DirectionRec, Optional ByVal Color As Long = -1)
 
     Select Case Dir
-    Case DIR_UP, DIR_UP_LEFT, DIR_UP_RIGHT
+    Case DIR_UP
         Call RenderParallaxTexture(Directions.Up.Frames(Anim).Texture, _
                                    ConvertMapX(X), _
                                    ConvertMapY(Y), _
@@ -105,7 +105,7 @@ Public Sub RenderMovementUpper(ByVal Dir As Byte, ByVal Anim As Long, ByVal X As
                                    MODEL_HALF_HEIGHT, _
                                    Color)
 
-    Case DIR_DOWN, DIR_DOWN_LEFT, DIR_DOWN_RIGHT
+    Case DIR_DOWN
         Call RenderParallaxTexture(Directions.Down.Frames(Anim).Texture, _
                                    ConvertMapX(X), _
                                    ConvertMapY(Y), _

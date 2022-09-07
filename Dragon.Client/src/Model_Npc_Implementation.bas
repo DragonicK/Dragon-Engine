@@ -246,34 +246,6 @@ Private Sub ProcessNpcMoving(ByVal MapNpcNum As Long)
             Anim = 2
         End If
 
-    Case DIR_UP_LEFT
-        If (MapNpc(MapNpcNum).yOffset > 16) And (MapNpc(MapNpcNum).xOffset > 16) Then
-            Anim = 1
-        Else
-            Anim = 2
-        End If
-
-    Case DIR_UP_RIGHT
-        If (MapNpc(MapNpcNum).yOffset > 16) And (MapNpc(MapNpcNum).xOffset < -16) Then
-            Anim = 1
-        Else
-            Anim = 2
-        End If
-
-    Case DIR_DOWN_LEFT
-        If (MapNpc(MapNpcNum).yOffset < -16) And (MapNpc(MapNpcNum).xOffset > 16) Then
-            Anim = 1
-        Else
-            Anim = 2
-        End If
-
-    Case DIR_DOWN_RIGHT
-        If (MapNpc(MapNpcNum).yOffset < -16) And (MapNpc(MapNpcNum).xOffset < -16) Then
-            Anim = 1
-        Else
-            Anim = 2
-        End If
-
     End Select
 
     ' Calculate the X
@@ -321,39 +293,12 @@ Public Sub ProcessNpcMovement(ByVal MapNpcNum As Long)
 
         If MapNpc(MapNpcNum).xOffset > 0 Then MapNpc(MapNpcNum).xOffset = 0
 
-    Case DIR_UP_LEFT
-        MapNpc(MapNpcNum).yOffset = MapNpc(MapNpcNum).yOffset - MovementSpeed
-        If MapNpc(MapNpcNum).yOffset < 0 Then MapNpc(MapNpcNum).yOffset = 0
-
-        MapNpc(MapNpcNum).xOffset = MapNpc(MapNpcNum).xOffset - MovementSpeed
-        If MapNpc(MapNpcNum).xOffset < 0 Then MapNpc(MapNpcNum).xOffset = 0
-
-    Case DIR_UP_RIGHT
-        MapNpc(MapNpcNum).yOffset = MapNpc(MapNpcNum).yOffset - MovementSpeed
-        If MapNpc(MapNpcNum).yOffset < 0 Then MapNpc(MapNpcNum).yOffset = 0
-
-        MapNpc(MapNpcNum).xOffset = MapNpc(MapNpcNum).xOffset + MovementSpeed
-        If MapNpc(MapNpcNum).xOffset > 0 Then MapNpc(MapNpcNum).xOffset = 0
-
-    Case DIR_DOWN_LEFT
-        MapNpc(MapNpcNum).yOffset = MapNpc(MapNpcNum).yOffset + MovementSpeed
-        If MapNpc(MapNpcNum).yOffset > 0 Then MapNpc(MapNpcNum).yOffset = 0
-
-        MapNpc(MapNpcNum).xOffset = MapNpc(MapNpcNum).xOffset - MovementSpeed
-        If MapNpc(MapNpcNum).xOffset < 0 Then MapNpc(MapNpcNum).xOffset = 0
-
-    Case DIR_DOWN_RIGHT
-        MapNpc(MapNpcNum).yOffset = MapNpc(MapNpcNum).yOffset + MovementSpeed
-        If MapNpc(MapNpcNum).yOffset > 0 Then MapNpc(MapNpcNum).yOffset = 0
-
-        MapNpc(MapNpcNum).xOffset = MapNpc(MapNpcNum).xOffset + MovementSpeed
-        If MapNpc(MapNpcNum).xOffset > 0 Then MapNpc(MapNpcNum).xOffset = 0
 
     End Select
 
     ' Check if completed walking over to the next tile
     If MapNpc(MapNpcNum).Moving > 0 Then
-        If MapNpc(MapNpcNum).Dir = DIR_RIGHT Or MapNpc(MapNpcNum).Dir = DIR_DOWN Or MapNpc(MapNpcNum).Dir = DIR_DOWN_LEFT Or MapNpc(MapNpcNum).Dir = DIR_DOWN_RIGHT Then
+        If MapNpc(MapNpcNum).Dir = DIR_RIGHT Or MapNpc(MapNpcNum).Dir = DIR_DOWN Then
             If (MapNpc(MapNpcNum).xOffset >= 0) And (MapNpc(MapNpcNum).yOffset >= 0) Then
                 MapNpc(MapNpcNum).Moving = 0
 

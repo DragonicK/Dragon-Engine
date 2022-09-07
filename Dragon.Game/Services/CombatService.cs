@@ -14,7 +14,7 @@ public class CombatService : IService, IUpdatableService {
     public ConnectionService? ConnectionService { get; private set; }
 
     private IMathDodge? dodge;
-    private IMathCritical? critical;
+    private IMathMagic? critical;
     private IMathMagical? magical;
     //private IParry? parry;
     //private IBlock? block;

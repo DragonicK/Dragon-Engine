@@ -134,11 +134,6 @@ Public SDown As Boolean
 Public ADown As Boolean
 Public DDown As Boolean
 
-Public DirUpLeft As Boolean
-Public DirUpRight As Boolean
-Public DirDownLeft As Boolean
-Public DirDownRight As Boolean
-
 ' Used to freeze controls when getting a new map
 Public GettingMap As Boolean
 

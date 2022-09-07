@@ -125,10 +125,6 @@ Public Const DIR_UP As Byte = 0
 Public Const DIR_DOWN As Byte = 1
 Public Const DIR_LEFT As Byte = 2
 Public Const DIR_RIGHT As Byte = 3
-Public Const DIR_UP_LEFT As Byte = 4
-Public Const DIR_UP_RIGHT As Byte = 5
-Public Const DIR_DOWN_LEFT As Byte = 6
-Public Const DIR_DOWN_RIGHT As Byte = 7
 
 ' Constants for player movement: Tiles per Second
 Public Const MOVING_WALKING As Byte = 1

@@ -3,7 +3,7 @@ using Dragon.Core.Model.Entity;
 
 namespace Dragon.Game.Combat.Formulas;
 
-public class MathCritical : IMathCritical {
+public class MathCritical : IMathMagic {
     private readonly Random r;
 
     public MathCritical() {

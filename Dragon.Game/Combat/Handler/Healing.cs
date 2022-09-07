@@ -68,7 +68,7 @@ public class Healing : ISkill {
         switch (targetType) {
             case SkillTargetType.Caster:
                 list.Add(new Target() {
-                    Entity = (IEntity)Player!,
+                    Entity = Player!,
                     Type = TargetType.Player
                 });
 
@@ -79,7 +79,7 @@ public class Healing : ISkill {
                 }
                 else {
                     list.Add(new Target() {
-                        Entity = (IEntity)Player!,
+                        Entity = Player!,
                         Type = TargetType.Player
                     });
                 }
@@ -91,7 +91,7 @@ public class Healing : ISkill {
                 }
                 else {
                     list.Add(new Target() {
-                        Entity = (IEntity)Player!,
+                        Entity = Player!,
                         Type = TargetType.Player
                     });
                 }
@@ -101,7 +101,7 @@ public class Healing : ISkill {
                 break;
             case SkillTargetType.Group:
                 list.Add(new Target() {
-                    Entity = (IEntity)Player!,
+                    Entity = Player!,
                     Type = TargetType.Player
                 });
 
@@ -140,7 +140,7 @@ public class Healing : ISkill {
 
                         if (IsInRange(range, x1, y1, x2, y2)) {
                             list.Add(new Target() {
-                                Entity = (IEntity)player,
+                                Entity = player,
                                 Type = TargetType.Player
                             });
                         }
@@ -187,7 +187,7 @@ public class Healing : ISkill {
 
                             if (IsInRange(range, x1, y1, x2, y2)) {
                                 list.Add(new Target() {
-                                    Entity = (IEntity)member.Player,
+                                    Entity = member.Player,
                                     Type = TargetType.Player
                                 });
                             }

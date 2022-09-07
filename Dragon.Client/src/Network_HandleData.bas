@@ -336,11 +336,6 @@ Private Sub HandlePlayerData(ByVal Index As Long, ByRef Data() As Byte, ByVal St
         SDown = False
         DDown = False
 
-        DirUpLeft = False
-        DirUpRight = False
-        DirDownLeft = False
-        DirDownRight = False
-
         With Windows(GetWindowIndex("winCharacter"))
             .Controls(GetControlIndex("winCharacter", "lblName")).Text = UCase$(GetPlayerName(MyIndex)) & " LV. " & GetPlayerLevel(MyIndex)
             .Controls(GetControlIndex("winCharacter", "lblClass")).Text = UCase$(Class(GetPlayerClass(MyIndex)).Name)
@@ -396,22 +391,6 @@ Private Sub HandlePlayerMovement(ByVal Index As Long, ByRef Data() As Byte, ByVa
     Case DIR_RIGHT
         Player(Index).xOffset = PIC_X * -1
         
-    Case DIR_UP_LEFT
-        Player(Index).yOffset = PIC_Y
-        Player(Index).xOffset = PIC_X
-
-    Case DIR_UP_RIGHT
-        Player(Index).yOffset = PIC_Y
-        Player(Index).xOffset = PIC_X * -1
-
-    Case DIR_DOWN_LEFT
-        Player(Index).yOffset = PIC_Y * -1
-        Player(Index).xOffset = PIC_X
-
-    Case DIR_DOWN_RIGHT
-        Player(Index).yOffset = PIC_Y * -1
-        Player(Index).xOffset = PIC_X * -1
-
     End Select
 End Sub
 

@@ -2,6 +2,6 @@
 
 namespace Dragon.Game.Combat.Formulas;
 
-public interface IMathCritical {
+public interface IMathMagic {
     bool CanCriticalAttack(IEntity attacker, IEntity receiver);
 }

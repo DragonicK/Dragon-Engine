@@ -27,9 +27,9 @@ Public Sub CreateWindow_Character()
     CreateButton WindowCount, "btnClose", Windows(WindowCount).Window.Width - 33, 11, 22, 22, , , , , , , Tex_GUI(TextureControl_CloseNormal), Tex_GUI(TextureControl_CloseHover), Tex_GUI(TextureControl_CloseClick), , , , , , GetAddress(AddressOf ButtonMenu_Char)
 
     CreateButton WindowCount, "btnCharacter", 25, 42, 100, 26, "PERSONAGEM", OpenSans_Effect, Green, , , , , , , , , , , , GetAddress(AddressOf ShowCharacter_Click)
-    CreateButton WindowCount, "btnAttributes", 135, 42, 100, 26, "ATTRIBUTOS", OpenSans_Effect, , , , , , , , , , , , , GetAddress(AddressOf ShowAttributes_Click)
+    CreateButton WindowCount, "btnAttributes", 135, 42, 100, 26, "ATRIBUTOS", OpenSans_Effect, , , , , , , , , , , , , GetAddress(AddressOf ShowAttributes_Click)
 
-    CreateButton WindowCount, "btnDefaultAttribute", 0, 72, 80, 26, "PADRÃO", OpenSans_Effect, Green, , False, , , , , , , , , , GetAddress(AddressOf ButtonDefaultPage_Click)
+    CreateButton WindowCount, "btnDefaultAttribute", 0, 72, 80, 26, "BÁSICO", OpenSans_Effect, Green, , False, , , , , , , , , , GetAddress(AddressOf ButtonDefaultPage_Click)
     CreateButton WindowCount, "btnSpecialAttribute", 85, 72, 80, 26, "ESPECIAL", OpenSans_Effect, White, , False, , , , , , , , , , GetAddress(AddressOf ButtonSpecialPage_Click)
     CreateButton WindowCount, "btnElementalAttribute", 170, 72, 80, 26, "ELEMENTAL", OpenSans_Effect, White, , False, , , , , , , , , , GetAddress(AddressOf ButtonElementalPage_Click)
 

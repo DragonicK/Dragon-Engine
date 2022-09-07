@@ -331,7 +331,7 @@ End Sub
 Function IsTryingToMove() As Boolean
 
 'If DirUp Or DirDown Or DirLeft Or DirRight Then
-    If WDown Or SDown Or ADown Or DDown Or DirUpLeft Or DirUpRight Or DirDownLeft Or DirDownRight Then
+    If WDown Or SDown Or ADown Or DDown Then
         IsTryingToMove = True
     End If
 
@@ -393,117 +393,6 @@ Function CanMove() As Boolean
 
     D = GetPlayerDir(MyIndex)
 
-    If DirUpLeft Then
-        Call SetPlayerDirection(MyIndex, DIR_UP_LEFT)
-
-        ' Check to see if they are trying to go out of bounds
-        If GetPlayerY(MyIndex) > 0 And GetPlayerX(MyIndex) > 0 Then
-            If CheckDirection(DIR_UP_LEFT) Then
-                CanMove = False
-                ' Set the new direction if they weren't facing that direction
-                If D <> DIR_UP_LEFT Then
-                    Call SendPlayerDirection
-                End If
-
-                Exit Function
-            End If
-        Else
-            ' Check if they can warp to a new map
-            If CurrentMap.MapData.Left > 0 Then
-                Call SendPlayerRequestNewMap
-                ' GettingMap = True
-                CanMoveNow = False
-            End If
-
-            CanMove = False
-            Exit Function
-        End If
-    End If
-
-
-    If DirUpRight Then
-        Call SetPlayerDirection(MyIndex, DIR_UP_RIGHT)
-
-        ' Check to see if they are trying to go out of bounds
-        If GetPlayerY(MyIndex) > 0 And GetPlayerX(MyIndex) < CurrentMap.MapData.MaxX Then
-            If CheckDirection(DIR_UP_RIGHT) Then
-                CanMove = False
-
-                ' Set the new direction if they weren't facing that direction
-                If D <> DIR_UP_RIGHT Then
-                    Call SendPlayerDirection
-                End If
-
-                Exit Function
-            End If
-        Else
-            ' Check if they can warp to a new map
-            If CurrentMap.MapData.Right > 0 Then
-                Call SendPlayerRequestNewMap
-                ' GettingMap = True
-                CanMoveNow = False
-            End If
-
-            CanMove = False
-            Exit Function
-        End If
-    End If
-
-
-    If DirDownLeft Then
-        Call SetPlayerDirection(MyIndex, DIR_DOWN_LEFT)
-        ' Check to see if they are trying to go out of bounds
-
-        If GetPlayerY(MyIndex) < CurrentMap.MapData.MaxY And GetPlayerX(MyIndex) > 0 Then
-            If CheckDirection(DIR_DOWN_LEFT) Then
-                CanMove = False
-                ' Set the new direction if they weren't facing that direction
-
-                If D <> DIR_DOWN_LEFT Then
-                    Call SendPlayerDirection
-                End If
-                Exit Function
-
-            End If
-        Else
-            ' Check if they can warp to a new map
-            If CurrentMap.MapData.Left > 0 Then
-                Call SendPlayerRequestNewMap
-                ' GettingMap = True
-                CanMoveNow = False
-            End If
-
-            CanMove = False
-            Exit Function
-        End If
-    End If
-
-
-    If DirDownRight Then
-        Call SetPlayerDirection(MyIndex, DIR_DOWN_RIGHT)
-        ' Check to see if they are trying to go out of bounds
-
-        If GetPlayerY(MyIndex) < CurrentMap.MapData.MaxY And GetPlayerX(MyIndex) < CurrentMap.MapData.MaxX Then
-            If CheckDirection(DIR_DOWN_RIGHT) Then
-                CanMove = False
-                ' Set the new direction if they weren't facing that direction
-                If D <> DIR_DOWN_RIGHT Then
-                    Call SendPlayerDirection
-                End If
-                Exit Function
-            End If
-        Else
-            ' Check if they can warp to a new map
-            If CurrentMap.MapData.Right > 0 Then
-                Call SendPlayerRequestNewMap
-                ' GettingMap = True
-                CanMoveNow = False
-            End If
-
-            CanMove = False
-            Exit Function
-        End If
-    End If
 
     If WDown Then
         Call SetPlayerDirection(MyIndex, DIR_UP)
@@ -650,53 +539,12 @@ Function CheckDirection(ByVal Direction As Byte) As Boolean
         X = GetPlayerX(MyIndex) + 1
         Y = GetPlayerY(MyIndex)
 
-    Case DIR_UP_LEFT
-        X = GetPlayerX(MyIndex) - 1
-        Y = GetPlayerY(MyIndex) - 1
-
-    Case DIR_UP_RIGHT
-        X = GetPlayerX(MyIndex) + 1
-        Y = GetPlayerY(MyIndex) - 1
-
-    Case DIR_DOWN_LEFT
-        X = GetPlayerX(MyIndex) - 1
-        Y = GetPlayerY(MyIndex) + 1
-
-    Case DIR_DOWN_RIGHT
-        X = GetPlayerX(MyIndex) + 1
-        Y = GetPlayerY(MyIndex) + 1
-
     End Select
 
-    If Direction >= DIR_UP_LEFT Then
-        ' check directional blocking
-        If Direction = DIR_UP_LEFT Then
-            If isDirBlocked(CurrentMap.TileData.Tile(X, Y).DirBlock, DIR_UP) Then    'And isDirBlocked(CurrentMap.TileData.Tile(X, Y).DirBlock, DIR_LEFT) Then
-                CheckDirection = True
-                Exit Function
-            End If
-        ElseIf Direction = DIR_UP_RIGHT Then
-            If isDirBlocked(CurrentMap.TileData.Tile(X, Y).DirBlock, DIR_UP) Then    'And isDirBlocked(CurrentMap.TileData.Tile(X, Y).DirBlock, DIR_RIGHT) Then
-                CheckDirection = True
-                Exit Function
-            End If
-        ElseIf Direction = DIR_DOWN_LEFT Then
-            If isDirBlocked(CurrentMap.TileData.Tile(X, Y).DirBlock, DIR_DOWN) Then    'And isDirBlocked(CurrentMap.TileData.Tile(X, Y).DirBlock, DIR_LEFT) Then
-                CheckDirection = True
-                Exit Function
-            End If
-        ElseIf Direction = DIR_DOWN_RIGHT Then
-            If isDirBlocked(CurrentMap.TileData.Tile(X, Y).DirBlock, DIR_DOWN) Then    'And isDirBlocked(CurrentMap.TileData.Tile(X, Y).DirBlock, DIR_RIGHT) Then
-                CheckDirection = True
-                Exit Function
-            End If
-        End If
-    Else
-        ' check directional blocking
-        If isDirBlocked(CurrentMap.TileData.Tile(GetPlayerX(MyIndex), GetPlayerY(MyIndex)).DirBlock, Direction) Then
-            CheckDirection = True
-            Exit Function
-        End If
+    ' check directional blocking
+    If isDirBlocked(CurrentMap.TileData.Tile(GetPlayerX(MyIndex), GetPlayerY(MyIndex)).DirBlock, Direction) Then
+        CheckDirection = True
+        Exit Function
     End If
 
     ' Check to see if the map tile is blocked or not
@@ -795,33 +643,6 @@ Sub CheckMovement()
                     Player(MyIndex).xOffset = PIC_X * -1
                     Call SetPlayerX(MyIndex, GetPlayerX(MyIndex) + 1)
 
-                Case DIR_UP_LEFT
-                    Call SendPlayerMovement
-                    Player(MyIndex).yOffset = PIC_Y
-                    Call SetPlayerY(MyIndex, GetPlayerY(MyIndex) - 1)
-                    Player(MyIndex).xOffset = PIC_X
-                    Call SetPlayerX(MyIndex, GetPlayerX(MyIndex) - 1)
-
-                Case DIR_UP_RIGHT
-                    Call SendPlayerMovement
-                    Player(MyIndex).yOffset = PIC_Y
-                    Call SetPlayerY(MyIndex, GetPlayerY(MyIndex) - 1)
-                    Player(MyIndex).xOffset = PIC_X * -1
-                    Call SetPlayerX(MyIndex, GetPlayerX(MyIndex) + 1)
-
-                Case DIR_DOWN_LEFT
-                    Call SendPlayerMovement
-                    Player(MyIndex).yOffset = PIC_Y * -1
-                    Call SetPlayerY(MyIndex, GetPlayerY(MyIndex) + 1)
-                    Player(MyIndex).xOffset = PIC_X
-                    Call SetPlayerX(MyIndex, GetPlayerX(MyIndex) - 1)
-
-                Case DIR_DOWN_RIGHT
-                    Call SendPlayerMovement
-                    Player(MyIndex).yOffset = PIC_Y * -1
-                    Call SetPlayerY(MyIndex, GetPlayerY(MyIndex) + 1)
-                    Player(MyIndex).xOffset = PIC_X * -1
-                    Call SetPlayerX(MyIndex, GetPlayerX(MyIndex) + 1)
 
                 End Select
 

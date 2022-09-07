@@ -22,10 +22,6 @@ Public Sub CheckKeys()
     If GetAsyncKeyState(VK_SHIFT) >= 0 Then ShiftDown = False
     If GetAsyncKeyState(VK_TAB) >= 0 Then TabDown = False
 
-    If GetAsyncKeyState(VK_W) >= 0 And GetAsyncKeyState(VK_A) >= 0 Then DirUpLeft = False
-    If GetAsyncKeyState(VK_W) >= 0 And GetAsyncKeyState(VK_D) >= 0 Then DirUpRight = False
-    If GetAsyncKeyState(VK_S) >= 0 And GetAsyncKeyState(VK_A) >= 0 Then DirDownLeft = False
-    If GetAsyncKeyState(VK_S) >= 0 And GetAsyncKeyState(VK_D) >= 0 Then DirDownRight = False
 End Sub
 
 Public Sub CheckInputKeys()
@@ -61,70 +57,6 @@ Public Sub CheckInputKeys()
 
         End If
 
-        ' Move Up Left
-        If GetAsyncKeyState(vbKeyW) < 0 And GetAsyncKeyState(vbKeyA) < 0 Then
-            WDown = False
-            SDown = False
-            ADown = False
-            DDown = False
-
-            DirUpLeft = True
-            DirUpRight = False
-            DirDownLeft = False
-            DirDownRight = False
-            Exit Sub
-        Else
-            DirUpLeft = False
-        End If
-
-        ' Move Up right
-        If GetAsyncKeyState(vbKeyW) < 0 And GetAsyncKeyState(vbKeyD) < 0 Then
-            WDown = False
-            SDown = False
-            ADown = False
-            DDown = False
-
-            DirUpLeft = False
-            DirUpRight = True
-            DirDownLeft = False
-            DirDownRight = False
-            Exit Sub
-        Else
-            DirUpRight = False
-        End If
-
-        ' Move Down Left
-        If GetAsyncKeyState(vbKeyS) < 0 And GetAsyncKeyState(vbKeyA) < 0 Then
-            WDown = False
-            SDown = False
-            ADown = False
-            DDown = False
-
-            DirUpLeft = False
-            DirUpRight = False
-            DirDownLeft = True
-            DirDownRight = False
-            Exit Sub
-        Else
-            DirDownLeft = False
-        End If
-
-        ' Move Down Right
-        If GetAsyncKeyState(vbKeyS) < 0 And GetAsyncKeyState(vbKeyD) < 0 Then
-            WDown = False
-            SDown = False
-            ADown = False
-            DDown = False
-
-            DirUpLeft = False
-            DirUpRight = False
-            DirDownLeft = False
-            DirDownRight = True
-            Exit Sub
-        Else
-            DirDownRight = False
-        End If
-
         ' move up
         If GetKeyState(vbKeyW) < 0 Then
             WDown = True
@@ -132,10 +64,6 @@ Public Sub CheckInputKeys()
             ADown = False
             DDown = False
 
-            DirUpLeft = False
-            DirUpRight = False
-            DirDownLeft = False
-            DirDownRight = False
             Exit Sub
         Else
             WDown = False
@@ -148,10 +76,6 @@ Public Sub CheckInputKeys()
             ADown = False
             DDown = True
 
-            DirUpLeft = False
-            DirUpRight = False
-            DirDownLeft = False
-            DirDownRight = False
             Exit Sub
         Else
             DDown = False
@@ -163,11 +87,7 @@ Public Sub CheckInputKeys()
             SDown = True
             ADown = False
             DDown = False
-
-            DirUpLeft = False
-            DirUpRight = False
-            DirDownLeft = False
-            DirDownRight = False
+            
             Exit Sub
         Else
             SDown = False
@@ -179,11 +99,7 @@ Public Sub CheckInputKeys()
             SDown = False
             ADown = True
             DDown = False
-
-            DirUpLeft = False
-            DirUpRight = False
-            DirDownLeft = False
-            DirDownRight = False
+            
             Exit Sub
         Else
             ADown = False
@@ -193,11 +109,6 @@ Public Sub CheckInputKeys()
         SDown = False
         ADown = False
         DDown = False
-
-        DirUpLeft = False
-        DirUpRight = False
-        DirDownLeft = False
-        DirDownRight = False
     End If
 
 End Sub

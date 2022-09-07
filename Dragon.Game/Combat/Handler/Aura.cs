@@ -44,7 +44,7 @@ public class Aura : ISkill {
 
         var list = new List<Target>(1) {
                 new Target() {
-                    Entity = (IEntity)Player!,
+                    Entity = Player!,
                     Type = TargetType.Player
                 }
             };
