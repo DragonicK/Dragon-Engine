@@ -82,67 +82,7 @@ public class PlayerMovement {
             var instance = instances[instanceId];
             var x = (int)Player!.Character.X;
             var y = (int)Player!.Character.Y;
-
-            if (direction == Direction.UpLeft) {
-                if (x > 0 && y > 0) {
-                    if (CheckBlockedDirection(instance, direction)) {
-                        return false;
-                    }
-                }
-                else {
-                    if (instance.Link.Left > 0) {
-                        Warp(instance.Link.Left, instance.MaximumX, y);
-
-                        return false;
-                    }
-                }
-            }
-
-            if (direction == Direction.UpRight) {
-                if (x > 0 && x < instance.MaximumX) {
-                    if (CheckBlockedDirection(instance, direction)) {
-                        return false;
-                    }
-                }
-                else {
-                    if (instance.Link.Right > 0) {
-                        Warp(instance.Link.Right, 0, y);
-
-                        return false;
-                    }
-                }
-            }
-
-            if (direction == Direction.DownLeft) {
-                if (y < instance.MaximumY && x > 0) {
-                    if (CheckBlockedDirection(instance, direction)) {
-                        return false;
-                    }
-                }
-                else {
-                    if (instance.Link.Left > 0) {
-                        Warp(instance.Link.Left, instance.MaximumX, y);
-
-                        return false;
-                    }
-                }
-            }
-
-            if (direction == Direction.DownRight) {
-                if (y < instance.MaximumX && x < instance.MaximumY) {
-                    if (CheckBlockedDirection(instance, direction)) {
-                        return false;
-                    }
-                }
-                else {
-                    if (instance.Link.Right > 0) {
-                        Warp(instance.Link.Right, 0, y);
-
-                        return false;
-                    }
-                }
-            }
-
+ 
             if (direction == Direction.Up) {
                 if (y > 0) {
                     if (CheckBlockedDirection(instance, direction)) {
@@ -222,10 +162,6 @@ public class PlayerMovement {
         Direction.Down => (x, y += 1),
         Direction.Left => (x -= 1, y),
         Direction.Right => (x += 1, y),
-        Direction.UpLeft => (x -= 1, y -= 1),
-        Direction.UpRight => (x += 1, y -= 1),
-        Direction.DownLeft => (x -= 1, y += 1),
-        Direction.DownRight => (x += 1, y += 1),
         _ => (Invalid, Invalid)
     };
 
