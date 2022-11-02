@@ -23,12 +23,135 @@
         ///  the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
-            this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMain));
+            this.MenuStrip = new System.Windows.Forms.MenuStrip();
+            this.FileMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.MenuSave = new System.Windows.Forms.ToolStripMenuItem();
+            this.MenuExit = new System.Windows.Forms.ToolStripMenuItem();
+            this.GroupList = new System.Windows.Forms.GroupBox();
+            this.ButtonClear = new System.Windows.Forms.Button();
+            this.ButtonDelete = new System.Windows.Forms.Button();
+            this.ButtonAdd = new System.Windows.Forms.Button();
+            this.ListIndex = new System.Windows.Forms.ListBox();
+            this.MenuStrip.SuspendLayout();
+            this.GroupList.SuspendLayout();
+            this.SuspendLayout();
+            // 
+            // MenuStrip
+            // 
+            this.MenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.FileMenuItem});
+            this.MenuStrip.Location = new System.Drawing.Point(0, 0);
+            this.MenuStrip.Name = "MenuStrip";
+            this.MenuStrip.Size = new System.Drawing.Size(800, 24);
+            this.MenuStrip.TabIndex = 4;
+            this.MenuStrip.Text = "menuStrip1";
+            // 
+            // FileMenuItem
+            // 
+            this.FileMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.MenuSave,
+            this.MenuExit});
+            this.FileMenuItem.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.FileMenuItem.Name = "FileMenuItem";
+            this.FileMenuItem.Size = new System.Drawing.Size(47, 20);
+            this.FileMenuItem.Text = "&File";
+            // 
+            // MenuSave
+            // 
+            this.MenuSave.Name = "MenuSave";
+            this.MenuSave.Size = new System.Drawing.Size(102, 22);
+            this.MenuSave.Text = "&Save";
+            // 
+            // MenuExit
+            // 
+            this.MenuExit.Name = "MenuExit";
+            this.MenuExit.Size = new System.Drawing.Size(102, 22);
+            this.MenuExit.Text = "&Exit";
+            // 
+            // GroupList
+            // 
+            this.GroupList.Controls.Add(this.ButtonClear);
+            this.GroupList.Controls.Add(this.ButtonDelete);
+            this.GroupList.Controls.Add(this.ButtonAdd);
+            this.GroupList.Controls.Add(this.ListIndex);
+            this.GroupList.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.GroupList.Location = new System.Drawing.Point(12, 27);
+            this.GroupList.Name = "GroupList";
+            this.GroupList.Padding = new System.Windows.Forms.Padding(10, 3, 10, 10);
+            this.GroupList.Size = new System.Drawing.Size(218, 576);
+            this.GroupList.TabIndex = 5;
+            this.GroupList.TabStop = false;
+            this.GroupList.Text = "Fonts";
+            // 
+            // ButtonClear
+            // 
+            this.ButtonClear.Location = new System.Drawing.Point(13, 538);
+            this.ButtonClear.Name = "ButtonClear";
+            this.ButtonClear.Size = new System.Drawing.Size(192, 22);
+            this.ButtonClear.TabIndex = 3;
+            this.ButtonClear.Text = "Clear";
+            this.ButtonClear.UseVisualStyleBackColor = true;
+            // 
+            // ButtonDelete
+            // 
+            this.ButtonDelete.Location = new System.Drawing.Point(115, 509);
+            this.ButtonDelete.Name = "ButtonDelete";
+            this.ButtonDelete.Size = new System.Drawing.Size(90, 22);
+            this.ButtonDelete.TabIndex = 2;
+            this.ButtonDelete.Text = "Delete";
+            this.ButtonDelete.UseVisualStyleBackColor = true;
+            // 
+            // ButtonAdd
+            // 
+            this.ButtonAdd.Location = new System.Drawing.Point(13, 509);
+            this.ButtonAdd.Name = "ButtonAdd";
+            this.ButtonAdd.Size = new System.Drawing.Size(90, 22);
+            this.ButtonAdd.TabIndex = 1;
+            this.ButtonAdd.Text = "Add";
+            this.ButtonAdd.UseVisualStyleBackColor = true;
+            // 
+            // ListIndex
+            // 
+            this.ListIndex.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.ListIndex.FormattingEnabled = true;
+            this.ListIndex.ItemHeight = 15;
+            this.ListIndex.Location = new System.Drawing.Point(13, 22);
+            this.ListIndex.Name = "ListIndex";
+            this.ListIndex.Size = new System.Drawing.Size(192, 469);
+            this.ListIndex.TabIndex = 0;
+            // 
+            // FormMain
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Text = "Form1";
+            this.ClientSize = new System.Drawing.Size(800, 616);
+            this.Controls.Add(this.GroupList);
+            this.Controls.Add(this.MenuStrip);
+            this.Font = new System.Drawing.Font("JetBrains Mono", 8.999999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Name = "FormMain";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Text = "Font Editor";
+            this.Load += new System.EventHandler(this.FormMain_Load);
+            this.MenuStrip.ResumeLayout(false);
+            this.MenuStrip.PerformLayout();
+            this.GroupList.ResumeLayout(false);
+            this.ResumeLayout(false);
+            this.PerformLayout();
+
         }
 
         #endregion
+
+        private MenuStrip MenuStrip;
+        private ToolStripMenuItem FileMenuItem;
+        private ToolStripMenuItem MenuSave;
+        private ToolStripMenuItem MenuExit;
+        private GroupBox GroupList;
+        private Button ButtonClear;
+        private Button ButtonDelete;
+        private Button ButtonAdd;
+        private ListBox ListIndex;
     }
 }

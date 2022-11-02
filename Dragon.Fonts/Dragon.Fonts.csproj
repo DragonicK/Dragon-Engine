@@ -8,7 +8,12 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
     <BaseOutputPath>..\Build\Fonts</BaseOutputPath>
+    <ApplicationIcon>_fonts.ico</ApplicationIcon>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="_fonts.ico" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Dragon.Core\Dragon.Core.csproj" />
