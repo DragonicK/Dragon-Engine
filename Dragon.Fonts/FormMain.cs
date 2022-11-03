@@ -41,5 +41,37 @@ namespace Dragon.Fonts {
         private void FormMain_Load(object sender, EventArgs e) {
             ChangeFont(this);
         }
+
+        private void FormMain_Resize(object sender, EventArgs e) {
+            var listHeight = ListIndex.Size.Height;
+
+            ChangeButtonAddLocation(listHeight);
+            ChangeButtonDeleteLocation(listHeight);
+            ChangeButtonClearLocation(listHeight);
+        }
+
+        private void ChangeButtonAddLocation(int listHeight) {
+            const int DefaultOffset = 40;
+
+            var x = ButtonAdd.Location.X;
+
+            ButtonAdd.Location = new Point(x, listHeight + DefaultOffset);
+        }
+
+        private void ChangeButtonDeleteLocation(int listHeight) {
+            const int DefaultOffset = 40;
+
+            var x = ButtonDelete.Location.X;
+
+            ButtonDelete.Location = new Point(x, listHeight + DefaultOffset);
+        }
+
+        private void ChangeButtonClearLocation(int listHeight) {
+            const int DefaultOffset = 70;
+
+            var x = ButtonClear.Location.X;
+
+            ButtonClear.Location = new Point(x, listHeight + DefaultOffset);
+        }
     }
 }

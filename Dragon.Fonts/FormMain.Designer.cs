@@ -33,6 +33,7 @@
             this.ButtonDelete = new System.Windows.Forms.Button();
             this.ButtonAdd = new System.Windows.Forms.Button();
             this.ListIndex = new System.Windows.Forms.ListBox();
+            this.GroupFont = new System.Windows.Forms.GroupBox();
             this.MenuStrip.SuspendLayout();
             this.GroupList.SuspendLayout();
             this.SuspendLayout();
@@ -71,6 +72,8 @@
             // 
             // GroupList
             // 
+            this.GroupList.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.GroupList.Controls.Add(this.ButtonClear);
             this.GroupList.Controls.Add(this.ButtonDelete);
             this.GroupList.Controls.Add(this.ButtonAdd);
@@ -113,6 +116,8 @@
             // 
             // ListIndex
             // 
+            this.ListIndex.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.ListIndex.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.ListIndex.FormattingEnabled = true;
             this.ListIndex.ItemHeight = 15;
@@ -121,11 +126,23 @@
             this.ListIndex.Size = new System.Drawing.Size(192, 469);
             this.ListIndex.TabIndex = 0;
             // 
+            // GroupFont
+            // 
+            this.GroupFont.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.GroupFont.Location = new System.Drawing.Point(236, 27);
+            this.GroupFont.Name = "GroupFont";
+            this.GroupFont.Size = new System.Drawing.Size(552, 576);
+            this.GroupFont.TabIndex = 6;
+            this.GroupFont.TabStop = false;
+            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 616);
+            this.Controls.Add(this.GroupFont);
             this.Controls.Add(this.GroupList);
             this.Controls.Add(this.MenuStrip);
             this.Font = new System.Drawing.Font("JetBrains Mono", 8.999999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
@@ -134,6 +151,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Font Editor";
             this.Load += new System.EventHandler(this.FormMain_Load);
+            this.Resize += new System.EventHandler(this.FormMain_Resize);
             this.MenuStrip.ResumeLayout(false);
             this.MenuStrip.PerformLayout();
             this.GroupList.ResumeLayout(false);
@@ -153,5 +171,6 @@
         private Button ButtonDelete;
         private Button ButtonAdd;
         private ListBox ListIndex;
+        private GroupBox GroupFont;
     }
 }
