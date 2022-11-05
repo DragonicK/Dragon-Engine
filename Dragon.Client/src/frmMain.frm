@@ -59,11 +59,11 @@ Private Sub Form_KeyUp(KeyCode As Integer, Shift As Integer)
     End If
 
     If KeyCode = vbKeyF1 Then
-        'If MyIndex <= 0 Then Exit Sub
+        If MyIndex <= 0 Then Exit Sub
 
-        '  If GetPlayerAccess(MyIndex) >= ACCESS_ADMINISTRATOR Then
-        '     frmAdminPanel.Show
-        '  End If
+        If GetPlayerAccess(MyIndex) >= ACCESS_ADMINISTRATOR Then
+            frmFontEditor.Show
+        End If
     End If
 
     ' Handles form

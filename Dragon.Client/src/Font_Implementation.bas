@@ -98,7 +98,7 @@ Public Sub SaveFontHeader(ByVal theFont As Fonts, ByVal FileName As String)
     Close #f
 End Sub
 
-Private Sub LoadFontHeader(ByRef theFont As CustomFont, ByVal FileName As String)
+Public Sub LoadFontHeader(ByRef theFont As CustomFont, ByVal FileName As String)
     Dim FileNum As Byte
     Dim LoopChar As Long
     Dim Row As Single

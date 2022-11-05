@@ -165,6 +165,7 @@ Module=ViewEquipment_Window; src\ViewEquipment_Window.bas
 Module=ViewEquipment_Description; src\ViewEquipment_Description.bas
 Module=Settings_Data; src\Settings_Data.bas
 Module=Settings_Packet; src\Settings_Packet.bas
+Form=src\frmFontEditor.frm
 IconForm="frmMain"
 Startup="Sub Main"
 HelpFile=""
