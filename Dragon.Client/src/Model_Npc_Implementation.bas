@@ -1,4 +1,6 @@
 Attribute VB_Name = "Model_Npc_Implementation"
+Option Explicit
+
 Public Sub ProcessNpcMovements(ByVal MapNpcNum As Long)
 ' Processa o ataque enquanto está em movimento.
     If MapNpc(MapNpcNum).Attacking = 1 And MapNpc(MapNpcNum).Moving > 0 Then

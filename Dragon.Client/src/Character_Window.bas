@@ -166,24 +166,38 @@ Private Sub ShowCharacter_Click()
     Dim CharacterIndex As Long
     Dim AttributesIndex As Long
     Dim CheckView As Long
+    Dim i As Long
 
     CheckView = GetControlIndex("winCharacter", "chkView")
     CharacterIndex = GetControlIndex("winCharacter", "btnCharacter")
     AttributesIndex = GetControlIndex("winCharacter", "btnAttributes")
 
-    Windows(WindowIndex).Controls(CheckView).Visible = True
+    With Windows(WindowIndex)
+        .Controls(CheckView).Visible = True
 
-    Windows(WindowIndex).Controls(CharacterIndex).textColour = Green
-    Windows(WindowIndex).Controls(CharacterIndex).textColour_Click = Green
-    Windows(WindowIndex).Controls(CharacterIndex).textColour_Hover = Green
+        .Controls(CharacterIndex).textColour = Green
+        .Controls(CharacterIndex).textColour_Click = Green
+        .Controls(CharacterIndex).textColour_Hover = Green
 
-    Windows(WindowIndex).Controls(AttributesIndex).textColour = White
-    Windows(WindowIndex).Controls(AttributesIndex).textColour_Click = White
-    Windows(WindowIndex).Controls(AttributesIndex).textColour_Hover = White
+        .Controls(AttributesIndex).textColour = White
+        .Controls(AttributesIndex).textColour_Click = White
+        .Controls(AttributesIndex).textColour_Hover = White
+    End With
 
     Call SetChildWindowVisible(True)
 
     IsShowingAttributes = False
+
+    With Windows(WindowIndex)
+        For i = 1 To Stats.Stat_Count - 1
+            ' grey out buttons
+            If GetPlayerPoints() = 0 Then
+                .Controls(GetControlIndex("winCharacter", "btnGreyStat_" & i)).Visible = True
+            Else
+                .Controls(GetControlIndex("winCharacter", "btnGreyStat_" & i)).Visible = False
+            End If
+        Next
+    End With
 End Sub
 
 Private Sub ShowAttributes_Click()

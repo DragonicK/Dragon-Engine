@@ -128,7 +128,6 @@ Begin VB.Form frmFontEditor
             Index           =   16
             Left            =   1560
             Max             =   32
-            Min             =   -32
             TabIndex        =   49
             Top             =   360
             Width           =   975
@@ -165,7 +164,6 @@ Begin VB.Form frmFontEditor
             Index           =   15
             Left            =   1560
             Max             =   32
-            Min             =   -32
             TabIndex        =   46
             Top             =   360
             Width           =   975
@@ -202,7 +200,6 @@ Begin VB.Form frmFontEditor
             Index           =   14
             Left            =   1560
             Max             =   32
-            Min             =   -32
             TabIndex        =   43
             Top             =   360
             Width           =   975
@@ -239,7 +236,6 @@ Begin VB.Form frmFontEditor
             Index           =   13
             Left            =   1560
             Max             =   32
-            Min             =   -32
             TabIndex        =   40
             Top             =   360
             Width           =   975
@@ -276,7 +272,6 @@ Begin VB.Form frmFontEditor
             Index           =   12
             Left            =   1560
             Max             =   32
-            Min             =   -32
             TabIndex        =   37
             Top             =   360
             Width           =   975
@@ -313,7 +308,6 @@ Begin VB.Form frmFontEditor
             Index           =   11
             Left            =   1560
             Max             =   32
-            Min             =   -32
             TabIndex        =   34
             Top             =   360
             Width           =   975
@@ -350,7 +344,6 @@ Begin VB.Form frmFontEditor
             Index           =   10
             Left            =   1560
             Max             =   32
-            Min             =   -32
             TabIndex        =   31
             Top             =   360
             Width           =   975
@@ -387,7 +380,6 @@ Begin VB.Form frmFontEditor
             Index           =   9
             Left            =   1560
             Max             =   32
-            Min             =   -32
             TabIndex        =   28
             Top             =   360
             Width           =   975
@@ -424,7 +416,6 @@ Begin VB.Form frmFontEditor
             Index           =   8
             Left            =   1560
             Max             =   32
-            Min             =   -32
             TabIndex        =   25
             Top             =   360
             Width           =   975
@@ -461,7 +452,6 @@ Begin VB.Form frmFontEditor
             Index           =   7
             Left            =   1560
             Max             =   32
-            Min             =   -32
             TabIndex        =   22
             Top             =   360
             Width           =   975
@@ -498,7 +488,6 @@ Begin VB.Form frmFontEditor
             Index           =   6
             Left            =   1560
             Max             =   32
-            Min             =   -32
             TabIndex        =   19
             Top             =   360
             Width           =   975
@@ -535,7 +524,6 @@ Begin VB.Form frmFontEditor
             Index           =   5
             Left            =   1560
             Max             =   32
-            Min             =   -32
             TabIndex        =   16
             Top             =   360
             Width           =   975
@@ -572,7 +560,6 @@ Begin VB.Form frmFontEditor
             Index           =   4
             Left            =   1560
             Max             =   32
-            Min             =   -32
             TabIndex        =   13
             Top             =   360
             Width           =   975
@@ -609,7 +596,6 @@ Begin VB.Form frmFontEditor
             Index           =   3
             Left            =   1560
             Max             =   32
-            Min             =   -32
             TabIndex        =   10
             Top             =   360
             Width           =   975
@@ -646,7 +632,6 @@ Begin VB.Form frmFontEditor
             Index           =   2
             Left            =   1560
             Max             =   32
-            Min             =   -32
             TabIndex        =   7
             Top             =   360
             Width           =   975
@@ -683,7 +668,6 @@ Begin VB.Form frmFontEditor
             Index           =   1
             Left            =   1560
             Max             =   32
-            Min             =   -32
             TabIndex        =   4
             Top             =   360
             Width           =   975
