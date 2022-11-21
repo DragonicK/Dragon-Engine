@@ -265,3 +265,152 @@ Private Sub GeomCalcParallax(ByRef Geom() As Vertex, ByRef Texture As TextureStr
     Geom(3) = MakeVertex(X + W, Y + H, 0, 1, Colour, 0, sW, sH)
 End Sub
 
+' BitWise Operators for directional blocking
+Public Sub SetDirBlock(ByRef blockvar As Byte, ByRef Dir As Byte, ByVal Block As Boolean)
+
+    If Block Then
+        blockvar = blockvar Or (2 ^ Dir)
+    Else
+        blockvar = blockvar And Not (2 ^ Dir)
+    End If
+
+End Sub
+
+Public Function IsDirBlocked(ByRef blockvar As Byte, ByRef Dir As Byte) As Boolean
+
+    If Not blockvar And (2 ^ Dir) Then
+        IsDirBlocked = False
+    Else
+        IsDirBlocked = True
+    End If
+
+End Function
+
+Public Function ConvertMapX(ByVal X As Long) As Long
+    ConvertMapX = X - (TileView.Left * PIC_X) - Camera.Left
+End Function
+
+Public Function ConvertMapY(ByVal Y As Long) As Long
+    ConvertMapY = Y - (TileView.Top * PIC_Y) - Camera.Top
+End Function
+
+Public Sub UpdateCamera()
+    Dim OffsetX As Long, OffSetY As Long, StartX As Long, StartY As Long, EndX As Long, EndY As Long
+
+    OffsetX = Player(MyIndex).xOffset + PIC_X
+    OffSetY = Player(MyIndex).yOffset + PIC_Y
+    StartX = GetPlayerX(MyIndex) - ((TileWidth + 1) \ 2) - 1
+    StartY = GetPlayerY(MyIndex) - ((TileHeight + 1) \ 2) - 1
+
+    If TileWidth + 1 <= CurrentMap.MapData.MaxX Then
+        If StartX < 0 Then
+            OffsetX = 0
+
+            If StartX = -1 Then
+                If Player(MyIndex).xOffset > 0 Then
+                    OffsetX = Player(MyIndex).xOffset
+                End If
+            End If
+
+            StartX = 0
+        End If
+
+        EndX = StartX + (TileWidth + 1) + 1
+
+        If EndX > CurrentMap.MapData.MaxX Then
+            OffsetX = 32
+
+            If EndX = CurrentMap.MapData.MaxX + 1 Then
+                If Player(MyIndex).xOffset < 0 Then
+                    OffsetX = Player(MyIndex).xOffset + PIC_X
+                End If
+            End If
+
+            EndX = CurrentMap.MapData.MaxX
+            StartX = EndX - TileWidth - 1
+        End If
+    Else
+        EndX = StartX + (TileWidth + 1) + 1
+    End If
+
+    If TileHeight + 1 <= CurrentMap.MapData.MaxY Then
+        If StartY < 0 Then
+            OffSetY = 0
+
+            If StartY = -1 Then
+                If Player(MyIndex).yOffset > 0 Then
+                    OffSetY = Player(MyIndex).yOffset
+                End If
+            End If
+
+            StartY = 0
+        End If
+
+        EndY = StartY + (TileHeight + 1) + 1
+
+        If EndY > CurrentMap.MapData.MaxY Then
+            OffSetY = 32
+
+            If EndY = CurrentMap.MapData.MaxY + 1 Then
+                If Player(MyIndex).yOffset < 0 Then
+                    OffSetY = Player(MyIndex).yOffset + PIC_Y
+                End If
+            End If
+
+            EndY = CurrentMap.MapData.MaxY
+            StartY = EndY - TileHeight - 1
+        End If
+    Else
+        EndY = StartY + (TileHeight + 1) + 1
+    End If
+
+    If TileWidth + 1 = CurrentMap.MapData.MaxX Then
+        OffsetX = 0
+    End If
+
+    If TileHeight + 1 = CurrentMap.MapData.MaxY Then
+        OffSetY = 0
+    End If
+
+    With TileView
+        .Top = StartY
+        .Bottom = EndY
+        .Left = StartX
+        .Right = EndX
+    End With
+
+    With Camera
+        .Top = OffSetY
+        .Bottom = .Top + ScreenY
+        .Left = OffsetX
+        .Right = .Left + ScreenX
+    End With
+
+    CurX = TileView.Left + CInt((GlobalX + Camera.Left) \ PIC_X)
+    CurY = TileView.Top + CInt((GlobalY + Camera.Top) \ PIC_Y)
+    GlobalX_Map = GlobalX + (TileView.Left * PIC_X) + Camera.Left
+    GlobalY_Map = GlobalY + (TileView.Top * PIC_Y) + Camera.Top
+End Sub
+
+Public Function IsInBounds()
+    If (CurX >= 0) Then
+        If (CurX <= CurrentMap.MapData.MaxX) Then
+            If (CurY >= 0) Then
+                If (CurY <= CurrentMap.MapData.MaxY) Then
+                    IsInBounds = True
+                End If
+            End If
+        End If
+    End If
+
+End Function
+
+Public Function IsValidMapPoint(ByVal X As Long, ByVal Y As Long) As Boolean
+    IsValidMapPoint = False
+
+    If X < 0 Then Exit Function
+    If Y < 0 Then Exit Function
+    If X > CurrentMap.MapData.MaxX Then Exit Function
+    If Y > CurrentMap.MapData.MaxY Then Exit Function
+    IsValidMapPoint = True
+End Function

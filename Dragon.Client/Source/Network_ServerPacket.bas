@@ -5,13 +5,9 @@ Option Explicit
 ' Packets sent by server to client
 Public Enum ServerPackets
     SNpcAttack
-    
     SNpcDead
-       
     SSound
-    
     SAnimation
-    
     SCancelAnimation
     
     SPlayerAchievement

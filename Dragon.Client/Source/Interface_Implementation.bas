@@ -1394,6 +1394,20 @@ Public Sub HideWindow(curWindow As Long)
     End If
 End Sub
 
+Public Function CensorWord(ByVal sString As String) As String
+    CensorWord = String$(Len(sString), "*")
+End Function
+
+Public Sub CreateWindow_Combobox()
+    ' background window
+    CreateWindow "winComboMenuBG", "ComboMenuBG", zOrder_Win, 0, 0, 800, 600, 0, , , , , , , , , , , , , , GetAddress(AddressOf CloseComboMenu), , , False, False
+
+    ' window
+    CreateWindow "winComboMenu", "ComboMenu", zOrder_Win, 0, 0, 100, 100, 0, , Fonts.OpenSans_Regular, , , , DesignTypes.desComboMenuNorm, , , , , , , , , , , False, False
+    ' centralise it
+    CentraliseWindow WindowCount
+End Sub
+
 Public Sub CreateWindow_Loading()
 ' Create the window
     CreateWindow "winLoading", "Carregando", zOrder_Win, 0, 0, 278, 79, 0, True, Fonts.OpenSans_Regular, , 2, 7, DesignTypes.desWin_AincradNoBar, DesignTypes.desWin_AincradNoBar, DesignTypes.desWin_AincradNoBar, , , , , , , , , False
@@ -1406,24 +1420,6 @@ Public Sub CreateWindow_Loading()
     CreatePictureBox WindowCount, "picRecess", 26, 23, 226, 26, , , , , , , , DesignTypes.desTextBlack, DesignTypes.desTextBlack, DesignTypes.desTextBlack
     ' Label
     CreateLabel WindowCount, "lblLoading", 6, 27, 266, , "Carregando dados do jogo ...", OpenSans_Regular, , Alignment.alignCentre
-End Sub
-
-Public Sub CreateWindow_EscMenu()
-' Create window
-    CreateWindow "winEscMenu", "", zOrder_Win, 0, 0, 210, 156, 0, , , , , , DesignTypes.desWin_NoBar, DesignTypes.desWin_NoBar, DesignTypes.desWin_NoBar, , , , , , , , , False, False
-    ' Centralise it
-    CentraliseWindow WindowCount
-
-    ' Set the index for spawning controls
-    zOrder_Con = 1
-
-    ' Parchment
-    CreatePictureBox WindowCount, "picParchment", 6, 6, 198, 144, , , , , , , , DesignTypes.desParchment, DesignTypes.desParchment, DesignTypes.desParchment
-    ' Buttons
-    CreateButton WindowCount, "btnReturn", 16, 16, 178, 28, "Retornar para o jogo (Esc)", OpenSans_Regular, , , , , , , , DesignTypes.desEmerald, DesignTypes.desEmerald_Hover, DesignTypes.desEmerald_Click, , , GetAddress(AddressOf btnEscMenu_Return)
-    CreateButton WindowCount, "btnOptions", 16, 48, 178, 28, "Opções", OpenSans_Regular, , , , , , , , DesignTypes.desOrange, DesignTypes.desOrange_Hover, DesignTypes.desOrange_Click, , , GetAddress(AddressOf btnEscMenu_Options)
-    CreateButton WindowCount, "btnMainMenu", 16, 80, 178, 28, "Voltar ao menu principal", OpenSans_Regular, , , , , , , , DesignTypes.desBlue, DesignTypes.desSteel_Hover, DesignTypes.desBlue_Click, , , GetAddress(AddressOf btnEscMenu_MainMenu)
-    CreateButton WindowCount, "btnExit", 16, 112, 178, 28, "Sair do jogo", OpenSans_Regular, , , , , , , , DesignTypes.desRed, DesignTypes.desRed_Hover, DesignTypes.desRed_Click, , , GetAddress(AddressOf btnEscMenu_Exit)
 End Sub
 
 Public Sub CreateWindow_Bars()
@@ -1468,19 +1464,9 @@ Public Sub CreateWindow_Description()
     CreateLabel WindowCount, "lblType", 0, 25, 225, , "Sword", OpenSans_Effect, White, Alignment.alignCentre
 
     CreateLabel WindowCount, "lblPrice", 15, 25, 183, , "Sword", OpenSans_Regular, White, Alignment.alignLeft
-    'CreateLabel WindowCount, "lblClass", 15, 40, 183, , "Sem Requiremento de classe", OpenSans_Regular, LightGreen, Alignment.alignLeft
-    ' CreateLabel WindowCount, "lblLevel", 15, 55, 183, , "Level 20", OpenSans_Regular, BrightRed, Alignment.alignLeft
-    ' CreateLabel WindowCount, "lblProficiency", 15, 70, 183, , "Tecido", OpenSans_Regular, BrightRed, Alignment.alignLeft
-    ' CreateLabel WindowCount, "lblBind", 15, 85, 183, , "Bind On Equip", OpenSans_Regular, BrightRed, Alignment.alignLeft
-
-    ' Sprite box
-    ' CreatePictureBox WindowCount, "picSprite", 18, 32, 68, 68, , , , , , , , DesignTypes.desDescPic, DesignTypes.desDescPic, DesignTypes.desDescPic, , , , , , GetAddress(AddressOf Description_OnDraw)
-    ' Sep
-    '  CreatePictureBox WindowCount, "picSep", 96, 28, 1, 92, , , , , Tex_GUI(44), Tex_GUI(44), Tex_GUI(44)
-
+    
     CreateLabel WindowCount, "lblDesc", 10, 100, 193, 350, "---", OpenSans_Regular, White, Alignment.alignCentre
-    ' Bar
-    '  CreatePictureBox WindowCount, "picBar", 19, 114, 66, 12, False, , , , Tex_GUI(45), Tex_GUI(45), Tex_GUI(45)
+ 
 End Sub
 
 Public Sub CreateWindow_DragBox()
@@ -1524,16 +1510,6 @@ Public Sub CreateWindow_Invitations()
     CreateWindow "winInvite_Trade", "", zOrder_Win, ScreenWidth - 234, ScreenHeight - 80, 223, 37, 0, , , , , , DesignTypes.desWin_Desc, DesignTypes.desWin_Desc, DesignTypes.desWin_Desc, , , , , , , , , False
     ' Button
     CreateButton WindowCount, "btnInvite", 11, 12, 201, 14, ColourChar & White & "Richard " & ColourChar & "-1" & "convidou voce para um grupo.", OpenSans_Regular, Grey, , , , , , , , , , , , 0, , , , , Green
-End Sub
-
-Public Sub CreateWindow_Combobox()
-' background window
-    CreateWindow "winComboMenuBG", "ComboMenuBG", zOrder_Win, 0, 0, 800, 600, 0, , , , , , , , , , , , , , GetAddress(AddressOf CloseComboMenu), , , False, False
-
-    ' window
-    CreateWindow "winComboMenu", "ComboMenu", zOrder_Win, 0, 0, 100, 100, 0, , Fonts.OpenSans_Regular, , , , DesignTypes.desComboMenuNorm, , , , , , , , , , , False, False
-    ' centralise it
-    CentraliseWindow WindowCount
 End Sub
 
 Public Sub CreateWindow_Target()

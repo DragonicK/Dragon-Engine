@@ -1,4 +1,6 @@
 Attribute VB_Name = "Party_Implementation"
+Option Explicit
+
 Public Sub ClearParty()
     Dim i As Long
 

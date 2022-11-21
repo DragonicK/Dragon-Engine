@@ -1,4 +1,6 @@
 Attribute VB_Name = "QuickSlot_Data"
+Option Explicit
+
 Public Const MaximumQuickSlot As Byte = 10
 
 ' QuickSlot

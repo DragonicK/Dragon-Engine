@@ -259,3 +259,43 @@ Public Sub AddPlayerMessage(ByVal Text As String, ByRef MsgTo As String)
     AddText ColourChar & GetColStr(Color) & "[Privado] Para " & MsgTo & ": " & ColourChar & GetColStr(Grey) & Text, Grey, , ChatChannel.ChannelPrivate
 End Sub
 
+Public Sub ShowChat()
+    ShowWindow GetWindowIndex("winChat"), , False
+    HideWindow GetWindowIndex("winChatSmall")
+    ' Set the active control
+    activeWindow = GetWindowIndex("winChat")
+    SetActiveControl GetWindowIndex("winChat"), GetControlIndex("winChat", "txtChat")
+    inSmallChat = False
+    ChatScroll = 0
+End Sub
+
+Public Sub HideChat()
+    ShowWindow GetWindowIndex("winChatSmall"), , False
+    HideWindow GetWindowIndex("winChat")
+    inSmallChat = True
+    ChatScroll = 0
+End Sub
+
+Public Sub SetChatHeight(Height As Long)
+    actChatHeight = Height
+End Sub
+
+Public Sub SetChatWidth(Width As Long)
+    actChatWidth = Width
+End Sub
+
+Public Sub UpdateChat()
+    SaveOptions
+End Sub
+
+Public Sub ScrollChatBox(ByVal Direction As Byte)
+    If Direction = 0 Then    ' up
+        If ChatScroll < ChatLines Then
+            ChatScroll = ChatScroll + 1
+        End If
+    Else
+        If ChatScroll > 0 Then
+            ChatScroll = ChatScroll - 1
+        End If
+    End If
+End Sub

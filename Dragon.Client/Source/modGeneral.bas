@@ -123,11 +123,11 @@ Public Function Rand(ByVal Low As Long, ByVal High As Long) As Long
     Rand = Int((High - Low + 1) * Rnd) + Low
 End Function
 
-Public Function isLoginLegal(ByVal Username As String, ByVal Password As String) As Boolean
+Public Function IsLoginLegal(ByVal Username As String, ByVal Password As String) As Boolean
 
     If LenB(Trim$(Username)) >= 3 Then
         If LenB(Trim$(Password)) >= 3 Then
-            isLoginLegal = True
+            IsLoginLegal = True
         End If
     End If
 

@@ -1,4 +1,6 @@
 Attribute VB_Name = "Party_Data"
+Option Explicit
+
 Public Const MaximumPartyMembers As Byte = 5
 
 Public Party As PartyRec

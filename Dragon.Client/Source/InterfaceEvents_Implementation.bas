@@ -304,34 +304,58 @@ Public Sub ResetMouseDown()
 
 End Sub
 
-
-' ##############
-' ## Esc Menu ##
-' ##############
-
-Public Sub btnEscMenu_Return()
-    HideWindow GetWindowIndex("winBlank")
-    HideWindow GetWindowIndex("winEscMenu")
+Public Sub ShowComboMenu(curWindow As Long, curControl As Long)
+    Dim Top As Long
+    With Windows(curWindow).Controls(curControl)
+        ' linked to
+        Windows(GetWindowIndex("winComboMenu")).Window.linkedToWin = curWindow
+        Windows(GetWindowIndex("winComboMenu")).Window.linkedToCon = curControl
+        ' set the size
+        Windows(GetWindowIndex("winComboMenu")).Window.Height = 2 + (UBound(.list) * 16)
+        Windows(GetWindowIndex("winComboMenu")).Window.Left = Windows(curWindow).Window.Left + .Left + 2
+        Top = Windows(curWindow).Window.Top + .Top + .Height
+        If Top + Windows(GetWindowIndex("winComboMenu")).Window.Height > ScreenHeight Then Top = ScreenHeight - Windows(GetWindowIndex("winComboMenu")).Window.Height
+        Windows(GetWindowIndex("winComboMenu")).Window.Top = Top
+        Windows(GetWindowIndex("winComboMenu")).Window.Width = .Width - 4
+        ' set the values
+        Windows(GetWindowIndex("winComboMenu")).Window.list() = .list()
+        Windows(GetWindowIndex("winComboMenu")).Window.Value = .Value
+        Windows(GetWindowIndex("winComboMenu")).Window.group = 0
+        ' load the menu
+        ShowWindow GetWindowIndex("winComboMenuBG"), True, False
+        ShowWindow GetWindowIndex("winComboMenu"), True, False
+    End With
 End Sub
 
-Public Sub btnEscMenu_Options()
-    HideWindow GetWindowIndex("winEscMenu")
-    ShowWindow GetWindowIndex("winOptions"), True, True
+Public Sub ComboMenu_MouseMove(curWindow As Long)
+    Dim Y As Long, i As Long
+    With Windows(curWindow).Window
+        Y = currMouseY - .Top
+        ' find the option we're hovering over
+        If UBound(.list) > 0 Then
+            For i = 1 To UBound(.list)
+                If Y >= (16 * (i - 1)) And Y <= (16 * (i)) Then
+                    .group = i
+                End If
+            Next
+        End If
+    End With
 End Sub
 
-Public Sub btnEscMenu_MainMenu()
-    HideWindows
-    ShowWindow GetWindowIndex("winLogin")
-    Stop_Music
-    ' play the menu music
-    If Len(Trim$(MenuMusic)) > 0 Then Play_Music Trim$(MenuMusic)
-    LogoutGame
-End Sub
-
-Public Sub btnEscMenu_Exit()
-    HideWindow GetWindowIndex("winBlank")
-    HideWindow GetWindowIndex("winEscMenu")
-    DestroyGame
+Public Sub ComboMenu_MouseDown(curWindow As Long)
+    Dim Y As Long, i As Long
+    With Windows(curWindow).Window
+        Y = currMouseY - .Top
+        ' find the option we're hovering over
+        If UBound(.list) > 0 Then
+            For i = 1 To UBound(.list)
+                If Y >= (16 * (i - 1)) And Y <= (16 * (i)) Then
+                    Windows(.linkedToWin).Controls(.linkedToCon).Value = i
+                    CloseComboMenu
+                End If
+            Next
+        End If
+    End With
 End Sub
 
 ' ##########
@@ -400,8 +424,6 @@ End Sub
 ' ##########
 ' ## Menu ##
 ' ##########
-
-
 
 Public Sub btnMenu_Inv()
     If GetPlayerDead(MyIndex) Then Exit Sub

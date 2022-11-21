@@ -16,7 +16,7 @@ Private Type AnimationRec
     LoopCount(0 To 1) As Long
     Looptime(0 To 1) As Long
     OffsetX(0 To 1) As Long
-    OffsetY(0 To 1) As Long
+    OffSetY(0 To 1) As Long
     W(0 To 1) As Long
     H(0 To 1) As Long
     LowerFrames() As AnimationFrameRec
@@ -68,15 +68,15 @@ Public Sub LoadAnimations()
 End Sub
 
 Private Sub LoadAnimation(ByVal Index As Long)
-    Dim Filename As String, f As Long
+    Dim FileName As String, f As Long
     Dim i As Long, Layer As Long, Num As Long
     Dim ByteValue As Byte
     Dim Sound As String * NAME_LENGTH
 
-    Filename = App.Path & AnimationPath & "Animation" & Index & ".dat"
+    FileName = App.Path & AnimationPath & "Animation" & Index & ".dat"
 
     f = FreeFile
-    Open Filename For Binary As #f
+    Open FileName For Binary As #f
 
     With Animation(Index)
         Get #f, , Num
@@ -87,7 +87,7 @@ Private Sub LoadAnimation(ByVal Index As Long)
         Get #f, , .FrameCount(Layer)
         Get #f, , .Looptime(Layer)
         Get #f, , .OffsetX(Layer)
-        Get #f, , .OffsetY(Layer)
+        Get #f, , .OffSetY(Layer)
         Get #f, , .W(Layer)
         Get #f, , .H(Layer)
         Get #f, , .Sprite(Layer)
@@ -110,7 +110,7 @@ Private Sub LoadAnimation(ByVal Index As Long)
         Get #f, , .FrameCount(Layer)
         Get #f, , .Looptime(Layer)
         Get #f, , .OffsetX(Layer)
-        Get #f, , .OffsetY(Layer)
+        Get #f, , .OffSetY(Layer)
         Get #f, , .W(Layer)
         Get #f, , .H(Layer)
         Get #f, , .Sprite(Layer)

@@ -1,4 +1,6 @@
 Attribute VB_Name = "NewCharacter_Packet"
+Option Explicit
+
 Public Sub SendAddChar(ByVal Name As String, ByVal Sex As Long, ByVal ClassId As Long, ByVal Sprite As Long)
     Dim Buffer As clsBuffer
     Set Buffer = New clsBuffer

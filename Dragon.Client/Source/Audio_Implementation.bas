@@ -63,17 +63,17 @@ Public Function Init_Music() As Boolean
 
     If inDevelopment Then Exit Function
 
-    On Error GoTo errorhandler
+    On Error GoTo ErrorHandler
 
     ' init music engine
     result = FSOUND_Init(44100, 32, FSOUND_INIT_USEDEFAULTMIDISYNTH)
 
-    If Not result Then GoTo errorhandler
+    If Not result Then GoTo ErrorHandler
     ' return positive
     Init_Music = True
     bInit_Music = True
     Exit Function
-errorhandler:
+ErrorHandler:
     Init_Music = False
     bInit_Music = False
 End Function
@@ -88,7 +88,7 @@ End Sub
 
 Public Sub Play_Music(ByVal song As String)
 
-    On Error GoTo errorhandler
+    On Error GoTo ErrorHandler
 
     If Not bInit_Music Then Exit Sub
 
@@ -129,13 +129,13 @@ Public Sub Play_Music(ByVal song As String)
     ' new current song
     CurSong = song
     Exit Sub
-errorhandler:
+ErrorHandler:
     Destroy_Music
 End Sub
 
 Public Sub Stop_Music()
 
-    On Error GoTo errorhandler
+    On Error GoTo ErrorHandler
 
     If Not StreamHandle = 0 Then
         ' stop stream
@@ -156,7 +156,7 @@ Public Sub Stop_Music()
     ' no music
     CurSong = vbNullString
     Exit Sub
-errorhandler:
+ErrorHandler:
     Destroy_Music
 End Sub
 
@@ -164,7 +164,7 @@ Public Sub Play_Sound(ByRef Sound As String, Optional ByVal X As Long = -1, Opti
     Dim dX As Long, dY As Long, Volume As Long, distance As Long
     Dim Index As Long
 
-    On Error GoTo errorhandler
+    On Error GoTo ErrorHandler
 
     If Not bInit_Music Then Exit Sub
 
@@ -213,19 +213,19 @@ Public Sub Play_Sound(ByRef Sound As String, Optional ByVal X As Long = -1, Opti
     End If
 
     Exit Sub
-errorhandler:
+ErrorHandler:
     Destroy_Music
 End Sub
 
 Public Sub Load_Sound(ByVal Sound As String, ByVal Index As Long)
 
-    On Error GoTo errorhandler
+    On Error GoTo ErrorHandler
     
     ' load the sound
     SoundHandle(Index) = FSOUND_Sample_Load(FSOUND_FREE, App.Path & SOUND_PATH & Sound, FSOUND_NORMAL, 0, 0)
     
     Exit Sub
-errorhandler:
+ErrorHandler:
     Destroy_Music
 End Sub
 
@@ -265,4 +265,45 @@ Private Function GetSoundIndex(ByRef Sound As String) As Long
 
 End Function
 
+Public Sub PlayMapSound(ByVal X As Long, ByVal Y As Long, ByVal EntityType As SoundEntity, ByVal EntityNum As Long)
+    Dim soundName As String
 
+    If EntityNum <= 0 Then Exit Sub
+
+    ' find the sound
+    Select Case EntityType
+
+    Case SoundEntity.SeAnimation
+        If EntityNum > MAX_ANIMATIONS Then Exit Sub
+        soundName = Animation(EntityNum).Sound
+
+    Case SoundEntity.SeItem
+        If EntityNum > MaximumItems Then Exit Sub
+        soundName = Item(EntityNum).Sound
+
+    Case SoundEntity.SeNpc
+        If EntityNum > MaximumNpcs Then Exit Sub
+        soundName = Npc(EntityNum).Sound
+
+    Case SoundEntity.SeResource
+        ' If entityNum > MAX_RESOURCES Then Exit Sub
+        ' soundName = Trim$(Resource(entityNum).Sound)
+
+    Case SoundEntity.SeSpell
+        If EntityNum > MaximumSkills Then Exit Sub
+        soundName = Skill(EntityNum).Sound
+
+    Case Else
+        Exit Sub
+    End Select
+
+    ' exit out if it's not set
+    If Trim$(soundName) = "None." Then
+        Exit Sub
+    End If
+
+    ' play the sound
+    If X > 0 And Y > 0 Then
+        Call Play_Sound(soundName, X, Y)
+    End If
+End Sub

@@ -1,6 +1,34 @@
-Attribute VB_Name = "Model_Packet"
+Attribute VB_Name = "Model_Player_Packet"
 Option Explicit
 
+Public Sub SendPlayerMovement()
+    Dim Buffer As clsBuffer
+    Set Buffer = New clsBuffer
+    
+    Buffer.WriteLong EnginePacket.PPlayerMovement
+    Buffer.WriteLong MyIndex
+    Buffer.WriteLong GetPlayerDir(MyIndex)
+    Buffer.WriteLong Player(MyIndex).Moving
+    Buffer.WriteInteger Player(MyIndex).X
+    Buffer.WriteInteger Player(MyIndex).Y
+    
+    SendData Buffer.ToArray()
+    
+    Set Buffer = Nothing
+End Sub
+
+Public Sub SendPlayerDirection()
+    Dim Buffer As clsBuffer
+    Set Buffer = New clsBuffer
+    
+    Buffer.WriteLong EnginePacket.PPlayerDirection
+    Buffer.WriteLong MyIndex
+    Buffer.WriteLong GetPlayerDir(MyIndex)
+    
+    SendData Buffer.ToArray()
+    
+    Set Buffer = Nothing
+End Sub
 
 Public Sub CheckAttack()
     Dim Buffer As clsBuffer
@@ -32,3 +60,6 @@ Public Sub CheckAttack()
     End If
 
 End Sub
+
+
+

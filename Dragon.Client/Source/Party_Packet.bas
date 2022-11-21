@@ -1,4 +1,6 @@
 Attribute VB_Name = "Party_Packet"
+Option Explicit
+
 Public Sub SendPartyRequest(ByVal Name As String)
     Dim Buffer As clsBuffer
     Set Buffer = New clsBuffer

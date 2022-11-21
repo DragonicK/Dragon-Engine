@@ -1,4 +1,6 @@
 Attribute VB_Name = "Quest_Data"
+Option Explicit
+
 Public MaximumQuests As Long
 
 Public Quests() As QuestRec

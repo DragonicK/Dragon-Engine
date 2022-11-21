@@ -149,3 +149,19 @@ Error:
     MsgBox "Ocorreu um erro ao enviar os dados para o servidor."
     DestroyGame
 End Sub
+
+Public Sub GetPing()
+    Dim Buffer As clsBuffer
+    Set Buffer = New clsBuffer
+
+    PingStart = GetTickCount
+
+    Buffer.WriteLong EnginePacket.PCheckPing
+
+    SendData Buffer.ToArray()
+
+    Set Buffer = Nothing
+End Sub
+
+
+

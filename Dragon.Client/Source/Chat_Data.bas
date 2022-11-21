@@ -1,4 +1,6 @@
 Attribute VB_Name = "Chat_Data"
+Option Explicit
+
 Public Enum SystemMessage
     YouDoNotHaveRequiredLevel
     SuccessToRevealItemAttribute
@@ -66,6 +68,7 @@ Public Enum SystemMessage
 End Enum
 
 Public Function GetSystemMessage(ByVal Header As SystemMessage, ByVal ParamCount As Long, ByRef Parameters() As String) As String
+    Dim i As Long
     Dim Id As Long
     Dim Value As Long
     Dim Name As String

@@ -145,10 +145,6 @@ Public vbQuote As String
 Public CurX As Long
 Public CurY As Long
 
-' appear
-Public EditorAppearRange As Long
-Public EditorAppearBottom As Long
-
 Public Camera As RECT
 Public TileView As RECT
 
@@ -163,7 +159,6 @@ Public AnimationIndex As Byte
 
 ' fps lock
 Public FPS_Lock As Boolean
-
 
 ' Looping Saves
 Public Player_HighIndex As Long
