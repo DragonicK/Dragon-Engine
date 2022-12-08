@@ -497,21 +497,42 @@ Public Sub CountRequiredItemToUpgrade()
 End Sub
 
 Private Function CouldStartUpgrade() As Boolean
+    Dim VerifiedRequirement(1 To MaximumUpgradeRequirements) As Boolean
     Dim i As Long
+    
+    CouldStartUpgrade = False
 
+    If UpgradeInventoryIndex < 1 Or UpgradeInventoryIndex > MaxInventories Then
+        Exit Function
+    End If
+    
+    Dim ItemNum As Long
+    Dim ItemLevel As Long
+    
+    ItemNum = GetInventoryItemNum(UpgradeInventoryIndex)
+    ItemLevel = GetInventoryItemLevel(UpgradeInventoryIndex)
+    
+    If ItemNum < 1 Or ItemNum > MaximumItems Then
+        Exit Function
+    End If
+    
+    If ItemLevel >= Item(ItemNum).MaximumLevel Then
+        AddText ColourChar & GetColStr(ColorType.BrightRed) & "[Sistema] : " & ColourChar & GetColStr(Grey) & "Este item não pode ser mais aprimorado.", Grey, , ChatChannel.ChannelGame
+        Exit Function
+    End If
+    
     If GetPlayerCurrency(CurrencyType.Currency_Gold) < Upgrade.CostValue Then
-        CouldStartUpgrade = False
         Exit Function
     End If
 
     For i = 1 To MaximumUpgradeRequirements
-        If Upgrade.Requirement(i).Id > 0 And Upgrade.Requirement(i).InventoryAmount >= Upgrade.Requirement(i).Amount Then
-            CouldStartUpgrade = True
-            Exit Function
+        If Upgrade.Requirement(i).Id > 0 Then
+            If Upgrade.Requirement(i).InventoryAmount < Upgrade.Requirement(i).Amount Then
+                Exit Function
+            End If
         End If
     Next
 
-    CouldStartUpgrade = False
-
+    CouldStartUpgrade = True
 
 End Function

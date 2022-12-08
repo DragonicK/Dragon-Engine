@@ -1,5 +1,5 @@
 Attribute VB_Name = "modGameLogic"
-
+Option Explicit
 
 Public Function IsHotbar(StartX As Long, StartY As Long) As Long
     Dim TempRec As RECT
@@ -31,16 +31,6 @@ Public Sub UseItem()
     End If
 
     Call SendUseItem(InventoryItemSelected)
-End Sub
-
-Public Sub DevMsg(ByVal Text As String, ByVal Color As Byte)
-    If InGame Then
-        If GetPlayerAccess(MyIndex) > ACCESS_ADMINISTRATOR Then
-            Call AddText(Text, Color)
-        End If
-    End If
-
-    Debug.Print Text
 End Sub
 
 Public Function ConvertCurrency(ByVal Amount As Long) As String
