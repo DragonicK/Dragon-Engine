@@ -439,20 +439,48 @@ Public Sub UpdateTwoHandedWeaponInformation()
     If ItemId > 0 And ItemId <= MaximumItems Then
         EquipmentId = Item(ItemId).EquipmentId
 
-        If EquipmentId > 0 And EquipmentId <= MaxEquipments Then
+        If EquipmentId > 0 And EquipmentId <= MaximumEquipments Then
             Data = GetEquipmentData(EquipmentId)
 
             If Data.Type = Weapon Then
                 If Data.HandStyle = HandStyle_TwoHanded Then
-                
                     Call SetPlayerEquipment(Equipment(EquipWeapon), EquipShield)
-                    
+                Else
+                    If HasShieldSlotTwoHandedStyle Then
+                        Equipment(PlayerEquipments.EquipShield).Num = 0
+                        Equipment(PlayerEquipments.EquipShield).Level = 0
+                        Equipment(PlayerEquipments.EquipShield).Bound = 0
+                        Equipment(PlayerEquipments.EquipShield).AttributeId = 0
+                        Equipment(PlayerEquipments.EquipShield).UpgradeId = 0
+                    End If
                 End If
             End If
         End If
     End If
 End Sub
 
+Private Function HasShieldSlotTwoHandedStyle() As Boolean
+    Dim EquipmentId As Long
+    Dim ItemId As Long
+    Dim Index As PlayerEquipments
+
+    Dim Data As EquipmentRec
+
+    ItemId = Equipment(PlayerEquipments.EquipShield).Num
+
+    If ItemId > 0 And ItemId <= MaximumItems Then
+        EquipmentId = Item(ItemId).EquipmentId
+
+        If EquipmentId > 0 And EquipmentId <= MaximumEquipments Then
+            Data = GetEquipmentData(EquipmentId)
+
+            If Data.Type = Weapon Then
+                HasShieldSlotTwoHandedStyle = Data.HandStyle = HandStyle_TwoHanded
+            End If
+        End If
+    End If
+
+End Function
 
 
 

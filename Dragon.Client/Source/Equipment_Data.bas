@@ -1,5 +1,5 @@
 Attribute VB_Name = "Equipment_Data"
-Public MaxEquipments As Long
+Public MaximumEquipments As Long
 Public MaxEquipmentAttributes As Long
 Public MaxEquipmentUpgrades As Long
 
@@ -79,12 +79,12 @@ Public Sub LoadEquipments()
     If Index > 0 Then
         Dim n As Long
 
-        MaxEquipments = ReadInt32(Index)
+        MaximumEquipments = ReadInt32(Index)
 
-        If MaxEquipments > 0 Then
-            ReDim Equipment(1 To MaxEquipments)
+        If MaximumEquipments > 0 Then
+            ReDim Equipment(1 To MaximumEquipments)
 
-            For i = 1 To MaxEquipments
+            For i = 1 To MaximumEquipments
                 Id = ReadInt32(Index)
 
                 Name = String(255, vbNullChar)

@@ -197,7 +197,7 @@ Private Sub AddTextPercentage(ByVal StatValue As Single, ByVal Text As String, O
 End Sub
 
 Private Sub AddEquipmentDescValues(ByVal ItemNum As Long, ByVal Level As Long, ByVal AttributeId As Long)
-    If Item(ItemNum).EquipmentId < 1 Or Item(ItemNum).EquipmentId > MaxEquipments Then
+    If Item(ItemNum).EquipmentId < 1 Or Item(ItemNum).EquipmentId > MaximumEquipments Then
         Exit Sub
     End If
 

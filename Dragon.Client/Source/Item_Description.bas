@@ -200,7 +200,7 @@ Private Sub AddTextPercentage(ByVal StatValue As Single, ByVal Text As String, O
 End Sub
 
 Private Sub AddEquipmentDescValues(ByVal ItemNum As Long, ByVal Level As Long, ByVal AttributeId As Long)
-    If Item(ItemNum).EquipmentId < 1 Or Item(ItemNum).EquipmentId > MaxEquipments Then
+    If Item(ItemNum).EquipmentId < 1 Or Item(ItemNum).EquipmentId > MaximumEquipments Then
         Exit Sub
     End If
 
@@ -486,6 +486,7 @@ Private Function GetPlayerItemSetCount(ByVal EquipmentSetId As Long) As Integer
                 If Equipment(EquipNum).EquipmentSetId = EquipmentSetId Then
 
                     If i = PlayerEquipments.EquipShield Then
+                        ' Do not count if we are using some two handed weapon
                         If ItemNum <> GetPlayerEquipmentId(EquipWeapon) Then
                             GetPlayerItemSetCount = GetPlayerItemSetCount + 1
                         End If
@@ -503,7 +504,6 @@ End Function
 
 Private Sub AddRecipeDesc(ByVal RecipeId As Long)
     If RecipeId > 0 Then
-
 
     End If
 End Sub

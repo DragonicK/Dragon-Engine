@@ -10,7 +10,6 @@
   "ConnectionLogs": true,
   "MaximumConnections": 1000,
   "TimeOut": 0,
-  "Delay": 45,
   "GameServer": {
     "Ip": "0.0.0.0",
     "Port": 7002

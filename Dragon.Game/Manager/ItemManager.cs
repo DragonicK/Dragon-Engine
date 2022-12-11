@@ -8,6 +8,8 @@ using Dragon.Game.Services;
 using Dragon.Game.Configurations;
 using Dragon.Game.Players;
 using Dragon.Game.Instances;
+using Dragon.Core.Content;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 
 namespace Dragon.Game.Manager;
 
@@ -137,15 +139,209 @@ public class ItemManager {
 
     #endregion
 
-    public void DestroyItem(int index) {
-        var inventory = Player!.Inventories.FindByIndex(index);
+    #region Equip Item
 
-        if (inventory is not null) {
-            inventory.Clear();
+    private void EquipItem(int index, Item item) {
+        if (item.EquipmentId > 0) {
+            var inventory = Player!.Inventories.FindByIndex(index)!;
 
-            PacketSender!.SendInventoryUpdate(Player, index);
+            if (inventory.AttributeId == 0) {
+                if (CanRevealItemAttribute(inventory, item)) {
+                    PacketSender!.SendInventoryUpdate(Player, index);
+                }
+            }
+            else {
+                var equipment = GetEquipmentFromItem(item);
+
+                if (equipment is not null) {
+                    var type = GetPlayerEquipmentType(equipment.Type);
+
+                    var isNeededTwoHandedStyleSwap = false;
+                    var successfullySwapped = true;
+
+                    if (type == PlayerEquipmentType.Costume) {
+                        ChangeAndSendModel(equipment);
+                    }
+
+                    if (equipment.Type == EquipmentType.Weapon || equipment.Type == EquipmentType.Shield) {
+                        isNeededTwoHandedStyleSwap = IsNeededTwoHandedStyleSwap(equipment);
+                    }
+
+                    if (!isNeededTwoHandedStyleSwap) {
+                        if (Player.Equipments.IsEquipped(type)) {
+                            SwapEquipment(type, inventory);  
+                        }
+                        else {
+                            Player!.Equipments.Equip(type, inventory);
+                            inventory.Clear();
+                        }
+                    }
+                    else {
+                        successfullySwapped = SwapTwoHandedStyleEquipment(equipment, inventory);
+                    }
+
+                    if (successfullySwapped) {
+                        PacketSender!.SendInventoryUpdate(Player, index);
+                        PacketSender!.SendEquipmentUpdate(Player, type);
+
+                        SendAttributes(); 
+                    }
+                }
+            }
         }
     }
+
+    private void SwapEquipment(PlayerEquipmentType index, CharacterInventory inventory) {
+        var equipment = Player!.Equipments.Get(index);
+
+        if (equipment is not null) {
+            var clone = equipment!.Clone();
+
+            Player!.Equipments.Unequip(index);
+            Player!.Equipments.Equip(index, inventory);
+
+            inventory.Clear();
+            inventory.Apply(clone);
+        }
+    }
+
+    private bool SwapTwoHandedStyleEquipment(Equipment incomingEquipment, CharacterInventory inventory) {
+        var equippedCount = 0;
+
+        if (Player!.Equipments.IsEquipped(PlayerEquipmentType.Weapon)) {
+            ++equippedCount;
+        }
+
+        if (Player!.Equipments.IsEquipped(PlayerEquipmentType.Shield)) {
+            ++equippedCount;
+        }
+
+        if (incomingEquipment.Type == EquipmentType.Weapon) {
+            // Realize a single swap.
+            if (equippedCount == 1) {
+                return SwapFromOneEquipmentToTwoHandedStyle(inventory);
+            }
+            else if (equippedCount == 2) {
+                return SwapFromTwoEquipmentToTwoHandedStyle(inventory);
+            }
+        }
+        else if (incomingEquipment.Type == EquipmentType.Shield) {
+            // Swap when we are using a two handed style.
+            return SwapFromTwoHandedStyleToShield(inventory);
+        }
+
+        return false;
+    }
+
+    private bool SwapFromOneEquipmentToTwoHandedStyle(CharacterInventory inventory) {
+        CharacterEquipment? clone = null;
+        CharacterEquipment? equipment;
+
+        if (Player!.Equipments.IsEquipped(PlayerEquipmentType.Weapon)) {
+            equipment = Player!.Equipments.Get(PlayerEquipmentType.Weapon);
+
+            if (equipment is not null) {
+                clone = equipment!.Clone();
+
+                Player!.Equipments.Unequip(PlayerEquipmentType.Weapon);
+                Player!.Equipments.Equip(PlayerEquipmentType.Weapon, inventory);
+            }
+        }
+        else if (Player!.Equipments.IsEquipped(PlayerEquipmentType.Shield)) {
+            equipment = Player!.Equipments.Get(PlayerEquipmentType.Shield);
+
+            if (equipment is not null) {
+                clone = equipment!.Clone();
+
+                Player!.Equipments.Unequip(PlayerEquipmentType.Shield);
+                Player!.Equipments.Equip(PlayerEquipmentType.Weapon, inventory);
+            }
+        }
+
+        if (clone is not null) {
+            inventory.Clear();
+            inventory.Apply(clone);
+
+            return true;
+        }
+
+        return false;
+    }
+
+    private bool SwapFromTwoEquipmentToTwoHandedStyle(CharacterInventory inventory) {
+        if (Player!.Equipments.IsEquipped(PlayerEquipmentType.Weapon)) {
+            if (Player!.Equipments.IsEquipped(PlayerEquipmentType.Shield)) {
+                var maximum = Player!.Character.MaximumInventories;
+                var free = Player!.Inventories.FindFreeInventory(maximum);
+
+                // Find a free slot to put shield.
+                if (free is not null) {
+                    var weapon = Player!.Equipments.Get(PlayerEquipmentType.Weapon);
+
+                    // Swap weapons.
+                    if (weapon is not null) {
+                        var clone = weapon.Clone();
+         
+                        Player!.Equipments.Unequip(PlayerEquipmentType.Weapon);
+                        Player!.Equipments.Equip(PlayerEquipmentType.Weapon, inventory);
+
+                        inventory.Clear();
+                        inventory.Apply(clone);
+
+                        // It doesnt need to update, returning true tells to update it.
+                        // PacketSender!.SendInventoryUpdate(Player, inventory.InventoryIndex);
+                        // PacketSender!.SendEquipmentUpdate(Player, PlayerEquipmentType.Weapon);
+                    }
+
+                    // Put shield to an inventory's slot.
+                    var shield = Player!.Equipments.Get(PlayerEquipmentType.Shield);
+
+                    if (shield is not null) {
+                        free.Apply(shield);
+
+                        Player!.Equipments.Unequip(PlayerEquipmentType.Shield);
+
+                        // Here we need to update it.
+                        PacketSender!.SendInventoryUpdate(Player, free.InventoryIndex);
+                        PacketSender!.SendEquipmentUpdate(Player, PlayerEquipmentType.Shield);
+                    }
+
+                    return true;
+                }
+                else {
+                    PacketSender!.SendMessage(SystemMessage.InventoryFull, QbColor.BrigthRed, Player);
+                }
+            }
+        }
+
+        return false;
+    }
+
+    private bool SwapFromTwoHandedStyleToShield(CharacterInventory inventory) {
+        if (Player!.Equipments.IsEquipped(PlayerEquipmentType.Weapon)) {
+            var equipment = Player!.Equipments.Get(PlayerEquipmentType.Weapon);
+
+            if (equipment is not null) {
+                var clone = equipment!.Clone();
+
+                Player!.Equipments.Unequip(PlayerEquipmentType.Weapon);
+                Player!.Equipments.Equip(PlayerEquipmentType.Shield, inventory);
+
+                PacketSender!.SendEquipmentUpdate(Player, PlayerEquipmentType.Weapon);
+
+                inventory.Clear();
+                inventory.Apply(clone);
+
+                return true;
+            }
+        }
+         
+        return false;
+    }
+
+    #endregion
+
+    #region Unequip Item
 
     public void UnequipItem(PlayerEquipmentType index) {
         var equipment = Player!.Equipments.Get(index);
@@ -172,12 +368,29 @@ public class ItemManager {
                     PacketSender!.SendInventoryUpdate(Player, inventory.InventoryIndex);
                     PacketSender!.SendEquipmentUpdate(Player, index);
 
+                    // Update shield in case of two handed style.
+                    if (index == PlayerEquipmentType.Weapon) {
+                        PacketSender!.SendEquipmentUpdate(Player, PlayerEquipmentType.Shield);
+                    }
+
                     SendAttributes();
                 }
                 else {
                     PacketSender!.SendMessage(SystemMessage.InventoryFull, QbColor.Red, Player);
                 }
             }
+        }
+    }
+
+    #endregion
+
+    public void DestroyItem(int index) {
+        var inventory = Player!.Inventories.FindByIndex(index);
+
+        if (inventory is not null) {
+            inventory.Clear();
+
+            PacketSender!.SendInventoryUpdate(Player, index);
         }
     }
 
@@ -197,42 +410,6 @@ public class ItemManager {
         }
 
         return null;
-    }
-
-    private void EquipItem(int index, Item item) {
-        if (item.EquipmentId > 0) {
-            var inventory = Player!.Inventories.FindByIndex(index)!;
-
-            if (inventory.AttributeId == 0) {
-                if (CanRevealItemAttribute(inventory, item)) {
-                    PacketSender!.SendInventoryUpdate(Player, index);
-                }
-            }
-            else {
-                var equipment = GetEquipmentFromItem(item);
-
-                if (equipment is not null) {
-                    var type = GetPlayerEquipmentType(equipment.Type);
-
-                    if (type == PlayerEquipmentType.Costume) {
-                        ChangeAndSendModel(equipment);
-                    }
-
-                    if (Player.Equipments.IsEquipped(type)) {
-                        SwapEquipment(type, inventory);
-                    }
-                    else {
-                        Player!.Equipments.Equip(type, inventory);
-                        inventory.Clear();
-                    }
-
-                    PacketSender!.SendInventoryUpdate(Player, index);
-                    PacketSender!.SendEquipmentUpdate(Player, type);
-
-                    SendAttributes();
-                }
-            }
-        }
     }
 
     private bool CanRevealItemAttribute(CharacterInventory inventory, Item item) {
@@ -290,6 +467,20 @@ public class ItemManager {
         if (item.EquipmentId > 0) {
             if (equipments!.Contains(item.EquipmentId)) {
                 return equipments[item.EquipmentId];
+            }
+        }
+
+        return null;
+    }
+
+    private Item? GetItemFromEquipped(PlayerEquipmentType type) {
+        var equipped = Player!.Equipments.Get(type);
+
+        if (equipped is not null) {
+           if (equipped.ItemId > 0) {
+                if (ContentService!.Items.Contains(equipped.ItemId)) {
+                    return ContentService!.Items[equipped.ItemId];
+                }
             }
         }
 
@@ -368,20 +559,6 @@ public class ItemManager {
         return index;
     }
 
-    private void SwapEquipment(PlayerEquipmentType index, CharacterInventory inventory) {
-        var equipment = Player!.Equipments.Get(index);
-
-        if (equipment is not null) {
-            var clone = equipment!.Clone();
-
-            Player!.Equipments.Unequip(index);
-            Player!.Equipments.Equip(index, inventory);
-
-            inventory.Clear();
-            inventory.Apply(clone);
-        }
-    }
-
     private void ChangeAndSendModel(Equipment equipment) {
         Player!.Character.CostumeModel = equipment.ModelId;
 
@@ -415,5 +592,34 @@ public class ItemManager {
         }
 
         return null;
+    }
+
+    private bool IsNeededTwoHandedStyleSwap(Equipment equipment) {
+        if (equipment.Type == EquipmentType.Weapon) {
+            if (equipment.HandStyle == EquipmentHandStyle.TwoHanded) {
+                return Player!.Equipments.IsEquipped(PlayerEquipmentType.Shield);
+            }
+        }
+        else if (equipment.Type == EquipmentType.Shield) {
+            return IsTwoHandedStyleWeaponEquipped();
+        }
+
+        return false;
+    }
+
+    private bool IsTwoHandedStyleWeaponEquipped() {
+        if (Player!.Equipments.IsEquipped(PlayerEquipmentType.Weapon)) {
+            var item = GetItemFromEquipped(PlayerEquipmentType.Weapon);
+
+            if (item is not null) {
+                var equipment = GetEquipmentFromItem(item);
+
+                if (equipment is not null) {
+                    return equipment.HandStyle == EquipmentHandStyle.TwoHanded;
+                }
+            }
+        }
+
+        return false;
     }
 }

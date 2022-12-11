@@ -119,7 +119,7 @@ Private Sub ViewEquipment_MouseDown()
 End Sub
 
 Private Sub ViewEquipment_MouseMove()
-    Dim EquipSlot As Long, X As Long, Y As Long
+    Dim EquipSlot As PlayerEquipments, X As Long, Y As Long
 
     ' exit out early if dragging
     If DragBox.Type <> part_None Then Exit Sub

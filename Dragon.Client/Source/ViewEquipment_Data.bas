@@ -47,14 +47,12 @@ Public Sub UpdateViewTwoHandedWeaponInformation()
     If ItemId > 0 And ItemId <= MaximumItems Then
         EquipmentId = Item(ItemId).EquipmentId
 
-        If EquipmentId > 0 And EquipmentId <= MaxEquipments Then
+        If EquipmentId > 0 And EquipmentId <= MaximumEquipments Then
             Data = GetEquipmentData(EquipmentId)
 
             If Data.Type = Weapon Then
                 If Data.HandStyle = HandStyle_TwoHanded Then
-                
                     Call SetViewEquipment(ViewEquipment(EquipWeapon), EquipShield)
-                    
                 End If
             End If
         End If

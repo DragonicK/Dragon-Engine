@@ -271,12 +271,20 @@ End Sub
 
 Private Sub Character_DoubleClick()
     If (mouseClick(VK_LBUTTON) And lastMouseClick(VK_LBUTTON) = 0) Then
-        Dim EquipSlot As Long
+        Dim EquipSlot As PlayerEquipments
 
         EquipSlot = GetEquipmentSlotFromPosition(Windows(WindowIndex).Window.Left, Windows(WindowIndex).Window.Top)
 
-        If EquipSlot Then
-            SendUnequip EquipSlot
+        If EquipSlot >= PlayerEquipments.EquipWeapon Then
+            If EquipSlot = PlayerEquipments.EquipShield Then
+                If IsTwoHandedStyleEquipped Then
+                    Call SendUnequip(PlayerEquipments.EquipWeapon)
+                Else
+                    Call SendUnequip(EquipSlot)
+                End If
+            Else
+                Call SendUnequip(EquipSlot)
+            End If
         End If
     End If
 
@@ -286,12 +294,20 @@ End Sub
 
 Private Sub Character_MouseDown()
     If (mouseClick(VK_RBUTTON) And lastMouseClick(VK_RBUTTON) = 0) Then
-        Dim EquipSlot As Long
+        Dim EquipSlot As PlayerEquipments
 
         EquipSlot = GetEquipmentSlotFromPosition(Windows(WindowIndex).Window.Left, Windows(WindowIndex).Window.Top)
 
-        If EquipSlot Then
-            SendUnequip EquipSlot
+        If EquipSlot >= PlayerEquipments.EquipWeapon Then
+            If EquipSlot = PlayerEquipments.EquipShield Then
+                If IsTwoHandedStyleEquipped Then
+                    Call SendUnequip(PlayerEquipments.EquipWeapon)
+                Else
+                    Call SendUnequip(EquipSlot)
+                End If
+            Else
+                Call SendUnequip(EquipSlot)
+            End If
         End If
     End If
 
@@ -300,14 +316,14 @@ Private Sub Character_MouseDown()
 End Sub
 
 Private Sub Character_MouseMove()
-    Dim EquipSlot As Long, X As Long, Y As Long
+    Dim EquipSlot As PlayerEquipments, X As Long, Y As Long
 
     ' exit out early if dragging
     If DragBox.Type <> part_None Then Exit Sub
 
     EquipSlot = GetEquipmentSlotFromPosition(Windows(WindowIndex).Window.Left, Windows(WindowIndex).Window.Top)
 
-    If EquipSlot Then
+    If EquipSlot >= PlayerEquipments.EquipWeapon Then
         ' calc position
         X = Windows(WindowIndex).Window.Left - Windows(GetWindowIndex("winDescription")).Window.Width - 2
         Y = Windows(WindowIndex).Window.Top
@@ -384,7 +400,7 @@ Private Sub RenderCharacter()
     End If
 End Sub
 
-Private Function GetEquipmentSlotFromPosition(StartX As Long, StartY As Long) As Long
+Private Function GetEquipmentSlotFromPosition(StartX As Long, StartY As Long) As PlayerEquipments
     Dim TempRec As RECT
     Dim i As Long
 
@@ -485,3 +501,18 @@ Private Sub RenderElementalAttributes(ByVal X As Long, ByVal Y As Long)
     RenderText Font(Fonts.OpenSans_Effect), "Redução de Dano Luz: " & MyAttributes.ElementDefense(Elements.Element_Light), X, Y + 165, ColorType.Gold
     RenderText Font(Fonts.OpenSans_Effect), "Redução de Dano Trevas: " & MyAttributes.ElementDefense(Elements.Element_Dark), X, Y + 180, ColorType.Gold
 End Sub
+
+Private Function IsTwoHandedStyleEquipped() As Boolean
+    Dim ItemNum As Long
+    Dim EquipmentId As Long
+
+    ItemNum = GetPlayerEquipmentId(PlayerEquipments.EquipWeapon)
+
+    If ItemNum > 0 And ItemNum <= MaximumItems Then
+        EquipmentId = Item(ItemNum).EquipmentId
+
+        If EquipmentId > 0 And EquipmentId <= MaximumEquipments Then
+            IsTwoHandedStyleEquipped = Equipment(EquipmentId).HandStyle = HandStyle_TwoHanded
+        End If
+    End If
+End Function
