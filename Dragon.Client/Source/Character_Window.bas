@@ -479,10 +479,10 @@ Private Sub RenderSpecialAttributes(ByVal X As Long, ByVal Y As Long)
     RenderText Font(Fonts.OpenSans_Effect), "Ataque Adicional PvP: " & MyAttributes.PvpAttack & "%", X, Y + 165, ColorType.Gold
     RenderText Font(Fonts.OpenSans_Effect), "Defesa Adicional PvP: " & MyAttributes.PvpDefense & "%", X, Y + 180, ColorType.Gold
 
-    RenderText Font(Fonts.OpenSans_Effect), "Resistência ao silêncio: " & MyAttributes.SilenceResistance & "%", X, Y + 210, ColorType.Gold
-    RenderText Font(Fonts.OpenSans_Effect), "Resistência à cegueira: " & MyAttributes.BlindResistance & "%", X, Y + 225, ColorType.Gold
-    RenderText Font(Fonts.OpenSans_Effect), "Resistência ao atordoamento: " & MyAttributes.StunResistance & "%", X, Y + 240, ColorType.Gold
-    RenderText Font(Fonts.OpenSans_Effect), "Resistência à queda: " & MyAttributes.StumbleResistance & "%", X, Y + 255, ColorType.Gold
+    RenderText Font(Fonts.OpenSans_Effect), "Resistência ao silêncio: " & MyAttributes.SilenceResistance, X, Y + 210, ColorType.Gold
+    RenderText Font(Fonts.OpenSans_Effect), "Resistência à cegueira: " & MyAttributes.BlindResistance, X, Y + 225, ColorType.Gold
+    RenderText Font(Fonts.OpenSans_Effect), "Resistência ao atordoamento: " & MyAttributes.StunResistance, X, Y + 240, ColorType.Gold
+    RenderText Font(Fonts.OpenSans_Effect), "Resistência à queda: " & MyAttributes.StumbleResistance, X, Y + 255, ColorType.Gold
     
 End Sub
 
