@@ -292,10 +292,10 @@ public sealed partial class PacketSender : IPacketSender {
             AttackSpeed = Convert.ToInt32(attributes.Get(UniqueAttribute.AttackSpeed) * 100),
             CastSpeed = Convert.ToInt32(attributes.Get(UniqueAttribute.CastSpeed) * 100),
 
-            ResistSilence = Convert.ToInt32(attributes.Get(SecondaryAttribute.SilenceResistance) * 100),
-            ResistBlind = Convert.ToInt32(attributes.Get(SecondaryAttribute.BlindResistance) * 100),
-            ResistStun = Convert.ToInt32(attributes.Get(SecondaryAttribute.StunResistance) * 100),
-            ResistStumble = Convert.ToInt32(attributes.Get(SecondaryAttribute.StumbleResistance) * 100),
+            ResistSilence = attributes.Get(SecondaryAttribute.SilenceResistance),
+            ResistBlind = attributes.Get(SecondaryAttribute.BlindResistance),
+            ResistStun = attributes.Get(SecondaryAttribute.StunResistance),
+            ResistStumble = attributes.Get(SecondaryAttribute.StumbleResistance),
 
             PveAttack = Convert.ToInt32(attributes.Get(UniqueAttribute.PveAttack) * 100),
             PveDefense = Convert.ToInt32(attributes.Get(UniqueAttribute.PveDefense) * 100),

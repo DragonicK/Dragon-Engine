@@ -462,8 +462,6 @@ End Sub
 Private Function HasEquipmentSlotTwoHandedStyle(ByVal Index As PlayerEquipments) As Boolean
     Dim EquipmentId As Long
     Dim ItemId As Long
-    Dim Index As PlayerEquipments
-
     Dim Data As EquipmentRec
 
     ItemId = Equipment(Index).Num
