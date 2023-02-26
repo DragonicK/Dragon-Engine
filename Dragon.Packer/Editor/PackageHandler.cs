@@ -98,7 +98,7 @@ public class PackageHandler : IPackageHandler {
         var length = reader.ReadInt32();
         var encrypted = reader.ReadBytes(length);
 
-        var decrypted = _aes.Encrypt(encrypted, key, iv);
+        var decrypted = _aes.Decrypt(encrypted, key, iv);
 
         UpdateProgress(name, ++counter, maximum);
 
