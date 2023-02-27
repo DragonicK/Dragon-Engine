@@ -20,7 +20,7 @@ End Sub
 Public Sub CreateWindow_ViewEquipment()
     Dim i As Long
     ' Create window
-    CreateWindow "winViewEquipment", "INFORMAÇÃO", zOrder_Win, 0, 0, 260, 420, 0, False, Fonts.OpenSans_Effect, , 2, 6, DesignTypes.desWin_AincradNorm, DesignTypes.desWin_AincradNorm, DesignTypes.desWin_AincradNorm, , , , , GetAddress(AddressOf ViewEquipment_MouseMove), GetAddress(AddressOf ViewEquipment_MouseDown), GetAddress(AddressOf ViewEquipment_MouseMove), GetAddress(AddressOf ViewEquipment_DoubleClick), , , GetAddress(AddressOf RenderViewEquipment)
+    CreateWindow "winViewEquipment", "INFORMAÇÃO", zOrder_Win, 0, 0, 260, 420, 0, False, Fonts.OpenSans_Effect, , 2, 6, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, , , , , GetAddress(AddressOf ViewEquipment_MouseMove), GetAddress(AddressOf ViewEquipment_MouseDown), GetAddress(AddressOf ViewEquipment_MouseMove), GetAddress(AddressOf ViewEquipment_DoubleClick), , , GetAddress(AddressOf RenderViewEquipment)
     ' Centralise it
     CentraliseWindow WindowCount
 
@@ -34,8 +34,8 @@ Public Sub CreateWindow_ViewEquipment()
     CreateButton WindowCount, "btnHeraldry", 135, 42, 100, 26, "BRASÃO", OpenSans_Effect, , , , , , , , , , , , , GetAddress(AddressOf ShowHeraldry_Click)
 
     ' Labels
-    CreateLabel WindowCount, "lblName", 50, 90, 156, 16, "NOME LV. 50", OpenSans_Effect, White, Alignment.alignCentre
-    CreateLabel WindowCount, "lblClass", 50, 170, 156, 16, "PRIEST", OpenSans_Effect, White, Alignment.alignCentre
+    CreateLabel WindowCount, "lblName", 50, 90, 156, 16, "NOME LV. 50", OpenSans_Effect, White, Alignment.AlignCenter
+    CreateLabel WindowCount, "lblClass", 50, 170, 156, 16, "PRIEST", OpenSans_Effect, White, Alignment.AlignCenter
 
     WindowIndex = WindowCount
     
@@ -83,13 +83,13 @@ Private Sub ShowCharacter_Click()
     CharacterIndex = GetControlIndex("winViewEquipment", "btnCharacter")
     HeraldryIndex = GetControlIndex("winViewEquipment", "btnHeraldry")
 
-    Windows(WindowIndex).Controls(CharacterIndex).textColour = Green
-    Windows(WindowIndex).Controls(CharacterIndex).textColour_Click = Green
-    Windows(WindowIndex).Controls(CharacterIndex).textColour_Hover = Green
+    Windows(WindowIndex).Controls(CharacterIndex).TextColour = Green
+    Windows(WindowIndex).Controls(CharacterIndex).TextColourClick = Green
+    Windows(WindowIndex).Controls(CharacterIndex).TextColourHover = Green
 
-    Windows(WindowIndex).Controls(HeraldryIndex).textColour = White
-    Windows(WindowIndex).Controls(HeraldryIndex).textColour_Click = White
-    Windows(WindowIndex).Controls(HeraldryIndex).textColour_Hover = White
+    Windows(WindowIndex).Controls(HeraldryIndex).TextColour = White
+    Windows(WindowIndex).Controls(HeraldryIndex).TextColourClick = White
+    Windows(WindowIndex).Controls(HeraldryIndex).TextColourHover = White
 End Sub
 
 Private Sub ShowHeraldry_Click()
@@ -99,13 +99,13 @@ Private Sub ShowHeraldry_Click()
     CharacterIndex = GetControlIndex("winViewEquipment", "btnCharacter")
     HeraldryIndex = GetControlIndex("winViewEquipment", "btnHeraldry")
 
-    Windows(WindowIndex).Controls(CharacterIndex).textColour = White
-    Windows(WindowIndex).Controls(CharacterIndex).textColour_Click = White
-    Windows(WindowIndex).Controls(CharacterIndex).textColour_Hover = White
+    Windows(WindowIndex).Controls(CharacterIndex).TextColour = White
+    Windows(WindowIndex).Controls(CharacterIndex).TextColourClick = White
+    Windows(WindowIndex).Controls(CharacterIndex).TextColourHover = White
 
-    Windows(WindowIndex).Controls(HeraldryIndex).textColour = Green
-    Windows(WindowIndex).Controls(HeraldryIndex).textColour_Click = Green
-    Windows(WindowIndex).Controls(HeraldryIndex).textColour_Hover = Green
+    Windows(WindowIndex).Controls(HeraldryIndex).TextColour = Green
+    Windows(WindowIndex).Controls(HeraldryIndex).TextColourClick = Green
+    Windows(WindowIndex).Controls(HeraldryIndex).TextColourHover = Green
 End Sub
 
 Private Sub ButtonMenu_CloseViewEquipment()
@@ -122,7 +122,7 @@ Private Sub ViewEquipment_MouseMove()
     Dim EquipSlot As PlayerEquipments, X As Long, Y As Long
 
     ' exit out early if dragging
-    If DragBox.Type <> part_None Then Exit Sub
+    If DragBox.Type <> PartNone Then Exit Sub
 
     EquipSlot = GetEquipmentSlotFromPosition(Windows(WindowIndex).Window.Left, Windows(WindowIndex).Window.Top)
 
@@ -171,10 +171,10 @@ Private Sub RenderViewEquipment()
     yO = Windows(WindowIndex).Window.Top
     Width = Windows(WindowIndex).Window.Width
 
-    RenderDesign DesignTypes.desWin_AincradMenu, xO, yO + 40, Width, 30
+    
 
     For i = 1 To PlayerEquipments.PlayerEquipment_Count - 1
-        RenderTexture Tex_GUI(85 + i), xO + EquipmentPosition(i).X, yO + EquipmentPosition(i).Y, 0, 0, 34, 34, 34, 34
+        RenderTexture Tex_GUI(54 + i), xO + EquipmentPosition(i).X, yO + EquipmentPosition(i).Y, 0, 0, 34, 34, 34, 34
 
         ItemNum = GetViewEquipment(i).Num
 

@@ -3,7 +3,7 @@ Option Explicit
 
 Public Sub CreateWindow_NewChar()
 ' Create window
-    CreateWindow "winNewChar", "NOVO PERSONAGEM", zOrder_Win, 0, 0, 291, 200, 0, False, Fonts.OpenSans_Regular, , 2, 6, DesignTypes.desWin_AincradNorm, DesignTypes.desWin_AincradNorm, DesignTypes.desWin_AincradNorm, , , , , , , , False
+    CreateWindow "winNewChar", "NOVO PERSONAGEM", zOrder_Win, 0, 0, 291, 200, 0, False, Fonts.OpenSans_Regular, , 2, 6, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, , , , , , , , False
     ' Centralise it
     CentraliseWindow WindowCount
 
@@ -14,20 +14,20 @@ Public Sub CreateWindow_NewChar()
     CreateButton WindowCount, "ButtonClose", Windows(WindowCount).Window.Width - 33, 11, 22, 22, , , , , , , Tex_GUI(TextureControl_CloseNormal), Tex_GUI(TextureControl_CloseHover), Tex_GUI(TextureControl_CloseClick), , , , , , GetAddress(AddressOf ButtonNewChar_Cancel)
     ' Name
 
-    CreateLabel WindowCount, "lblName", 29, 49, 124, , "Name", OpenSans_Regular, White, Alignment.alignCentre
+    CreateLabel WindowCount, "lblName", 29, 49, 124, , "Name", OpenSans_Regular, White, Alignment.AlignCenter
     ' Textbox
-    CreateTextbox WindowCount, "txtName", 29, 65, 124, 24, , Fonts.OpenSans_Regular, , Alignment.alignLeft, , , , , , DesignTypes.desTextAincrad, DesignTypes.desTextAincrad, DesignTypes.desTextAincrad, , , , , , , 5, 3
+    CreateTextbox WindowCount, "txtName", 29, 65, 124, 24, , Fonts.OpenSans_Regular, , Alignment.AlignLeft, , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, , , , , , , 5, 3
     ' Gender
-    CreateLabel WindowCount, "lblGender", 29, 92, 124, , "Gender", OpenSans_Regular, White, Alignment.alignCentre
+    CreateLabel WindowCount, "lblGender", 29, 92, 124, , "Gender", OpenSans_Regular, White, Alignment.AlignCenter
     ' Checkboxes
-    CreateCheckbox WindowCount, "CheckMale", 29, 113, 55, , 1, "Male", OpenSans_Regular, , Alignment.alignCentre, , , DesignTypes.desChkNorm, , , GetAddress(AddressOf CheckNewChar_Male), , , 1
-    CreateCheckbox WindowCount, "CheckFemale", 90, 113, 62, , 0, "Female", OpenSans_Regular, , Alignment.alignCentre, , , DesignTypes.desChkNorm, , , GetAddress(AddressOf CheckNewChar_Female), , , 1
+    CreateCheckbox WindowCount, "CheckMale", 29, 113, 55, , 1, "Male", OpenSans_Regular, , Alignment.AlignCenter, , , DesignTypes.DesignCheckBox, , , GetAddress(AddressOf CheckNewChar_Male), , , 1
+    CreateCheckbox WindowCount, "CheckFemale", 90, 113, 62, , 0, "Female", OpenSans_Regular, , Alignment.AlignCenter, , , DesignTypes.DesignCheckBox, , , GetAddress(AddressOf CheckNewChar_Female), , , 1
     ' Buttons
-    CreateButton WindowCount, "ButtonAccept", 29, 137, 60, 26, "Accept", OpenSans_Regular, , , , , , , , DesignTypes.desSteel, DesignTypes.desSteel_Hover, DesignTypes.desSteel_Click, , , GetAddress(AddressOf ButtonNewChar_Accept)
-    CreateButton WindowCount, "ButtonCancel", 93, 137, 60, 26, "Cancel", OpenSans_Regular, , , , , , , , DesignTypes.desSteel, DesignTypes.desSteel_Hover, DesignTypes.desSteel_Click, , , GetAddress(AddressOf ButtonNewChar_Cancel)
+    CreateButton WindowCount, "ButtonAccept", 29, 137, 60, 26, "Accept", OpenSans_Regular, , , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf ButtonNewChar_Accept)
+    CreateButton WindowCount, "ButtonCancel", 93, 137, 60, 26, "Cancel", OpenSans_Regular, , , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf ButtonNewChar_Cancel)
     ' Sprite
-    CreatePictureBox WindowCount, "picShadow_3", 175, 52, 76, 9, , , , , , , , DesignTypes.desBlackOval, DesignTypes.desBlackOval, DesignTypes.desBlackOval
-    CreateLabel WindowCount, "lblSprite", 175, 49, 76, , "Sprite", OpenSans_Regular, White, Alignment.alignCentre
+    CreatePictureBox WindowCount, "picShadow_3", 175, 52, 76, 9, , , , , , , , DesignTypes.DesignBackgroundOval, DesignTypes.DesignBackgroundOval, DesignTypes.DesignBackgroundOval
+    CreateLabel WindowCount, "lblSprite", 175, 49, 76, , "Sprite", OpenSans_Regular, White, Alignment.AlignCenter
     ' Scene
     CreatePictureBox WindowCount, "picScene", 165, 65, 96, 96, , , , , Tex_GUI(11), Tex_GUI(11), Tex_GUI(11), , , , , , , , , GetAddress(AddressOf NewChar_OnDraw)
     ' Buttons

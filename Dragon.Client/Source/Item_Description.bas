@@ -65,7 +65,7 @@ Public Sub ShowItemDesc(X As Long, Y As Long, ByRef Inventory As InventoryRec)
             .Controls(ControlIndex).Text = ItemName
         End If
 
-        .Controls(ControlIndex).textColour = GetRarityColor(Item(Inventory.Num).Rarity)
+        .Controls(ControlIndex).TextColour = GetRarityColor(Item(Inventory.Num).Rarity)
         .Controls(ControlIndex).Width = 225
 
         If Item(Inventory.Num).Type = ItemType.ItemType_Equipment Then
@@ -74,8 +74,8 @@ Public Sub ShowItemDesc(X As Long, Y As Long, ByRef Inventory As InventoryRec)
             .Controls(ControlType).Text = GetItemTypeText(Item(Inventory.Num).Type)
         End If
 
-        .Controls(ControlType).textColour = White
-        .Controls(ControlType).align = Alignment.alignCentre
+        .Controls(ControlType).TextColour = White
+        .Controls(ControlType).Align = Alignment.AlignCenter
         .Controls(ControlType).Width = 225
     End With
 

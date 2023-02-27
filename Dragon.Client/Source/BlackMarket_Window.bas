@@ -21,66 +21,66 @@ Public Sub CreateWindow_CashShop()
     Dim i As Long
 
     ' Create window
-    CreateWindow "winCashShop", "MERCADO NEGRO", zOrder_Win, 0, 0, 404, 410, 0, False, Fonts.OpenSans_Regular, , 2, 7, DesignTypes.desWin_AincradNorm, DesignTypes.desWin_AincradNorm, DesignTypes.desWin_AincradNorm
+    CreateWindow "winCashShop", "MERCADO NEGRO", zOrder_Win, 0, 0, 404, 410, 0, False, Fonts.OpenSans_Regular, , 2, 7, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar
     ' Centralise it
     CentraliseWindow WindowCount
     ' Set the index for spawning controls
     zOrder_Con = 1
     ' Close button
     CreateButton WindowCount, "btnClose", Windows(WindowCount).Window.Width - 33, 11, 22, 22, , , , , , , Tex_GUI(TextureControl_CloseNormal), Tex_GUI(TextureControl_CloseHover), Tex_GUI(TextureControl_CloseClick), , , , , , GetAddress(AddressOf ButtonMenu_CashShop)
-    CreateLabel WindowCount, "lblBalance", 0, 60, 404, 22, "Meu Balanço: $ 195,454.011", OpenSans_Effect, Gold, Alignment.alignCentre
+    CreateLabel WindowCount, "lblBalance", 0, 60, 404, 22, "Meu Balanço: $ 195,454.011", OpenSans_Effect, Gold, Alignment.AlignCenter
 
-    CreatePictureBox WindowCount, "picBack", 20, LeftListY + 45, 364, 290, , , , , , , , DesignTypes.desTextWhite, DesignTypes.desTextWhite, DesignTypes.desTextWhite
+    'CreatePictureBox WindowCount, "picBack", 20, LeftListY + 45, 364, 290, , , , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox
 
     For i = 0 To BlackMarketListCount - 1
-        CreateLabel WindowCount, "lblItemName" & (i + 1), (LeftListX + 55), (LeftListY + 62) + (ListOffsetY * i), 190, 20, "", OpenSans_Effect, Coral, Alignment.alignLeft
-        CreateLabel WindowCount, "lblItemPrice" & (i + 1), (LeftListX + 55), (LeftListY + 76) + (ListOffsetY * i), 190, 20, "", OpenSans_Effect, White, Alignment.alignLeft
+        CreateLabel WindowCount, "lblItemName" & (i + 1), (LeftListX + 55), (LeftListY + 62) + (ListOffsetY * i), 190, 20, "", OpenSans_Effect, Coral, Alignment.AlignLeft
+        CreateLabel WindowCount, "lblItemPrice" & (i + 1), (LeftListX + 55), (LeftListY + 76) + (ListOffsetY * i), 190, 20, "", OpenSans_Effect, White, Alignment.AlignLeft
     Next
 
-    CreateButton WindowCount, "btnCategory1", LeftListX - 94, LeftListY + 75, 95, 25, "PROMOÇÃO", OpenSans_Effect, White, , , , , , , DesignTypes.desSteel, DesignTypes.desSteel_Hover, DesignTypes.desSteel_Click, , , GetAddress(AddressOf SelectCategory_Promo)
-    CreateButton WindowCount, "btnCategory2", LeftListX - 94, LeftListY + 105, 95, 25, "ESTÍMULOS", OpenSans_Effect, White, , , , , , , DesignTypes.desSteel, DesignTypes.desSteel_Hover, DesignTypes.desSteel_Click, , , GetAddress(AddressOf SelectCategory_Boost)
-    CreateButton WindowCount, "btnCategory3", LeftListX - 94, LeftListY + 135, 95, 25, "SUPLEMENTOS", OpenSans_Effect, White, , , , , , , DesignTypes.desSteel, DesignTypes.desSteel_Hover, DesignTypes.desSteel_Click, , , GetAddress(AddressOf SelectCategory_Supply)
-    CreateButton WindowCount, "btnCategory4", LeftListX - 94, LeftListY + 165, 95, 25, "CONSUMÍVEIS", OpenSans_Effect, White, , , , , , , DesignTypes.desSteel, DesignTypes.desSteel_Hover, DesignTypes.desSteel_Click, , , GetAddress(AddressOf SelectCategory_Consumable)
-    CreateButton WindowCount, "btnCategory5", LeftListX - 94, LeftListY + 195, 95, 25, "SERVIÇOS", OpenSans_Effect, White, , , , , , , DesignTypes.desSteel, DesignTypes.desSteel_Hover, DesignTypes.desSteel_Click, , , GetAddress(AddressOf SelectCategory_Service)
-    CreateButton WindowCount, "btnCategory6", LeftListX - 94, LeftListY + 225, 95, 25, "PACOTES", OpenSans_Effect, White, , , , , , , DesignTypes.desSteel, DesignTypes.desSteel_Hover, DesignTypes.desSteel_Click, , , GetAddress(AddressOf SelectCategory_Package)
-    CreateButton WindowCount, "btnCategory7", LeftListX - 94, LeftListY + 255, 95, 25, "PETS", OpenSans_Effect, White, , , , , , , DesignTypes.desSteel, DesignTypes.desSteel_Hover, DesignTypes.desSteel_Click, , , GetAddress(AddressOf SelectCategory_Pet)
+    CreateButton WindowCount, "btnCategory1", LeftListX - 94, LeftListY + 75, 95, 25, "PROMOÇÃO", OpenSans_Effect, White, , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf SelectCategory_Promo)
+    CreateButton WindowCount, "btnCategory2", LeftListX - 94, LeftListY + 105, 95, 25, "ESTÍMULOS", OpenSans_Effect, White, , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf SelectCategory_Boost)
+    CreateButton WindowCount, "btnCategory3", LeftListX - 94, LeftListY + 135, 95, 25, "SUPLEMENTOS", OpenSans_Effect, White, , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf SelectCategory_Supply)
+    CreateButton WindowCount, "btnCategory4", LeftListX - 94, LeftListY + 165, 95, 25, "CONSUMÍVEIS", OpenSans_Effect, White, , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf SelectCategory_Consumable)
+    CreateButton WindowCount, "btnCategory5", LeftListX - 94, LeftListY + 195, 95, 25, "SERVIÇOS", OpenSans_Effect, White, , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf SelectCategory_Service)
+    CreateButton WindowCount, "btnCategory6", LeftListX - 94, LeftListY + 225, 95, 25, "PACOTES", OpenSans_Effect, White, , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf SelectCategory_Package)
+    CreateButton WindowCount, "btnCategory7", LeftListX - 94, LeftListY + 255, 95, 25, "PETS", OpenSans_Effect, White, , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf SelectCategory_Pet)
 
-    CreatePictureBox WindowCount, "picIcon1", (LeftListX + 15), (LeftListY + 60) + (ListOffsetY * 0), 32, 32, , , , , , , , DesignTypes.desTextWhite, DesignTypes.desTextWhite, DesignTypes.desTextWhite, , GetAddress(AddressOf ButtonSelectItem1_MouseMove), GetAddress(AddressOf ButtonSelectItem1_Click), GetAddress(AddressOf ButtonSelectItem1_MouseMove)
-    CreatePictureBox WindowCount, "picIcon2", (LeftListX + 15), (LeftListY + 60) + (ListOffsetY * 1), 32, 32, , , , , , , , DesignTypes.desTextWhite, DesignTypes.desTextWhite, DesignTypes.desTextWhite, , GetAddress(AddressOf ButtonSelectItem2_MouseMove), GetAddress(AddressOf ButtonSelectItem2_Click), GetAddress(AddressOf ButtonSelectItem2_MouseMove)
-    CreatePictureBox WindowCount, "picIcon3", (LeftListX + 15), (LeftListY + 60) + (ListOffsetY * 2), 32, 32, , , , , , , , DesignTypes.desTextWhite, DesignTypes.desTextWhite, DesignTypes.desTextWhite, , GetAddress(AddressOf ButtonSelectItem3_MouseMove), GetAddress(AddressOf ButtonSelectItem3_Click), GetAddress(AddressOf ButtonSelectItem3_MouseMove)
-    CreatePictureBox WindowCount, "picIcon4", (LeftListX + 15), (LeftListY + 60) + (ListOffsetY * 3), 32, 32, , , , , , , , DesignTypes.desTextWhite, DesignTypes.desTextWhite, DesignTypes.desTextWhite, , GetAddress(AddressOf ButtonSelectItem4_MouseMove), GetAddress(AddressOf ButtonSelectItem4_Click), GetAddress(AddressOf ButtonSelectItem4_MouseMove)
-    CreatePictureBox WindowCount, "picIcon5", (LeftListX + 15), (LeftListY + 60) + (ListOffsetY * 4), 32, 32, , , , , , , , DesignTypes.desTextWhite, DesignTypes.desTextWhite, DesignTypes.desTextWhite, , GetAddress(AddressOf ButtonSelectItem5_MouseMove), GetAddress(AddressOf ButtonSelectItem5_Click), GetAddress(AddressOf ButtonSelectItem5_MouseMove)
-    CreatePictureBox WindowCount, "picIcon6", (LeftListX + 15), (LeftListY + 60) + (ListOffsetY * 5), 32, 32, , , , , , , , DesignTypes.desTextWhite, DesignTypes.desTextWhite, DesignTypes.desTextWhite, , GetAddress(AddressOf ButtonSelectItem6_MouseMove), GetAddress(AddressOf ButtonSelectItem6_Click), GetAddress(AddressOf ButtonSelectItem6_MouseMove)
+    CreatePictureBox WindowCount, "picIcon1", (LeftListX + 15), (LeftListY + 60) + (ListOffsetY * 0), 32, 32, , , , , , , , , , , , GetAddress(AddressOf ButtonSelectItem1_MouseMove), GetAddress(AddressOf ButtonSelectItem1_Click), GetAddress(AddressOf ButtonSelectItem1_MouseMove)
+    CreatePictureBox WindowCount, "picIcon2", (LeftListX + 15), (LeftListY + 60) + (ListOffsetY * 1), 32, 32, , , , , , , , , , , , GetAddress(AddressOf ButtonSelectItem2_MouseMove), GetAddress(AddressOf ButtonSelectItem2_Click), GetAddress(AddressOf ButtonSelectItem2_MouseMove)
+    CreatePictureBox WindowCount, "picIcon3", (LeftListX + 15), (LeftListY + 60) + (ListOffsetY * 2), 32, 32, , , , , , , , , , , , GetAddress(AddressOf ButtonSelectItem3_MouseMove), GetAddress(AddressOf ButtonSelectItem3_Click), GetAddress(AddressOf ButtonSelectItem3_MouseMove)
+    CreatePictureBox WindowCount, "picIcon4", (LeftListX + 15), (LeftListY + 60) + (ListOffsetY * 3), 32, 32, , , , , , , , , , , , GetAddress(AddressOf ButtonSelectItem4_MouseMove), GetAddress(AddressOf ButtonSelectItem4_Click), GetAddress(AddressOf ButtonSelectItem4_MouseMove)
+    CreatePictureBox WindowCount, "picIcon5", (LeftListX + 15), (LeftListY + 60) + (ListOffsetY * 4), 32, 32, , , , , , , , , , , , GetAddress(AddressOf ButtonSelectItem5_MouseMove), GetAddress(AddressOf ButtonSelectItem5_Click), GetAddress(AddressOf ButtonSelectItem5_MouseMove)
+    CreatePictureBox WindowCount, "picIcon6", (LeftListX + 15), (LeftListY + 60) + (ListOffsetY * 5), 32, 32, , , , , , , , , , , , GetAddress(AddressOf ButtonSelectItem6_MouseMove), GetAddress(AddressOf ButtonSelectItem6_Click), GetAddress(AddressOf ButtonSelectItem6_MouseMove)
 
-    CreatePictureBox WindowCount, "picName1", (LeftListX + 47), (LeftListY + 60) + (ListOffsetY * 0), 190, 32, , , , , , , , DesignTypes.desTextWhite, DesignTypes.desTextWhite, DesignTypes.desTextWhite, , GetAddress(AddressOf ButtonSelectItem1_MouseMove), GetAddress(AddressOf ButtonSelectItem1_Click), GetAddress(AddressOf ButtonSelectItem1_MouseMove)
-    CreatePictureBox WindowCount, "picName2", (LeftListX + 47), (LeftListY + 60) + (ListOffsetY * 1), 190, 32, , , , , , , , DesignTypes.desTextWhite, DesignTypes.desTextWhite, DesignTypes.desTextWhite, , GetAddress(AddressOf ButtonSelectItem2_MouseMove), GetAddress(AddressOf ButtonSelectItem2_Click), GetAddress(AddressOf ButtonSelectItem2_MouseMove)
-    CreatePictureBox WindowCount, "picName3", (LeftListX + 47), (LeftListY + 60) + (ListOffsetY * 2), 190, 32, , , , , , , , DesignTypes.desTextWhite, DesignTypes.desTextWhite, DesignTypes.desTextWhite, , GetAddress(AddressOf ButtonSelectItem3_MouseMove), GetAddress(AddressOf ButtonSelectItem3_Click), GetAddress(AddressOf ButtonSelectItem3_MouseMove)
-    CreatePictureBox WindowCount, "picName4", (LeftListX + 47), (LeftListY + 60) + (ListOffsetY * 3), 190, 32, , , , , , , , DesignTypes.desTextWhite, DesignTypes.desTextWhite, DesignTypes.desTextWhite, , GetAddress(AddressOf ButtonSelectItem4_MouseMove), GetAddress(AddressOf ButtonSelectItem4_Click), GetAddress(AddressOf ButtonSelectItem4_MouseMove)
-    CreatePictureBox WindowCount, "picName5", (LeftListX + 47), (LeftListY + 60) + (ListOffsetY * 4), 190, 32, , , , , , , , DesignTypes.desTextWhite, DesignTypes.desTextWhite, DesignTypes.desTextWhite, , GetAddress(AddressOf ButtonSelectItem5_MouseMove), GetAddress(AddressOf ButtonSelectItem5_Click), GetAddress(AddressOf ButtonSelectItem5_MouseMove)
-    CreatePictureBox WindowCount, "picName6", (LeftListX + 47), (LeftListY + 60) + (ListOffsetY * 5), 190, 32, , , , , , , , DesignTypes.desTextWhite, DesignTypes.desTextWhite, DesignTypes.desTextWhite, , GetAddress(AddressOf ButtonSelectItem6_MouseMove), GetAddress(AddressOf ButtonSelectItem6_Click), GetAddress(AddressOf ButtonSelectItem6_MouseMove)
+    CreatePictureBox WindowCount, "picName1", (LeftListX + 47), (LeftListY + 60) + (ListOffsetY * 0), 190, 32, , , , , , , , , , , , GetAddress(AddressOf ButtonSelectItem1_MouseMove), GetAddress(AddressOf ButtonSelectItem1_Click), GetAddress(AddressOf ButtonSelectItem1_MouseMove)
+    CreatePictureBox WindowCount, "picName2", (LeftListX + 47), (LeftListY + 60) + (ListOffsetY * 1), 190, 32, , , , , , , , , , , , GetAddress(AddressOf ButtonSelectItem2_MouseMove), GetAddress(AddressOf ButtonSelectItem2_Click), GetAddress(AddressOf ButtonSelectItem2_MouseMove)
+    CreatePictureBox WindowCount, "picName3", (LeftListX + 47), (LeftListY + 60) + (ListOffsetY * 2), 190, 32, , , , , , , , , , , , GetAddress(AddressOf ButtonSelectItem3_MouseMove), GetAddress(AddressOf ButtonSelectItem3_Click), GetAddress(AddressOf ButtonSelectItem3_MouseMove)
+    CreatePictureBox WindowCount, "picName4", (LeftListX + 47), (LeftListY + 60) + (ListOffsetY * 3), 190, 32, , , , , , , , , , , , GetAddress(AddressOf ButtonSelectItem4_MouseMove), GetAddress(AddressOf ButtonSelectItem4_Click), GetAddress(AddressOf ButtonSelectItem4_MouseMove)
+    CreatePictureBox WindowCount, "picName5", (LeftListX + 47), (LeftListY + 60) + (ListOffsetY * 4), 190, 32, , , , , , , , , , , , GetAddress(AddressOf ButtonSelectItem5_MouseMove), GetAddress(AddressOf ButtonSelectItem5_Click), GetAddress(AddressOf ButtonSelectItem5_MouseMove)
+    CreatePictureBox WindowCount, "picName6", (LeftListX + 47), (LeftListY + 60) + (ListOffsetY * 5), 190, 32, , , , , , , , , , , , GetAddress(AddressOf ButtonSelectItem6_MouseMove), GetAddress(AddressOf ButtonSelectItem6_Click), GetAddress(AddressOf ButtonSelectItem6_MouseMove)
 
     'Botões setas
-    CreateLabel WindowCount, "lblPage", LeftListX + 65, LeftListY + 305, 120, 50, "Página: 1/2", OpenSans_Effect, White, Alignment.alignCentre
-    CreateButton WindowCount, "btnUp", LeftListX + 60, LeftListY + 305, 15, 15, , , , , , , Tex_GUI(82), Tex_GUI(83), Tex_GUI(84), , , , , , GetAddress(AddressOf MoveListToUp)
-    CreateButton WindowCount, "btnDown", LeftListX + 179, LeftListY + 305, 15, 15, , , , , , , Tex_GUI(79), Tex_GUI(80), Tex_GUI(81), , , , , , GetAddress(AddressOf MoveListToDown)
+    CreateLabel WindowCount, "lblPage", LeftListX + 65, LeftListY + 305, 120, 50, "Página: 1/2", OpenSans_Effect, White, Alignment.AlignCenter
+    CreateButton WindowCount, "btnUp", LeftListX + 60, LeftListY + 305, 15, 15, , , , , , , Tex_GUI(44), Tex_GUI(45), Tex_GUI(46), , , , , , GetAddress(AddressOf MoveListToUp)
+    CreateButton WindowCount, "btnDown", LeftListX + 179, LeftListY + 305, 15, 15, , , , , , , Tex_GUI(47), Tex_GUI(48), Tex_GUI(49), , , , , , GetAddress(AddressOf MoveListToDown)
 
     ' ################ SELECTED ITEM ################
-    CreateLabel WindowCount, "lblItemName", LeftListX + 25, LeftListY + 63, 200, 20, "", OpenSans_Effect, Coral, Alignment.alignCentre
-    CreateLabel WindowCount, "lblItemPrice", LeftListX + 25, LeftListY + 77, 200, 20, "", OpenSans_Effect, White, Alignment.alignCentre
-    CreatePictureBox WindowCount, "picNameBack", LeftListX + 25, LeftListY + 60, 200, 34, , , , , , , , DesignTypes.desTextWhite, DesignTypes.desTextWhite, DesignTypes.desTextWhite, , GetAddress(AddressOf ShowSelectedItem), , GetAddress(AddressOf ShowSelectedItem)
+    CreateLabel WindowCount, "lblItemName", LeftListX + 25, LeftListY + 63, 200, 20, "", OpenSans_Effect, Coral, Alignment.AlignCenter
+    CreateLabel WindowCount, "lblItemPrice", LeftListX + 25, LeftListY + 77, 200, 20, "", OpenSans_Effect, White, Alignment.AlignCenter
+    CreatePictureBox WindowCount, "picNameBack", LeftListX + 25, LeftListY + 60, 200, 34, , , , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, , GetAddress(AddressOf ShowSelectedItem), , GetAddress(AddressOf ShowSelectedItem)
     ' Icone
-    CreatePictureBox WindowCount, "picIcon", (LeftListX + 109), LeftListY + 105, 32, 32, , , , , , , , DesignTypes.desTextWhite, DesignTypes.desTextWhite, DesignTypes.desTextWhite, , GetAddress(AddressOf ShowSelectedItem), , GetAddress(AddressOf ShowSelectedItem)
+    CreatePictureBox WindowCount, "picIcon", (LeftListX + 109), LeftListY + 105, 32, 32, , , , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, , GetAddress(AddressOf ShowSelectedItem), , GetAddress(AddressOf ShowSelectedItem)
     ' Text Character
-    CreateLabel WindowCount, "lblTarget", LeftListX + 25, LeftListY + 145, 200, 20, "Personagem", OpenSans_Effect, Gold, Alignment.alignCentre
-    CreateTextbox WindowCount, "txtName", LeftListX + 25, LeftListY + 160, 200, 24, , Fonts.OpenSans_Effect, White, Alignment.alignCentre, , , , , , DesignTypes.desTextAincrad, DesignTypes.desTextAincrad, DesignTypes.desTextAincrad, , , , , , , 8, 5
+    CreateLabel WindowCount, "lblTarget", LeftListX + 25, LeftListY + 145, 200, 20, "Personagem", OpenSans_Effect, Gold, Alignment.AlignCenter
+    CreateTextbox WindowCount, "txtName", LeftListX + 25, LeftListY + 160, 200, 24, , Fonts.OpenSans_Effect, White, Alignment.AlignCenter, , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, , , , , , , 8, 5
 
-    CreateLabel WindowCount, "lblQuantity", LeftListX + 25, LeftListY + 185, 200, 20, "Quantidade", OpenSans_Effect, Gold, Alignment.alignCentre
-    CreateTextbox WindowCount, "txtQuantity", LeftListX + 25, LeftListY + 200, 200, 24, "1", Fonts.OpenSans_Effect, White, Alignment.alignCentre, , , , , , DesignTypes.desTextAincrad, DesignTypes.desTextAincrad, DesignTypes.desTextAincrad, , , , , , , 8, 5, , GetAddress(AddressOf UpdatePrice)
+    CreateLabel WindowCount, "lblQuantity", LeftListX + 25, LeftListY + 185, 200, 20, "Quantidade", OpenSans_Effect, Gold, Alignment.AlignCenter
+    CreateTextbox WindowCount, "txtQuantity", LeftListX + 25, LeftListY + 200, 200, 24, "1", Fonts.OpenSans_Effect, White, Alignment.AlignCenter, , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, , , , , , , 8, 5, , GetAddress(AddressOf UpdatePrice)
 
-    CreateLabel WindowCount, "lblGift", LeftListX + 25, LeftListY + 230, 200, 20, "Este item pode ser enviado como presente.", OpenSans_Effect, BrightGreen, Alignment.alignCentre
+    CreateLabel WindowCount, "lblGift", LeftListX + 25, LeftListY + 230, 200, 20, "Este item pode ser enviado como presente.", OpenSans_Effect, BrightGreen, Alignment.AlignCenter
 
-    CreateButton WindowCount, "btnPurchase", LeftListX + 25, LeftListY + 270, 95, 25, "Comprar", OpenSans_Effect, White, , , , , , , DesignTypes.desBlue, DesignTypes.desSteel_Hover, DesignTypes.desBlue_Click, , , GetAddress(AddressOf ButtonPurchase_Click)
-    CreateButton WindowCount, "btnCancel", LeftListX + 130, LeftListY + 270, 95, 25, "Cancelar", OpenSans_Effect, White, , , , , , , DesignTypes.desRed, DesignTypes.desRed_Hover, DesignTypes.desRed_Click, , , GetAddress(AddressOf ButtonCancel_Click)
+    CreateButton WindowCount, "btnPurchase", LeftListX + 25, LeftListY + 270, 95, 25, "Comprar", OpenSans_Effect, White, , , , , , , DesignTypes.DesignGreen, DesignTypes.DesignGreenHover, DesignTypes.DesignGreenClick, , , GetAddress(AddressOf ButtonPurchase_Click)
+    CreateButton WindowCount, "btnCancel", LeftListX + 130, LeftListY + 270, 95, 25, "Cancelar", OpenSans_Effect, White, , , , , , , DesignTypes.DesignRed, DesignTypes.DesignRedHover, DesignTypes.DesignRedClick, , , GetAddress(AddressOf ButtonCancel_Click)
 
     WindowIndex = WindowCount
     SelectedCashCategory = BlackMarketCategory_Promo
@@ -91,7 +91,7 @@ Public Sub CreateWindow_CashShop()
     Windows(WindowIndex).Controls(GetControlIndex("winCashShop", "txtQuantity")).TextLimit = 3
     Windows(WindowIndex).Controls(GetControlIndex("winCashShop", "txtName")).TextLimit = 25
     ' Define o callback para o valor do preço. O evento é chamado toda vez que uma tecla for pressionada.
-    Windows(WindowIndex).Controls(GetControlIndex("winCashShop", "txtQuantity")).entCallBack(entStates.KeyPress) = GetAddress(AddressOf UpdatePrice)
+    Windows(WindowIndex).Controls(GetControlIndex("winCashShop", "txtQuantity")).EntityCallBack(entStates.KeyPress) = GetAddress(AddressOf UpdatePrice)
 
     MaximumItemCategoryPage = 1
     CurrentItemCategoryPage = 1
@@ -458,7 +458,7 @@ Private Sub SetControlImage(ByVal Index As Long, ByVal TextureNum As Long)
     ControlIndex = GetControlIndex("winCashShop", "picIcon" & Index)
 
     For i = 0 To entStates.state_Count - 1
-        Windows(WindowIndex).Controls(ControlIndex).image(i) = TextureNum
+        Windows(WindowIndex).Controls(ControlIndex).Image(i) = TextureNum
     Next
 
 End Sub
@@ -498,7 +498,7 @@ Private Sub UpdateBuyControlsText()
         End If
 
         For i = 0 To entStates.state_Count - 1
-            Windows(WindowIndex).Controls(ControlIconIndex).image(i) = IconId
+            Windows(WindowIndex).Controls(ControlIconIndex).Image(i) = IconId
         Next
 
         ControlGiftIndex = GetControlIndex("winCashShop", "lblGift")
@@ -508,23 +508,23 @@ Private Sub UpdateBuyControlsText()
 
         If BlackMarketItems(SelectedIndex).GiftEnabled Then
             Windows(WindowIndex).Controls(ControlGiftIndex).Text = "Este item pode ser enviado como presente."
-            Windows(WindowIndex).Controls(ControlGiftIndex).textColour = Gold
-            Windows(WindowIndex).Controls(ControlGiftIndex).textColour_Click = Gold
-            Windows(WindowIndex).Controls(ControlGiftIndex).textColour_Hover = Gold
+            Windows(WindowIndex).Controls(ControlGiftIndex).TextColour = Gold
+            Windows(WindowIndex).Controls(ControlGiftIndex).TextColourClick = Gold
+            Windows(WindowIndex).Controls(ControlGiftIndex).TextColourHover = Gold
 
-            Windows(WindowIndex).Controls(ControlNameIndex).textColour = White
-            Windows(WindowIndex).Controls(ControlNameIndex).textColour_Click = White
-            Windows(WindowIndex).Controls(ControlNameIndex).textColour_Hover = White
+            Windows(WindowIndex).Controls(ControlNameIndex).TextColour = White
+            Windows(WindowIndex).Controls(ControlNameIndex).TextColourClick = White
+            Windows(WindowIndex).Controls(ControlNameIndex).TextColourHover = White
 
         Else
             Windows(WindowIndex).Controls(ControlGiftIndex).Text = "Este item não pode ser enviado como presente."
-            Windows(WindowIndex).Controls(ControlGiftIndex).textColour = BrightRed
-            Windows(WindowIndex).Controls(ControlGiftIndex).textColour_Click = BrightRed
-            Windows(WindowIndex).Controls(ControlGiftIndex).textColour_Hover = BrightRed
+            Windows(WindowIndex).Controls(ControlGiftIndex).TextColour = BrightRed
+            Windows(WindowIndex).Controls(ControlGiftIndex).TextColourClick = BrightRed
+            Windows(WindowIndex).Controls(ControlGiftIndex).TextColourHover = BrightRed
 
-            Windows(WindowIndex).Controls(ControlNameIndex).textColour = Grey
-            Windows(WindowIndex).Controls(ControlNameIndex).textColour_Click = Grey
-            Windows(WindowIndex).Controls(ControlNameIndex).textColour_Hover = Grey
+            Windows(WindowIndex).Controls(ControlNameIndex).TextColour = Grey
+            Windows(WindowIndex).Controls(ControlNameIndex).TextColourClick = Grey
+            Windows(WindowIndex).Controls(ControlNameIndex).TextColourHover = Grey
         End If
 
         Windows(WindowIndex).Controls(GetControlIndex("winCashShop", "txtQuantity")).Enabled = Item(ItemNum).Stackable
@@ -533,13 +533,13 @@ Private Sub UpdateBuyControlsText()
         ControlQuantityIndex = GetControlIndex("winCashShop", "txtQuantity")
 
         If Item(ItemNum).Stackable Then
-            Windows(WindowIndex).Controls(ControlQuantityIndex).textColour = White
-            Windows(WindowIndex).Controls(ControlQuantityIndex).textColour_Click = White
-            Windows(WindowIndex).Controls(ControlQuantityIndex).textColour_Hover = White
+            Windows(WindowIndex).Controls(ControlQuantityIndex).TextColour = White
+            Windows(WindowIndex).Controls(ControlQuantityIndex).TextColourClick = White
+            Windows(WindowIndex).Controls(ControlQuantityIndex).TextColourHover = White
         Else
-            Windows(WindowIndex).Controls(ControlQuantityIndex).textColour = Grey
-            Windows(WindowIndex).Controls(ControlQuantityIndex).textColour_Click = Grey
-            Windows(WindowIndex).Controls(ControlQuantityIndex).textColour_Hover = Grey
+            Windows(WindowIndex).Controls(ControlQuantityIndex).TextColour = Grey
+            Windows(WindowIndex).Controls(ControlQuantityIndex).TextColourClick = Grey
+            Windows(WindowIndex).Controls(ControlQuantityIndex).TextColourHover = Grey
         End If
 
     End If
@@ -581,16 +581,16 @@ Public Sub UpdateBlackMarketItemList()
                 Windows(WindowIndex).Controls(ControlNameIndex).Text = Trim$(Item(ItemNum).Name)
             End If
 
-            Windows(WindowIndex).Controls(ControlNameIndex).textColour = Colour
-            Windows(WindowIndex).Controls(ControlNameIndex).textColour_Click = Colour
-            Windows(WindowIndex).Controls(ControlNameIndex).textColour_Hover = Colour
+            Windows(WindowIndex).Controls(ControlNameIndex).TextColour = Colour
+            Windows(WindowIndex).Controls(ControlNameIndex).TextColourClick = Colour
+            Windows(WindowIndex).Controls(ControlNameIndex).TextColourHover = Colour
 
             Colour = GetCurrencyColor(Price)
 
             Windows(WindowIndex).Controls(ControlPriceIndex).Text = "Cash: $ " & Format$(Price, "#,###,###,###")
-            Windows(WindowIndex).Controls(ControlPriceIndex).textColour = Colour
-            Windows(WindowIndex).Controls(ControlPriceIndex).textColour_Click = Colour
-            Windows(WindowIndex).Controls(ControlPriceIndex).textColour_Hover = Colour
+            Windows(WindowIndex).Controls(ControlPriceIndex).TextColour = Colour
+            Windows(WindowIndex).Controls(ControlPriceIndex).TextColourClick = Colour
+            Windows(WindowIndex).Controls(ControlPriceIndex).TextColourHover = Colour
 
             If Item(ItemNum).IconId > 0 Then
                 Call SetControlImage(i + 1, Tex_Item(Item(ItemNum).IconId))

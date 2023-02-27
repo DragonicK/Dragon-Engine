@@ -141,13 +141,13 @@ Public Sub HandleKeyPresses(ByVal KeyAscii As Integer)
     End If
 
     ' Do we have an active window
-    If activeWindow > 0 Then
+    If ActiveWindow > 0 Then
         ' make sure it's visible
-        If Windows(activeWindow).Window.Visible Then
+        If Windows(ActiveWindow).Window.Visible Then
             ' Do we have an active control
-            If Windows(activeWindow).activeControl > 0 Then
+            If Windows(ActiveWindow).activeControl > 0 Then
                 ' Do our thing
-                With Windows(activeWindow).Controls(Windows(activeWindow).activeControl)
+                With Windows(ActiveWindow).Controls(Windows(ActiveWindow).activeControl)
 
                     If .Enabled Then
 
@@ -160,33 +160,33 @@ Public Sub HandleKeyPresses(ByVal KeyAscii As Integer)
 
                         Case vbKeyReturn
                             ' override for function callbacks
-                            If .entCallBack(entStates.Enter) > 0 Then
-                                entCallBack .entCallBack(entStates.Enter), activeWindow, Windows(activeWindow).activeControl, 0, 0
+                            If .EntityCallBack(entStates.Enter) > 0 Then
+                                EntityCallBack .EntityCallBack(entStates.Enter), ActiveWindow, Windows(ActiveWindow).activeControl, 0, 0
                                 Exit Sub
                             Else
                                 n = 0
-                                For i = Windows(activeWindow).ControlCount To 1 Step -1
-                                    If i > Windows(activeWindow).activeControl Then
-                                        If SetActiveControl(activeWindow, i) Then n = i
+                                For i = Windows(ActiveWindow).ControlCount To 1 Step -1
+                                    If i > Windows(ActiveWindow).activeControl Then
+                                        If SetActiveControl(ActiveWindow, i) Then n = i
                                     End If
                                 Next
                                 If n = 0 Then
-                                    For i = Windows(activeWindow).ControlCount To 1 Step -1
-                                        SetActiveControl activeWindow, i
+                                    For i = Windows(ActiveWindow).ControlCount To 1 Step -1
+                                        SetActiveControl ActiveWindow, i
                                     Next
                                 End If
                             End If
 
                         Case vbKeyTab
                             n = 0
-                            For i = Windows(activeWindow).ControlCount To 1 Step -1
-                                If i > Windows(activeWindow).activeControl Then
-                                    If SetActiveControl(activeWindow, i) Then n = i
+                            For i = Windows(ActiveWindow).ControlCount To 1 Step -1
+                                If i > Windows(ActiveWindow).activeControl Then
+                                    If SetActiveControl(ActiveWindow, i) Then n = i
                                 End If
                             Next
                             If n = 0 Then
-                                For i = Windows(activeWindow).ControlCount To 1 Step -1
-                                    SetActiveControl activeWindow, i
+                                For i = Windows(ActiveWindow).ControlCount To 1 Step -1
+                                    SetActiveControl ActiveWindow, i
                                 Next
                             End If
                         Case Else
@@ -206,12 +206,12 @@ Public Sub HandleKeyPresses(ByVal KeyAscii As Integer)
                         ' callback keyPress
                         Dim callBack As Long
 
-                        callBack = .entCallBack(entStates.KeyPress)
+                        callBack = .EntityCallBack(entStates.KeyPress)
 
-                        If callBack <> 0 Then entCallBack callBack, activeWindow, Windows(activeWindow).activeControl, 0, 0
+                        If callBack <> 0 Then EntityCallBack callBack, ActiveWindow, Windows(ActiveWindow).activeControl, 0, 0
 
                         ' exit out early - if not chatting
-                        If Windows(activeWindow).Window.Name <> "winChat" Then Exit Sub
+                        If Windows(ActiveWindow).Window.Name <> "winChat" Then Exit Sub
                     End If
                 End With
             End If

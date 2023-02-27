@@ -64,12 +64,12 @@ Public Sub ShowAttributeEffectDesc(X As Long, Y As Long, ByVal Target As Long, B
     With Windows(WindowIndex)
         ' set name
         ControlIndex = GetControlIndex("winDescription", "lblName")
-        .Controls(ControlIndex).textColour = BrightGreen
+        .Controls(ControlIndex).TextColour = BrightGreen
         .Controls(ControlIndex).Text = AttributeEffect(EffectId).Name
         .Controls(ControlIndex).Width = 225
 
         ControlIndex = GetControlIndex("winDescription", "lblType")
-        .Controls(ControlIndex).textColour = BrightGreen
+        .Controls(ControlIndex).TextColour = BrightGreen
         .Controls(ControlIndex).Width = 225
         .Controls(ControlIndex).Text = "Level " & EffectLevel
     End With

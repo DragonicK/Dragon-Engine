@@ -61,7 +61,7 @@ Private Const Sended As String = "Data de Envio: "
 Public Sub CreateWindow_Mail()
     Dim i As Long
     ' Create window
-    CreateWindow "winMail", "CORREIO", zOrder_Win, 0, 0, 400, 460, 0, False, Fonts.OpenSans_Regular, , 2, 7, DesignTypes.desWin_AincradNorm, DesignTypes.desWin_AincradNorm, DesignTypes.desWin_AincradNorm, , , , , , GetAddress(AddressOf WindowMail_MouseDown), , , , , GetAddress(AddressOf Draw_Mail)
+    CreateWindow "winMail", "CORREIO", zOrder_Win, 0, 0, 400, 460, 0, False, Fonts.OpenSans_Regular, , 2, 7, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, , , , , , GetAddress(AddressOf WindowMail_MouseDown), , , , , GetAddress(AddressOf Draw_Mail)
     ' Centralise it
     CentraliseWindow WindowCount
     ' Set the index for spawning controls
@@ -74,53 +74,53 @@ Public Sub CreateWindow_Mail()
     CreateButton WindowCount, "btnWrite", 200, 42, 200, 26, "ESCREVER", OpenSans_Effect, , , , , , , , , , , , , GetAddress(AddressOf Button_ShowWrite)
 
     ' Read Mail
-    CreatePictureBox WindowCount, "picSender", ReadingMailLeft, PictureSenderTop, 310, 25, False, , , , , , , DesignTypes.desTextWhite, DesignTypes.desTextWhite, DesignTypes.desTextWhite
-    CreatePictureBox WindowCount, "picSubject", ReadingMailLeft, PictureTitleTop, 310, 25, False, , , , , , , DesignTypes.desTextWhite, DesignTypes.desTextWhite, DesignTypes.desTextWhite
-    CreatePictureBox WindowCount, "picContent", ReadingMailLeft, PictureTextTop, 310, 122, False, , , , , , , DesignTypes.desTextWhite, DesignTypes.desTextWhite, DesignTypes.desTextWhite
-    CreatePictureBox WindowCount, "picSendDate", ReadingMailLeft, PictureSendDateTop, 310, 25, False, , , , , , , DesignTypes.desTextWhite, DesignTypes.desTextWhite, DesignTypes.desTextWhite
-    CreatePictureBox WindowCount, "picExpireDate", ReadingMailLeft, PictureExpireDateTop, 310, 25, False, , , , , , , DesignTypes.desTextWhite, DesignTypes.desTextWhite, DesignTypes.desTextWhite
-    CreatePictureBox WindowCount, "picAttachCoin", ReadingMailLeft, 330, 310, 25, False, , , , , , , DesignTypes.desTextWhite, DesignTypes.desTextWhite, DesignTypes.desTextWhite
-    CreatePictureBox WindowCount, "picAttachItem", PictureItemLeft, PictureItemTop, 40, 40, False, , , , , , , DesignTypes.desTextWhite, DesignTypes.desTextWhite, DesignTypes.desTextWhite, , , , , , GetAddress(AddressOf Draw_ReceivedItem)
+    CreatePictureBox WindowCount, "picSender", ReadingMailLeft, PictureSenderTop, 310, 25, False, , , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox
+    CreatePictureBox WindowCount, "picSubject", ReadingMailLeft, PictureTitleTop, 310, 25, False, , , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox
+    CreatePictureBox WindowCount, "picContent", ReadingMailLeft, PictureTextTop, 310, 122, False, , , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox
+    CreatePictureBox WindowCount, "picSendDate", ReadingMailLeft, PictureSendDateTop, 310, 25, False, , , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox
+    CreatePictureBox WindowCount, "picExpireDate", ReadingMailLeft, PictureExpireDateTop, 310, 25, False, , , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox
+    CreatePictureBox WindowCount, "picAttachCoin", ReadingMailLeft, 330, 310, 25, False, , , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox
+    CreatePictureBox WindowCount, "picAttachItem", PictureItemLeft, PictureItemTop, 40, 40, False, , , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, , , , , , GetAddress(AddressOf Draw_ReceivedItem)
 
-    CreateLabel WindowCount, "lblCurrency", ReadingMailLeft, 334, 310, 20, "Ouro: 0", OpenSans_Effect, White, Alignment.alignCentre, False, , , , , GetAddress(AddressOf ReadMailCurrency_MouseDown)
-    CreateLabel WindowCount, "lblText", ReadingMailLeft, PictureTextTop + 5, 310, 115, "", OpenSans_Effect, White, Alignment.alignCentre, False
-    CreateLabel WindowCount, "lblReceiveItem", PictureItemLeft, PictureItemTop, 40, 40, vbNullString, OpenSans_Effect, White, Alignment.alignCentre, False, , , , GetAddress(AddressOf ReadMailItem_MouseMove), GetAddress(AddressOf ReadMailItem_MouseDown), GetAddress(AddressOf ReadMailItem_MouseMove)
+    CreateLabel WindowCount, "lblCurrency", ReadingMailLeft, 334, 310, 20, "Ouro: 0", OpenSans_Effect, White, Alignment.AlignCenter, False, , , , , GetAddress(AddressOf ReadMailCurrency_MouseDown)
+    CreateLabel WindowCount, "lblText", ReadingMailLeft, PictureTextTop + 5, 310, 115, "", OpenSans_Effect, White, Alignment.AlignCenter, False
+    CreateLabel WindowCount, "lblReceiveItem", PictureItemLeft, PictureItemTop, 40, 40, vbNullString, OpenSans_Effect, White, Alignment.AlignCenter, False, , , , GetAddress(AddressOf ReadMailItem_MouseMove), GetAddress(AddressOf ReadMailItem_MouseDown), GetAddress(AddressOf ReadMailItem_MouseMove)
 
     ' Write Mail
-    CreateTextbox WindowCount, "txtReceiver", ReadingMailLeft, PictureSenderTop, 310, 25, "Destinatário", Fonts.OpenSans_Regular, , Alignment.alignLeft, , , , , , DesignTypes.desTextAincrad, DesignTypes.desTextAincrad, DesignTypes.desTextAincrad, , , , , , , 8, 5, , , False
-    CreateTextbox WindowCount, "txtSubject", ReadingMailLeft, PictureTitleTop, 310, 25, "Título", Fonts.OpenSans_Regular, , Alignment.alignLeft, , , , , , DesignTypes.desTextAincrad, DesignTypes.desTextAincrad, DesignTypes.desTextAincrad, , , , , , , 8, 5, , , False
-    CreateTextbox WindowCount, "txtContent", ReadingMailLeft, PictureTextTop, 310, 122, "Mensagem", Fonts.OpenSans_Regular, , Alignment.alignCentre, , , , , , DesignTypes.desTextAincrad, DesignTypes.desTextAincrad, DesignTypes.desTextAincrad, , , , , , , 8, 10, , , True
+    CreateTextbox WindowCount, "txtReceiver", ReadingMailLeft, PictureSenderTop, 310, 25, "Destinatário", Fonts.OpenSans_Regular, , Alignment.AlignLeft, , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, , , , , , , 8, 5, , , False
+    CreateTextbox WindowCount, "txtSubject", ReadingMailLeft, PictureTitleTop, 310, 25, "Título", Fonts.OpenSans_Regular, , Alignment.AlignLeft, , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, , , , , , , 8, 5, , , False
+    CreateTextbox WindowCount, "txtContent", ReadingMailLeft, PictureTextTop, 310, 122, "Mensagem", Fonts.OpenSans_Regular, , Alignment.AlignCenter, , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, , , , , , , 8, 10, , , True
 
-    CreatePictureBox WindowCount, "picSendAttachCoin", ReadingMailLeft, 330, 310, 25, False, , , , , , , DesignTypes.desTextWhite, DesignTypes.desTextWhite, DesignTypes.desTextWhite
-    CreatePictureBox WindowCount, "picSendAttachItem", PictureItemLeft, PictureItemTop, 40, 40, True, , , , , , , DesignTypes.desTextWhite, DesignTypes.desTextWhite, DesignTypes.desTextWhite, , , , , , GetAddress(AddressOf Draw_SendItem)
+    CreatePictureBox WindowCount, "picSendAttachCoin", ReadingMailLeft, 330, 310, 25, False, , , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox
+    CreatePictureBox WindowCount, "picSendAttachItem", PictureItemLeft, PictureItemTop, 40, 40, True, , , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, , , , , , GetAddress(AddressOf Draw_SendItem)
 
-    CreateLabel WindowCount, "lblSendAttachCoin", ReadingMailLeft, 334, 310, 20, "Ouro: 0", OpenSans_Effect, White, Alignment.alignCentre, False, , , , , GetAddress(AddressOf Button_AddSendMailCurrency)
-    CreateLabel WindowCount, "lblWriteItem", PictureItemLeft, PictureItemTop, 40, 40, vbNullString, OpenSans_Effect, White, Alignment.alignCentre, False, , , , GetAddress(AddressOf WriteMailItem_MouseMove), GetAddress(AddressOf WriteMailItem_MouseDown), GetAddress(AddressOf WriteMailItem_MouseMove)
+    CreateLabel WindowCount, "lblSendAttachCoin", ReadingMailLeft, 334, 310, 20, "Ouro: 0", OpenSans_Effect, White, Alignment.AlignCenter, False, , , , , GetAddress(AddressOf Button_AddSendMailCurrency)
+    CreateLabel WindowCount, "lblWriteItem", PictureItemLeft, PictureItemTop, 40, 40, vbNullString, OpenSans_Effect, White, Alignment.AlignCenter, False, , , , GetAddress(AddressOf WriteMailItem_MouseMove), GetAddress(AddressOf WriteMailItem_MouseDown), GetAddress(AddressOf WriteMailItem_MouseMove)
 
     For i = 1 To MaxMailList
-        CreateCheckbox WindowCount, "chkSelected" & i, CheckBoxLeft, CheckBoxTop + (CheckBoxOffSetY * (i - 1)), 25, , False, vbNullString, OpenSans_Regular, , , , , DesignTypes.desChkNorm
+        CreateCheckbox WindowCount, "chkSelected" & i, CheckBoxLeft, CheckBoxTop + (CheckBoxOffSetY * (i - 1)), 25, , False, vbNullString, OpenSans_Regular, , , , , DesignTypes.DesignCheckBox
     Next
 
     ' List Mail
     ' Registra manualmente os eventos.
-    CreatePictureBox WindowCount, "picBack1", PictureBackLeft, PictureBackTop + (PictureBackOffSetY * 0), 310, 25, , , , , , , , DesignTypes.desTextWhite, DesignTypes.desTextWhite, DesignTypes.desTextWhite, , , GetAddress(AddressOf Button_ReadMail1)
-    CreatePictureBox WindowCount, "picBack2", PictureBackLeft, PictureBackTop + (PictureBackOffSetY * 1), 310, 25, , , , , , , , DesignTypes.desTextWhite, DesignTypes.desTextWhite, DesignTypes.desTextWhite, , , GetAddress(AddressOf Button_ReadMail2)
-    CreatePictureBox WindowCount, "picBack3", PictureBackLeft, PictureBackTop + (PictureBackOffSetY * 2), 310, 25, , , , , , , , DesignTypes.desTextWhite, DesignTypes.desTextWhite, DesignTypes.desTextWhite, , , GetAddress(AddressOf Button_ReadMail3)
-    CreatePictureBox WindowCount, "picBack4", PictureBackLeft, PictureBackTop + (PictureBackOffSetY * 3), 310, 25, , , , , , , , DesignTypes.desTextWhite, DesignTypes.desTextWhite, DesignTypes.desTextWhite, , , GetAddress(AddressOf Button_ReadMail4)
-    CreatePictureBox WindowCount, "picBack5", PictureBackLeft, PictureBackTop + (PictureBackOffSetY * 4), 310, 25, , , , , , , , DesignTypes.desTextWhite, DesignTypes.desTextWhite, DesignTypes.desTextWhite, , , GetAddress(AddressOf Button_ReadMail5)
-    CreatePictureBox WindowCount, "picBack6", PictureBackLeft, PictureBackTop + (PictureBackOffSetY * 5), 310, 25, , , , , , , , DesignTypes.desTextWhite, DesignTypes.desTextWhite, DesignTypes.desTextWhite, , , GetAddress(AddressOf Button_ReadMail6)
-    CreatePictureBox WindowCount, "picBack7", PictureBackLeft, PictureBackTop + (PictureBackOffSetY * 6), 310, 25, , , , , , , , DesignTypes.desTextWhite, DesignTypes.desTextWhite, DesignTypes.desTextWhite, , , GetAddress(AddressOf Button_ReadMail7)
-    CreatePictureBox WindowCount, "picBack8", PictureBackLeft, PictureBackTop + (PictureBackOffSetY * 7), 310, 25, , , , , , , , DesignTypes.desTextWhite, DesignTypes.desTextWhite, DesignTypes.desTextWhite, , , GetAddress(AddressOf Button_ReadMail8)
-    CreatePictureBox WindowCount, "picBack9", PictureBackLeft, PictureBackTop + (PictureBackOffSetY * 8), 310, 25, , , , , , , , DesignTypes.desTextWhite, DesignTypes.desTextWhite, DesignTypes.desTextWhite, , , GetAddress(AddressOf Button_ReadMail9)
+    CreatePictureBox WindowCount, "picBack1", PictureBackLeft, PictureBackTop + (PictureBackOffSetY * 0), 310, 25, , , , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, , , GetAddress(AddressOf Button_ReadMail1)
+    CreatePictureBox WindowCount, "picBack2", PictureBackLeft, PictureBackTop + (PictureBackOffSetY * 1), 310, 25, , , , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, , , GetAddress(AddressOf Button_ReadMail2)
+    CreatePictureBox WindowCount, "picBack3", PictureBackLeft, PictureBackTop + (PictureBackOffSetY * 2), 310, 25, , , , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, , , GetAddress(AddressOf Button_ReadMail3)
+    CreatePictureBox WindowCount, "picBack4", PictureBackLeft, PictureBackTop + (PictureBackOffSetY * 3), 310, 25, , , , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, , , GetAddress(AddressOf Button_ReadMail4)
+    CreatePictureBox WindowCount, "picBack5", PictureBackLeft, PictureBackTop + (PictureBackOffSetY * 4), 310, 25, , , , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, , , GetAddress(AddressOf Button_ReadMail5)
+    CreatePictureBox WindowCount, "picBack6", PictureBackLeft, PictureBackTop + (PictureBackOffSetY * 5), 310, 25, , , , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, , , GetAddress(AddressOf Button_ReadMail6)
+    CreatePictureBox WindowCount, "picBack7", PictureBackLeft, PictureBackTop + (PictureBackOffSetY * 6), 310, 25, , , , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, , , GetAddress(AddressOf Button_ReadMail7)
+    CreatePictureBox WindowCount, "picBack8", PictureBackLeft, PictureBackTop + (PictureBackOffSetY * 7), 310, 25, , , , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, , , GetAddress(AddressOf Button_ReadMail8)
+    CreatePictureBox WindowCount, "picBack9", PictureBackLeft, PictureBackTop + (PictureBackOffSetY * 8), 310, 25, , , , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, , , GetAddress(AddressOf Button_ReadMail9)
 
     ' Botões setas
-    CreateLabel WindowCount, "lblPage", 150, 385, 120, 25, "Página: 1/1", OpenSans_Effect, White, Alignment.alignCentre
-    CreateButton WindowCount, "btnUp", 264, 385, 16, 16, , , , , , , Tex_GUI(79), Tex_GUI(80), Tex_GUI(81), , , , , , GetAddress(AddressOf Button_PageUp)
-    CreateButton WindowCount, "btnDown", 139, 385, 16, 16, , , , , , , Tex_GUI(82), Tex_GUI(83), Tex_GUI(84), , , , , , GetAddress(AddressOf Button_PageDown)
+    CreateLabel WindowCount, "lblPage", 150, 385, 120, 25, "Página: 1/1", OpenSans_Effect, White, Alignment.AlignCenter
+    CreateButton WindowCount, "btnUp", 264, 385, 16, 16, , , , , , , Tex_GUI(44), Tex_GUI(45), Tex_GUI(46), , , , , , GetAddress(AddressOf Button_PageUp)
+    CreateButton WindowCount, "btnDown", 139, 385, 16, 16, , , , , , , Tex_GUI(47), Tex_GUI(48), Tex_GUI(49), , , , , , GetAddress(AddressOf Button_PageDown)
 
-    CreateButton WindowCount, "btnSelectAll", 47, 410, 150, 24, "SELECIONAR TODOS", OpenSans_Effect, , , , , , , , DesignTypes.desSteel, DesignTypes.desSteel_Hover, DesignTypes.desSteel_Click, , , GetAddress(AddressOf SelectAll)
-    CreateButton WindowCount, "btnDelete", 204, 410, 150, 24, "DELETAR", OpenSans_Effect, , , , , , , , DesignTypes.desSteel, DesignTypes.desSteel_Hover, DesignTypes.desSteel_Click, , , GetAddress(AddressOf DeleteMail)
-    CreateButton WindowCount, "btnSend", 125, 410, 150, 24, "ENVIAR", OpenSans_Effect, , , False, , , , , DesignTypes.desSteel, DesignTypes.desSteel_Hover, DesignTypes.desSteel_Click, , , GetAddress(AddressOf SendNewMail)
+    CreateButton WindowCount, "btnSelectAll", 47, 410, 150, 24, "SELECIONAR TODOS", OpenSans_Effect, , , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf SelectAll)
+    CreateButton WindowCount, "btnDelete", 204, 410, 150, 24, "DELETAR", OpenSans_Effect, , , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf DeleteMail)
+    CreateButton WindowCount, "btnSend", 125, 410, 150, 24, "ENVIAR", OpenSans_Effect, , , False, , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf SendNewMail)
 
     MailPage = 1
     WindowIndex = WindowCount
@@ -457,7 +457,7 @@ Private Sub Draw_Mail()
     yO = Windows(WindowIndex).Window.Top
     Width = Windows(WindowIndex).Window.Width
 
-    RenderDesign DesignTypes.desWin_AincradMenu, xO, yO + 40, Width, 30
+    
 
     If MailingWindowState = WindowMailState.WindowMailState_Listing Then
         If MaxPlayerMail > 0 Then
@@ -626,13 +626,13 @@ Private Sub Button_ShowRead()
         Exit Sub
     End If
 
-    Windows(WindowIndex).Controls(ButtonReadIndex).textColour = Gold
-    Windows(WindowIndex).Controls(ButtonReadIndex).textColour_Hover = Gold
-    Windows(WindowIndex).Controls(ButtonReadIndex).textColour_Click = Gold
+    Windows(WindowIndex).Controls(ButtonReadIndex).TextColour = Gold
+    Windows(WindowIndex).Controls(ButtonReadIndex).TextColourHover = Gold
+    Windows(WindowIndex).Controls(ButtonReadIndex).TextColourClick = Gold
 
-    Windows(WindowIndex).Controls(ButtonWriteIndex).textColour = White
-    Windows(WindowIndex).Controls(ButtonWriteIndex).textColour_Hover = White
-    Windows(WindowIndex).Controls(ButtonWriteIndex).textColour_Click = White
+    Windows(WindowIndex).Controls(ButtonWriteIndex).TextColour = White
+    Windows(WindowIndex).Controls(ButtonWriteIndex).TextColourHover = White
+    Windows(WindowIndex).Controls(ButtonWriteIndex).TextColourClick = White
 
     CanSwapInvItems = True
     ReadingMailIndex = 0
@@ -645,13 +645,13 @@ Private Sub Button_ShowWrite()
         Exit Sub
     End If
 
-    Windows(WindowIndex).Controls(ButtonReadIndex).textColour = White
-    Windows(WindowIndex).Controls(ButtonReadIndex).textColour_Hover = White
-    Windows(WindowIndex).Controls(ButtonReadIndex).textColour_Click = White
+    Windows(WindowIndex).Controls(ButtonReadIndex).TextColour = White
+    Windows(WindowIndex).Controls(ButtonReadIndex).TextColourHover = White
+    Windows(WindowIndex).Controls(ButtonReadIndex).TextColourClick = White
 
-    Windows(WindowIndex).Controls(ButtonWriteIndex).textColour = Gold
-    Windows(WindowIndex).Controls(ButtonWriteIndex).textColour_Hover = Gold
-    Windows(WindowIndex).Controls(ButtonWriteIndex).textColour_Click = Gold
+    Windows(WindowIndex).Controls(ButtonWriteIndex).TextColour = Gold
+    Windows(WindowIndex).Controls(ButtonWriteIndex).TextColourHover = Gold
+    Windows(WindowIndex).Controls(ButtonWriteIndex).TextColourClick = Gold
 
     SendMailItemInventoryIndex = 0
     SendMailItemValue = 1
@@ -853,7 +853,7 @@ Public Sub DragBox_CheckInventoryToMail()
     ' Retira o cursor de qualquer texto.
     Windows(WindowIndex).activeControl = 0
 
-    If DragBox.Origin = origin_Inventory And DragBox.Type = Part_Item Then
+    If DragBox.Origin = OriginInventory And DragBox.Type = PartItem Then
         If DragBox.Slot > 0 Then
             If DragBox.Value > 0 Then
 

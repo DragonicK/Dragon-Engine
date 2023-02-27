@@ -17,7 +17,7 @@ Private ItemLoot As ItemLootRec
 Public Sub CreateWindow_LootDice()
     Dim i As Long, Y As Long
     ' Create window
-    CreateWindow "winLootDice", "LOTERIA", zOrder_Win, 0, 0, 252, 185, 0, False, Fonts.OpenSans_Regular, , 2, 7, DesignTypes.desWin_AincradNorm, DesignTypes.desWin_AincradNorm, DesignTypes.desWin_AincradNorm, , , , , , , , , , , GetAddress(AddressOf DrawLootDice)
+    CreateWindow "winLootDice", "LOTERIA", zOrder_Win, 0, 0, 252, 185, 0, False, Fonts.OpenSans_Regular, , 2, 7, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, , , , , , , , , , , GetAddress(AddressOf DrawLootDice)
     ' Centralise it
     CentraliseWindow WindowCount
 
@@ -28,15 +28,15 @@ Public Sub CreateWindow_LootDice()
     ' Close button
     CreateButton WindowCount, "btnClose", Windows(WindowCount).Window.Width - 33, 11, 22, 22, , , , , , , Tex_GUI(TextureControl_CloseNormal), Tex_GUI(TextureControl_CloseHover), Tex_GUI(TextureControl_CloseClick), , , , , , GetAddress(AddressOf btnMenu_LootDice)
 
-    CreatePictureBox WindowCount, "picIcon", 15, 60, 32, 32, , , , , , , , DesignTypes.desTextWhite, DesignTypes.desTextWhite, DesignTypes.desTextWhite, , GetAddress(AddressOf ShowLootDescription), , GetAddress(AddressOf ShowLootDescription)
-    CreateLabel WindowCount, "lblItemName", 55, 62, 190, 20, "", OpenSans_Effect, Coral, Alignment.alignLeft
-    CreateLabel WindowCount, "lblItemCount", 55, 74, 190, 20, "", OpenSans_Effect, White, Alignment.alignLeft
-    CreatePictureBox WindowCount, "picName", 47, 60, 190, 32, , , , , , , , DesignTypes.desTextWhite, DesignTypes.desTextWhite, DesignTypes.desTextWhite, , GetAddress(AddressOf ShowLootDescription), , GetAddress(AddressOf ShowLootDescription)
+    CreatePictureBox WindowCount, "picIcon", 15, 60, 32, 32, , , , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, , GetAddress(AddressOf ShowLootDescription), , GetAddress(AddressOf ShowLootDescription)
+    CreateLabel WindowCount, "lblItemName", 55, 62, 190, 20, "", OpenSans_Effect, Coral, Alignment.AlignLeft
+    CreateLabel WindowCount, "lblItemCount", 55, 74, 190, 20, "", OpenSans_Effect, White, Alignment.AlignLeft
+    CreatePictureBox WindowCount, "picName", 47, 60, 190, 32, , , , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, , GetAddress(AddressOf ShowLootDescription), , GetAddress(AddressOf ShowLootDescription)
 
-    CreateLabel WindowCount, "lblRemainingTime", 15, 95, 220, 20, "Tempo Restante: 180", OpenSans_Effect, White, Alignment.alignRight
+    CreateLabel WindowCount, "lblRemainingTime", 15, 95, 220, 20, "Tempo Restante: 180", OpenSans_Effect, White, Alignment.AlignRight
 
-    CreateButton WindowCount, "btnRoll", 16, 145, 105, 20, "Rolar", OpenSans_Effect, White, , True, , , , , DesignTypes.desSteel, DesignTypes.desSteel_Hover, DesignTypes.desSteel_Click, , , GetAddress(AddressOf Button_RollDice)
-    CreateButton WindowCount, "btnPass", 131, 145, 105, 20, "Passar", OpenSans_Effect, White, , True, , , , , DesignTypes.desSteel, DesignTypes.desSteel_Hover, DesignTypes.desSteel_Click, , , GetAddress(AddressOf Button_Pass)
+    CreateButton WindowCount, "btnRoll", 16, 145, 105, 20, "Rolar", OpenSans_Effect, White, , True, , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf Button_RollDice)
+    CreateButton WindowCount, "btnPass", 131, 145, 105, 20, "Passar", OpenSans_Effect, White, , True, , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf Button_Pass)
 
     WindowIndex = WindowCount
     RemainingTime = -1
@@ -63,10 +63,10 @@ Private Sub DrawLootDice()
     xO = Windows(WindowIndex).Window.Left
     yO = Windows(WindowIndex).Window.Top
 
-    RenderTexture Tex_GUI(105), xO + 16, yO + 115, 0, 0, 220, 32, 180, 32
+    RenderTexture Tex_GUI(50), xO + 16, yO + 115, 0, 0, 220, 32, 180, 32
 
     If RemainingTime >= 0 Then
-        RenderTexture Tex_GUI(106), xO + 16, yO + 115, 0, 0, CInt(ProgressBarSizeStep * RemainingTime), 32, 180, 32
+        RenderTexture Tex_GUI(51), xO + 16, yO + 115, 0, 0, CInt(ProgressBarSizeStep * RemainingTime), 32, 180, 32
     End If
 End Sub
 
@@ -87,19 +87,19 @@ Private Sub ShowLootDescription()
         Exit Sub
     End If
 
-    Dim x As Long, Y As Long
+    Dim X As Long, Y As Long
     Dim WinDescription As Long
 
     WinDescription = GetWindowIndex("winDescription")
 
     ' calc position
-    x = Windows(WindowIndex).Window.Left - Windows(WinDescription).Window.Width - 2
+    X = Windows(WindowIndex).Window.Left - Windows(WinDescription).Window.Width - 2
     Y = Windows(WindowIndex).Window.Top
 
     ' offscreen?
-    If x < 0 Then
+    If X < 0 Then
         ' switch to right
-        x = Windows(WindowIndex).Window.Left + Windows(WindowIndex).Window.Width + 2
+        X = Windows(WindowIndex).Window.Left + Windows(WindowIndex).Window.Width + 2
     End If
 
     If Y + Windows(WinDescription).Window.Height >= ScreenHeight Then
@@ -111,7 +111,7 @@ Private Sub ShowLootDescription()
     Inventory.Num = ItemLoot.Num
     Inventory.Level = ItemLoot.Level
 
-    Call ShowItemDesc(x, Y, Inventory)
+    Call ShowItemDesc(X, Y, Inventory)
 
 End Sub
 
@@ -135,9 +135,9 @@ Private Sub UpdateItem()
         Windows(WindowIndex).Controls(ControlNameIndex).Text = Item(ItemNum).Name
     End If
 
-    Windows(WindowIndex).Controls(ControlNameIndex).textColour = Rarity
-    Windows(WindowIndex).Controls(ControlNameIndex).textColour_Click = Rarity
-    Windows(WindowIndex).Controls(ControlNameIndex).textColour_Hover = Rarity
+    Windows(WindowIndex).Controls(ControlNameIndex).TextColour = Rarity
+    Windows(WindowIndex).Controls(ControlNameIndex).TextColourClick = Rarity
+    Windows(WindowIndex).Controls(ControlNameIndex).TextColourHover = Rarity
 
     Windows(WindowIndex).Controls(ControlCountIndex).Text = "Quantidade: " & ItemValue
     Call SetControlImage(Tex_Item(Item(ItemNum).IconId))
@@ -166,7 +166,7 @@ Private Sub SetControlImage(ByVal TextureNum As Long)
     ControlIndex = GetControlIndex("winLootDice", "picIcon")
 
     For i = 0 To entStates.state_Count - 1
-        Windows(WindowIndex).Controls(ControlIndex).image(i) = TextureNum
+        Windows(WindowIndex).Controls(ControlIndex).Image(i) = TextureNum
     Next
 
 End Sub

@@ -1,7 +1,7 @@
 Attribute VB_Name = "Classes_Window"
 Public Sub CreateWindow_Classes()
 ' Create window
-    CreateWindow "winClasses", "SELEÇÃO DE CLASSE", zOrder_Win, 0, 0, 364, 249, 0, False, Fonts.OpenSans_Regular, , 2, 6, DesignTypes.desWin_AincradNorm, DesignTypes.desWin_AincradNorm, DesignTypes.desWin_AincradNorm, , , , , , , , , False, , GetAddress(AddressOf Classes_DrawFace)
+    CreateWindow "winClasses", "SELEÇÃO DE CLASSE", zOrder_Win, 0, 0, 364, 249, 0, False, Fonts.OpenSans_Regular, , 2, 6, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, , , , , , , , , False, , GetAddress(AddressOf Classes_DrawFace)
     ' Centralise it
     CentraliseWindow WindowCount
 
@@ -11,15 +11,15 @@ Public Sub CreateWindow_Classes()
     ' Close button
     CreateButton WindowCount, "ButtonClose", Windows(WindowCount).Window.Width - 33, 11, 22, 22, , , , , , , Tex_GUI(TextureControl_CloseNormal), Tex_GUI(TextureControl_CloseHover), Tex_GUI(TextureControl_CloseClick), , , , , , GetAddress(AddressOf ButtonClasses_Close)
     ' Class Name
-    CreatePictureBox WindowCount, "picShadow", 183, 52, 98, 9, , , , , , , , DesignTypes.desBlackOval, DesignTypes.desBlackOval, DesignTypes.desBlackOval
-    CreateLabel WindowCount, "lblClassName", 183, 49, 98, , "Warrior", OpenSans_Effect, White, Alignment.alignCentre
+    CreatePictureBox WindowCount, "picShadow", 183, 52, 98, 9, , , , , , , , DesignTypes.DesignBackgroundOval, DesignTypes.DesignBackgroundOval, DesignTypes.DesignBackgroundOval
+    CreateLabel WindowCount, "lblClassName", 183, 49, 98, , "Warrior", OpenSans_Effect, White, Alignment.AlignCenter
     ' Select Buttons
-    CreateButton WindowCount, "ButtonLeft", 171, 50, 11, 13, , , , , , , Tex_GUI(12), Tex_GUI(14), Tex_GUI(16), , , , , , GetAddress(AddressOf ButtonClasses_Left)
-    CreateButton WindowCount, "ButtonRight", 282, 50, 11, 13, , , , , , , Tex_GUI(13), Tex_GUI(15), Tex_GUI(17), , , , , , GetAddress(AddressOf ButtonClasses_Right)
+    CreateButton WindowCount, "ButtonLeft", 171, 50, 11, 13, , , , , , , Tex_GUI(12), Tex_GUI(13), Tex_GUI(14), , , , , , GetAddress(AddressOf ButtonClasses_Left)
+    CreateButton WindowCount, "ButtonRight", 282, 50, 11, 13, , , , , , , Tex_GUI(15), Tex_GUI(16), Tex_GUI(17), , , , , , GetAddress(AddressOf ButtonClasses_Right)
     ' Accept Button
-    CreateButton WindowCount, "ButtonAccept", 183, 205, 98, 26, "ACEITAR", OpenSans_Regular, , , , , , , , DesignTypes.desSteel, DesignTypes.desSteel_Hover, DesignTypes.desSteel_Click, , , GetAddress(AddressOf ButtonClasses_Accept)
+    CreateButton WindowCount, "ButtonAccept", 183, 205, 98, 26, "ACEITAR", OpenSans_Regular, , , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf ButtonClasses_Accept)
     ' Text background
-    CreatePictureBox WindowCount, "picBackground", 127, 65, 210, 134, , , , , , , , DesignTypes.desTextBlack, DesignTypes.desTextBlack, DesignTypes.desTextBlack
+    CreatePictureBox WindowCount, "picBackground", 127, 65, 210, 134, , , , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox
     ' Overlay
     CreatePictureBox WindowCount, "picOverlay", 6, 36, 0, 0, , , , , , , , , , , , , , , , GetAddress(AddressOf Classes_DrawText)
 End Sub

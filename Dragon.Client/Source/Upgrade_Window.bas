@@ -37,7 +37,7 @@ End Sub
 
 Public Sub CreateWindow_ItemUpgrade()
 ' Create window
-    CreateWindow "winItemUpgrade", "APRIMORAMENTO", zOrder_Win, 0, 0, 400, 400, 0, False, Fonts.OpenSans_Effect, , 2, 7, DesignTypes.desWin_AincradNorm, DesignTypes.desWin_AincradNorm, DesignTypes.desWin_AincradNorm, , , , , , , , , , , GetAddress(AddressOf ItemUpgrade_OnDraw)
+    CreateWindow "winItemUpgrade", "APRIMORAMENTO", zOrder_Win, 0, 0, 400, 400, 0, False, Fonts.OpenSans_Effect, , 2, 7, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, , , , , , , , , , , GetAddress(AddressOf ItemUpgrade_OnDraw)
     ' Centralise it
     CentraliseWindow WindowCount
 
@@ -47,23 +47,23 @@ Public Sub CreateWindow_ItemUpgrade()
     ' Close button
     CreateButton WindowCount, "btnClose", Windows(WindowCount).Window.Width - 33, 11, 22, 22, , , , , , , Tex_GUI(TextureControl_CloseNormal), Tex_GUI(TextureControl_CloseHover), Tex_GUI(TextureControl_CloseClick), , , , , , GetAddress(AddressOf btnMenu_ItemUpgrade)
 
-    CreateButton WindowCount, "btnUpgrade", 50, 355, 100, 26, "APRIMORAR", OpenSans_Regular, White, , , , , , , DesignTypes.desSteel, DesignTypes.desSteel_Hover, DesignTypes.desSteel_Click, , , GetAddress(AddressOf Button_StartUpgrade)
-    CreateButton WindowCount, "btnCancel", 250, 355, 100, 26, "CANCELAR", OpenSans_Regular, White, , , , , , , DesignTypes.desSteel, DesignTypes.desSteel_Hover, DesignTypes.desSteel_Click, , , GetAddress(AddressOf Button_CancelUpgrade)
+    CreateButton WindowCount, "btnUpgrade", 50, 355, 100, 26, "APRIMORAR", OpenSans_Regular, White, , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf Button_StartUpgrade)
+    CreateButton WindowCount, "btnCancel", 250, 355, 100, 26, "CANCELAR", OpenSans_Regular, White, , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf Button_CancelUpgrade)
 
-    CreateLabel WindowCount, "lblItem", 0, ItemSlotY - 20, 400, 16, "Vazio", OpenSans_Regular, , Alignment.alignCentre
-    CreateLabel WindowCount, "lblRequirement", 150, RequirementY - 20, 200, 16, "Itens Necessários", OpenSans_Regular, , Alignment.alignLeft
+    CreateLabel WindowCount, "lblItem", 0, ItemSlotY - 20, 400, 16, "Vazio", OpenSans_Regular, , Alignment.AlignCenter
+    CreateLabel WindowCount, "lblRequirement", 150, RequirementY - 20, 200, 16, "Itens Necessários", OpenSans_Regular, , Alignment.AlignLeft
 
     ' Botões invisíveis para retirada dos items.
     CreatePictureBox WindowCount, "picBlank", ItemSlotX, ItemSlotY, 34, 34, , , , , , , , , , , , GetAddress(AddressOf Item_MouseMove), GetAddress(AddressOf RemoveItem), GetAddress(AddressOf Item_MouseMove)
 
-    CreateLabel WindowCount, "lblWarning", LabelResultX + 25, LabelResultY, 350, 100, "Em caso de falha, existe a possibilidade do item ser destruído ou ter o nível reduzido.", OpenSans_Effect, BrightRed, Alignment.alignCentre
+    CreateLabel WindowCount, "lblWarning", LabelResultX + 25, LabelResultY, 350, 100, "Em caso de falha, existe a possibilidade do item ser destruído ou ter o nível reduzido.", OpenSans_Effect, BrightRed, Alignment.AlignCenter
 
-    CreateLabel WindowCount, "lblSuccess", LabelResultX, LabelResultY + 35, 400, 25, "Possibilidade de Sucesso: 0%", OpenSans_Effect, , Alignment.alignCentre
-    CreateLabel WindowCount, "lblBreak", LabelResultX, LabelResultY + 50, 400, 25, "Possibilidade de Quebra: 0%", OpenSans_Effect, , Alignment.alignCentre
-    CreateLabel WindowCount, "lblReduction", LabelResultX, LabelResultY + 65, 400, 25, "Possibilidade de Redução de Nível: 0%", OpenSans_Effect, , Alignment.alignCentre
-    CreateLabel WindowCount, "lblCost", LabelResultX, LabelResultY + 80, 400, 25, "Custo: 0 Ouro", OpenSans_Effect, , Alignment.alignCentre
+    CreateLabel WindowCount, "lblSuccess", LabelResultX, LabelResultY + 35, 400, 25, "Possibilidade de Sucesso: 0%", OpenSans_Effect, , Alignment.AlignCenter
+    CreateLabel WindowCount, "lblBreak", LabelResultX, LabelResultY + 50, 400, 25, "Possibilidade de Quebra: 0%", OpenSans_Effect, , Alignment.AlignCenter
+    CreateLabel WindowCount, "lblReduction", LabelResultX, LabelResultY + 65, 400, 25, "Possibilidade de Redução de Nível: 0%", OpenSans_Effect, , Alignment.AlignCenter
+    CreateLabel WindowCount, "lblCost", LabelResultX, LabelResultY + 80, 400, 25, "Custo: 0 Ouro", OpenSans_Effect, , Alignment.AlignCenter
 
-    CreateLabel WindowCount, "lblProgress", 110, 190, 180, 22, "Processando: 0%", OpenSans_Regular, ColorType.Gold, Alignment.alignCentre
+    CreateLabel WindowCount, "lblProgress", 110, 190, 180, 22, "Processando: 0%", OpenSans_Regular, ColorType.Gold, Alignment.AlignCenter
 
     CanSwapInvItems = True
     WindowIndex = WindowCount
@@ -132,9 +132,9 @@ Private Sub ItemUpgrade_OnDraw()
     xO = Windows(WindowIndex).Window.Left
     yO = Windows(WindowIndex).Window.Top
 
-    RenderTexture Tex_GUI(37), xO + ItemSlotX, yO + ItemSlotY, 0, 0, SlotSize, SlotSize, SlotSize, SlotSize
+    RenderTexture Tex_GUI(27), xO + ItemSlotX, yO + ItemSlotY, 0, 0, SlotSize, SlotSize, SlotSize, SlotSize
 
-    If DragBox.Origin <> origin_Upgrade Then
+    If DragBox.Origin <> OriginUpgrade Then
         If UpgradeInventoryIndex > 0 Then
             ItemId = GetInventoryItemNum(UpgradeInventoryIndex)
 
@@ -145,7 +145,7 @@ Private Sub ItemUpgrade_OnDraw()
     End If
 
     For i = 1 To MaximumUpgradeRequirements
-        RenderTexture Tex_GUI(37), xO + RequirementX + (i * SlotPadding), yO + RequirementY, 0, 0, SlotSize, SlotSize, SlotSize, SlotSize
+        RenderTexture Tex_GUI(27), xO + RequirementX + (i * SlotPadding), yO + RequirementY, 0, 0, SlotSize, SlotSize, SlotSize, SlotSize
 
         ItemId = Upgrade.Requirement(i).Id
         Amount = Upgrade.Requirement(i).Amount
@@ -172,22 +172,22 @@ Private Sub ItemUpgrade_OnDraw()
     Next
 
     If UpgradeProgressPercentage > 0 Then
-        Windows(WindowIndex).Window.canDrag = False
+        Windows(WindowIndex).Window.CanDrag = False
     Else
-        Windows(WindowIndex).Window.canDrag = True
+        Windows(WindowIndex).Window.CanDrag = True
     End If
 
     Percentage = CSng(UpgradeProgressPercentage / 100)
 
-    RenderTexture Tex_GUI(105), xO + 110, yO + 205, 0, 0, 180, 32, 180, 32
-    RenderTexture Tex_GUI(106), xO + 110, yO + 205, 0, 0, 180 * Percentage, 32, 180 * Percentage, 32
+    RenderTexture Tex_GUI(50), xO + 110, yO + 205, 0, 0, 180, 32, 180, 32
+    RenderTexture Tex_GUI(51), xO + 110, yO + 205, 0, 0, 180 * Percentage, 32, 180 * Percentage, 32
 
 End Sub
 
 Public Sub DragBox_CheckInventoryToItemUpgrade()
 
-    If DragBox.Origin = origin_Inventory Then
-        If DragBox.Type = Part_Item Then
+    If DragBox.Origin = OriginInventory Then
+        If DragBox.Type = PartItem Then
             If DragBox.Slot > 0 Then
                 Call SendSelectedItemToUpgrade(DragBox.Slot)
             End If
@@ -198,8 +198,8 @@ End Sub
 
 Public Sub DragBox_CheckItemUpgradeToInventory()
 
-    If DragBox.Origin = origin_Upgrade Then
-        If DragBox.Type = Part_Item Then
+    If DragBox.Origin = OriginUpgrade Then
+        If DragBox.Type = PartItem Then
 
             If DragBox.Slot > 0 Then
                 ClearWindowValues
@@ -225,9 +225,9 @@ Public Sub UpdateGoldInUpgradeWindow()
 
     ControlIndex = GetControlIndex("winItemUpgrade", "lblCost")
     Windows(WindowIndex).Controls(ControlIndex).Text = "Custo: " & Upgrade.CostValue & " Ouro"
-    Windows(WindowIndex).Controls(ControlIndex).textColour = Color
-    Windows(WindowIndex).Controls(ControlIndex).textColour_Click = Color
-    Windows(WindowIndex).Controls(ControlIndex).textColour_Hover = Color
+    Windows(WindowIndex).Controls(ControlIndex).TextColour = Color
+    Windows(WindowIndex).Controls(ControlIndex).TextColourClick = Color
+    Windows(WindowIndex).Controls(ControlIndex).TextColourHover = Color
 End Sub
 
 Public Sub UpdateUpgradeWindow()
@@ -258,9 +258,9 @@ Public Sub UpdateUpgradeWindow()
 
     ControlIndex = GetControlIndex("winItemUpgrade", "lblCost")
     Windows(WindowIndex).Controls(ControlIndex).Text = "Custo: " & Upgrade.CostValue & " Ouro"
-    Windows(WindowIndex).Controls(ControlIndex).textColour = Color
-    Windows(WindowIndex).Controls(ControlIndex).textColour_Click = Color
-    Windows(WindowIndex).Controls(ControlIndex).textColour_Hover = Color
+    Windows(WindowIndex).Controls(ControlIndex).TextColour = Color
+    Windows(WindowIndex).Controls(ControlIndex).TextColourClick = Color
+    Windows(WindowIndex).Controls(ControlIndex).TextColourHover = Color
 
     ControlIndex = GetControlIndex("winItemUpgrade", "lblItem")
 
@@ -284,9 +284,9 @@ Public Sub UpdateUpgradeWindow()
     End If
 
 
-    Windows(WindowIndex).Controls(ControlIndex).textColour = Color
-    Windows(WindowIndex).Controls(ControlIndex).textColour_Click = Color
-    Windows(WindowIndex).Controls(ControlIndex).textColour_Hover = Color
+    Windows(WindowIndex).Controls(ControlIndex).TextColour = Color
+    Windows(WindowIndex).Controls(ControlIndex).TextColourClick = Color
+    Windows(WindowIndex).Controls(ControlIndex).TextColourHover = Color
 End Sub
 
 Private Sub ClearWindowValues()
@@ -311,7 +311,7 @@ Private Sub ClearWindowValues()
 End Sub
 
 Private Sub Item_MouseMove()
-    If DragBox.Origin = origin_None Then
+    If DragBox.Origin = OriginNone Then
         If UpgradeInventoryIndex > 0 Then
             Dim xO As Long
             Dim yO As Long
@@ -375,9 +375,9 @@ Private Sub RemoveItem()
 
         ' drag it
         With DragBox
-            .Type = Part_Item
+            .Type = PartItem
             .Value = GetInventoryItemNum(UpgradeInventoryIndex)
-            .Origin = origin_Upgrade
+            .Origin = OriginUpgrade
             .Slot = UpgradeInventoryIndex
         End With
 
@@ -387,7 +387,7 @@ Private Sub RemoveItem()
             .State = MouseDown
             .Left = lastMouseX - 16
             .Top = lastMouseY - 16
-            .movedX = clickedX - .Left
+            .MovedX = clickedX - .Left
             .movedY = clickedY - .Top
         End With
 

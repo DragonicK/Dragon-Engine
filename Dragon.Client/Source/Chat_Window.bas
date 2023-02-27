@@ -43,7 +43,7 @@ Private Sub OnDraw_ChatSmall()
     yO = ScreenHeight - 16 - actChatHeight - 8
 
     ' draw the background
-    RenderDesign DesignTypes.desWin_Shadow, xO, yO, actChatWidth, actChatHeight
+    RenderDesign DesignTypes.DesignChatSmallShadow, xO, yO, actChatWidth, actChatHeight
     
     ' call the chat render
     RenderChat
@@ -57,25 +57,25 @@ Public Sub CreateWindow_Chat()
     zOrder_Con = 1
 
     ' Channel boxes
-    CreateCheckbox WindowCount, "chkGame", 10, 2, 49, 23, 1, "Jogo", OpenSans_Regular, , , , , DesignTypes.desChkChat, , , GetAddress(AddressOf CheckBoxChat_Game)
-    CreateCheckbox WindowCount, "chkMap", 60, 2, 49, 23, 1, "Mapa", OpenSans_Regular, , , , , DesignTypes.desChkChat, , , GetAddress(AddressOf CheckBoxChat_Map)
-    CreateCheckbox WindowCount, "chkGlobal", 110, 2, 49, 23, 1, "Global", OpenSans_Regular, , , , , DesignTypes.desChkChat, , , GetAddress(AddressOf CheckBoxChat_Global)
-    CreateCheckbox WindowCount, "chkParty", 160, 2, 49, 23, 1, "Grupo", OpenSans_Regular, , , , , DesignTypes.desChkChat, , , GetAddress(AddressOf CheckBoxChat_Party)
-    CreateCheckbox WindowCount, "chkGuild", 210, 2, 49, 23, 1, "Guild", OpenSans_Regular, , , , , DesignTypes.desChkChat, , , GetAddress(AddressOf CheckBoxChat_Guild)
-    CreateCheckbox WindowCount, "chkPrivate", 260, 2, 49, 23, 1, "Privado", OpenSans_Regular, , , , , DesignTypes.desChkChat, , , GetAddress(AddressOf CheckBoxChat_Private)
+    CreateCheckbox WindowCount, "chkGame", 10, 2, 49, 23, 1, "Jogo", OpenSans_Regular, , , , , DesignTypes.DesignCheckBoxChat, , , GetAddress(AddressOf CheckBoxChat_Game)
+    CreateCheckbox WindowCount, "chkMap", 60, 2, 49, 23, 1, "Mapa", OpenSans_Regular, , , , , DesignTypes.DesignCheckBoxChat, , , GetAddress(AddressOf CheckBoxChat_Map)
+    CreateCheckbox WindowCount, "chkGlobal", 110, 2, 49, 23, 1, "Global", OpenSans_Regular, , , , , DesignTypes.DesignCheckBoxChat, , , GetAddress(AddressOf CheckBoxChat_Global)
+    CreateCheckbox WindowCount, "chkParty", 160, 2, 49, 23, 1, "Grupo", OpenSans_Regular, , , , , DesignTypes.DesignCheckBoxChat, , , GetAddress(AddressOf CheckBoxChat_Party)
+    CreateCheckbox WindowCount, "chkGuild", 210, 2, 49, 23, 1, "Guild", OpenSans_Regular, , , , , DesignTypes.DesignCheckBoxChat, , , GetAddress(AddressOf CheckBoxChat_Guild)
+    CreateCheckbox WindowCount, "chkPrivate", 260, 2, 49, 23, 1, "Privado", OpenSans_Regular, , , , , DesignTypes.DesignCheckBoxChat, , , GetAddress(AddressOf CheckBoxChat_Private)
     ' Blank picturebox - ondraw wrapper
     CreatePictureBox WindowCount, "picNull", 0, 0, 0, 0, , , , , , , , , , , , , , , , GetAddress(AddressOf OnDraw_Chat)
     ' Chat button
-    CreateButton WindowCount, "btnChat", 296, 124 + 16, 48, 20, "Dizer", OpenSans_Regular, , , , , , , , DesignTypes.desSteel, DesignTypes.desSteel_Hover, DesignTypes.desSteel_Click, , , GetAddress(AddressOf ButtonSay_Click)
+    CreateButton WindowCount, "btnChat", 296, 124 + 16, 48, 20, "Dizer", OpenSans_Regular, , , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf ButtonSay_Click)
     ' Chat Textbox
     CreateTextbox WindowCount, "txtChat", 12, 127 + 16, 286, 25, , Fonts.OpenSans_Regular
     ' buttons
-    CreateButton WindowCount, "btnUp", 328, 28, 11, 13, , , , , , , Tex_GUI(4), Tex_GUI(52), Tex_GUI(4), , , , , , GetAddress(AddressOf ButtonChat_Up)
-    CreateButton WindowCount, "btnDown", 327, 122, 11, 13, , , , , , , Tex_GUI(5), Tex_GUI(53), Tex_GUI(5), , , , , , GetAddress(AddressOf ButtonChat_Down)
+    CreateButton WindowCount, "btnUp", 328, 28, 11, 13, , , , , , , Tex_GUI(3), Tex_GUI(4), Tex_GUI(5), , , , , , GetAddress(AddressOf ButtonChat_Up)
+    CreateButton WindowCount, "btnDown", 327, 122, 11, 13, , , , , , , Tex_GUI(6), Tex_GUI(7), Tex_GUI(8), , , , , , GetAddress(AddressOf ButtonChat_Down)
 
     ' Custom Handlers for mouse up
-    Windows(WindowCount).Controls(GetControlIndex("winChat", "btnUp")).entCallBack(entStates.MouseUp) = GetAddress(AddressOf ButtonChat_Up_MouseUp)
-    Windows(WindowCount).Controls(GetControlIndex("winChat", "btnDown")).entCallBack(entStates.MouseUp) = GetAddress(AddressOf ButtonChat_Down_MouseUp)
+    Windows(WindowCount).Controls(GetControlIndex("winChat", "btnUp")).EntityCallBack(entStates.MouseUp) = GetAddress(AddressOf ButtonChat_Up_MouseUp)
+    Windows(WindowCount).Controls(GetControlIndex("winChat", "btnDown")).EntityCallBack(entStates.MouseUp) = GetAddress(AddressOf ButtonChat_Down_MouseUp)
 
     ' Set the active control
     SetActiveControl WindowCount, GetControlIndex("winChat", "txtChat")
@@ -187,10 +187,9 @@ Private Sub OnDraw_Chat()
     yO = Windows(WindowIndex).Window.Top + 16
 
     ' draw the box
-    RenderDesign DesignTypes.desWin_Desc, xO, yO, 352, 152
+    RenderDesign DesignTypes.DesignOpenChat, xO, yO, 352, 152
     ' draw the input box
-    RenderTexture Tex_GUI(46), xO + 7, yO + 123, 0, 0, 171, 22, 171, 22
-    RenderTexture Tex_GUI(46), xO + 174, yO + 123, 0, 22, 171, 22, 171, 22
+    RenderDesign DesignTypes.DesignTextBox, xO + 7, yO + 123, 352, 22
     ' call the chat render
     RenderChat
 End Sub
@@ -263,7 +262,7 @@ Public Sub ShowChat()
     ShowWindow GetWindowIndex("winChat"), , False
     HideWindow GetWindowIndex("winChatSmall")
     ' Set the active control
-    activeWindow = GetWindowIndex("winChat")
+    ActiveWindow = GetWindowIndex("winChat")
     SetActiveControl GetWindowIndex("winChat"), GetControlIndex("winChat", "txtChat")
     inSmallChat = False
     ChatScroll = 0

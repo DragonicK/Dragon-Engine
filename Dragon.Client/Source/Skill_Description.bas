@@ -61,7 +61,7 @@ Public Sub ShowSkillDesc(X As Long, Y As Long, ByVal Slot As Long, SkillNum As L
     With Windows(WindowIndex)
         ' set name
         ControlIndex = GetControlIndex("winDescription", "lblName")
-        .Controls(ControlIndex).textColour = BrightGreen
+        .Controls(ControlIndex).TextColour = BrightGreen
         .Controls(ControlIndex).Text = Skill(SkillNum).Name
         .Controls(ControlIndex).Width = 260
 
@@ -70,13 +70,13 @@ Public Sub ShowSkillDesc(X As Long, Y As Long, ByVal Slot As Long, SkillNum As L
 
         If SkillLevel > 0 Then
             .Controls(ControlIndex).Text = "Level " & SkillLevel
-            .Controls(ControlIndex).textColour = BrightGreen
+            .Controls(ControlIndex).TextColour = BrightGreen
         Else
             .Controls(ControlIndex).Text = "Não aprendido"
-            .Controls(ControlIndex).textColour = BrightRed
+            .Controls(ControlIndex).TextColour = BrightRed
         End If
 
-        .Controls(ControlIndex).align = Alignment.alignCentre
+        .Controls(ControlIndex).Align = Alignment.AlignCenter
         .Controls(ControlIndex).Font = Fonts.OpenSans_Regular
     End With
 

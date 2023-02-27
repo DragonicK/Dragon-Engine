@@ -2,7 +2,7 @@ Attribute VB_Name = "InterfaceEvents_Implementation"
 Option Explicit
 Public Declare Sub GetCursorPos Lib "user32" (lpPoint As POINTAPI)
 Public Declare Function ScreenToClient Lib "user32" (ByVal hWnd As Long, lpPoint As POINTAPI) As Long
-Public Declare Function entCallBack Lib "user32.dll" Alias "CallWindowProcA" (ByVal lpPrevWndFunc As Long, ByVal Window As Long, ByRef Control As Long, ByVal Forced As Long, ByVal lParam As Long) As Long
+Public Declare Function EntityCallBack Lib "user32.dll" Alias "CallWindowProcA" (ByVal lpPrevWndFunc As Long, ByVal Window As Long, ByRef Control As Long, ByVal Forced As Long, ByVal lParam As Long) As Long
 Public Const VK_LBUTTON = &H1
 Public Const VK_RBUTTON = &H2
 Public lastMouseX As Long, lastMouseY As Long
@@ -129,7 +129,7 @@ Public Function HandleGuiMouse(entState As entStates) As Boolean
                 If currMouseX >= .Left And currMouseX <= .Width + .Left Then
                     If currMouseY >= .Top And currMouseY <= .Height + .Top Then
                         ' set the combomenu
-                        If .design(0) = DesignTypes.desComboMenuNorm Then
+                        If .Design(0) = DesignTypes.DesignComboMenu Then
                             ' set the hover menu
                             If entState = MouseMove Or entState = Hover Then
                                 ComboMenu_MouseMove i
@@ -143,9 +143,9 @@ Public Function HandleGuiMouse(entState As entStates) As Boolean
                     End If
                 End If
                 If entState = entStates.MouseMove Then
-                    If .canDrag Then
+                    If .CanDrag Then
                         If .State = entStates.MouseDown Then
-                            .Left = Clamp(.Left + ((currMouseX - .Left) - .movedX), 0, ScreenWidth - .Width)
+                            .Left = Clamp(.Left + ((currMouseX - .Left) - .MovedX), 0, ScreenWidth - .Width)
                             .Top = Clamp(.Top + ((currMouseY - .Top) - .movedY), 0, ScreenHeight - .Height)
                         End If
                     End If
@@ -175,9 +175,9 @@ Public Function HandleGuiMouse(entState As entStates) As Boolean
                         End If
                     End If
                     If entState = entStates.MouseMove Then
-                        If .canDrag Then
+                        If .CanDrag Then
                             If .State = entStates.MouseDown Then
-                                .Left = Clamp(.Left + ((currMouseX - .Left) - .movedX), 0, Windows(curWindow).Window.Width - .Width)
+                                .Left = Clamp(.Left + ((currMouseX - .Left) - .MovedX), 0, Windows(curWindow).Window.Width - .Width)
                                 .Top = Clamp(.Top + ((currMouseY - .Top) - .movedY), 0, Windows(curWindow).Window.Height - .Height)
                             End If
                         End If
@@ -197,18 +197,18 @@ Public Function HandleGuiMouse(entState As entStates) As Boolean
                     End If
                 End If
                 If entState = entStates.MouseDown Then
-                    If .canDrag Then
-                        .movedX = clickedX - .Left
+                    If .CanDrag Then
+                        .MovedX = clickedX - .Left
                         .movedY = clickedY - .Top
                     End If
                     ' toggle boxes
                     Select Case .Type
-                    Case EntityTypes.entCheckbox
+                    Case EntityTypes.EntityCheckBox
                         ' grouped boxes
                         If .group > 0 Then
                             If .Value = 0 Then
                                 For i = 1 To Windows(curWindow).ControlCount
-                                    If Windows(curWindow).Controls(i).Type = EntityTypes.entCheckbox Then
+                                    If Windows(curWindow).Controls(i).Type = EntityTypes.EntityCheckBox Then
                                         If Windows(curWindow).Controls(i).group = .group Then
                                             Windows(curWindow).Controls(i).Value = 0
                                         End If
@@ -223,13 +223,13 @@ Public Function HandleGuiMouse(entState As entStates) As Boolean
                                 .Value = 0
                             End If
                         End If
-                    Case EntityTypes.entCombobox
+                    Case EntityTypes.EntityComboBox
                         ShowComboMenu curWindow, curControl
                     End Select
                     ' set active input
                     SetActiveControl curWindow, curControl
                 End If
-                callBack = .entCallBack(entState)
+                callBack = .EntityCallBack(entState)
             End With
         Else
             ' Handle container
@@ -243,21 +243,21 @@ Public Function HandleGuiMouse(entState As entStates) As Boolean
                     End If
                 End If
                 If entState = entStates.MouseDown Then
-                    If .canDrag Then
-                        .movedX = clickedX - .Left
+                    If .CanDrag Then
+                        .MovedX = clickedX - .Left
                         .movedY = clickedY - .Top
                     End If
                 End If
-                callBack = .entCallBack(entState)
+                callBack = .EntityCallBack(entState)
             End With
         End If
         ' bring to front
         If entState = entStates.MouseDown Then
             UpdateZOrder curWindow
-            activeWindow = curWindow
+            ActiveWindow = curWindow
         End If
         ' call back
-        If callBack <> 0 Then entCallBack callBack, curWindow, curControl, 0, 0
+        If callBack <> 0 Then EntityCallBack callBack, curWindow, curControl, 0, 0
     End If
 
     ' Reset
@@ -287,15 +287,15 @@ Public Sub ResetMouseDown()
 
         With Windows(i)
             .Window.State = entStates.Normal
-            callBack = .Window.entCallBack(entStates.Normal)
+            callBack = .Window.EntityCallBack(entStates.Normal)
 
-            If callBack <> 0 Then entCallBack callBack, i, 0, 0, 0
+            If callBack <> 0 Then EntityCallBack callBack, i, 0, 0, 0
 
             For X = 1 To .ControlCount
                 .Controls(X).State = entStates.Normal
-                callBack = .Controls(X).entCallBack(entStates.Normal)
+                callBack = .Controls(X).EntityCallBack(entStates.Normal)
 
-                If callBack <> 0 Then entCallBack callBack, i, X, 0, 0
+                If callBack <> 0 Then EntityCallBack callBack, i, X, 0, 0
             Next
 
         End With
@@ -308,8 +308,8 @@ Public Sub ShowComboMenu(curWindow As Long, curControl As Long)
     Dim Top As Long
     With Windows(curWindow).Controls(curControl)
         ' linked to
-        Windows(GetWindowIndex("winComboMenu")).Window.linkedToWin = curWindow
-        Windows(GetWindowIndex("winComboMenu")).Window.linkedToCon = curControl
+        Windows(GetWindowIndex("winComboMenu")).Window.LinkedToWin = curWindow
+        Windows(GetWindowIndex("winComboMenu")).Window.LinkedToCon = curControl
         ' set the size
         Windows(GetWindowIndex("winComboMenu")).Window.Height = 2 + (UBound(.list) * 16)
         Windows(GetWindowIndex("winComboMenu")).Window.Left = Windows(curWindow).Window.Left + .Left + 2
@@ -350,7 +350,7 @@ Public Sub ComboMenu_MouseDown(curWindow As Long)
         If UBound(.list) > 0 Then
             For i = 1 To UBound(.list)
                 If Y >= (16 * (i - 1)) And Y <= (16 * (i)) Then
-                    Windows(.linkedToWin).Controls(.linkedToCon).Value = i
+                    Windows(.LinkedToWin).Controls(.LinkedToCon).Value = i
                     CloseComboMenu
                 End If
             Next
@@ -384,9 +384,9 @@ Public Sub Bars_OnDraw()
     ' End If
 
     ' Bars
-    RenderTexture Tex_GUI(27), xO + 15, yO + 15, 0, 0, BarWidth_GuiHP, 13, BarWidth_GuiHP, 13
-    RenderTexture Tex_GUI(28), xO + 15, yO + 32, 0, 0, BarWidth_GuiSP, 13, BarWidth_GuiSP, 13
-
+    RenderTexture Tex_GUI(19), xO + 15, yO + 15, 0, 0, BarWidth_GuiHP, 13, BarWidth_GuiHP, 13
+    RenderTexture Tex_GUI(21), xO + 15, yO + 32, 0, 0, BarWidth_GuiSP, 13, BarWidth_GuiSP, 13
+    RenderTexture Tex_GUI(23), xO + 15, yO + 49, 0, 0, BarWidth_GuiEXP, 13, BarWidth_GuiEXP, 13
     ' xO + 15 + OffsetX
     ' Move a barra para a direita de acordo com a quantidade de pixels que foi retirado.
 
@@ -401,7 +401,7 @@ Public Sub Bars_OnDraw()
 
     '  RenderTexture Tex_GUI(28), xO + 15 + OffsetX, yO + 32, OffsetX, 0, Width - OffsetX, 13, Width - OffsetX, 13
 
-    RenderTexture Tex_GUI(29), xO + 15, yO + 49, 0, 0, BarWidth_GuiEXP, 13, BarWidth_GuiEXP, 13
+    
 End Sub
 
 ' ############
@@ -417,8 +417,8 @@ Public Sub Target_OnDraw()
     xO = Windows(WindowIndex).Window.Left
     yO = Windows(WindowIndex).Window.Top
 
-    RenderTexture Tex_GUI(27), xO + 15, yO + 30, 0, 0, BarWidth_TargetHP, 13, BarWidth_TargetHP, 13
-    RenderTexture Tex_GUI(28), xO + 15, yO + 47, 0, 0, BarWidth_TargetMP, 13, BarWidth_TargetMP, 13
+    RenderTexture Tex_GUI(19), xO + 15, yO + 30, 0, 0, BarWidth_TargetHP, 13, BarWidth_TargetHP, 13
+    RenderTexture Tex_GUI(21), xO + 15, yO + 47, 0, 0, BarWidth_TargetMP, 13, BarWidth_TargetMP, 13
 End Sub
 
 ' ##########
@@ -575,11 +575,11 @@ Public Sub DragBox_OnDraw()
     ' get texture num
     With DragBox
         Select Case .Type
-        Case Part_Item
+        Case PartItem
             If .Value Then
                 texNum = Tex_Item(Item(.Value).IconId)
             End If
-        Case Part_spell
+        Case PartSpell
             If .Value Then
                 texNum = Tex_Spellicon(Skill(.Value).IconId)
             End If
@@ -597,7 +597,7 @@ Public Sub DragBox_Check()
     WinIndex = GetWindowIndex("winDragBox")
 
     ' can't drag nuthin'
-    If DragBox.Type = part_None Then Exit Sub
+    If DragBox.Type = PartNone Then Exit Sub
 
     ' check for other windows
     For i = 1 To WindowCount
@@ -620,12 +620,12 @@ Public Sub DragBox_Check()
     If curWindow Then
         Select Case Windows(curWindow).Window.Name
         Case "winWarehouse"
-            If DragBox.Origin = origin_Warehouse Then
+            If DragBox.Origin = OriginWarehouse Then
                 Call DragBox_WarehouseToWarehouse
             End If
 
-            If DragBox.Origin = origin_Inventory Then
-                If DragBox.Type = Part_Item Then
+            If DragBox.Origin = OriginInventory Then
+                If DragBox.Type = PartItem Then
 
                     If Item(GetInventoryItemNum(DragBox.Slot)).Stackable = 0 Then
                         SendDepositItem DragBox.Slot, 1
@@ -638,17 +638,17 @@ Public Sub DragBox_Check()
 
         Case "winInventory"
             ' Heraldry to Inventory
-            If DragBox.Origin = origin_Heraldry Then
+            If DragBox.Origin = OriginHeraldry Then
                 Call DragBox_CheckHeraldryToInventory
             End If
 
-            If DragBox.Origin = origin_Upgrade Then
+            If DragBox.Origin = OriginUpgrade Then
                 Call DragBox_CheckItemUpgradeToInventory
             End If
 
-            If DragBox.Origin = origin_Inventory Then
+            If DragBox.Origin = OriginInventory Then
                 ' it's from the inventory!
-                If DragBox.Type = Part_Item Then
+                If DragBox.Type = PartItem Then
                     ' find the slot to switch with
                     For i = 1 To MaxInventoryPerTab
                         With tmpRec
@@ -669,8 +669,8 @@ Public Sub DragBox_Check()
                 End If
             End If
 
-            If DragBox.Origin = origin_Warehouse Then
-                If DragBox.Type = Part_Item Then
+            If DragBox.Origin = OriginWarehouse Then
+                If DragBox.Type = PartItem Then
                     If Item(GetWarehouseItemNum(DragBox.Slot)).Stackable = 0 Then
                         SendWithdrawItem DragBox.Slot, 1
                     Else
@@ -695,13 +695,13 @@ Public Sub DragBox_Check()
     Else
         ' no windows found - dropping on bare map
         Select Case DragBox.Origin
-        Case PartTypeOrigins.origin_Inventory
+        Case PartTypeOrigins.OriginInventory
             ShowDialogue "DESTRUIR ITEM", "Deseja realmente destruir o item?", "", DialogueTypeDestroyItem, DialogueStyleYesNo, DragBox.Slot
             
-        Case PartTypeOrigins.origin_Spells
+        Case PartTypeOrigins.OriginSpells
             ' dialogue
             
-        Case PartTypeOrigins.origin_QuickSlot
+        Case PartTypeOrigins.OriginQuickSlot
             SendQuickSlotChange 0, 0, DragBox.Slot
             
         End Select
@@ -711,9 +711,9 @@ Public Sub DragBox_Check()
     HideWindow WinIndex
     
     With DragBox
-        .Type = part_None
+        .Type = PartNone
         .Slot = 0
-        .Origin = origin_None
+        .Origin = OriginNone
         .Value = 0
     End With
 End Sub
@@ -722,8 +722,8 @@ Private Sub DragBox_CheckHotBar(ByVal curWindow As Long)
     Dim i As Long
     Dim tmpRec As RECT
 
-    If DragBox.Origin <> origin_None Then
-        If DragBox.Type <> part_None Then
+    If DragBox.Origin <> OriginNone Then
+        If DragBox.Type <> PartNone Then
             ' find the slot
             For i = 1 To MaximumQuickSlot
                 With tmpRec
@@ -737,10 +737,10 @@ Private Sub DragBox_CheckHotBar(ByVal curWindow As Long)
                     If currMouseY >= tmpRec.Top And currMouseY <= tmpRec.Bottom Then
                         ' set the hotbar slot
 
-                        If DragBox.Origin <> origin_QuickSlot Then
-                            If DragBox.Type = Part_Item Then
+                        If DragBox.Origin <> OriginQuickSlot Then
+                            If DragBox.Type = PartItem Then
                                 SendQuickSlotChange 1, DragBox.Slot, i
-                            ElseIf DragBox.Type = Part_spell Then
+                            ElseIf DragBox.Type = PartSpell Then
                                 SendQuickSlotChange 2, DragBox.Slot, i
                             End If
                         Else
@@ -769,12 +769,12 @@ Public Sub QuickSlot_MouseDown()
     If SlotNum Then
         With DragBox
             If QuickSlot(SlotNum).SType = 1 Then    ' inventory
-                .Type = Part_Item
+                .Type = PartItem
             ElseIf QuickSlot(SlotNum).SType = 2 Then    ' spell
-                .Type = Part_spell
+                .Type = PartSpell
             End If
             .Value = QuickSlot(SlotNum).Slot
-            .Origin = origin_QuickSlot
+            .Origin = OriginQuickSlot
             .Slot = SlotNum
         End With
 
@@ -783,7 +783,7 @@ Public Sub QuickSlot_MouseDown()
             .State = MouseDown
             .Left = lastMouseX - 16
             .Top = lastMouseY - 16
-            .movedX = clickedX - .Left
+            .MovedX = clickedX - .Left
             .movedY = clickedY - .Top
         End With
         ShowWindow WinIndex, , False
@@ -813,13 +813,13 @@ Public Sub QuickSlot_MouseMove()
     Dim SlotNum As Long, X As Long, Y As Long
 
     ' exit out early if dragging
-    If DragBox.Type <> part_None Then Exit Sub
+    If DragBox.Type <> PartNone Then Exit Sub
 
     SlotNum = IsHotbar(Windows(GetWindowIndex("winHotbar")).Window.Left, Windows(GetWindowIndex("winHotbar")).Window.Top)
 
     If SlotNum Then
         ' make sure we're not dragging the item
-        If DragBox.Origin = origin_QuickSlot And DragBox.Slot = SlotNum Then Exit Sub
+        If DragBox.Origin = OriginQuickSlot And DragBox.Slot = SlotNum Then Exit Sub
 
         Dim WinDescription As Long
         Dim Inventory As InventoryRec

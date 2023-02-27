@@ -20,7 +20,7 @@ Public MaxInventories As Long
 Public Sub CreateWindow_Inventory()
     Dim i As Long
     ' Create window
-    CreateWindow "winInventory", "INVENTÁRIO", zOrder_Win, 0, 0, 202, 380, 0, False, Fonts.OpenSans_Regular, , 2, 7, DesignTypes.desWin_AincradNorm, DesignTypes.desWin_AincradNorm, DesignTypes.desWin_AincradNorm, , , , , GetAddress(AddressOf Inventory_MouseMove), GetAddress(AddressOf Inventory_MouseDown), GetAddress(AddressOf Inventory_MouseMove), GetAddress(AddressOf Inventory_DblClick), , , GetAddress(AddressOf DrawInventory)
+    CreateWindow "winInventory", "INVENTÁRIO", zOrder_Win, 0, 0, 202, 380, 0, False, Fonts.OpenSans_Regular, , 2, 7, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, , , , , GetAddress(AddressOf Inventory_MouseMove), GetAddress(AddressOf Inventory_MouseDown), GetAddress(AddressOf Inventory_MouseMove), GetAddress(AddressOf Inventory_DblClick), , , GetAddress(AddressOf DrawInventory)
     ' Centralise it
     CentraliseWindow WindowCount
 
@@ -52,43 +52,43 @@ Private Sub SetTabButtonColor(ByVal Index As Long, ByVal Color As Long)
         ControlIndex = GetControlIndex("winInventory", "btnInventoryTab" & i)
 
         If i = Index Then
-            Windows(WindowIndex).Controls(ControlIndex).textColour = Color
-            Windows(WindowIndex).Controls(ControlIndex).textColour_Hover = Green
-            Windows(WindowIndex).Controls(ControlIndex).textColour_Click = Green
+            Windows(WindowIndex).Controls(ControlIndex).TextColour = Color
+            Windows(WindowIndex).Controls(ControlIndex).TextColourHover = Green
+            Windows(WindowIndex).Controls(ControlIndex).TextColourClick = Green
         Else
-            Windows(WindowIndex).Controls(ControlIndex).textColour = White
-            Windows(WindowIndex).Controls(ControlIndex).textColour_Hover = White
-            Windows(WindowIndex).Controls(ControlIndex).textColour_Click = White
+            Windows(WindowIndex).Controls(ControlIndex).TextColour = White
+            Windows(WindowIndex).Controls(ControlIndex).TextColourHover = White
+            Windows(WindowIndex).Controls(ControlIndex).TextColourClick = White
         End If
     Next
 End Sub
 
 Private Sub Button_InventoryTab1_MouseMove()
-    If DragBox.Origin = origin_Inventory And DragBox.Type = Part_Item Then
+    If DragBox.Origin = OriginInventory And DragBox.Type = PartItem Then
         InventoryentoryTabIndex = 0
         Call SetTabButtonColor(1, Green)
     End If
 End Sub
 Private Sub Button_InventoryTab2_MouseMove()
-    If DragBox.Origin = origin_Inventory And DragBox.Type = Part_Item Then
+    If DragBox.Origin = OriginInventory And DragBox.Type = PartItem Then
         InventoryentoryTabIndex = 1
         Call SetTabButtonColor(2, Green)
     End If
 End Sub
 Private Sub Button_InventoryTab3_MouseMove()
-    If DragBox.Origin = origin_Inventory And DragBox.Type = Part_Item Then
+    If DragBox.Origin = OriginInventory And DragBox.Type = PartItem Then
         InventoryentoryTabIndex = 2
         Call SetTabButtonColor(3, Green)
     End If
 End Sub
 Private Sub Button_InventoryTab4_MouseMove()
-    If DragBox.Origin = origin_Inventory And DragBox.Type = Part_Item Then
+    If DragBox.Origin = OriginInventory And DragBox.Type = PartItem Then
         InventoryentoryTabIndex = 3
         Call SetTabButtonColor(4, Green)
     End If
 End Sub
 Private Sub Button_InventoryTab5_MouseMove()
-    If DragBox.Origin = origin_Inventory And DragBox.Type = Part_Item Then
+    If DragBox.Origin = OriginInventory And DragBox.Type = PartItem Then
         InventoryentoryTabIndex = 4
         Call SetTabButtonColor(5, Green)
     End If
@@ -179,9 +179,9 @@ Private Sub Inventory_MouseDown()
 
         ' drag it
         With DragBox
-            .Type = Part_Item
+            .Type = PartItem
             .Value = GetInventoryItemNum(InvNum)
-            .Origin = origin_Inventory
+            .Origin = OriginInventory
             .Slot = InvNum
         End With
 
@@ -190,7 +190,7 @@ Private Sub Inventory_MouseDown()
             .State = MouseDown
             .Left = lastMouseX - 16
             .Top = lastMouseY - 16
-            .movedX = clickedX - .Left
+            .MovedX = clickedX - .Left
             .movedY = clickedY - .Top
         End With
 
@@ -222,13 +222,13 @@ Private Sub Inventory_MouseMove()
     Dim InvNum As Long, X As Long, Y As Long, i As Long
 
     ' exit out early if dragging
-    If DragBox.Type <> part_None Then Exit Sub
+    If DragBox.Type <> PartNone Then Exit Sub
 
     InvNum = GetInventorySlotFromPosition(Windows(WindowIndex).Window.Left, Windows(WindowIndex).Window.Top)
 
     If InvNum > 0 Then
         ' make sure we're not dragging the item
-        If DragBox.Type = Part_Item And DragBox.Value = InvNum Then Exit Sub
+        If DragBox.Type = PartItem And DragBox.Value = InvNum Then Exit Sub
 
         For i = 1 To MaxTradeItems
             If GetMyTradeInventoryIndex(i) = InvNum And GetMyTradeInventoryItemValue(i) >= GetInventoryItemValue(InvNum) Then
@@ -260,7 +260,7 @@ Private Sub DrawInventory()
     yO = Windows(WindowIndex).Window.Top
     Width = Windows(WindowIndex).Window.Width
 
-    RenderDesign DesignTypes.desWin_AincradMenu, xO, yO + 40, Width, 30
+    '
     CurrentInventoryIndex = InventoryentoryTabIndex * MaxInventoryPerTab
 
     Width = 76
@@ -270,14 +270,12 @@ Private Sub DrawInventory()
     ' render grid - row
     For i = 1 To 4
         If i = 4 Then Height = 38
-        RenderTexture Tex_GUI(35), xO + 4, Y, 0, 0, Width, Height, Width, Height
-        RenderTexture Tex_GUI(35), xO + 80, Y, 0, 0, Width, Height, Width, Height
-        RenderTexture Tex_GUI(35), xO + 156, Y, 0, 0, 42, Height, 42, Height
+        RenderTexture Tex_GUI(26), xO + 4, Y, 0, 0, Width, Height, Width, Height
+        RenderTexture Tex_GUI(26), xO + 80, Y, 0, 0, Width, Height, Width, Height
+        RenderTexture Tex_GUI(26), xO + 156, Y, 0, 0, 42, Height, 42, Height
         Y = Y + 76
     Next
     ' render bottom wood
-
-    RenderTexture Tex_GUI(46), xO + 8, yO + 350, 0, 0, 186, 22, 171, 22
 
     ' actually draw the icons
     For i = 1 To MaxInventoryPerTab
@@ -321,7 +319,7 @@ Private Sub DrawInventory()
 
         If ItemNum > 0 And ItemNum <= MaximumItems Then
             ' not dragging?
-            If Not (DragBox.Origin = origin_Inventory And DragBox.Slot = i + CurrentInventoryIndex) Then
+            If Not (DragBox.Origin = OriginInventory And DragBox.Slot = i + CurrentInventoryIndex) Then
                 ItemPic = Item(ItemNum).IconId
 
                 If Not skipItem Then

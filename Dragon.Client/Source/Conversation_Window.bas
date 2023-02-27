@@ -21,7 +21,7 @@ Private PageCount As Long
 
 Public Sub CreateWindow_Conversation()
 ' Create the window
-    CreateWindow "winConversation", "CONVERSAÇÃO", zOrder_Win, 0, 0, 420, 400, 0, , Fonts.OpenSans_Effect, , 3, 5, DesignTypes.desWin_AincradNorm, DesignTypes.desWin_AincradNorm, DesignTypes.desWin_AincradNorm, , , , , , , , , , , GetAddress(AddressOf RenderConversation)
+    CreateWindow "winConversation", "CONVERSAÇÃO", zOrder_Win, 0, 0, 420, 400, 0, , Fonts.OpenSans_Effect, , 3, 5, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, , , , , , , , , , , GetAddress(AddressOf RenderConversation)
 
     ' Centralise it
     CentraliseWindow WindowCount
@@ -33,22 +33,22 @@ Public Sub CreateWindow_Conversation()
     CreateButton WindowCount, "btnClose", Windows(WindowCount).Window.Width - 33, 11, 22, 22, , , , , , , Tex_GUI(TextureControl_CloseNormal), Tex_GUI(TextureControl_CloseHover), Tex_GUI(TextureControl_CloseClick), , , , , , GetAddress(AddressOf HideConversation)
 
     ' Reply buttons
-    CreateButton WindowCount, "btnOpt1", 30, OptionsY + (OptionOffsetY * 0), 340, 22, "[Text]", OpenSans_Effect, White, , , , , , , DesignTypes.desSteel, DesignTypes.desSteel_Hover, DesignTypes.desSteel_Click, , , GetAddress(AddressOf Button_Option1), , , , , ColorType.Gold
-    CreateButton WindowCount, "btnOpt2", 30, OptionsY + (OptionOffsetY * 1), 340, 22, "[Text]", OpenSans_Effect, White, , , , , , , DesignTypes.desSteel, DesignTypes.desSteel_Hover, DesignTypes.desSteel_Click, , , GetAddress(AddressOf Button_Option2), , , , , ColorType.Gold
-    CreateButton WindowCount, "btnOpt3", 30, OptionsY + (OptionOffsetY * 2), 340, 22, "[Text]", OpenSans_Effect, White, , , , , , , DesignTypes.desSteel, DesignTypes.desSteel_Hover, DesignTypes.desSteel_Click, , , GetAddress(AddressOf Button_Option3), , , , , ColorType.Gold
-    CreateButton WindowCount, "btnOpt4", 30, OptionsY + (OptionOffsetY * 3), 340, 22, "[Text]", OpenSans_Effect, White, , , , , , , DesignTypes.desSteel, DesignTypes.desSteel_Hover, DesignTypes.desSteel_Click, , , GetAddress(AddressOf Button_Option4), , , , , ColorType.Gold
-    CreateButton WindowCount, "btnOpt5", 30, OptionsY + (OptionOffsetY * 4), 340, 22, "[Text]", OpenSans_Effect, White, , , , , , , DesignTypes.desSteel, DesignTypes.desSteel_Hover, DesignTypes.desSteel_Click, , , GetAddress(AddressOf Button_Option5), , , , , ColorType.Gold
-    CreateButton WindowCount, "btnOpt6", 30, OptionsY + (OptionOffsetY * 5), 340, 22, "[Text]", OpenSans_Effect, White, , , , , , , DesignTypes.desSteel, DesignTypes.desSteel_Hover, DesignTypes.desSteel_Click, , , GetAddress(AddressOf Button_Option6), , , , , ColorType.Gold
-    CreateButton WindowCount, "btnOpt7", 30, OptionsY + (OptionOffsetY * 6), 340, 22, "[Text]", OpenSans_Effect, White, , , , , , , DesignTypes.desSteel, DesignTypes.desSteel_Hover, DesignTypes.desSteel_Click, , , GetAddress(AddressOf Button_Option7), , , , , ColorType.Gold
-    CreateButton WindowCount, "btnOpt8", 30, OptionsY + (OptionOffsetY * 7), 340, 22, "[Text]", OpenSans_Effect, White, , , , , , , DesignTypes.desSteel, DesignTypes.desSteel_Hover, DesignTypes.desSteel_Click, , , GetAddress(AddressOf Button_Option8), , , , , ColorType.Gold
+    CreateButton WindowCount, "btnOpt1", 30, OptionsY + (OptionOffsetY * 0), 340, 22, "[Text]", OpenSans_Effect, White, , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf Button_Option1), , , , , ColorType.Gold
+    CreateButton WindowCount, "btnOpt2", 30, OptionsY + (OptionOffsetY * 1), 340, 22, "[Text]", OpenSans_Effect, White, , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf Button_Option2), , , , , ColorType.Gold
+    CreateButton WindowCount, "btnOpt3", 30, OptionsY + (OptionOffsetY * 2), 340, 22, "[Text]", OpenSans_Effect, White, , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf Button_Option3), , , , , ColorType.Gold
+    CreateButton WindowCount, "btnOpt4", 30, OptionsY + (OptionOffsetY * 3), 340, 22, "[Text]", OpenSans_Effect, White, , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf Button_Option4), , , , , ColorType.Gold
+    CreateButton WindowCount, "btnOpt5", 30, OptionsY + (OptionOffsetY * 4), 340, 22, "[Text]", OpenSans_Effect, White, , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf Button_Option5), , , , , ColorType.Gold
+    CreateButton WindowCount, "btnOpt6", 30, OptionsY + (OptionOffsetY * 5), 340, 22, "[Text]", OpenSans_Effect, White, , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf Button_Option6), , , , , ColorType.Gold
+    CreateButton WindowCount, "btnOpt7", 30, OptionsY + (OptionOffsetY * 6), 340, 22, "[Text]", OpenSans_Effect, White, , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf Button_Option7), , , , , ColorType.Gold
+    CreateButton WindowCount, "btnOpt8", 30, OptionsY + (OptionOffsetY * 7), 340, 22, "[Text]", OpenSans_Effect, White, , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf Button_Option8), , , , , ColorType.Gold
 
     'Arrow
-    CreateButton WindowCount, "btnUp", 380, 90, 15, 15, , , , , , , Tex_GUI(110), Tex_GUI(110), Tex_GUI(110), , , , , , GetAddress(AddressOf Button_MoveUp)
-    CreateButton WindowCount, "btnDown", 380, 360, 15, 15, , , , , , , Tex_GUI(111), Tex_GUI(111), Tex_GUI(111), , , , , , GetAddress(AddressOf Button_MoveDown)
+    CreateButton WindowCount, "btnUp", 380, 90, 15, 15, , , , , , , Tex_GUI(44), Tex_GUI(45), Tex_GUI(46), , , , , , GetAddress(AddressOf Button_MoveUp)
+    CreateButton WindowCount, "btnDown", 380, 360, 15, 15, , , , , , , Tex_GUI(47), Tex_GUI(48), Tex_GUI(49), , , , , , GetAddress(AddressOf Button_MoveDown)
 
     'Scroll
-    CreateButton WindowCount, "ScrollUp", 382, 100, 9, 130, , , , , , , , , , DesignTypes.desSteel, DesignTypes.desSteel_Hover, DesignTypes.desSteel_Click, , , GetAddress(AddressOf Button_MoveUp)
-    CreateButton WindowCount, "ScrollDown", 382, 230, 9, 130, , , , , , , , , , DesignTypes.desSteel, DesignTypes.desSteel_Hover, DesignTypes.desSteel_Click, , , GetAddress(AddressOf Button_MoveDown)
+    CreateButton WindowCount, "ScrollUp", 382, 100, 9, 130, , , , , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf Button_MoveUp)
+    CreateButton WindowCount, "ScrollDown", 382, 230, 9, 130, , , , , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf Button_MoveDown)
 
     ' Set de WindowIndex variable to avoid search for index.
     WindowIndex = WindowCount
@@ -313,7 +313,7 @@ Private Sub RenderHeader(ByRef Text As String)
     yO = Windows(WindowIndex).Window.Top
     Width = Windows(WindowIndex).Window.Width
 
-    RenderDesign DesignTypes.desWin_AincradMenu, xO, yO + 40, Width, 30
+    
 
     Width = (Width / 2) - (TextWidth(Font(Fonts.OpenSans_Effect), Text) / 2)
 

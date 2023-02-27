@@ -33,12 +33,12 @@ Public Sub ShowTitleDesc(X As Long, Y As Long, ByVal TitleId As Long)
     With Windows(WindowIndex)
         ' set name
         ControlIndex = GetControlIndex("winDescription", "lblName")
-        .Controls(ControlIndex).textColour = GetRarityColor(Title(TitleId).Rarity)
+        .Controls(ControlIndex).TextColour = GetRarityColor(Title(TitleId).Rarity)
         .Controls(ControlIndex).Text = Title(TitleId).Name
         .Controls(ControlIndex).Width = 225
 
         ControlIndex = GetControlIndex("winDescription", "lblType")
-        '.Controls(ControlIndex).textColour = BrightGreen
+        '.Controls(ControlIndex).TextColour = BrightGreen
         '.Controls(ControlIndex).Width = 225
         .Controls(ControlIndex).Text = vbNullString
     End With

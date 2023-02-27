@@ -49,13 +49,13 @@ Public Sub ShowCurrencyDesc(ByRef X As Long, ByRef Y As Long, ByVal CurType As C
     With Windows(WindowIndex)
         ControlIndex = GetControlIndex("winDescription", "lblName")
         .Controls(ControlIndex).Text = GetCurrencyData(CurType).Name
-        .Controls(ControlIndex).textColour = Gold
+        .Controls(ControlIndex).TextColour = Gold
         .Controls(ControlIndex).Width = 225
-        .Controls(ControlIndex).align = Alignment.alignCentre
+        .Controls(ControlIndex).Align = Alignment.AlignCenter
 
         .Controls(ControlType).Text = "Quantidade: " & CurrencyValue
-        .Controls(ControlType).textColour = White
-        .Controls(ControlType).align = Alignment.alignCentre
+        .Controls(ControlType).TextColour = White
+        .Controls(ControlType).Align = Alignment.AlignCenter
         .Controls(ControlType).Width = 225
     End With
 
