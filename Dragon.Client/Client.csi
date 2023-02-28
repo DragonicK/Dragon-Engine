@@ -1,0 +1,7 @@
+[History]
+1=#P0#=mb	#P1#=InitGUI	#P2#=Crystalshire/Interface_Implementation/InitGUI	#P3#=	#P4#=	#P5#=MembMethodPublic	#P6#=20230228122347	#P7#=0	#P8#=7	.
+2=#P0#=mb	#P1#=Main	#P2#=Crystalshire/EntryPoint/Main	#P3#=	#P4#=	#P5#=MembMethodPublic	#P6#=20230228122256	#P7#=0	#P8#=102	.
+3=#P0#=mb	#P1#=ResizeGUI	#P2#=Crystalshire/modDirectX8/ResizeGUI	#P3#=	#P4#=	#P5#=MembMethodPublic	#P6#=20230228122234	#P7#=0	#P8#=41	.
+4=#P0#=mb	#P1#=CreateWindow_LoginBottomBar	#P2#=Crystalshire/LoginBottomBar_Window/CreateWindow_LoginBottomBar	#P3#=	#P4#=	#P5#=MembMethodPublic	#P6#=20230228123229	#P7#=0	#P8#=12	.
+5=#P0#=mb	#P1#=CreateWindow_Login	#P2#=Crystalshire/LoginBottomBar_Window/CreateWindow_Login	#P3#=	#P4#=	#P5#=MembMethodPublic	#P6#=20230228121133	#P7#=0	#P8#=0	.
+6=#P0#=mb	#P1#=CreateWindow_Login	#P2#=Crystalshire/Login_Window/CreateWindow_Login	#P3#=	#P4#=	#P5#=MembMethodPublic	#P6#=20230228115023	#P7#=0	#P8#=24	.
