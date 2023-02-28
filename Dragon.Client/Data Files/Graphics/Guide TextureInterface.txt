@@ -1,0 +1,55 @@
+1 - Check Off
+2 - Check On
+3 - Chat Up
+4 - Chat Up Hover
+5 - Chat Up Click
+6 - Chat Down
+7 - Chat Down Hover
+8 - Chat Down Click
+9 - Char 01
+10 - Char 02
+11 - Char 03
+12 - Chat Left
+13 - Chat Left Hover
+14 - Chat Left Click
+15 - Chat Right
+16 - Chat Right Hover
+17 - Chat Right Click
+18 - Hp Bar Blank
+19 - Hp Bar
+20 - Mp Bar Blank
+21 - Mp Bar
+22 - Exp Bar Blank
+23 - Exp Bar
+24 - HotBar Slot
+25 - ChatBubble
+26 - Slots Itens Interface
+27 - Slot Item Interface
+28 - Shaddow Window Bottom
+29 - Shaddow Window Top
+30 - Fake + Button
+31 - Fake + Buttom Hover
+32 - Fake + Buttom Click
+33 - Plus Button
+34 - Plus Buttom Hover
+35 - Plus Buttom Click
+36 - Chat Tab
+37 - Shop Selected Bottom Item
+38 - Shop Selected Item
+39 - Hp Bar Party Blank
+40 - Hp Bar Party
+41 - Mp Bar party Blank
+42 - Mp Bar Party
+43 - Combobox Icon
+44 - List Up
+45 - List Up Hover
+46 - List Up Click
+57 - List Down
+48 - List Down Hover
+49 - List Down Click
+50 - Loading Bar Blank
+51 - Loading Bar
+52 - Close
+53 - Close Hover
+54 - Close Click
+
