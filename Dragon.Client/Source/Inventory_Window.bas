@@ -20,7 +20,7 @@ Public MaxInventories As Long
 Public Sub CreateWindow_Inventory()
     Dim i As Long
     ' Create window
-    CreateWindow "winInventory", "INVENTÁRIO", zOrder_Win, 0, 0, 202, 380, 0, False, Fonts.OpenSans_Regular, , 2, 7, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, , , , , GetAddress(AddressOf Inventory_MouseMove), GetAddress(AddressOf Inventory_MouseDown), GetAddress(AddressOf Inventory_MouseMove), GetAddress(AddressOf Inventory_DblClick), , , GetAddress(AddressOf DrawInventory)
+    CreateWindow "winInventory", "INVENTÁRIO", zOrder_Win, 0, 0, 202, 380, 0, False, Fonts.OpenSans_Regular, , 2, 7, DesignTypes.DesignWindowWithTopBarAndNavBar, DesignTypes.DesignWindowWithTopBarAndNavBar, DesignTypes.DesignWindowWithTopBarAndNavBar, , , , , GetAddress(AddressOf Inventory_MouseMove), GetAddress(AddressOf Inventory_MouseDown), GetAddress(AddressOf Inventory_MouseMove), GetAddress(AddressOf Inventory_DblClick), , , GetAddress(AddressOf DrawInventory)
     ' Centralise it
     CentraliseWindow WindowCount
 
@@ -191,7 +191,7 @@ Private Sub Inventory_MouseDown()
             .Left = lastMouseX - 16
             .Top = lastMouseY - 16
             .MovedX = clickedX - .Left
-            .movedY = clickedY - .Top
+            .MovedY = clickedY - .Top
         End With
 
         ShowWindow WinIndex, , False

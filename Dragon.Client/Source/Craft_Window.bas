@@ -40,7 +40,7 @@ End Sub
 Public Sub CreateWindow_Craft()
     Dim i As Long
 
-    CreateWindow "winCraft", "PRODUÇÃO", zOrder_Win, 0, 0, 389, 408, 0, True, Fonts.OpenSans_Regular, , 2, 5, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, , , , , 0, 0, 0, 0, , , GetAddress(AddressOf DrawCraft)
+    CreateWindow "winCraft", "PRODUÇÃO", zOrder_Win, 0, 0, 389, 408, 0, True, Fonts.OpenSans_Regular, , 2, 5, DesignTypes.DesignWindowWithTopBarAndNavBar, DesignTypes.DesignWindowWithTopBarAndNavBar, DesignTypes.DesignWindowWithTopBarAndNavBar, , , , , 0, 0, 0, 0, , , GetAddress(AddressOf DrawCraft)
 
     CentraliseWindow WindowCount
     ' Set the index for spawning controls
@@ -97,8 +97,6 @@ Private Sub DrawCraft()
 
     xO = Windows(WindowIndex).Window.Left
     yO = Windows(WindowIndex).Window.Top
-
-    RenderEntity_Square TextureDesign(TextureDesign_Parchment), xO + 6, WindowOffsetY + yO - 2, 371, 29, 20, 255    'Exp x 55, w 280
 
     ' Sai do metodo para evitar processamento quando não há produção.
     If GetCraftType = CraftType.CraftType_None Then
@@ -293,7 +291,7 @@ Private Sub SetControlResultItem(ByVal TextureNum As Long)
     ControlIndexItem = GetControlIndex("winCraft", "picItemResult")
 
     For i = 0 To entStates.state_Count - 1
-        Windows(WindowIndex).Controls(ControlIndexItem).image(i) = Tex_Item(TextureNum)
+        Windows(WindowIndex).Controls(ControlIndexItem).Image(i) = Tex_Item(TextureNum)
     Next
 End Sub
 
