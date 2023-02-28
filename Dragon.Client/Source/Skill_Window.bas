@@ -21,7 +21,7 @@ Public Sub CreateWindow_Skills()
     SetSkillPageCount
 
     ' Create window
-    CreateWindow "winSkills", "HABILIDADES", zOrder_Win, 0, 0, 300, 410, 0, False, Fonts.OpenSans_Effect, , 2, 7, DesignTypes.desWin_AincradNorm, DesignTypes.desWin_AincradNorm, DesignTypes.desWin_AincradNorm, , , , , GetAddress(AddressOf Skills_MouseMove), GetAddress(AddressOf Skills_MouseDown), GetAddress(AddressOf Skills_MouseMove), GetAddress(AddressOf Skills_DblClick), , , GetAddress(AddressOf DrawSkills)
+    CreateWindow "winSkills", "HABILIDADES", zOrder_Win, 0, 0, 300, 410, 0, False, Fonts.OpenSans_Effect, , 2, 7, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, , , , , GetAddress(AddressOf Skills_MouseMove), GetAddress(AddressOf Skills_MouseDown), GetAddress(AddressOf Skills_MouseMove), GetAddress(AddressOf Skills_DblClick), , , GetAddress(AddressOf DrawSkills)
     ' Centralise it
     CentraliseWindow WindowCount
 
@@ -35,14 +35,12 @@ Public Sub CreateWindow_Skills()
     CreateButton WindowCount, "btnPassive", 173, 42, 100, 26, "PASSIVA", OpenSans_Effect, , , , , , , , , , , , , GetAddress(AddressOf Button_ShowPassive)
     
     
-    CreateButton WindowCount, "btnUpAttributes", ListX * 27, ListY * 8, 15, 15, , , , , , , Tex_GUI(110), Tex_GUI(110), Tex_GUI(110), , , , , , GetAddress(AddressOf MovePageUp)
-    CreateButton WindowCount, "btnDownAttributes", ListX * 27, (ListY * 36) + 28, 15, 15, , , , , , , Tex_GUI(111), Tex_GUI(111), Tex_GUI(111), , , , , , GetAddress(AddressOf MovePageDown)
+    CreateButton WindowCount, "btnUpAttributes", ListX * 27, ListY * 8, 15, 15, , , , , , , Tex_GUI(44), Tex_GUI(45), Tex_GUI(46), , , , , , GetAddress(AddressOf MovePageUp)
+    CreateButton WindowCount, "btnDownAttributes", ListX * 27, (ListY * 36) + 28, 15, 15, , , , , , , Tex_GUI(47), Tex_GUI(48), Tex_GUI(49), , , , , , GetAddress(AddressOf MovePageDown)
     
-    CreateButton WindowCount, "ScrollUpAttributes", (ListX * 27) + 2, (ListY * 8) + 16, 8, 138, , , , , , , , , , DesignTypes.desButton, DesignTypes.desButton_Hover, DesignTypes.desButton_Click, , , GetAddress(AddressOf MovePageUp)
-    CreateButton WindowCount, "ScrollDownAttributes", (ListX * 27) + 2, (ListY * 22) + 14, 8, 146, , , , , , , , , , DesignTypes.desButton, DesignTypes.desButton_Hover, DesignTypes.desButton_Click, , , GetAddress(AddressOf MovePageDown)
 
     'Botões setas
-    'CreateLabel WindowCount, "lblPage", 92, 350, 120, 50, "Página: 1/" & SkillPageCount, OpenSans_Effect, White, Alignment.alignCentre
+    'CreateLabel WindowCount, "lblPage", 92, 350, 120, 50, "Página: 1/" & SkillPageCount, OpenSans_Effect, White, Alignment.AlignCenter
 
     WindowIndex = WindowCount
 End Sub
@@ -56,7 +54,7 @@ Public Sub DrawSkills()
     yO = Windows(WindowIndex).Window.Top
     Width = Windows(WindowIndex).Window.Width
     
-    RenderDesign DesignTypes.desWin_AincradMenu, xO, yO + 40, Width, 30
+    '
 
     For i = 1 To MaxSkillList
         SkillIndex = ((SkillPage - 1) * MaxSkillList) + i
@@ -74,7 +72,7 @@ Public Sub DrawSkills()
             If SkillNum > 0 Then
                 If SkillNum > 0 And SkillNum <= MaximumSkills Then
                     ' not dragging?
-                    If Not (DragBox.Origin = origin_Spells And DragBox.Slot = SkillIndex) Then
+                    If Not (DragBox.Origin = OriginSpells And DragBox.Slot = SkillIndex) Then
                         SkillIcon = Skill(SkillNum).IconId
 
                         If SkillIcon > 0 And SkillIcon <= Count_Spellicon Then
@@ -101,9 +99,9 @@ Public Sub Skills_MouseDown()
 
         If SlotNum Then
             With DragBox
-                .Type = Part_spell
+                .Type = PartSpell
                 .Value = PlayerSkill(SlotNum).Id
-                .Origin = origin_Spells
+                .Origin = OriginSpells
                 .Slot = SlotNum
             End With
 
@@ -112,7 +110,7 @@ Public Sub Skills_MouseDown()
                 .State = MouseDown
                 .Left = lastMouseX - 16
                 .Top = lastMouseY - 16
-                .movedX = clickedX - .Left
+                .MovedX = clickedX - .Left
                 .movedY = clickedY - .Top
             End With
 
@@ -144,13 +142,13 @@ Private Sub Skills_MouseMove()
     Dim SlotNum As Long, X As Long, Y As Long
 
     ' exit out early if dragging
-    If DragBox.Type <> part_None Then Exit Sub
+    If DragBox.Type <> PartNone Then Exit Sub
 
     SlotNum = GetSkillSlotFromPosition(Windows(WindowIndex).Window.Left, Windows(WindowIndex).Window.Top)
 
     If SlotNum Then
         ' make sure we're not dragging the item
-        If DragBox.Type = Part_Item And DragBox.Value = SlotNum Then Exit Sub
+        If DragBox.Type = PartItem And DragBox.Value = SlotNum Then Exit Sub
         ' calc position
         X = Windows(WindowIndex).Window.Left - Windows(GetWindowIndex("winDescription")).Window.Width - 2
         Y = Windows(WindowIndex).Window.Top
@@ -175,13 +173,13 @@ Private Sub Button_ShowSkill()
     BtnPassive = GetControlIndex("winSkills", "btnPassive")
     BtnActive = GetControlIndex("winSkills", "btnActive")
 
-    Windows(WindowIndex).Controls(BtnPassive).textColour = White
-    Windows(WindowIndex).Controls(BtnPassive).textColour_Hover = White
-    Windows(WindowIndex).Controls(BtnPassive).textColour_Click = White
+    Windows(WindowIndex).Controls(BtnPassive).TextColour = White
+    Windows(WindowIndex).Controls(BtnPassive).TextColourHover = White
+    Windows(WindowIndex).Controls(BtnPassive).TextColourClick = White
 
-    Windows(WindowIndex).Controls(BtnActive).textColour = Gold
-    Windows(WindowIndex).Controls(BtnActive).textColour_Hover = Gold
-    Windows(WindowIndex).Controls(BtnActive).textColour_Click = Gold
+    Windows(WindowIndex).Controls(BtnActive).TextColour = Gold
+    Windows(WindowIndex).Controls(BtnActive).TextColourHover = Gold
+    Windows(WindowIndex).Controls(BtnActive).TextColourClick = Gold
 End Sub
 
 Private Sub Button_ShowPassive()
@@ -194,13 +192,13 @@ Private Sub Button_ShowPassive()
     BtnPassive = GetControlIndex("winSkills", "btnPassive")
     BtnActive = GetControlIndex("winSkills", "btnActive")
 
-    Windows(WindowIndex).Controls(BtnActive).textColour = White
-    Windows(WindowIndex).Controls(BtnActive).textColour_Hover = White
-    Windows(WindowIndex).Controls(BtnActive).textColour_Click = White
+    Windows(WindowIndex).Controls(BtnActive).TextColour = White
+    Windows(WindowIndex).Controls(BtnActive).TextColourHover = White
+    Windows(WindowIndex).Controls(BtnActive).TextColourClick = White
 
-    Windows(WindowIndex).Controls(BtnPassive).textColour = Gold
-    Windows(WindowIndex).Controls(BtnPassive).textColour_Hover = Gold
-    Windows(WindowIndex).Controls(BtnPassive).textColour_Click = Gold
+    Windows(WindowIndex).Controls(BtnPassive).TextColour = Gold
+    Windows(WindowIndex).Controls(BtnPassive).TextColourHover = Gold
+    Windows(WindowIndex).Controls(BtnPassive).TextColourClick = Gold
 End Sub
 
 Private Sub MovePageUp()

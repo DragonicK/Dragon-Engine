@@ -61,11 +61,11 @@ Public Sub ShowHeraldryDescription(X As Long, Y As Long, ByRef Inventory As Inve
             .Controls(ControlIndex).Text = ItemName
         End If
 
-        .Controls(ControlIndex).textColour = GetRarityColor(Item(Inventory.Num).Rarity)
+        .Controls(ControlIndex).TextColour = GetRarityColor(Item(Inventory.Num).Rarity)
         .Controls(ControlIndex).Width = 225
         .Controls(ControlType).Text = "Heráldica"
-        .Controls(ControlType).textColour = White
-        .Controls(ControlType).align = Alignment.alignCentre
+        .Controls(ControlType).TextColour = White
+        .Controls(ControlType).Align = Alignment.AlignCenter
         .Controls(ControlType).Width = 225
     End With
 

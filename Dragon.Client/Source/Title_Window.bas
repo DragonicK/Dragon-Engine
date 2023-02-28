@@ -42,7 +42,7 @@ End Sub
 
 Public Sub CreateWindow_Title()
 ' Create the window
-    CreateWindow "winTitle", "TÍTULOS", zOrder_Win, 0, 0, 208, 520, 0, , Fonts.OpenSans_Effect, , 3, 5, DesignTypes.desWin_AincradNorm, DesignTypes.desWin_AincradNorm, DesignTypes.desWin_AincradNorm, , , , , , , , , , , GetAddress(AddressOf RenderWindowTitle)
+    CreateWindow "winTitle", "TÍTULOS", zOrder_Win, 0, 0, 208, 520, 0, , Fonts.OpenSans_Effect, , 3, 5, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, , , , , , , , , , , GetAddress(AddressOf RenderWindowTitle)
 
     ' Centralise it
     CentraliseWindow WindowCount
@@ -54,35 +54,35 @@ Public Sub CreateWindow_Title()
     CreateButton WindowCount, "btnClose", Windows(WindowCount).Window.Width - 33, 11, 22, 22, , , , , , , Tex_GUI(TextureControl_CloseNormal), Tex_GUI(TextureControl_CloseHover), Tex_GUI(TextureControl_CloseClick), , , , , , GetAddress(AddressOf Button_CloseTitle)
 
     ' Labels
-    CreateLabel WindowCount, "lblTitleCount", 0, 49, 205, , "Quantidade: 0/" & MaxPlayerTitles, OpenSans_Regular, White, Alignment.alignCentre
-    CreateLabel WindowCount, "lblTitleActivated", 0, 76, 205, , "Nenhum", OpenSans_Regular, ColorType.White, Alignment.alignCentre
+    CreateLabel WindowCount, "lblTitleCount", 0, 49, 205, , "Quantidade: 0/" & MaxPlayerTitles, OpenSans_Regular, White, Alignment.AlignCenter
+    CreateLabel WindowCount, "lblTitleActivated", 0, 76, 205, , "Nenhum", OpenSans_Regular, ColorType.White, Alignment.AlignCenter
 
     ' PictureBox
-    CreatePictureBox WindowCount, "picList" & 1, ListX, ListY + (ListOffsetY * 1), 154, 28, , , , , , , , DesignTypes.desTextWhite, DesignTypes.desTextBlack, DesignTypes.desTextWhite, , GetAddress(AddressOf PicList1_MouseMove), GetAddress(AddressOf PicList1_Click), GetAddress(AddressOf PicList1_MouseMove)
-    CreatePictureBox WindowCount, "picList" & 2, ListX, ListY + (ListOffsetY * 2), 154, 28, , , , , , , , DesignTypes.desTextWhite, DesignTypes.desTextBlack, DesignTypes.desTextWhite, , GetAddress(AddressOf PicList2_MouseMove), GetAddress(AddressOf PicList2_Click), GetAddress(AddressOf PicList2_MouseMove)
-    CreatePictureBox WindowCount, "picList" & 3, ListX, ListY + (ListOffsetY * 3), 154, 28, , , , , , , , DesignTypes.desTextWhite, DesignTypes.desTextBlack, DesignTypes.desTextWhite, , GetAddress(AddressOf PicList3_MouseMove), GetAddress(AddressOf PicList3_Click), GetAddress(AddressOf PicList3_MouseMove)
-    CreatePictureBox WindowCount, "picList" & 4, ListX, ListY + (ListOffsetY * 4), 154, 28, , , , , , , , DesignTypes.desTextWhite, DesignTypes.desTextBlack, DesignTypes.desTextWhite, , GetAddress(AddressOf PicList4_MouseMove), GetAddress(AddressOf PicList4_Click), GetAddress(AddressOf PicList4_MouseMove)
-    CreatePictureBox WindowCount, "picList" & 5, ListX, ListY + (ListOffsetY * 5), 154, 28, , , , , , , , DesignTypes.desTextWhite, DesignTypes.desTextBlack, DesignTypes.desTextWhite, , GetAddress(AddressOf PicList5_MouseMove), GetAddress(AddressOf PicList5_Click), GetAddress(AddressOf PicList5_MouseMove)
-    CreatePictureBox WindowCount, "picList" & 6, ListX, ListY + (ListOffsetY * 6), 154, 28, , , , , , , , DesignTypes.desTextWhite, DesignTypes.desTextBlack, DesignTypes.desTextWhite, , GetAddress(AddressOf PicList6_MouseMove), GetAddress(AddressOf PicList6_Click), GetAddress(AddressOf PicList6_MouseMove)
-    CreatePictureBox WindowCount, "picList" & 7, ListX, ListY + (ListOffsetY * 7), 154, 28, , , , , , , , DesignTypes.desTextWhite, DesignTypes.desTextBlack, DesignTypes.desTextWhite, , GetAddress(AddressOf PicList7_MouseMove), GetAddress(AddressOf PicList7_Click), GetAddress(AddressOf PicList7_MouseMove)
-    CreatePictureBox WindowCount, "picList" & 8, ListX, ListY + (ListOffsetY * 8), 154, 28, , , , , , , , DesignTypes.desTextWhite, DesignTypes.desTextBlack, DesignTypes.desTextWhite, , GetAddress(AddressOf PicList8_MouseMove), GetAddress(AddressOf PicList8_Click), GetAddress(AddressOf PicList8_MouseMove)
-    CreatePictureBox WindowCount, "picList" & 9, ListX, ListY + (ListOffsetY * 9), 154, 28, , , , , , , , DesignTypes.desTextWhite, DesignTypes.desTextBlack, DesignTypes.desTextWhite, , GetAddress(AddressOf PicList9_MouseMove), GetAddress(AddressOf PicList9_Click), GetAddress(AddressOf PicList9_MouseMove)
-    CreatePictureBox WindowCount, "picList" & 9, ListX, ListY + (ListOffsetY * 10), 154, 28, , , , , , , , DesignTypes.desTextWhite, DesignTypes.desTextBlack, DesignTypes.desTextWhite, , GetAddress(AddressOf PicList10_MouseMove), GetAddress(AddressOf PicList10_Click), GetAddress(AddressOf PicList10_MouseMove)
+    CreatePictureBox WindowCount, "picList" & 1, ListX, ListY + (ListOffsetY * 1), 154, 28, , , , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, , GetAddress(AddressOf PicList1_MouseMove), GetAddress(AddressOf PicList1_Click), GetAddress(AddressOf PicList1_MouseMove)
+    CreatePictureBox WindowCount, "picList" & 2, ListX, ListY + (ListOffsetY * 2), 154, 28, , , , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, , GetAddress(AddressOf PicList2_MouseMove), GetAddress(AddressOf PicList2_Click), GetAddress(AddressOf PicList2_MouseMove)
+    CreatePictureBox WindowCount, "picList" & 3, ListX, ListY + (ListOffsetY * 3), 154, 28, , , , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, , GetAddress(AddressOf PicList3_MouseMove), GetAddress(AddressOf PicList3_Click), GetAddress(AddressOf PicList3_MouseMove)
+    CreatePictureBox WindowCount, "picList" & 4, ListX, ListY + (ListOffsetY * 4), 154, 28, , , , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, , GetAddress(AddressOf PicList4_MouseMove), GetAddress(AddressOf PicList4_Click), GetAddress(AddressOf PicList4_MouseMove)
+    CreatePictureBox WindowCount, "picList" & 5, ListX, ListY + (ListOffsetY * 5), 154, 28, , , , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, , GetAddress(AddressOf PicList5_MouseMove), GetAddress(AddressOf PicList5_Click), GetAddress(AddressOf PicList5_MouseMove)
+    CreatePictureBox WindowCount, "picList" & 6, ListX, ListY + (ListOffsetY * 6), 154, 28, , , , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, , GetAddress(AddressOf PicList6_MouseMove), GetAddress(AddressOf PicList6_Click), GetAddress(AddressOf PicList6_MouseMove)
+    CreatePictureBox WindowCount, "picList" & 7, ListX, ListY + (ListOffsetY * 7), 154, 28, , , , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, , GetAddress(AddressOf PicList7_MouseMove), GetAddress(AddressOf PicList7_Click), GetAddress(AddressOf PicList7_MouseMove)
+    CreatePictureBox WindowCount, "picList" & 8, ListX, ListY + (ListOffsetY * 8), 154, 28, , , , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, , GetAddress(AddressOf PicList8_MouseMove), GetAddress(AddressOf PicList8_Click), GetAddress(AddressOf PicList8_MouseMove)
+    CreatePictureBox WindowCount, "picList" & 9, ListX, ListY + (ListOffsetY * 9), 154, 28, , , , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, , GetAddress(AddressOf PicList9_MouseMove), GetAddress(AddressOf PicList9_Click), GetAddress(AddressOf PicList9_MouseMove)
+    CreatePictureBox WindowCount, "picList" & 9, ListX, ListY + (ListOffsetY * 10), 154, 28, , , , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, , GetAddress(AddressOf PicList10_MouseMove), GetAddress(AddressOf PicList10_Click), GetAddress(AddressOf PicList10_MouseMove)
 
     ' Invisible for draw
     CreatePictureBox WindowCount, "invisble", 0, 0, 0, 0, , , , , , , , , , , , , , , , GetAddress(AddressOf Draw_Title)
     
     ' Buttons
-    CreateButton WindowCount, "btnActivate", ListX, ListY + 390, 80, 28, "ATIVAR", OpenSans_Effect, White, , , , , , , DesignTypes.desSteel, DesignTypes.desSteel_Hover, DesignTypes.desSteel_Click, , , GetAddress(AddressOf Button_Activate)
-    CreateButton WindowCount, "btnDisable", 110, ListY + 390, 80, 28, "DESATIVAR", OpenSans_Effect, White, , , , , , , DesignTypes.desSteel, DesignTypes.desSteel_Hover, DesignTypes.desSteel_Click, , , GetAddress(AddressOf Button_Disable)
+    CreateButton WindowCount, "btnActivate", ListX, ListY + 390, 80, 28, "ATIVAR", OpenSans_Effect, White, , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf Button_Activate)
+    CreateButton WindowCount, "btnDisable", 110, ListY + 390, 80, 28, "DESATIVAR", OpenSans_Effect, White, , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf Button_Disable)
 
     'Arrow
-    CreateButton WindowCount, "btnUp", 184, ListY + (ListOffsetY * 1), 15, 15, , , , , , , Tex_GUI(110), Tex_GUI(110), Tex_GUI(110), , , , , , GetAddress(AddressOf MoveListToUp)
-    CreateButton WindowCount, "btnDown", 184, ListY + (ListOffsetY * 10 + 20), 15, 15, , , , , , , Tex_GUI(111), Tex_GUI(111), Tex_GUI(111), , , , , , GetAddress(AddressOf MoveListToDown)
+    CreateButton WindowCount, "btnUp", 184, ListY + (ListOffsetY * 1), 15, 15, , , , , , , Tex_GUI(44), Tex_GUI(45), Tex_GUI(46), , , , , , GetAddress(AddressOf MoveListToUp)
+    CreateButton WindowCount, "btnDown", 184, ListY + (ListOffsetY * 10 + 20), 15, 15, , , , , , , Tex_GUI(47), Tex_GUI(48), Tex_GUI(49), , , , , , GetAddress(AddressOf MoveListToDown)
 
     'Scroll
-    CreateButton WindowCount, "ScrollUp", 186, ListY + (ListOffsetY * 1 + 15), 8, 157, , , , , , , , , , DesignTypes.desSteel, DesignTypes.desSteel_Hover, DesignTypes.desSteel_Click, , , GetAddress(AddressOf MoveListToUp)
-    CreateButton WindowCount, "ScrollDown", 186, ListY + 206, 8, 157, , , , , , , , , , DesignTypes.desSteel, DesignTypes.desSteel_Hover, DesignTypes.desSteel_Click, , , GetAddress(AddressOf MoveListToDown)
+    CreateButton WindowCount, "ScrollUp", 186, ListY + (ListOffsetY * 1 + 15), 8, 157, , , , , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf MoveListToUp)
+    CreateButton WindowCount, "ScrollDown", 186, ListY + 206, 8, 157, , , , , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf MoveListToDown)
 
     ' Set de WindowIndex variable to avoid search for index.
     WindowIndex = WindowCount
@@ -115,8 +115,8 @@ Private Sub RenderWindowTitle()
     yO = Windows(WindowIndex).Window.Top
     Width = Windows(WindowIndex).Window.Width
 
-    RenderDesign DesignTypes.desWin_AincradMenu, xO, yO + 40, Width, 30
-    RenderDesign DesignTypes.desWin_AincradMenu, xO, yO + 70, Width, 30
+    
+    'RenderDesign DesignTypes.desWin_AincradMenu, xO, yO + 70, Width, 30
 End Sub
 
 Private Sub Draw_Title()
@@ -387,7 +387,7 @@ Public Sub ClearTitleWindow()
     Call ClearTitles
 
     Windows(WindowIndex).Controls(GetControlIndex("winTitle", "lblTitleActivated")).Text = "Nenhum"
-    Windows(WindowIndex).Controls(GetControlIndex("winTitle", "lblTitleActivated")).textColour = White
+    Windows(WindowIndex).Controls(GetControlIndex("winTitle", "lblTitleActivated")).TextColour = White
     Windows(WindowIndex).Controls(GetControlIndex("winTitle", "lblTitleCount")).Text = "Quantidade: 0/" & MaxPlayerTitles
 End Sub
 
@@ -409,9 +409,9 @@ Public Sub UpdateActiveTitle(ByVal TitleNum As Long)
     End If
 
     Windows(WindowIndex).Controls(ControlIndex).Text = Name
-    Windows(WindowIndex).Controls(ControlIndex).textColour = Colour
-    Windows(WindowIndex).Controls(ControlIndex).textColour_Click = Colour
-    Windows(WindowIndex).Controls(ControlIndex).textColour_Hover = Colour
+    Windows(WindowIndex).Controls(ControlIndex).TextColour = Colour
+    Windows(WindowIndex).Controls(ControlIndex).TextColourClick = Colour
+    Windows(WindowIndex).Controls(ControlIndex).TextColourHover = Colour
 End Sub
 
 Public Sub ButtonMenu_Title()

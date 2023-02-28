@@ -3,7 +3,7 @@ Option Explicit
 
 Public Sub CreateWindow_Models()
 ' Create the window
-    CreateWindow "winModels", "PERSONAGENS", zOrder_Win, 0, 0, 364, 250, 0, False, Fonts.OpenSans_Effect, , 3, 5, DesignTypes.desWin_AincradNorm, DesignTypes.desWin_AincradNorm, DesignTypes.desWin_AincradNorm, , , , , , , , , False
+    CreateWindow "winModels", "PERSONAGENS", zOrder_Win, 0, 0, 364, 250, 0, False, Fonts.OpenSans_Effect, , 3, 5, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, , , , , , , , , False
     ' Centralise it
     CentraliseWindow WindowCount
 
@@ -14,31 +14,31 @@ Public Sub CreateWindow_Models()
     CreateButton WindowCount, "ButtonClose", Windows(WindowCount).Window.Width - 33, 11, 22, 22, , , , , , , Tex_GUI(TextureControl_CloseNormal), Tex_GUI(TextureControl_CloseHover), Tex_GUI(TextureControl_CloseClick), , , , , , GetAddress(AddressOf ButtonModels_Close)
 
     ' Names
-    CreateLabel WindowCount, "lblCharName_1", 22, 47, 98, , "Slot Vazio", OpenSans_Effect, White, Alignment.alignCentre
-    CreateLabel WindowCount, "lblCharName_2", 132, 47, 98, , "Slot Vazio", OpenSans_Effect, White, Alignment.alignCentre
-    CreateLabel WindowCount, "lblCharName_3", 242, 47, 98, , "Slot Vazio", OpenSans_Effect, White, Alignment.alignCentre
+    CreateLabel WindowCount, "lblCharName_1", 22, 47, 98, , "Slot Vazio", OpenSans_Effect, White, Alignment.AlignCenter
+    CreateLabel WindowCount, "lblCharName_2", 132, 47, 98, , "Slot Vazio", OpenSans_Effect, White, Alignment.AlignCenter
+    CreateLabel WindowCount, "lblCharName_3", 242, 47, 98, , "Slot Vazio", OpenSans_Effect, White, Alignment.AlignCenter
     ' Scenery Boxes
-    CreatePictureBox WindowCount, "picScene_1", 23, 65, 96, 96, , , , , Tex_GUI(11), Tex_GUI(11), Tex_GUI(11)
-    CreatePictureBox WindowCount, "picScene_2", 133, 65, 96, 96, , , , , Tex_GUI(11), Tex_GUI(11), Tex_GUI(11)
+    CreatePictureBox WindowCount, "picScene_1", 23, 65, 96, 96, , , , , Tex_GUI(9), Tex_GUI(9), Tex_GUI(9)
+    CreatePictureBox WindowCount, "picScene_2", 133, 65, 96, 96, , , , , Tex_GUI(10), Tex_GUI(10), Tex_GUI(10)
     CreatePictureBox WindowCount, "picScene_3", 243, 65, 96, 96, , , , , Tex_GUI(11), Tex_GUI(11), Tex_GUI(11), , , , , , , , , GetAddress(AddressOf Chars_DrawFace)
 
     ' Date
-    CreateLabel WindowCount, "lblCharDate_1", 22, 163, 98, , "ue", OpenSans_Effect, White, Alignment.alignCentre
-    CreateLabel WindowCount, "lblCharDate_2", 132, 163, 98, , "", OpenSans_Effect, White, Alignment.alignCentre
-    CreateLabel WindowCount, "lblCharDate_3", 242, 163, 98, , "", OpenSans_Effect, White, Alignment.alignCentre
+    CreateLabel WindowCount, "lblCharDate_1", 22, 163, 98, , "ue", OpenSans_Effect, White, Alignment.AlignCenter
+    CreateLabel WindowCount, "lblCharDate_2", 132, 163, 98, , "", OpenSans_Effect, White, Alignment.AlignCenter
+    CreateLabel WindowCount, "lblCharDate_3", 242, 163, 98, , "", OpenSans_Effect, White, Alignment.AlignCenter
 
     ' Create Buttons
-    CreateButton WindowCount, "ButtonSelectChar_1", 22, 180, 98, 26, "SELECIONAR", OpenSans_Effect, , , , , , , , DesignTypes.desSteel, DesignTypes.desSteel_Hover, DesignTypes.desSteel_Click, , , GetAddress(AddressOf ButtonAcceptChar_1)
-    CreateButton WindowCount, "ButtonCreateChar_1", 22, 170, 98, 26, "CRIAR", OpenSans_Effect, , , , , , , , DesignTypes.desSteel, DesignTypes.desSteel_Hover, DesignTypes.desSteel_Click, , , GetAddress(AddressOf ButtonCreateChar_1)
-    CreateButton WindowCount, "ButtonDelChar_1", 22, 208, 98, 26, "DELETAR", OpenSans_Effect, , , , , , , , DesignTypes.desSteel, DesignTypes.desSteel_Hover, DesignTypes.desSteel_Click, , , GetAddress(AddressOf ButtonDelChar_1)
+    CreateButton WindowCount, "ButtonSelectChar_1", 22, 180, 98, 26, "SELECIONAR", OpenSans_Effect, , , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf ButtonAcceptChar_1)
+    CreateButton WindowCount, "ButtonCreateChar_1", 22, 170, 98, 26, "CRIAR", OpenSans_Effect, , , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf ButtonCreateChar_1)
+    CreateButton WindowCount, "ButtonDelChar_1", 22, 208, 98, 26, "DELETAR", OpenSans_Effect, , , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf ButtonDelChar_1)
 
-    CreateButton WindowCount, "ButtonSelectChar_2", 132, 180, 98, 26, "SELECIONAR", OpenSans_Effect, , , , , , , , DesignTypes.desSteel, DesignTypes.desSteel_Hover, DesignTypes.desSteel_Click, , , GetAddress(AddressOf ButtonAcceptChar_2)
-    CreateButton WindowCount, "ButtonCreateChar_2", 132, 170, 98, 26, "CRIAR", OpenSans_Effect, , , , , , , , DesignTypes.desSteel, DesignTypes.desSteel_Hover, DesignTypes.desSteel_Click, , , GetAddress(AddressOf ButtonCreateChar_2)
-    CreateButton WindowCount, "ButtonDelChar_2", 132, 208, 98, 26, "DELETAR", OpenSans_Effect, , , , , , , , DesignTypes.desSteel, DesignTypes.desSteel_Hover, DesignTypes.desSteel_Click, , , GetAddress(AddressOf ButtonDelChar_2)
+    CreateButton WindowCount, "ButtonSelectChar_2", 132, 180, 98, 26, "SELECIONAR", OpenSans_Effect, , , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf ButtonAcceptChar_2)
+    CreateButton WindowCount, "ButtonCreateChar_2", 132, 170, 98, 26, "CRIAR", OpenSans_Effect, , , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf ButtonCreateChar_2)
+    CreateButton WindowCount, "ButtonDelChar_2", 132, 208, 98, 26, "DELETAR", OpenSans_Effect, , , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf ButtonDelChar_2)
 
-    CreateButton WindowCount, "ButtonSelectChar_3", 242, 180, 98, 26, "SELECIONAR", OpenSans_Effect, , , , , , , , DesignTypes.desSteel, DesignTypes.desSteel_Hover, DesignTypes.desSteel_Click, , , GetAddress(AddressOf ButtonAcceptChar_3)
-    CreateButton WindowCount, "ButtonCreateChar_3", 242, 170, 98, 26, "CRIAR", OpenSans_Effect, , , , , , , , DesignTypes.desSteel, DesignTypes.desSteel_Hover, DesignTypes.desSteel_Click, , , GetAddress(AddressOf ButtonCreateChar_3)
-    CreateButton WindowCount, "ButtonDelChar_3", 242, 208, 98, 26, "DELETAR", OpenSans_Effect, , , , , , , , DesignTypes.desSteel, DesignTypes.desSteel_Hover, DesignTypes.desSteel_Click, , , GetAddress(AddressOf ButtonDelChar_3)
+    CreateButton WindowCount, "ButtonSelectChar_3", 242, 180, 98, 26, "SELECIONAR", OpenSans_Effect, , , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf ButtonAcceptChar_3)
+    CreateButton WindowCount, "ButtonCreateChar_3", 242, 170, 98, 26, "CRIAR", OpenSans_Effect, , , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf ButtonCreateChar_3)
+    CreateButton WindowCount, "ButtonDelChar_3", 242, 208, 98, 26, "DELETAR", OpenSans_Effect, , , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf ButtonDelChar_3)
 End Sub
 
 Private Sub Chars_DrawFace()

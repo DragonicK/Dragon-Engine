@@ -20,13 +20,8 @@ Private Const SecurityText As String = "This is a complement"
 
 ' Texture wrapper
 Public Tex_Anim() As Long, Tex_Item() As Long, Tex_Face() As Long
-Public Tex_Spellicon() As Long, Tex_Fog() As Long, Tex_GUI() As Long, Tex_Design() As Long, Tex_Gradient() As Long, Tex_Surface() As Long
+Public Tex_Spellicon() As Long, Tex_Fog() As Long, Tex_GUI() As Long, TextureDesign() As Long, Tex_Gradient() As Long, Tex_Surface() As Long
 Attribute Tex_Spellicon.VB_VarUserMemId = 1073741828
-Attribute Tex_Fog.VB_VarUserMemId = 1073741828
-Attribute Tex_GUI.VB_VarUserMemId = 1073741828
-Attribute Tex_Design.VB_VarUserMemId = 1073741828
-Attribute Tex_Gradient.VB_VarUserMemId = 1073741828
-Attribute Tex_Surface.VB_VarUserMemId = 1073741828
 Public Tex_Misc() As Long
 
 Public Tex_Bars As Long, Tex_Fader As Long, Tex_Blank As Long
@@ -50,7 +45,7 @@ Public Sub LoadTextures()
     Tex_Item = LoadTexturePack(Count_Item, App.Path & Path_Item)
     Tex_Fog = LoadTexturePack(Count_Fog, App.Path & Path_Fog)
     Tex_Face = LoadTexturePack(Count_Face, App.Path & Path_Face)
-    Tex_Design = LoadTexturePack(Count_Design, App.Path & Path_Design)
+    TextureDesign = LoadTexturePack(Count_Design, App.Path & Path_Design)
     Tex_Gradient = LoadTexturePack(Count_Gradient, App.Path & Path_Gradient)
     Tex_GUI = LoadTexturePack(Count_GUI, App.Path & Path_GUI)
     Tex_Surface = LoadTexturePack(Count_Surface, App.Path & Path_Surface)

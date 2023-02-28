@@ -35,30 +35,30 @@ End Sub
 
 Public Sub CreateWindow_Trade()
     ' Create window
-    CreateWindow "winTrade", "NEGOCIAÇÃO", zOrder_Win, 0, 0, 412, 320, 0, False, Fonts.OpenSans_Regular, , 2, 5, DesignTypes.desWin_AincradNorm, DesignTypes.desWin_AincradNorm, DesignTypes.desWin_AincradNorm, , , , , , , , , , , GetAddress(AddressOf DrawTrade)
+    CreateWindow "winTrade", "NEGOCIAÇÃO", zOrder_Win, 0, 0, 412, 320, 0, False, Fonts.OpenSans_Regular, , 2, 5, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, , , , , , , , , , , GetAddress(AddressOf DrawTrade)
     ' Centralise it
     CentraliseWindow WindowCount
     ' Close Button
     CreateButton WindowCount, "btnClose", Windows(WindowCount).Window.Width - 33, 11, 22, 22, , , , , , , Tex_GUI(TextureControl_CloseNormal), Tex_GUI(TextureControl_CloseHover), Tex_GUI(TextureControl_CloseClick), , , , , , GetAddress(AddressOf ButtonTrade_Close)
     ' Labels
-    CreateLabel WindowCount, "lblYourStatus", 15, 65, 180, 9, "Aguardando Confirmação", OpenSans_Effect, BrightRed, Alignment.alignCentre
-    CreateLabel WindowCount, "lblTheirStatus", 15 + 200, 65, 180, 9, "Aguardando Confirmação", OpenSans_Effect, BrightRed, Alignment.alignCentre
-    CreateLabel WindowCount, "lblYourTrade", 15, 50, 180, 9, "DragonicK Lv. 1", OpenSans_Effect, White, Alignment.alignCentre
-    CreateLabel WindowCount, "lblTheirTrade", 15 + 200, 50, 180, 9, "DragonicK Lv. 1", OpenSans_Effect, White, Alignment.alignCentre
+    CreateLabel WindowCount, "lblYourStatus", 15, 65, 180, 9, "Aguardando Confirmação", OpenSans_Effect, BrightRed, Alignment.AlignCenter
+    CreateLabel WindowCount, "lblTheirStatus", 15 + 200, 65, 180, 9, "Aguardando Confirmação", OpenSans_Effect, BrightRed, Alignment.AlignCenter
+    CreateLabel WindowCount, "lblYourTrade", 15, 50, 180, 9, "DragonicK Lv. 1", OpenSans_Effect, White, Alignment.AlignCenter
+    CreateLabel WindowCount, "lblTheirTrade", 15 + 200, 50, 180, 9, "DragonicK Lv. 1", OpenSans_Effect, White, Alignment.AlignCenter
     ' Buttons
-    CreateButton WindowCount, "btnConfirm", 70, 245, 120, 24, "CONFIRMAR", OpenSans_Effect, White, , , , , , , DesignTypes.desSteel, DesignTypes.desSteel_Hover, DesignTypes.desSteel_Click, , , GetAddress(AddressOf ButtonTrade_Confirm)
-    CreateButton WindowCount, "btnDecline", 228, 245, 120, 24, "RECUSAR", OpenSans_Effect, White, , , , , , , DesignTypes.desSteel, DesignTypes.desSteel_Hover, DesignTypes.desSteel_Click, , , GetAddress(AddressOf ButtonTrade_Close)
-    CreateButton WindowCount, "btnAccept", 149, 280, 120, 24, "ACEITAR", OpenSans_Effect, White, , , , , , , DesignTypes.desSteel, DesignTypes.desSteel_Hover, DesignTypes.desSteel_Click, , , GetAddress(AddressOf ButtonTrade_Accept)
+    CreateButton WindowCount, "btnConfirm", 70, 245, 120, 24, "CONFIRMAR", OpenSans_Effect, White, , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf ButtonTrade_Confirm)
+    CreateButton WindowCount, "btnDecline", 228, 245, 120, 24, "RECUSAR", OpenSans_Effect, White, , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf ButtonTrade_Close)
+    CreateButton WindowCount, "btnAccept", 149, 280, 120, 24, "ACEITAR", OpenSans_Effect, White, , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf ButtonTrade_Accept)
 
     ' Amounts
-    CreatePictureBox WindowCount, "picYour", 15, 206, 184, 24, , , , , Tex_GUI(1), Tex_GUI(1), Tex_GUI(1)
-    CreateLabel WindowCount, "lblYourCurrency", 15, 210, 180, 20, "Ouro: 0", OpenSans_Effect, White, Alignment.alignCentre
+    'CreatePictureBox WindowCount, "picYour", 15, 206, 184, 24, , , , , Tex_GUI(1), Tex_GUI(1), Tex_GUI(1)
+    CreateLabel WindowCount, "lblYourCurrency", 15, 210, 180, 20, "Ouro: 0", OpenSans_Effect, White, Alignment.AlignCenter
 
-    CreatePictureBox WindowCount, "picYour", 215, 206, 184, 24, , , , , Tex_GUI(1), Tex_GUI(1), Tex_GUI(1)
-    CreateLabel WindowCount, "lblTheirCurrency", 215, 210, 180, 20, "Ouro: 0", OpenSans_Effect, White, Alignment.alignCentre
+    'CreatePictureBox WindowCount, "picYour", 215, 206, 184, 24, , , , , Tex_GUI(1), Tex_GUI(1), Tex_GUI(1)
+    CreateLabel WindowCount, "lblTheirCurrency", 215, 210, 180, 20, "Ouro: 0", OpenSans_Effect, White, Alignment.AlignCenter
 
     ' Buttons
-    CreateButton WindowCount, "btnSetGold", 15, 206, 24, 24, " +", OpenSans_Effect, White, , , , , , , DesignTypes.desSteel, DesignTypes.desSteel_Hover, DesignTypes.desSteel_Click, , , GetAddress(AddressOf ButtonTrade_Currency)
+    CreateButton WindowCount, "btnSetGold", 15, 206, 24, 24, " +", OpenSans_Effect, White, , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf ButtonTrade_Currency)
 
     CreatePictureBox WindowCount, "picYourTrade", 13, 81, 185, 115, , , , , , , , , , , , GetAddress(AddressOf TradeMouseMove_Me), GetAddress(AddressOf TradeMouseDown_Me), GetAddress(AddressOf TradeMouseMove_Me)
     CreatePictureBox WindowCount, "picOtherTrade", 214, 81, 185, 115, , , , , , , , , , , , GetAddress(AddressOf TradeMouseMove_Their), , GetAddress(AddressOf TradeMouseMove_Their)
@@ -81,9 +81,9 @@ Private Sub DrawTrade()
     
     For i = 1 To 2
         If i = 2 Then Height = 38
-        RenderTexture Tex_GUI(35), xO + 4 + 5, Y, 0, 0, Width, Height, Width, Height
-        RenderTexture Tex_GUI(35), xO + 80 + 5, Y, 0, 0, Width, Height, Width, Height
-        RenderTexture Tex_GUI(35), xO + 156 + 5, Y, 0, 0, 42, Height, 42, Height
+        RenderTexture Tex_GUI(26), xO + 4 + 5, Y, 0, 0, Width, Height, Width, Height
+        RenderTexture Tex_GUI(26), xO + 80 + 5, Y, 0, 0, Width, Height, Width, Height
+        RenderTexture Tex_GUI(26), xO + 156 + 5, Y, 0, 0, 42, Height, 42, Height
         Y = Y + 76
     Next
 
@@ -94,9 +94,9 @@ Private Sub DrawTrade()
     
     For i = 1 To 2
         If i = 2 Then Height = 38
-        RenderTexture Tex_GUI(35), xO + 4 + 205, Y, 0, 0, Width, Height, Width, Height
-        RenderTexture Tex_GUI(35), xO + 80 + 205, Y, 0, 0, Width, Height, Width, Height
-        RenderTexture Tex_GUI(35), xO + 156 + 205, Y, 0, 0, 42, Height, 42, Height
+        RenderTexture Tex_GUI(26), xO + 4 + 205, Y, 0, 0, Width, Height, Width, Height
+        RenderTexture Tex_GUI(26), xO + 80 + 205, Y, 0, 0, Width, Height, Width, Height
+        RenderTexture Tex_GUI(26), xO + 156 + 205, Y, 0, 0, 42, Height, 42, Height
         Y = Y + 76
     Next
 
@@ -379,9 +379,9 @@ End Sub
 
 Private Sub SetControlTextAndColor(ByVal ControlIndex As Long, ByVal Text As String, ByVal Color As Long)
     Windows(WindowIndex).Controls(ControlIndex).Text = Text
-    Windows(WindowIndex).Controls(ControlIndex).textColour = Color
-    Windows(WindowIndex).Controls(ControlIndex).textColour_Click = Color
-    Windows(WindowIndex).Controls(ControlIndex).textColour_Hover = Color
+    Windows(WindowIndex).Controls(ControlIndex).TextColour = Color
+    Windows(WindowIndex).Controls(ControlIndex).TextColourClick = Color
+    Windows(WindowIndex).Controls(ControlIndex).TextColourHover = Color
 End Sub
 
 Private Sub SetCurrencyTextAndColor(ByVal ControlIndex As Long, ByVal Amount As Long)
@@ -394,9 +394,9 @@ Private Sub SetCurrencyTextAndColor(ByVal ControlIndex As Long, ByVal Amount As 
         Windows(WindowIndex).Controls(ControlIndex).Text = "Ouro: " & Format$(Amount, "#,###,###,###")
     End If
 
-    Windows(WindowIndex).Controls(ControlIndex).textColour = Color
-    Windows(WindowIndex).Controls(ControlIndex).textColour_Click = Color
-    Windows(WindowIndex).Controls(ControlIndex).textColour_Hover = Color
+    Windows(WindowIndex).Controls(ControlIndex).TextColour = Color
+    Windows(WindowIndex).Controls(ControlIndex).TextColourClick = Color
+    Windows(WindowIndex).Controls(ControlIndex).TextColourHover = Color
 End Sub
 
 Public Sub UpdateTradeStatus()

@@ -7,7 +7,7 @@ Public Sub CreateWindow_Heraldry()
     Dim i As Long
 
     ' Create window
-    CreateWindow "winHeraldry", "BRASÃO", zOrder_Win, 0, 0, 280, 350, 0, False, Fonts.OpenSans_Effect, , 2, 7, DesignTypes.desWin_AincradNorm, DesignTypes.desWin_AincradNorm, DesignTypes.desWin_AincradNorm, , , , , , , , , , , GetAddress(AddressOf RenderHeraldry)
+    CreateWindow "winHeraldry", "BRASÃO", zOrder_Win, 0, 0, 280, 350, 0, False, Fonts.OpenSans_Effect, , 2, 7, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, , , , , , , , , , , GetAddress(AddressOf RenderHeraldry)
     ' Centralise it
     CentraliseWindow WindowCount
     ' Set the index for spawning controls
@@ -109,9 +109,9 @@ Private Sub Heraldry_MouseDown()
     If ItemIndex > 0 Then
         ' drag it
         With DragBox
-            .Type = Part_Item
+            .Type = PartItem
             .Value = GetHeraldryItemId(ItemIndex)
-            .Origin = origin_Heraldry
+            .Origin = OriginHeraldry
             .Slot = ItemIndex
         End With
 
@@ -122,7 +122,7 @@ Private Sub Heraldry_MouseDown()
             .State = MouseDown
             .Left = lastMouseX - 16
             .Top = lastMouseY - 16
-            .movedX = clickedX - .Left
+            .MovedX = clickedX - .Left
             .movedY = clickedY - .Top
         End With
 
@@ -188,12 +188,12 @@ Private Sub RenderHeraldry()
     yO = Windows(WindowIndex).Window.Top
 
     For i = 1 To MaxPlayerHeraldry
-        RenderTexture Tex_GUI(37), xO + GetHeraldryPositionX(i), yO + GetHeraldryPositionY(i), 0, 0, 34, 34, 34, 34
+        RenderTexture Tex_GUI(27), xO + GetHeraldryPositionX(i), yO + GetHeraldryPositionY(i), 0, 0, 34, 34, 34, 34
 
         If GetHeraldryItemId(i) > 0 Then
             IconId = Item(GetHeraldryItemId(i)).IconId
 
-            If Not (DragBox.Origin = origin_Heraldry And DragBox.Slot = i) Then
+            If Not (DragBox.Origin = OriginHeraldry And DragBox.Slot = i) Then
                 If IconId > 0 Then
                     RenderTexture Tex_Item(IconId), xO + GetHeraldryPositionX(i) + 1, yO + GetHeraldryPositionY(i) + 2, 0, 0, 32, 32, 32, 32
                 End If
@@ -225,7 +225,7 @@ End Sub
 
 Public Sub DragBox_CheckInventoryToHeraldry()
 
-    If DragBox.Origin = origin_Inventory And DragBox.Type = Part_Item Then
+    If DragBox.Origin = OriginInventory And DragBox.Type = PartItem Then
         If DragBox.Slot > 0 Then
             If DragBox.Value > 0 Then
                 Dim HeraldrySlot As Long

@@ -60,7 +60,7 @@ Private Descriptions As RequirementDescriptionRec
 Public Sub CreateWindow_Achievement()
     Dim i As Long
 
-    CreateWindow "winAchievement", "CONQUISTAS", zOrder_Win, 0, 0, 630, 360, 0, False, Fonts.OpenSans_Effect, , 2, 7, DesignTypes.desWin_AincradNorm, DesignTypes.desWin_AincradNorm, DesignTypes.desWin_AincradNorm, , , , , , , , , , , GetAddress(AddressOf RenderAchievement)
+    CreateWindow "winAchievement", "CONQUISTAS", zOrder_Win, 0, 0, 630, 360, 0, False, Fonts.OpenSans_Effect, , 2, 7, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, , , , , , , , , , , GetAddress(AddressOf RenderAchievement)
     ' Centralise it
     CentraliseWindow WindowCount
 
@@ -69,42 +69,42 @@ Public Sub CreateWindow_Achievement()
 
     CreateButton WindowCount, "btnClose", Windows(WindowCount).Window.Width - 33, 11, 22, 22, , , , , , , Tex_GUI(TextureControl_CloseNormal), Tex_GUI(TextureControl_CloseHover), Tex_GUI(TextureControl_CloseClick), , , , , , GetAddress(AddressOf btnMenu_Achievement)
 
-    CreateButton WindowCount, "btnSummary", 20, 87, 120, 26, "RESUMO", OpenSans_Effect, , , , , , , , DesignTypes.desSteel, DesignTypes.desSteel_Hover, DesignTypes.desSteel_Click, , , GetAddress(AddressOf ChangeCategorySummary)
-    CreateButton WindowCount, "btnCharacter", 20, 119, 120, 26, "PERSONAGEM", OpenSans_Effect, , , , , , , , DesignTypes.desSteel, DesignTypes.desSteel_Hover, DesignTypes.desSteel_Click, , , GetAddress(AddressOf ChangeCategoryCharacter)
-    CreateButton WindowCount, "btnQuest", 20, 151, 120, 26, "MISSÕES", OpenSans_Effect, , , , , , , , DesignTypes.desSteel, DesignTypes.desSteel_Hover, DesignTypes.desSteel_Click, , , GetAddress(AddressOf ChangeCategoryQuest)
-    CreateButton WindowCount, "btnReputation", 20, 183, 120, 26, "REPUTAÇÕES", OpenSans_Effect, , , , , , , , DesignTypes.desSteel, DesignTypes.desSteel_Hover, DesignTypes.desSteel_Click, , , GetAddress(AddressOf ChangeCategoryReputation)
-    CreateButton WindowCount, "btnDungeon", 20, 215, 120, 26, "MASMORRAS", OpenSans_Effect, , , , , , , , DesignTypes.desSteel, DesignTypes.desSteel_Hover, DesignTypes.desSteel_Click, , , GetAddress(AddressOf ChangeCategoryDungeon)
-    CreateButton WindowCount, "btnProfession", 20, 247, 120, 26, "PROFISSÕES", OpenSans_Effect, , , , , , , , DesignTypes.desSteel, DesignTypes.desSteel_Hover, DesignTypes.desSteel_Click, , , GetAddress(AddressOf ChangeCategoryProfession)
-    CreateButton WindowCount, "btnExplore", 20, 279, 120, 26, "EXPLORAÇÃO", OpenSans_Effect, , , , , , , , DesignTypes.desSteel, DesignTypes.desSteel_Hover, DesignTypes.desSteel_Click, , , GetAddress(AddressOf ChangeCategoryExploration)
-    CreateButton WindowCount, "btnPvp", 20, 311, 120, 26, "PVP", OpenSans_Effect, , , , , , , , DesignTypes.desSteel, DesignTypes.desSteel_Hover, DesignTypes.desSteel_Click, , , GetAddress(AddressOf ChangeCategoryPvp)
+    CreateButton WindowCount, "btnSummary", 20, 87, 120, 26, "RESUMO", OpenSans_Effect, , , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf ChangeCategorySummary)
+    CreateButton WindowCount, "btnCharacter", 20, 119, 120, 26, "PERSONAGEM", OpenSans_Effect, , , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf ChangeCategoryCharacter)
+    CreateButton WindowCount, "btnQuest", 20, 151, 120, 26, "MISSÕES", OpenSans_Effect, , , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf ChangeCategoryQuest)
+    CreateButton WindowCount, "btnReputation", 20, 183, 120, 26, "REPUTAÇÕES", OpenSans_Effect, , , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf ChangeCategoryReputation)
+    CreateButton WindowCount, "btnDungeon", 20, 215, 120, 26, "MASMORRAS", OpenSans_Effect, , , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf ChangeCategoryDungeon)
+    CreateButton WindowCount, "btnProfession", 20, 247, 120, 26, "PROFISSÕES", OpenSans_Effect, , , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf ChangeCategoryProfession)
+    CreateButton WindowCount, "btnExplore", 20, 279, 120, 26, "EXPLORAÇÃO", OpenSans_Effect, , , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf ChangeCategoryExploration)
+    CreateButton WindowCount, "btnPvp", 20, 311, 120, 26, "PVP", OpenSans_Effect, , , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf ChangeCategoryPvp)
 
-    CreateLabel WindowCount, "lblProgress", 170, 90, 220, 50, "RESUMO: 0/30", OpenSans_Effect, White, Alignment.alignCentre
+    CreateLabel WindowCount, "lblProgress", 170, 90, 220, 50, "RESUMO: 0/30", OpenSans_Effect, White, Alignment.AlignCenter
 
-    CreateLabel WindowCount, "lblReq", 430, 90, 200, 50, "REQUERIMENTOS", OpenSans_Effect, ColorType.Gold, Alignment.alignLeft
+    CreateLabel WindowCount, "lblReq", 430, 90, 200, 50, "REQUERIMENTOS", OpenSans_Effect, ColorType.Gold, Alignment.AlignLeft
 
     For i = 1 To MaxAchievementList
-        CreatePictureBox WindowCount, "picWhiteBox", 170, 70 + AchievementY + ((i - 1) * 32), 220, 26, , , , , , , , DesignTypes.desTextAincrad, DesignTypes.desTextAincrad, DesignTypes.desTextAincrad
+        CreatePictureBox WindowCount, "picWhiteBox", 170, 70 + AchievementY + ((i - 1) * 32), 220, 26, , , , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox
     Next
 
-    CreateLabel WindowCount, "lblName1", 170, 75 + AchievementY + (0 * 32), 220, 26, "", OpenSans_Regular, White, Alignment.alignCentre, , , , , GetAddress(AddressOf List1_MouseMove), GetAddress(AddressOf List1_MouseDown), GetAddress(AddressOf List1_MouseMove)
-    CreateLabel WindowCount, "lblName2", 170, 75 + AchievementY + (1 * 32), 220, 26, "", OpenSans_Regular, White, Alignment.alignCentre, , , , , GetAddress(AddressOf List2_MouseMove), GetAddress(AddressOf List2_MouseDown), GetAddress(AddressOf List2_MouseMove)
-    CreateLabel WindowCount, "lblName3", 170, 75 + AchievementY + (2 * 32), 220, 26, "", OpenSans_Regular, White, Alignment.alignCentre, , , , , GetAddress(AddressOf List3_MouseMove), GetAddress(AddressOf List3_MouseDown), GetAddress(AddressOf List3_MouseMove)
-    CreateLabel WindowCount, "lblName4", 170, 75 + AchievementY + (3 * 32), 220, 26, "", OpenSans_Regular, White, Alignment.alignCentre, , , , , GetAddress(AddressOf List4_MouseMove), GetAddress(AddressOf List4_MouseDown), GetAddress(AddressOf List4_MouseMove)
-    CreateLabel WindowCount, "lblName5", 170, 75 + AchievementY + (4 * 32), 220, 26, "", OpenSans_Regular, White, Alignment.alignCentre, , , , , GetAddress(AddressOf List5_MouseMove), GetAddress(AddressOf List5_MouseDown), GetAddress(AddressOf List5_MouseMove)
-    CreateLabel WindowCount, "lblName6", 170, 75 + AchievementY + (5 * 32), 220, 26, "", OpenSans_Regular, White, Alignment.alignCentre, , , , , GetAddress(AddressOf List6_MouseMove), GetAddress(AddressOf List6_MouseDown), GetAddress(AddressOf List6_MouseMove)
+    CreateLabel WindowCount, "lblName1", 170, 75 + AchievementY + (0 * 32), 220, 26, "", OpenSans_Regular, White, Alignment.AlignCenter, , , , , GetAddress(AddressOf List1_MouseMove), GetAddress(AddressOf List1_MouseDown), GetAddress(AddressOf List1_MouseMove)
+    CreateLabel WindowCount, "lblName2", 170, 75 + AchievementY + (1 * 32), 220, 26, "", OpenSans_Regular, White, Alignment.AlignCenter, , , , , GetAddress(AddressOf List2_MouseMove), GetAddress(AddressOf List2_MouseDown), GetAddress(AddressOf List2_MouseMove)
+    CreateLabel WindowCount, "lblName3", 170, 75 + AchievementY + (2 * 32), 220, 26, "", OpenSans_Regular, White, Alignment.AlignCenter, , , , , GetAddress(AddressOf List3_MouseMove), GetAddress(AddressOf List3_MouseDown), GetAddress(AddressOf List3_MouseMove)
+    CreateLabel WindowCount, "lblName4", 170, 75 + AchievementY + (3 * 32), 220, 26, "", OpenSans_Regular, White, Alignment.AlignCenter, , , , , GetAddress(AddressOf List4_MouseMove), GetAddress(AddressOf List4_MouseDown), GetAddress(AddressOf List4_MouseMove)
+    CreateLabel WindowCount, "lblName5", 170, 75 + AchievementY + (4 * 32), 220, 26, "", OpenSans_Regular, White, Alignment.AlignCenter, , , , , GetAddress(AddressOf List5_MouseMove), GetAddress(AddressOf List5_MouseDown), GetAddress(AddressOf List5_MouseMove)
+    CreateLabel WindowCount, "lblName6", 170, 75 + AchievementY + (5 * 32), 220, 26, "", OpenSans_Regular, White, Alignment.AlignCenter, , , , , GetAddress(AddressOf List6_MouseMove), GetAddress(AddressOf List6_MouseDown), GetAddress(AddressOf List6_MouseMove)
 
     'Botões setas
-    CreateLabel WindowCount, "lblPage", 170, 315, 220, 50, "Página: 0/0", OpenSans_Effect, White, Alignment.alignCentre
-    CreateButton WindowCount, "btnUp", 335, 315, 15, 15, , , , , , , Tex_GUI(79), Tex_GUI(80), Tex_GUI(81), , , , , , GetAddress(AddressOf MovePageUp)
-    CreateButton WindowCount, "btnDown", 210, 315, 15, 15, , , , , , , Tex_GUI(82), Tex_GUI(83), Tex_GUI(84), , , , , , GetAddress(AddressOf MovePageDown)
+    CreateLabel WindowCount, "lblPage", 170, 315, 220, 50, "Página: 0/0", OpenSans_Effect, White, Alignment.AlignCenter
+    CreateButton WindowCount, "btnUp", 335, 315, 15, 15, , , , , , , Tex_GUI(44), Tex_GUI(45), Tex_GUI(46), , , , , , GetAddress(AddressOf MovePageUp)
+    CreateButton WindowCount, "btnDown", 210, 315, 15, 15, , , , , , , Tex_GUI(47), Tex_GUI(48), Tex_GUI(49), , , , , , GetAddress(AddressOf MovePageDown)
 
     'Arrow
-    CreateButton WindowCount, "btnScrollUp", 608, 80, 15, 15, , , , , , , Tex_GUI(110), Tex_GUI(110), Tex_GUI(110), , , , , , GetAddress(AddressOf Scroll_RequirementUp)
-    CreateButton WindowCount, "btnScrollDown", 608, 330, 15, 15, , , , , , , Tex_GUI(111), Tex_GUI(111), Tex_GUI(111), , , , , , GetAddress(AddressOf Scroll_RequirementDown)
+    CreateButton WindowCount, "btnScrollUp", 608, 80, 15, 15, , , , , , , Tex_GUI(44), Tex_GUI(45), Tex_GUI(46), , , , , , GetAddress(AddressOf Scroll_RequirementUp)
+    CreateButton WindowCount, "btnScrollDown", 608, 330, 15, 15, , , , , , , Tex_GUI(47), Tex_GUI(48), Tex_GUI(49), , , , , , GetAddress(AddressOf Scroll_RequirementDown)
 
     'Scroll
-    CreateButton WindowCount, "ScrollUp", 610, 98, 8, 110, , , , , , , , , , DesignTypes.desSteel, DesignTypes.desSteel_Hover, DesignTypes.desSteel_Click, , , GetAddress(AddressOf Scroll_RequirementUp)
-    CreateButton WindowCount, "ScrollDown", 610, 208, 8, 110, , , , , , , , , , DesignTypes.desSteel, DesignTypes.desSteel_Hover, DesignTypes.desSteel_Click, , , GetAddress(AddressOf Scroll_RequirementDown)
+    CreateButton WindowCount, "ScrollUp", 610, 98, 8, 110, , , , , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf Scroll_RequirementUp)
+    CreateButton WindowCount, "ScrollDown", 610, 208, 8, 110, , , , , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf Scroll_RequirementDown)
 
     ' Set the default values
     CategoryIndex = AchievementCategory_Summary
@@ -523,9 +523,9 @@ Private Sub RenderAchievement()
 
     StringWidth = TextWidth(Font(Fonts.OpenSans_Effect), "PONTOS DE CONQUISTA: " & GetPlayerAchievementPoints())
 
-    RenderDesign DesignTypes.desTextAincrad, xO + 150, yO + 87, 2, 250
-    RenderDesign DesignTypes.desTextAincrad, xO + 410, yO + 87, 2, 250
-    RenderDesign DesignTypes.desWin_AincradMenu, xO, yO + 40, Width, 30
+    RenderDesign DesignTypes.DesignTextBox, xO + 150, yO + 87, 2, 250
+    RenderDesign DesignTypes.DesignTextBox, xO + 410, yO + 87, 2, 250
+    
 
     RenderText Font(Fonts.OpenSans_Effect), "PONTOS DE CONQUISTA: " & GetPlayerAchievementPoints(), xO + (Width * 0.5) - (StringWidth * 0.5), yO + 48, Gold
 
@@ -618,7 +618,7 @@ Public Sub CheckAchievement()
                 ColorName = Gold
             End If
 
-            Windows(WindowIndex).Controls(ControlIndex).textColour = ColorName
+            Windows(WindowIndex).Controls(ControlIndex).TextColour = ColorName
             Windows(WindowIndex).Controls(ControlIndex).Text = Achievement(AchievementId).Name
         Else
             Windows(WindowIndex).Controls(ControlIndex).Text = vbNullString

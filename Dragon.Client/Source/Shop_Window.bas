@@ -27,9 +27,9 @@ End Sub
 
 Public Sub CreateWindow_Shop()
     ' Create window
-    CreateWindow "winShop", "SHOP", zOrder_Win, 0, 0, 278, 345, 0, False, Fonts.OpenSans_Effect, , 2, 5, DesignTypes.desWin_AincradNorm, DesignTypes.desWin_AincradNorm, DesignTypes.desWin_AincradNorm, , , , , GetAddress(AddressOf Shop_MouseMove), GetAddress(AddressOf Shop_MouseDown), GetAddress(AddressOf Shop_MouseMove), GetAddress(AddressOf Shop_MouseMove), , , GetAddress(AddressOf DrawShop)
+    CreateWindow "winShop", "SHOP", zOrder_Win, 0, 0, 278, 345, 0, False, Fonts.OpenSans_Effect, , 2, 5, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, , , , , GetAddress(AddressOf Shop_MouseMove), GetAddress(AddressOf Shop_MouseDown), GetAddress(AddressOf Shop_MouseMove), GetAddress(AddressOf Shop_MouseMove), , , GetAddress(AddressOf DrawShop)
     ' additional mouse event
-    Windows(WindowCount).Window.entCallBack(entStates.MouseUp) = GetAddress(AddressOf Shop_MouseMove)
+    Windows(WindowCount).Window.EntityCallBack(entStates.MouseUp) = GetAddress(AddressOf Shop_MouseMove)
     ' Centralise it
     CentraliseWindow WindowCount
 
@@ -41,17 +41,17 @@ Public Sub CreateWindow_Shop()
     ' Picture Box
 
     ' Gold
-    CreatePictureBox WindowCount, "picBlank", 9, 278, 260, 52, , , , , , , , DesignTypes.desTextAincrad, DesignTypes.desTextAincrad, DesignTypes.desTextAincrad
+    CreatePictureBox WindowCount, "picBlank", 9, 278, 260, 52, , , , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox
 
     ' Buttons
-    CreateButton WindowCount, "btnBuy", 190, 289, 70, 26, "COMPRAR", OpenSans_Regular, White, , , , , , , DesignTypes.desSteel, DesignTypes.desSteel_Hover, DesignTypes.desSteel_Click, , , GetAddress(AddressOf ButtonShop_Buy)
-    CreateButton WindowCount, "btnSell", 190, 289, 70, 26, "VENDER", OpenSans_Regular, White, , False, , , , , DesignTypes.desSteel, DesignTypes.desSteel_Hover, DesignTypes.desSteel_Click, , , GetAddress(AddressOf ButtonShop_Sell)
+    CreateButton WindowCount, "btnBuy", 190, 289, 70, 26, "COMPRAR", OpenSans_Regular, White, , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf ButtonShop_Buy)
+    CreateButton WindowCount, "btnSell", 190, 289, 70, 26, "VENDER", OpenSans_Regular, White, , False, , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf ButtonShop_Sell)
 
     ' Labels
-    CreateLabel WindowCount, "lblName", 56, 285, 300, , "Test Item", OpenSans_Effect, White, Alignment.alignLeft
-    CreateLabel WindowCount, "lblCost", 56, 302, 300, , "1000", OpenSans_Effect, White, Alignment.alignLeft
+    CreateLabel WindowCount, "lblName", 56, 285, 300, , "Test Item", OpenSans_Effect, White, Alignment.AlignLeft
+    CreateLabel WindowCount, "lblCost", 56, 302, 300, , "1000", OpenSans_Effect, White, Alignment.AlignLeft
 
-    CreatePictureBox WindowCount, "picItemBG", 15, 286, 36, 36, , , , , Tex_GUI(54), Tex_GUI(54), Tex_GUI(54)
+    CreatePictureBox WindowCount, "picItemBG", 15, 286, 36, 36, , , , , Tex_GUI(37), Tex_GUI(37), Tex_GUI(37)
     CreatePictureBox WindowCount, "picItem", 15, 288, 32, 32
     
     WindowIndex = WindowCount
@@ -66,12 +66,12 @@ Private Sub Button_ShopBuying()
 
     Windows(WindowIndex).Controls(GetControlIndex("winShop", "btnBuy")).Visible = True
     Windows(WindowIndex).Controls(GetControlIndex("winShop", "btnSell")).Visible = False
-    Windows(WindowIndex).Controls(BtnSellIndex).textColour = White
-    Windows(WindowIndex).Controls(BtnSellIndex).textColour_Hover = White
-    Windows(WindowIndex).Controls(BtnSellIndex).textColour_Click = White
-    Windows(WindowIndex).Controls(BtnBuyIndex).textColour = Green
-    Windows(WindowIndex).Controls(BtnBuyIndex).textColour_Hover = Green
-    Windows(WindowIndex).Controls(BtnBuyIndex).textColour_Click = Green
+    Windows(WindowIndex).Controls(BtnSellIndex).TextColour = White
+    Windows(WindowIndex).Controls(BtnSellIndex).TextColourHover = White
+    Windows(WindowIndex).Controls(BtnSellIndex).TextColourClick = White
+    Windows(WindowIndex).Controls(BtnBuyIndex).TextColour = Green
+    Windows(WindowIndex).Controls(BtnBuyIndex).TextColourHover = Green
+    Windows(WindowIndex).Controls(BtnBuyIndex).TextColourClick = Green
 
     ShopIsSelling = False
     ShopSelectedSlot = 1
@@ -87,12 +87,12 @@ Private Sub Button_ShopSelling()
 
     Windows(WindowIndex).Controls(GetControlIndex("winShop", "btnBuy")).Visible = False
     Windows(WindowIndex).Controls(GetControlIndex("winShop", "btnSell")).Visible = True
-    Windows(WindowIndex).Controls(BtnSellIndex).textColour = Green
-    Windows(WindowIndex).Controls(BtnSellIndex).textColour_Hover = Green
-    Windows(WindowIndex).Controls(BtnSellIndex).textColour_Click = Green
-    Windows(WindowIndex).Controls(BtnBuyIndex).textColour = White
-    Windows(WindowIndex).Controls(BtnBuyIndex).textColour_Hover = White
-    Windows(WindowIndex).Controls(BtnBuyIndex).textColour_Click = White
+    Windows(WindowIndex).Controls(BtnSellIndex).TextColour = Green
+    Windows(WindowIndex).Controls(BtnSellIndex).TextColourHover = Green
+    Windows(WindowIndex).Controls(BtnSellIndex).TextColourClick = Green
+    Windows(WindowIndex).Controls(BtnBuyIndex).TextColour = White
+    Windows(WindowIndex).Controls(BtnBuyIndex).TextColourHover = White
+    Windows(WindowIndex).Controls(BtnBuyIndex).TextColourClick = White
 
     ShopIsSelling = True
     ShopSelectedSlot = 1
@@ -149,14 +149,14 @@ Private Sub UpdateShop()
 
                 ' draw the item
                 For i = 0 To entStates.state_Count - 1
-                    .Controls(GetControlIndex("winShop", "picItem")).image(i) = Tex_Item(Item(ShopSelectedItem).IconId)
+                    .Controls(GetControlIndex("winShop", "picItem")).Image(i) = Tex_Item(Item(ShopSelectedItem).IconId)
                 Next
             Else
                 .Controls(GetControlIndex("winShop", "lblName")).Text = "Empty Slot"
                 .Controls(GetControlIndex("winShop", "lblCost")).Text = vbNullString
                 ' draw the item
                 For i = 0 To entStates.state_Count - 1
-                    .Controls(GetControlIndex("winShop", "picItem")).image(i) = 0
+                    .Controls(GetControlIndex("winShop", "picItem")).Image(i) = 0
                 Next
             End If
         Else
@@ -176,7 +176,7 @@ Private Sub UpdateShop()
 
                 ' draw the item
                 For i = 0 To entStates.state_Count - 1
-                    .Controls(GetControlIndex("winShop", "picItem")).image(i) = Tex_Item(Item(ShopSelectedItem).IconId)
+                    .Controls(GetControlIndex("winShop", "picItem")).Image(i) = Tex_Item(Item(ShopSelectedItem).IconId)
                 Next
             Else
                 .Controls(GetControlIndex("winShop", "lblName")).Text = "Empty Slot"
@@ -184,7 +184,7 @@ Private Sub UpdateShop()
                 ' draw the item
 
                 For i = 0 To entStates.state_Count - 1
-                    .Controls(GetControlIndex("winShop", "picItem")).image(i) = 0
+                    .Controls(GetControlIndex("winShop", "picItem")).Image(i) = 0
                 Next
             End If
         End If
@@ -200,7 +200,7 @@ Private Sub DrawShop()
     yO = Windows(WindowIndex).Window.Top
     Width = Windows(WindowIndex).Window.Width
 
-    RenderDesign DesignTypes.desWin_AincradMenu, xO, yO + 40, Width, 30
+    
 
     Width = 76
     Height = 76
@@ -209,10 +209,10 @@ Private Sub DrawShop()
     ' render grid - row
     For i = 1 To 3
         If i = 3 Then Height = 42
-        RenderTexture Tex_GUI(35), xO + 4, Y, 0, 0, Width, Height, Width, Height
-        RenderTexture Tex_GUI(35), xO + 80, Y, 0, 0, Width, Height, Width, Height
-        RenderTexture Tex_GUI(35), xO + 156, Y, 0, 0, Width, Height, Width, Height
-        RenderTexture Tex_GUI(35), xO + 232, Y, 0, 0, 42, Height, 42, Height
+        RenderTexture Tex_GUI(26), xO + 4, Y, 0, 0, Width, Height, Width, Height
+        RenderTexture Tex_GUI(26), xO + 80, Y, 0, 0, Width, Height, Width, Height
+        RenderTexture Tex_GUI(26), xO + 156, Y, 0, 0, Width, Height, Width, Height
+        RenderTexture Tex_GUI(26), xO + 232, Y, 0, 0, 42, Height, 42, Height
         Y = Y + 76
     Next
 
@@ -226,7 +226,7 @@ Private Sub DrawShop()
             Left = xO + ShopLeft + ((ShopOffsetX + 32) * (((i - 1) Mod ShopColumns)))
             
             ' draw selected square
-            If ShopSelectedSlot = i Then RenderTexture Tex_GUI(61), Left, Top, 0, 0, 32, 32, 32, 32
+            If ShopSelectedSlot = i Then RenderTexture Tex_GUI(38), Left, Top, 0, 0, 32, 32, 32, 32
 
             If ItemNum > 0 And ItemNum <= MaximumItems Then
                 ItemPic = Item(ItemNum).IconId
@@ -254,7 +254,7 @@ Private Sub DrawShop()
             Top = yO + ShopTop + ((ShopOffsetY + 32) * ((i - 1) \ ShopColumns))
             Left = xO + ShopLeft + ((ShopOffsetX + 32) * (((i - 1) Mod ShopColumns)))
             ' draw selected square
-            If ShopSelectedSlot = i Then RenderTexture Tex_GUI(61), Left, Top, 0, 0, 32, 32, 32, 32
+            If ShopSelectedSlot = i Then RenderTexture Tex_GUI(38), Left, Top, 0, 0, 32, 32, 32, 32
 
             If ItemNum > 0 And ItemNum <= MaximumItems Then
                 ItemPic = Item(ItemNum).IconId

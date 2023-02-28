@@ -3,7 +3,7 @@ Option Explicit
 
 Public Sub CreateWindow_Party()
 ' Create window
-    CreateWindow "winParty", "", zOrder_Win, 4, 78, 252, 158, 0, , , , , , DesignTypes.desWin_Party, DesignTypes.desWin_Party, DesignTypes.desWin_Party, , , , , , , , , False
+    CreateWindow "winParty", "", zOrder_Win, 4, 78, 252, 158, 0, , , , , , DesignTypes.DesignParty, DesignTypes.DesignParty, DesignTypes.DesignParty, , , , , , , , , False
 
     Dim i As Long
     Dim OffSetY As Long
@@ -14,13 +14,13 @@ Public Sub CreateWindow_Party()
         ' Names
         CreateLabel WindowCount, "lblName" & i, 60, 20 + (OffSetY * (i - 1)), 173, , "Richard - Level 10", OpenSans_Regular
         ' Empty Bars - HP
-        CreatePictureBox WindowCount, "picEmptyBar_HP" & i, 58, 34 + (OffSetY * (i - 1)), 173, 9, , , , , Tex_GUI(62), Tex_GUI(62), Tex_GUI(62)
+        CreatePictureBox WindowCount, "picEmptyBar_HP" & i, 58, 34 + (OffSetY * (i - 1)), 173, 9, , , , , Tex_GUI(39), Tex_GUI(39), Tex_GUI(39)
         ' Empty Bars - SP
-        CreatePictureBox WindowCount, "picEmptyBar_SP" & i, 58, 44 + (OffSetY * (i - 1)), 173, 9, , , , , Tex_GUI(63), Tex_GUI(63), Tex_GUI(63)
+        CreatePictureBox WindowCount, "picEmptyBar_SP" & i, 58, 44 + (OffSetY * (i - 1)), 173, 9, , , , , Tex_GUI(41), Tex_GUI(41), Tex_GUI(41)
         ' Filled bars - HP
-        CreatePictureBox WindowCount, "picBar_HP" & i, 58, 34 + (OffSetY * (i - 1)), 173, 9, , , , , Tex_GUI(64), Tex_GUI(64), Tex_GUI(64)
+        CreatePictureBox WindowCount, "picBar_HP" & i, 58, 34 + (OffSetY * (i - 1)), 173, 9, , , , , Tex_GUI(64), Tex_GUI(40), Tex_GUI(40)
         ' Filled bars - SP
-        CreatePictureBox WindowCount, "picBar_SP" & i, 58, 44 + (OffSetY * (i - 1)), 173, 9, , , , , Tex_GUI(65), Tex_GUI(65), Tex_GUI(65)
+        CreatePictureBox WindowCount, "picBar_SP" & i, 58, 44 + (OffSetY * (i - 1)), 173, 9, , , , , Tex_GUI(42), Tex_GUI(42), Tex_GUI(42)
         ' Models
         CreatePictureBox WindowCount, "picChar" & i, 20, 20 + (OffSetY * (i - 1)), 32, 32    ', , , , , Tex_Char(1), Tex_Char(1), Tex_Char(1)
     Next

@@ -27,7 +27,7 @@ End Type
 Public Sub CreateWindow_Loot()
     Dim i As Long
     ' Create window
-    CreateWindow "winLoot", "ITEMS", zOrder_Win, 0, 0, 245, 340, 0, False, Fonts.OpenSans_Regular, , 2, 7, DesignTypes.desWin_AincradNorm, DesignTypes.desWin_AincradNorm, DesignTypes.desWin_AincradNorm
+    CreateWindow "winLoot", "ITEMS", zOrder_Win, 0, 0, 245, 340, 0, False, Fonts.OpenSans_Regular, , 2, 7, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar
     ' Centralise it
     CentraliseWindow WindowCount
     ' Set the index for spawning controls
@@ -35,31 +35,31 @@ Public Sub CreateWindow_Loot()
     ' Close button
     CreateButton WindowCount, "btnClose", Windows(WindowCount).Window.Width - 33, 11, 22, 22, , , , , , , Tex_GUI(TextureControl_CloseNormal), Tex_GUI(TextureControl_CloseHover), Tex_GUI(TextureControl_CloseClick), , , , , , GetAddress(AddressOf btnMenu_Loot)
 
-    CreatePictureBox WindowCount, "picIcon1", 15, 60 + (LIST_OFFSET_Y * 0), 32, 32, , , , , , , , DesignTypes.desTextWhite, DesignTypes.desTextWhite, DesignTypes.desTextWhite, , GetAddress(AddressOf ItemSlot1_MouseMove), GetAddress(AddressOf ItemSlot1_MouseDown), GetAddress(AddressOf ItemSlot1_MouseMove)
-    CreatePictureBox WindowCount, "picIcon2", 15, 60 + (LIST_OFFSET_Y * 1), 32, 32, , , , , , , , DesignTypes.desTextWhite, DesignTypes.desTextWhite, DesignTypes.desTextWhite, , GetAddress(AddressOf ItemSlot2_MouseMove), GetAddress(AddressOf ItemSlot2_MouseDown), GetAddress(AddressOf ItemSlot2_MouseMove)
-    CreatePictureBox WindowCount, "picIcon3", 15, 60 + (LIST_OFFSET_Y * 2), 32, 32, , , , , , , , DesignTypes.desTextWhite, DesignTypes.desTextWhite, DesignTypes.desTextWhite, , GetAddress(AddressOf ItemSlot3_MouseMove), GetAddress(AddressOf ItemSlot3_MouseDown), GetAddress(AddressOf ItemSlot3_MouseMove)
-    CreatePictureBox WindowCount, "picIcon4", 15, 60 + (LIST_OFFSET_Y * 3), 32, 32, , , , , , , , DesignTypes.desTextWhite, DesignTypes.desTextWhite, DesignTypes.desTextWhite, , GetAddress(AddressOf ItemSlot4_MouseMove), GetAddress(AddressOf ItemSlot4_MouseDown), GetAddress(AddressOf ItemSlot4_MouseMove)
-    CreatePictureBox WindowCount, "picIcon5", 15, 60 + (LIST_OFFSET_Y * 4), 32, 32, , , , , , , , DesignTypes.desTextWhite, DesignTypes.desTextWhite, DesignTypes.desTextWhite, , GetAddress(AddressOf ItemSlot5_MouseMove), GetAddress(AddressOf ItemSlot5_MouseDown), GetAddress(AddressOf ItemSlot5_MouseMove)
-    CreatePictureBox WindowCount, "picIcon6", 15, 60 + (LIST_OFFSET_Y * 5), 32, 32, , , , , , , , DesignTypes.desTextWhite, DesignTypes.desTextWhite, DesignTypes.desTextWhite, , GetAddress(AddressOf ItemSlot6_MouseMove), GetAddress(AddressOf ItemSlot6_MouseDown), GetAddress(AddressOf ItemSlot6_MouseMove)
+    CreatePictureBox WindowCount, "picIcon1", 15, 60 + (LIST_OFFSET_Y * 0), 32, 32, , , , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, , GetAddress(AddressOf ItemSlot1_MouseMove), GetAddress(AddressOf ItemSlot1_MouseDown), GetAddress(AddressOf ItemSlot1_MouseMove)
+    CreatePictureBox WindowCount, "picIcon2", 15, 60 + (LIST_OFFSET_Y * 1), 32, 32, , , , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, , GetAddress(AddressOf ItemSlot2_MouseMove), GetAddress(AddressOf ItemSlot2_MouseDown), GetAddress(AddressOf ItemSlot2_MouseMove)
+    CreatePictureBox WindowCount, "picIcon3", 15, 60 + (LIST_OFFSET_Y * 2), 32, 32, , , , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, , GetAddress(AddressOf ItemSlot3_MouseMove), GetAddress(AddressOf ItemSlot3_MouseDown), GetAddress(AddressOf ItemSlot3_MouseMove)
+    CreatePictureBox WindowCount, "picIcon4", 15, 60 + (LIST_OFFSET_Y * 3), 32, 32, , , , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, , GetAddress(AddressOf ItemSlot4_MouseMove), GetAddress(AddressOf ItemSlot4_MouseDown), GetAddress(AddressOf ItemSlot4_MouseMove)
+    CreatePictureBox WindowCount, "picIcon5", 15, 60 + (LIST_OFFSET_Y * 4), 32, 32, , , , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, , GetAddress(AddressOf ItemSlot5_MouseMove), GetAddress(AddressOf ItemSlot5_MouseDown), GetAddress(AddressOf ItemSlot5_MouseMove)
+    CreatePictureBox WindowCount, "picIcon6", 15, 60 + (LIST_OFFSET_Y * 5), 32, 32, , , , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, , GetAddress(AddressOf ItemSlot6_MouseMove), GetAddress(AddressOf ItemSlot6_MouseDown), GetAddress(AddressOf ItemSlot6_MouseMove)
 
     For i = 1 To LIST_COUNT
-        CreateLabel WindowCount, "lblItemName" & i, 55, 62 + (LIST_OFFSET_Y * (i - 1)), 160, 20, "", OpenSans_Effect, Coral, Alignment.alignLeft
-        CreateLabel WindowCount, "lblItemCount" & i, 55, 74 + (LIST_OFFSET_Y * (i - 1)), 160, 20, "", OpenSans_Effect, White, Alignment.alignLeft
+        CreateLabel WindowCount, "lblItemName" & i, 55, 62 + (LIST_OFFSET_Y * (i - 1)), 160, 20, "", OpenSans_Effect, Coral, Alignment.AlignLeft
+        CreateLabel WindowCount, "lblItemCount" & i, 55, 74 + (LIST_OFFSET_Y * (i - 1)), 160, 20, "", OpenSans_Effect, White, Alignment.AlignLeft
     Next
 
-    CreatePictureBox WindowCount, "picName1", 47, 60 + (LIST_OFFSET_Y * 0), 160, 32, , , , , , , , DesignTypes.desTextWhite, DesignTypes.desTextWhite, DesignTypes.desTextWhite, , GetAddress(AddressOf ItemSlot1_MouseMove), GetAddress(AddressOf ItemSlot1_MouseDown), GetAddress(AddressOf ItemSlot1_MouseMove)
-    CreatePictureBox WindowCount, "picName2", 47, 60 + (LIST_OFFSET_Y * 1), 160, 32, , , , , , , , DesignTypes.desTextWhite, DesignTypes.desTextWhite, DesignTypes.desTextWhite, , GetAddress(AddressOf ItemSlot2_MouseMove), GetAddress(AddressOf ItemSlot2_MouseDown), GetAddress(AddressOf ItemSlot2_MouseMove)
-    CreatePictureBox WindowCount, "picName3", 47, 60 + (LIST_OFFSET_Y * 2), 160, 32, , , , , , , , DesignTypes.desTextWhite, DesignTypes.desTextWhite, DesignTypes.desTextWhite, , GetAddress(AddressOf ItemSlot3_MouseMove), GetAddress(AddressOf ItemSlot3_MouseDown), GetAddress(AddressOf ItemSlot3_MouseMove)
-    CreatePictureBox WindowCount, "picName4", 47, 60 + (LIST_OFFSET_Y * 3), 160, 32, , , , , , , , DesignTypes.desTextWhite, DesignTypes.desTextWhite, DesignTypes.desTextWhite, , GetAddress(AddressOf ItemSlot4_MouseMove), GetAddress(AddressOf ItemSlot4_MouseDown), GetAddress(AddressOf ItemSlot4_MouseMove)
-    CreatePictureBox WindowCount, "picName5", 47, 60 + (LIST_OFFSET_Y * 4), 160, 32, , , , , , , , DesignTypes.desTextWhite, DesignTypes.desTextWhite, DesignTypes.desTextWhite, , GetAddress(AddressOf ItemSlot5_MouseMove), GetAddress(AddressOf ItemSlot5_MouseDown), GetAddress(AddressOf ItemSlot5_MouseMove)
-    CreatePictureBox WindowCount, "picName6", 47, 60 + (LIST_OFFSET_Y * 5), 160, 32, , , , , , , , DesignTypes.desTextWhite, DesignTypes.desTextWhite, DesignTypes.desTextWhite, , GetAddress(AddressOf ItemSlot6_MouseMove), GetAddress(AddressOf ItemSlot6_MouseDown), GetAddress(AddressOf ItemSlot6_MouseMove)
+    CreatePictureBox WindowCount, "picName1", 47, 60 + (LIST_OFFSET_Y * 0), 160, 32, , , , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, , GetAddress(AddressOf ItemSlot1_MouseMove), GetAddress(AddressOf ItemSlot1_MouseDown), GetAddress(AddressOf ItemSlot1_MouseMove)
+    CreatePictureBox WindowCount, "picName2", 47, 60 + (LIST_OFFSET_Y * 1), 160, 32, , , , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, , GetAddress(AddressOf ItemSlot2_MouseMove), GetAddress(AddressOf ItemSlot2_MouseDown), GetAddress(AddressOf ItemSlot2_MouseMove)
+    CreatePictureBox WindowCount, "picName3", 47, 60 + (LIST_OFFSET_Y * 2), 160, 32, , , , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, , GetAddress(AddressOf ItemSlot3_MouseMove), GetAddress(AddressOf ItemSlot3_MouseDown), GetAddress(AddressOf ItemSlot3_MouseMove)
+    CreatePictureBox WindowCount, "picName4", 47, 60 + (LIST_OFFSET_Y * 3), 160, 32, , , , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, , GetAddress(AddressOf ItemSlot4_MouseMove), GetAddress(AddressOf ItemSlot4_MouseDown), GetAddress(AddressOf ItemSlot4_MouseMove)
+    CreatePictureBox WindowCount, "picName5", 47, 60 + (LIST_OFFSET_Y * 4), 160, 32, , , , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, , GetAddress(AddressOf ItemSlot5_MouseMove), GetAddress(AddressOf ItemSlot5_MouseDown), GetAddress(AddressOf ItemSlot5_MouseMove)
+    CreatePictureBox WindowCount, "picName6", 47, 60 + (LIST_OFFSET_Y * 5), 160, 32, , , , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, , GetAddress(AddressOf ItemSlot6_MouseMove), GetAddress(AddressOf ItemSlot6_MouseDown), GetAddress(AddressOf ItemSlot6_MouseMove)
 
     'Botões setas
-    CreateButton WindowCount, "btnCraft", 215, 60, 15, 15, , , , , , , Tex_GUI(79), Tex_GUI(80), Tex_GUI(81), , , , , , GetAddress(AddressOf MoveListToUp)
-    CreateButton WindowCount, "btnCraft", 215, 276, 15, 15, , , , , , , Tex_GUI(82), Tex_GUI(83), Tex_GUI(84), , , , , , GetAddress(AddressOf MoveListToDown)
+    CreateButton WindowCount, "btnCraft", 215, 60, 15, 15, , , , , , , Tex_GUI(44), Tex_GUI(45), Tex_GUI(46), , , , , , GetAddress(AddressOf MoveListToUp)
+    CreateButton WindowCount, "btnCraft", 215, 276, 15, 15, , , , , , , Tex_GUI(47), Tex_GUI(48), Tex_GUI(49), , , , , , GetAddress(AddressOf MoveListToDown)
 
-    CreatePictureBox WindowCount, "picName", 15, 305, 215, 22, , , , , , , , DesignTypes.desTextWhite, DesignTypes.desTextWhite, DesignTypes.desTextWhite
-    CreateLabel WindowCount, "lblItemCount", 15, 308, 215, 22, "Quantidade: 1", OpenSans_Effect, White, Alignment.alignCentre
+    CreatePictureBox WindowCount, "picName", 15, 305, 215, 22, , , , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox
+    CreateLabel WindowCount, "lblItemCount", 15, 308, 215, 22, "Quantidade: 1", OpenSans_Effect, White, Alignment.AlignCenter
 
     WindowIndex = WindowCount
 End Sub
@@ -255,9 +255,9 @@ Private Sub UpdateList()
                     Windows(WindowIndex).Controls(ControlNameIndex).Text = Item(ItemNum).Name
                 End If
 
-                Windows(WindowIndex).Controls(ControlNameIndex).textColour = Rarity
-                Windows(WindowIndex).Controls(ControlNameIndex).textColour_Click = Rarity
-                Windows(WindowIndex).Controls(ControlNameIndex).textColour_Hover = Rarity
+                Windows(WindowIndex).Controls(ControlNameIndex).TextColour = Rarity
+                Windows(WindowIndex).Controls(ControlNameIndex).TextColourClick = Rarity
+                Windows(WindowIndex).Controls(ControlNameIndex).TextColourHover = Rarity
 
                 Windows(WindowIndex).Controls(ControlCountIndex).Text = "Quantidade: " & ItemValue
                 Call SetControlImage(i, Tex_Item(Item(ItemNum).IconId))
@@ -268,9 +268,9 @@ Private Sub UpdateList()
                ' CurRec = GetCurrencyData(CurrencyType, True)
                 
                ' Windows(WindowIndex).Controls(ControlNameIndex).Text = CurRec.Name
-                Windows(WindowIndex).Controls(ControlNameIndex).textColour = White
-                Windows(WindowIndex).Controls(ControlNameIndex).textColour_Click = White
-                Windows(WindowIndex).Controls(ControlNameIndex).textColour_Hover = White
+                Windows(WindowIndex).Controls(ControlNameIndex).TextColour = White
+                Windows(WindowIndex).Controls(ControlNameIndex).TextColourClick = White
+                Windows(WindowIndex).Controls(ControlNameIndex).TextColourHover = White
 
                 Windows(WindowIndex).Controls(ControlCountIndex).Text = "Quantidade: " & ItemValue
                 'Call SetControlImage(i, Tex_Item(CurRec.IconId))
@@ -293,7 +293,7 @@ Private Sub SetControlImage(ByVal Index As Long, ByVal TextureNum As Long)
     ControlIndex = GetControlIndex("winLoot", "picIcon" & Index)
 
     For i = 0 To entStates.state_Count - 1
-        Windows(WindowIndex).Controls(ControlIndex).image(i) = TextureNum
+        Windows(WindowIndex).Controls(ControlIndex).Image(i) = TextureNum
     Next
 
 End Sub

@@ -5,35 +5,33 @@ Private WindowIndex As Long
 
 Public Sub CreateWindow_Options()
 ' Create window
-    CreateWindow "winOptions", "", zOrder_Win, 0, 0, 210, 212, 0, , , , , , DesignTypes.desWin_AincradNoBar, DesignTypes.desWin_AincradNoBar, DesignTypes.desWin_AincradNoBar, , , , , , , , , False, False
+    CreateWindow "winOptions", "", zOrder_Win, 0, 0, 210, 212, 0, , , , , , DesignTypes.DesignWindowWithoutTopBar, DesignTypes.DesignWindowWithoutTopBar, DesignTypes.DesignWindowWithoutTopBar, , , , , , , , , False, False
     ' Centralise it
     CentraliseWindow WindowCount
 
     ' Set the index for spawning controls
     zOrder_Con = 1
 
-    ' Parchment
-    CreatePictureBox WindowCount, "picParchment", 6, 6, 198, 200, , , , , , , , DesignTypes.desParchment, DesignTypes.desParchment, DesignTypes.desParchment
     ' General
-    CreatePictureBox WindowCount, "picBlank", 35, 25, 140, 9, , , , , , , , DesignTypes.desBlackOval, DesignTypes.desBlackOval, DesignTypes.desBlackOval
-    CreateLabel WindowCount, "lblBlank", 35, 22, 140, , "Opcoes Gerais", OpenSans_Regular, White, Alignment.alignCentre
+    CreatePictureBox WindowCount, "picBlank", 35, 25, 140, 9, , , , , , , , DesignTypes.DesignBackgroundOval, DesignTypes.DesignBackgroundOval, DesignTypes.DesignBackgroundOval
+    CreateLabel WindowCount, "lblBlank", 35, 22, 140, , "Opcoes Gerais", OpenSans_Regular, White, Alignment.AlignCenter
     ' Check boxes
-    CreateCheckbox WindowCount, "chkMusic", 35, 40, 80, , , "Musica", OpenSans_Regular, , , , , DesignTypes.desChkNorm
-    CreateCheckbox WindowCount, "chkSound", 115, 40, 80, , , "Som", OpenSans_Regular, , , , , DesignTypes.desChkNorm
+    CreateCheckbox WindowCount, "chkMusic", 35, 40, 80, , , "Musica", OpenSans_Regular, , , , , DesignTypes.DesignCheckBox
+    CreateCheckbox WindowCount, "chkSound", 115, 40, 80, , , "Som", OpenSans_Regular, , , , , DesignTypes.DesignCheckBox
 
-    CreateCheckbox WindowCount, "chkFullscreen", 115, 60, 80, , , "Tela Cheia", OpenSans_Regular, , , , , DesignTypes.desChkNorm
+    CreateCheckbox WindowCount, "chkFullscreen", 115, 60, 80, , , "Tela Cheia", OpenSans_Regular, , , , , DesignTypes.DesignCheckBox
     ' Resolution
-    CreatePictureBox WindowCount, "picBlank", 35, 85, 140, 9, , , , , , , , DesignTypes.desBlackOval, DesignTypes.desBlackOval, DesignTypes.desBlackOval
-    CreateLabel WindowCount, "lblBlank", 35, 82, 140, , "Selecionar Resolucao", OpenSans_Regular, White, Alignment.alignCentre
+    CreatePictureBox WindowCount, "picBlank", 35, 85, 140, 9, , , , , , , , DesignTypes.DesignBackgroundOval, DesignTypes.DesignBackgroundOval, DesignTypes.DesignBackgroundOval
+    CreateLabel WindowCount, "lblBlank", 35, 82, 140, , "Selecionar Resolucao", OpenSans_Regular, White, Alignment.AlignCenter
     ' combobox
-    CreateComboBox WindowCount, "cmbRes", 30, 100, 150, 18, DesignTypes.desComboNorm, OpenSans_Regular
+    CreateComboBox WindowCount, "cmbRes", 30, 100, 150, 18, DesignTypes.DesignComboNormal, OpenSans_Regular
     ' Renderer
-    CreatePictureBox WindowCount, "picBlank", 35, 125, 140, 9, , , , , , , , DesignTypes.desBlackOval, DesignTypes.desBlackOval, DesignTypes.desBlackOval
-    CreateLabel WindowCount, "lblBlank", 35, 122, 140, , "Modo de DirectX", OpenSans_Regular, White, Alignment.alignCentre
+    CreatePictureBox WindowCount, "picBlank", 35, 125, 140, 9, , , , , , , , DesignTypes.DesignBackgroundOval, DesignTypes.DesignBackgroundOval, DesignTypes.DesignBackgroundOval
+    CreateLabel WindowCount, "lblBlank", 35, 122, 140, , "Modo de DirectX", OpenSans_Regular, White, Alignment.AlignCenter
     ' Check boxes
-    CreateComboBox WindowCount, "cmbRender", 30, 140, 150, 18, DesignTypes.desComboNorm, OpenSans_Regular
+    CreateComboBox WindowCount, "cmbRender", 30, 140, 150, 18, DesignTypes.DesignComboNormal, OpenSans_Regular
     ' Button
-    CreateButton WindowCount, "btnConfirm", 65, 168, 80, 22, "CONFIRMAR", OpenSans_Effect, , , , , , , , DesignTypes.desSteel, DesignTypes.desSteel_Hover, DesignTypes.desSteel_Click, , , GetAddress(AddressOf ButtonConfirm)
+    CreateButton WindowCount, "btnConfirm", 65, 168, 80, 22, "CONFIRMAR", OpenSans_Effect, , , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf ButtonConfirm)
     
     WindowIndex = WindowCount
 

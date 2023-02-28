@@ -40,7 +40,7 @@ End Sub
 Public Sub CreateWindow_Craft()
     Dim i As Long
 
-    CreateWindow "winCraft", "PRODUÇÃO", zOrder_Win, 0, 0, 389, 408, 0, True, Fonts.OpenSans_Regular, , 2, 5, DesignTypes.desWin_AincradNorm, DesignTypes.desWin_AincradNorm, DesignTypes.desWin_AincradNorm, , , , , 0, 0, 0, 0, , , GetAddress(AddressOf DrawCraft)
+    CreateWindow "winCraft", "PRODUÇÃO", zOrder_Win, 0, 0, 389, 408, 0, True, Fonts.OpenSans_Regular, , 2, 5, DesignTypes.DesignWindowWithTopBarAndNavBar, DesignTypes.DesignWindowWithTopBarAndNavBar, DesignTypes.DesignWindowWithTopBarAndNavBar, , , , , 0, 0, 0, 0, , , GetAddress(AddressOf DrawCraft)
 
     CentraliseWindow WindowCount
     ' Set the index for spawning controls
@@ -48,46 +48,46 @@ Public Sub CreateWindow_Craft()
 
     CreateButton WindowCount, "btnClose", Windows(WindowCount).Window.Width - 33, 11, 22, 22, , , , , , , Tex_GUI(TextureControl_CloseNormal), Tex_GUI(TextureControl_CloseHover), Tex_GUI(TextureControl_CloseClick), , , , , , GetAddress(AddressOf ButtonMenu_Craft)
 
-    CreatePictureBox WindowCount, "picList" & 1, 20, WindowOffsetY + 21 + (CraftOffsetY * 1), 130, 20, , , , , , , , DesignTypes.desTextWhite, DesignTypes.desTextBlack, DesignTypes.desTextWhite, , , GetAddress(AddressOf PicList1_Click)
-    CreatePictureBox WindowCount, "picList" & 2, 20, WindowOffsetY + 21 + (CraftOffsetY * 2), 130, 20, , , , , , , , DesignTypes.desTextWhite, DesignTypes.desTextBlack, DesignTypes.desTextWhite, , , GetAddress(AddressOf PicList2_Click)
-    CreatePictureBox WindowCount, "picList" & 3, 20, WindowOffsetY + 21 + (CraftOffsetY * 3), 130, 20, , , , , , , , DesignTypes.desTextWhite, DesignTypes.desTextBlack, DesignTypes.desTextWhite, , , GetAddress(AddressOf PicList3_Click)
-    CreatePictureBox WindowCount, "picList" & 4, 20, WindowOffsetY + 21 + (CraftOffsetY * 4), 130, 20, , , , , , , , DesignTypes.desTextWhite, DesignTypes.desTextBlack, DesignTypes.desTextWhite, , , GetAddress(AddressOf PicList4_Click)
-    CreatePictureBox WindowCount, "picList" & 5, 20, WindowOffsetY + 21 + (CraftOffsetY * 5), 130, 20, , , , , , , , DesignTypes.desTextWhite, DesignTypes.desTextBlack, DesignTypes.desTextWhite, , , GetAddress(AddressOf PicList5_Click)
-    CreatePictureBox WindowCount, "picList" & 6, 20, WindowOffsetY + 21 + (CraftOffsetY * 6), 130, 20, , , , , , , , DesignTypes.desTextWhite, DesignTypes.desTextBlack, DesignTypes.desTextWhite, , , GetAddress(AddressOf PicList6_Click)
-    CreatePictureBox WindowCount, "picList" & 7, 20, WindowOffsetY + 21 + (CraftOffsetY * 7), 130, 20, , , , , , , , DesignTypes.desTextWhite, DesignTypes.desTextBlack, DesignTypes.desTextWhite, , , GetAddress(AddressOf PicList7_Click)
-    CreatePictureBox WindowCount, "picList" & 8, 20, WindowOffsetY + 21 + (CraftOffsetY * 8), 130, 20, , , , , , , , DesignTypes.desTextWhite, DesignTypes.desTextBlack, DesignTypes.desTextWhite, , , GetAddress(AddressOf PicList8_Click)
-    CreatePictureBox WindowCount, "picList" & 9, 20, WindowOffsetY + 21 + (CraftOffsetY * 9), 130, 20, , , , , , , , DesignTypes.desTextWhite, DesignTypes.desTextBlack, DesignTypes.desTextWhite, , , GetAddress(AddressOf PicList9_Click)
-    CreatePictureBox WindowCount, "picList" & 9, 20, WindowOffsetY + 21 + (CraftOffsetY * 10), 130, 20, , , , , , , , DesignTypes.desTextWhite, DesignTypes.desTextBlack, DesignTypes.desTextWhite, , , GetAddress(AddressOf PicList9_Click)
+    CreatePictureBox WindowCount, "picList" & 1, 20, WindowOffsetY + 21 + (CraftOffsetY * 1), 130, 20, , , , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, , , GetAddress(AddressOf PicList1_Click)
+    CreatePictureBox WindowCount, "picList" & 2, 20, WindowOffsetY + 21 + (CraftOffsetY * 2), 130, 20, , , , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, , , GetAddress(AddressOf PicList2_Click)
+    CreatePictureBox WindowCount, "picList" & 3, 20, WindowOffsetY + 21 + (CraftOffsetY * 3), 130, 20, , , , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, , , GetAddress(AddressOf PicList3_Click)
+    CreatePictureBox WindowCount, "picList" & 4, 20, WindowOffsetY + 21 + (CraftOffsetY * 4), 130, 20, , , , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, , , GetAddress(AddressOf PicList4_Click)
+    CreatePictureBox WindowCount, "picList" & 5, 20, WindowOffsetY + 21 + (CraftOffsetY * 5), 130, 20, , , , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, , , GetAddress(AddressOf PicList5_Click)
+    CreatePictureBox WindowCount, "picList" & 6, 20, WindowOffsetY + 21 + (CraftOffsetY * 6), 130, 20, , , , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, , , GetAddress(AddressOf PicList6_Click)
+    CreatePictureBox WindowCount, "picList" & 7, 20, WindowOffsetY + 21 + (CraftOffsetY * 7), 130, 20, , , , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, , , GetAddress(AddressOf PicList7_Click)
+    CreatePictureBox WindowCount, "picList" & 8, 20, WindowOffsetY + 21 + (CraftOffsetY * 8), 130, 20, , , , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, , , GetAddress(AddressOf PicList8_Click)
+    CreatePictureBox WindowCount, "picList" & 9, 20, WindowOffsetY + 21 + (CraftOffsetY * 9), 130, 20, , , , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, , , GetAddress(AddressOf PicList9_Click)
+    CreatePictureBox WindowCount, "picList" & 9, 20, WindowOffsetY + 21 + (CraftOffsetY * 10), 130, 20, , , , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, , , GetAddress(AddressOf PicList9_Click)
 
     For i = 1 To MaxRecipeRequiredItems
-        CreateLabel WindowCount, "lblReqCount" & i, 193, WindowOffsetY + 58 + (CraftOffsetY * i), 175, 20, "", OpenSans_Regular, White, Alignment.alignRight
-        CreateLabel WindowCount, "lblReqItem" & i, 200, WindowOffsetY + 58 + (CraftOffsetY * i), 175, 20, "", OpenSans_Regular, White, Alignment.alignLeft
+        CreateLabel WindowCount, "lblReqCount" & i, 193, WindowOffsetY + 58 + (CraftOffsetY * i), 175, 20, "", OpenSans_Regular, White, Alignment.AlignRight
+        CreateLabel WindowCount, "lblReqItem" & i, 200, WindowOffsetY + 58 + (CraftOffsetY * i), 175, 20, "", OpenSans_Regular, White, Alignment.AlignLeft
     Next
 
-    CreatePictureBox WindowCount, "picRequirement1", 193, WindowOffsetY + 55 + (CraftOffsetY * 1), 180, 20, , , , , , , , DesignTypes.desTextWhite, DesignTypes.desTextWhite, DesignTypes.desTextWhite, , GetAddress(AddressOf Requirement1_MouseMove), GetAddress(AddressOf Requirement1_MouseMove), GetAddress(AddressOf Requirement1_MouseMove)
-    CreatePictureBox WindowCount, "picRequirement2", 193, WindowOffsetY + 55 + (CraftOffsetY * 2), 180, 20, , , , , , , , DesignTypes.desTextWhite, DesignTypes.desTextWhite, DesignTypes.desTextWhite, , GetAddress(AddressOf Requirement2_MouseMove), GetAddress(AddressOf Requirement2_MouseMove), GetAddress(AddressOf Requirement2_MouseMove)
-    CreatePictureBox WindowCount, "picRequirement3", 193, WindowOffsetY + 55 + (CraftOffsetY * 3), 180, 20, , , , , , , , DesignTypes.desTextWhite, DesignTypes.desTextWhite, DesignTypes.desTextWhite, , GetAddress(AddressOf Requirement3_MouseMove), GetAddress(AddressOf Requirement3_MouseMove), GetAddress(AddressOf Requirement3_MouseMove)
-    CreatePictureBox WindowCount, "picRequirement4", 193, WindowOffsetY + 55 + (CraftOffsetY * 4), 180, 20, , , , , , , , DesignTypes.desTextWhite, DesignTypes.desTextWhite, DesignTypes.desTextWhite, , GetAddress(AddressOf Requirement4_MouseMove), GetAddress(AddressOf Requirement4_MouseMove), GetAddress(AddressOf Requirement4_MouseMove)
-    CreatePictureBox WindowCount, "picRequirement5", 193, WindowOffsetY + 55 + (CraftOffsetY * 5), 180, 20, , , , , , , , DesignTypes.desTextWhite, DesignTypes.desTextWhite, DesignTypes.desTextWhite, , GetAddress(AddressOf Requirement5_MouseMove), GetAddress(AddressOf Requirement5_MouseMove), GetAddress(AddressOf Requirement5_MouseMove)
+    CreatePictureBox WindowCount, "picRequirement1", 193, WindowOffsetY + 55 + (CraftOffsetY * 1), 180, 20, , , , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, , GetAddress(AddressOf Requirement1_MouseMove), GetAddress(AddressOf Requirement1_MouseMove), GetAddress(AddressOf Requirement1_MouseMove)
+    CreatePictureBox WindowCount, "picRequirement2", 193, WindowOffsetY + 55 + (CraftOffsetY * 2), 180, 20, , , , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, , GetAddress(AddressOf Requirement2_MouseMove), GetAddress(AddressOf Requirement2_MouseMove), GetAddress(AddressOf Requirement2_MouseMove)
+    CreatePictureBox WindowCount, "picRequirement3", 193, WindowOffsetY + 55 + (CraftOffsetY * 3), 180, 20, , , , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, , GetAddress(AddressOf Requirement3_MouseMove), GetAddress(AddressOf Requirement3_MouseMove), GetAddress(AddressOf Requirement3_MouseMove)
+    CreatePictureBox WindowCount, "picRequirement4", 193, WindowOffsetY + 55 + (CraftOffsetY * 4), 180, 20, , , , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, , GetAddress(AddressOf Requirement4_MouseMove), GetAddress(AddressOf Requirement4_MouseMove), GetAddress(AddressOf Requirement4_MouseMove)
+    CreatePictureBox WindowCount, "picRequirement5", 193, WindowOffsetY + 55 + (CraftOffsetY * 5), 180, 20, , , , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, , GetAddress(AddressOf Requirement5_MouseMove), GetAddress(AddressOf Requirement5_MouseMove), GetAddress(AddressOf Requirement5_MouseMove)
 
     'Nomes
-    CreateLabel WindowCount, "lblResults", 208, WindowOffsetY + 31, 142, , "Resultado de Criação", OpenSans_Regular, White, Alignment.alignCentre
-    CreateLabel WindowCount, "lblSuplement", 208, WindowOffsetY + 204, 142, , "Progresso", OpenSans_Regular, White, Alignment.alignCentre
-    CreateLabel WindowCount, "lblProgress", 208, WindowOffsetY + 218, 142, , "Processando: 0%", OpenSans_Regular, White, Alignment.alignCentre
-    CreateLabel WindowCount, "lblSuccessRate", 185, WindowOffsetY + 258, 205, 25, "Chance de Sucesso: 100%", OpenSans_Regular, White, Alignment.alignCentre, , , , , , , , 0
-    CreateLabel WindowCount, "lblList", 20, WindowOffsetY + 31, 130, , "Receitas", OpenSans_Regular, White, Alignment.alignCentre
-    CreateLabel WindowCount, "lblExp", 90, WindowOffsetY + 5, 209, , GetCraftName(CraftType_None) & "Nenhum Lv. 0 0/0", OpenSans_Regular, White, Alignment.alignCentre
+    CreateLabel WindowCount, "lblResults", 208, WindowOffsetY + 31, 142, , "Resultado de Criação", OpenSans_Regular, White, Alignment.AlignCenter
+    CreateLabel WindowCount, "lblSuplement", 208, WindowOffsetY + 204, 142, , "Progresso", OpenSans_Regular, White, Alignment.AlignCenter
+    CreateLabel WindowCount, "lblProgress", 208, WindowOffsetY + 218, 142, , "Processando: 0%", OpenSans_Regular, White, Alignment.AlignCenter
+    CreateLabel WindowCount, "lblSuccessRate", 185, WindowOffsetY + 258, 205, 25, "Chance de Sucesso: 100%", OpenSans_Regular, White, Alignment.AlignCenter, , , , , , , , 0
+    CreateLabel WindowCount, "lblList", 20, WindowOffsetY + 31, 130, , "Receitas", OpenSans_Regular, White, Alignment.AlignCenter
+    CreateLabel WindowCount, "lblExp", 90, WindowOffsetY + 5, 209, , GetCraftName(CraftType_None) & "Nenhum Lv. 0 0/0", OpenSans_Regular, White, Alignment.AlignCenter
 
     ' Result Item Slot
-    CreatePictureBox WindowCount, "picItemResult", 268, WindowOffsetY + 45, 32, 32, , , , , Tex_Item(1), Tex_Item(1), Tex_Item(1), DesignTypes.desTextWhite, DesignTypes.desTextWhite, DesignTypes.desTextWhite, , GetAddress(AddressOf ResultItem_MouseMove), GetAddress(AddressOf ResultItem_MouseMove), GetAddress(AddressOf ResultItem_MouseMove)
+    CreatePictureBox WindowCount, "picItemResult", 268, WindowOffsetY + 45, 32, 32, , , , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, , GetAddress(AddressOf ResultItem_MouseMove), GetAddress(AddressOf ResultItem_MouseMove), GetAddress(AddressOf ResultItem_MouseMove)
  
     'Botões setas
-    CreateButton WindowCount, "btnCraft", 155, WindowOffsetY + 22 + (CraftOffsetY * 1), 15, 15, , , , , , , Tex_GUI(79), Tex_GUI(80), Tex_GUI(81), , , , , , GetAddress(AddressOf MoveListToUp)
-    CreateButton WindowCount, "btnCraft", 155, WindowOffsetY + 24 + (CraftOffsetY * 10), 15, 15, , , , , , , Tex_GUI(82), Tex_GUI(83), Tex_GUI(84), , , , , , GetAddress(AddressOf MoveListToDown)
+    CreateButton WindowCount, "btnCraft", 155, WindowOffsetY + 22 + (CraftOffsetY * 1), 15, 15, , , , , , , Tex_GUI(44), Tex_GUI(45), Tex_GUI(46), , , , , , GetAddress(AddressOf MoveListToUp)
+    CreateButton WindowCount, "btnCraft", 155, WindowOffsetY + 24 + (CraftOffsetY * 10), 15, 15, , , , , , , Tex_GUI(47), Tex_GUI(48), Tex_GUI(49), , , , , , GetAddress(AddressOf MoveListToDown)
 
     'Botões inferiores
-    CreateButton WindowCount, "btnCraft", 90, WindowOffsetY + 310, 103, 24, "CRIAR", OpenSans_Regular, , , , , , , , DesignTypes.desSteel, DesignTypes.desSteel_Hover, DesignTypes.desSteel_Click, , , GetAddress(AddressOf Button_Craft)
-    CreateButton WindowCount, "btnCancel", 198, WindowOffsetY + 310, 103, 24, "CANCELAR", OpenSans_Regular, , , , , , , , DesignTypes.desSteel, DesignTypes.desSteel_Hover, DesignTypes.desSteel_Click, , , GetAddress(AddressOf Button_Cancel)
+    CreateButton WindowCount, "btnCraft", 90, WindowOffsetY + 310, 103, 24, "CRIAR", OpenSans_Regular, , , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf Button_Craft)
+    CreateButton WindowCount, "btnCancel", 198, WindowOffsetY + 310, 103, 24, "CANCELAR", OpenSans_Regular, , , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf Button_Cancel)
     
     WindowIndex = WindowCount
 End Sub
@@ -97,8 +97,6 @@ Private Sub DrawCraft()
 
     xO = Windows(WindowIndex).Window.Left
     yO = Windows(WindowIndex).Window.Top
-
-    RenderEntity_Square Tex_Design(TextureDesign_Parchment), xO + 6, WindowOffsetY + yO - 2, 371, 29, 20, 255    'Exp x 55, w 280
 
     ' Sai do metodo para evitar processamento quando não há produção.
     If GetCraftType = CraftType.CraftType_None Then
@@ -142,16 +140,16 @@ Private Sub DrawCraft()
     Next
 
     If CraftProgressPercentage > 0 Then
-        Windows(WindowIndex).Window.canDrag = False
+        Windows(WindowIndex).Window.CanDrag = False
     Else
-        Windows(WindowIndex).Window.canDrag = True
+        Windows(WindowIndex).Window.CanDrag = True
     End If
 
     Dim Percentage As Single
     Percentage = CSng(CraftProgressPercentage / 100)
 
-    RenderTexture Tex_GUI(105), xO + 193, WindowOffsetY + yO + 235, 0, 0, 180, 32, 180, 32
-    RenderTexture Tex_GUI(106), xO + 193, WindowOffsetY + yO + 235, 0, 0, 180 * Percentage, 32, 180 * Percentage, 32
+    RenderTexture Tex_GUI(50), xO + 193, WindowOffsetY + yO + 235, 0, 0, 180, 32, 180, 32
+    RenderTexture Tex_GUI(51), xO + 193, WindowOffsetY + yO + 235, 0, 0, 180 * Percentage, 32, 180 * Percentage, 32
 
 End Sub
 
@@ -293,7 +291,7 @@ Private Sub SetControlResultItem(ByVal TextureNum As Long)
     ControlIndexItem = GetControlIndex("winCraft", "picItemResult")
 
     For i = 0 To entStates.state_Count - 1
-        Windows(WindowIndex).Controls(ControlIndexItem).image(i) = Tex_Item(TextureNum)
+        Windows(WindowIndex).Controls(ControlIndexItem).Image(i) = Tex_Item(TextureNum)
     Next
 End Sub
 

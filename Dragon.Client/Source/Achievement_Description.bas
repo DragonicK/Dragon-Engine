@@ -33,12 +33,12 @@ Public Sub ShowAchievementDesc(X As Long, Y As Long, ByVal AchievementId As Long
     With Windows(WindowIndex)
         ' set name
         ControlIndex = GetControlIndex("winDescription", "lblName")
-        .Controls(ControlIndex).textColour = White    ' GetRarityColor(Achievement(AchievementId).Rarity)
+        .Controls(ControlIndex).TextColour = White    ' GetRarityColor(Achievement(AchievementId).Rarity)
         .Controls(ControlIndex).Text = Achievement(AchievementId).Name
         .Controls(ControlIndex).Width = 225
 
         ControlIndex = GetControlIndex("winDescription", "lblType")
-        .Controls(ControlIndex).textColour = BrightGreen
+        .Controls(ControlIndex).TextColour = BrightGreen
         .Controls(ControlIndex).Width = 225
         .Controls(ControlIndex).Text = "Pontos: " & Achievement(AchievementId).Points
     End With

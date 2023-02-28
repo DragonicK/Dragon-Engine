@@ -289,9 +289,11 @@ Public Sub SetTexture(ByVal TextureNum As Long)
     End If
 End Sub
 
-Public Sub RenderTexture(Texture As Long, ByVal X As Long, ByVal Y As Long, ByVal sX As Single, ByVal sY As Single, ByVal W As Long, ByVal H As Long, ByVal sW As Single, ByVal sH As Single, Optional ByVal Colour As Long = -1, Optional ByVal offset As Boolean = False)
+'PositionX, PositionY, CuteX, CuteY, ScaleX, ScaleY, SizeX, SizeY
+'(Texture As Long, ByVal PositionX, ByVal PositionY, ByVal PositionY,)
+Public Sub RenderTexture(Texture As Long, ByVal PositionX As Long, ByVal PositionY As Long, ByVal SourceX As Single, ByVal SourceY As Single, ByVal Width As Long, ByVal Height As Long, ByVal SourceWidth As Single, ByVal SourceHeight As Single, Optional ByVal Colour As Long = -1, Optional ByVal offset As Boolean = False)
     SetTexture Texture
-    RenderGeom X, Y, sX, sY, W, H, sW, sH, Colour, offset
+    RenderGeom PositionX, PositionY, SourceX, SourceY, Width, Height, SourceWidth, SourceHeight, Colour, offset
 End Sub
 
 Public Sub RenderGeom(ByVal X As Long, ByVal Y As Long, ByVal sX As Single, ByVal sY As Single, ByVal W As Long, ByVal H As Long, ByVal sW As Single, ByVal sH As Single, Optional ByVal Colour As Long = -1, Optional ByVal offset As Boolean = False)
@@ -424,9 +426,9 @@ Public Sub DrawHotbar()
         Height = 36
 
         ' render box
-        RenderTexture Tex_GUI(30), xO - 2, yO - 2, 0, 0, Width, Height, Width, Height
+        RenderTexture Tex_GUI(24), xO - 2, yO - 2, 0, 0, Width, Height, Width, Height
         ' render icon
-        If Not (DragBox.Origin = origin_QuickSlot And DragBox.Slot = i) Then
+        If Not (DragBox.Origin = OriginQuickSlot And DragBox.Slot = i) Then
             Select Case QuickSlot(i).SType
             Case 1    ' inventory
                 If QuickSlot(i).Slot > 0 Then
@@ -502,27 +504,27 @@ Public Sub DrawChatBubble(ByVal Index As Long)
         x2 = X - (MaxWidth \ 2)
         y2 = Y - (UBound(theArray) * 12)
         ' render bubble - top left
-        RenderTexture Tex_GUI(33), x2 - 9, y2 - 5, 0, 0, 9, 5, 9, 5
+        RenderTexture Tex_GUI(25), x2 - 9, y2 - 5, 0, 0, 9, 5, 9, 5
         ' top right
-        RenderTexture Tex_GUI(33), x2 + MaxWidth, y2 - 5, 119, 0, 9, 5, 9, 5
+        RenderTexture Tex_GUI(25), x2 + MaxWidth, y2 - 5, 119, 0, 9, 5, 9, 5
         ' top
-        RenderTexture Tex_GUI(33), x2, y2 - 5, 9, 0, MaxWidth, 5, 5, 5
+        RenderTexture Tex_GUI(25), x2, y2 - 5, 9, 0, MaxWidth, 5, 5, 5
         ' bottom left
-        RenderTexture Tex_GUI(33), x2 - 9, Y, 0, 19, 9, 6, 9, 6
+        RenderTexture Tex_GUI(25), x2 - 9, Y, 0, 19, 9, 6, 9, 6
         ' bottom right
-        RenderTexture Tex_GUI(33), x2 + MaxWidth, Y, 119, 19, 9, 6, 9, 6
+        RenderTexture Tex_GUI(25), x2 + MaxWidth, Y, 119, 19, 9, 6, 9, 6
         ' bottom - left half
-        RenderTexture Tex_GUI(33), x2, Y, 9, 19, (MaxWidth \ 2) - 5, 6, 9, 6
+        RenderTexture Tex_GUI(25), x2, Y, 9, 19, (MaxWidth \ 2) - 5, 6, 9, 6
         ' bottom - right half
-        RenderTexture Tex_GUI(33), x2 + (MaxWidth \ 2) + 6, Y, 9, 19, (MaxWidth \ 2) - 5, 6, 9, 6
+        RenderTexture Tex_GUI(25), x2 + (MaxWidth \ 2) + 6, Y, 9, 19, (MaxWidth \ 2) - 5, 6, 9, 6
         ' left
-        RenderTexture Tex_GUI(33), x2 - 9, y2, 0, 6, 9, (UBound(theArray) * 12), 9, 1
+        RenderTexture Tex_GUI(25), x2 - 9, y2, 0, 6, 9, (UBound(theArray) * 12), 9, 1
         ' right
-        RenderTexture Tex_GUI(33), x2 + MaxWidth, y2, 119, 6, 9, (UBound(theArray) * 12), 9, 1
+        RenderTexture Tex_GUI(25), x2 + MaxWidth, y2, 119, 6, 9, (UBound(theArray) * 12), 9, 1
         ' center
-        RenderTexture Tex_GUI(33), x2, y2, 9, 5, MaxWidth, (UBound(theArray) * 12), 1, 1
+        RenderTexture Tex_GUI(25), x2, y2, 9, 5, MaxWidth, (UBound(theArray) * 12), 1, 1
         ' little pointy bit
-        RenderTexture Tex_GUI(33), X - 5, Y, 58, 19, 11, 11, 11, 11
+        RenderTexture Tex_GUI(25), X - 5, Y, 58, 19, 11, 11, 11, 11
         ' render each line centralised
         tmpNum = UBound(theArray)
 
@@ -895,8 +897,8 @@ Public Sub Render_Graphics()
 
     ' draw shadow
     If Not ScreenshotMode Then
-        RenderTexture Tex_GUI(43), 0, 0, 0, 0, ScreenWidth, 64, 1, 64
-        RenderTexture Tex_GUI(42), 0, ScreenHeight - 64, 0, 0, ScreenWidth, 64, 1, 64
+        RenderTexture Tex_GUI(29), 0, 0, 0, 0, ScreenWidth, 64, 1, 64
+        RenderTexture Tex_GUI(28), 0, ScreenHeight - 64, 0, 0, ScreenWidth, 64, 1, 64
     End If
 
     ' Draw Player icons

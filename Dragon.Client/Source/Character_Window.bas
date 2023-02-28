@@ -16,7 +16,7 @@ Private AttributePage As Long
 Public Sub CreateWindow_Character()
     Dim i As Long
     ' Create window
-    CreateWindow "winCharacter", "PERSONAGEM", zOrder_Win, 0, 0, 260, 435, 0, False, Fonts.OpenSans_Effect, , 2, 6, DesignTypes.desWin_AincradNorm, DesignTypes.desWin_AincradNorm, DesignTypes.desWin_AincradNorm, , , , , GetAddress(AddressOf Character_MouseMove), GetAddress(AddressOf Character_MouseDown), GetAddress(AddressOf Character_MouseMove), GetAddress(AddressOf Character_DoubleClick), , , GetAddress(AddressOf RenderCharacter)
+    CreateWindow "winCharacter", "PERSONAGEM", zOrder_Win, 0, 0, 260, 435, 0, False, Fonts.OpenSans_Effect, , 2, 6, DesignTypes.DesignWindowWithTopBarAndDoubleNavBar, DesignTypes.DesignWindowWithTopBarAndDoubleNavBar, DesignTypes.DesignWindowWithTopBarAndDoubleNavBar, , , , , GetAddress(AddressOf Character_MouseMove), GetAddress(AddressOf Character_MouseDown), GetAddress(AddressOf Character_MouseMove), GetAddress(AddressOf Character_DoubleClick), , , GetAddress(AddressOf RenderCharacter)
     ' Centralise it
     CentraliseWindow WindowCount
 
@@ -34,42 +34,42 @@ Public Sub CreateWindow_Character()
     CreateButton WindowCount, "btnElementalAttribute", 170, 72, 80, 26, "ELEMENTAL", OpenSans_Effect, White, , False, , , , , , , , , , GetAddress(AddressOf ButtonElementalPage_Click)
 
     ' Labels
-    CreateLabel WindowCount, "lblName", 50, 115, 156, 16, "NOME LV. 50", OpenSans_Effect, White, Alignment.alignCentre
-    CreateLabel WindowCount, "lblClass", 50, 170, 156, 16, "PRIEST", OpenSans_Effect, White, Alignment.alignCentre
+    CreateLabel WindowCount, "lblName", 50, 115, 156, 16, "NOME LV. 50", OpenSans_Effect, White, Alignment.AlignCenter
+    CreateLabel WindowCount, "lblClass", 50, 170, 156, 16, "PRIEST", OpenSans_Effect, White, Alignment.AlignCenter
 
     ' Attributes
-    CreateLabel WindowCount, "lblLabel_1", 60, 252, 138, , "Força:", OpenSans_Regular, White, Alignment.alignLeft
-    CreateLabel WindowCount, "lblLabel_2", 60, 272, 138, , "Agilidade:", OpenSans_Regular, White, Alignment.alignLeft
-    CreateLabel WindowCount, "lblLabel_3", 60, 292, 138, , "Destreza:", OpenSans_Regular, White, Alignment.alignLeft
-    CreateLabel WindowCount, "lblLabel_4", 60, 312, 138, , "Constituição:", OpenSans_Regular, White, Alignment.alignLeft
-    CreateLabel WindowCount, "lblLabel_5", 60, 332, 138, , "Inteligência:", OpenSans_Regular, White, Alignment.alignLeft
-    CreateLabel WindowCount, "lblLabel_6", 60, 352, 138, , "Espírito:", OpenSans_Regular, White, Alignment.alignLeft
-    CreateLabel WindowCount, "lblPoints", 60, 382, 138, , "DISPONÍVEL: 100", OpenSans_Effect, Gold, Alignment.alignLeft
+    CreateLabel WindowCount, "lblLabel_1", 60, 252, 138, , "Força:", OpenSans_Regular, White, Alignment.AlignLeft
+    CreateLabel WindowCount, "lblLabel_2", 60, 272, 138, , "Agilidade:", OpenSans_Regular, White, Alignment.AlignLeft
+    CreateLabel WindowCount, "lblLabel_3", 60, 292, 138, , "Destreza:", OpenSans_Regular, White, Alignment.AlignLeft
+    CreateLabel WindowCount, "lblLabel_4", 60, 312, 138, , "Constituição:", OpenSans_Regular, White, Alignment.AlignLeft
+    CreateLabel WindowCount, "lblLabel_5", 60, 332, 138, , "Inteligência:", OpenSans_Regular, White, Alignment.AlignLeft
+    CreateLabel WindowCount, "lblLabel_6", 60, 352, 138, , "Espírito:", OpenSans_Regular, White, Alignment.AlignLeft
+    CreateLabel WindowCount, "lblPoints", 60, 382, 138, , "DISPONÍVEL: 100", OpenSans_Effect, Gold, Alignment.AlignLeft
 
-    CreateLabel WindowCount, "lblStat_1", 138, 252, 138, , "0", OpenSans_Regular, White, Alignment.alignLeft
-    CreateLabel WindowCount, "lblStat_2", 138, 272, 138, , "0", OpenSans_Regular, White, Alignment.alignLeft
-    CreateLabel WindowCount, "lblStat_3", 138, 292, 138, , "0", OpenSans_Regular, White, Alignment.alignLeft
-    CreateLabel WindowCount, "lblStat_4", 138, 312, 138, , "0", OpenSans_Regular, White, Alignment.alignLeft
-    CreateLabel WindowCount, "lblStat_5", 138, 332, 138, , "0", OpenSans_Regular, White, Alignment.alignLeft
-    CreateLabel WindowCount, "lblStat_6", 138, 352, 138, , "0", OpenSans_Regular, White, Alignment.alignLeft
+    CreateLabel WindowCount, "lblStat_1", 138, 252, 138, , "0", OpenSans_Regular, White, Alignment.AlignLeft
+    CreateLabel WindowCount, "lblStat_2", 138, 272, 138, , "0", OpenSans_Regular, White, Alignment.AlignLeft
+    CreateLabel WindowCount, "lblStat_3", 138, 292, 138, , "0", OpenSans_Regular, White, Alignment.AlignLeft
+    CreateLabel WindowCount, "lblStat_4", 138, 312, 138, , "0", OpenSans_Regular, White, Alignment.AlignLeft
+    CreateLabel WindowCount, "lblStat_5", 138, 332, 138, , "0", OpenSans_Regular, White, Alignment.AlignLeft
+    CreateLabel WindowCount, "lblStat_6", 138, 352, 138, , "0", OpenSans_Regular, White, Alignment.AlignLeft
 
     ' Buttons
-    CreateButton WindowCount, "btnStat_1", 180, 252, 16, 16, , , , , , , Tex_GUI(48), Tex_GUI(49), Tex_GUI(50), , , , , , GetAddress(AddressOf Character_SpendPoint1)
-    CreateButton WindowCount, "btnStat_2", 180, 272, 16, 16, , , , , , , Tex_GUI(48), Tex_GUI(49), Tex_GUI(50), , , , , , GetAddress(AddressOf Character_SpendPoint2)
-    CreateButton WindowCount, "btnStat_3", 180, 292, 16, 16, , , , , , , Tex_GUI(48), Tex_GUI(49), Tex_GUI(50), , , , , , GetAddress(AddressOf Character_SpendPoint3)
-    CreateButton WindowCount, "btnStat_4", 180, 312, 16, 16, , , , , , , Tex_GUI(48), Tex_GUI(49), Tex_GUI(50), , , , , , GetAddress(AddressOf Character_SpendPoint4)
-    CreateButton WindowCount, "btnStat_5", 180, 332, 16, 16, , , , , , , Tex_GUI(48), Tex_GUI(49), Tex_GUI(50), , , , , , GetAddress(AddressOf Character_SpendPoint5)
-    CreateButton WindowCount, "btnStat_6", 180, 352, 16, 16, , , , , , , Tex_GUI(48), Tex_GUI(49), Tex_GUI(50), , , , , , GetAddress(AddressOf Character_SpendPoint6)
+    CreateButton WindowCount, "btnStat_1", 180, 252, 16, 16, , , , , , , Tex_GUI(47), Tex_GUI(48), Tex_GUI(49), , , , , , GetAddress(AddressOf Character_SpendPoint1)
+    CreateButton WindowCount, "btnStat_2", 180, 272, 16, 16, , , , , , , Tex_GUI(47), Tex_GUI(48), Tex_GUI(49), , , , , , GetAddress(AddressOf Character_SpendPoint2)
+    CreateButton WindowCount, "btnStat_3", 180, 292, 16, 16, , , , , , , Tex_GUI(47), Tex_GUI(48), Tex_GUI(49), , , , , , GetAddress(AddressOf Character_SpendPoint3)
+    CreateButton WindowCount, "btnStat_4", 180, 312, 16, 16, , , , , , , Tex_GUI(47), Tex_GUI(48), Tex_GUI(49), , , , , , GetAddress(AddressOf Character_SpendPoint4)
+    CreateButton WindowCount, "btnStat_5", 180, 332, 16, 16, , , , , , , Tex_GUI(47), Tex_GUI(48), Tex_GUI(49), , , , , , GetAddress(AddressOf Character_SpendPoint5)
+    CreateButton WindowCount, "btnStat_6", 180, 352, 16, 16, , , , , , , Tex_GUI(47), Tex_GUI(48), Tex_GUI(49), , , , , , GetAddress(AddressOf Character_SpendPoint6)
 
     ' fake buttons
-    CreatePictureBox WindowCount, "btnGreyStat_1", 180, 252, 15, 15, False, , , , Tex_GUI(47), Tex_GUI(47), Tex_GUI(47)
-    CreatePictureBox WindowCount, "btnGreyStat_2", 180, 272, 15, 15, False, , , , Tex_GUI(47), Tex_GUI(47), Tex_GUI(47)
-    CreatePictureBox WindowCount, "btnGreyStat_3", 180, 292, 15, 15, False, , , , Tex_GUI(47), Tex_GUI(47), Tex_GUI(47)
-    CreatePictureBox WindowCount, "btnGreyStat_4", 180, 312, 15, 15, False, , , , Tex_GUI(47), Tex_GUI(47), Tex_GUI(47)
-    CreatePictureBox WindowCount, "btnGreyStat_5", 180, 332, 15, 15, False, , , , Tex_GUI(47), Tex_GUI(47), Tex_GUI(47)
-    CreatePictureBox WindowCount, "btnGreyStat_6", 180, 352, 15, 15, False, , , , Tex_GUI(47), Tex_GUI(47), Tex_GUI(47)
+    CreatePictureBox WindowCount, "btnGreyStat_1", 180, 252, 15, 15, False, , , , Tex_GUI(30), Tex_GUI(31), Tex_GUI(32)
+    CreatePictureBox WindowCount, "btnGreyStat_2", 180, 272, 15, 15, False, , , , Tex_GUI(30), Tex_GUI(31), Tex_GUI(32)
+    CreatePictureBox WindowCount, "btnGreyStat_3", 180, 292, 15, 15, False, , , , Tex_GUI(30), Tex_GUI(31), Tex_GUI(32)
+    CreatePictureBox WindowCount, "btnGreyStat_4", 180, 312, 15, 15, False, , , , Tex_GUI(30), Tex_GUI(31), Tex_GUI(32)
+    CreatePictureBox WindowCount, "btnGreyStat_5", 180, 332, 15, 15, False, , , , Tex_GUI(30), Tex_GUI(31), Tex_GUI(32)
+    CreatePictureBox WindowCount, "btnGreyStat_6", 180, 352, 15, 15, False, , , , Tex_GUI(30), Tex_GUI(31), Tex_GUI(32)
 
-    CreateCheckbox WindowCount, "chkView", 48, 76, 35, , False, "VISUALIZAR EQUIPAMENTO", OpenSans_Effect, ColorType.Gold, , , , DesignTypes.desChkNorm, , , GetAddress(AddressOf Button_ViewVisibility)
+    CreateCheckbox WindowCount, "chkView", 48, 76, 35, , False, "VISUALIZAR EQUIPAMENTO", OpenSans_Effect, ColorType.Gold, , , , DesignTypes.DesignCheckBox, , , GetAddress(AddressOf Button_ViewVisibility)
 
     AttributePage = DefaultPage
 
@@ -99,17 +99,17 @@ Private Sub ButtonDefaultPage_Click()
     SpecialIndex = GetControlIndex("winCharacter", "btnSpecialAttribute")
     ElementalIndex = GetControlIndex("winCharacter", "btnElementalAttribute")
 
-    Windows(WindowIndex).Controls(DefaultIndex).textColour = Green
-    Windows(WindowIndex).Controls(DefaultIndex).textColour_Click = Green
-    Windows(WindowIndex).Controls(DefaultIndex).textColour_Hover = Green
+    Windows(WindowIndex).Controls(DefaultIndex).TextColour = Green
+    Windows(WindowIndex).Controls(DefaultIndex).TextColourClick = Green
+    Windows(WindowIndex).Controls(DefaultIndex).TextColourHover = Green
 
-    Windows(WindowIndex).Controls(SpecialIndex).textColour = White
-    Windows(WindowIndex).Controls(SpecialIndex).textColour_Click = White
-    Windows(WindowIndex).Controls(SpecialIndex).textColour_Hover = White
+    Windows(WindowIndex).Controls(SpecialIndex).TextColour = White
+    Windows(WindowIndex).Controls(SpecialIndex).TextColourClick = White
+    Windows(WindowIndex).Controls(SpecialIndex).TextColourHover = White
 
-    Windows(WindowIndex).Controls(ElementalIndex).textColour = White
-    Windows(WindowIndex).Controls(ElementalIndex).textColour_Click = White
-    Windows(WindowIndex).Controls(ElementalIndex).textColour_Hover = White
+    Windows(WindowIndex).Controls(ElementalIndex).TextColour = White
+    Windows(WindowIndex).Controls(ElementalIndex).TextColourClick = White
+    Windows(WindowIndex).Controls(ElementalIndex).TextColourHover = White
 
     AttributePage = DefaultPage
 End Sub
@@ -123,17 +123,17 @@ Private Sub ButtonSpecialPage_Click()
     SpecialIndex = GetControlIndex("winCharacter", "btnSpecialAttribute")
     ElementalIndex = GetControlIndex("winCharacter", "btnElementalAttribute")
 
-    Windows(WindowIndex).Controls(DefaultIndex).textColour = White
-    Windows(WindowIndex).Controls(DefaultIndex).textColour_Click = White
-    Windows(WindowIndex).Controls(DefaultIndex).textColour_Hover = White
+    Windows(WindowIndex).Controls(DefaultIndex).TextColour = White
+    Windows(WindowIndex).Controls(DefaultIndex).TextColourClick = White
+    Windows(WindowIndex).Controls(DefaultIndex).TextColourHover = White
 
-    Windows(WindowIndex).Controls(SpecialIndex).textColour = Green
-    Windows(WindowIndex).Controls(SpecialIndex).textColour_Click = Green
-    Windows(WindowIndex).Controls(SpecialIndex).textColour_Hover = Green
+    Windows(WindowIndex).Controls(SpecialIndex).TextColour = Green
+    Windows(WindowIndex).Controls(SpecialIndex).TextColourClick = Green
+    Windows(WindowIndex).Controls(SpecialIndex).TextColourHover = Green
 
-    Windows(WindowIndex).Controls(ElementalIndex).textColour = White
-    Windows(WindowIndex).Controls(ElementalIndex).textColour_Click = White
-    Windows(WindowIndex).Controls(ElementalIndex).textColour_Hover = White
+    Windows(WindowIndex).Controls(ElementalIndex).TextColour = White
+    Windows(WindowIndex).Controls(ElementalIndex).TextColourClick = White
+    Windows(WindowIndex).Controls(ElementalIndex).TextColourHover = White
 
     AttributePage = SpecialPage
 End Sub
@@ -147,17 +147,17 @@ Private Sub ButtonElementalPage_Click()
     SpecialIndex = GetControlIndex("winCharacter", "btnSpecialAttribute")
     ElementalIndex = GetControlIndex("winCharacter", "btnElementalAttribute")
 
-    Windows(WindowIndex).Controls(DefaultIndex).textColour = White
-    Windows(WindowIndex).Controls(DefaultIndex).textColour_Click = White
-    Windows(WindowIndex).Controls(DefaultIndex).textColour_Hover = White
+    Windows(WindowIndex).Controls(DefaultIndex).TextColour = White
+    Windows(WindowIndex).Controls(DefaultIndex).TextColourClick = White
+    Windows(WindowIndex).Controls(DefaultIndex).TextColourHover = White
 
-    Windows(WindowIndex).Controls(SpecialIndex).textColour = White
-    Windows(WindowIndex).Controls(SpecialIndex).textColour_Click = White
-    Windows(WindowIndex).Controls(SpecialIndex).textColour_Hover = White
+    Windows(WindowIndex).Controls(SpecialIndex).TextColour = White
+    Windows(WindowIndex).Controls(SpecialIndex).TextColourClick = White
+    Windows(WindowIndex).Controls(SpecialIndex).TextColourHover = White
 
-    Windows(WindowIndex).Controls(ElementalIndex).textColour = Green
-    Windows(WindowIndex).Controls(ElementalIndex).textColour_Click = Green
-    Windows(WindowIndex).Controls(ElementalIndex).textColour_Hover = Green
+    Windows(WindowIndex).Controls(ElementalIndex).TextColour = Green
+    Windows(WindowIndex).Controls(ElementalIndex).TextColourClick = Green
+    Windows(WindowIndex).Controls(ElementalIndex).TextColourHover = Green
     
     AttributePage = ElementalPage
 End Sub
@@ -175,13 +175,13 @@ Private Sub ShowCharacter_Click()
     With Windows(WindowIndex)
         .Controls(CheckView).Visible = True
 
-        .Controls(CharacterIndex).textColour = Green
-        .Controls(CharacterIndex).textColour_Click = Green
-        .Controls(CharacterIndex).textColour_Hover = Green
+        .Controls(CharacterIndex).TextColour = Green
+        .Controls(CharacterIndex).TextColourClick = Green
+        .Controls(CharacterIndex).TextColourHover = Green
 
-        .Controls(AttributesIndex).textColour = White
-        .Controls(AttributesIndex).textColour_Click = White
-        .Controls(AttributesIndex).textColour_Hover = White
+        .Controls(AttributesIndex).TextColour = White
+        .Controls(AttributesIndex).TextColourClick = White
+        .Controls(AttributesIndex).TextColourHover = White
     End With
 
     Call SetChildWindowVisible(True)
@@ -211,13 +211,13 @@ Private Sub ShowAttributes_Click()
     
     Windows(WindowIndex).Controls(CheckView).Visible = False
 
-    Windows(WindowIndex).Controls(CharacterIndex).textColour = White
-    Windows(WindowIndex).Controls(CharacterIndex).textColour_Click = White
-    Windows(WindowIndex).Controls(CharacterIndex).textColour_Hover = White
+    Windows(WindowIndex).Controls(CharacterIndex).TextColour = White
+    Windows(WindowIndex).Controls(CharacterIndex).TextColourClick = White
+    Windows(WindowIndex).Controls(CharacterIndex).TextColourHover = White
 
-    Windows(WindowIndex).Controls(AttributesIndex).textColour = Green
-    Windows(WindowIndex).Controls(AttributesIndex).textColour_Click = Green
-    Windows(WindowIndex).Controls(AttributesIndex).textColour_Hover = Green
+    Windows(WindowIndex).Controls(AttributesIndex).TextColour = Green
+    Windows(WindowIndex).Controls(AttributesIndex).TextColourClick = Green
+    Windows(WindowIndex).Controls(AttributesIndex).TextColourHover = Green
 
     Call SetChildWindowVisible(False)
     
@@ -319,7 +319,7 @@ Private Sub Character_MouseMove()
     Dim EquipSlot As PlayerEquipments, X As Long, Y As Long
 
     ' exit out early if dragging
-    If DragBox.Type <> part_None Then Exit Sub
+    If DragBox.Type <> PartNone Then Exit Sub
 
     EquipSlot = GetEquipmentSlotFromPosition(Windows(WindowIndex).Window.Left, Windows(WindowIndex).Window.Top)
 
@@ -370,12 +370,12 @@ Private Sub RenderCharacter()
     yO = Windows(WindowIndex).Window.Top
     Width = Windows(WindowIndex).Window.Width
 
-    RenderDesign DesignTypes.desWin_AincradMenu, xO, yO + 40, Width, 30
-    RenderDesign DesignTypes.desWin_AincradMenu, xO, yO + 70, Width, 30
+    '
+    'RenderDesign DesignTypes.desWin_AincradMenu, xO, yO + 70, Width, 30
        
     If Not IsShowingAttributes Then
         For i = 1 To PlayerEquipments.PlayerEquipment_Count - 1
-            RenderTexture Tex_GUI(85 + i), xO + EquipmentPosition(i).X, yO + EquipmentPosition(i).Y, 0, 0, 34, 34, 34, 34
+            RenderTexture Tex_GUI(54 + i), xO + EquipmentPosition(i).X, yO + EquipmentPosition(i).Y, 0, 0, 34, 34, 34, 34
 
             ItemNum = GetPlayerEquipmentId(i)
 

@@ -24,7 +24,7 @@ Public Sub HideWarehouse()
 End Sub
 
 Public Sub CreateWindow_Warehouse()
-    CreateWindow "winWarehouse", "ARMAZÉM", zOrder_Win, 0, 0, 204, 432, 0, True, Fonts.OpenSans_Regular, , 2, 5, DesignTypes.desWin_AincradNorm, DesignTypes.desWin_AincradNorm, DesignTypes.desWin_AincradNorm, , , , , GetAddress(AddressOf Warehouse_MouseMove), GetAddress(AddressOf Warehouse_MouseDown), GetAddress(AddressOf Warehouse_MouseMove), 0, , , GetAddress(AddressOf DrawWarehouse)
+    CreateWindow "winWarehouse", "ARMAZÉM", zOrder_Win, 0, 0, 204, 432, 0, True, Fonts.OpenSans_Regular, , 2, 5, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, , , , , GetAddress(AddressOf Warehouse_MouseMove), GetAddress(AddressOf Warehouse_MouseDown), GetAddress(AddressOf Warehouse_MouseMove), 0, , , GetAddress(AddressOf DrawWarehouse)
     
     CentraliseWindow WindowCount
 
@@ -69,9 +69,9 @@ Private Sub DrawWarehouse()
     For i = 1 To 5
         If i = 4 Then Height = 38
         
-        RenderTexture Tex_GUI(35), xO + 5, Y, 0, 0, 80, 80, 80, 80
-        RenderTexture Tex_GUI(35), xO + 81, Y, 0, 0, 80, 80, 80, 80
-        RenderTexture Tex_GUI(35), xO + 157, Y, 0, 0, 42, 80, 42, 80
+        RenderTexture Tex_GUI(26), xO + 5, Y, 0, 0, 80, 80, 80, 80
+        RenderTexture Tex_GUI(26), xO + 81, Y, 0, 0, 80, 80, 80, 80
+        RenderTexture Tex_GUI(26), xO + 157, Y, 0, 0, 42, 80, 42, 80
 
         Y = Y + 76
     Next
@@ -82,7 +82,7 @@ Private Sub DrawWarehouse()
 
         If ItemNum > 0 And ItemNum <= MaximumItems Then
             ' not dragging?
-            If Not (DragBox.Origin = origin_Warehouse And DragBox.Slot = i) Then
+            If Not (DragBox.Origin = OriginWarehouse And DragBox.Slot = i) Then
                 ItemPic = Item(ItemNum).IconId
 
                 If ItemPic > 0 And ItemPic <= Count_Item Then
@@ -139,7 +139,7 @@ Private Sub Warehouse_MouseMove()
     Dim ItemNum As Long, WinDescription As Long
 
     ' exit out early if dragging
-    If DragBox.Type <> part_None Then Exit Sub
+    If DragBox.Type <> PartNone Then Exit Sub
 
     Slot = GetWarehouseSlotFromPosition(Windows(WindowIndex).Window.Left, Windows(WindowIndex).Window.Top)
 
@@ -151,7 +151,7 @@ Private Sub Warehouse_MouseMove()
         End If
 
         ' make sure we're not dragging the item
-        If DragBox.Type = Part_Item And DragBox.Value = ItemNum Then Exit Sub
+        If DragBox.Type = PartItem And DragBox.Value = ItemNum Then Exit Sub
 
         WinDescription = GetWindowIndex("winDescription")
 
@@ -210,9 +210,9 @@ Private Sub Warehouse_MouseDown()
         Else
             ' drag it
             With DragBox
-                .Type = Part_Item
+                .Type = PartItem
                 .Value = ItemNum
-                .Origin = origin_Warehouse
+                .Origin = OriginWarehouse
                 .Slot = Slot
             End With
 
@@ -221,7 +221,7 @@ Private Sub Warehouse_MouseDown()
                 .State = MouseDown
                 .Left = lastMouseX - 16
                 .Top = lastMouseY - 16
-                .movedX = clickedX - .Left
+                .MovedX = clickedX - .Left
                 .movedY = clickedY - .Top
             End With
 
@@ -239,9 +239,9 @@ Public Sub DragBox_WarehouseToWarehouse()
     Dim i As Long
     Dim tmpRec As RECT
 
-    If DragBox.Origin = origin_Warehouse Then
+    If DragBox.Origin = OriginWarehouse Then
         ' it's from the inventory!
-        If DragBox.Type = Part_Item Then
+        If DragBox.Type = PartItem Then
             ' find the slot to switch with
             For i = 1 To MaxWarehouse
                 With tmpRec

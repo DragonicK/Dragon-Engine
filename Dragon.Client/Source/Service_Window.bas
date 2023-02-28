@@ -43,7 +43,7 @@ End Sub
 
 Public Sub CreateWindow_Services()
 ' Create window
-    CreateWindow "winServices", "SERVIÇO PREMIUM", zOrder_Win, 0, 0, 220, 505, 0, False, Fonts.OpenSans_Effect, , 2, 7, DesignTypes.desWin_AincradNorm, DesignTypes.desWin_AincradNorm, DesignTypes.desWin_AincradNorm, , , , , , , , , , , GetAddress(AddressOf RenderServices)
+    CreateWindow "winServices", "SERVIÇO PREMIUM", zOrder_Win, 0, 0, 220, 505, 0, False, Fonts.OpenSans_Effect, , 2, 7, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, , , , , , , , , , , GetAddress(AddressOf RenderServices)
     ' Centralise it
     CentraliseWindow WindowCount
 
@@ -57,13 +57,13 @@ Public Sub CreateWindow_Services()
     CreateButton WindowCount, "btnServer", 70, 42, 80, 26, "SERVIDOR", OpenSans_Effect, , , , , , , , , , , , , GetAddress(AddressOf ShowServerRate)
     CreateButton WindowCount, "btnService", 135, 42, 80, 26, "SERVIÇO", OpenSans_Effect, , , , , , , , , , , , , GetAddress(AddressOf ShowServiceRates)
 
-    CreateLabel WindowCount, "lblName", 0, OffSetY - 10, 220, 15, "BONUS TOTAL", OpenSans_Effect, White, Alignment.alignCentre
-    CreateLabel WindowCount, "lblExpire", 0, OffSetY + 365, 220, 15, "TÉRMINO: 02/01/1995 23:52", OpenSans_Effect, Coral, Alignment.alignCentre, False
+    CreateLabel WindowCount, "lblName", 0, OffSetY - 10, 220, 15, "BONUS TOTAL", OpenSans_Effect, White, Alignment.AlignCenter
+    CreateLabel WindowCount, "lblExpire", 0, OffSetY + 365, 220, 15, "TÉRMINO: 02/01/1995 23:52", OpenSans_Effect, Coral, Alignment.AlignCenter, False
 
     'Botões setas
-    CreateLabel WindowCount, "lblPage", 0, OffSetY + 390, 220, 50, "1/1", OpenSans_Effect, White, Alignment.alignCentre, False
-    CreateButton WindowCount, "btnUp", 140, OffSetY + 390, 16, 16, , , , , False, , Tex_GUI(79), Tex_GUI(80), Tex_GUI(81), , , , , , GetAddress(AddressOf MoveUp)
-    CreateButton WindowCount, "btnDown", 65, OffSetY + 390, 16, 16, , , , , False, , Tex_GUI(82), Tex_GUI(83), Tex_GUI(84), , , , , , GetAddress(AddressOf MoveDown)
+    CreateLabel WindowCount, "lblPage", 0, OffSetY + 390, 220, 50, "1/1", OpenSans_Effect, White, Alignment.AlignCenter, False
+    CreateButton WindowCount, "btnUp", 140, OffSetY + 390, 16, 16, , , , , False, , Tex_GUI(44), Tex_GUI(45), Tex_GUI(46), , , , , , GetAddress(AddressOf MoveUp)
+    CreateButton WindowCount, "btnDown", 65, OffSetY + 390, 16, 16, , , , , False, , Tex_GUI(47), Tex_GUI(48), Tex_GUI(49), , , , , , GetAddress(AddressOf MoveDown)
 
     WindowIndex = WindowCount
 
@@ -126,17 +126,17 @@ Private Sub ShowBonusRates()
     ServiceIndex = GetControlIndex("winServices", "btnService")
     ServerIndex = GetControlIndex("winServices", "btnServer")
 
-    Windows(WindowIndex).Controls(BonusIndex).textColour = Green
-    Windows(WindowIndex).Controls(BonusIndex).textColour_Click = Green
-    Windows(WindowIndex).Controls(BonusIndex).textColour_Hover = Green
+    Windows(WindowIndex).Controls(BonusIndex).TextColour = Green
+    Windows(WindowIndex).Controls(BonusIndex).TextColourClick = Green
+    Windows(WindowIndex).Controls(BonusIndex).TextColourHover = Green
 
-    Windows(WindowIndex).Controls(ServiceIndex).textColour = White
-    Windows(WindowIndex).Controls(ServiceIndex).textColour_Click = White
-    Windows(WindowIndex).Controls(ServiceIndex).textColour_Hover = White
+    Windows(WindowIndex).Controls(ServiceIndex).TextColour = White
+    Windows(WindowIndex).Controls(ServiceIndex).TextColourClick = White
+    Windows(WindowIndex).Controls(ServiceIndex).TextColourHover = White
 
-    Windows(WindowIndex).Controls(ServerIndex).textColour = White
-    Windows(WindowIndex).Controls(ServerIndex).textColour_Click = White
-    Windows(WindowIndex).Controls(ServerIndex).textColour_Hover = White
+    Windows(WindowIndex).Controls(ServerIndex).TextColour = White
+    Windows(WindowIndex).Controls(ServerIndex).TextColourClick = White
+    Windows(WindowIndex).Controls(ServerIndex).TextColourHover = White
 
     Windows(WindowIndex).Controls(GetControlIndex("winServices", "lblExpire")).Visible = False
     Windows(WindowIndex).Controls(GetControlIndex("winServices", "lblPage")).Visible = False
@@ -158,17 +158,17 @@ Private Sub ShowServerRate()
     ServiceIndex = GetControlIndex("winServices", "btnService")
     ServerIndex = GetControlIndex("winServices", "btnServer")
 
-    Windows(WindowIndex).Controls(BonusIndex).textColour = White
-    Windows(WindowIndex).Controls(BonusIndex).textColour_Click = White
-    Windows(WindowIndex).Controls(BonusIndex).textColour_Hover = White
+    Windows(WindowIndex).Controls(BonusIndex).TextColour = White
+    Windows(WindowIndex).Controls(BonusIndex).TextColourClick = White
+    Windows(WindowIndex).Controls(BonusIndex).TextColourHover = White
 
-    Windows(WindowIndex).Controls(ServiceIndex).textColour = White
-    Windows(WindowIndex).Controls(ServiceIndex).textColour_Click = White
-    Windows(WindowIndex).Controls(ServiceIndex).textColour_Hover = White
+    Windows(WindowIndex).Controls(ServiceIndex).TextColour = White
+    Windows(WindowIndex).Controls(ServiceIndex).TextColourClick = White
+    Windows(WindowIndex).Controls(ServiceIndex).TextColourHover = White
 
-    Windows(WindowIndex).Controls(ServerIndex).textColour = Green
-    Windows(WindowIndex).Controls(ServerIndex).textColour_Click = Green
-    Windows(WindowIndex).Controls(ServerIndex).textColour_Hover = Green
+    Windows(WindowIndex).Controls(ServerIndex).TextColour = Green
+    Windows(WindowIndex).Controls(ServerIndex).TextColourClick = Green
+    Windows(WindowIndex).Controls(ServerIndex).TextColourHover = Green
 
     Windows(WindowIndex).Controls(GetControlIndex("winServices", "lblExpire")).Visible = False
     Windows(WindowIndex).Controls(GetControlIndex("winServices", "lblPage")).Visible = False
@@ -194,17 +194,17 @@ Private Sub ShowServiceRates()
     ServiceIndex = GetControlIndex("winServices", "btnService")
     ServerIndex = GetControlIndex("winServices", "btnServer")
 
-    Windows(WindowIndex).Controls(BonusIndex).textColour = White
-    Windows(WindowIndex).Controls(BonusIndex).textColour_Click = White
-    Windows(WindowIndex).Controls(BonusIndex).textColour_Hover = White
+    Windows(WindowIndex).Controls(BonusIndex).TextColour = White
+    Windows(WindowIndex).Controls(BonusIndex).TextColourClick = White
+    Windows(WindowIndex).Controls(BonusIndex).TextColourHover = White
 
-    Windows(WindowIndex).Controls(ServiceIndex).textColour = Green
-    Windows(WindowIndex).Controls(ServiceIndex).textColour_Click = Green
-    Windows(WindowIndex).Controls(ServiceIndex).textColour_Hover = Green
+    Windows(WindowIndex).Controls(ServiceIndex).TextColour = Green
+    Windows(WindowIndex).Controls(ServiceIndex).TextColourClick = Green
+    Windows(WindowIndex).Controls(ServiceIndex).TextColourHover = Green
 
-    Windows(WindowIndex).Controls(ServerIndex).textColour = White
-    Windows(WindowIndex).Controls(ServerIndex).textColour_Click = White
-    Windows(WindowIndex).Controls(ServerIndex).textColour_Hover = White
+    Windows(WindowIndex).Controls(ServerIndex).TextColour = White
+    Windows(WindowIndex).Controls(ServerIndex).TextColourClick = White
+    Windows(WindowIndex).Controls(ServerIndex).TextColourHover = White
 
     Windows(WindowIndex).Controls(GetControlIndex("winServices", "lblExpire")).Visible = True
     Windows(WindowIndex).Controls(GetControlIndex("winServices", "lblPage")).Visible = True
@@ -258,7 +258,7 @@ Private Sub RenderServices()
     xO = Windows(WindowIndex).Window.Left
     yO = Windows(WindowIndex).Window.Top
 
-    RenderDesign DesignTypes.desWin_AincradMenu, xO, yO + 40, WindowWidth, 30
+    'RenderDesign DesignTypes.desWin_AincradMenu, xO, yO + 40, WindowWidth, 30
 
     For i = 0 To MaxDescriptionTextLine
         SizeWidth = TextWidth(Font(Fonts.OpenSans_Regular), DescriptionTextLine(i))
