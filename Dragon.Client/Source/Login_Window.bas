@@ -5,6 +5,10 @@ Private Const Width As Long = 320
 Private Const Height As Long = 200
 Private Const PaddingTop As Long = 10
 
+Private Const LogoSizeY As Long = 142
+Private Const LogoSizeX As Long = 512
+Private Const CenterLeft As Long = ((LogoSizeX + 40) / 2)
+
 Public Sub CreateWindow_Login()
     
     CreateWindow "winLogin", "", zOrder_Win, (ScreenWidth / 2) - (Width / 2), 400, Width, Height, 0, , Fonts.OpenSans_Effect, , 3, 5, DesignTypes.DesignWindowWithoutBackground, DesignTypes.DesignWindowWithoutBackground, DesignTypes.DesignWindowWithoutBackground, , , , , , , , , False
@@ -41,6 +45,34 @@ Public Sub CreateWindow_Login()
     End If
     
 End Sub
+
+Public Sub CreateWindow_LoginFooter()
+
+    ' Create Window
+    CreateWindow "winLoginBottomBar", "", zOrder_Win, 0, ScreenHeight - 20, ScreenWidth, 20, 0, , , , 3, 5, DesignTypes.DesignChatSmallShadow, DesignTypes.DesignChatSmallShadow, DesignTypes.DesignChatSmallShadow, , , , , , , , , False
+
+    ' Order of Controls
+    zOrder_Con = 1
+    
+    ' Label
+    CreateLabel WindowCount, "lblCopy", 0, -6, ScreenWidth, 0, "Copyright 2022 - 2023 Julio Sperandio. Todos os direitos reservados.", OpenSans_Regular, White, Alignment.AlignCenter
+    
+End Sub
+
+Public Sub CreateWindow_LoginLogo()
+
+    ' Create Window
+    CreateWindow "winLoginLogo", "", zOrder_Win, (ScreenWidth / 2) - CenterLeft, 200, LogoSizeX, LogoSizeY, 0, , , , 0, 0, DesignTypes.DesignWindowWithoutBackground, DesignTypes.DesignWindowWithoutBackground, DesignTypes.DesignWindowWithoutBackground, , , , , , , , , False
+
+    ' Order of Controls
+    zOrder_Con = 1
+    
+    ' Create Picture Logo
+    CreatePictureBox WindowCount, "picLoginLogo", 0, 0, 512, 142, , , , , Tex_GUI(73), Tex_GUI(73), Tex_GUI(73)
+    
+End Sub
+
+
 
 Private Sub btnLogin_Click()
     Dim user As String, pass As String

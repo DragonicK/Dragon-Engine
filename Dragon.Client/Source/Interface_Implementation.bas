@@ -1605,7 +1605,7 @@ Public Sub InitGUI()
 
     ' Menu
     CreateWindow_Login
-    CreateWindow_LoginBottomBar
+    CreateWindow_LoginFooter
     CreateWindow_LoginLogo
     CreateWindow_Models
     CreateWindow_Loading
