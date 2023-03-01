@@ -362,6 +362,8 @@ Public Sub AttemptLogin()
 
     If Not IsConnected Then
         ShowWindow GetWindowIndex("winLogin")
+        ShowWindow GetWindowIndex("winLoginFooter")
+        ShowWindow GetWindowIndex("winLoginLogo")
         ShowDialogue "Problema de Conexao", "Não pode conectar-se ao game server.", "Tente novamente depois.", DialogueTypeAlert
     End If
 End Sub

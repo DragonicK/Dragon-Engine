@@ -49,7 +49,7 @@ End Sub
 Public Sub CreateWindow_LoginFooter()
 
     ' Create Window
-    CreateWindow "winLoginBottomBar", "", zOrder_Win, 0, ScreenHeight - 20, ScreenWidth, 20, 0, , , , 3, 5, DesignTypes.DesignChatSmallShadow, DesignTypes.DesignChatSmallShadow, DesignTypes.DesignChatSmallShadow, , , , , , , , , False
+    CreateWindow "winLoginFooter", "", zOrder_Win, 0, ScreenHeight - 20, ScreenWidth, 20, 0, , , , 3, 5, DesignTypes.DesignChatSmallShadow, DesignTypes.DesignChatSmallShadow, DesignTypes.DesignChatSmallShadow, , , , , , , , , False
 
     ' Order of Controls
     zOrder_Con = 1
@@ -71,8 +71,6 @@ Public Sub CreateWindow_LoginLogo()
     CreatePictureBox WindowCount, "picLoginLogo", 0, 0, 512, 142, , , , , Tex_GUI(73), Tex_GUI(73), Tex_GUI(73)
     
 End Sub
-
-
 
 Private Sub btnLogin_Click()
     Dim user As String, pass As String

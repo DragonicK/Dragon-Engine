@@ -34,6 +34,8 @@ End Sub
 Private Sub ButtonMainMenu()
     HideWindows
     ShowWindow GetWindowIndex("winLogin")
+    ShowWindow GetWindowIndex("winLoginFooter")
+    ShowWindow GetWindowIndex("winLoginLogo")
    
     Stop_Music
     ' play the menu music

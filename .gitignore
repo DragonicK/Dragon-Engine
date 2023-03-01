@@ -387,3 +387,6 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 Dragon.Client/Client.exe
+Dragon.Client/Client.csi
+Dragon.Client/Client.vbp
+Dragon.Client/Data Files/Configuration.ini

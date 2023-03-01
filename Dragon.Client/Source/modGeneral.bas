@@ -10,6 +10,8 @@ Public Sub AddChar(Name As String, Sex As Long, Class As Long, Sprite As Long)
         Exit Sub
     Else
         ShowWindow GetWindowIndex("winLogin")
+        ShowWindow GetWindowIndex("winLoginFooter")
+        ShowWindow GetWindowIndex("winLoginLogo")
         ShowDialogue "Problema de Conexao", "Não pode conectar-se ao servidor de jogo.", "", DialogueTypeAlert
     End If
 
@@ -28,6 +30,8 @@ Public Sub Login(Name As String, Password As String)
         Exit Sub
     Else
         ShowWindow GetWindowIndex("winLogin")
+        ShowWindow GetWindowIndex("winLoginFooter")
+        ShowWindow GetWindowIndex("winLoginLogo")
         ShowDialogue "Problema de Conexao", "Não pode conectar-se ao servidor de login.", "Tente novamente mais tarde.", DialogueTypeAlert
     End If
 
