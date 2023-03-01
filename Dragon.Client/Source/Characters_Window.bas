@@ -126,4 +126,6 @@ Private Sub ButtonModels_Close()
     HideWindows
 
     ShowWindow GetWindowIndex("winLogin")
+    ShowWindow GetWindowIndex("winLoginFooter")
+    ShowWindow GetWindowIndex("winLoginLogo")
 End Sub

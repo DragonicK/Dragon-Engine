@@ -200,7 +200,7 @@ Sub HandleAlertMsg(ByVal Index As Long, ByRef Data() As Byte, ByVal StartAddr As
         Select Case MenuReset
         Case MenuCount.MenuLogin
             ShowWindow GetWindowIndex("winLogin")
-            ShowWindow GetWindowIndex("winLoginBottomBar")
+            ShowWindow GetWindowIndex("winLoginFooter")
             ShowWindow GetWindowIndex("WinLoginLogo")
         Case MenuCount.MenuChars
             ShowWindow GetWindowIndex("winModels")
@@ -210,10 +210,15 @@ Sub HandleAlertMsg(ByVal Index As Long, ByRef Data() As Byte, ByVal StartAddr As
             ShowWindow GetWindowIndex("winNewChar")
         Case MenuCount.MenuMain
             ShowWindow GetWindowIndex("winLogin")
+            ShowWindow GetWindowIndex("winLoginFooter")
+            ShowWindow GetWindowIndex("winLoginLogo")
         End Select
     Else
         If Kick > 0 Or inMenu = True Then
             ShowWindow GetWindowIndex("winLogin")
+            ShowWindow GetWindowIndex("winLoginFooter")
+            ShowWindow GetWindowIndex("winLoginLogo")
+            
             DialogueAlert dialogue_index
             LogoutGame
             Exit Sub
