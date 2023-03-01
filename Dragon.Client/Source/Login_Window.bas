@@ -29,13 +29,6 @@ Public Sub CreateWindow_Login()
 
     ' Login Buttom
     CreateButton WindowCount, "btnAccept", (Width / 2) - (164 / 2), PaddingTop + (PaddingTop * 14), 164, 38, "Acessar", OpenSans_Effect, White, , , , , , , DesignTypes.DesignGreen, DesignTypes.DesignGreenHover, DesignTypes.DesignGreenClick, , , GetAddress(AddressOf btnLogin_Click)
-
-    ' Close Button
-    'CreateButton WindowCount, "btnClose", Windows(WindowCount).Window.Width - 33, 11, 22, 22, , , , , , , Tex_GUI(TextureControl_CloseNormal), Tex_GUI(TextureControl_CloseHover), Tex_GUI(TextureControl_CloseClick), , , , , , GetAddress(AddressOf DestroyGame)
-    
-    ' Button definitions
-    
-    'CreateButton WindowCount, "btnExit", 160, 155, 100, 26, "SAIR", OpenSans_Effect, White, , , , , , , DesignTypes.DesignGreen, DesignTypes.DesignGreenHover, DesignTypes.DesignGreenClick, , , GetAddress(AddressOf DestroyGame)
     
     ' Checkbox
     'CreateCheckbox WindowCount, "chkSaveUser", 82, 129, 142, , Options.SaveUser, "Salvar Nome?", OpenSans_Regular, , , , , DesignTypes.DesignCheckBox, , , GetAddress(AddressOf chkSaveUser_Click)
