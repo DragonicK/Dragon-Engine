@@ -1,9 +1,0 @@
-[History]
-1=#P0#=mb	#P1#=HandleAlertMsg	#P2#=Crystalshire/Network_HandleData/HandleAlertMsg	#P3#=	#P4#=	#P5#=MembMethodPublic	#P6#=20230301024232	#P7#=0	#P8#=24	.
-2=#P0#=mb	#P1#=CreateWindow_LoginLogo	#P2#=Crystalshire/LoginLogo_Window/CreateWindow_LoginLogo	#P3#=	#P4#=	#P5#=MembMethodPublic	#P6#=20230301023921	#P7#=0	#P8#=0	.
-3=#P0#=mb	#P1#=CreateWindow_Login	#P2#=Crystalshire/Login_Window/CreateWindow_Login	#P3#=	#P4#=	#P5#=MembMethodPublic	#P6#=20230301022951	#P7#=0	#P8#=9	.
-4=#P0#=mb	#P1#=Main	#P2#=Crystalshire/EntryPoint/Main	#P3#=	#P4#=	#P5#=MembMethodPublic	#P6#=20230301023944	#P7#=0	#P8#=105	.
-5=#P0#=mb	#P1#=InitGUI	#P2#=Crystalshire/Interface_Implementation/InitGUI	#P3#=	#P4#=	#P5#=MembMethodPublic	#P6#=20230301024024	#P7#=0	#P8#=9	.
-6=#P0#=mb	#P1#=RenderWindow	#P2#=Crystalshire/Interface_Implementation/RenderWindow	#P3#=	#P4#=	#P5#=MembMethodPublic	#P6#=20230301020701	#P7#=0	#P8#=54	.
-7=#P0#=mb	#P1#=RenderDesign	#P2#=Crystalshire/Interface_Implementation/RenderDesign	#P3#=	#P4#=	#P5#=MembMethodPublic	#P6#=20230301020602	#P7#=0	#P8#=190	.
-8=#P0#=mb	#P1#=CreateWindow_Bars	#P2#=Crystalshire/Interface_Implementation/CreateWindow_Bars	#P3#=	#P4#=	#P5#=MembMethodPublic	#P6#=20230301020344	#P7#=0	#P8#=10	.
