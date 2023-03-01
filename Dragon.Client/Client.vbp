@@ -1,6 +1,5 @@
 Type=Exe
-Reference=*\G{56A868B0-0AD4-11CE-B03A-0020AF0BA770}#1.0#0#..\..\..\..\..\..\Windows\System32\quartz.dll#ActiveMovie control type library
-Reference=*\G{E1211242-8E94-11D1-8808-00C04FC2C603}#1.0#0#..\..\..\..\..\..\Windows\SysWow64\dx8vb.dll#DirectX 8 for Visual Basic Type Library 
+Reference=*\G{E1211242-8E94-11D1-8808-00C04FC2C603}#1.0#0#..\..\..\..\..\Windows\SysWow64\dx8vb.dll#DirectX 8 for Visual Basic Type Library 
 Object={248DD890-BB45-11CF-9ABC-0080C7E7B78D}#1.0#0; mswinsck.ocx
 Form=Source\frmMain.frm
 Module=modTypes; Source\modTypes.bas
@@ -180,8 +179,6 @@ Module=Map_Packet; Source\Map_Packet.bas
 Module=Model_Player_Packet; Source\Model_Player_Packet.bas
 Module=Target_Packet; Source\Target_Packet.bas
 Module=Model_Player_Logic; Source\Model_Player_Logic.bas
-Module=LoginBottomBar_Window; Source\LoginBottomBar_Window.bas
-Module=LoginLogo_Window; Source\LoginLogo_Window.bas
 IconForm="frmMain"
 Startup="Sub Main"
 HelpFile=""
