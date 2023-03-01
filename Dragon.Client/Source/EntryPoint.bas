@@ -18,8 +18,10 @@ Public Sub Main()
 
     ' Load Options
     LoadOptions
+    
     ' check the resolution
     CheckResolution
+    
     ' load maps
     LoadMapsProperties
 

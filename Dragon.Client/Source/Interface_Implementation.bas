@@ -22,6 +22,7 @@ Public Enum DesignTypes
     DesignWindowWithTopBar
     DesignWindowWithTopBarAndNavBar
     DesignWindowWithTopBarAndDoubleNavBar
+    DesignWindowWithoutBackground
     
     ' Design Player interaction Menu
     DesignPlayerInteractionHeader
@@ -469,6 +470,7 @@ Public Sub RenderEntity(winNum As Long, entNum As Long)
                         ' Just one line
                         Left = .Left + (.Width \ 2) - (TextWidth(Font(.Font), .Text) \ 2)
                         RenderText Font(.Font), .Text & taddText, Left + xO, .Top + yO, .TextColour, .Alpha
+                        
                     End If
                     
                 End If
@@ -496,8 +498,20 @@ Public Sub RenderEntity(winNum As Long, entNum As Long)
                 If Not .isCensor Then
                     RenderText Font(.Font), .Text & taddText, hor_centre, .Top + yO + .yOffset, .TextColour
                 Else
-                    RenderText Font(.Font), CensorWord(.Text) & taddText, .Left + xO + .xOffset, .Top + yO + .yOffset, .TextColour
-                    RenderText Font(.Font), CensorWord(.Text) & taddText, hor_centre, .Top + yO + .yOffset, .TextColour
+                    
+                    If Alignment.AlignCenter Then
+                        RenderText Font(.Font), CensorWord(.Text) & taddText, hor_centre, .Top + yO + .yOffset, .TextColour
+                    
+                    ElseIf Alignment.AlignLeft Then
+                        RenderText Font(.Font), CensorWord(.Text) & taddText, .Left + xO + .xOffset, .Top + yO + .yOffset, .TextColour
+                        
+                    ElseIf Alignment.AlignRight Then
+                        RenderText Font(.Font), CensorWord(.Text) & taddText, .Left + xO + .xOffset, .Top + yO + .yOffset, .TextColour
+                    End If
+                    
+                    'Else
+                        'RenderText Font(.Font), CensorWord(.Text) & taddText, .Left + xO + .xOffset, .Top + yO + .yOffset, .TextColour
+                    
                 End If
                 
             End If
@@ -806,6 +820,13 @@ Public Sub RenderWindow(winNum As Long)
             
                 ' render the caption
                 RenderText Font(.Font), Trim$(.Text), .Left + (.Width * 0.5) - (Size * 0.5), .Top + 15, .TextColour
+                
+            ' Render Window Without Background
+            Case DesignWindowWithoutBackground
+            
+                ' Render Background
+                RenderDesign DesignTypes.DesignWindowWithoutBackground, .Left, .Top, .Width, .Height, 255
+                
 
         End Select
 
@@ -1038,6 +1059,13 @@ Public Sub RenderDesign(Design As Long, Left As Long, Top As Long, Width As Long
         
         ' Render Separator
         RenderEntity_Square TextureDesign(TextureDesignWindowSeparator), Left + 2, Top + (BorderSide * 46), Width - 4, 2, BorderSide, Alpha
+        
+    ' Render Design Window Without Background
+    Case DesignWindowWithoutBackground
+        
+        ' Render background
+        RenderEntity_Square TextureDesign(TextureDesign_None), Left, Top, Width, Height, 0, 230
+        
 
     End Select
 

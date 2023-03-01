@@ -52,4 +52,22 @@
 52 - Close
 53 - Close Hover
 54 - Close Click
-
+55 - Espada Slot
+56 - Escudo Slot
+57 - Capacete Slot
+58 - Peitoral Slot
+59 - Ombro Slot
+60 - Cinto Slot
+61 - Luva Slot
+62 - Calça Slot
+63 - Bota Slot
+64 - Colar Slot
+65 - Pulseira Slot
+66 - Pulseira Slot
+67 - Anel Slot
+68 - Anel Slot
+69 - Bracelete Slot
+70 - Bracelete Slot
+71 - Empty Slot
+72 - Empty Slot
+73 - Logo
