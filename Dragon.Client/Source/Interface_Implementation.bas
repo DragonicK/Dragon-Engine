@@ -1062,8 +1062,8 @@ Public Sub RenderDesign(Design As Long, Left As Long, Top As Long, Width As Long
         
     ' Render Design Window Without Background
     Case DesignWindowWithoutBackground
-
-        ' Render Background
+        
+        ' Render background
         RenderEntity_Square TextureDesign(TextureDesign_None), Left, Top, Width, Height, 0, 230
         
 
@@ -1606,7 +1606,6 @@ Public Sub InitGUI()
     ' Menu
     CreateWindow_Login
     CreateWindow_LoginBottomBar
-    CreateWindow_LoginLogo
     CreateWindow_Models
     CreateWindow_Loading
     CreateWindow_Dialogue
