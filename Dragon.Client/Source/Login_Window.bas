@@ -1,31 +1,44 @@
 Attribute VB_Name = "Login_Window"
 Public LoginToken As String
 
+Private Const Width As Long = 320
+Private Const Height As Long = 200
+Private Const PaddingTop As Long = 10
+
 Public Sub CreateWindow_Login()
-    CreateWindow "winLogin", "LOGIN", zOrder_Win, 0, 0, 300, 200, 0, , Fonts.OpenSans_Effect, , 3, 5, DesignTypes.DesignWindowWithTopBarAndDoubleNavBar, DesignTypes.DesignWindowWithTopBarAndDoubleNavBar, DesignTypes.DesignWindowWithTopBarAndDoubleNavBar, , , , , , , , , False
+    
+    CreateWindow "winLogin", "", zOrder_Win, (ScreenWidth / 2) - (Width / 2), 400, Width, Height, 0, , Fonts.OpenSans_Effect, , 3, 5, DesignTypes.DesignWindowWithoutBackground, DesignTypes.DesignWindowWithoutBackground, DesignTypes.DesignWindowWithoutBackground, , , , , , , , , False
+    
     ' Center Window
-    CentraliseWindow WindowCount
+    'CentraliseWindow WindowCount
 
     ' Order of Controls
     zOrder_Con = 1
+    
+    ' Label Username
+    CreateLabel WindowCount, "lblUsername", 0, PaddingTop, Width, , "Usuário", OpenSans_Regular, White, Alignment.AlignCenter
+    
+    ' TextBox Username
+    CreateTextbox WindowCount, "txtUser", 0, PaddingTop + (PaddingTop * 2), Width, 30, Options.Username, Fonts.OpenSans_Regular, , Alignment.AlignCenter, , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, , , , , , , 0, 8
+    
+    ' Label Password
+    CreateLabel WindowCount, "lblPassword", 0, PaddingTop + (PaddingTop * 6), Width, , "Senha", OpenSans_Regular, White, Alignment.AlignCenter
+    
+    ' TextBox Password
+    CreateTextbox WindowCount, "txtPass", 0, PaddingTop + (PaddingTop * 8), Width, 30, vbNullString, Fonts.OpenSans_Regular, , Alignment.AlignCenter, , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, , , , , , , 0, 8, True, GetAddress(AddressOf btnLogin_Click)
+
+    ' Login Buttom
+    CreateButton WindowCount, "btnAccept", (Width / 2) - (164 / 2), PaddingTop + (PaddingTop * 14), 164, 38, "Acessar", OpenSans_Effect, White, , , , , , , DesignTypes.DesignGreen, DesignTypes.DesignGreenHover, DesignTypes.DesignGreenClick, , , GetAddress(AddressOf btnLogin_Click)
 
     ' Close Button
-    CreateButton WindowCount, "btnClose", Windows(WindowCount).Window.Width - 33, 11, 22, 22, , , , , , , Tex_GUI(TextureControl_CloseNormal), Tex_GUI(TextureControl_CloseHover), Tex_GUI(TextureControl_CloseClick), , , , , , GetAddress(AddressOf DestroyGame)
+    'CreateButton WindowCount, "btnClose", Windows(WindowCount).Window.Width - 33, 11, 22, 22, , , , , , , Tex_GUI(TextureControl_CloseNormal), Tex_GUI(TextureControl_CloseHover), Tex_GUI(TextureControl_CloseClick), , , , , , GetAddress(AddressOf DestroyGame)
     
     ' Button definitions
-    CreateButton WindowCount, "btnAccept", 40, 155, 100, 26, "ACEITAR", OpenSans_Effect, White, , , , , , , DesignTypes.DesignGreen, DesignTypes.DesignGreenHover, DesignTypes.DesignGreenClick, , , GetAddress(AddressOf btnLogin_Click)
-    CreateButton WindowCount, "btnExit", 160, 155, 100, 26, "SAIR", OpenSans_Effect, White, , , , , , , DesignTypes.DesignGreen, DesignTypes.DesignGreenHover, DesignTypes.DesignGreenClick, , , GetAddress(AddressOf DestroyGame)
     
-    ' Labels
-    CreateLabel WindowCount, "lblUsername", 80, 49, 142, , "Login", OpenSans_Regular, White, Alignment.AlignCenter
-    CreateLabel WindowCount, "lblPassword", 80, 88, 142, , "Senha", OpenSans_Regular, White, Alignment.AlignCenter
-    
-    ' Textboxes
-    CreateTextbox WindowCount, "txtUser", 80, 65, 142, 24, Options.Username, Fonts.OpenSans_Regular, , Alignment.AlignLeft, , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, , , , , , , 8, 5
-    CreateTextbox WindowCount, "txtPass", 80, 103, 142, 24, vbNullString, Fonts.OpenSans_Regular, , Alignment.AlignLeft, , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, , , , , , , 8, 5, True, GetAddress(AddressOf btnLogin_Click)
+    'CreateButton WindowCount, "btnExit", 160, 155, 100, 26, "SAIR", OpenSans_Effect, White, , , , , , , DesignTypes.DesignGreen, DesignTypes.DesignGreenHover, DesignTypes.DesignGreenClick, , , GetAddress(AddressOf DestroyGame)
     
     ' Checkbox
-    CreateCheckbox WindowCount, "chkSaveUser", 82, 129, 142, , Options.SaveUser, "Salvar Nome?", OpenSans_Regular, , , , , DesignTypes.DesignCheckBox, , , GetAddress(AddressOf chkSaveUser_Click)
+    'CreateCheckbox WindowCount, "chkSaveUser", 82, 129, 142, , Options.SaveUser, "Salvar Nome?", OpenSans_Regular, , , , , DesignTypes.DesignCheckBox, , , GetAddress(AddressOf chkSaveUser_Click)
 
     ' Set the active control
     If Not Len(Windows(GetWindowIndex("winLogin")).Controls(GetControlIndex("winLogin", "txtUser")).Text) > 0 Then

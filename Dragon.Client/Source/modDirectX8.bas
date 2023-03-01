@@ -1120,7 +1120,6 @@ Public Sub ResizeGUI()
     Windows(GetWindowIndex("winComboMenuBG")).Window.Height = ScreenHeight
     
     ' centralise windows
-    CentraliseWindow GetWindowIndex("winLogin")
     CentraliseWindow GetWindowIndex("winModels")
     CentraliseWindow GetWindowIndex("winLoading")
     CentraliseWindow GetWindowIndex("winDialogue")
