@@ -1,22 +1,37 @@
 Attribute VB_Name = "EscapeMenu_Window"
 Option Explicit
 
+Private Const Width As Long = 250
+Private Const Height As Long = 210
+Private Const ButtonWidth As Long = 240
+Private Const ButtonHeight As Long = 30
+Private Const PaddingTop As Long = 5
+Private Const CenterLeft As Long = (Width / 2) - (ButtonWidth / 2)
+
 Private WindowIndex As Long
 
 Public Sub CreateWindow_EscMenu()
+
     ' Create window
-    CreateWindow "winEscMenu", "", zOrder_Win, 0, 0, 210, 156, 0, , , , , , DesignTypes.DesignWindowWithoutTopBar, DesignTypes.DesignWindowWithoutTopBar, DesignTypes.DesignWindowWithoutTopBar, , , , , , , , , False, False
+    CreateWindow "winEscMenu", "", zOrder_Win, 0, 0, Width, Height, 0, , , , , , DesignTypes.DesignWindowWithoutBackground, DesignTypes.DesignWindowWithoutBackground, DesignTypes.DesignWindowWithoutBackground, , , , , , , , , False, True
+    
     ' Centralise it
     CentraliseWindow WindowCount
 
     ' Set the index for spawning controls
     zOrder_Con = 1
 
-    ' Buttons
-    CreateButton WindowCount, "btnReturn", 16, 16, 178, 28, "Retornar para o jogo (Esc)", FontRegular, , , , , , , , DesignTypes.DesignGreen, DesignTypes.DesignGreenHover, DesignTypes.DesignGreenClick, , , GetAddress(AddressOf ButtonReturn)
-    CreateButton WindowCount, "btnOptions", 16, 48, 178, 28, "Opções", FontRegular, , , , , , , , DesignTypes.DesignGreen, DesignTypes.DesignGreenHover, DesignTypes.DesignGreenClick, , , GetAddress(AddressOf ButtonOptions)
-    CreateButton WindowCount, "btnMainMenu", 16, 80, 178, 28, "Voltar ao menu principal", FontRegular, , , , , , , , DesignTypes.DesignGreen, DesignTypes.DesignGreenHover, DesignTypes.DesignGreenClick, , , GetAddress(AddressOf ButtonMainMenu)
-    CreateButton WindowCount, "btnExit", 16, 112, 178, 28, "Sair do jogo", FontRegular, , , , , , , , DesignTypes.DesignRed, DesignTypes.DesignRedHover, DesignTypes.DesignRedClick, , , GetAddress(AddressOf ButtonExit)
+    ' Button Return
+    CreateButton WindowCount, "btnReturn", CenterLeft, 25 + PaddingTop + (0 * 34), ButtonWidth, ButtonHeight, "Retornar ao jogo", FontRegular, , , , , , , , DesignTypes.DesignGreen, DesignTypes.DesignGreenHover, DesignTypes.DesignGreenClick, , , GetAddress(AddressOf ButtonReturn)
+    
+    ' Button Options
+    CreateButton WindowCount, "btnOptions", CenterLeft, 25 + PaddingTop + (1 * 34), ButtonWidth, ButtonHeight, "Opções", FontRegular, , , , , , , , DesignTypes.DesignGreen, DesignTypes.DesignGreenHover, DesignTypes.DesignGreenClick, , , GetAddress(AddressOf ButtonOptions)
+    
+    ' Button Main Menu
+    CreateButton WindowCount, "btnMainMenu", CenterLeft, 25 + PaddingTop + (2 * 34), ButtonWidth, ButtonHeight, "Voltar ao menu principal", FontRegular, , , , , , , , DesignTypes.DesignGreen, DesignTypes.DesignGreenHover, DesignTypes.DesignGreenClick, , , GetAddress(AddressOf ButtonMainMenu)
+    
+    ' Button Exit
+    CreateButton WindowCount, "btnExit", CenterLeft, 25 + PaddingTop + (4 * 34), ButtonWidth, ButtonHeight, "Sair do jogo", FontRegular, , , , , , , , DesignTypes.DesignRed, DesignTypes.DesignRedHover, DesignTypes.DesignRedClick, , , GetAddress(AddressOf ButtonExit)
 
     WindowIndex = WindowCount
 End Sub
