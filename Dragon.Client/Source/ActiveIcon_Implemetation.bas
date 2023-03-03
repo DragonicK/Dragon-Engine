@@ -231,7 +231,7 @@ Public Sub DrawActiveIcon(ByVal X As Long, ByVal Y As Long, ByVal ActiveIconType
     End Select
 
     If IconId > 0 Then
-        RenderText Font(Fonts.OpenSans_Regular), DurationText, Left - 3, Top - 15, ColorType.Gold
+        RenderText Font(Fonts.FontRegular), DurationText, Left - 3, Top - 15, ColorType.Gold
     End If
 
 End Sub

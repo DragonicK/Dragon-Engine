@@ -20,7 +20,7 @@ Public MaxInventories As Long
 Public Sub CreateWindow_Inventory()
     Dim i As Long
     ' Create window
-    CreateWindow "winInventory", "INVENTÁRIO", zOrder_Win, 0, 0, 202, 380, 0, False, Fonts.OpenSans_Regular, , 2, 7, DesignTypes.DesignWindowWithTopBarAndNavBar, DesignTypes.DesignWindowWithTopBarAndNavBar, DesignTypes.DesignWindowWithTopBarAndNavBar, , , , , GetAddress(AddressOf Inventory_MouseMove), GetAddress(AddressOf Inventory_MouseDown), GetAddress(AddressOf Inventory_MouseMove), GetAddress(AddressOf Inventory_DblClick), , , GetAddress(AddressOf DrawInventory)
+    CreateWindow "winInventory", "INVENTÁRIO", zOrder_Win, 0, 0, 202, 380, 0, False, Fonts.FontRegular, , 2, 7, DesignTypes.DesignWindowWithTopBarAndNavBar, DesignTypes.DesignWindowWithTopBarAndNavBar, DesignTypes.DesignWindowWithTopBarAndNavBar, , , , , GetAddress(AddressOf Inventory_MouseMove), GetAddress(AddressOf Inventory_MouseDown), GetAddress(AddressOf Inventory_MouseMove), GetAddress(AddressOf Inventory_DblClick), , , GetAddress(AddressOf DrawInventory)
     ' Centralise it
     CentraliseWindow WindowCount
 
@@ -29,14 +29,14 @@ Public Sub CreateWindow_Inventory()
     ' Close button
     CreateButton WindowCount, "btnClose", Windows(WindowCount).Window.Width - 33, 11, 22, 22, , , , , , , Tex_GUI(TextureControl_CloseNormal), Tex_GUI(TextureControl_CloseHover), Tex_GUI(TextureControl_CloseClick), , , , , , GetAddress(AddressOf btnMenu_Inv)
 
-    CreateButton WindowCount, "btnInventoryTab1", 12 + (0 * 36), 43, 26, 26, "1", OpenSans_Effect, White, , , , , , , , , , , , GetAddress(AddressOf Button_InventoryTab1_Click)
-    CreateButton WindowCount, "btnInventoryTab2", 12 + (1 * 36), 43, 26, 26, "2", OpenSans_Effect, White, , , , , , , , , , , , GetAddress(AddressOf Button_InventoryTab2_Click)
-    CreateButton WindowCount, "btnInventoryTab3", 12 + (2 * 36), 43, 26, 26, "3", OpenSans_Effect, White, , , , , , , , , , , , GetAddress(AddressOf Button_InventoryTab3_Click)
-    CreateButton WindowCount, "btnInventoryTab4", 12 + (3 * 36), 43, 26, 26, "4", OpenSans_Effect, White, , , , , , , , , , , , GetAddress(AddressOf Button_InventoryTab4_Click)
-    CreateButton WindowCount, "btnInventoryTab5", 12 + (4 * 36), 43, 26, 26, "5", OpenSans_Effect, White, , , , , , , , , , , , GetAddress(AddressOf Button_InventoryTab5_Click)
+    CreateButton WindowCount, "btnInventoryTab1", 12 + (0 * 36), 43, 26, 26, "1", FontRegular, White, , , , , , , , , , , , GetAddress(AddressOf Button_InventoryTab1_Click)
+    CreateButton WindowCount, "btnInventoryTab2", 12 + (1 * 36), 43, 26, 26, "2", FontRegular, White, , , , , , , , , , , , GetAddress(AddressOf Button_InventoryTab2_Click)
+    CreateButton WindowCount, "btnInventoryTab3", 12 + (2 * 36), 43, 26, 26, "3", FontRegular, White, , , , , , , , , , , , GetAddress(AddressOf Button_InventoryTab3_Click)
+    CreateButton WindowCount, "btnInventoryTab4", 12 + (3 * 36), 43, 26, 26, "4", FontRegular, White, , , , , , , , , , , , GetAddress(AddressOf Button_InventoryTab4_Click)
+    CreateButton WindowCount, "btnInventoryTab5", 12 + (4 * 36), 43, 26, 26, "5", FontRegular, White, , , , , , , , , , , , GetAddress(AddressOf Button_InventoryTab5_Click)
 
     ' Gold amount
-    CreateLabel WindowCount, "lblGold", 15, 353, 150, , "Ouro: 0", OpenSans_Regular, Gold
+    CreateLabel WindowCount, "lblGold", 15, 353, 150, , "Ouro: 0", FontRegular, Gold
     
     WindowIndex = WindowCount
     InventoryentoryTabIndex = 0
@@ -312,7 +312,7 @@ Private Sub DrawInventory()
 
             Y = Top + 8
             X = Left + 13
-            RenderText Font(Fonts.OpenSans_Effect), "X", X, Y, Gold
+            RenderText Font(Fonts.FontRegular), "X", X, Y, Gold
         End If
 
         ItemNum = GetInventoryItemNum(i + CurrentInventoryIndex)
@@ -338,7 +338,7 @@ Private Sub DrawInventory()
 
                             ' Draw currency but with k, m, b etc. using a convertion function
                             Colour = GetCurrencyColor(Amount)
-                            RenderText Font(Fonts.OpenSans_Regular), ConvertCurrency(Amount), X, Y, Colour
+                            RenderText Font(Fonts.FontRegular), ConvertCurrency(Amount), X, Y, Colour
                         End If
                     End If
                 End If

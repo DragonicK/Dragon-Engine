@@ -37,7 +37,7 @@ End Sub
 
 Public Sub CreateWindow_ItemUpgrade()
 ' Create window
-    CreateWindow "winItemUpgrade", "APRIMORAMENTO", zOrder_Win, 0, 0, 400, 400, 0, False, Fonts.OpenSans_Effect, , 2, 7, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, , , , , , , , , , , GetAddress(AddressOf ItemUpgrade_OnDraw)
+    CreateWindow "winItemUpgrade", "APRIMORAMENTO", zOrder_Win, 0, 0, 400, 400, 0, False, Fonts.FontRegular, , 2, 7, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, , , , , , , , , , , GetAddress(AddressOf ItemUpgrade_OnDraw)
     ' Centralise it
     CentraliseWindow WindowCount
 
@@ -47,23 +47,23 @@ Public Sub CreateWindow_ItemUpgrade()
     ' Close button
     CreateButton WindowCount, "btnClose", Windows(WindowCount).Window.Width - 33, 11, 22, 22, , , , , , , Tex_GUI(TextureControl_CloseNormal), Tex_GUI(TextureControl_CloseHover), Tex_GUI(TextureControl_CloseClick), , , , , , GetAddress(AddressOf btnMenu_ItemUpgrade)
 
-    CreateButton WindowCount, "btnUpgrade", 50, 355, 100, 26, "APRIMORAR", OpenSans_Regular, White, , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf Button_StartUpgrade)
-    CreateButton WindowCount, "btnCancel", 250, 355, 100, 26, "CANCELAR", OpenSans_Regular, White, , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf Button_CancelUpgrade)
+    CreateButton WindowCount, "btnUpgrade", 50, 355, 100, 26, "APRIMORAR", FontRegular, White, , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf Button_StartUpgrade)
+    CreateButton WindowCount, "btnCancel", 250, 355, 100, 26, "CANCELAR", FontRegular, White, , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf Button_CancelUpgrade)
 
-    CreateLabel WindowCount, "lblItem", 0, ItemSlotY - 20, 400, 16, "Vazio", OpenSans_Regular, , Alignment.AlignCenter
-    CreateLabel WindowCount, "lblRequirement", 150, RequirementY - 20, 200, 16, "Itens Necessários", OpenSans_Regular, , Alignment.AlignLeft
+    CreateLabel WindowCount, "lblItem", 0, ItemSlotY - 20, 400, 16, "Vazio", FontRegular, , Alignment.AlignCenter
+    CreateLabel WindowCount, "lblRequirement", 150, RequirementY - 20, 200, 16, "Itens Necessários", FontRegular, , Alignment.AlignLeft
 
     ' Botões invisíveis para retirada dos items.
     CreatePictureBox WindowCount, "picBlank", ItemSlotX, ItemSlotY, 34, 34, , , , , , , , , , , , GetAddress(AddressOf Item_MouseMove), GetAddress(AddressOf RemoveItem), GetAddress(AddressOf Item_MouseMove)
 
-    CreateLabel WindowCount, "lblWarning", LabelResultX + 25, LabelResultY, 350, 100, "Em caso de falha, existe a possibilidade do item ser destruído ou ter o nível reduzido.", OpenSans_Effect, BrightRed, Alignment.AlignCenter
+    CreateLabel WindowCount, "lblWarning", LabelResultX + 25, LabelResultY, 350, 100, "Em caso de falha, existe a possibilidade do item ser destruído ou ter o nível reduzido.", FontRegular, BrightRed, Alignment.AlignCenter
 
-    CreateLabel WindowCount, "lblSuccess", LabelResultX, LabelResultY + 35, 400, 25, "Possibilidade de Sucesso: 0%", OpenSans_Effect, , Alignment.AlignCenter
-    CreateLabel WindowCount, "lblBreak", LabelResultX, LabelResultY + 50, 400, 25, "Possibilidade de Quebra: 0%", OpenSans_Effect, , Alignment.AlignCenter
-    CreateLabel WindowCount, "lblReduction", LabelResultX, LabelResultY + 65, 400, 25, "Possibilidade de Redução de Nível: 0%", OpenSans_Effect, , Alignment.AlignCenter
-    CreateLabel WindowCount, "lblCost", LabelResultX, LabelResultY + 80, 400, 25, "Custo: 0 Ouro", OpenSans_Effect, , Alignment.AlignCenter
+    CreateLabel WindowCount, "lblSuccess", LabelResultX, LabelResultY + 35, 400, 25, "Possibilidade de Sucesso: 0%", FontRegular, , Alignment.AlignCenter
+    CreateLabel WindowCount, "lblBreak", LabelResultX, LabelResultY + 50, 400, 25, "Possibilidade de Quebra: 0%", FontRegular, , Alignment.AlignCenter
+    CreateLabel WindowCount, "lblReduction", LabelResultX, LabelResultY + 65, 400, 25, "Possibilidade de Redução de Nível: 0%", FontRegular, , Alignment.AlignCenter
+    CreateLabel WindowCount, "lblCost", LabelResultX, LabelResultY + 80, 400, 25, "Custo: 0 Ouro", FontRegular, , Alignment.AlignCenter
 
-    CreateLabel WindowCount, "lblProgress", 110, 190, 180, 22, "Processando: 0%", OpenSans_Regular, ColorType.Gold, Alignment.AlignCenter
+    CreateLabel WindowCount, "lblProgress", 110, 190, 180, 22, "Processando: 0%", FontRegular, ColorType.Gold, Alignment.AlignCenter
 
     CanSwapInvItems = True
     WindowIndex = WindowCount
@@ -163,7 +163,7 @@ Private Sub ItemUpgrade_OnDraw()
         End If
 
         If Amount > 0 Then
-            RenderText Font(Fonts.OpenSans_Effect), ConvertCurrency(InventoryAmount) & "/" & Amount, xO + RequirementX + (i * SlotPadding) + 5, yO + RequirementY + 20, ColorType.Yellow
+            RenderText Font(Fonts.FontRegular), ConvertCurrency(InventoryAmount) & "/" & Amount, xO + RequirementX + (i * SlotPadding) + 5, yO + RequirementY + 20, ColorType.Yellow
         End If
 
         If ItemId > 0 And ItemId <= MaximumItems Then
@@ -388,7 +388,7 @@ Private Sub RemoveItem()
             .Left = lastMouseX - 16
             .Top = lastMouseY - 16
             .MovedX = clickedX - .Left
-            .movedY = clickedY - .Top
+            .MovedY = clickedY - .Top
         End With
 
         ShowWindow WinIndex, , False

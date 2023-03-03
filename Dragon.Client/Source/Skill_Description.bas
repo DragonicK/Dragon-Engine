@@ -77,7 +77,7 @@ Public Sub ShowSkillDesc(X As Long, Y As Long, ByVal Slot As Long, SkillNum As L
         End If
 
         .Controls(ControlIndex).Align = Alignment.AlignCenter
-        .Controls(ControlIndex).Font = Fonts.OpenSans_Regular
+        .Controls(ControlIndex).Font = Fonts.FontRegular
     End With
 
     AddDescInfo ""

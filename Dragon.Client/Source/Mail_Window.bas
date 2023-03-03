@@ -61,7 +61,7 @@ Private Const Sended As String = "Data de Envio: "
 Public Sub CreateWindow_Mail()
     Dim i As Long
     ' Create window
-    CreateWindow "winMail", "CORREIO", zOrder_Win, 0, 0, 400, 460, 0, False, Fonts.OpenSans_Regular, , 2, 7, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, , , , , , GetAddress(AddressOf WindowMail_MouseDown), , , , , GetAddress(AddressOf Draw_Mail)
+    CreateWindow "winMail", "CORREIO", zOrder_Win, 0, 0, 400, 460, 0, False, Fonts.FontRegular, , 2, 7, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, , , , , , GetAddress(AddressOf WindowMail_MouseDown), , , , , GetAddress(AddressOf Draw_Mail)
     ' Centralise it
     CentraliseWindow WindowCount
     ' Set the index for spawning controls
@@ -70,8 +70,8 @@ Public Sub CreateWindow_Mail()
     ' Close button
     CreateButton WindowCount, "btnClose", Windows(WindowCount).Window.Width - 33, 11, 22, 22, , , , , , , Tex_GUI(TextureControl_CloseNormal), Tex_GUI(TextureControl_CloseHover), Tex_GUI(TextureControl_CloseClick), , , , , , GetAddress(AddressOf ButtonMenu_Mail)
 
-    CreateButton WindowCount, "btnRead", 0, 42, 200, 26, "LER", OpenSans_Effect, Gold, , , , , , , , , , , , GetAddress(AddressOf Button_ShowRead)
-    CreateButton WindowCount, "btnWrite", 200, 42, 200, 26, "ESCREVER", OpenSans_Effect, , , , , , , , , , , , , GetAddress(AddressOf Button_ShowWrite)
+    CreateButton WindowCount, "btnRead", 0, 42, 200, 26, "LER", FontRegular, Gold, , , , , , , , , , , , GetAddress(AddressOf Button_ShowRead)
+    CreateButton WindowCount, "btnWrite", 200, 42, 200, 26, "ESCREVER", FontRegular, , , , , , , , , , , , , GetAddress(AddressOf Button_ShowWrite)
 
     ' Read Mail
     CreatePictureBox WindowCount, "picSender", ReadingMailLeft, PictureSenderTop, 310, 25, False, , , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox
@@ -82,23 +82,23 @@ Public Sub CreateWindow_Mail()
     CreatePictureBox WindowCount, "picAttachCoin", ReadingMailLeft, 330, 310, 25, False, , , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox
     CreatePictureBox WindowCount, "picAttachItem", PictureItemLeft, PictureItemTop, 40, 40, False, , , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, , , , , , GetAddress(AddressOf Draw_ReceivedItem)
 
-    CreateLabel WindowCount, "lblCurrency", ReadingMailLeft, 334, 310, 20, "Ouro: 0", OpenSans_Effect, White, Alignment.AlignCenter, False, , , , , GetAddress(AddressOf ReadMailCurrency_MouseDown)
-    CreateLabel WindowCount, "lblText", ReadingMailLeft, PictureTextTop + 5, 310, 115, "", OpenSans_Effect, White, Alignment.AlignCenter, False
-    CreateLabel WindowCount, "lblReceiveItem", PictureItemLeft, PictureItemTop, 40, 40, vbNullString, OpenSans_Effect, White, Alignment.AlignCenter, False, , , , GetAddress(AddressOf ReadMailItem_MouseMove), GetAddress(AddressOf ReadMailItem_MouseDown), GetAddress(AddressOf ReadMailItem_MouseMove)
+    CreateLabel WindowCount, "lblCurrency", ReadingMailLeft, 334, 310, 20, "Ouro: 0", FontRegular, White, Alignment.AlignCenter, False, , , , , GetAddress(AddressOf ReadMailCurrency_MouseDown)
+    CreateLabel WindowCount, "lblText", ReadingMailLeft, PictureTextTop + 5, 310, 115, "", FontRegular, White, Alignment.AlignCenter, False
+    CreateLabel WindowCount, "lblReceiveItem", PictureItemLeft, PictureItemTop, 40, 40, vbNullString, FontRegular, White, Alignment.AlignCenter, False, , , , GetAddress(AddressOf ReadMailItem_MouseMove), GetAddress(AddressOf ReadMailItem_MouseDown), GetAddress(AddressOf ReadMailItem_MouseMove)
 
     ' Write Mail
-    CreateTextbox WindowCount, "txtReceiver", ReadingMailLeft, PictureSenderTop, 310, 25, "Destinatário", Fonts.OpenSans_Regular, , Alignment.AlignLeft, , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, , , , , , , 8, 5, , , False
-    CreateTextbox WindowCount, "txtSubject", ReadingMailLeft, PictureTitleTop, 310, 25, "Título", Fonts.OpenSans_Regular, , Alignment.AlignLeft, , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, , , , , , , 8, 5, , , False
-    CreateTextbox WindowCount, "txtContent", ReadingMailLeft, PictureTextTop, 310, 122, "Mensagem", Fonts.OpenSans_Regular, , Alignment.AlignCenter, , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, , , , , , , 8, 10, , , True
+    CreateTextbox WindowCount, "txtReceiver", ReadingMailLeft, PictureSenderTop, 310, 25, "Destinatário", Fonts.FontRegular, , Alignment.AlignLeft, , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, , , , , , , 8, 5, , , False
+    CreateTextbox WindowCount, "txtSubject", ReadingMailLeft, PictureTitleTop, 310, 25, "Título", Fonts.FontRegular, , Alignment.AlignLeft, , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, , , , , , , 8, 5, , , False
+    CreateTextbox WindowCount, "txtContent", ReadingMailLeft, PictureTextTop, 310, 122, "Mensagem", Fonts.FontRegular, , Alignment.AlignCenter, , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, , , , , , , 8, 10, , , True
 
     CreatePictureBox WindowCount, "picSendAttachCoin", ReadingMailLeft, 330, 310, 25, False, , , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox
     CreatePictureBox WindowCount, "picSendAttachItem", PictureItemLeft, PictureItemTop, 40, 40, True, , , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, , , , , , GetAddress(AddressOf Draw_SendItem)
 
-    CreateLabel WindowCount, "lblSendAttachCoin", ReadingMailLeft, 334, 310, 20, "Ouro: 0", OpenSans_Effect, White, Alignment.AlignCenter, False, , , , , GetAddress(AddressOf Button_AddSendMailCurrency)
-    CreateLabel WindowCount, "lblWriteItem", PictureItemLeft, PictureItemTop, 40, 40, vbNullString, OpenSans_Effect, White, Alignment.AlignCenter, False, , , , GetAddress(AddressOf WriteMailItem_MouseMove), GetAddress(AddressOf WriteMailItem_MouseDown), GetAddress(AddressOf WriteMailItem_MouseMove)
+    CreateLabel WindowCount, "lblSendAttachCoin", ReadingMailLeft, 334, 310, 20, "Ouro: 0", FontRegular, White, Alignment.AlignCenter, False, , , , , GetAddress(AddressOf Button_AddSendMailCurrency)
+    CreateLabel WindowCount, "lblWriteItem", PictureItemLeft, PictureItemTop, 40, 40, vbNullString, FontRegular, White, Alignment.AlignCenter, False, , , , GetAddress(AddressOf WriteMailItem_MouseMove), GetAddress(AddressOf WriteMailItem_MouseDown), GetAddress(AddressOf WriteMailItem_MouseMove)
 
     For i = 1 To MaxMailList
-        CreateCheckbox WindowCount, "chkSelected" & i, CheckBoxLeft, CheckBoxTop + (CheckBoxOffSetY * (i - 1)), 25, , False, vbNullString, OpenSans_Regular, , , , , DesignTypes.DesignCheckBox
+        CreateCheckbox WindowCount, "chkSelected" & i, CheckBoxLeft, CheckBoxTop + (CheckBoxOffSetY * (i - 1)), 25, , False, vbNullString, FontRegular, , , , , DesignTypes.DesignCheckBox
     Next
 
     ' List Mail
@@ -114,13 +114,13 @@ Public Sub CreateWindow_Mail()
     CreatePictureBox WindowCount, "picBack9", PictureBackLeft, PictureBackTop + (PictureBackOffSetY * 8), 310, 25, , , , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, , , GetAddress(AddressOf Button_ReadMail9)
 
     ' Botões setas
-    CreateLabel WindowCount, "lblPage", 150, 385, 120, 25, "Página: 1/1", OpenSans_Effect, White, Alignment.AlignCenter
+    CreateLabel WindowCount, "lblPage", 150, 385, 120, 25, "Página: 1/1", FontRegular, White, Alignment.AlignCenter
     CreateButton WindowCount, "btnUp", 264, 385, 16, 16, , , , , , , Tex_GUI(44), Tex_GUI(45), Tex_GUI(46), , , , , , GetAddress(AddressOf Button_PageUp)
     CreateButton WindowCount, "btnDown", 139, 385, 16, 16, , , , , , , Tex_GUI(47), Tex_GUI(48), Tex_GUI(49), , , , , , GetAddress(AddressOf Button_PageDown)
 
-    CreateButton WindowCount, "btnSelectAll", 47, 410, 150, 24, "SELECIONAR TODOS", OpenSans_Effect, , , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf SelectAll)
-    CreateButton WindowCount, "btnDelete", 204, 410, 150, 24, "DELETAR", OpenSans_Effect, , , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf DeleteMail)
-    CreateButton WindowCount, "btnSend", 125, 410, 150, 24, "ENVIAR", OpenSans_Effect, , , False, , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf SendNewMail)
+    CreateButton WindowCount, "btnSelectAll", 47, 410, 150, 24, "SELECIONAR TODOS", FontRegular, , , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf SelectAll)
+    CreateButton WindowCount, "btnDelete", 204, 410, 150, 24, "DELETAR", FontRegular, , , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf DeleteMail)
+    CreateButton WindowCount, "btnSend", 125, 410, 150, 24, "ENVIAR", FontRegular, , , False, , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf SendNewMail)
 
     MailPage = 1
     WindowIndex = WindowCount
@@ -405,7 +405,7 @@ Private Sub Draw_SendItem()
                     RenderTexture Tex_Item(IconId), xO + PictureItemLeft + 1, yO + PictureItemTop + 1, 0, 0, 38, 38, PIC_X, PIC_Y
                     
                     If Amount > 1 Then
-                        RenderText Font(Fonts.OpenSans_Regular), ConvertCurrency(Amount), xO + PictureItemLeft, yO + PictureItemTop, GetCurrencyColor(Amount)
+                        RenderText Font(Fonts.FontRegular), ConvertCurrency(Amount), xO + PictureItemLeft, yO + PictureItemTop, GetCurrencyColor(Amount)
                     End If
                 End If
             End If
@@ -434,13 +434,13 @@ Private Sub Draw_ReceivedItem()
                         RenderTexture Tex_Item(IconId), xO + PictureItemLeft + 1, yO + PictureItemTop + 1, 0, 0, 38, 38, PIC_X, PIC_Y, DX8Colour(White, 120)
 
                         If Amount > 1 Then
-                            RenderText Font(Fonts.OpenSans_Regular), ConvertCurrency(Amount), xO + PictureItemLeft + 1, yO + PictureItemTop + 1, GetCurrencyColor(Amount)
+                            RenderText Font(Fonts.FontRegular), ConvertCurrency(Amount), xO + PictureItemLeft + 1, yO + PictureItemTop + 1, GetCurrencyColor(Amount)
                         End If
                     Else
                         RenderTexture Tex_Item(IconId), xO + PictureItemLeft + 1, yO + PictureItemTop + 1, 0, 0, 38, 38, PIC_X, PIC_Y
 
                         If Amount > 1 Then
-                            RenderText Font(Fonts.OpenSans_Regular), ConvertCurrency(Amount), xO + PictureItemLeft, yO + PictureItemTop, GetCurrencyColor(Amount)
+                            RenderText Font(Fonts.FontRegular), ConvertCurrency(Amount), xO + PictureItemLeft, yO + PictureItemTop, GetCurrencyColor(Amount)
                         End If
                     End If
                 End If
@@ -467,9 +467,9 @@ Private Sub Draw_Mail()
                 If MailIndex <= MaxPlayerMail Then
                     If LenB(Mail(MailIndex).Subject) > 0 Then
                         If Mail(MailIndex).ReadFlag Then
-                            RenderText Font(Fonts.OpenSans_Regular), Mail(MailIndex).Subject, xO + PictureBackLeft + 10, yO + PictureBackTop + 5 + (PictureBackOffSetY * (i - 1)), Grey
+                            RenderText Font(Fonts.FontRegular), Mail(MailIndex).Subject, xO + PictureBackLeft + 10, yO + PictureBackTop + 5 + (PictureBackOffSetY * (i - 1)), Grey
                         Else
-                            RenderText Font(Fonts.OpenSans_Regular), Mail(MailIndex).Subject, xO + PictureBackLeft + 10, yO + PictureBackTop + 5 + (PictureBackOffSetY * (i - 1)), White
+                            RenderText Font(Fonts.FontRegular), Mail(MailIndex).Subject, xO + PictureBackLeft + 10, yO + PictureBackTop + 5 + (PictureBackOffSetY * (i - 1)), White
                         End If
                     End If
                 End If
@@ -479,16 +479,16 @@ Private Sub Draw_Mail()
 
     If MailingWindowState = WindowMailState.WindowMailState_Reading Then
         If ReadingMailIndex > 0 Then
-            RenderText Font(Fonts.OpenSans_Regular), Mail(ReadingMailIndex).SenderCharacterName, xO + ReadingMailLeft + 10, yO + PictureSenderTop + 5, White
-            RenderText Font(Fonts.OpenSans_Regular), Mail(ReadingMailIndex).Subject, xO + ReadingMailLeft + 10, yO + PictureTitleTop + 5, White
-            RenderText Font(Fonts.OpenSans_Regular), Received & Mail(ReadingMailIndex).SendDate, xO + ReadingMailLeft + 10, yO + PictureSendDateTop + 5, White
-            RenderText Font(Fonts.OpenSans_Regular), Expiration & Mail(ReadingMailIndex).ExpireDate, xO + ReadingMailLeft + 10, yO + PictureExpireDateTop + 5, White
+            RenderText Font(Fonts.FontRegular), Mail(ReadingMailIndex).SenderCharacterName, xO + ReadingMailLeft + 10, yO + PictureSenderTop + 5, White
+            RenderText Font(Fonts.FontRegular), Mail(ReadingMailIndex).Subject, xO + ReadingMailLeft + 10, yO + PictureTitleTop + 5, White
+            RenderText Font(Fonts.FontRegular), Received & Mail(ReadingMailIndex).SendDate, xO + ReadingMailLeft + 10, yO + PictureSendDateTop + 5, White
+            RenderText Font(Fonts.FontRegular), Expiration & Mail(ReadingMailIndex).ExpireDate, xO + ReadingMailLeft + 10, yO + PictureExpireDateTop + 5, White
         End If
     End If
 
     If MailingWindowState = WindowMailState_Writing Then
-        RenderText Font(Fonts.OpenSans_Regular), Sended & SendDate, xO + ReadingMailLeft + 10, yO + PictureSendDateTop + 5, White
-        RenderText Font(Fonts.OpenSans_Regular), Expiration & "-", xO + ReadingMailLeft + 10, yO + PictureExpireDateTop + 5, White
+        RenderText Font(Fonts.FontRegular), Sended & SendDate, xO + ReadingMailLeft + 10, yO + PictureSendDateTop + 5, White
+        RenderText Font(Fonts.FontRegular), Expiration & "-", xO + ReadingMailLeft + 10, yO + PictureExpireDateTop + 5, White
     End If
 
 End Sub

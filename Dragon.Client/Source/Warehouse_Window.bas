@@ -24,7 +24,7 @@ Public Sub HideWarehouse()
 End Sub
 
 Public Sub CreateWindow_Warehouse()
-    CreateWindow "winWarehouse", "ARMAZÉM", zOrder_Win, 0, 0, 204, 432, 0, True, Fonts.OpenSans_Regular, , 2, 5, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, , , , , GetAddress(AddressOf Warehouse_MouseMove), GetAddress(AddressOf Warehouse_MouseDown), GetAddress(AddressOf Warehouse_MouseMove), 0, , , GetAddress(AddressOf DrawWarehouse)
+    CreateWindow "winWarehouse", "ARMAZÉM", zOrder_Win, 0, 0, 204, 432, 0, True, Fonts.FontRegular, , 2, 5, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, , , , , GetAddress(AddressOf Warehouse_MouseMove), GetAddress(AddressOf Warehouse_MouseDown), GetAddress(AddressOf Warehouse_MouseMove), 0, , , GetAddress(AddressOf DrawWarehouse)
     
     CentraliseWindow WindowCount
 
@@ -99,7 +99,7 @@ Private Sub DrawWarehouse()
 
                         ' Draw currency but with k, m, b etc. using a convertion function
                         Colour = GetCurrencyColor(GetWarehouseItemValue(i))
-                        RenderText Font(Fonts.OpenSans_Regular), ConvertCurrency(GetWarehouseItemValue(i)), X, Y, Colour
+                        RenderText Font(Fonts.FontRegular), ConvertCurrency(GetWarehouseItemValue(i)), X, Y, Colour
                     End If
                 End If
             End If
@@ -222,7 +222,7 @@ Private Sub Warehouse_MouseDown()
                 .Left = lastMouseX - 16
                 .Top = lastMouseY - 16
                 .MovedX = clickedX - .Left
-                .movedY = clickedY - .Top
+                .MovedY = clickedY - .Top
             End With
 
             ShowWindow WinIndex, , False

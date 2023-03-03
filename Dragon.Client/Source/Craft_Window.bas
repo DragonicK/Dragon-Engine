@@ -40,7 +40,7 @@ End Sub
 Public Sub CreateWindow_Craft()
     Dim i As Long
 
-    CreateWindow "winCraft", "PRODUÇÃO", zOrder_Win, 0, 0, 389, 408, 0, True, Fonts.OpenSans_Regular, , 2, 5, DesignTypes.DesignWindowWithTopBarAndNavBar, DesignTypes.DesignWindowWithTopBarAndNavBar, DesignTypes.DesignWindowWithTopBarAndNavBar, , , , , 0, 0, 0, 0, , , GetAddress(AddressOf DrawCraft)
+    CreateWindow "winCraft", "PRODUÇÃO", zOrder_Win, 0, 0, 389, 408, 0, True, Fonts.FontRegular, , 2, 5, DesignTypes.DesignWindowWithTopBarAndNavBar, DesignTypes.DesignWindowWithTopBarAndNavBar, DesignTypes.DesignWindowWithTopBarAndNavBar, , , , , 0, 0, 0, 0, , , GetAddress(AddressOf DrawCraft)
 
     CentraliseWindow WindowCount
     ' Set the index for spawning controls
@@ -60,8 +60,8 @@ Public Sub CreateWindow_Craft()
     CreatePictureBox WindowCount, "picList" & 9, 20, WindowOffsetY + 21 + (CraftOffsetY * 10), 130, 20, , , , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, , , GetAddress(AddressOf PicList9_Click)
 
     For i = 1 To MaxRecipeRequiredItems
-        CreateLabel WindowCount, "lblReqCount" & i, 193, WindowOffsetY + 58 + (CraftOffsetY * i), 175, 20, "", OpenSans_Regular, White, Alignment.AlignRight
-        CreateLabel WindowCount, "lblReqItem" & i, 200, WindowOffsetY + 58 + (CraftOffsetY * i), 175, 20, "", OpenSans_Regular, White, Alignment.AlignLeft
+        CreateLabel WindowCount, "lblReqCount" & i, 193, WindowOffsetY + 58 + (CraftOffsetY * i), 175, 20, "", FontRegular, White, Alignment.AlignRight
+        CreateLabel WindowCount, "lblReqItem" & i, 200, WindowOffsetY + 58 + (CraftOffsetY * i), 175, 20, "", FontRegular, White, Alignment.AlignLeft
     Next
 
     CreatePictureBox WindowCount, "picRequirement1", 193, WindowOffsetY + 55 + (CraftOffsetY * 1), 180, 20, , , , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, , GetAddress(AddressOf Requirement1_MouseMove), GetAddress(AddressOf Requirement1_MouseMove), GetAddress(AddressOf Requirement1_MouseMove)
@@ -71,12 +71,12 @@ Public Sub CreateWindow_Craft()
     CreatePictureBox WindowCount, "picRequirement5", 193, WindowOffsetY + 55 + (CraftOffsetY * 5), 180, 20, , , , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, , GetAddress(AddressOf Requirement5_MouseMove), GetAddress(AddressOf Requirement5_MouseMove), GetAddress(AddressOf Requirement5_MouseMove)
 
     'Nomes
-    CreateLabel WindowCount, "lblResults", 208, WindowOffsetY + 31, 142, , "Resultado de Criação", OpenSans_Regular, White, Alignment.AlignCenter
-    CreateLabel WindowCount, "lblSuplement", 208, WindowOffsetY + 204, 142, , "Progresso", OpenSans_Regular, White, Alignment.AlignCenter
-    CreateLabel WindowCount, "lblProgress", 208, WindowOffsetY + 218, 142, , "Processando: 0%", OpenSans_Regular, White, Alignment.AlignCenter
-    CreateLabel WindowCount, "lblSuccessRate", 185, WindowOffsetY + 258, 205, 25, "Chance de Sucesso: 100%", OpenSans_Regular, White, Alignment.AlignCenter, , , , , , , , 0
-    CreateLabel WindowCount, "lblList", 20, WindowOffsetY + 31, 130, , "Receitas", OpenSans_Regular, White, Alignment.AlignCenter
-    CreateLabel WindowCount, "lblExp", 90, WindowOffsetY + 5, 209, , GetCraftName(CraftType_None) & "Nenhum Lv. 0 0/0", OpenSans_Regular, White, Alignment.AlignCenter
+    CreateLabel WindowCount, "lblResults", 208, WindowOffsetY + 31, 142, , "Resultado de Criação", FontRegular, White, Alignment.AlignCenter
+    CreateLabel WindowCount, "lblSuplement", 208, WindowOffsetY + 204, 142, , "Progresso", FontRegular, White, Alignment.AlignCenter
+    CreateLabel WindowCount, "lblProgress", 208, WindowOffsetY + 218, 142, , "Processando: 0%", FontRegular, White, Alignment.AlignCenter
+    CreateLabel WindowCount, "lblSuccessRate", 185, WindowOffsetY + 258, 205, 25, "Chance de Sucesso: 100%", FontRegular, White, Alignment.AlignCenter, , , , , , , , 0
+    CreateLabel WindowCount, "lblList", 20, WindowOffsetY + 31, 130, , "Receitas", FontRegular, White, Alignment.AlignCenter
+    CreateLabel WindowCount, "lblExp", 90, WindowOffsetY + 5, 209, , GetCraftName(CraftType_None) & "Nenhum Lv. 0 0/0", FontRegular, White, Alignment.AlignCenter
 
     ' Result Item Slot
     CreatePictureBox WindowCount, "picItemResult", 268, WindowOffsetY + 45, 32, 32, , , , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, , GetAddress(AddressOf ResultItem_MouseMove), GetAddress(AddressOf ResultItem_MouseMove), GetAddress(AddressOf ResultItem_MouseMove)
@@ -86,8 +86,8 @@ Public Sub CreateWindow_Craft()
     CreateButton WindowCount, "btnCraft", 155, WindowOffsetY + 24 + (CraftOffsetY * 10), 15, 15, , , , , , , Tex_GUI(47), Tex_GUI(48), Tex_GUI(49), , , , , , GetAddress(AddressOf MoveListToDown)
 
     'Botões inferiores
-    CreateButton WindowCount, "btnCraft", 90, WindowOffsetY + 310, 103, 24, "CRIAR", OpenSans_Regular, , , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf Button_Craft)
-    CreateButton WindowCount, "btnCancel", 198, WindowOffsetY + 310, 103, 24, "CANCELAR", OpenSans_Regular, , , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf Button_Cancel)
+    CreateButton WindowCount, "btnCraft", 90, WindowOffsetY + 310, 103, 24, "CRIAR", FontRegular, , , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf Button_Craft)
+    CreateButton WindowCount, "btnCancel", 198, WindowOffsetY + 310, 103, 24, "CANCELAR", FontRegular, , , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf Button_Cancel)
     
     WindowIndex = WindowCount
 End Sub
@@ -135,7 +135,7 @@ Private Sub DrawCraft()
                 Color = White
             End If
 
-            RenderText Font(Fonts.OpenSans_Regular), Trim$(Recipe(RecipeNum).Name), xO + 25, WindowOffsetY + yO + 24 + (CraftOffsetY * i), Color
+            RenderText Font(Fonts.FontRegular), Trim$(Recipe(RecipeNum).Name), xO + 25, WindowOffsetY + yO + 24 + (CraftOffsetY * i), Color
         End If
     Next
 
@@ -291,7 +291,7 @@ Private Sub SetControlResultItem(ByVal TextureNum As Long)
     ControlIndexItem = GetControlIndex("winCraft", "picItemResult")
 
     For i = 0 To entStates.state_Count - 1
-        Windows(WindowIndex).Controls(ControlIndexItem).Image(i) = Tex_Item(TextureNum)
+        Windows(WindowIndex).Controls(ControlIndexItem).image(i) = Tex_Item(TextureNum)
     Next
 End Sub
 

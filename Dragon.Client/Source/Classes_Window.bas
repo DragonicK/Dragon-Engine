@@ -1,7 +1,7 @@
 Attribute VB_Name = "Classes_Window"
 Public Sub CreateWindow_Classes()
 ' Create window
-    CreateWindow "winClasses", "SELEÇÃO DE CLASSE", zOrder_Win, 0, 0, 364, 249, 0, False, Fonts.OpenSans_Regular, , 2, 6, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, , , , , , , , , False, , GetAddress(AddressOf Classes_DrawFace)
+    CreateWindow "winClasses", "SELEÇÃO DE CLASSE", zOrder_Win, 0, 0, 364, 249, 0, False, Fonts.FontRegular, , 2, 6, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, , , , , , , , , False, , GetAddress(AddressOf Classes_DrawFace)
     ' Centralise it
     CentraliseWindow WindowCount
 
@@ -12,12 +12,12 @@ Public Sub CreateWindow_Classes()
     CreateButton WindowCount, "ButtonClose", Windows(WindowCount).Window.Width - 33, 11, 22, 22, , , , , , , Tex_GUI(TextureControl_CloseNormal), Tex_GUI(TextureControl_CloseHover), Tex_GUI(TextureControl_CloseClick), , , , , , GetAddress(AddressOf ButtonClasses_Close)
     ' Class Name
     CreatePictureBox WindowCount, "picShadow", 183, 52, 98, 9, , , , , , , , DesignTypes.DesignBackgroundOval, DesignTypes.DesignBackgroundOval, DesignTypes.DesignBackgroundOval
-    CreateLabel WindowCount, "lblClassName", 183, 49, 98, , "Warrior", OpenSans_Effect, White, Alignment.AlignCenter
+    CreateLabel WindowCount, "lblClassName", 183, 49, 98, , "Warrior", FontRegular, White, Alignment.AlignCenter
     ' Select Buttons
     CreateButton WindowCount, "ButtonLeft", 171, 50, 11, 13, , , , , , , Tex_GUI(12), Tex_GUI(13), Tex_GUI(14), , , , , , GetAddress(AddressOf ButtonClasses_Left)
     CreateButton WindowCount, "ButtonRight", 282, 50, 11, 13, , , , , , , Tex_GUI(15), Tex_GUI(16), Tex_GUI(17), , , , , , GetAddress(AddressOf ButtonClasses_Right)
     ' Accept Button
-    CreateButton WindowCount, "ButtonAccept", 183, 205, 98, 26, "ACEITAR", OpenSans_Regular, , , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf ButtonClasses_Accept)
+    CreateButton WindowCount, "ButtonAccept", 183, 205, 98, 26, "ACEITAR", FontRegular, , , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf ButtonClasses_Accept)
     ' Text background
     CreatePictureBox WindowCount, "picBackground", 127, 65, 210, 134, , , , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox
     ' Overlay
@@ -81,9 +81,9 @@ Private Sub Classes_DrawText()
     Y = yO + 70
     
     For i = 1 To Count
-        X = xO + 132 + (200 \ 2) - (TextWidth(Font(Fonts.OpenSans_Regular), TextArray(i)) \ 2)
+        X = xO + 132 + (200 \ 2) - (TextWidth(Font(Fonts.FontRegular), TextArray(i)) \ 2)
         
-        RenderText Font(Fonts.OpenSans_Regular), TextArray(i), X, Y, White
+        RenderText Font(Fonts.FontRegular), TextArray(i), X, Y, White
         
         Y = Y + 14
     Next

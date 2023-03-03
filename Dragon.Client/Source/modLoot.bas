@@ -27,7 +27,7 @@ End Type
 Public Sub CreateWindow_Loot()
     Dim i As Long
     ' Create window
-    CreateWindow "winLoot", "ITEMS", zOrder_Win, 0, 0, 245, 340, 0, False, Fonts.OpenSans_Regular, , 2, 7, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar
+    CreateWindow "winLoot", "ITEMS", zOrder_Win, 0, 0, 245, 340, 0, False, Fonts.FontRegular, , 2, 7, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar
     ' Centralise it
     CentraliseWindow WindowCount
     ' Set the index for spawning controls
@@ -43,8 +43,8 @@ Public Sub CreateWindow_Loot()
     CreatePictureBox WindowCount, "picIcon6", 15, 60 + (LIST_OFFSET_Y * 5), 32, 32, , , , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, , GetAddress(AddressOf ItemSlot6_MouseMove), GetAddress(AddressOf ItemSlot6_MouseDown), GetAddress(AddressOf ItemSlot6_MouseMove)
 
     For i = 1 To LIST_COUNT
-        CreateLabel WindowCount, "lblItemName" & i, 55, 62 + (LIST_OFFSET_Y * (i - 1)), 160, 20, "", OpenSans_Effect, Coral, Alignment.AlignLeft
-        CreateLabel WindowCount, "lblItemCount" & i, 55, 74 + (LIST_OFFSET_Y * (i - 1)), 160, 20, "", OpenSans_Effect, White, Alignment.AlignLeft
+        CreateLabel WindowCount, "lblItemName" & i, 55, 62 + (LIST_OFFSET_Y * (i - 1)), 160, 20, "", FontRegular, Coral, Alignment.AlignLeft
+        CreateLabel WindowCount, "lblItemCount" & i, 55, 74 + (LIST_OFFSET_Y * (i - 1)), 160, 20, "", FontRegular, White, Alignment.AlignLeft
     Next
 
     CreatePictureBox WindowCount, "picName1", 47, 60 + (LIST_OFFSET_Y * 0), 160, 32, , , , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, , GetAddress(AddressOf ItemSlot1_MouseMove), GetAddress(AddressOf ItemSlot1_MouseDown), GetAddress(AddressOf ItemSlot1_MouseMove)
@@ -59,7 +59,7 @@ Public Sub CreateWindow_Loot()
     CreateButton WindowCount, "btnCraft", 215, 276, 15, 15, , , , , , , Tex_GUI(47), Tex_GUI(48), Tex_GUI(49), , , , , , GetAddress(AddressOf MoveListToDown)
 
     CreatePictureBox WindowCount, "picName", 15, 305, 215, 22, , , , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox
-    CreateLabel WindowCount, "lblItemCount", 15, 308, 215, 22, "Quantidade: 1", OpenSans_Effect, White, Alignment.AlignCenter
+    CreateLabel WindowCount, "lblItemCount", 15, 308, 215, 22, "Quantidade: 1", FontRegular, White, Alignment.AlignCenter
 
     WindowIndex = WindowCount
 End Sub
@@ -293,7 +293,7 @@ Private Sub SetControlImage(ByVal Index As Long, ByVal TextureNum As Long)
     ControlIndex = GetControlIndex("winLoot", "picIcon" & Index)
 
     For i = 0 To entStates.state_Count - 1
-        Windows(WindowIndex).Controls(ControlIndex).Image(i) = TextureNum
+        Windows(WindowIndex).Controls(ControlIndex).image(i) = TextureNum
     Next
 
 End Sub

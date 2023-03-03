@@ -54,18 +54,18 @@ Public Sub CreateWindow_DeadPanel()
     X = (Width / 2) - 119
     Y = (Heigth / 2) - 300
 
-    CreateWindow "winDeadPanel", "", zOrder_Win, X, Y, 239, 150, 0, True, Fonts.OpenSans_Regular, , 2, 7, DesignTypes.DesignWindowWithoutTopBar, DesignTypes.DesignWindowWithoutTopBar, DesignTypes.DesignWindowWithoutTopBar, , , , , , , , , False, , GetAddress(AddressOf Target_OnDraw)
+    CreateWindow "winDeadPanel", "", zOrder_Win, X, Y, 239, 150, 0, True, Fonts.FontRegular, , 2, 7, DesignTypes.DesignWindowWithoutTopBar, DesignTypes.DesignWindowWithoutTopBar, DesignTypes.DesignWindowWithoutTopBar, , , , , , , , , False, , GetAddress(AddressOf Target_OnDraw)
 
     zOrder_Con = 1
 
-    CreateLabel WindowCount, "lblTime", 0, 15, 239, 25, "Tempo: 360 segundo(s)", OpenSans_Regular, White, Alignment.AlignCenter
-    CreateLabel WindowCount, "lblMsg", 20, 40, 200, , "Voce morreu. Escolha o modo de ressureição.", OpenSans_Regular, White, Alignment.AlignCenter
+    CreateLabel WindowCount, "lblTime", 0, 15, 239, 25, "Tempo: 360 segundo(s)", FontRegular, White, Alignment.AlignCenter
+    CreateLabel WindowCount, "lblMsg", 20, 40, 200, , "Voce morreu. Escolha o modo de ressureição.", FontRegular, White, Alignment.AlignCenter
 
-    CreateButton WindowCount, "btnYes", 35, 85, 75, 24, "SIM", OpenSans_Regular, , , False, , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf AcceptRessurect)
-    CreateButton WindowCount, "btnNo", 125, 85, 75, 24, "NÃO", OpenSans_Regular, , , False, , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf DeclineRessurect)
+    CreateButton WindowCount, "btnYes", 35, 85, 75, 24, "SIM", FontRegular, , , False, , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf AcceptRessurect)
+    CreateButton WindowCount, "btnNo", 125, 85, 75, 24, "NÃO", FontRegular, , , False, , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf DeclineRessurect)
 
-    CreateButton WindowCount, "btnRessurrect", 20, 75, 195, 24, "REVIVER AQUI", OpenSans_Regular, , , True, , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf RessurectHere)
-    CreateButton WindowCount, "btnBindPoint", 20, 105, 195, 24, "ÚLTIMO PONTO SALVO", OpenSans_Regular, , , True, , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf RessurectBindPoint)
+    CreateButton WindowCount, "btnRessurrect", 20, 75, 195, 24, "REVIVER AQUI", FontRegular, , , True, , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf RessurectHere)
+    CreateButton WindowCount, "btnBindPoint", 20, 105, 195, 24, "ÚLTIMO PONTO SALVO", FontRegular, , , True, , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf RessurectBindPoint)
 
     Windows(WindowCount).Window.Top = 100
     WindowIndex = WindowCount

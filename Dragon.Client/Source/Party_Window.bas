@@ -12,7 +12,7 @@ Public Sub CreateWindow_Party()
 
     For i = 1 To MaximumPartyMembers - 1
         ' Names
-        CreateLabel WindowCount, "lblName" & i, 60, 20 + (OffSetY * (i - 1)), 173, , "Richard - Level 10", OpenSans_Regular
+        CreateLabel WindowCount, "lblName" & i, 60, 20 + (OffSetY * (i - 1)), 173, , "Richard - Level 10", FontRegular
         ' Empty Bars - HP
         CreatePictureBox WindowCount, "picEmptyBar_HP" & i, 58, 34 + (OffSetY * (i - 1)), 173, 9, , , , , Tex_GUI(39), Tex_GUI(39), Tex_GUI(39)
         ' Empty Bars - SP
@@ -26,11 +26,11 @@ Public Sub CreateWindow_Party()
     Next
 
     ' Name labels
-    ' CreateLabel WindowCount, "lblName1", 60, 20, 173, , "Richard - Level 10", OpenSans_Regular
-    ' CreateLabel WindowCount, "lblName2", 60, 60, 173, , "Anna - Level 18", OpenSans_Regular
-    ' CreateLabel WindowCount, "lblName3", 60, 140, 173, , "Doleo - Level 25", OpenSans_Regular
-    ' CreateLabel WindowCount, "lblName4", 60, 180, 173, , "Doleo - Level 25", OpenSans_Regular
-    ' CreateLabel WindowCount, "lblName5", 60, 220, 173, , "Doleo - Level 25", OpenSans_Regular
+    ' CreateLabel WindowCount, "lblName1", 60, 20, 173, , "Richard - Level 10", FontRegular
+    ' CreateLabel WindowCount, "lblName2", 60, 60, 173, , "Anna - Level 18", FontRegular
+    ' CreateLabel WindowCount, "lblName3", 60, 140, 173, , "Doleo - Level 25", FontRegular
+    ' CreateLabel WindowCount, "lblName4", 60, 180, 173, , "Doleo - Level 25", FontRegular
+    ' CreateLabel WindowCount, "lblName5", 60, 220, 173, , "Doleo - Level 25", FontRegular
 
     ' Empty Bars - HP
     'CreatePictureBox WindowCount, "picEmptyBar_HP1", 58, 34, 173, 9, , , , , Tex_GUI(62), Tex_GUI(62), Tex_GUI(62)

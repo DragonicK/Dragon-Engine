@@ -42,7 +42,7 @@ End Sub
 
 Public Sub CreateWindow_Title()
 ' Create the window
-    CreateWindow "winTitle", "TÍTULOS", zOrder_Win, 0, 0, 208, 520, 0, , Fonts.OpenSans_Effect, , 3, 5, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, , , , , , , , , , , GetAddress(AddressOf RenderWindowTitle)
+    CreateWindow "winTitle", "TÍTULOS", zOrder_Win, 0, 0, 208, 520, 0, , Fonts.FontRegular, , 3, 5, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, , , , , , , , , , , GetAddress(AddressOf RenderWindowTitle)
 
     ' Centralise it
     CentraliseWindow WindowCount
@@ -54,8 +54,8 @@ Public Sub CreateWindow_Title()
     CreateButton WindowCount, "btnClose", Windows(WindowCount).Window.Width - 33, 11, 22, 22, , , , , , , Tex_GUI(TextureControl_CloseNormal), Tex_GUI(TextureControl_CloseHover), Tex_GUI(TextureControl_CloseClick), , , , , , GetAddress(AddressOf Button_CloseTitle)
 
     ' Labels
-    CreateLabel WindowCount, "lblTitleCount", 0, 49, 205, , "Quantidade: 0/" & MaxPlayerTitles, OpenSans_Regular, White, Alignment.AlignCenter
-    CreateLabel WindowCount, "lblTitleActivated", 0, 76, 205, , "Nenhum", OpenSans_Regular, ColorType.White, Alignment.AlignCenter
+    CreateLabel WindowCount, "lblTitleCount", 0, 49, 205, , "Quantidade: 0/" & MaxPlayerTitles, FontRegular, White, Alignment.AlignCenter
+    CreateLabel WindowCount, "lblTitleActivated", 0, 76, 205, , "Nenhum", FontRegular, ColorType.White, Alignment.AlignCenter
 
     ' PictureBox
     CreatePictureBox WindowCount, "picList" & 1, ListX, ListY + (ListOffsetY * 1), 154, 28, , , , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, , GetAddress(AddressOf PicList1_MouseMove), GetAddress(AddressOf PicList1_Click), GetAddress(AddressOf PicList1_MouseMove)
@@ -73,8 +73,8 @@ Public Sub CreateWindow_Title()
     CreatePictureBox WindowCount, "invisble", 0, 0, 0, 0, , , , , , , , , , , , , , , , GetAddress(AddressOf Draw_Title)
     
     ' Buttons
-    CreateButton WindowCount, "btnActivate", ListX, ListY + 390, 80, 28, "ATIVAR", OpenSans_Effect, White, , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf Button_Activate)
-    CreateButton WindowCount, "btnDisable", 110, ListY + 390, 80, 28, "DESATIVAR", OpenSans_Effect, White, , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf Button_Disable)
+    CreateButton WindowCount, "btnActivate", ListX, ListY + 390, 80, 28, "ATIVAR", FontRegular, White, , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf Button_Activate)
+    CreateButton WindowCount, "btnDisable", 110, ListY + 390, 80, 28, "DESATIVAR", FontRegular, White, , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf Button_Disable)
 
     'Arrow
     CreateButton WindowCount, "btnUp", 184, ListY + (ListOffsetY * 1), 15, 15, , , , , , , Tex_GUI(44), Tex_GUI(45), Tex_GUI(46), , , , , , GetAddress(AddressOf MoveListToUp)
@@ -139,7 +139,7 @@ Private Sub Draw_Title()
         End If
 
         If TitleNum > 0 And TitleNum <= MaximumTitles Then
-            RenderText Font(Fonts.OpenSans_Regular), Title(TitleNum).Name, xO + ListX + 7, yO + ListY + 5 + (ListOffsetY * i), Colour
+            RenderText Font(Fonts.FontRegular), Title(TitleNum).Name, xO + ListX + 7, yO + ListY + 5 + (ListOffsetY * i), Colour
         End If
     Next
 

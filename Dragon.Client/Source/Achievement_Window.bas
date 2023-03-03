@@ -60,7 +60,7 @@ Private Descriptions As RequirementDescriptionRec
 Public Sub CreateWindow_Achievement()
     Dim i As Long
 
-    CreateWindow "winAchievement", "CONQUISTAS", zOrder_Win, 0, 0, 630, 360, 0, False, Fonts.OpenSans_Effect, , 2, 7, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, , , , , , , , , , , GetAddress(AddressOf RenderAchievement)
+    CreateWindow "winAchievement", "CONQUISTAS", zOrder_Win, 0, 0, 630, 360, 0, False, Fonts.FontRegular, , 2, 7, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, , , , , , , , , , , GetAddress(AddressOf RenderAchievement)
     ' Centralise it
     CentraliseWindow WindowCount
 
@@ -69,32 +69,32 @@ Public Sub CreateWindow_Achievement()
 
     CreateButton WindowCount, "btnClose", Windows(WindowCount).Window.Width - 33, 11, 22, 22, , , , , , , Tex_GUI(TextureControl_CloseNormal), Tex_GUI(TextureControl_CloseHover), Tex_GUI(TextureControl_CloseClick), , , , , , GetAddress(AddressOf btnMenu_Achievement)
 
-    CreateButton WindowCount, "btnSummary", 20, 87, 120, 26, "RESUMO", OpenSans_Effect, , , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf ChangeCategorySummary)
-    CreateButton WindowCount, "btnCharacter", 20, 119, 120, 26, "PERSONAGEM", OpenSans_Effect, , , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf ChangeCategoryCharacter)
-    CreateButton WindowCount, "btnQuest", 20, 151, 120, 26, "MISSÕES", OpenSans_Effect, , , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf ChangeCategoryQuest)
-    CreateButton WindowCount, "btnReputation", 20, 183, 120, 26, "REPUTAÇÕES", OpenSans_Effect, , , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf ChangeCategoryReputation)
-    CreateButton WindowCount, "btnDungeon", 20, 215, 120, 26, "MASMORRAS", OpenSans_Effect, , , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf ChangeCategoryDungeon)
-    CreateButton WindowCount, "btnProfession", 20, 247, 120, 26, "PROFISSÕES", OpenSans_Effect, , , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf ChangeCategoryProfession)
-    CreateButton WindowCount, "btnExplore", 20, 279, 120, 26, "EXPLORAÇÃO", OpenSans_Effect, , , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf ChangeCategoryExploration)
-    CreateButton WindowCount, "btnPvp", 20, 311, 120, 26, "PVP", OpenSans_Effect, , , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf ChangeCategoryPvp)
+    CreateButton WindowCount, "btnSummary", 20, 87, 120, 26, "RESUMO", FontRegular, , , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf ChangeCategorySummary)
+    CreateButton WindowCount, "btnCharacter", 20, 119, 120, 26, "PERSONAGEM", FontRegular, , , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf ChangeCategoryCharacter)
+    CreateButton WindowCount, "btnQuest", 20, 151, 120, 26, "MISSÕES", FontRegular, , , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf ChangeCategoryQuest)
+    CreateButton WindowCount, "btnReputation", 20, 183, 120, 26, "REPUTAÇÕES", FontRegular, , , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf ChangeCategoryReputation)
+    CreateButton WindowCount, "btnDungeon", 20, 215, 120, 26, "MASMORRAS", FontRegular, , , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf ChangeCategoryDungeon)
+    CreateButton WindowCount, "btnProfession", 20, 247, 120, 26, "PROFISSÕES", FontRegular, , , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf ChangeCategoryProfession)
+    CreateButton WindowCount, "btnExplore", 20, 279, 120, 26, "EXPLORAÇÃO", FontRegular, , , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf ChangeCategoryExploration)
+    CreateButton WindowCount, "btnPvp", 20, 311, 120, 26, "PVP", FontRegular, , , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf ChangeCategoryPvp)
 
-    CreateLabel WindowCount, "lblProgress", 170, 90, 220, 50, "RESUMO: 0/30", OpenSans_Effect, White, Alignment.AlignCenter
+    CreateLabel WindowCount, "lblProgress", 170, 90, 220, 50, "RESUMO: 0/30", FontRegular, White, Alignment.AlignCenter
 
-    CreateLabel WindowCount, "lblReq", 430, 90, 200, 50, "REQUERIMENTOS", OpenSans_Effect, ColorType.Gold, Alignment.AlignLeft
+    CreateLabel WindowCount, "lblReq", 430, 90, 200, 50, "REQUERIMENTOS", FontRegular, ColorType.Gold, Alignment.AlignLeft
 
     For i = 1 To MaxAchievementList
         CreatePictureBox WindowCount, "picWhiteBox", 170, 70 + AchievementY + ((i - 1) * 32), 220, 26, , , , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox
     Next
 
-    CreateLabel WindowCount, "lblName1", 170, 75 + AchievementY + (0 * 32), 220, 26, "", OpenSans_Regular, White, Alignment.AlignCenter, , , , , GetAddress(AddressOf List1_MouseMove), GetAddress(AddressOf List1_MouseDown), GetAddress(AddressOf List1_MouseMove)
-    CreateLabel WindowCount, "lblName2", 170, 75 + AchievementY + (1 * 32), 220, 26, "", OpenSans_Regular, White, Alignment.AlignCenter, , , , , GetAddress(AddressOf List2_MouseMove), GetAddress(AddressOf List2_MouseDown), GetAddress(AddressOf List2_MouseMove)
-    CreateLabel WindowCount, "lblName3", 170, 75 + AchievementY + (2 * 32), 220, 26, "", OpenSans_Regular, White, Alignment.AlignCenter, , , , , GetAddress(AddressOf List3_MouseMove), GetAddress(AddressOf List3_MouseDown), GetAddress(AddressOf List3_MouseMove)
-    CreateLabel WindowCount, "lblName4", 170, 75 + AchievementY + (3 * 32), 220, 26, "", OpenSans_Regular, White, Alignment.AlignCenter, , , , , GetAddress(AddressOf List4_MouseMove), GetAddress(AddressOf List4_MouseDown), GetAddress(AddressOf List4_MouseMove)
-    CreateLabel WindowCount, "lblName5", 170, 75 + AchievementY + (4 * 32), 220, 26, "", OpenSans_Regular, White, Alignment.AlignCenter, , , , , GetAddress(AddressOf List5_MouseMove), GetAddress(AddressOf List5_MouseDown), GetAddress(AddressOf List5_MouseMove)
-    CreateLabel WindowCount, "lblName6", 170, 75 + AchievementY + (5 * 32), 220, 26, "", OpenSans_Regular, White, Alignment.AlignCenter, , , , , GetAddress(AddressOf List6_MouseMove), GetAddress(AddressOf List6_MouseDown), GetAddress(AddressOf List6_MouseMove)
+    CreateLabel WindowCount, "lblName1", 170, 75 + AchievementY + (0 * 32), 220, 26, "", FontRegular, White, Alignment.AlignCenter, , , , , GetAddress(AddressOf List1_MouseMove), GetAddress(AddressOf List1_MouseDown), GetAddress(AddressOf List1_MouseMove)
+    CreateLabel WindowCount, "lblName2", 170, 75 + AchievementY + (1 * 32), 220, 26, "", FontRegular, White, Alignment.AlignCenter, , , , , GetAddress(AddressOf List2_MouseMove), GetAddress(AddressOf List2_MouseDown), GetAddress(AddressOf List2_MouseMove)
+    CreateLabel WindowCount, "lblName3", 170, 75 + AchievementY + (2 * 32), 220, 26, "", FontRegular, White, Alignment.AlignCenter, , , , , GetAddress(AddressOf List3_MouseMove), GetAddress(AddressOf List3_MouseDown), GetAddress(AddressOf List3_MouseMove)
+    CreateLabel WindowCount, "lblName4", 170, 75 + AchievementY + (3 * 32), 220, 26, "", FontRegular, White, Alignment.AlignCenter, , , , , GetAddress(AddressOf List4_MouseMove), GetAddress(AddressOf List4_MouseDown), GetAddress(AddressOf List4_MouseMove)
+    CreateLabel WindowCount, "lblName5", 170, 75 + AchievementY + (4 * 32), 220, 26, "", FontRegular, White, Alignment.AlignCenter, , , , , GetAddress(AddressOf List5_MouseMove), GetAddress(AddressOf List5_MouseDown), GetAddress(AddressOf List5_MouseMove)
+    CreateLabel WindowCount, "lblName6", 170, 75 + AchievementY + (5 * 32), 220, 26, "", FontRegular, White, Alignment.AlignCenter, , , , , GetAddress(AddressOf List6_MouseMove), GetAddress(AddressOf List6_MouseDown), GetAddress(AddressOf List6_MouseMove)
 
     'Botões setas
-    CreateLabel WindowCount, "lblPage", 170, 315, 220, 50, "Página: 0/0", OpenSans_Effect, White, Alignment.AlignCenter
+    CreateLabel WindowCount, "lblPage", 170, 315, 220, 50, "Página: 0/0", FontRegular, White, Alignment.AlignCenter
     CreateButton WindowCount, "btnUp", 335, 315, 15, 15, , , , , , , Tex_GUI(44), Tex_GUI(45), Tex_GUI(46), , , , , , GetAddress(AddressOf MovePageUp)
     CreateButton WindowCount, "btnDown", 210, 315, 15, 15, , , , , , , Tex_GUI(47), Tex_GUI(48), Tex_GUI(49), , , , , , GetAddress(AddressOf MovePageDown)
 
@@ -521,13 +521,13 @@ Private Sub RenderAchievement()
     Width = Windows(WindowIndex).Window.Width
     Height = Windows(WindowIndex).Window.Height
 
-    StringWidth = TextWidth(Font(Fonts.OpenSans_Effect), "PONTOS DE CONQUISTA: " & GetPlayerAchievementPoints())
+    StringWidth = TextWidth(Font(Fonts.FontRegular), "PONTOS DE CONQUISTA: " & GetPlayerAchievementPoints())
 
     RenderDesign DesignTypes.DesignTextBox, xO + 150, yO + 87, 2, 250
     RenderDesign DesignTypes.DesignTextBox, xO + 410, yO + 87, 2, 250
     
 
-    RenderText Font(Fonts.OpenSans_Effect), "PONTOS DE CONQUISTA: " & GetPlayerAchievementPoints(), xO + (Width * 0.5) - (StringWidth * 0.5), yO + 48, Gold
+    RenderText Font(Fonts.FontRegular), "PONTOS DE CONQUISTA: " & GetPlayerAchievementPoints(), xO + (Width * 0.5) - (StringWidth * 0.5), yO + 48, Gold
 
     For i = Descriptions.LineIndex To Descriptions.LineCount
         With Descriptions
@@ -548,7 +548,7 @@ Private Sub RenderAchievement()
                         CurrentY = yO + 108 + Y
 
                         RenderTexture Tex_Item(IconId), CurrentX, CurrentY, 0, 0, ICON_ACHIEVEMENT_WIDTH, ICON_ACHIEVEMENT_HEIGHT, PIC_X, PIC_Y
-                        RenderText Font(Fonts.OpenSans_Effect), .Lines(i), CurrentX + PIC_X, yO + 115 + Y, .LineColor(i)
+                        RenderText Font(Fonts.FontRegular), .Lines(i), CurrentX + PIC_X, yO + 115 + Y, .LineColor(i)
 
                         Call ShowRewardItemDescription(CurrentX, CurrentY, .Reward(i))
 
@@ -562,7 +562,7 @@ Private Sub RenderAchievement()
                         CurrentY = yO + 108 + Y
 
                         RenderTexture Tex_Spellicon(IconId), CurrentX, CurrentY, 0, 0, ICON_ACHIEVEMENT_WIDTH, ICON_ACHIEVEMENT_HEIGHT, PIC_X, PIC_Y
-                        RenderText Font(Fonts.OpenSans_Effect), .Lines(i), CurrentX + PIC_X, yO + 115 + Y, .LineColor(i)
+                        RenderText Font(Fonts.FontRegular), .Lines(i), CurrentX + PIC_X, yO + 115 + Y, .LineColor(i)
 
                         Call ShowRewardTitleDescription(CurrentX, CurrentY, .Reward(i))
 
@@ -578,7 +578,7 @@ Private Sub RenderAchievement()
                         CurrentY = yO + 108 + Y
 
                         RenderTexture Tex_Item(CurData.IconId), CurrentX, CurrentY, 0, 0, ICON_ACHIEVEMENT_WIDTH, ICON_ACHIEVEMENT_HEIGHT, PIC_X, PIC_Y
-                        RenderText Font(Fonts.OpenSans_Effect), .Lines(i), CurrentX + PIC_X, yO + 115 + Y, .LineColor(i)
+                        RenderText Font(Fonts.FontRegular), .Lines(i), CurrentX + PIC_X, yO + 115 + Y, .LineColor(i)
 
                         Call ShowRewardCurrencyDescription(CurrentX, CurrentY, .Reward(i))
 
@@ -586,7 +586,7 @@ Private Sub RenderAchievement()
                     End If
 
                 ElseIf .Reward(i).Type = AchievementRewardType_None Then
-                    RenderText Font(Fonts.OpenSans_Effect), .Lines(i), xO + (Width * 0.8) - (StringWidth * 0.5), yO + 115 + Y, .LineColor(i)
+                    RenderText Font(Fonts.FontRegular), .Lines(i), xO + (Width * 0.8) - (StringWidth * 0.5), yO + 115 + Y, .LineColor(i)
                     Y = Y + 20
                 End If
 

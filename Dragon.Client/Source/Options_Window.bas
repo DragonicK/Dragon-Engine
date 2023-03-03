@@ -14,24 +14,24 @@ Public Sub CreateWindow_Options()
 
     ' General
     CreatePictureBox WindowCount, "picBlank", 35, 25, 140, 9, , , , , , , , DesignTypes.DesignBackgroundOval, DesignTypes.DesignBackgroundOval, DesignTypes.DesignBackgroundOval
-    CreateLabel WindowCount, "lblBlank", 35, 22, 140, , "Opcoes Gerais", OpenSans_Regular, White, Alignment.AlignCenter
+    CreateLabel WindowCount, "lblBlank", 35, 22, 140, , "Opcoes Gerais", FontRegular, White, Alignment.AlignCenter
     ' Check boxes
-    CreateCheckbox WindowCount, "chkMusic", 35, 40, 80, , , "Musica", OpenSans_Regular, , , , , DesignTypes.DesignCheckBox
-    CreateCheckbox WindowCount, "chkSound", 115, 40, 80, , , "Som", OpenSans_Regular, , , , , DesignTypes.DesignCheckBox
+    CreateCheckbox WindowCount, "chkMusic", 35, 40, 80, , , "Musica", FontRegular, , , , , DesignTypes.DesignCheckBox
+    CreateCheckbox WindowCount, "chkSound", 115, 40, 80, , , "Som", FontRegular, , , , , DesignTypes.DesignCheckBox
 
-    CreateCheckbox WindowCount, "chkFullscreen", 115, 60, 80, , , "Tela Cheia", OpenSans_Regular, , , , , DesignTypes.DesignCheckBox
+    CreateCheckbox WindowCount, "chkFullscreen", 115, 60, 80, , , "Tela Cheia", FontRegular, , , , , DesignTypes.DesignCheckBox
     ' Resolution
     CreatePictureBox WindowCount, "picBlank", 35, 85, 140, 9, , , , , , , , DesignTypes.DesignBackgroundOval, DesignTypes.DesignBackgroundOval, DesignTypes.DesignBackgroundOval
-    CreateLabel WindowCount, "lblBlank", 35, 82, 140, , "Selecionar Resolucao", OpenSans_Regular, White, Alignment.AlignCenter
+    CreateLabel WindowCount, "lblBlank", 35, 82, 140, , "Selecionar Resolucao", FontRegular, White, Alignment.AlignCenter
     ' combobox
-    CreateComboBox WindowCount, "cmbRes", 30, 100, 150, 18, DesignTypes.DesignComboNormal, OpenSans_Regular
+    CreateComboBox WindowCount, "cmbRes", 30, 100, 150, 18, DesignTypes.DesignComboNormal, FontRegular
     ' Renderer
     CreatePictureBox WindowCount, "picBlank", 35, 125, 140, 9, , , , , , , , DesignTypes.DesignBackgroundOval, DesignTypes.DesignBackgroundOval, DesignTypes.DesignBackgroundOval
-    CreateLabel WindowCount, "lblBlank", 35, 122, 140, , "Modo de DirectX", OpenSans_Regular, White, Alignment.AlignCenter
+    CreateLabel WindowCount, "lblBlank", 35, 122, 140, , "Modo de DirectX", FontRegular, White, Alignment.AlignCenter
     ' Check boxes
-    CreateComboBox WindowCount, "cmbRender", 30, 140, 150, 18, DesignTypes.DesignComboNormal, OpenSans_Regular
+    CreateComboBox WindowCount, "cmbRender", 30, 140, 150, 18, DesignTypes.DesignComboNormal, FontRegular
     ' Button
-    CreateButton WindowCount, "btnConfirm", 65, 168, 80, 22, "CONFIRMAR", OpenSans_Effect, , , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf ButtonConfirm)
+    CreateButton WindowCount, "btnConfirm", 65, 168, 80, 22, "CONFIRMAR", FontRegular, , , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf ButtonConfirm)
     
     WindowIndex = WindowCount
 
@@ -41,10 +41,10 @@ End Sub
 
 Private Sub SetOptionsScreen()
     ' clear the combolists
-    Erase Windows(WindowIndex).Controls(GetControlIndex("winOptions", "cmbRes")).list
-    ReDim Windows(WindowIndex).Controls(GetControlIndex("winOptions", "cmbRes")).list(0)
-    Erase Windows(WindowIndex).Controls(GetControlIndex("winOptions", "cmbRender")).list
-    ReDim Windows(WindowIndex).Controls(GetControlIndex("winOptions", "cmbRender")).list(0)
+    Erase Windows(WindowIndex).Controls(GetControlIndex("winOptions", "cmbRes")).List
+    ReDim Windows(WindowIndex).Controls(GetControlIndex("winOptions", "cmbRes")).List(0)
+    Erase Windows(WindowIndex).Controls(GetControlIndex("winOptions", "cmbRender")).List
+    ReDim Windows(WindowIndex).Controls(GetControlIndex("winOptions", "cmbRender")).List(0)
 
     ' Resolutions
     Combobox_AddItem WindowIndex, GetControlIndex("winOptions", "cmbRes"), "1920x1080"
