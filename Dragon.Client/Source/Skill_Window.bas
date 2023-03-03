@@ -21,7 +21,7 @@ Public Sub CreateWindow_Skills()
     SetSkillPageCount
 
     ' Create window
-    CreateWindow "winSkills", "HABILIDADES", zOrder_Win, 0, 0, 300, 410, 0, False, Fonts.OpenSans_Effect, , 2, 7, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, , , , , GetAddress(AddressOf Skills_MouseMove), GetAddress(AddressOf Skills_MouseDown), GetAddress(AddressOf Skills_MouseMove), GetAddress(AddressOf Skills_DblClick), , , GetAddress(AddressOf DrawSkills)
+    CreateWindow "winSkills", "HABILIDADES", zOrder_Win, 0, 0, 300, 410, 0, False, Fonts.FontRegular, , 2, 7, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, , , , , GetAddress(AddressOf Skills_MouseMove), GetAddress(AddressOf Skills_MouseDown), GetAddress(AddressOf Skills_MouseMove), GetAddress(AddressOf Skills_DblClick), , , GetAddress(AddressOf DrawSkills)
     ' Centralise it
     CentraliseWindow WindowCount
 
@@ -31,8 +31,8 @@ Public Sub CreateWindow_Skills()
     ' Close button
     CreateButton WindowCount, "btnClose", Windows(WindowCount).Window.Width - 33, 11, 22, 22, , , , , , , Tex_GUI(TextureControl_CloseNormal), Tex_GUI(TextureControl_CloseHover), Tex_GUI(TextureControl_CloseClick), , , , , , GetAddress(AddressOf btnMenu_Skills)
 
-    CreateButton WindowCount, "btnActive", 38, 42, 100, 26, "ATIVA", OpenSans_Effect, Green, , , , , , , , , , , , GetAddress(AddressOf Button_ShowSkill)
-    CreateButton WindowCount, "btnPassive", 173, 42, 100, 26, "PASSIVA", OpenSans_Effect, , , , , , , , , , , , , GetAddress(AddressOf Button_ShowPassive)
+    CreateButton WindowCount, "btnActive", 38, 42, 100, 26, "ATIVA", FontRegular, Green, , , , , , , , , , , , GetAddress(AddressOf Button_ShowSkill)
+    CreateButton WindowCount, "btnPassive", 173, 42, 100, 26, "PASSIVA", FontRegular, , , , , , , , , , , , , GetAddress(AddressOf Button_ShowPassive)
     
     
     CreateButton WindowCount, "btnUpAttributes", ListX * 27, ListY * 8, 15, 15, , , , , , , Tex_GUI(44), Tex_GUI(45), Tex_GUI(46), , , , , , GetAddress(AddressOf MovePageUp)
@@ -40,7 +40,7 @@ Public Sub CreateWindow_Skills()
     
 
     'Botões setas
-    'CreateLabel WindowCount, "lblPage", 92, 350, 120, 50, "Página: 1/" & SkillPageCount, OpenSans_Effect, White, Alignment.AlignCenter
+    'CreateLabel WindowCount, "lblPage", 92, 350, 120, 50, "Página: 1/" & SkillPageCount, FontRegular, White, Alignment.AlignCenter
 
     WindowIndex = WindowCount
 End Sub
@@ -80,8 +80,8 @@ Public Sub DrawSkills()
                         End If
                     End If
 
-                    RenderText Font(Fonts.OpenSans_Effect), Skill(SkillNum).Name, xO + ListX * 7, yO + (ListY * 5) + (i * SkillOffsetY) + 4, BrightGreen
-                    RenderText Font(Fonts.OpenSans_Effect), "Level " & SkillLevel, xO + ListX * 7, yO + (ListY * 5) + (i * SkillOffsetY) + 18, White
+                    RenderText Font(Fonts.FontRegular), Skill(SkillNum).Name, xO + ListX * 7, yO + (ListY * 5) + (i * SkillOffsetY) + 4, BrightGreen
+                    RenderText Font(Fonts.FontRegular), "Level " & SkillLevel, xO + ListX * 7, yO + (ListY * 5) + (i * SkillOffsetY) + 18, White
                 End If
             End If
 
@@ -111,7 +111,7 @@ Public Sub Skills_MouseDown()
                 .Left = lastMouseX - 16
                 .Top = lastMouseY - 16
                 .MovedX = clickedX - .Left
-                .movedY = clickedY - .Top
+                .MovedY = clickedY - .Top
             End With
 
             ShowWindow WinIndex, , False

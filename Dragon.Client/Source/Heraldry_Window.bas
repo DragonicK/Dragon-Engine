@@ -7,7 +7,7 @@ Public Sub CreateWindow_Heraldry()
     Dim i As Long
 
     ' Create window
-    CreateWindow "winHeraldry", "BRASÃO", zOrder_Win, 0, 0, 280, 350, 0, False, Fonts.OpenSans_Effect, , 2, 7, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, , , , , , , , , , , GetAddress(AddressOf RenderHeraldry)
+    CreateWindow "winHeraldry", "BRASÃO", zOrder_Win, 0, 0, 280, 350, 0, False, Fonts.FontRegular, , 2, 7, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, , , , , , , , , , , GetAddress(AddressOf RenderHeraldry)
     ' Centralise it
     CentraliseWindow WindowCount
     ' Set the index for spawning controls
@@ -123,7 +123,7 @@ Private Sub Heraldry_MouseDown()
             .Left = lastMouseX - 16
             .Top = lastMouseY - 16
             .MovedX = clickedX - .Left
-            .movedY = clickedY - .Top
+            .MovedY = clickedY - .Top
         End With
 
         ShowWindow WinIndex, , False

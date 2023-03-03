@@ -17,7 +17,7 @@ Private ItemLoot As ItemLootRec
 Public Sub CreateWindow_LootDice()
     Dim i As Long, Y As Long
     ' Create window
-    CreateWindow "winLootDice", "LOTERIA", zOrder_Win, 0, 0, 252, 185, 0, False, Fonts.OpenSans_Regular, , 2, 7, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, , , , , , , , , , , GetAddress(AddressOf DrawLootDice)
+    CreateWindow "winLootDice", "LOTERIA", zOrder_Win, 0, 0, 252, 185, 0, False, Fonts.FontRegular, , 2, 7, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, , , , , , , , , , , GetAddress(AddressOf DrawLootDice)
     ' Centralise it
     CentraliseWindow WindowCount
 
@@ -29,14 +29,14 @@ Public Sub CreateWindow_LootDice()
     CreateButton WindowCount, "btnClose", Windows(WindowCount).Window.Width - 33, 11, 22, 22, , , , , , , Tex_GUI(TextureControl_CloseNormal), Tex_GUI(TextureControl_CloseHover), Tex_GUI(TextureControl_CloseClick), , , , , , GetAddress(AddressOf btnMenu_LootDice)
 
     CreatePictureBox WindowCount, "picIcon", 15, 60, 32, 32, , , , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, , GetAddress(AddressOf ShowLootDescription), , GetAddress(AddressOf ShowLootDescription)
-    CreateLabel WindowCount, "lblItemName", 55, 62, 190, 20, "", OpenSans_Effect, Coral, Alignment.AlignLeft
-    CreateLabel WindowCount, "lblItemCount", 55, 74, 190, 20, "", OpenSans_Effect, White, Alignment.AlignLeft
+    CreateLabel WindowCount, "lblItemName", 55, 62, 190, 20, "", FontRegular, Coral, Alignment.AlignLeft
+    CreateLabel WindowCount, "lblItemCount", 55, 74, 190, 20, "", FontRegular, White, Alignment.AlignLeft
     CreatePictureBox WindowCount, "picName", 47, 60, 190, 32, , , , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, , GetAddress(AddressOf ShowLootDescription), , GetAddress(AddressOf ShowLootDescription)
 
-    CreateLabel WindowCount, "lblRemainingTime", 15, 95, 220, 20, "Tempo Restante: 180", OpenSans_Effect, White, Alignment.AlignRight
+    CreateLabel WindowCount, "lblRemainingTime", 15, 95, 220, 20, "Tempo Restante: 180", FontRegular, White, Alignment.AlignRight
 
-    CreateButton WindowCount, "btnRoll", 16, 145, 105, 20, "Rolar", OpenSans_Effect, White, , True, , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf Button_RollDice)
-    CreateButton WindowCount, "btnPass", 131, 145, 105, 20, "Passar", OpenSans_Effect, White, , True, , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf Button_Pass)
+    CreateButton WindowCount, "btnRoll", 16, 145, 105, 20, "Rolar", FontRegular, White, , True, , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf Button_RollDice)
+    CreateButton WindowCount, "btnPass", 131, 145, 105, 20, "Passar", FontRegular, White, , True, , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf Button_Pass)
 
     WindowIndex = WindowCount
     RemainingTime = -1
@@ -166,7 +166,7 @@ Private Sub SetControlImage(ByVal TextureNum As Long)
     ControlIndex = GetControlIndex("winLootDice", "picIcon")
 
     For i = 0 To entStates.state_Count - 1
-        Windows(WindowIndex).Controls(ControlIndex).Image(i) = TextureNum
+        Windows(WindowIndex).Controls(ControlIndex).image(i) = TextureNum
     Next
 
 End Sub

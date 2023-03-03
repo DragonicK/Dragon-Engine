@@ -21,7 +21,7 @@ Private PageCount As Long
 
 Public Sub CreateWindow_Conversation()
 ' Create the window
-    CreateWindow "winConversation", "CONVERSAÇÃO", zOrder_Win, 0, 0, 420, 400, 0, , Fonts.OpenSans_Effect, , 3, 5, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, , , , , , , , , , , GetAddress(AddressOf RenderConversation)
+    CreateWindow "winConversation", "CONVERSAÇÃO", zOrder_Win, 0, 0, 420, 400, 0, , Fonts.FontRegular, , 3, 5, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, , , , , , , , , , , GetAddress(AddressOf RenderConversation)
 
     ' Centralise it
     CentraliseWindow WindowCount
@@ -33,14 +33,14 @@ Public Sub CreateWindow_Conversation()
     CreateButton WindowCount, "btnClose", Windows(WindowCount).Window.Width - 33, 11, 22, 22, , , , , , , Tex_GUI(TextureControl_CloseNormal), Tex_GUI(TextureControl_CloseHover), Tex_GUI(TextureControl_CloseClick), , , , , , GetAddress(AddressOf HideConversation)
 
     ' Reply buttons
-    CreateButton WindowCount, "btnOpt1", 30, OptionsY + (OptionOffsetY * 0), 340, 22, "[Text]", OpenSans_Effect, White, , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf Button_Option1), , , , , ColorType.Gold
-    CreateButton WindowCount, "btnOpt2", 30, OptionsY + (OptionOffsetY * 1), 340, 22, "[Text]", OpenSans_Effect, White, , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf Button_Option2), , , , , ColorType.Gold
-    CreateButton WindowCount, "btnOpt3", 30, OptionsY + (OptionOffsetY * 2), 340, 22, "[Text]", OpenSans_Effect, White, , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf Button_Option3), , , , , ColorType.Gold
-    CreateButton WindowCount, "btnOpt4", 30, OptionsY + (OptionOffsetY * 3), 340, 22, "[Text]", OpenSans_Effect, White, , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf Button_Option4), , , , , ColorType.Gold
-    CreateButton WindowCount, "btnOpt5", 30, OptionsY + (OptionOffsetY * 4), 340, 22, "[Text]", OpenSans_Effect, White, , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf Button_Option5), , , , , ColorType.Gold
-    CreateButton WindowCount, "btnOpt6", 30, OptionsY + (OptionOffsetY * 5), 340, 22, "[Text]", OpenSans_Effect, White, , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf Button_Option6), , , , , ColorType.Gold
-    CreateButton WindowCount, "btnOpt7", 30, OptionsY + (OptionOffsetY * 6), 340, 22, "[Text]", OpenSans_Effect, White, , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf Button_Option7), , , , , ColorType.Gold
-    CreateButton WindowCount, "btnOpt8", 30, OptionsY + (OptionOffsetY * 7), 340, 22, "[Text]", OpenSans_Effect, White, , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf Button_Option8), , , , , ColorType.Gold
+    CreateButton WindowCount, "btnOpt1", 30, OptionsY + (OptionOffsetY * 0), 340, 22, "[Text]", FontRegular, White, , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf Button_Option1), , , , , ColorType.Gold
+    CreateButton WindowCount, "btnOpt2", 30, OptionsY + (OptionOffsetY * 1), 340, 22, "[Text]", FontRegular, White, , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf Button_Option2), , , , , ColorType.Gold
+    CreateButton WindowCount, "btnOpt3", 30, OptionsY + (OptionOffsetY * 2), 340, 22, "[Text]", FontRegular, White, , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf Button_Option3), , , , , ColorType.Gold
+    CreateButton WindowCount, "btnOpt4", 30, OptionsY + (OptionOffsetY * 3), 340, 22, "[Text]", FontRegular, White, , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf Button_Option4), , , , , ColorType.Gold
+    CreateButton WindowCount, "btnOpt5", 30, OptionsY + (OptionOffsetY * 4), 340, 22, "[Text]", FontRegular, White, , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf Button_Option5), , , , , ColorType.Gold
+    CreateButton WindowCount, "btnOpt6", 30, OptionsY + (OptionOffsetY * 5), 340, 22, "[Text]", FontRegular, White, , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf Button_Option6), , , , , ColorType.Gold
+    CreateButton WindowCount, "btnOpt7", 30, OptionsY + (OptionOffsetY * 6), 340, 22, "[Text]", FontRegular, White, , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf Button_Option7), , , , , ColorType.Gold
+    CreateButton WindowCount, "btnOpt8", 30, OptionsY + (OptionOffsetY * 7), 340, 22, "[Text]", FontRegular, White, , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf Button_Option8), , , , , ColorType.Gold
 
     'Arrow
     CreateButton WindowCount, "btnUp", 380, 90, 15, 15, , , , , , , Tex_GUI(44), Tex_GUI(45), Tex_GUI(46), , , , , , GetAddress(AddressOf Button_MoveUp)
@@ -315,9 +315,9 @@ Private Sub RenderHeader(ByRef Text As String)
 
     
 
-    Width = (Width / 2) - (TextWidth(Font(Fonts.OpenSans_Effect), Text) / 2)
+    Width = (Width / 2) - (TextWidth(Font(Fonts.FontRegular), Text) / 2)
 
-    RenderText Font(Fonts.OpenSans_Effect), Text, xO + Width, yO + 48, White
+    RenderText Font(Fonts.FontRegular), Text, xO + Width, yO + 48, White
 End Sub
 
 Private Sub RenderMainText(ByRef Text As String)
@@ -329,7 +329,7 @@ Private Sub RenderMainText(ByRef Text As String)
         X = Windows(WindowIndex).Window.Left + MainTextX
         Y = Windows(WindowIndex).Window.Top + MainTextY
 
-        tWidth = TextWidth(Font(Fonts.OpenSans_Effect), Text)
+        tWidth = TextWidth(Font(Fonts.FontRegular), Text)
 
         If tWidth > Width Then
             Dim TextArray() As String
@@ -342,15 +342,15 @@ Private Sub RenderMainText(ByRef Text As String)
             TextLineCount = UBound(TextArray)
 
             For i = 1 To TextLineCount
-                tWidth = TextWidth(Font(Fonts.OpenSans_Effect), TextArray(i))
+                tWidth = TextWidth(Font(Fonts.FontRegular), TextArray(i))
 
-                RenderText Font(Fonts.OpenSans_Effect), TextArray(i), X + (Width * 0.5) - (tWidth * 0.5), Y + yOffset, White
+                RenderText Font(Fonts.FontRegular), TextArray(i), X + (Width * 0.5) - (tWidth * 0.5), Y + yOffset, White
                 yOffset = yOffset + 14
             Next
         Else
-            tWidth = TextWidth(Font(Fonts.OpenSans_Effect), Text)
+            tWidth = TextWidth(Font(Fonts.FontRegular), Text)
 
-            RenderText Font(Fonts.OpenSans_Effect), Text, X + (Width * 0.5) - (tWidth * 0.5), Y, White
+            RenderText Font(Fonts.FontRegular), Text, X + (Width * 0.5) - (tWidth * 0.5), Y, White
         End If
     End If
 

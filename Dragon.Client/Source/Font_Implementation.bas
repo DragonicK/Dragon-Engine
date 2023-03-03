@@ -39,12 +39,9 @@ End Type
 
 ' Fonts
 Public Enum Fonts
-    OpenSans_Regular = 1
-    OpenSans_Bold
-    OpenSans_Italic
-    OpenSans_Effect
+    FontRegular = 1
     OpenSans_Damage
-    ' count value
+
     Fonts_Count
 End Enum
 
@@ -58,11 +55,8 @@ Public Sub LoadFonts()
     ' re-dim the fonts
     ReDim Font(1 To Fonts.Fonts_Count - 1)
     ' load the fonts
-    SetFont Fonts.OpenSans_Regular, "OpenSansRegular_11", 256, 2, 2
-    SetFont Fonts.OpenSans_Bold, "OpenSansBold_11", 256, 2, 2
-    SetFont Fonts.OpenSans_Italic, "OpenSansItalic_11", 256, 2, 2
-    SetFont Fonts.OpenSans_Effect, "OpenSansEffect_11", 256, 2, 2
-    SetFont Fonts.OpenSans_Damage, "OpenSansDamage", 256, 2, 2
+    SetFont Fonts.FontRegular, "regular", 256, 2, 2
+    SetFont Fonts.OpenSans_Damage, "damage", 256, 2, 2
 End Sub
 
 Private Sub SetFont(ByVal FontNum As Long, ByVal texName As String, ByVal Size As Long, Optional ByVal xOffset As Long, Optional ByVal yOffset As Long)
@@ -288,7 +282,7 @@ Public Sub WordWrap_Array(ByVal Text As String, ByVal MaxLineLen As Long, ByRef 
         End Select
 
         'Add up the size
-        Size = Size + Font(Fonts.OpenSans_Regular).HeaderInfo.CharWidth(Asc(Mid$(Text, i, 1)))
+        Size = Size + Font(Fonts.FontRegular).HeaderInfo.CharWidth(Asc(Mid$(Text, i, 1)))
 
         'Check for too large of a size
         If Size > MaxLineLen Then
@@ -307,7 +301,7 @@ Public Sub WordWrap_Array(ByVal Text As String, ByVal MaxLineLen As Long, ByRef 
                 theArray(LineCount) = Trim$(Mid$(Text, b, lastSpace - b))
                 b = lastSpace + 1
                 'Count all the words we ignored (the ones that weren't printed, but are before "i")
-                Size = TextWidth(Font(Fonts.OpenSans_Regular), Mid$(Text, lastSpace, i - lastSpace))
+                Size = TextWidth(Font(Fonts.FontRegular), Mid$(Text, lastSpace, i - lastSpace))
             End If
         End If
 

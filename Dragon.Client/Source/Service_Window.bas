@@ -43,7 +43,7 @@ End Sub
 
 Public Sub CreateWindow_Services()
 ' Create window
-    CreateWindow "winServices", "SERVIÇO PREMIUM", zOrder_Win, 0, 0, 220, 505, 0, False, Fonts.OpenSans_Effect, , 2, 7, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, , , , , , , , , , , GetAddress(AddressOf RenderServices)
+    CreateWindow "winServices", "SERVIÇO PREMIUM", zOrder_Win, 0, 0, 220, 505, 0, False, Fonts.FontRegular, , 2, 7, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, , , , , , , , , , , GetAddress(AddressOf RenderServices)
     ' Centralise it
     CentraliseWindow WindowCount
 
@@ -53,15 +53,15 @@ Public Sub CreateWindow_Services()
     ' Close button
     CreateButton WindowCount, "btnClose", Windows(WindowCount).Window.Width - 33, 11, 22, 22, , , , , , , Tex_GUI(TextureControl_CloseNormal), Tex_GUI(TextureControl_CloseHover), Tex_GUI(TextureControl_CloseClick), , , , , , GetAddress(AddressOf ButtonMenu_Services)
 
-    CreateButton WindowCount, "btnBonus", 0, 42, 80, 26, "BONUS", OpenSans_Effect, Green, , , , , , , , , , , , GetAddress(AddressOf ShowBonusRates)
-    CreateButton WindowCount, "btnServer", 70, 42, 80, 26, "SERVIDOR", OpenSans_Effect, , , , , , , , , , , , , GetAddress(AddressOf ShowServerRate)
-    CreateButton WindowCount, "btnService", 135, 42, 80, 26, "SERVIÇO", OpenSans_Effect, , , , , , , , , , , , , GetAddress(AddressOf ShowServiceRates)
+    CreateButton WindowCount, "btnBonus", 0, 42, 80, 26, "BONUS", FontRegular, Green, , , , , , , , , , , , GetAddress(AddressOf ShowBonusRates)
+    CreateButton WindowCount, "btnServer", 70, 42, 80, 26, "SERVIDOR", FontRegular, , , , , , , , , , , , , GetAddress(AddressOf ShowServerRate)
+    CreateButton WindowCount, "btnService", 135, 42, 80, 26, "SERVIÇO", FontRegular, , , , , , , , , , , , , GetAddress(AddressOf ShowServiceRates)
 
-    CreateLabel WindowCount, "lblName", 0, OffSetY - 10, 220, 15, "BONUS TOTAL", OpenSans_Effect, White, Alignment.AlignCenter
-    CreateLabel WindowCount, "lblExpire", 0, OffSetY + 365, 220, 15, "TÉRMINO: 02/01/1995 23:52", OpenSans_Effect, Coral, Alignment.AlignCenter, False
+    CreateLabel WindowCount, "lblName", 0, OffSetY - 10, 220, 15, "BONUS TOTAL", FontRegular, White, Alignment.AlignCenter
+    CreateLabel WindowCount, "lblExpire", 0, OffSetY + 365, 220, 15, "TÉRMINO: 02/01/1995 23:52", FontRegular, Coral, Alignment.AlignCenter, False
 
     'Botões setas
-    CreateLabel WindowCount, "lblPage", 0, OffSetY + 390, 220, 50, "1/1", OpenSans_Effect, White, Alignment.AlignCenter, False
+    CreateLabel WindowCount, "lblPage", 0, OffSetY + 390, 220, 50, "1/1", FontRegular, White, Alignment.AlignCenter, False
     CreateButton WindowCount, "btnUp", 140, OffSetY + 390, 16, 16, , , , , False, , Tex_GUI(44), Tex_GUI(45), Tex_GUI(46), , , , , , GetAddress(AddressOf MoveUp)
     CreateButton WindowCount, "btnDown", 65, OffSetY + 390, 16, 16, , , , , False, , Tex_GUI(47), Tex_GUI(48), Tex_GUI(49), , , , , , GetAddress(AddressOf MoveDown)
 
@@ -261,7 +261,7 @@ Private Sub RenderServices()
     'RenderDesign DesignTypes.desWin_AincradMenu, xO, yO + 40, WindowWidth, 30
 
     For i = 0 To MaxDescriptionTextLine
-        SizeWidth = TextWidth(Font(Fonts.OpenSans_Regular), DescriptionTextLine(i))
+        SizeWidth = TextWidth(Font(Fonts.FontRegular), DescriptionTextLine(i))
 
         If DescriptionTextLine(i) = ExperienceText Then
             Color = Gold
@@ -273,7 +273,7 @@ Private Sub RenderServices()
             Color = White
         End If
 
-        Call RenderText(Font(Fonts.OpenSans_Regular), DescriptionTextLine(i), xO + DescriptionX - (SizeWidth * 0.5), yO + DescriptionY + (i * 15), Color)
+        Call RenderText(Font(Fonts.FontRegular), DescriptionTextLine(i), xO + DescriptionX - (SizeWidth * 0.5), yO + DescriptionY + (i * 15), Color)
     Next
 
 End Sub

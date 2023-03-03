@@ -20,7 +20,7 @@ End Sub
 Public Sub CreateWindow_ViewEquipment()
     Dim i As Long
     ' Create window
-    CreateWindow "winViewEquipment", "INFORMAÇÃO", zOrder_Win, 0, 0, 260, 420, 0, False, Fonts.OpenSans_Effect, , 2, 6, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, , , , , GetAddress(AddressOf ViewEquipment_MouseMove), GetAddress(AddressOf ViewEquipment_MouseDown), GetAddress(AddressOf ViewEquipment_MouseMove), GetAddress(AddressOf ViewEquipment_DoubleClick), , , GetAddress(AddressOf RenderViewEquipment)
+    CreateWindow "winViewEquipment", "INFORMAÇÃO", zOrder_Win, 0, 0, 260, 420, 0, False, Fonts.FontRegular, , 2, 6, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, , , , , GetAddress(AddressOf ViewEquipment_MouseMove), GetAddress(AddressOf ViewEquipment_MouseDown), GetAddress(AddressOf ViewEquipment_MouseMove), GetAddress(AddressOf ViewEquipment_DoubleClick), , , GetAddress(AddressOf RenderViewEquipment)
     ' Centralise it
     CentraliseWindow WindowCount
 
@@ -30,12 +30,12 @@ Public Sub CreateWindow_ViewEquipment()
     ' Close button
     CreateButton WindowCount, "btnClose", Windows(WindowCount).Window.Width - 33, 11, 22, 22, , , , , , , Tex_GUI(TextureControl_CloseNormal), Tex_GUI(TextureControl_CloseHover), Tex_GUI(TextureControl_CloseClick), , , , , , GetAddress(AddressOf ButtonMenu_CloseViewEquipment)
 
-    CreateButton WindowCount, "btnCharacter", 25, 42, 100, 26, "PERSONAGEM", OpenSans_Effect, Green, , , , , , , , , , , , GetAddress(AddressOf ShowCharacter_Click)
-    CreateButton WindowCount, "btnHeraldry", 135, 42, 100, 26, "BRASÃO", OpenSans_Effect, , , , , , , , , , , , , GetAddress(AddressOf ShowHeraldry_Click)
+    CreateButton WindowCount, "btnCharacter", 25, 42, 100, 26, "PERSONAGEM", FontRegular, Green, , , , , , , , , , , , GetAddress(AddressOf ShowCharacter_Click)
+    CreateButton WindowCount, "btnHeraldry", 135, 42, 100, 26, "BRASÃO", FontRegular, , , , , , , , , , , , , GetAddress(AddressOf ShowHeraldry_Click)
 
     ' Labels
-    CreateLabel WindowCount, "lblName", 50, 90, 156, 16, "NOME LV. 50", OpenSans_Effect, White, Alignment.AlignCenter
-    CreateLabel WindowCount, "lblClass", 50, 170, 156, 16, "PRIEST", OpenSans_Effect, White, Alignment.AlignCenter
+    CreateLabel WindowCount, "lblName", 50, 90, 156, 16, "NOME LV. 50", FontRegular, White, Alignment.AlignCenter
+    CreateLabel WindowCount, "lblClass", 50, 170, 156, 16, "PRIEST", FontRegular, White, Alignment.AlignCenter
 
     WindowIndex = WindowCount
     

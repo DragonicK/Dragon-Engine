@@ -452,7 +452,7 @@ Public Sub DrawHotbar()
         ' draw the numbers
         sS = Str(i)
         If i = 10 Then sS = "0"
-        RenderText Font(Fonts.OpenSans_Regular), sS, xO + 4, yO + 19, White
+        RenderText Font(Fonts.FontRegular), sS, xO + 4, yO + 19, White
     Next
 End Sub
 
@@ -470,7 +470,7 @@ Public Sub RenderMapName()
         Colour = Grey
     End If
 
-    RenderText Font(Fonts.OpenSans_Regular), Trim$(CurrentMap.MapData.Name) & " - " & zonetype, ScreenWidth - 15 - TextWidth(Font(Fonts.OpenSans_Regular), Trim$(CurrentMap.MapData.Name) & " - " & zonetype), 45, Colour, 255
+    RenderText Font(Fonts.FontRegular), Trim$(CurrentMap.MapData.Name) & " - " & zonetype, ScreenWidth - 15 - TextWidth(Font(Fonts.FontRegular), Trim$(CurrentMap.MapData.Name) & " - " & zonetype), 45, Colour, 255
 End Sub
 
 Public Sub DrawChatBubble(ByVal Index As Long)
@@ -497,7 +497,7 @@ Public Sub DrawChatBubble(ByVal Index As Long)
         tmpNum = UBound(theArray)
 
         For i = 1 To tmpNum
-            If TextWidth(Font(Fonts.OpenSans_Regular), theArray(i)) > MaxWidth Then MaxWidth = TextWidth(Font(Fonts.OpenSans_Regular), theArray(i))
+            If TextWidth(Font(Fonts.FontRegular), theArray(i)) > MaxWidth Then MaxWidth = TextWidth(Font(Fonts.FontRegular), theArray(i))
         Next
 
         ' calculate the new position
@@ -529,7 +529,7 @@ Public Sub DrawChatBubble(ByVal Index As Long)
         tmpNum = UBound(theArray)
 
         For i = 1 To tmpNum
-            RenderText Font(Fonts.OpenSans_Regular), theArray(i), 4 + X - (TextWidth(Font(Fonts.OpenSans_Regular), theArray(i)) / 2), y2, Colour
+            RenderText Font(Fonts.FontRegular), theArray(i), 4 + X - (TextWidth(Font(Fonts.FontRegular), theArray(i)) / 2), y2, Colour
             y2 = y2 + 12
         Next
 
@@ -911,13 +911,13 @@ Public Sub Render_Graphics()
     If Not hideGUI And Not ScreenshotMode Then RenderEntities
 
     ' render FPS
-    If Not ScreenshotMode Then RenderText Font(Fonts.OpenSans_Regular), "FPS: " & GameFPS & " Ping: " & Ping, 1, 1, White
+    If Not ScreenshotMode Then RenderText Font(Fonts.FontRegular), "FPS: " & GameFPS & " Ping: " & Ping, 1, 1, White
 
     ' draw loc
     If BLoc Then
-        RenderText Font(Fonts.OpenSans_Regular), Trim$("cur x: " & CurX & " y: " & CurY), 260, 6, Yellow
-        RenderText Font(Fonts.OpenSans_Regular), Trim$("loc x: " & GetPlayerX(MyIndex) & " y: " & GetPlayerY(MyIndex)), 260, 22, Yellow
-        RenderText Font(Fonts.OpenSans_Regular), Trim$(" (map #" & GetPlayerMap(MyIndex) & ")"), 260, 38, Yellow
+        RenderText Font(Fonts.FontRegular), Trim$("cur x: " & CurX & " y: " & CurY), 260, 6, Yellow
+        RenderText Font(Fonts.FontRegular), Trim$("loc x: " & GetPlayerX(MyIndex) & " y: " & GetPlayerY(MyIndex)), 260, 22, Yellow
+        RenderText Font(Fonts.FontRegular), Trim$(" (map #" & GetPlayerMap(MyIndex) & ")"), 260, 38, Yellow
     End If
 
     ' draw map name

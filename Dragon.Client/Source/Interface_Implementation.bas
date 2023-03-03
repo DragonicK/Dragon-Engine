@@ -190,7 +190,7 @@ Public zOrder_Con As Long
 
 Public Sub CreateEntity(winNum As Long, zOrder As Long, Name As String, tType As EntityTypes, ByRef Design() As Long, ByRef image() As Long, ByRef EntityCallBack() As Long, _
                         Optional Left As Long, Optional Top As Long, Optional Width As Long, Optional Height As Long, Optional Visible As Boolean = True, Optional CanDrag As Boolean, Optional Max As Long, _
-                        Optional Min As Long, Optional Value As Long, Optional Text As String, Optional Align As Byte, Optional Font As Long = Fonts.OpenSans_Regular, Optional TextColour As Long = White, _
+                        Optional Min As Long, Optional Value As Long, Optional Text As String, Optional Align As Byte, Optional Font As Long = Fonts.FontRegular, Optional TextColour As Long = White, _
                         Optional Alpha As Long = 255, Optional ClickThrough As Boolean, Optional xOffset As Long, Optional yOffset As Long, Optional zChange As Byte, Optional ByVal Icon As Long, _
                         Optional ByVal onDraw As Long, Optional isActive As Boolean, Optional isCensor As Boolean, Optional TextColourHover As Long, Optional TextColourClick As Long, _
                         Optional Tooltip As String, Optional Group As Long, Optional Multiline As Boolean)
@@ -537,7 +537,7 @@ Public Sub RenderEntity(winNum As Long, entNum As Long)
             xOffset = Width
 
             ' Calculate the vertical centre
-            Height = TextHeight(Font(Fonts.OpenSans_Regular))
+            Height = TextHeight(Font(Fonts.FontRegular))
             If Height > .Height Then
                 ver_centre = .Top + yO
             Else
@@ -1114,7 +1114,7 @@ Sub Combobox_AddItem(WinIndex As Long, ControlIndex As Long, Text As String)
 End Sub
 
 Public Sub CreateWindow(Name As String, caption As String, zOrder As Long, Left As Long, Top As Long, Width As Long, Height As Long, Icon As Long, _
-                        Optional Visible As Boolean = True, Optional Font As Long = Fonts.OpenSans_Regular, Optional TextColour As Long = White, Optional xOffset As Long, _
+                        Optional Visible As Boolean = True, Optional Font As Long = Fonts.FontRegular, Optional TextColour As Long = White, Optional xOffset As Long, _
                         Optional yOffset As Long, Optional DesignNormal As Long, Optional DesignHover As Long, Optional DesignMouseDown As Long, Optional ImageNormal As Long, _
                         Optional ImageHover As Long, Optional ImageMouseDown As Long, Optional EntityCallBackNormal As Long, Optional EntityCallBackHover As Long, Optional EntityCallBackMouseDown As Long, _
                         Optional EntityCallBackMouseMove As Long, Optional EntityCallBackDoubleClick As Long, Optional CanDrag As Boolean = True, Optional zChange As Byte = True, Optional ByVal onDraw As Long, _
@@ -1186,7 +1186,7 @@ Public Sub CreateWindow(Name As String, caption As String, zOrder As Long, Left 
     zOrder_Win = zOrder_Win + 1
 End Sub
 
-Public Sub CreateTextbox(winNum As Long, Name As String, Left As Long, Top As Long, Width As Long, Height As Long, Optional Text As String, Optional Font As Long = Fonts.OpenSans_Regular, _
+Public Sub CreateTextbox(winNum As Long, Name As String, Left As Long, Top As Long, Width As Long, Height As Long, Optional Text As String, Optional Font As Long = Fonts.FontRegular, _
                          Optional TextColour As Long = White, Optional Align As Byte = Alignment.AlignLeft, Optional Visible As Boolean = True, Optional Alpha As Long = 255, Optional ImageNormal As Long, _
                          Optional ImageHover As Long, Optional ImageMouseDown As Long, Optional DesignNormal As Long, Optional DesignHover As Long, Optional DesignMouseDown As Long, _
                          Optional EntityCallBackNormal As Long, Optional EntityCallBackHover As Long, Optional EntityCallBackMouseDown As Long, Optional EntityCallBackMouseMove As Long, Optional EntityCallBackDoubleClick As Long, _
@@ -1238,7 +1238,7 @@ Public Sub CreatePictureBox(winNum As Long, Name As String, Left As Long, Top As
     CreateEntity winNum, zOrder_Con, Name, EntityPictureBox, Design(), image(), EntityCallBack(), Left, Top, Width, Height, Visible, CanDrag, , , , , , , , Alpha, ClickThrough, , , , , onDraw
 End Sub
 
-Public Sub CreateButton(winNum As Long, Name As String, Left As Long, Top As Long, Width As Long, Height As Long, Optional Text As String, Optional Font As Fonts = Fonts.OpenSans_Regular, _
+Public Sub CreateButton(winNum As Long, Name As String, Left As Long, Top As Long, Width As Long, Height As Long, Optional Text As String, Optional Font As Fonts = Fonts.FontRegular, _
                         Optional TextColour As Long = White, Optional Icon As Long, Optional Visible As Boolean = True, Optional Alpha As Long = 255, Optional ImageNormal As Long, Optional ImageHover As Long, _
                         Optional ImageMouseDown As Long, Optional DesignNormal As Long, Optional DesignHover As Long, Optional DesignMouseDown As Long, Optional EntityCallBackNormal As Long, _
                         Optional EntityCallBackHover As Long, Optional EntityCallBackMouseDown As Long, Optional EntityCallBackMouseMove As Long, Optional EntityCallBackDoubleClick As Long, Optional xOffset As Long, _
@@ -1268,7 +1268,7 @@ Public Sub CreateButton(winNum As Long, Name As String, Left As Long, Top As Lon
     CreateEntity winNum, zOrder_Con, Name, EntityButton, Design(), image(), EntityCallBack(), Left, Top, Width, Height, Visible, , , , , Text, , Font, TextColour, Alpha, , xOffset, yOffset, , Icon, , , , TextColourHover, TextColourClick, Tooltip
 End Sub
 
-Public Sub CreateLabel(winNum As Long, Name As String, Left As Long, Top As Long, Width As Long, Optional Height As Long, Optional Text As String, Optional Font As Fonts = Fonts.OpenSans_Regular, _
+Public Sub CreateLabel(winNum As Long, Name As String, Left As Long, Top As Long, Width As Long, Optional Height As Long, Optional Text As String, Optional Font As Fonts = Fonts.FontRegular, _
                        Optional TextColour As Long = White, Optional Align As Byte = Alignment.AlignLeft, Optional Visible As Boolean = True, Optional Alpha As Long = 255, Optional ClickThrough As Boolean, _
                        Optional EntityCallBackNormal As Long, Optional EntityCallBackHover As Long, Optional EntityCallBackMouseDown As Long, Optional EntityCallBackMouseMove As Long, Optional EntityCallBackDoubleClick As Long)
     Dim Design(0 To entStates.state_Count - 1) As Long
@@ -1287,7 +1287,7 @@ Public Sub CreateLabel(winNum As Long, Name As String, Left As Long, Top As Long
 End Sub
 
 Public Sub CreateCheckbox(winNum As Long, Name As String, Left As Long, Top As Long, Width As Long, Optional Height As Long = 15, Optional Value As Long, Optional Text As String, _
-                          Optional Font As Fonts = Fonts.OpenSans_Regular, Optional TextColour As Long = White, Optional Align As Byte = Alignment.AlignLeft, Optional Visible As Boolean = True, Optional Alpha As Long = 255, _
+                          Optional Font As Fonts = Fonts.FontRegular, Optional TextColour As Long = White, Optional Align As Byte = Alignment.AlignLeft, Optional Visible As Boolean = True, Optional Alpha As Long = 255, _
                           Optional theDesign As Long, Optional EntityCallBackNormal As Long, Optional EntityCallBackHover As Long, Optional EntityCallBackMouseDown As Long, Optional EntityCallBackMouseMove As Long, _
                           Optional EntityCallBackDoubleClick As Long, Optional Group As Long)
     Dim Design(0 To entStates.state_Count - 1) As Long
@@ -1308,7 +1308,7 @@ Public Sub CreateCheckbox(winNum As Long, Name As String, Left As Long, Top As L
     CreateEntity winNum, zOrder_Con, Name, EntityCheckBox, Design(), image(), EntityCallBack(), Left, Top, Width, Height, Visible, , , , Value, Text, Align, Font, TextColour, Alpha, , , , , , , , , , , , Group
 End Sub
 
-Public Sub CreateComboBox(winNum As Long, Name As String, Left As Long, Top As Long, Width As Long, Height As Long, Design As Long, Optional Font As Fonts = Fonts.OpenSans_Regular)
+Public Sub CreateComboBox(winNum As Long, Name As String, Left As Long, Top As Long, Width As Long, Height As Long, Design As Long, Optional Font As Fonts = Fonts.FontRegular)
     Dim theDesign(0 To entStates.state_Count - 1) As Long
     Dim image(0 To entStates.state_Count - 1) As Long
     Dim EntityCallBack(0 To entStates.state_Count - 1) As Long
@@ -1426,7 +1426,7 @@ Public Sub CreateWindow_Combobox()
     CreateWindow "winComboMenuBG", "ComboMenuBG", zOrder_Win, 0, 0, 800, 600, 0, , , , , , , , , , , , , , GetAddress(AddressOf CloseComboMenu), , , False, False
 
     ' Window
-    CreateWindow "winComboMenu", "ComboMenu", zOrder_Win, 0, 0, 100, 100, 0, , Fonts.OpenSans_Regular, , , , DesignTypes.DesignComboMenu, , , , , , , , , , , False, False
+    CreateWindow "winComboMenu", "ComboMenu", zOrder_Win, 0, 0, 100, 100, 0, , Fonts.FontRegular, , , , DesignTypes.DesignComboMenu, , , , , , , , , , , False, False
     
     ' Centralise it
     CentraliseWindow WindowCount
@@ -1435,7 +1435,7 @@ End Sub
 Public Sub CreateWindow_Loading()
 
     ' Create the window
-    CreateWindow "winLoading", "Carregando", zOrder_Win, 0, 0, 278, 79, 0, True, Fonts.OpenSans_Regular, , 2, 7, DesignTypes.DesignWindowWithoutTopBar, DesignTypes.DesignWindowWithoutTopBar, DesignTypes.DesignWindowWithoutTopBar, , , , , , , , , False
+    CreateWindow "winLoading", "Carregando", zOrder_Win, 0, 0, 278, 79, 0, True, Fonts.FontRegular, , 2, 7, DesignTypes.DesignWindowWithoutTopBar, DesignTypes.DesignWindowWithoutTopBar, DesignTypes.DesignWindowWithoutTopBar, , , , , , , , , False
     
     ' Centralise it
     CentraliseWindow WindowCount
@@ -1447,7 +1447,7 @@ Public Sub CreateWindow_Loading()
     CreatePictureBox WindowCount, "picRecess", 26, 23, 226, 26, , , , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox
     
     ' Label
-    CreateLabel WindowCount, "lblLoading", 6, 27, 266, , "Carregando dados do jogo ...", OpenSans_Regular, , Alignment.AlignCenter
+    CreateLabel WindowCount, "lblLoading", 6, 27, 266, , "Carregando dados do jogo ...", FontRegular, , Alignment.AlignCenter
 End Sub
 
 Public Sub CreateWindow_Bars()
@@ -1471,13 +1471,13 @@ Public Sub CreateWindow_Bars()
     CreatePictureBox WindowCount, "picBlank", 0, 0, 0, 0, , , , , , , , , , , , , , , , GetAddress(AddressOf Bars_OnDraw)
     
     ' Label HP
-    CreateLabel WindowCount, "lblHP", 15, 14, 209, 12, "0/0", OpenSans_Regular, White, Alignment.AlignCenter
+    CreateLabel WindowCount, "lblHP", 15, 14, 209, 12, "0/0", FontRegular, White, Alignment.AlignCenter
     
     ' Label MP
-    CreateLabel WindowCount, "lblMP", 15, 31, 209, 12, "0/0", OpenSans_Regular, White, Alignment.AlignCenter
+    CreateLabel WindowCount, "lblMP", 15, 31, 209, 12, "0/0", FontRegular, White, Alignment.AlignCenter
     
     ' Label XP
-    CreateLabel WindowCount, "lblEXP", 15, 48, 209, 12, "0/0", OpenSans_Regular, White, Alignment.AlignCenter
+    CreateLabel WindowCount, "lblEXP", 15, 48, 209, 12, "0/0", FontRegular, White, Alignment.AlignCenter
 End Sub
 
 Public Sub CreateWindow_QuickSlot()
@@ -1495,16 +1495,16 @@ Public Sub CreateWindow_Description()
     zOrder_Con = 1
 
     ' Name
-    CreateLabel WindowCount, "lblName", 0, 10, 225, , "Name", OpenSans_Effect, BrightBlue, Alignment.AlignCenter
+    CreateLabel WindowCount, "lblName", 0, 10, 225, , "Name", FontRegular, BrightBlue, Alignment.AlignCenter
     
     ' Type
-    CreateLabel WindowCount, "lblType", 0, 25, 225, , "Trade", OpenSans_Effect, White, Alignment.AlignCenter
+    CreateLabel WindowCount, "lblType", 0, 25, 225, , "Trade", FontRegular, White, Alignment.AlignCenter
     
     ' Price
-    CreateLabel WindowCount, "lblPrice", 15, 25, 183, , "Price", OpenSans_Regular, White, Alignment.AlignLeft
+    CreateLabel WindowCount, "lblPrice", 15, 25, 183, , "Price", FontRegular, White, Alignment.AlignLeft
     
     ' Description
-    CreateLabel WindowCount, "lblDesc", 10, 100, 193, 350, "Description", OpenSans_Regular, White, Alignment.AlignCenter
+    CreateLabel WindowCount, "lblDesc", 10, 100, 193, 350, "Description", FontRegular, White, Alignment.AlignCenter
  
 End Sub
 
@@ -1535,25 +1535,25 @@ Public Sub CreateWindow_PlayerMenu()
     CentraliseWindow WindowCount
 
     ' Name
-    CreateButton WindowCount, "btnName", 8, 8, 134, 18, "Name", OpenSans_Effect, White, , , , , , , DesignTypes.DesignPlayerInteractionHeader, DesignTypes.DesignPlayerInteractionHeader, DesignTypes.DesignPlayerInteractionHeader, , , GetAddress(AddressOf RightClick_Close)
+    CreateButton WindowCount, "btnName", 8, 8, 134, 18, "Name", FontRegular, White, , , , , , , DesignTypes.DesignPlayerInteractionHeader, DesignTypes.DesignPlayerInteractionHeader, DesignTypes.DesignPlayerInteractionHeader, , , GetAddress(AddressOf RightClick_Close)
     
     ' Option Create Group
-    CreateButton WindowCount, "btnParty", 8, 26, 135, 18, "Convite para grupo", OpenSans_Effect, White, , , , , , , , DesignTypes.DesignPlayerInteractionHover, , , , GetAddress(AddressOf PlayerMenu_Party)
+    CreateButton WindowCount, "btnParty", 8, 26, 135, 18, "Convite para grupo", FontRegular, White, , , , , , , , DesignTypes.DesignPlayerInteractionHover, , , , GetAddress(AddressOf PlayerMenu_Party)
     
     ' Option Exit Group
-    CreateButton WindowCount, "btnParty", 8, 44, 135, 18, "Sair do grupo", OpenSans_Effect, White, , , , , , , , DesignTypes.DesignPlayerInteractionHover, , , , GetAddress(AddressOf PlayerMenu_LeaveParty)
+    CreateButton WindowCount, "btnParty", 8, 44, 135, 18, "Sair do grupo", FontRegular, White, , , , , , , , DesignTypes.DesignPlayerInteractionHover, , , , GetAddress(AddressOf PlayerMenu_LeaveParty)
     
     ' Option Trade
-    CreateButton WindowCount, "btnTrade", 8, 62, 135, 18, "Pedido de negociação", OpenSans_Effect, White, , , , , , , , DesignTypes.DesignPlayerInteractionHover, , , , GetAddress(AddressOf PlayerMenu_Trade)
+    CreateButton WindowCount, "btnTrade", 8, 62, 135, 18, "Pedido de negociação", FontRegular, White, , , , , , , , DesignTypes.DesignPlayerInteractionHover, , , , GetAddress(AddressOf PlayerMenu_Trade)
     
     ' Option Guild
-    CreateButton WindowCount, "btnGuild", 8, 80, 135, 18, "Convite para guild", OpenSans_Effect, White, , , , , , , , DesignTypes.DesignPlayerInteractionHover, , , , GetAddress(AddressOf PlayerMenu_Guild)
+    CreateButton WindowCount, "btnGuild", 8, 80, 135, 18, "Convite para guild", FontRegular, White, , , , , , , , DesignTypes.DesignPlayerInteractionHover, , , , GetAddress(AddressOf PlayerMenu_Guild)
     
     ' Option Private Message
-    CreateButton WindowCount, "btnPM", 8, 98, 135, 18, "Mensagem privada", OpenSans_Effect, White, , , , , , , , DesignTypes.DesignPlayerInteractionHover, , , , GetAddress(AddressOf PlayerMenu_PM)
+    CreateButton WindowCount, "btnPM", 8, 98, 135, 18, "Mensagem privada", FontRegular, White, , , , , , , , DesignTypes.DesignPlayerInteractionHover, , , , GetAddress(AddressOf PlayerMenu_PM)
     
     ' Option View Equipament
-    CreateButton WindowCount, "btnViewEquipment", 8, 116, 135, 18, "Ver Equipamento", OpenSans_Effect, White, , , , , , , , DesignTypes.DesignPlayerInteractionHover, , , , GetAddress(AddressOf PlayerMenu_ViewEquipment)
+    CreateButton WindowCount, "btnViewEquipment", 8, 116, 135, 18, "Ver Equipamento", FontRegular, White, , , , , , , , DesignTypes.DesignPlayerInteractionHover, , , , GetAddress(AddressOf PlayerMenu_ViewEquipment)
     
 End Sub
 
@@ -1563,19 +1563,19 @@ Public Sub CreateWindow_Invitations()
     CreateWindow "winInvite_Party", "", zOrder_Win, ScreenWidth - 234, ScreenHeight - 80, 223, 37, 0, , , , , , DesignTypes.DesignPlayerInteraction, DesignTypes.DesignPlayerInteraction, DesignTypes.DesignPlayerInteraction, , , , , , , , , False
     
     ' Button Invite Party
-    CreateButton WindowCount, "btnInvite", 11, 12, 201, 14, ColourChar & White & "Richard " & ColourChar & "-1" & "has invited you to a party.", OpenSans_Regular, Grey, , , , , , , , , , , , GetAddress(AddressOf btnInvite_Party), , , , , Green
+    CreateButton WindowCount, "btnInvite", 11, 12, 201, 14, ColourChar & White & "Richard " & ColourChar & "-1" & "has invited you to a party.", FontRegular, Grey, , , , , , , , , , , , GetAddress(AddressOf btnInvite_Party), , , , , Green
 
     ' Create Window Trade
     CreateWindow "winInvite_Trade", "", zOrder_Win, ScreenWidth - 234, ScreenHeight - 80, 223, 37, 0, , , , , , DesignTypes.DesignPlayerInteraction, DesignTypes.DesignPlayerInteraction, DesignTypes.DesignPlayerInteraction, , , , , , , , , False
     
     ' Button Invite Trade
-    CreateButton WindowCount, "btnInvite", 11, 12, 201, 14, ColourChar & White & "Richard " & ColourChar & "-1" & "convidou voce para um grupo.", OpenSans_Regular, Grey, , , , , , , , , , , , 0, , , , , Green
+    CreateButton WindowCount, "btnInvite", 11, 12, 201, 14, ColourChar & White & "Richard " & ColourChar & "-1" & "convidou voce para um grupo.", FontRegular, Grey, , , , , , , , , , , , 0, , , , , Green
 End Sub
 
 Public Sub CreateWindow_Target()
 
     ' Create window
-    CreateWindow "winTarget", "", zOrder_Win, 255, 10, 239, 78, 0, True, Fonts.OpenSans_Regular, , 2, 7, DesignTypes.DesignWindowWithoutTopBar, DesignTypes.DesignWindowWithoutTopBar, DesignTypes.DesignWindowWithoutTopBar, , , , , , , , , , , GetAddress(AddressOf Target_OnDraw)
+    CreateWindow "winTarget", "", zOrder_Win, 255, 10, 239, 78, 0, True, Fonts.FontRegular, , 2, 7, DesignTypes.DesignWindowWithoutTopBar, DesignTypes.DesignWindowWithoutTopBar, DesignTypes.DesignWindowWithoutTopBar, , , , , , , , , , , GetAddress(AddressOf Target_OnDraw)
 
     zOrder_Con = 1
     
@@ -1586,13 +1586,13 @@ Public Sub CreateWindow_Target()
     CreatePictureBox WindowCount, "picSP_Blank", 15, 47, 209, 13, , , , , Tex_GUI(20), Tex_GUI(20), Tex_GUI(20)
 
     ' Label HP
-    CreateLabel WindowCount, "lblHP", 15, 29, 209, 12, "0/0", OpenSans_Regular, White, Alignment.AlignCenter
+    CreateLabel WindowCount, "lblHP", 15, 29, 209, 12, "0/0", FontRegular, White, Alignment.AlignCenter
     
     ' Label MP
-    CreateLabel WindowCount, "lblMP", 15, 46, 209, 12, "0/0", OpenSans_Regular, White, Alignment.AlignCenter
+    CreateLabel WindowCount, "lblMP", 15, 46, 209, 12, "0/0", FontRegular, White, Alignment.AlignCenter
     
     ' Label Name
-    CreateLabel WindowCount, "lblName", 0, 10, 239, 25, "Name", OpenSans_Regular, White, Alignment.AlignCenter
+    CreateLabel WindowCount, "lblName", 0, 10, 239, 25, "Name", FontRegular, White, Alignment.AlignCenter
 
 End Sub
 

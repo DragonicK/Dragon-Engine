@@ -27,7 +27,7 @@ End Sub
 
 Public Sub CreateWindow_Shop()
     ' Create window
-    CreateWindow "winShop", "SHOP", zOrder_Win, 0, 0, 278, 345, 0, False, Fonts.OpenSans_Effect, , 2, 5, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, , , , , GetAddress(AddressOf Shop_MouseMove), GetAddress(AddressOf Shop_MouseDown), GetAddress(AddressOf Shop_MouseMove), GetAddress(AddressOf Shop_MouseMove), , , GetAddress(AddressOf DrawShop)
+    CreateWindow "winShop", "SHOP", zOrder_Win, 0, 0, 278, 345, 0, False, Fonts.FontRegular, , 2, 5, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, , , , , GetAddress(AddressOf Shop_MouseMove), GetAddress(AddressOf Shop_MouseDown), GetAddress(AddressOf Shop_MouseMove), GetAddress(AddressOf Shop_MouseMove), , , GetAddress(AddressOf DrawShop)
     ' additional mouse event
     Windows(WindowCount).Window.EntityCallBack(entStates.MouseUp) = GetAddress(AddressOf Shop_MouseMove)
     ' Centralise it
@@ -36,20 +36,20 @@ Public Sub CreateWindow_Shop()
     ' Close button
     CreateButton WindowCount, "btnClose", Windows(WindowCount).Window.Width - 33, 11, 22, 22, , , , , , , Tex_GUI(TextureControl_CloseNormal), Tex_GUI(TextureControl_CloseHover), Tex_GUI(TextureControl_CloseClick), , , , , , GetAddress(AddressOf ButtonShop_Close)
 
-    CreateButton WindowCount, "btnBuyTab", 0, 43, 135, 26, "COMPRAR", OpenSans_Effect, Green, , , , , , , , , , , , GetAddress(AddressOf Button_ShopBuying)
-    CreateButton WindowCount, "btnSellTab", 140, 43, 135, 26, "VENDER", OpenSans_Effect, , , , , , , , , , , , , GetAddress(AddressOf Button_ShopSelling)
+    CreateButton WindowCount, "btnBuyTab", 0, 43, 135, 26, "COMPRAR", FontRegular, Green, , , , , , , , , , , , GetAddress(AddressOf Button_ShopBuying)
+    CreateButton WindowCount, "btnSellTab", 140, 43, 135, 26, "VENDER", FontRegular, , , , , , , , , , , , , GetAddress(AddressOf Button_ShopSelling)
     ' Picture Box
 
     ' Gold
     CreatePictureBox WindowCount, "picBlank", 9, 278, 260, 52, , , , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox
 
     ' Buttons
-    CreateButton WindowCount, "btnBuy", 190, 289, 70, 26, "COMPRAR", OpenSans_Regular, White, , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf ButtonShop_Buy)
-    CreateButton WindowCount, "btnSell", 190, 289, 70, 26, "VENDER", OpenSans_Regular, White, , False, , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf ButtonShop_Sell)
+    CreateButton WindowCount, "btnBuy", 190, 289, 70, 26, "COMPRAR", FontRegular, White, , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf ButtonShop_Buy)
+    CreateButton WindowCount, "btnSell", 190, 289, 70, 26, "VENDER", FontRegular, White, , False, , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf ButtonShop_Sell)
 
     ' Labels
-    CreateLabel WindowCount, "lblName", 56, 285, 300, , "Test Item", OpenSans_Effect, White, Alignment.AlignLeft
-    CreateLabel WindowCount, "lblCost", 56, 302, 300, , "1000", OpenSans_Effect, White, Alignment.AlignLeft
+    CreateLabel WindowCount, "lblName", 56, 285, 300, , "Test Item", FontRegular, White, Alignment.AlignLeft
+    CreateLabel WindowCount, "lblCost", 56, 302, 300, , "1000", FontRegular, White, Alignment.AlignLeft
 
     CreatePictureBox WindowCount, "picItemBG", 15, 286, 36, 36, , , , , Tex_GUI(37), Tex_GUI(37), Tex_GUI(37)
     CreatePictureBox WindowCount, "picItem", 15, 288, 32, 32
@@ -149,14 +149,14 @@ Private Sub UpdateShop()
 
                 ' draw the item
                 For i = 0 To entStates.state_Count - 1
-                    .Controls(GetControlIndex("winShop", "picItem")).Image(i) = Tex_Item(Item(ShopSelectedItem).IconId)
+                    .Controls(GetControlIndex("winShop", "picItem")).image(i) = Tex_Item(Item(ShopSelectedItem).IconId)
                 Next
             Else
                 .Controls(GetControlIndex("winShop", "lblName")).Text = "Empty Slot"
                 .Controls(GetControlIndex("winShop", "lblCost")).Text = vbNullString
                 ' draw the item
                 For i = 0 To entStates.state_Count - 1
-                    .Controls(GetControlIndex("winShop", "picItem")).Image(i) = 0
+                    .Controls(GetControlIndex("winShop", "picItem")).image(i) = 0
                 Next
             End If
         Else
@@ -176,7 +176,7 @@ Private Sub UpdateShop()
 
                 ' draw the item
                 For i = 0 To entStates.state_Count - 1
-                    .Controls(GetControlIndex("winShop", "picItem")).Image(i) = Tex_Item(Item(ShopSelectedItem).IconId)
+                    .Controls(GetControlIndex("winShop", "picItem")).image(i) = Tex_Item(Item(ShopSelectedItem).IconId)
                 Next
             Else
                 .Controls(GetControlIndex("winShop", "lblName")).Text = "Empty Slot"
@@ -184,7 +184,7 @@ Private Sub UpdateShop()
                 ' draw the item
 
                 For i = 0 To entStates.state_Count - 1
-                    .Controls(GetControlIndex("winShop", "picItem")).Image(i) = 0
+                    .Controls(GetControlIndex("winShop", "picItem")).image(i) = 0
                 Next
             End If
         End If
@@ -240,7 +240,7 @@ Private Sub DrawShop()
                         Y = Top + 21
                         X = Left + 1
                         Colour = GetCurrencyColor(GetShopItemValue(i))
-                        RenderText Font(Fonts.OpenSans_Regular), ConvertCurrency(GetShopItemValue(i)), X, Y, Colour
+                        RenderText Font(Fonts.FontRegular), ConvertCurrency(GetShopItemValue(i)), X, Y, Colour
                     End If
                 End If
             End If
@@ -269,7 +269,7 @@ Private Sub DrawShop()
                         X = Left + 1
 
                         Colour = GetCurrencyColor(GetInventoryItemValue(i))
-                        RenderText Font(Fonts.OpenSans_Regular), ConvertCurrency(GetInventoryItemValue(i)), X, Y, Colour
+                        RenderText Font(Fonts.FontRegular), ConvertCurrency(GetInventoryItemValue(i)), X, Y, Colour
                     End If
                 End If
             End If

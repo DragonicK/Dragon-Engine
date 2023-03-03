@@ -35,30 +35,30 @@ End Sub
 
 Public Sub CreateWindow_Trade()
     ' Create window
-    CreateWindow "winTrade", "NEGOCIAÇÃO", zOrder_Win, 0, 0, 412, 320, 0, False, Fonts.OpenSans_Regular, , 2, 5, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, , , , , , , , , , , GetAddress(AddressOf DrawTrade)
+    CreateWindow "winTrade", "NEGOCIAÇÃO", zOrder_Win, 0, 0, 412, 320, 0, False, Fonts.FontRegular, , 2, 5, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, , , , , , , , , , , GetAddress(AddressOf DrawTrade)
     ' Centralise it
     CentraliseWindow WindowCount
     ' Close Button
     CreateButton WindowCount, "btnClose", Windows(WindowCount).Window.Width - 33, 11, 22, 22, , , , , , , Tex_GUI(TextureControl_CloseNormal), Tex_GUI(TextureControl_CloseHover), Tex_GUI(TextureControl_CloseClick), , , , , , GetAddress(AddressOf ButtonTrade_Close)
     ' Labels
-    CreateLabel WindowCount, "lblYourStatus", 15, 65, 180, 9, "Aguardando Confirmação", OpenSans_Effect, BrightRed, Alignment.AlignCenter
-    CreateLabel WindowCount, "lblTheirStatus", 15 + 200, 65, 180, 9, "Aguardando Confirmação", OpenSans_Effect, BrightRed, Alignment.AlignCenter
-    CreateLabel WindowCount, "lblYourTrade", 15, 50, 180, 9, "DragonicK Lv. 1", OpenSans_Effect, White, Alignment.AlignCenter
-    CreateLabel WindowCount, "lblTheirTrade", 15 + 200, 50, 180, 9, "DragonicK Lv. 1", OpenSans_Effect, White, Alignment.AlignCenter
+    CreateLabel WindowCount, "lblYourStatus", 15, 65, 180, 9, "Aguardando Confirmação", FontRegular, BrightRed, Alignment.AlignCenter
+    CreateLabel WindowCount, "lblTheirStatus", 15 + 200, 65, 180, 9, "Aguardando Confirmação", FontRegular, BrightRed, Alignment.AlignCenter
+    CreateLabel WindowCount, "lblYourTrade", 15, 50, 180, 9, "DragonicK Lv. 1", FontRegular, White, Alignment.AlignCenter
+    CreateLabel WindowCount, "lblTheirTrade", 15 + 200, 50, 180, 9, "DragonicK Lv. 1", FontRegular, White, Alignment.AlignCenter
     ' Buttons
-    CreateButton WindowCount, "btnConfirm", 70, 245, 120, 24, "CONFIRMAR", OpenSans_Effect, White, , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf ButtonTrade_Confirm)
-    CreateButton WindowCount, "btnDecline", 228, 245, 120, 24, "RECUSAR", OpenSans_Effect, White, , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf ButtonTrade_Close)
-    CreateButton WindowCount, "btnAccept", 149, 280, 120, 24, "ACEITAR", OpenSans_Effect, White, , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf ButtonTrade_Accept)
+    CreateButton WindowCount, "btnConfirm", 70, 245, 120, 24, "CONFIRMAR", FontRegular, White, , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf ButtonTrade_Confirm)
+    CreateButton WindowCount, "btnDecline", 228, 245, 120, 24, "RECUSAR", FontRegular, White, , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf ButtonTrade_Close)
+    CreateButton WindowCount, "btnAccept", 149, 280, 120, 24, "ACEITAR", FontRegular, White, , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf ButtonTrade_Accept)
 
     ' Amounts
     'CreatePictureBox WindowCount, "picYour", 15, 206, 184, 24, , , , , Tex_GUI(1), Tex_GUI(1), Tex_GUI(1)
-    CreateLabel WindowCount, "lblYourCurrency", 15, 210, 180, 20, "Ouro: 0", OpenSans_Effect, White, Alignment.AlignCenter
+    CreateLabel WindowCount, "lblYourCurrency", 15, 210, 180, 20, "Ouro: 0", FontRegular, White, Alignment.AlignCenter
 
     'CreatePictureBox WindowCount, "picYour", 215, 206, 184, 24, , , , , Tex_GUI(1), Tex_GUI(1), Tex_GUI(1)
-    CreateLabel WindowCount, "lblTheirCurrency", 215, 210, 180, 20, "Ouro: 0", OpenSans_Effect, White, Alignment.AlignCenter
+    CreateLabel WindowCount, "lblTheirCurrency", 215, 210, 180, 20, "Ouro: 0", FontRegular, White, Alignment.AlignCenter
 
     ' Buttons
-    CreateButton WindowCount, "btnSetGold", 15, 206, 24, 24, " +", OpenSans_Effect, White, , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf ButtonTrade_Currency)
+    CreateButton WindowCount, "btnSetGold", 15, 206, 24, 24, " +", FontRegular, White, , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf ButtonTrade_Currency)
 
     CreatePictureBox WindowCount, "picYourTrade", 13, 81, 185, 115, , , , , , , , , , , , GetAddress(AddressOf TradeMouseMove_Me), GetAddress(AddressOf TradeMouseDown_Me), GetAddress(AddressOf TradeMouseMove_Me)
     CreatePictureBox WindowCount, "picOtherTrade", 214, 81, 185, 115, , , , , , , , , , , , GetAddress(AddressOf TradeMouseMove_Their), , GetAddress(AddressOf TradeMouseMove_Their)
@@ -134,7 +134,7 @@ Private Sub DrawMyTrade()
                         
                         ' Draw currency but with k, m, b etc. using a convertion function
                         Colour = GetCurrencyColor(GetMyTradeInventoryItemValue(i))
-                        RenderText Font(Fonts.OpenSans_Regular), ConvertCurrency(GetMyTradeInventoryItemValue(i)), X, Y, Colour
+                        RenderText Font(Fonts.FontRegular), ConvertCurrency(GetMyTradeInventoryItemValue(i)), X, Y, Colour
                     End If
                 End If
             End If
@@ -169,7 +169,7 @@ Private Sub DrawTheirTrade()
                     
                     ' Draw currency but with k, m, b etc. using a convertion function
                     Colour = GetCurrencyColor(GetOtherTradeItemValue(i))
-                    RenderText Font(Fonts.OpenSans_Regular), ConvertCurrency(GetOtherTradeItemValue(i)), X, Y, Colour
+                    RenderText Font(Fonts.FontRegular), ConvertCurrency(GetOtherTradeItemValue(i)), X, Y, Colour
                 End If
             End If
         End If

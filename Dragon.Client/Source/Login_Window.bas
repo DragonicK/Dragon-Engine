@@ -11,7 +11,7 @@ Private Const CenterLeft As Long = ((LogoSizeX + 40) / 2)
 
 Public Sub CreateWindow_Login()
     
-    CreateWindow "winLogin", "", zOrder_Win, (ScreenWidth / 2) - (Width / 2), 400, Width, Height, 0, , Fonts.OpenSans_Effect, , 3, 5, DesignTypes.DesignWindowWithoutBackground, DesignTypes.DesignWindowWithoutBackground, DesignTypes.DesignWindowWithoutBackground, , , , , , , , , False
+    CreateWindow "winLogin", "", zOrder_Win, (ScreenWidth / 2) - (Width / 2), 400, Width, Height, 0, , Fonts.FontRegular, , 3, 5, DesignTypes.DesignWindowWithoutBackground, DesignTypes.DesignWindowWithoutBackground, DesignTypes.DesignWindowWithoutBackground, , , , , , , , , False
     
     ' Center Window
     'CentraliseWindow WindowCount
@@ -20,22 +20,22 @@ Public Sub CreateWindow_Login()
     zOrder_Con = 1
     
     ' Label Username
-    CreateLabel WindowCount, "lblUsername", 0, PaddingTop, Width, , "Usuário", OpenSans_Regular, White, Alignment.AlignCenter
+    CreateLabel WindowCount, "lblUsername", 0, PaddingTop, Width, , "Usuário", FontRegular, White, Alignment.AlignCenter
     
     ' TextBox Username
-    CreateTextbox WindowCount, "txtUser", 0, PaddingTop + (PaddingTop * 2), Width, 30, Options.Username, Fonts.OpenSans_Regular, , Alignment.AlignCenter, , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, , , , , , , 0, 8
+    CreateTextbox WindowCount, "txtUser", 0, PaddingTop + (PaddingTop * 2), Width, 30, Options.Username, Fonts.FontRegular, , Alignment.AlignCenter, , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, , , , , , , 0, 8
     
     ' Label Password
-    CreateLabel WindowCount, "lblPassword", 0, PaddingTop + (PaddingTop * 6), Width, , "Senha", OpenSans_Regular, White, Alignment.AlignCenter
+    CreateLabel WindowCount, "lblPassword", 0, PaddingTop + (PaddingTop * 6), Width, , "Senha", FontRegular, White, Alignment.AlignCenter
     
     ' TextBox Password
-    CreateTextbox WindowCount, "txtPass", 0, PaddingTop + (PaddingTop * 8), Width, 30, vbNullString, Fonts.OpenSans_Regular, , Alignment.AlignCenter, , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, , , , , , , 0, 8, True, GetAddress(AddressOf btnLogin_Click)
+    CreateTextbox WindowCount, "txtPass", 0, PaddingTop + (PaddingTop * 8), Width, 30, vbNullString, Fonts.FontRegular, , Alignment.AlignCenter, , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, , , , , , , 0, 8, True, GetAddress(AddressOf btnLogin_Click)
 
     ' Login Buttom
-    CreateButton WindowCount, "btnAccept", (Width / 2) - (164 / 2), PaddingTop + (PaddingTop * 14), 164, 38, "Acessar", OpenSans_Effect, White, , , , , , , DesignTypes.DesignGreen, DesignTypes.DesignGreenHover, DesignTypes.DesignGreenClick, , , GetAddress(AddressOf btnLogin_Click)
+    CreateButton WindowCount, "btnAccept", (Width / 2) - (164 / 2), PaddingTop + (PaddingTop * 14), 164, 38, "Acessar", FontRegular, White, , , , , , , DesignTypes.DesignGreen, DesignTypes.DesignGreenHover, DesignTypes.DesignGreenClick, , , GetAddress(AddressOf btnLogin_Click)
     
     ' Checkbox
-    'CreateCheckbox WindowCount, "chkSaveUser", 82, 129, 142, , Options.SaveUser, "Salvar Nome?", OpenSans_Regular, , , , , DesignTypes.DesignCheckBox, , , GetAddress(AddressOf chkSaveUser_Click)
+    'CreateCheckbox WindowCount, "chkSaveUser", 82, 129, 142, , Options.SaveUser, "Salvar Nome?", FontRegular, , , , , DesignTypes.DesignCheckBox, , , GetAddress(AddressOf chkSaveUser_Click)
 
     ' Set the active control
     If Not Len(Windows(GetWindowIndex("winLogin")).Controls(GetControlIndex("winLogin", "txtUser")).Text) > 0 Then
@@ -55,7 +55,7 @@ Public Sub CreateWindow_LoginFooter()
     zOrder_Con = 1
     
     ' Label
-    CreateLabel WindowCount, "lblCopy", 0, -6, ScreenWidth, 0, "Copyright 2022 - 2023 Julio Sperandio. Todos os direitos reservados.", OpenSans_Regular, White, Alignment.AlignCenter
+    CreateLabel WindowCount, "lblCopy", 0, -6, ScreenWidth, 0, "Copyright 2022 - 2023 Julio Sperandio. Todos os direitos reservados.", FontRegular, White, Alignment.AlignCenter
     
 End Sub
 

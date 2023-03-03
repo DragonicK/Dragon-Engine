@@ -146,7 +146,7 @@ Public Function HandleGuiMouse(entState As entStates) As Boolean
                     If .CanDrag Then
                         If .State = entStates.MouseDown Then
                             .Left = Clamp(.Left + ((currMouseX - .Left) - .MovedX), 0, ScreenWidth - .Width)
-                            .Top = Clamp(.Top + ((currMouseY - .Top) - .movedY), 0, ScreenHeight - .Height)
+                            .Top = Clamp(.Top + ((currMouseY - .Top) - .MovedY), 0, ScreenHeight - .Height)
                         End If
                     End If
                 End If
@@ -178,7 +178,7 @@ Public Function HandleGuiMouse(entState As entStates) As Boolean
                         If .CanDrag Then
                             If .State = entStates.MouseDown Then
                                 .Left = Clamp(.Left + ((currMouseX - .Left) - .MovedX), 0, Windows(curWindow).Window.Width - .Width)
-                                .Top = Clamp(.Top + ((currMouseY - .Top) - .movedY), 0, Windows(curWindow).Window.Height - .Height)
+                                .Top = Clamp(.Top + ((currMouseY - .Top) - .MovedY), 0, Windows(curWindow).Window.Height - .Height)
                             End If
                         End If
                     End If
@@ -199,17 +199,17 @@ Public Function HandleGuiMouse(entState As entStates) As Boolean
                 If entState = entStates.MouseDown Then
                     If .CanDrag Then
                         .MovedX = clickedX - .Left
-                        .movedY = clickedY - .Top
+                        .MovedY = clickedY - .Top
                     End If
                     ' toggle boxes
                     Select Case .Type
                     Case EntityTypes.EntityCheckBox
                         ' grouped boxes
-                        If .group > 0 Then
+                        If .Group > 0 Then
                             If .Value = 0 Then
                                 For i = 1 To Windows(curWindow).ControlCount
                                     If Windows(curWindow).Controls(i).Type = EntityTypes.EntityCheckBox Then
-                                        If Windows(curWindow).Controls(i).group = .group Then
+                                        If Windows(curWindow).Controls(i).Group = .Group Then
                                             Windows(curWindow).Controls(i).Value = 0
                                         End If
                                     End If
@@ -245,7 +245,7 @@ Public Function HandleGuiMouse(entState As entStates) As Boolean
                 If entState = entStates.MouseDown Then
                     If .CanDrag Then
                         .MovedX = clickedX - .Left
-                        .movedY = clickedY - .Top
+                        .MovedY = clickedY - .Top
                     End If
                 End If
                 callBack = .EntityCallBack(entState)
@@ -311,16 +311,16 @@ Public Sub ShowComboMenu(curWindow As Long, curControl As Long)
         Windows(GetWindowIndex("winComboMenu")).Window.LinkedToWin = curWindow
         Windows(GetWindowIndex("winComboMenu")).Window.LinkedToCon = curControl
         ' set the size
-        Windows(GetWindowIndex("winComboMenu")).Window.Height = 2 + (UBound(.list) * 16)
+        Windows(GetWindowIndex("winComboMenu")).Window.Height = 2 + (UBound(.List) * 16)
         Windows(GetWindowIndex("winComboMenu")).Window.Left = Windows(curWindow).Window.Left + .Left + 2
         Top = Windows(curWindow).Window.Top + .Top + .Height
         If Top + Windows(GetWindowIndex("winComboMenu")).Window.Height > ScreenHeight Then Top = ScreenHeight - Windows(GetWindowIndex("winComboMenu")).Window.Height
         Windows(GetWindowIndex("winComboMenu")).Window.Top = Top
         Windows(GetWindowIndex("winComboMenu")).Window.Width = .Width - 4
         ' set the values
-        Windows(GetWindowIndex("winComboMenu")).Window.list() = .list()
+        Windows(GetWindowIndex("winComboMenu")).Window.List() = .List()
         Windows(GetWindowIndex("winComboMenu")).Window.Value = .Value
-        Windows(GetWindowIndex("winComboMenu")).Window.group = 0
+        Windows(GetWindowIndex("winComboMenu")).Window.Group = 0
         ' load the menu
         ShowWindow GetWindowIndex("winComboMenuBG"), True, False
         ShowWindow GetWindowIndex("winComboMenu"), True, False
@@ -332,10 +332,10 @@ Public Sub ComboMenu_MouseMove(curWindow As Long)
     With Windows(curWindow).Window
         Y = currMouseY - .Top
         ' find the option we're hovering over
-        If UBound(.list) > 0 Then
-            For i = 1 To UBound(.list)
+        If UBound(.List) > 0 Then
+            For i = 1 To UBound(.List)
                 If Y >= (16 * (i - 1)) And Y <= (16 * (i)) Then
-                    .group = i
+                    .Group = i
                 End If
             Next
         End If
@@ -347,8 +347,8 @@ Public Sub ComboMenu_MouseDown(curWindow As Long)
     With Windows(curWindow).Window
         Y = currMouseY - .Top
         ' find the option we're hovering over
-        If UBound(.list) > 0 Then
-            For i = 1 To UBound(.list)
+        If UBound(.List) > 0 Then
+            For i = 1 To UBound(.List)
                 If Y >= (16 * (i - 1)) And Y <= (16 * (i)) Then
                     Windows(.LinkedToWin).Controls(.LinkedToCon).Value = i
                     CloseComboMenu
@@ -551,9 +551,9 @@ Public Sub Description_OnDraw()
     Y = 26
     Count = UBound(DescText)
     For i = 1 To Count
-        X = xO + (Width * 0.5) - (TextWidth(Font(Fonts.OpenSans_Regular), DescText(i).Text) * 0.5)
+        X = xO + (Width * 0.5) - (TextWidth(Font(Fonts.FontRegular), DescText(i).Text) * 0.5)
 
-        RenderText Font(Fonts.OpenSans_Regular), DescText(i).Text, X, yO + Y, DescText(i).Colour
+        RenderText Font(Fonts.FontRegular), DescText(i).Text, X, yO + Y, DescText(i).Colour
         Y = Y + 12
     Next
 
@@ -784,7 +784,7 @@ Public Sub QuickSlot_MouseDown()
             .Left = lastMouseX - 16
             .Top = lastMouseY - 16
             .MovedX = clickedX - .Left
-            .movedY = clickedY - .Top
+            .MovedY = clickedY - .Top
         End With
         ShowWindow WinIndex, , False
 

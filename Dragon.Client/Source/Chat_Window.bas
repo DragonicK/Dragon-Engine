@@ -28,7 +28,7 @@ Public Sub CreateWindow_ChatSmall()
     ' Set the index for spawning controls
     zOrder_Con = 1
     ' Chat Label
-    CreateLabel WindowCount, "lblMsg", 12, 127, 286, 25, "Pressione 'Enter' para abrir o chat.", OpenSans_Regular, Grey
+    CreateLabel WindowCount, "lblMsg", 12, 127, 286, 25, "Pressione 'Enter' para abrir o chat.", FontRegular, Grey
     
     ChatSmallWindowIndex = WindowCount
 End Sub
@@ -57,18 +57,18 @@ Public Sub CreateWindow_Chat()
     zOrder_Con = 1
 
     ' Channel boxes
-    CreateCheckbox WindowCount, "chkGame", 10, 2, 49, 23, 1, "Jogo", OpenSans_Regular, , , , , DesignTypes.DesignCheckBoxChat, , , GetAddress(AddressOf CheckBoxChat_Game)
-    CreateCheckbox WindowCount, "chkMap", 60, 2, 49, 23, 1, "Mapa", OpenSans_Regular, , , , , DesignTypes.DesignCheckBoxChat, , , GetAddress(AddressOf CheckBoxChat_Map)
-    CreateCheckbox WindowCount, "chkGlobal", 110, 2, 49, 23, 1, "Global", OpenSans_Regular, , , , , DesignTypes.DesignCheckBoxChat, , , GetAddress(AddressOf CheckBoxChat_Global)
-    CreateCheckbox WindowCount, "chkParty", 160, 2, 49, 23, 1, "Grupo", OpenSans_Regular, , , , , DesignTypes.DesignCheckBoxChat, , , GetAddress(AddressOf CheckBoxChat_Party)
-    CreateCheckbox WindowCount, "chkGuild", 210, 2, 49, 23, 1, "Guild", OpenSans_Regular, , , , , DesignTypes.DesignCheckBoxChat, , , GetAddress(AddressOf CheckBoxChat_Guild)
-    CreateCheckbox WindowCount, "chkPrivate", 260, 2, 49, 23, 1, "Privado", OpenSans_Regular, , , , , DesignTypes.DesignCheckBoxChat, , , GetAddress(AddressOf CheckBoxChat_Private)
+    CreateCheckbox WindowCount, "chkGame", 10, 2, 49, 23, 1, "Jogo", FontRegular, , , , , DesignTypes.DesignCheckBoxChat, , , GetAddress(AddressOf CheckBoxChat_Game)
+    CreateCheckbox WindowCount, "chkMap", 60, 2, 49, 23, 1, "Mapa", FontRegular, , , , , DesignTypes.DesignCheckBoxChat, , , GetAddress(AddressOf CheckBoxChat_Map)
+    CreateCheckbox WindowCount, "chkGlobal", 110, 2, 49, 23, 1, "Global", FontRegular, , , , , DesignTypes.DesignCheckBoxChat, , , GetAddress(AddressOf CheckBoxChat_Global)
+    CreateCheckbox WindowCount, "chkParty", 160, 2, 49, 23, 1, "Grupo", FontRegular, , , , , DesignTypes.DesignCheckBoxChat, , , GetAddress(AddressOf CheckBoxChat_Party)
+    CreateCheckbox WindowCount, "chkGuild", 210, 2, 49, 23, 1, "Guild", FontRegular, , , , , DesignTypes.DesignCheckBoxChat, , , GetAddress(AddressOf CheckBoxChat_Guild)
+    CreateCheckbox WindowCount, "chkPrivate", 260, 2, 49, 23, 1, "Privado", FontRegular, , , , , DesignTypes.DesignCheckBoxChat, , , GetAddress(AddressOf CheckBoxChat_Private)
     ' Blank picturebox - ondraw wrapper
     CreatePictureBox WindowCount, "picNull", 0, 0, 0, 0, , , , , , , , , , , , , , , , GetAddress(AddressOf OnDraw_Chat)
     ' Chat button
-    CreateButton WindowCount, "btnChat", 296, 124 + 16, 48, 20, "Dizer", OpenSans_Regular, , , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf ButtonSay_Click)
+    CreateButton WindowCount, "btnChat", 296, 124 + 16, 48, 20, "Dizer", FontRegular, , , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf ButtonSay_Click)
     ' Chat Textbox
-    CreateTextbox WindowCount, "txtChat", 12, 127 + 16, 286, 25, , Fonts.OpenSans_Regular
+    CreateTextbox WindowCount, "txtChat", 12, 127 + 16, 286, 25, , Fonts.FontRegular
     ' buttons
     CreateButton WindowCount, "btnUp", 328, 28, 11, 13, , , , , , , Tex_GUI(3), Tex_GUI(4), Tex_GUI(5), , , , , , GetAddress(AddressOf ButtonChat_Up)
     CreateButton WindowCount, "btnDown", 327, 122, 11, 13, , , , , , , Tex_GUI(6), Tex_GUI(7), Tex_GUI(8), , , , , , GetAddress(AddressOf ButtonChat_Down)
@@ -129,27 +129,27 @@ Private Sub RenderChat()
             ' render line
             Colour = Chat(i).Color
             ' check if we need to word wrap
-            If TextWidth(Font(Fonts.OpenSans_Regular), Chat(i).Text) > ChatWidth Then
+            If TextWidth(Font(Fonts.FontRegular), Chat(i).Text) > ChatWidth Then
                 ' word wrap
-                tmpText = WordWrap(Font(Fonts.OpenSans_Regular), Chat(i).Text, ChatWidth, LineCount)
+                tmpText = WordWrap(Font(Fonts.FontRegular), Chat(i).Text, ChatWidth, LineCount)
                 ' can't have it going offscreen.
                 If rLines + LineCount > 9 Then Exit Do
                 ' continue on
                 yOffset = yOffset - (14 * LineCount)
-                RenderText Font(Fonts.OpenSans_Regular), tmpText, xO, yO + yOffset, Colour
+                RenderText Font(Fonts.FontRegular), tmpText, xO, yO + yOffset, Colour
                 rLines = rLines + LineCount
                 ' set the top width
                 tmpArray = Split(tmpText, vbNewLine)
                 For X = 0 To UBound(tmpArray)
-                    If TextWidth(Font(Fonts.OpenSans_Regular), tmpArray(X)) > topWidth Then topWidth = TextWidth(Font(Fonts.OpenSans_Regular), tmpArray(X))
+                    If TextWidth(Font(Fonts.FontRegular), tmpArray(X)) > topWidth Then topWidth = TextWidth(Font(Fonts.FontRegular), tmpArray(X))
                 Next
             Else
                 ' normal
                 yOffset = yOffset - 14
-                RenderText Font(Fonts.OpenSans_Regular), Chat(i).Text, xO, yO + yOffset, Colour
+                RenderText Font(Fonts.FontRegular), Chat(i).Text, xO, yO + yOffset, Colour
                 rLines = rLines + 1
                 ' set the top width
-                If TextWidth(Font(Fonts.OpenSans_Regular), Chat(i).Text) > topWidth Then topWidth = TextWidth(Font(Fonts.OpenSans_Regular), Chat(i).Text)
+                If TextWidth(Font(Fonts.FontRegular), Chat(i).Text) > topWidth Then topWidth = TextWidth(Font(Fonts.FontRegular), Chat(i).Text)
             End If
         End If
         ' increment chat pointer
