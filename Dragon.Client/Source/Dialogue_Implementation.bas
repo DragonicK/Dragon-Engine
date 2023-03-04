@@ -157,6 +157,7 @@ Public Sub DialogueAlert(ByVal Index As AlertMessage)
 
     ' set the dialogue up!
     ShowDialogue Header, Body, Body2, DialogueTypeAlert
+    
 End Sub
 
 Public Sub ShowDialogue(ByVal Header As String, ByVal Body As String, ByVal Body2 As String, ByVal Index As Long, Optional ByVal Style As DialogueStyle = 1, Optional ByVal Data1 As Long = 0)
