@@ -179,6 +179,7 @@ Module=Map_Packet; Source\Map_Packet.bas
 Module=Model_Player_Packet; Source\Model_Player_Packet.bas
 Module=Target_Packet; Source\Target_Packet.bas
 Module=Model_Player_Logic; Source\Model_Player_Logic.bas
+Module=Loading_Window; Source\Loading_Window.bas
 IconForm="frmMain"
 Startup="Sub Main"
 HelpFile=""
