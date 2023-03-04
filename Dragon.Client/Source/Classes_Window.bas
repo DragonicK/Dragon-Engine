@@ -1,7 +1,7 @@
 Attribute VB_Name = "Classes_Window"
 Public Sub CreateWindow_Classes()
 ' Create window
-    CreateWindow "winClasses", "SELEÇÃO DE CLASSE", zOrder_Win, 0, 0, 364, 249, 0, False, Fonts.FontRegular, , 2, 6, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, , , , , , , , , False, , GetAddress(AddressOf Classes_DrawFace)
+    CreateWindow "winClasses", "Seleção de Classe", zOrder_Win, 0, 0, 420, 249, 0, False, Fonts.FontRegular, , 2, 6, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, , , , , , , , , False, , GetAddress(AddressOf Classes_DrawFace)
     ' Centralise it
     CentraliseWindow WindowCount
 
