@@ -1121,7 +1121,6 @@ Public Sub ResizeGUI()
     
     ' centralise windows
     CentraliseWindow GetWindowIndex("winModels")
-    CentraliseWindow GetWindowIndex("winLoading")
     CentraliseWindow GetWindowIndex("winDialogue")
     CentraliseWindow GetWindowIndex("winClasses")
     CentraliseWindow GetWindowIndex("winNewChar")
