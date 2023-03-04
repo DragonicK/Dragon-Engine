@@ -113,5 +113,6 @@ End Sub
 Private Sub ButtonClasses_Close()
     HideWindows
     ShowWindow GetWindowIndex("winModels")
+    ShowWindow GetWindowIndex("winModelFooter")
 End Sub
 

@@ -204,6 +204,7 @@ Sub HandleAlertMsg(ByVal Index As Long, ByRef Data() As Byte, ByVal StartAddr As
             ShowWindow GetWindowIndex("WinLoginLogo")
         Case MenuCount.MenuChars
             ShowWindow GetWindowIndex("winModels")
+            ShowWindow GetWindowIndex("winLoginFooter")
         Case MenuCount.MenuClass
             ShowWindow GetWindowIndex("winClasses")
         Case MenuCount.MenuNewChar
