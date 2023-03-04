@@ -1432,24 +1432,6 @@ Public Sub CreateWindow_Combobox()
     CentraliseWindow WindowCount
 End Sub
 
-Public Sub CreateWindow_Loading()
-
-    ' Create the window
-    CreateWindow "winLoading", "Carregando", zOrder_Win, 0, 0, 278, 79, 0, True, Fonts.FontRegular, , 2, 7, DesignTypes.DesignWindowWithoutTopBar, DesignTypes.DesignWindowWithoutTopBar, DesignTypes.DesignWindowWithoutTopBar, , , , , , , , , False
-    
-    ' Centralise it
-    CentraliseWindow WindowCount
-    
-    ' Set the index for spawning controls
-    zOrder_Con = 1
-
-    ' Text background
-    CreatePictureBox WindowCount, "picRecess", 26, 23, 226, 26, , , , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox
-    
-    ' Label
-    CreateLabel WindowCount, "lblLoading", 6, 27, 266, , "Carregando dados do jogo ...", FontRegular, , Alignment.AlignCenter
-End Sub
-
 Public Sub CreateWindow_Bars()
 
     ' Create window
