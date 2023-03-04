@@ -40,6 +40,7 @@ Public Sub HandlePlayerModels(ByVal Index As Long, ByRef Data() As Byte, ByVal S
 
     HideWindows
     ShowWindow GetWindowIndex("winModels")
+    ShowWindow GetWindowIndex("winModelFooter")
 
     ' set GUI window up
     winNum = GetWindowIndex("winModels")

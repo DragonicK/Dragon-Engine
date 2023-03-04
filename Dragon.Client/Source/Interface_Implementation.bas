@@ -1590,6 +1590,7 @@ Public Sub InitGUI()
     CreateWindow_LoginFooter
     CreateWindow_LoginLogo
     CreateWindow_Models
+    CreateWindow_ModelFooter
     CreateWindow_Loading
     CreateWindow_Dialogue
     CreateWindow_Classes
