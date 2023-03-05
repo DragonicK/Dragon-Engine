@@ -62,6 +62,9 @@ Public Enum DesignTypes
     ' Design ComboBox
     DesignComboNormal
     DesignComboMenu
+    
+    ' Design Blank
+    DesignBlank
 
 End Enum
 
@@ -826,6 +829,11 @@ Public Sub RenderWindow(winNum As Long)
 
             ' Render Background
             RenderDesign DesignTypes.DesignWindowWithoutBackground, .Left, .Top, .Width, .Height, 255
+            
+        Case DesignBlank
+            
+            ' Render Background
+            RenderDesign DesignTypes.DesignBlank, .Left, .Top, .Width, .Height, 220
 
 
         End Select
@@ -1065,6 +1073,11 @@ Public Sub RenderDesign(Design As Long, Left As Long, Top As Long, Width As Long
 
         ' Render background
         RenderEntity_Square TextureDesign(TextureDesign_None), Left, Top, Width, Height, 0, 230
+        
+    Case DesignBlank
+    
+        'Render Background
+        RenderTexture Tex_Blank, Left, Top, 0, 0, Width, Height, Width, Height, D3DColorARGB(Alpha, 10, 10, 10)
 
 
     End Select

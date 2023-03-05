@@ -3,7 +3,8 @@ Option Explicit
 
 Public Sub CreateWindow_Dialogue()
     ' Create black background
-    CreateWindow "winBlank", "", zOrder_Win, 0, 0, 800, 600, 0, , Fonts.FontRegular, , , , DesignTypes.DesignChatSmallShadow, DesignTypes.DesignChatSmallShadow, DesignTypes.DesignChatSmallShadow, , , , , , , , , False, False
+    CreateWindow "winBlank", "", zOrder_Win, 0, 0, 800, 600, 0, , Fonts.FontRegular, , , , DesignTypes.DesignBlank, DesignTypes.DesignBlank, DesignTypes.DesignBlank, , , , , , , , , False, False
+    
     ' Create dialogue window
     CreateWindow "winDialogue", "MENSAGEM", zOrder_Win, 0, 0, 348, 145, 0, , Fonts.FontRegular, , 3, 5, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, , , , , , , , , , False
     ' Centralise it
