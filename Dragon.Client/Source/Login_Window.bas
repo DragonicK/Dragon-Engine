@@ -98,3 +98,33 @@ Private Sub chkSaveUser_Click()
     End With
 
 End Sub
+
+Public Sub Resize_WinLoginFooter()
+    Dim WindowIndex As Long
+    Dim ControlIndex As Long
+    
+    ' Get The Window
+    WindowIndex = GetWindowIndex("winLoginFooter")
+    
+    ' Get The Widget
+    ControlIndex = GetControlIndex("winLoginFooter", "lblCopy")
+    
+    ' Centralise Window
+    CentraliseWindow WindowIndex, ScreenHeight - 35
+      
+    ' Reposition Window
+    Windows(WindowIndex).Window.Left = 0
+    
+    ' Resize Window
+    Windows(WindowIndex).Window.Width = ScreenWidth
+    
+    ' Resize Label Widget
+    Windows(WindowIndex).Controls(ControlIndex).Width = ScreenWidth
+    
+    ' Reposition Window
+    Windows(WindowIndex).Controls(ControlIndex).Left = 0
+    Windows(WindowIndex).Controls(ControlIndex).Top = 0
+    
+    ' Realignment Label Widget
+    Windows(WindowIndex).Controls(ControlIndex).Align = Alignment.AlignCenter
+End Sub
