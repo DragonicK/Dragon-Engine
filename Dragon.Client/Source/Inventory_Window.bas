@@ -22,7 +22,7 @@ Public Sub CreateWindow_Inventory()
     ' Create window
     CreateWindow "winInventory", "INVENTÁRIO", zOrder_Win, 0, 0, 202, 380, 0, False, Fonts.FontRegular, , 2, 7, DesignTypes.DesignWindowWithTopBarAndNavBar, DesignTypes.DesignWindowWithTopBarAndNavBar, DesignTypes.DesignWindowWithTopBarAndNavBar, , , , , GetAddress(AddressOf Inventory_MouseMove), GetAddress(AddressOf Inventory_MouseDown), GetAddress(AddressOf Inventory_MouseMove), GetAddress(AddressOf Inventory_DblClick), , , GetAddress(AddressOf DrawInventory)
     ' Centralise it
-    CentraliseWindow WindowCount, 0
+    CentraliseWindow WindowCount
 
     ' Set the index for spawning controls
     zOrder_Con = 1

@@ -221,14 +221,17 @@ Public Sub ResetGFX()
         Temp(i).Data = mTexture(i).Data
     Next
 
+
     ' Ground
     GroundCount = MaxGroundParallax
     If GroundCount > 0 Then
         ReDim GroundParallaxTemp(1 To GroundCount)
 
         For i = 1 To GroundCount
-            Set GroundParallax(i).Texture.Texture = Nothing
-            GroundParallaxTemp(i).Data = GroundParallax(i).Texture.Data
+            If IsGroundTexturesInitialized() Then
+                Set GroundParallax(i).Texture.Texture = Nothing
+                GroundParallaxTemp(i).Data = GroundParallax(i).Texture.Data
+            End If
         Next
     End If
 
@@ -238,8 +241,10 @@ Public Sub ResetGFX()
         ReDim FringeParallaxTemp(1 To FringeCount)
 
         For i = 1 To FringeCount
-            Set GroundParallax(i).Texture.Texture = Nothing
-            FringeParallaxTemp(i).Data = FringeParallax(i).Texture.Data
+            If IsFringeTexturesInitialized() Then
+                Set FringeParallax(i).Texture.Texture = Nothing
+                FringeParallaxTemp(i).Data = FringeParallax(i).Texture.Data
+            End If
         Next
     End If
 
@@ -269,13 +274,17 @@ Public Sub ResetGFX()
         Call LoadTexture(Temp(i).Data)
     Next
 
-    For i = 1 To GroundCount
-        Call LoadParallaxTexture(GroundParallaxTemp(i).Data, GroundParallax(i).Texture)
-    Next
+    If IsGroundTexturesInitialized() Then
+        For i = 1 To GroundCount
+            Call LoadParallaxTexture(GroundParallaxTemp(i).Data, GroundParallax(i).Texture)
+        Next
+    End If
 
-    For i = 1 To FringeCount
-        Call LoadParallaxTexture(FringeParallaxTemp(i).Data, FringeParallax(i).Texture)
-    Next
+    If IsFringeTexturesInitialized() Then
+        For i = 1 To FringeCount
+            Call LoadParallaxTexture(FringeParallaxTemp(i).Data, FringeParallax(i).Texture)
+        Next
+    End If
 
 End Sub
 
@@ -1048,21 +1057,19 @@ End Sub
 
 Public Sub ResizeGUI()
     Dim Top As Long
+    Dim WindowIndex As Long
+    Dim ControlIndex As Long
 
     ' move hotbar
     Windows(GetWindowIndex("winHotbar")).Window.Left = ScreenWidth - 430    ' (ScreenWidth / 2) - (Windows(GetWindowIndex("winHotbar")).Window.Width / 2) ' ScreenWidth - 430
     Windows(GetWindowIndex("winHotbar")).Window.Top = 15    ' ScreenHeight - 50
-    
-    
+
     ' Login Footer Resize Width
     Windows(GetWindowIndex("winLoginFooter")).Window.Width = ScreenWidth
     
     ' Login Footer Resize Width
     Windows(GetWindowIndex("winLoginFooter")).Controls(GetControlIndex("winLoginFooter", "lblCopy")).Width = ScreenWidth
-    
-    ' Characters Footer Resize Width
-    Windows(GetWindowIndex("winModelFooter")).Controls(GetControlIndex("winModelFooter", "lblPremium")).Width = ScreenWidth
-    
+        
     ' move chat
     Windows(GetWindowIndex("winChat")).Window.Top = ScreenHeight - 178
     Windows(GetWindowIndex("winChatSmall")).Window.Top = ScreenHeight - 162
@@ -1097,25 +1104,27 @@ Public Sub ResizeGUI()
     Windows(GetWindowIndex("winComboMenuBG")).Window.Height = ScreenHeight
     
     ' centralise windows
-    CentraliseWindow GetWindowIndex("winLogin"), 0
+    CentraliseWindow GetWindowIndex("winLogin")
     
-    CentraliseWindow GetWindowIndex("winModels"), 0
-    CentraliseWindow GetWindowIndex("winDialogue"), 0
-    CentraliseWindow GetWindowIndex("winClasses"), 0
-    CentraliseWindow GetWindowIndex("winNewChar"), 0
-    CentraliseWindow GetWindowIndex("winEscMenu"), 0
-    CentraliseWindow GetWindowIndex("winInventory"), 0
-    CentraliseWindow GetWindowIndex("winCharacter"), 0
-    CentraliseWindow GetWindowIndex("winSkills"), 0
-    CentraliseWindow GetWindowIndex("winOptions"), 0
-    CentraliseWindow GetWindowIndex("winShop"), 0
-    CentraliseWindow GetWindowIndex("winTrade"), 0
-    CentraliseWindow GetWindowIndex("winItemUpgrade"), 0
-    CentraliseWindow GetWindowIndex("winCraft"), 0
-    CentraliseWindow GetWindowIndex("winAchievement"), 0
-    CentraliseWindow GetWindowIndex("winLoot"), 0
+    CentraliseWindow GetWindowIndex("winModels")
+    CentraliseWindow GetWindowIndex("winDialogue")
+    CentraliseWindow GetWindowIndex("winClasses")
+    CentraliseWindow GetWindowIndex("winNewChar")
+    CentraliseWindow GetWindowIndex("winEscMenu")
+    CentraliseWindow GetWindowIndex("winInventory")
+    CentraliseWindow GetWindowIndex("winCharacter")
+    CentraliseWindow GetWindowIndex("winSkills")
+    CentraliseWindow GetWindowIndex("winOptions")
+    CentraliseWindow GetWindowIndex("winShop")
+    CentraliseWindow GetWindowIndex("winTrade")
+    CentraliseWindow GetWindowIndex("winItemUpgrade")
+    CentraliseWindow GetWindowIndex("winCraft")
+    CentraliseWindow GetWindowIndex("winAchievement")
+    CentraliseWindow GetWindowIndex("winLoot")
     CentraliseWindow GetWindowIndex("winLoginFooter"), ScreenHeight - 35
-    CentraliseWindow GetWindowIndex("winModelFooter"), ScreenHeight - 35
+    
+    Resize_CharactersUI
+
 End Sub
 
 Public Sub SaveScreen()

@@ -7,7 +7,7 @@ Public Sub CreateWindow_Dialogue()
     ' Create dialogue window
     CreateWindow "winDialogue", "MENSAGEM", zOrder_Win, 0, 0, 348, 145, 0, , Fonts.FontRegular, , 3, 5, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, , , , , , , , , , False
     ' Centralise it
-    CentraliseWindow WindowCount, 0
+    CentraliseWindow WindowCount
 
     ' Set the index for spawning controls
     zOrder_Con = 1

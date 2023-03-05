@@ -23,7 +23,7 @@ Public Sub CreateWindow_CashShop()
     ' Create window
     CreateWindow "winCashShop", "MERCADO NEGRO", zOrder_Win, 0, 0, 404, 410, 0, False, Fonts.FontRegular, , 2, 7, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar
     ' Centralise it
-    CentraliseWindow WindowCount, 0
+    CentraliseWindow WindowCount
     ' Set the index for spawning controls
     zOrder_Con = 1
     ' Close button

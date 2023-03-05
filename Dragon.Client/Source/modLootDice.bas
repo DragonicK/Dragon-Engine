@@ -19,7 +19,7 @@ Public Sub CreateWindow_LootDice()
     ' Create window
     CreateWindow "winLootDice", "LOTERIA", zOrder_Win, 0, 0, 252, 185, 0, False, Fonts.FontRegular, , 2, 7, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, , , , , , , , , , , GetAddress(AddressOf DrawLootDice)
     ' Centralise it
-    CentraliseWindow WindowCount, 0
+    CentraliseWindow WindowCount
 
     Windows(WindowCount).Window.Top = ScreenHeight - 300
 

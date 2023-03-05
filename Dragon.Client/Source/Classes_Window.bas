@@ -5,7 +5,7 @@ Public Sub CreateWindow_Classes()
     CreateWindow "winClasses", "Seleção de Classe", zOrder_Win, 0, 0, 440, 250, 0, False, Fonts.FontRegular, , 2, 6, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, , , , , , , , , False
     
     ' Centralise it
-    CentraliseWindow WindowCount, 0
+    CentraliseWindow WindowCount
 
     ' Set the index for spawning controls
     zOrder_Con = 1

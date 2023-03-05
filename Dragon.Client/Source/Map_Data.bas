@@ -316,3 +316,27 @@ Public Sub CopyMapProperty(ByVal MapNum As Long)
         CurrentMap.TileData = MapPropertyData(MapNum).TileData
     End If
 End Sub
+
+Public Function IsGroundTexturesInitialized() As Boolean
+  Dim rv As Long
+
+  On Error Resume Next
+
+  rv = UBound(GroundParallax)
+  
+  IsGroundTexturesInitialized = (Err.Number = 0)
+End Function
+
+Public Function IsFringeTexturesInitialized() As Boolean
+  Dim rv As Long
+
+  On Error Resume Next
+
+  rv = UBound(FringeParallax)
+  
+  IsFringeTexturesInitialized = (Err.Number = 0)
+End Function
+
+
+ 
+

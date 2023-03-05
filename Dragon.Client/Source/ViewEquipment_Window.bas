@@ -22,7 +22,7 @@ Public Sub CreateWindow_ViewEquipment()
     ' Create window
     CreateWindow "winViewEquipment", "INFORMAÇÃO", zOrder_Win, 0, 0, 260, 420, 0, False, Fonts.FontRegular, , 2, 6, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, , , , , GetAddress(AddressOf ViewEquipment_MouseMove), GetAddress(AddressOf ViewEquipment_MouseDown), GetAddress(AddressOf ViewEquipment_MouseMove), GetAddress(AddressOf ViewEquipment_DoubleClick), , , GetAddress(AddressOf RenderViewEquipment)
     ' Centralise it
-    CentraliseWindow WindowCount, 0
+    CentraliseWindow WindowCount
 
     ' Set the index for spawning controls
     zOrder_Con = 1
@@ -170,8 +170,6 @@ Private Sub RenderViewEquipment()
     xO = Windows(WindowIndex).Window.Left
     yO = Windows(WindowIndex).Window.Top
     Width = Windows(WindowIndex).Window.Width
-
-    
 
     For i = 1 To PlayerEquipments.PlayerEquipment_Count - 1
         RenderTexture Tex_GUI(54 + i), xO + EquipmentPosition(i).X, yO + EquipmentPosition(i).Y, 0, 0, 34, 34, 34, 34
