@@ -169,17 +169,17 @@ Private Sub ButtonDelChar_3()
 End Sub
 
 Private Sub ButtonCreateChar_1()
-    CharNum = 0
-    ShowClasses
-End Sub
-
-Private Sub ButtonCreateChar_2()
     CharNum = 1
     ShowClasses
 End Sub
 
-Private Sub ButtonCreateChar_3()
+Private Sub ButtonCreateChar_2()
     CharNum = 2
+    ShowClasses
+End Sub
+
+Private Sub ButtonCreateChar_3()
+    CharNum = 3
     ShowClasses
 End Sub
 

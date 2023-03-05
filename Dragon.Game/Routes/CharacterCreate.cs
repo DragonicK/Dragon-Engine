@@ -112,7 +112,7 @@ public sealed class CharacterCreate {
 
         if (!CanValidateNext(validated)) {
             SendValidationResult(validated);
-            DisconnectWhenNeeded(validated);
+         //   DisconnectWhenNeeded(validated);
             return false;
         }
 
@@ -120,7 +120,7 @@ public sealed class CharacterCreate {
 
         if (!CanValidateNext(validated)) {
             SendValidationResult(validated);
-            DisconnectWhenNeeded(validated);
+         //   DisconnectWhenNeeded(validated);
             return false;
         }
 
@@ -128,7 +128,7 @@ public sealed class CharacterCreate {
 
         if (!CanValidateNext(validated)) {
             SendValidationResult(validated);
-            DisconnectWhenNeeded(validated);
+        //    DisconnectWhenNeeded(validated);
             return false;
         }
 
@@ -136,7 +136,7 @@ public sealed class CharacterCreate {
 
         if (!CanValidateNext(validated)) {
             SendValidationResult(validated);
-            DisconnectWhenNeeded(validated);
+          //  DisconnectWhenNeeded(validated);
             return false;
         }
 
@@ -144,7 +144,7 @@ public sealed class CharacterCreate {
 
         if (!CanValidateNext(validated)) {
             SendValidationResult(validated);
-            DisconnectWhenNeeded(validated);
+           // DisconnectWhenNeeded(validated);
             return false;
         }
 

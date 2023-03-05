@@ -7,6 +7,6 @@ Public Enum MenuCount
     MenuLogin
     MenuClass
     MenuNewChar
-    MenuChars
+    MenuModels
 End Enum
 

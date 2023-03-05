@@ -22,6 +22,7 @@ public sealed class CharacterBegin {
     public ContentService? ContentService { get; init; }
     public InstanceService? InstanceService { get; init; }
     public DatabaseService? DatabaseService { get; init; }
+    public CharacterService? CharacterService { get; init; }
     public ConfigurationService? Configuration { get; init; }
     public ConnectionService? ConnectionService { get; init; }
     public PacketSenderService? PacketSenderService { get; init; }
@@ -40,6 +41,8 @@ public sealed class CharacterBegin {
                     var result = await LoadPlayer(player, index);
 
                     if (result) {
+                        CharacterService.CancelExclusion(player.Character.CharacterId);
+
                         JoinGame(player);
                     }
                 }
