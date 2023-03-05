@@ -2,8 +2,10 @@ Attribute VB_Name = "NewCharacter_Window"
 Option Explicit
 
 Public Sub CreateWindow_NewChar()
-' Create window
-    CreateWindow "winNewChar", "NOVO PERSONAGEM", zOrder_Win, 0, 0, 291, 200, 0, False, Fonts.FontRegular, , 2, 6, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, , , , , , , , False
+
+    ' Create window
+    CreateWindow "winNewChar", "Novo Personagem", zOrder_Win, 0, 0, 440, 224, 0, False, Fonts.FontRegular, , 2, 6, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, , , , , , , , , False
+    
     ' Centralise it
     CentraliseWindow WindowCount
 
@@ -12,27 +14,37 @@ Public Sub CreateWindow_NewChar()
 
     ' Close button
     CreateButton WindowCount, "ButtonClose", Windows(WindowCount).Window.Width - 33, 11, 22, 22, , , , , , , Tex_GUI(TextureControl_CloseNormal), Tex_GUI(TextureControl_CloseHover), Tex_GUI(TextureControl_CloseClick), , , , , , GetAddress(AddressOf ButtonNewChar_Cancel)
-    ' Name
+    
+    ' Name Label
+    CreateLabel WindowCount, "lblName", 128, 70, 40, , "Nome", FontRegular, White, Alignment.AlignLeft
+    
+    ' Textbox Name
+    CreateTextbox WindowCount, "txtName", 180, 60, 236, 30, , Fonts.FontRegular, , Alignment.AlignLeft, , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, , , , , , , 6, 8
+    
+    ' Select Gender Button
+    CreateButton WindowCount, "CheckMale", 128, 110, 11, 13, , , , , , , Tex_GUI(12), Tex_GUI(13), Tex_GUI(14), , , , , , GetAddress(AddressOf CheckNewChar_Male)
+    CreateButton WindowCount, "CheckFemale", 408, 110, 11, 13, , , , , , , Tex_GUI(15), Tex_GUI(16), Tex_GUI(17), , , , , , GetAddress(AddressOf CheckNewChar_Female)
+    ' Background Oval
+    CreatePictureBox WindowCount, "picShadow_3", 146, 110, 252, 12, , , , , , , , DesignTypes.DesignBackgroundOval, DesignTypes.DesignBackgroundOval, DesignTypes.DesignBackgroundOval
+    ' Sex Label
+    CreateLabel WindowCount, "lblSex", 146, 110, 252, , "Masculino", FontRegular, White, Alignment.AlignCenter
+    
+    ' Sprite Button
+    CreateButton WindowCount, "ButtonLeft", 128, 137, 11, 13, , , , , , , Tex_GUI(12), Tex_GUI(13), Tex_GUI(14), , , , , , GetAddress(AddressOf ButtonNewChar_Left)
+    CreateButton WindowCount, "ButtonRight", 408, 137, 11, 13, , , , , , , Tex_GUI(15), Tex_GUI(16), Tex_GUI(17), , , , , , GetAddress(AddressOf ButtonNewChar_Right)
+    ' Background Oval
+    CreatePictureBox WindowCount, "picShadow_3", 146, 137, 252, 12, , , , , , , , DesignTypes.DesignBackgroundOval, DesignTypes.DesignBackgroundOval, DesignTypes.DesignBackgroundOval
+    ' Sprite Label
+    CreateLabel WindowCount, "lblSprite", 146, 137, 252, , "Sprite", FontRegular, White, Alignment.AlignCenter
 
-    CreateLabel WindowCount, "lblName", 29, 49, 124, , "Name", FontRegular, White, Alignment.AlignCenter
-    ' Textbox
-    CreateTextbox WindowCount, "txtName", 29, 65, 124, 24, , Fonts.FontRegular, , Alignment.AlignLeft, , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, , , , , , , 5, 3
-    ' Gender
-    CreateLabel WindowCount, "lblGender", 29, 92, 124, , "Gender", FontRegular, White, Alignment.AlignCenter
-    ' Checkboxes
-    CreateCheckbox WindowCount, "CheckMale", 29, 113, 55, , 1, "Male", FontRegular, , Alignment.AlignCenter, , , DesignTypes.DesignCheckBox, , , GetAddress(AddressOf CheckNewChar_Male), , , 1
-    CreateCheckbox WindowCount, "CheckFemale", 90, 113, 62, , 0, "Female", FontRegular, , Alignment.AlignCenter, , , DesignTypes.DesignCheckBox, , , GetAddress(AddressOf CheckNewChar_Female), , , 1
-    ' Buttons
-    CreateButton WindowCount, "ButtonAccept", 29, 137, 60, 26, "Accept", FontRegular, , , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf ButtonNewChar_Accept)
-    CreateButton WindowCount, "ButtonCancel", 93, 137, 60, 26, "Cancel", FontRegular, , , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf ButtonNewChar_Cancel)
-    ' Sprite
-    CreatePictureBox WindowCount, "picShadow_3", 175, 52, 76, 9, , , , , , , , DesignTypes.DesignBackgroundOval, DesignTypes.DesignBackgroundOval, DesignTypes.DesignBackgroundOval
-    CreateLabel WindowCount, "lblSprite", 175, 49, 76, , "Sprite", FontRegular, White, Alignment.AlignCenter
-    ' Scene
-    CreatePictureBox WindowCount, "picScene", 165, 65, 96, 96, , , , , Tex_GUI(11), Tex_GUI(11), Tex_GUI(11), , , , , , , , , GetAddress(AddressOf NewChar_OnDraw)
-    ' Buttons
-    CreateButton WindowCount, "ButtonLeft", 163, 50, 11, 13, , , , , , , Tex_GUI(12), Tex_GUI(14), Tex_GUI(16), , , , , , GetAddress(AddressOf ButtonNewChar_Left)
-    CreateButton WindowCount, "ButtonRight", 252, 50, 11, 13, , , , , , , Tex_GUI(13), Tex_GUI(15), Tex_GUI(17), , , , , , GetAddress(AddressOf ButtonNewChar_Right)
+    ' Acept Button
+    CreateButton WindowCount, "ButtonAccept", 223, 174, 197, 30, "Criar", FontRegular, , , , , , , , DesignTypes.DesignGreen, DesignTypes.DesignGreenHover, DesignTypes.DesignGreenClick, , , GetAddress(AddressOf ButtonNewChar_Accept)
+    
+    ' Cancel Button
+    CreateButton WindowCount, "ButtonCancel", 20, 174, 197, 30, "Cancelar", FontRegular, , , , , , , , DesignTypes.DesignRed, DesignTypes.DesignRedHover, DesignTypes.DesignRedClick, , , GetAddress(AddressOf ButtonNewChar_Cancel)
+    
+    ' Background Face
+    CreatePictureBox WindowCount, "picScene", 20, 60, 96, 96, , , , , Tex_GUI(11), Tex_GUI(11), Tex_GUI(11), , , , , , , , , GetAddress(AddressOf NewChar_OnDraw)
 
     ' Set the active control
     SetActiveControl GetWindowIndex("winNewChar"), GetControlIndex("winNewChar", "txtName")
@@ -47,16 +59,12 @@ Private Sub NewChar_OnDraw()
 
     If NewCharGender = SEX_MALE Then
         imageFace = Tex_Face(Class(NewCharClass).MaleSprite(NewCharSprite))
-        ' imageChar = Tex_Char(Class(newCharClass).MaleSprite(newCharSprite))
     Else
         imageFace = Tex_Face(Class(NewCharClass).FemaleSprite(NewCharSprite))
-        '   imageChar = Tex_Char(Class(newCharClass).FemaleSprite(newCharSprite))
     End If
 
     ' render face
-    RenderTexture imageFace, xO + 166, yO + 66, 0, 0, 94, 94, 94, 94
-    ' render char
-    '  RenderTexture imageChar, xO + 166, yO + 126, 32, 0, 32, 32, 32, 32
+    RenderTexture imageFace, xO + 21, yO + 61, 0, 0, 94, 94, 94, 94
 End Sub
 
 Private Sub ButtonNewChar_Left()
@@ -98,11 +106,13 @@ End Sub
 Private Sub CheckNewChar_Male()
     NewCharSprite = 1
     NewCharGender = SEX_MALE
+    Windows(GetWindowIndex("winNewChar")).Controls(GetControlIndex("winNewChar", "lblSex")).Text = "Masculino"
 End Sub
 
 Private Sub CheckNewChar_Female()
     NewCharSprite = 1
     NewCharGender = SEX_FEMALE
+    Windows(GetWindowIndex("winNewChar")).Controls(GetControlIndex("winNewChar", "lblSex")).Text = "Feminino"
 End Sub
 
 Private Sub ButtonNewChar_Cancel()
@@ -118,7 +128,12 @@ End Sub
 Private Sub ButtonNewChar_Accept()
     Dim Name As String
     Name = Windows(GetWindowIndex("winNewChar")).Controls(GetControlIndex("winNewChar", "txtName")).Text
+    
+    If Len(Windows(GetWindowIndex("winNewChar")).Controls(GetControlIndex("winNewChar", "txtName")).Text) >= 5 Then
+        HideWindows
+        AddChar Name, NewCharGender, NewCharClass, NewCharSprite
+    Else
+        ShowDialogue "Error!", "O Nome escolhido não atente aos critérios,", "Verifique o nome e tente novamente.", DialogueTypeAlert
+    End If
 
-    HideWindows
-    AddChar Name, NewCharGender, NewCharClass, NewCharSprite
 End Sub
