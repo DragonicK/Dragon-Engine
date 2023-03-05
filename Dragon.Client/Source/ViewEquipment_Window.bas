@@ -22,7 +22,7 @@ Public Sub CreateWindow_ViewEquipment()
     ' Create window
     CreateWindow "winViewEquipment", "INFORMAÇÃO", zOrder_Win, 0, 0, 260, 420, 0, False, Fonts.FontRegular, , 2, 6, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, , , , , GetAddress(AddressOf ViewEquipment_MouseMove), GetAddress(AddressOf ViewEquipment_MouseDown), GetAddress(AddressOf ViewEquipment_MouseMove), GetAddress(AddressOf ViewEquipment_DoubleClick), , , GetAddress(AddressOf RenderViewEquipment)
     ' Centralise it
-    CentraliseWindow WindowCount
+    CentraliseWindow WindowCount, 0
 
     ' Set the index for spawning controls
     zOrder_Con = 1

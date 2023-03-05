@@ -7,7 +7,7 @@ Public Sub CreateWindow_Options()
 ' Create window
     CreateWindow "winOptions", "", zOrder_Win, 0, 0, 210, 212, 0, , , , , , DesignTypes.DesignWindowWithoutTopBar, DesignTypes.DesignWindowWithoutTopBar, DesignTypes.DesignWindowWithoutTopBar, , , , , , , , , False, False
     ' Centralise it
-    CentraliseWindow WindowCount
+    CentraliseWindow WindowCount, 0
 
     ' Set the index for spawning controls
     zOrder_Con = 1
@@ -47,22 +47,11 @@ Private Sub SetOptionsScreen()
     ReDim Windows(WindowIndex).Controls(GetControlIndex("winOptions", "cmbRender")).List(0)
 
     ' Resolutions
+    Combobox_AddItem WindowIndex, GetControlIndex("winOptions", "cmbRes"), "2560x1080"
     Combobox_AddItem WindowIndex, GetControlIndex("winOptions", "cmbRes"), "1920x1080"
-    Combobox_AddItem WindowIndex, GetControlIndex("winOptions", "cmbRes"), "1680x1050"
     Combobox_AddItem WindowIndex, GetControlIndex("winOptions", "cmbRes"), "1600x900"
-    Combobox_AddItem WindowIndex, GetControlIndex("winOptions", "cmbRes"), "1440x900"
-    Combobox_AddItem WindowIndex, GetControlIndex("winOptions", "cmbRes"), "1440x1050"
     Combobox_AddItem WindowIndex, GetControlIndex("winOptions", "cmbRes"), "1366x768"
-    Combobox_AddItem WindowIndex, GetControlIndex("winOptions", "cmbRes"), "1360x1024"
-    Combobox_AddItem WindowIndex, GetControlIndex("winOptions", "cmbRes"), "1360x768"
-    Combobox_AddItem WindowIndex, GetControlIndex("winOptions", "cmbRes"), "1280x1024"
-    Combobox_AddItem WindowIndex, GetControlIndex("winOptions", "cmbRes"), "1280x800"
-    Combobox_AddItem WindowIndex, GetControlIndex("winOptions", "cmbRes"), "1280x768"
     Combobox_AddItem WindowIndex, GetControlIndex("winOptions", "cmbRes"), "1280x720"
-    Combobox_AddItem WindowIndex, GetControlIndex("winOptions", "cmbRes"), "1024x768"
-    Combobox_AddItem WindowIndex, GetControlIndex("winOptions", "cmbRes"), "1024x576"
-    Combobox_AddItem WindowIndex, GetControlIndex("winOptions", "cmbRes"), "800x600"
-    Combobox_AddItem WindowIndex, GetControlIndex("winOptions", "cmbRes"), "800x450"
 
     ' Render Options
     Combobox_AddItem WindowIndex, GetControlIndex("winOptions", "cmbRender"), "Automatic"

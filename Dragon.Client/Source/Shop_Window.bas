@@ -31,7 +31,7 @@ Public Sub CreateWindow_Shop()
     ' additional mouse event
     Windows(WindowCount).Window.EntityCallBack(entStates.MouseUp) = GetAddress(AddressOf Shop_MouseMove)
     ' Centralise it
-    CentraliseWindow WindowCount
+    CentraliseWindow WindowCount, 0
 
     ' Close button
     CreateButton WindowCount, "btnClose", Windows(WindowCount).Window.Width - 33, 11, 22, 22, , , , , , , Tex_GUI(TextureControl_CloseNormal), Tex_GUI(TextureControl_CloseHover), Tex_GUI(TextureControl_CloseClick), , , , , , GetAddress(AddressOf ButtonShop_Close)

@@ -1361,10 +1361,16 @@ Public Function SetActiveControl(curWindow As Long, curControl As Long) As Boole
     
 End Function
 
-Public Sub CentraliseWindow(curWindow As Long)
+Public Sub CentraliseWindow(curWindow As Long, paddingTop As Long)
     With Windows(curWindow).Window
         .Left = (ScreenWidth / 2) - (.Width / 2)
-        .Top = (ScreenHeight / 2) - (.Height / 2)
+        
+        If paddingTop = 0 Then
+            .Top = (ScreenHeight / 2) - (.Height / 2)
+        Else
+            .Top = paddingTop
+        End If
+        
         .OrigLeft = .Left
         .OrigTop = .Top
     End With
@@ -1429,7 +1435,7 @@ Public Sub CreateWindow_Combobox()
     CreateWindow "winComboMenu", "ComboMenu", zOrder_Win, 0, 0, 100, 100, 0, , Fonts.FontRegular, , , , DesignTypes.DesignComboMenu, , , , , , , , , , , False, False
     
     ' Centralise it
-    CentraliseWindow WindowCount
+    CentraliseWindow WindowCount, 0
 End Sub
 
 Public Sub CreateWindow_Bars()
@@ -1505,7 +1511,7 @@ Public Sub CreateWindow_RightClick()
     CreateWindow "winRightClickBG", "", zOrder_Win, 0, 0, 800, 600, 0, , , , , , , , , , , , , , GetAddress(AddressOf RightClick_Close), , , False
     
     ' Centralise it
-    CentraliseWindow WindowCount
+    CentraliseWindow WindowCount, 0
 End Sub
 
 Public Sub CreateWindow_PlayerMenu()
@@ -1514,7 +1520,7 @@ Public Sub CreateWindow_PlayerMenu()
     CreateWindow "winPlayerMenu", "", zOrder_Win, 0, 0, 150, 150, 0, , , , , , DesignTypes.DesignPlayerInteraction, DesignTypes.DesignPlayerInteraction, DesignTypes.DesignPlayerInteraction, , , , , , GetAddress(AddressOf RightClick_Close), , , False
     
     ' Centralise it
-    CentraliseWindow WindowCount
+    CentraliseWindow WindowCount, 0
 
     ' Name
     CreateButton WindowCount, "btnName", 8, 8, 134, 18, "Name", FontRegular, White, , , , , , , DesignTypes.DesignPlayerInteractionHeader, DesignTypes.DesignPlayerInteractionHeader, DesignTypes.DesignPlayerInteractionHeader, , , GetAddress(AddressOf RightClick_Close)
@@ -1588,7 +1594,6 @@ Public Sub InitGUI()
     ' Menu
     CreateWindow_Login
     CreateWindow_LoginFooter
-    CreateWindow_LoginLogo
     CreateWindow_Models
     CreateWindow_ModelFooter
     CreateWindow_Loading

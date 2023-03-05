@@ -113,7 +113,6 @@ Public Sub Main()
     ' show login window
     ShowWindow GetWindowIndex("winLogin")
     ShowWindow GetWindowIndex("winLoginFooter")
-    ShowWindow GetWindowIndex("winLoginLogo")
 
     inSmallChat = True
     ' Set the loop going

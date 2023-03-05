@@ -1005,53 +1005,20 @@ End Function
 Function GetResolutionSize(Resolution As Byte, ByRef Width As Long, ByRef Height As Long)
     Select Case Resolution
     Case 1
-        Width = 1920
+        Width = 2560
         Height = 1080
     Case 2
-        Width = 1680
-        Height = 1050
+        Width = 1920
+        Height = 1080
     Case 3
         Width = 1600
         Height = 900
     Case 4
-        Width = 1440
-        Height = 900
-    Case 5
-        Width = 1440
-        Height = 1050
-    Case 6
         Width = 1366
         Height = 768
-    Case 7
-        Width = 1360
-        Height = 1024
-    Case 8
-        Width = 1360
-        Height = 768
-    Case 9
-        Width = 1280
-        Height = 1024
-    Case 10
-        Width = 1280
-        Height = 800
-    Case 11
-        Width = 1280
-        Height = 768
-    Case 12
+    Case 5
         Width = 1280
         Height = 720
-    Case 13
-        Width = 1024
-        Height = 768
-    Case 14
-        Width = 1024
-        Height = 576
-    Case 15
-        Width = 800
-        Height = 600
-    Case 16
-        Width = 800
-        Height = 450
     End Select
 End Function
 
@@ -1085,7 +1052,17 @@ Public Sub ResizeGUI()
     ' move hotbar
     Windows(GetWindowIndex("winHotbar")).Window.Left = ScreenWidth - 430    ' (ScreenWidth / 2) - (Windows(GetWindowIndex("winHotbar")).Window.Width / 2) ' ScreenWidth - 430
     Windows(GetWindowIndex("winHotbar")).Window.Top = 15    ' ScreenHeight - 50
-
+    
+    
+    ' Login Footer Resize Width
+    Windows(GetWindowIndex("winLoginFooter")).Window.Width = ScreenWidth
+    
+    ' Login Footer Resize Width
+    Windows(GetWindowIndex("winLoginFooter")).Controls(GetControlIndex("winLoginFooter", "lblCopy")).Width = ScreenWidth
+    
+    ' Characters Footer Resize Width
+    Windows(GetWindowIndex("winModelFooter")).Controls(GetControlIndex("winModelFooter", "lblPremium")).Width = ScreenWidth
+    
     ' move chat
     Windows(GetWindowIndex("winChat")).Window.Top = ScreenHeight - 178
     Windows(GetWindowIndex("winChatSmall")).Window.Top = ScreenHeight - 162
@@ -1120,21 +1097,25 @@ Public Sub ResizeGUI()
     Windows(GetWindowIndex("winComboMenuBG")).Window.Height = ScreenHeight
     
     ' centralise windows
-    CentraliseWindow GetWindowIndex("winModels")
-    CentraliseWindow GetWindowIndex("winDialogue")
-    CentraliseWindow GetWindowIndex("winClasses")
-    CentraliseWindow GetWindowIndex("winNewChar")
-    CentraliseWindow GetWindowIndex("winEscMenu")
-    CentraliseWindow GetWindowIndex("winInventory")
-    CentraliseWindow GetWindowIndex("winCharacter")
-    CentraliseWindow GetWindowIndex("winSkills")
-    CentraliseWindow GetWindowIndex("winOptions")
-    CentraliseWindow GetWindowIndex("winShop")
-    CentraliseWindow GetWindowIndex("winTrade")
-    CentraliseWindow GetWindowIndex("winItemUpgrade")
-    CentraliseWindow GetWindowIndex("winCraft")
-    CentraliseWindow GetWindowIndex("winAchievement")
-    CentraliseWindow GetWindowIndex("winLoot")
+    CentraliseWindow GetWindowIndex("winLogin"), 0
+    
+    CentraliseWindow GetWindowIndex("winModels"), 0
+    CentraliseWindow GetWindowIndex("winDialogue"), 0
+    CentraliseWindow GetWindowIndex("winClasses"), 0
+    CentraliseWindow GetWindowIndex("winNewChar"), 0
+    CentraliseWindow GetWindowIndex("winEscMenu"), 0
+    CentraliseWindow GetWindowIndex("winInventory"), 0
+    CentraliseWindow GetWindowIndex("winCharacter"), 0
+    CentraliseWindow GetWindowIndex("winSkills"), 0
+    CentraliseWindow GetWindowIndex("winOptions"), 0
+    CentraliseWindow GetWindowIndex("winShop"), 0
+    CentraliseWindow GetWindowIndex("winTrade"), 0
+    CentraliseWindow GetWindowIndex("winItemUpgrade"), 0
+    CentraliseWindow GetWindowIndex("winCraft"), 0
+    CentraliseWindow GetWindowIndex("winAchievement"), 0
+    CentraliseWindow GetWindowIndex("winLoot"), 0
+    CentraliseWindow GetWindowIndex("winLoginFooter"), ScreenHeight - 35
+    CentraliseWindow GetWindowIndex("winModelFooter"), ScreenHeight - 35
 End Sub
 
 Public Sub SaveScreen()

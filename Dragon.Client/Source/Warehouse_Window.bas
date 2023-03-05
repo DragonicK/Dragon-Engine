@@ -26,7 +26,7 @@ End Sub
 Public Sub CreateWindow_Warehouse()
     CreateWindow "winWarehouse", "ARMAZÉM", zOrder_Win, 0, 0, 204, 432, 0, True, Fonts.FontRegular, , 2, 5, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, , , , , GetAddress(AddressOf Warehouse_MouseMove), GetAddress(AddressOf Warehouse_MouseDown), GetAddress(AddressOf Warehouse_MouseMove), 0, , , GetAddress(AddressOf DrawWarehouse)
     
-    CentraliseWindow WindowCount
+    CentraliseWindow WindowCount, 0
 
     ' Set the index for spawning controls
     zOrder_Con = 1

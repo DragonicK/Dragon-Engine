@@ -7,7 +7,7 @@ Public Sub CreateWindow_NewChar()
     CreateWindow "winNewChar", "Novo Personagem", zOrder_Win, 0, 0, 440, 224, 0, False, Fonts.FontRegular, , 2, 6, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, , , , , , , , , False
     
     ' Centralise it
-    CentraliseWindow WindowCount
+    CentraliseWindow WindowCount, 0
 
     ' Set the index for spawning controls
     zOrder_Con = 1

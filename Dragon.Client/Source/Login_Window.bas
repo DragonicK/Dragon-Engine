@@ -1,38 +1,48 @@
 Attribute VB_Name = "Login_Window"
 Public LoginToken As String
 
-Private Const Width As Long = 320
-Private Const Height As Long = 200
-Private Const PaddingTop As Long = 10
+Private Const WindowWidth As Long = 512
+Private Const WindowHeight As Long = 400
+Private Const WindowPaddingTop As Long = 10
+Private Const WindowPaddingLogo As Long = WindowPaddingTop + (LogoHeight + 80)
 
-Private Const LogoSizeY As Long = 142
-Private Const LogoSizeX As Long = 512
-Private Const CenterLeft As Long = ((LogoSizeX + 40) / 2)
+Private Const LogoWidth As Long = 512
+Private Const LogoHeight As Long = 142
+Private Const CenterLogo As Long = (WindowWidth / 2) - ((LogoWidth + 40) / 2)
+
+Private Const WidgetWidth As Long = WindowWidth - (WindowWidth / 3)
+Private Const WidgetCenter As Long = (WindowWidth / 2) - (WidgetWidth / 2)
+
+Private Const ButtonWidth As Long = 170
+Private Const ButtonCenter As Long = (WindowWidth / 2) - (ButtonWidth / 2)
 
 Public Sub CreateWindow_Login()
     
-    CreateWindow "winLogin", "", zOrder_Win, (ScreenWidth / 2) - (Width / 2), 400, Width, Height, 0, , Fonts.FontRegular, , 3, 5, DesignTypes.DesignWindowWithoutBackground, DesignTypes.DesignWindowWithoutBackground, DesignTypes.DesignWindowWithoutBackground, , , , , , , , , False
+    CreateWindow "winLogin", "", zOrder_Win, 0, 0, WindowWidth, WindowHeight, 0, , Fonts.FontRegular, , 3, 5, DesignTypes.DesignWindowWithoutBackground, DesignTypes.DesignWindowWithoutBackground, DesignTypes.DesignWindowWithoutBackground, , , , , , , , , False
     
     ' Center Window
-    'CentraliseWindow WindowCount
+    CentraliseWindow WindowCount, 0
 
     ' Order of Controls
     zOrder_Con = 1
     
+    ' Create Picture Logo
+    CreatePictureBox WindowCount, "picLoginLogo", CenterLogo, 0, LogoWidth, LogoHeight, , , , , Tex_GUI(73), Tex_GUI(73), Tex_GUI(73)
+    
     ' Label Username
-    CreateLabel WindowCount, "lblUsername", 0, PaddingTop, Width, , "Usuário", FontRegular, White, Alignment.AlignCenter
+    CreateLabel WindowCount, "lblUsername", WidgetCenter, WindowPaddingLogo, WidgetWidth, , "Usuário", FontRegular, White, Alignment.AlignCenter
     
     ' TextBox Username
-    CreateTextbox WindowCount, "txtUser", 0, PaddingTop + (PaddingTop * 2), Width, 30, Options.Username, Fonts.FontRegular, , Alignment.AlignCenter, , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, , , , , , , 0, 8
+    CreateTextbox WindowCount, "txtUser", WidgetCenter, WindowPaddingLogo + (WindowPaddingTop * 2), WidgetWidth, 30, Options.Username, Fonts.FontRegular, , Alignment.AlignCenter, , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, , , , , , , 0, 8
     
     ' Label Password
-    CreateLabel WindowCount, "lblPassword", 0, PaddingTop + (PaddingTop * 6), Width, , "Senha", FontRegular, White, Alignment.AlignCenter
+    CreateLabel WindowCount, "lblPassword", WidgetCenter, WindowPaddingLogo + (WindowPaddingTop * 6), WidgetWidth, , "Senha", FontRegular, White, Alignment.AlignCenter
     
     ' TextBox Password
-    CreateTextbox WindowCount, "txtPass", 0, PaddingTop + (PaddingTop * 8), Width, 30, vbNullString, Fonts.FontRegular, , Alignment.AlignCenter, , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, , , , , , , 0, 8, True, GetAddress(AddressOf btnLogin_Click)
+    CreateTextbox WindowCount, "txtPass", WidgetCenter, WindowPaddingLogo + (WindowPaddingTop * 8), WidgetWidth, 30, vbNullString, Fonts.FontRegular, , Alignment.AlignCenter, , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, , , , , , , 0, 8, True, GetAddress(AddressOf btnLogin_Click)
 
     ' Login Buttom
-    CreateButton WindowCount, "btnAccept", (Width / 2) - (164 / 2), PaddingTop + (PaddingTop * 14), 164, 38, "Acessar", FontRegular, White, , , , , , , DesignTypes.DesignGreen, DesignTypes.DesignGreenHover, DesignTypes.DesignGreenClick, , , GetAddress(AddressOf btnLogin_Click)
+    CreateButton WindowCount, "btnAccept", ButtonCenter, WindowPaddingLogo + (WindowPaddingTop * 14), ButtonWidth, 38, "Acessar", FontRegular, White, , , , , , , DesignTypes.DesignGreen, DesignTypes.DesignGreenHover, DesignTypes.DesignGreenClick, , , GetAddress(AddressOf btnLogin_Click)
     
     ' Checkbox
     'CreateCheckbox WindowCount, "chkSaveUser", 82, 129, 142, , Options.SaveUser, "Salvar Nome?", FontRegular, , , , , DesignTypes.DesignCheckBox, , , GetAddress(AddressOf chkSaveUser_Click)
@@ -54,21 +64,11 @@ Public Sub CreateWindow_LoginFooter()
     ' Order of Controls
     zOrder_Con = 1
     
+    ' Center Window
+    CentraliseWindow WindowCount, ScreenHeight - 35
+    
     ' Label
-    CreateLabel WindowCount, "lblCopy", 0, -6, ScreenWidth, 0, "Copyright 2022 - 2023 Julio Sperandio. Todos os direitos reservados.", FontRegular, White, Alignment.AlignCenter
-    
-End Sub
-
-Public Sub CreateWindow_LoginLogo()
-
-    ' Create Window
-    CreateWindow "winLoginLogo", "", zOrder_Win, (ScreenWidth / 2) - CenterLeft, 200, LogoSizeX, LogoSizeY, 0, , , , 0, 0, DesignTypes.DesignWindowWithoutBackground, DesignTypes.DesignWindowWithoutBackground, DesignTypes.DesignWindowWithoutBackground, , , , , , , , , False
-
-    ' Order of Controls
-    zOrder_Con = 1
-    
-    ' Create Picture Logo
-    CreatePictureBox WindowCount, "picLoginLogo", 0, 0, 512, 142, , , , , Tex_GUI(73), Tex_GUI(73), Tex_GUI(73)
+    CreateLabel WindowCount, "lblCopy", 0, 0, ScreenWidth, 0, "Copyright 2022 - 2023 Julio Sperandio. Todos os direitos reservados.", FontRegular, White, Alignment.AlignCenter
     
 End Sub
 
