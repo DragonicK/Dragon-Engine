@@ -100,7 +100,7 @@ public sealed class CharacterBegin {
     private Task WriteExceptionLog(string username, string message) {
         var logger = GetLogger();
 
-        logger?.Error("CharacterBegin", $"Character: An error ocurred by {username} ... {message}");
+        logger?.Error(GetType().Name, $"Character: An error ocurred by {username} ... {message}");
 
         return Task.CompletedTask;
     }

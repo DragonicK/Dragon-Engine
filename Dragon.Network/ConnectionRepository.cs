@@ -1,17 +1,21 @@
-﻿using System.Collections.Concurrent;
+﻿using Dragon.Core.Logs;
+using System.Collections.Concurrent;
 
 namespace Dragon.Network;
 
 public class ConnectionRepository : IConnectionRepository {
     public ConcurrentDictionary<int, IConnection> Connections { get; private set; }
 
-    public ConnectionRepository() {
+    private readonly ILogger _logger;
+
+    public ConnectionRepository(ILogger logger) {
+        _logger = logger;   
         Connections = new ConcurrentDictionary<int, IConnection>();
     }
 
     public IConnection AddClientFromId(int connectionId) {
         if (!Connections.ContainsKey(connectionId)) {
-            Connections.TryAdd(connectionId, new Connection { Id = connectionId });
+            Connections.TryAdd(connectionId, new Connection { Id = connectionId, Logger = _logger });
         }
 
         return Connections.GetOrAdd(connectionId, default(IConnection)!);

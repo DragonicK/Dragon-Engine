@@ -23,7 +23,7 @@ public sealed class LeftServer {
     public void DisconnectConnection() {
         var (id, ipAddress) = GetIdAndIpAddress();
 
-        Logger?.Info("LeftServer", $"Disconnected Id: {id} IpAddress: {ipAddress}");
+        Logger?.Info(GetType().Name, $"Disconnected Id: {id} IpAddress: {ipAddress}");
 
         ConnectionRepository?.RemoveFromId(id);
         IndexGenerator?.Remove(id);
@@ -54,7 +54,7 @@ public sealed class LeftServer {
             PlayerRepository?.RemoveFromConnectionId(id);
         }
 
-        Logger?.Info("LeftServer", $"Refused From {text} IpAddress: {ipAddress} Id: {id}");
+        Logger?.Info(GetType().Name, $"Refused From {text} IpAddress: {ipAddress} Id: {id}");
     }
 
     private Country? GetBlockedCountry(string ipAddress) {

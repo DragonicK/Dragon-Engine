@@ -157,7 +157,7 @@ public class JoinGame {
 
         Player.InGame = true;
 
-        Logger?.Info("JoinGame", $"{Player!.Username} Joined Game");
+        Logger?.Info(GetType().Name, $"{Player!.Username} Joined Game");
     }
 
     private IClass? GetClass() {

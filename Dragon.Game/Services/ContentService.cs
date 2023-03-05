@@ -247,7 +247,7 @@ public class ContentService : IService {
     public void Start() {
         var logger = GetLogger();
 
-        logger?.Info("ContentService", "Loading game content");
+        logger?.Info(GetType().Name, "Loading game content");
 
         Classes.Load();
         Maps.Load();
@@ -288,7 +288,7 @@ public class ContentService : IService {
     public void Stop() {
         var logger = GetLogger();
 
-        logger?.Info("ContentService", "Cleaning game content");
+        logger?.Info(GetType().Name, "Cleaning game content");
 
         Classes.Clear();
         Maps.Clear();

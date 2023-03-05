@@ -15,6 +15,6 @@ public sealed class JoinServer {
         var id = Connection is not null ? Connection.Id : 0;
         var ipAddress = Connection is not null ? Connection.IpAddress : string.Empty;
 
-        Logger?.Info("JoinServer", $"Approval Id: {id} IpAddress: {ipAddress}");
+        Logger?.Info(GetType().Name, $"Approval Id: {id} IpAddress: {ipAddress}");
     }
 }

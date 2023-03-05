@@ -1,4 +1,5 @@
 ﻿using System.Net.Sockets;
+using Dragon.Core.Logs;
 using Dragon.Network.Incoming;
 
 namespace Dragon.Network;
@@ -8,6 +9,7 @@ public class Connection : IConnection {
     public bool Authenticated { get; set; }
     public string IpAddress { get; set; }
     public Socket? Socket { get; set; }
+    public ILogger? Logger { get; set; }
     public bool Connected => connected;
     public IIncomingMessageQueue? IncomingMessageQueue { get; set; }
     public EventHandler<IConnection>? OnDisconnect { get; set; }
@@ -54,53 +56,57 @@ public class Connection : IConnection {
     }
 
     private void OnReceive(IAsyncResult ar) {
-        var length = Socket!.EndReceive(ar);
+        try {
+            var length = Socket!.EndReceive(ar);
 
-        if (length == 0) {
-            Disconnect();
-        }
-        else {
-            var pLength = 0;
-
-            msg.Write(buffer, length);
-
-            Array.Clear(buffer, 0, length);
-
-            if (msg.Length() >= 4) {
-                pLength = msg.ReadInt32(false);
-
-                if (pLength <= 0) {
-                    return;
-                }
+            if (length == 0) {
+                Disconnect();
             }
+            else {
+                var pLength = 0;
 
-            while (pLength > 0 && pLength <= msg.Length() - 4) {
-                if (pLength <= msg.Length() - 4) {
-                    // Remove the first packet (Size of Packet).
-                    msg.ReadInt32();
+                msg.Write(buffer, length);
 
-                    IncomingMessageQueue?.Enqueue(Id, msg.ReadBytes(pLength));
-                }
-
-                pLength = 0;
+                Array.Clear(buffer, 0, length);
 
                 if (msg.Length() >= 4) {
                     pLength = msg.ReadInt32(false);
 
-                    if (pLength < 0) {
+                    if (pLength <= 0) {
                         return;
                     }
                 }
+
+                while (pLength > 0 && pLength <= msg.Length() - 4) {
+                    if (pLength <= msg.Length() - 4) {
+                        // Remove the first packet (Size of Packet).
+                        msg.ReadInt32();
+
+                        IncomingMessageQueue?.Enqueue(Id, msg.ReadBytes(pLength));
+                    }
+
+                    pLength = 0;
+
+                    if (msg.Length() >= 4) {
+                        pLength = msg.ReadInt32(false);
+
+                        if (pLength < 0) {
+                            return;
+                        }
+                    }
+                }
+
+                msg.Trim();
+
+                Socket.BeginReceive(buffer, 0, BufferSize, SocketFlags.None, OnReceive, null);
             }
-
-            msg.Trim();
-
-            Socket.BeginReceive(buffer, 0, BufferSize, SocketFlags.None, OnReceive, null);
+        }
+        catch (Exception ex) {
+            Logger?.Write(WarningLevel.Error, GetType().Name, ex.Message);
         }
     }
 
     private void OnSend(IAsyncResult ar) {
         Socket?.EndSend(ar);
-    }
-     
+    }  
 }

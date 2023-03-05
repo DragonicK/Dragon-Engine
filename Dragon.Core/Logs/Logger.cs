@@ -81,11 +81,12 @@ public class Logger : ILogger {
                 }
 
                 var level = item.Level;
+                var header = item.Description.Name;
                 var message = item.Description.Message;
 
                 Serialize(item.Description);
 
-                ConsoleWrite(level, message);
+                ConsoleWrite(level, $"{header}: {message}");
             }
         }
     }

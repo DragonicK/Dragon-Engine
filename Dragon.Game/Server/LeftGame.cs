@@ -60,7 +60,7 @@ public class LeftGame {
 
         DisconnectParty();
 
-        Logger?.Info("LeftGame", $"{Player!.Username} Left Game");
+        Logger?.Info(GetType().Name, $"{Player!.Username} Left Game");
 
 
         // TODO

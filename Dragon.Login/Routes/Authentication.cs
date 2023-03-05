@@ -61,7 +61,7 @@ public sealed class Authentication {
             }
         }
         else {
-            logger?.Error("Authentication", "Packet Failed: Authentication Login");
+            logger?.Error(GetType().Name, "Packet Failed: Authentication Login");
         }
     }
 
@@ -186,7 +186,7 @@ public sealed class Authentication {
         var logger = GetLogger();
 
         if (uniqueKey.Length > 0) {
-            logger?.Warning("Authentication", $"Authentication: {GetString(result)} {username}");
+            logger?.Warning(GetType().Name, $"Authentication: {GetString(result)} {username}");
         }
 
         return Task.CompletedTask;
@@ -195,7 +195,7 @@ public sealed class Authentication {
     private Task WriteExceptionLog(string username, string message) {
         var logger = GetLogger();
 
-        logger?.Error("Authentication", $"Authentication: An error ocurred by {username} ... {message}");
+        logger?.Error(GetType().Name, $"Authentication: An error ocurred by {username} ... {message}");
 
         return Task.CompletedTask;
     }

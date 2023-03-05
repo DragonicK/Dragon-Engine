@@ -27,24 +27,24 @@ public class DatabaseService : IService {
     }
 
     private void CheckMembershipDatabase(ILogger? logger, IConfiguration? configuration) {
-        logger?.Info("DatabaseService", "Checking Membership database");
+        logger?.Info(GetType().Name, "Checking Membership database");
 
         if (configuration is not null) {
             CheckDatabaseConnection("Membership", logger, DatabaseFactory, configuration.DatabaseMembership);
         }
         else {
-            logger?.Error("DatabaseService", "Membership configuration not found");
+            logger?.Error(GetType().Name, "Membership configuration not found");
         }
     }
 
     private void CheckServerDatabase(ILogger? logger, IConfiguration? configuration) {
-        logger?.Info("DatabaseService", "Checking Server database");
+        logger?.Info(GetType().Name, "Checking Server database");
 
         if (configuration is not null) {
             CheckDatabaseConnection("Server", logger, DatabaseFactory, configuration.DatabaseServer);
         }
         else {
-            logger?.Error("DatabaseService", "Server configuration not found");
+            logger?.Error(GetType().Name, "Server configuration not found");
         }
     }
 
@@ -55,10 +55,10 @@ public class DatabaseService : IService {
 
             handler.Dispose();
 
-            logger?.Info("DatabaseService", $"{name} database is {(result ? "" : "not ")}connected");
+            logger?.Info(GetType().Name, $"{name} database is {(result ? "" : "not ")}connected");
         }
         else {
-            logger?.Error("DatabaseService", "Database factory not found");
+            logger?.Error(GetType().Name, "Database factory not found");
         }
     }
 }

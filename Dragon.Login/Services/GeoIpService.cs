@@ -21,7 +21,7 @@ public class GeoIpService : IService {
             var logger = LoggerService?.Logger;
 
             if (!success) {
-                logger?.Error("GeoIpService", "Failed to read GeoIPCountryWhois");
+                logger?.Error(GetType().Name, "Failed to read GeoIPCountryWhois");
             }
         }
     }

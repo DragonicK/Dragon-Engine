@@ -31,7 +31,7 @@ public sealed class Authentication {
         if (jwtTokenData.AccountId == 0) {
             Disconnect(Connection!, AlertMessageType.Connection);
 
-            logger?.Warning("Authentication", $"Authentication Failed {jwtToken}");
+            logger?.Warning(GetType().Name, $"Authentication Failed {jwtToken}");
 
             return;
         }
@@ -42,13 +42,13 @@ public sealed class Authentication {
         var player = FindDuplicated(accountId);
         var repository = GetPlayerRepository();
 
-        logger?.Warning("Authentication", $"Authenticated {username}");
+        logger?.Warning(GetType().Name, $"Authenticated {username}");
 
         if (player is not null) {
             Disconnect(Connection!, AlertMessageType.DuplicatedLogin);
             Disconnect(player.GetConnection(), AlertMessageType.TryingToLogin);
 
-            logger?.Error("Authentication", $"Duplicated Entry {username}");
+            logger?.Error(GetType().Name, $"Duplicated Entry {username}");
 
             // Wait about 1 second before disconnect.
             await Task.Delay(1000);
@@ -77,10 +77,10 @@ public sealed class Authentication {
                 var sender = GetSender();
                 sender?.SendCharacters(player);
 
-                logger?.Info("Authentication", $"Sending characters User: {username}");
+                logger?.Info(GetType().Name, $"Sending characters User: {username}");
             }
             else {
-                logger?.Info("Authentication", $"Failed to load characterrs User: {username}");
+                logger?.Info(GetType().Name, $"Failed to load characterrs User: {username}");
             }
         }
     }
@@ -123,7 +123,7 @@ public sealed class Authentication {
     private Task WriteExceptionLog(string username, string message) {
         var logger = GetLogger();
 
-        logger?.Error("Authentication", $"Authentication: An error ocurred by {username} ... {message}");
+        logger?.Error(GetType().Name, $"Authentication: An error ocurred by {username} ... {message}");
 
         return Task.CompletedTask;
     }

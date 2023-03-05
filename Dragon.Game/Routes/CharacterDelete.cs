@@ -35,12 +35,12 @@ public sealed class CharacterDelete {
             if (IsValidIndex(player, index)) {
                 var character = player.Characters[index];
 
-                logger?.Warning("CharacterDelete", $"Requesting Exclusion From Id {character.CharacterId}");
+                logger?.Warning(GetType().Name, $"Requesting Exclusion From Id {character.CharacterId}");
 
                 if (CanDelete(character)) {
                     ExecuteExclusion(character, player);
 
-                    logger?.Warning("CharacterDelete", $"Executing Exclusion From Id {character.CharacterId}");
+                    logger?.Warning(GetType().Name, $"Executing Exclusion From Id {character.CharacterId}");
                 }
             }
         }
@@ -93,7 +93,7 @@ public sealed class CharacterDelete {
     private void WriteInvalidPlayerLog() {
         var logger = GetLogger();
 
-        logger?.Warning("CharacterDelete", "Character Exclusion: Player not found");
+        logger?.Warning(GetType().Name, "Character Exclusion: Player not found");
     }
 
     private IPlayerRepository? GetPlayerRepository() {
