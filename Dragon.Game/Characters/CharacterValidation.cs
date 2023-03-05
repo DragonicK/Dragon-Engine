@@ -166,6 +166,10 @@ public class CharacterValidation : ICharacterValidation {
             };
         }
 
+        // Client model index starts at 1.
+        // So we need to decrease.
+        modelIndex--;
+
         Model = models[modelIndex];
 
         return new CharacterValidationResult() {

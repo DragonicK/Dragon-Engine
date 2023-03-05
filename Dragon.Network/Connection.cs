@@ -107,6 +107,11 @@ public class Connection : IConnection {
     }
 
     private void OnSend(IAsyncResult ar) {
-        Socket?.EndSend(ar);
-    }  
+        try {
+            Socket?.EndSend(ar);
+        }
+        catch (Exception ex) {
+            Logger?.Write(WarningLevel.Error, GetType().Name, ex.Message);
+        }
+    }
 }
