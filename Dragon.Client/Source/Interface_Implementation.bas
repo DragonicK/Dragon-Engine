@@ -1615,6 +1615,7 @@ Public Sub InitGUI()
     CreateWindow_Models
     CreateWindow_ModelFooter
     CreateWindow_Loading
+    CreateWindow_Blank
     CreateWindow_Dialogue
     CreateWindow_Classes
     CreateWindow_NewChar
