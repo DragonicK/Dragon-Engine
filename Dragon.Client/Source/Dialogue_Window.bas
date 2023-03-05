@@ -3,8 +3,8 @@ Option Explicit
 
 Public Sub CreateWindow_Dialogue()
     ' Create black background
-    CreateWindow "winBlank", "", zOrder_Win, 0, 0, 800, 600, 0, , Fonts.FontRegular, , , , DesignTypes.DesignChatSmallShadow, DesignTypes.DesignChatSmallShadow, DesignTypes.DesignChatSmallShadow, , , , , , , , , False, False
-
+    CreateWindow "winBlank", "", zOrder_Win, 0, 0, 800, 600, 0, , Fonts.FontRegular, , , , DesignTypes.DesignBlank, DesignTypes.DesignBlank, DesignTypes.DesignBlank, , , , , , , , , False, False
+    
     ' Create dialogue window
     CreateWindow "winDialogue", "", zOrder_Win, 0, 0, 420, 180, 0, , Fonts.FontRegular, , 3, 5, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, , , , , , , , , True, False
     
@@ -19,7 +19,7 @@ Public Sub CreateWindow_Dialogue()
     CreateLabel WindowCount, "lblBody_2", 20, 90, 380, , "Please try again.", FontRegular, , Alignment.AlignCenter
     
     ' Buttons
-    CreateButton WindowCount, "btnNo", 20, 130, 188, 30, "Não", FontRegular, , , False, , , , , DesignTypes.DesignRed, DesignTypes.DesignRedHover, DesignTypes.DesignRedClick, , , GetAddress(AddressOf Dialogue_No)
+    CreateButton WindowCount, "btnNo", 20, 130, 188, 30, "NÃ£o", FontRegular, , , False, , , , , DesignTypes.DesignRed, DesignTypes.DesignRedHover, DesignTypes.DesignRedClick, , , GetAddress(AddressOf Dialogue_No)
     CreateButton WindowCount, "btnYes", 212, 130, 188, 30, "Sim", FontRegular, , , False, , , , , DesignTypes.DesignGreen, DesignTypes.DesignGreenHover, DesignTypes.DesignGreenClick, , , GetAddress(AddressOf Dialogue_Yes)
     
     ' Button OK
