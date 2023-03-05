@@ -5,7 +5,7 @@ Public Sub CreateWindow_Models()
 ' Create the window
     CreateWindow "winModels", "Personagens", zOrder_Win, 0, 0, 360, 250, 0, False, Fonts.FontRegular, , 3, 5, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, , , , , , , , , False
     ' Centralise it
-    CentraliseWindow WindowCount
+    CentraliseWindow WindowCount, 0
 
     ' Set the index for spawning controls
     zOrder_Con = 1
@@ -51,8 +51,11 @@ Public Sub CreateWindow_ModelFooter()
     ' Order of Controls
     zOrder_Con = 1
     
+    ' Center Window
+    CentraliseWindow WindowCount, ScreenHeight - 35
+    
     ' Label
-    CreateButton WindowCount, "btnPremium", 0, 0, ScreenWidth, 20, "Você não possuí uma conta premium, adquirir agora mesmo!", FontRegular, White, , True, , , , , , , , , , , , , , , BrightGreen, Green, "Adquirir Premium"
+    CreateButton WindowCount, "lblPremium", 0, 0, ScreenWidth, 20, "Você não possuí uma conta premium, adquirir agora mesmo!", FontRegular, White, , True, , , , , DesignBackgroundOval, , , , , , , , , , BrightGreen, Green, "Adquirir Premium"
     
 End Sub
 
@@ -142,5 +145,4 @@ Private Sub ButtonModels_Close()
 
     ShowWindow GetWindowIndex("winLogin")
     ShowWindow GetWindowIndex("winLoginFooter")
-    ShowWindow GetWindowIndex("winLoginLogo")
 End Sub

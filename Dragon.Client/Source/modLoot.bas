@@ -29,7 +29,7 @@ Public Sub CreateWindow_Loot()
     ' Create window
     CreateWindow "winLoot", "ITEMS", zOrder_Win, 0, 0, 245, 340, 0, False, Fonts.FontRegular, , 2, 7, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar
     ' Centralise it
-    CentraliseWindow WindowCount
+    CentraliseWindow WindowCount, 0
     ' Set the index for spawning controls
     zOrder_Con = 1
     ' Close button

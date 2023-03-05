@@ -9,7 +9,7 @@ Public Sub CreateWindow_Heraldry()
     ' Create window
     CreateWindow "winHeraldry", "BRASÃO", zOrder_Win, 0, 0, 280, 350, 0, False, Fonts.FontRegular, , 2, 7, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, , , , , , , , , , , GetAddress(AddressOf RenderHeraldry)
     ' Centralise it
-    CentraliseWindow WindowCount
+    CentraliseWindow WindowCount, 0
     ' Set the index for spawning controls
     zOrder_Con = 1
 

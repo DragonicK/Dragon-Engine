@@ -24,7 +24,7 @@ Public Sub CreateWindow_Conversation()
     CreateWindow "winConversation", "CONVERSAÇÃO", zOrder_Win, 0, 0, 420, 400, 0, , Fonts.FontRegular, , 3, 5, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, , , , , , , , , , , GetAddress(AddressOf RenderConversation)
 
     ' Centralise it
-    CentraliseWindow WindowCount
+    CentraliseWindow WindowCount, 0
 
     ' Set the index for spawning controls
     zOrder_Con = 1

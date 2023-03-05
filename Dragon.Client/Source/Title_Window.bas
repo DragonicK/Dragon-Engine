@@ -45,7 +45,7 @@ Public Sub CreateWindow_Title()
     CreateWindow "winTitle", "TÍTULOS", zOrder_Win, 0, 0, 208, 520, 0, , Fonts.FontRegular, , 3, 5, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, , , , , , , , , , , GetAddress(AddressOf RenderWindowTitle)
 
     ' Centralise it
-    CentraliseWindow WindowCount
+    CentraliseWindow WindowCount, 0
 
     ' Set the index for spawning controls
     zOrder_Con = 1

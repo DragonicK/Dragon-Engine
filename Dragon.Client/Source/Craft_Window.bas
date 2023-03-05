@@ -42,7 +42,7 @@ Public Sub CreateWindow_Craft()
 
     CreateWindow "winCraft", "PRODUÇÃO", zOrder_Win, 0, 0, 389, 408, 0, True, Fonts.FontRegular, , 2, 5, DesignTypes.DesignWindowWithTopBarAndNavBar, DesignTypes.DesignWindowWithTopBarAndNavBar, DesignTypes.DesignWindowWithTopBarAndNavBar, , , , , 0, 0, 0, 0, , , GetAddress(AddressOf DrawCraft)
 
-    CentraliseWindow WindowCount
+    CentraliseWindow WindowCount, 0
     ' Set the index for spawning controls
     zOrder_Con = 1
 

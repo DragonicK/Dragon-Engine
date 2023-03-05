@@ -37,7 +37,7 @@ Public Sub CreateWindow_Trade()
     ' Create window
     CreateWindow "winTrade", "NEGOCIAÇÃO", zOrder_Win, 0, 0, 412, 320, 0, False, Fonts.FontRegular, , 2, 5, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, , , , , , , , , , , GetAddress(AddressOf DrawTrade)
     ' Centralise it
-    CentraliseWindow WindowCount
+    CentraliseWindow WindowCount, 0
     ' Close Button
     CreateButton WindowCount, "btnClose", Windows(WindowCount).Window.Width - 33, 11, 22, 22, , , , , , , Tex_GUI(TextureControl_CloseNormal), Tex_GUI(TextureControl_CloseHover), Tex_GUI(TextureControl_CloseClick), , , , , , GetAddress(AddressOf ButtonTrade_Close)
     ' Labels

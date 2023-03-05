@@ -39,7 +39,7 @@ Public Sub CreateWindow_ItemUpgrade()
 ' Create window
     CreateWindow "winItemUpgrade", "APRIMORAMENTO", zOrder_Win, 0, 0, 400, 400, 0, False, Fonts.FontRegular, , 2, 7, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, , , , , , , , , , , GetAddress(AddressOf ItemUpgrade_OnDraw)
     ' Centralise it
-    CentraliseWindow WindowCount
+    CentraliseWindow WindowCount, 0
 
     ' Set the index for spawning controls
     zOrder_Con = 1
