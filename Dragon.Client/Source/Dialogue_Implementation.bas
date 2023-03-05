@@ -191,7 +191,7 @@ Public Sub ShowDialogue(ByVal Header As String, ByVal Body As String, ByVal Body
         End If
 
         ' set labels
-        .Controls(GetControlIndex("winDialogue", "lblHeader")).Text = Header
+        Windows(WindowIndex).Window.Text = Header
         .Controls(GetControlIndex("winDialogue", "lblBody_1")).Text = Body
         .Controls(GetControlIndex("winDialogue", "lblBody_2")).Text = Body2
         .Controls(GetControlIndex("winDialogue", "txtInput")).Text = vbNullString
