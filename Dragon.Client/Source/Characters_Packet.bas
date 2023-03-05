@@ -84,6 +84,8 @@ Public Sub HandlePlayerModels(ByVal Index As Long, ByRef Data() As Byte, ByVal S
             Windows(winNum).Controls(conNum).Visible = True
         End If
     Next
+    
+    ResizeGUI
 End Sub
 
 Public Sub SendUseChar(ByVal CharSlot As Long)

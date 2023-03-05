@@ -5,7 +5,7 @@ Public Sub CreateWindow_Models()
 ' Create the window
     CreateWindow "winModels", "Personagens", zOrder_Win, 0, 0, 360, 250, 0, False, Fonts.FontRegular, , 3, 5, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, , , , , , , , , False
     ' Centralise it
-    CentraliseWindow WindowCount, 0
+    CentraliseWindow WindowCount
 
     ' Set the index for spawning controls
     zOrder_Con = 1
@@ -145,4 +145,21 @@ Private Sub ButtonModels_Close()
 
     ShowWindow GetWindowIndex("winLogin")
     ShowWindow GetWindowIndex("winLoginFooter")
+End Sub
+
+Public Sub Resize_CharactersUI()
+    Dim WindowIndex As Long
+    Dim ControlIndex As Long
+
+    CentraliseWindow GetWindowIndex("winModelFooter"), ScreenHeight - 35
+    
+    WindowIndex = GetWindowIndex("winModelFooter")
+    ControlIndex = GetControlIndex("winModelFooter", "lblPremium")
+      
+    ' Characters Footer Resize Width
+    Windows(WindowIndex).Window.Left = 0
+    Windows(WindowIndex).Controls(ControlIndex).Width = ScreenWidth
+    Windows(WindowIndex).Controls(ControlIndex).Left = 0
+    Windows(WindowIndex).Controls(ControlIndex).Top = 0
+    Windows(WindowIndex).Controls(ControlIndex).Align = Alignment.AlignCenter
 End Sub

@@ -1,13 +1,14 @@
 Attribute VB_Name = "Login_Window"
 Public LoginToken As String
 
+Private Const LogoWidth As Long = 512
+Private Const LogoHeight As Long = 142
+
 Private Const WindowWidth As Long = 512
 Private Const WindowHeight As Long = 400
 Private Const WindowPaddingTop As Long = 10
 Private Const WindowPaddingLogo As Long = WindowPaddingTop + (LogoHeight + 80)
 
-Private Const LogoWidth As Long = 512
-Private Const LogoHeight As Long = 142
 Private Const CenterLogo As Long = (WindowWidth / 2) - ((LogoWidth + 40) / 2)
 
 Private Const WidgetWidth As Long = WindowWidth - (WindowWidth / 3)
@@ -21,7 +22,7 @@ Public Sub CreateWindow_Login()
     CreateWindow "winLogin", "", zOrder_Win, 0, 0, WindowWidth, WindowHeight, 0, , Fonts.FontRegular, , 3, 5, DesignTypes.DesignWindowWithoutBackground, DesignTypes.DesignWindowWithoutBackground, DesignTypes.DesignWindowWithoutBackground, , , , , , , , , False
     
     ' Center Window
-    CentraliseWindow WindowCount, 0
+    CentraliseWindow WindowCount
 
     ' Order of Controls
     zOrder_Con = 1

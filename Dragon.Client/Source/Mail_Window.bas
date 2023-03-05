@@ -63,7 +63,7 @@ Public Sub CreateWindow_Mail()
     ' Create window
     CreateWindow "winMail", "CORREIO", zOrder_Win, 0, 0, 400, 460, 0, False, Fonts.FontRegular, , 2, 7, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, , , , , , GetAddress(AddressOf WindowMail_MouseDown), , , , , GetAddress(AddressOf Draw_Mail)
     ' Centralise it
-    CentraliseWindow WindowCount, 0
+    CentraliseWindow WindowCount
     ' Set the index for spawning controls
     zOrder_Con = 1
 

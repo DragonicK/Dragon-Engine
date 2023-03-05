@@ -7,7 +7,7 @@ Public Sub CreateWindow_Options()
 ' Create window
     CreateWindow "winOptions", "", zOrder_Win, 0, 0, 210, 212, 0, , , , , , DesignTypes.DesignWindowWithoutTopBar, DesignTypes.DesignWindowWithoutTopBar, DesignTypes.DesignWindowWithoutTopBar, , , , , , , , , False, False
     ' Centralise it
-    CentraliseWindow WindowCount, 0
+    CentraliseWindow WindowCount
 
     ' Set the index for spawning controls
     zOrder_Con = 1
