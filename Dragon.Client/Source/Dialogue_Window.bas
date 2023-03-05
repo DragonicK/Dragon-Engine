@@ -2,12 +2,9 @@ Attribute VB_Name = "Dialogue_Window"
 Option Explicit
 
 Public Sub CreateWindow_Dialogue()
-<<<<<<< Updated upstream
     ' Create black background
     CreateWindow "winBlank", "", zOrder_Win, 0, 0, 800, 600, 0, , Fonts.FontRegular, , , , DesignTypes.DesignChatSmallShadow, DesignTypes.DesignChatSmallShadow, DesignTypes.DesignChatSmallShadow, , , , , , , , , False, False
-=======
-   
->>>>>>> Stashed changes
+
     ' Create dialogue window
     CreateWindow "winDialogue", "", zOrder_Win, 0, 0, 420, 180, 0, , Fonts.FontRegular, , 3, 5, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, , , , , , , , , True, False
     
