@@ -19,9 +19,9 @@ Public Sub CreateWindow_Models()
     CreateLabel WindowCount, "lblCharName_3", 242, 50, 98, , "Slot Vazio", FontRegular, White, Alignment.AlignCenter
     
     ' Scenery Boxes
-    CreatePictureBox WindowCount, "picScene_1", 23, 70, 96, 96, , , , , Tex_GUI(9), Tex_GUI(9), Tex_GUI(9)
-    CreatePictureBox WindowCount, "picScene_2", 133, 70, 96, 96, , , , , Tex_GUI(10), Tex_GUI(10), Tex_GUI(10)
-    CreatePictureBox WindowCount, "picScene_3", 243, 70, 96, 96, , , , , Tex_GUI(11), Tex_GUI(11), Tex_GUI(11), , , , , , , , , GetAddress(AddressOf Chars_DrawFace)
+    CreatePictureBox WindowCount, "picScene_1", 23, 70, 96, 96, , , , , Tex_GUI(9), Tex_GUI(9), Tex_GUI(9), , , , , , , , GetAddress(AddressOf DblClick_1)
+    CreatePictureBox WindowCount, "picScene_2", 133, 70, 96, 96, , , , , Tex_GUI(10), Tex_GUI(10), Tex_GUI(10), , , , , , , , GetAddress(AddressOf DblClick_2)
+    CreatePictureBox WindowCount, "picScene_3", 243, 70, 96, 96, , , , , Tex_GUI(11), Tex_GUI(11), Tex_GUI(11), , , , , , , , GetAddress(AddressOf DblClick_3), GetAddress(AddressOf Chars_DrawFace)
 
     ' Date
     CreateLabel WindowCount, "lblCharDate_1", 22, 150, 98, , "", FontRegular, White, Alignment.AlignCenter
@@ -55,7 +55,7 @@ Public Sub CreateWindow_ModelFooter()
     CentraliseWindow WindowCount, ScreenHeight - 35
     
     ' Label
-    CreateButton WindowCount, "lblPremium", 0, 0, ScreenWidth, 20, "Você não possuí uma conta premium, adquirir agora mesmo!", FontRegular, White, , True, , , , , DesignBackgroundOval, , , , , , , , , , BrightGreen, Green, "Adquirir Premium"
+    CreateButton WindowCount, "lblPremium", 0, 0, ScreenWidth, 20, "Você não possuí uma conta premium, adquirir agora mesmo!", FontRegular, White, , True, , , , , , , , , , , , , , , BrightGreen, Green, "Adquirir Premium"
     
 End Sub
 
@@ -81,6 +81,61 @@ Private Sub Chars_DrawFace()
 
         X = X + 110
     Next
+End Sub
+
+Private Sub DblClick_1()
+    Dim WindowIndex As Long
+    Dim ControlIndex As Long
+    
+    ' Get The Window
+    WindowIndex = GetWindowIndex("winModels")
+
+    ' Get The Widget
+    ControlIndex = GetControlIndex("winModels", "ButtonDelChar_1")
+    
+    If Windows(WindowIndex).Controls(ControlIndex).Visible Then
+        ButtonAcceptChar_1
+    Else
+        ButtonCreateChar_1
+    End If
+
+
+End Sub
+
+Private Sub DblClick_2()
+    Dim WindowIndex As Long
+    Dim ControlIndex As Long
+    
+    ' Get The Window
+    WindowIndex = GetWindowIndex("winModels")
+
+    ' Get The Widget
+    ControlIndex = GetControlIndex("winModels", "ButtonDelChar_2")
+    
+    If Windows(WindowIndex).Controls(ControlIndex).Visible Then
+        ButtonAcceptChar_2
+    Else
+        ButtonCreateChar_2
+    End If
+
+End Sub
+
+Private Sub DblClick_3()
+    Dim WindowIndex As Long
+    Dim ControlIndex As Long
+
+    ' Get The Window
+    WindowIndex = GetWindowIndex("winModels")
+
+    ' Get The Widget
+    ControlIndex = GetControlIndex("winModels", "ButtonDelChar_3")
+
+    If Windows(WindowIndex).Controls(ControlIndex).Visible Then
+        ButtonAcceptChar_3
+    Else
+        ButtonCreateChar_3
+    End If
+
 End Sub
 
 Private Sub ButtonAcceptChar_1()
@@ -147,19 +202,32 @@ Private Sub ButtonModels_Close()
     ShowWindow GetWindowIndex("winLoginFooter")
 End Sub
 
-Public Sub Resize_CharactersUI()
+Public Sub Resize_WinModelFooter()
     Dim WindowIndex As Long
     Dim ControlIndex As Long
-
-    CentraliseWindow GetWindowIndex("winModelFooter"), ScreenHeight - 35
     
+    ' Get The Window
     WindowIndex = GetWindowIndex("winModelFooter")
+    
+    ' Get The Widget
     ControlIndex = GetControlIndex("winModelFooter", "lblPremium")
+    
+    ' Centralise Window
+    CentraliseWindow WindowIndex, ScreenHeight - 35
       
-    ' Characters Footer Resize Width
+    ' Reposition Window
     Windows(WindowIndex).Window.Left = 0
+    
+    ' Resize Window
+    Windows(WindowIndex).Window.Width = ScreenWidth
+    
+    ' Resize Label Widget
     Windows(WindowIndex).Controls(ControlIndex).Width = ScreenWidth
+    
+    ' Reposition Window
     Windows(WindowIndex).Controls(ControlIndex).Left = 0
     Windows(WindowIndex).Controls(ControlIndex).Top = 0
+    
+    ' Realignment Label Widget
     Windows(WindowIndex).Controls(ControlIndex).Align = Alignment.AlignCenter
 End Sub

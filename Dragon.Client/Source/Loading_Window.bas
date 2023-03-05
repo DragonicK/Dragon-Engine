@@ -9,5 +9,35 @@ Public Sub CreateWindow_Loading()
     zOrder_Con = 1
     
     ' Label Information
-    CreateLabel WindowCount, "lblLoading", (ScreenWidth / 2) - (300 / 2), 20, 300, , "Carregando dados do jogo ...", FontRegular, , Alignment.AlignCenter
+    CreateLabel WindowCount, "lblLoading", 0, 20, ScreenWidth, , "Carregando dados do jogo ...", FontRegular, , Alignment.AlignCenter
+End Sub
+
+Public Sub Resize_WinLoading()
+    Dim WindowIndex As Long
+    Dim ControlIndex As Long
+    
+    ' Get The Window
+    WindowIndex = GetWindowIndex("winLoading")
+    
+    ' Get The Widget
+    ControlIndex = GetControlIndex("winLoading", "lblLoading")
+    
+    ' Centralise Window
+    CentraliseWindow WindowIndex, 30
+      
+    ' Reposition Window
+    Windows(WindowIndex).Window.Left = 0
+    
+    ' Resize Window
+    Windows(WindowIndex).Window.Width = ScreenWidth
+    
+    ' Resize Label Widget
+    Windows(WindowIndex).Controls(ControlIndex).Width = ScreenWidth
+    
+    ' Reposition Window
+    Windows(WindowIndex).Controls(ControlIndex).Left = 0
+    Windows(WindowIndex).Controls(ControlIndex).Top = 20
+    
+    ' Realignment Label Widget
+    Windows(WindowIndex).Controls(ControlIndex).Align = Alignment.AlignCenter
 End Sub

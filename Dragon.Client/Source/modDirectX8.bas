@@ -1063,12 +1063,6 @@ Public Sub ResizeGUI()
     ' move hotbar
     Windows(GetWindowIndex("winHotbar")).Window.Left = ScreenWidth - 430    ' (ScreenWidth / 2) - (Windows(GetWindowIndex("winHotbar")).Window.Width / 2) ' ScreenWidth - 430
     Windows(GetWindowIndex("winHotbar")).Window.Top = 15    ' ScreenHeight - 50
-
-    ' Login Footer Resize Width
-    Windows(GetWindowIndex("winLoginFooter")).Window.Width = ScreenWidth
-    
-    ' Login Footer Resize Width
-    Windows(GetWindowIndex("winLoginFooter")).Controls(GetControlIndex("winLoginFooter", "lblCopy")).Width = ScreenWidth
         
     ' move chat
     Windows(GetWindowIndex("winChat")).Window.Top = ScreenHeight - 178
@@ -1123,7 +1117,9 @@ Public Sub ResizeGUI()
     CentraliseWindow GetWindowIndex("winLoot")
     CentraliseWindow GetWindowIndex("winLoginFooter"), ScreenHeight - 35
     
-    Resize_CharactersUI
+    Resize_WinModelFooter
+    Resize_WinLoginFooter
+    Resize_WinLoading
 
 End Sub
 
