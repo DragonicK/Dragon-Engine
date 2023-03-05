@@ -76,7 +76,7 @@ Public Sub CreateWindow_Craft()
     CreateLabel WindowCount, "lblProgress", 208, WindowOffsetY + 218, 142, , "Processando: 0%", FontRegular, White, Alignment.AlignCenter
     CreateLabel WindowCount, "lblSuccessRate", 185, WindowOffsetY + 258, 205, 25, "Chance de Sucesso: 100%", FontRegular, White, Alignment.AlignCenter, , , , , , , , 0
     CreateLabel WindowCount, "lblList", 20, WindowOffsetY + 31, 130, , "Receitas", FontRegular, White, Alignment.AlignCenter
-    CreateLabel WindowCount, "lblExp", 90, WindowOffsetY + 5, 209, , GetCraftName(CraftType_None) & "Nenhum Lv. 0 0/0", FontRegular, White, Alignment.AlignCenter
+    CreateLabel WindowCount, "lblExp", 90, WindowOffsetY - 5, 209, , GetCraftName(CraftType_None) & "Nenhum Lv. 0 0/0", FontRegular, Gold, Alignment.AlignCenter
 
     ' Result Item Slot
     CreatePictureBox WindowCount, "picItemResult", 268, WindowOffsetY + 45, 32, 32, , , , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, , GetAddress(AddressOf ResultItem_MouseMove), GetAddress(AddressOf ResultItem_MouseMove), GetAddress(AddressOf ResultItem_MouseMove)
