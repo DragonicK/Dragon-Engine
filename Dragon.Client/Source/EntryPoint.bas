@@ -113,7 +113,7 @@ Public Sub Main()
     ' show login window
     ShowWindow GetWindowIndex("winLogin")
     ShowWindow GetWindowIndex("winLoginFooter")
-
+    
     inSmallChat = True
     ' Set the loop going
     FadeAlpha = 255
