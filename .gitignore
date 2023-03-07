@@ -34,6 +34,9 @@ mono_crash.*
 # Login Release
 [Bb]uild/Login/Release/net7.0/runtimes/
 [Bb]uild/Login/Release/net7.0/*.*
+# Logs
+[Bb]uild/Game/Debug/net7.0/Server/Logs/*.*
+[Bb]uild/Login/Debug/net7.0/Server/Logs/*.*
 # Editor Debug
 [Bb]uild/Editor/Debug/net7.0-windows/*.*
 [Bb]uild/Editor/Debug/net7.0-windows/runtimes/
