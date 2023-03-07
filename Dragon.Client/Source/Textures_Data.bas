@@ -163,23 +163,7 @@ Private Function CheckFilePassword(ByVal Password As String) As Boolean
 
     ReDim Encrypted(0 To EncryptedLength - 1)
     
-    Dim Satanas As Long
-
-    Satanas = ReadBytes(ByVal VarPtr(Encrypted(0)), EncryptedLength)
-    
-    Satanas = Encrypted(0)
-    Satanas = Encrypted(1)
-    Satanas = Encrypted(2)
-    Satanas = Encrypted(3)
-    Satanas = Encrypted(4)
-    Satanas = Encrypted(5)
-    Satanas = Encrypted(6)
-    Satanas = Encrypted(7)
-    Satanas = Encrypted(8)
-    Satanas = Encrypted(9)
-    Satanas = Encrypted(10)
-    Satanas = Encrypted(11)
-    
+    Call ReadBytes(ByVal VarPtr(Encrypted(0)), EncryptedLength)
 
     Settings.CipherMode = AesCipherMode.AesCipherMode_CBC
     Settings.PaddingMode = AesPaddingMode.AesPaddingMode_PKCS7
