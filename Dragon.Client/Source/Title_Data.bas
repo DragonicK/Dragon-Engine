@@ -23,8 +23,8 @@ Public Sub LoadTitles()
 
     Index = GetFileHandler(App.Path & "\Data Files\Data\Titles.dat")
 
-    If Index > 0 Then
-        MaximumTitles = ReadInt32(Index)
+    If Index = 0 Then
+        MaximumTitles = ReadInt32()
 
         If MaximumTitles > 0 Then
             ReDim Title(1 To MaximumTitles)
@@ -33,11 +33,11 @@ Public Sub LoadTitles()
                 Name = String(512, vbNullChar)
                 Description = String(512, vbNullChar)
                 
-                Title(i).Id = ReadInt32(Index)
-                Call ReadString(Index, Name)
-                Call ReadString(Index, Description)
-                Title(i).Rarity = ReadInt32(Index)
-                Title(i).AttributeId = ReadInt32(Index)
+                Title(i).Id = ReadInt32()
+                Call ReadString(Name)
+                Call ReadString(Description)
+                Title(i).Rarity = ReadInt32()
+                Title(i).AttributeId = ReadInt32()
           
                 Title(i).Name = Trim$(Replace(Name, vbNullChar, vbNullString))
                 Title(i).Description = Trim$(Replace(Description, vbNullChar, vbNullString))
@@ -45,7 +45,7 @@ Public Sub LoadTitles()
         End If
     End If
 
-    Call CloseFileHandler(Index)
+    Call CloseFileHandler
 
 End Sub
 

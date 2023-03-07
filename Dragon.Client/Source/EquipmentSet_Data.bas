@@ -48,32 +48,32 @@ Public Sub LoadEquipmentSets()
 
     Index = GetFileHandler(App.Path & "\Data Files\Data\EquipmentSets.dat")
 
-    If Index > 0 Then
+    If Index = 0 Then
         Dim n As Long
         
-        MaxEquipmentSets = ReadInt32(Index)
+        MaxEquipmentSets = ReadInt32()
 
         If MaxEquipmentSets > 0 Then
             ReDim EquipmentSet(1 To MaxEquipmentSets)
 
             For i = 1 To MaxEquipmentSets
-                EquipmentSet(i).Id = ReadInt32(Index)
+                EquipmentSet(i).Id = ReadInt32()
 
                 Name = String(255, vbNullChar)
                 Description = String(1024, vbNullChar)
 
-                Call ReadString(Index, Name)
-                Call ReadString(Index, Description)
+                Call ReadString(Name)
+                Call ReadString(Description)
 
-                EquipmentSet(i).MaxEffects = ReadInt32(Index)
+                EquipmentSet(i).MaxEffects = ReadInt32()
 
                 If EquipmentSet(i).MaxEffects > 0 Then
                     ReDim EquipmentSet(i).Effect(1 To EquipmentSet(i).MaxEffects)
 
                     For n = 1 To EquipmentSet(i).MaxEffects
-                        EquipmentSet(i).Effect(n).PieceCount = ReadInt32(Index)
-                        EquipmentSet(i).Effect(n).AttributeId = ReadInt32(Index)
-                        EquipmentSet(i).Effect(n).SkillId = ReadInt32(Index)
+                        EquipmentSet(i).Effect(n).PieceCount = ReadInt32()
+                        EquipmentSet(i).Effect(n).AttributeId = ReadInt32()
+                        EquipmentSet(i).Effect(n).SkillId = ReadInt32()
                     Next
                 End If
             Next
@@ -81,7 +81,7 @@ Public Sub LoadEquipmentSets()
         End If
     End If
 
-    Call CloseFileHandler(Index)
+    Call CloseFileHandler
 
 End Sub
 

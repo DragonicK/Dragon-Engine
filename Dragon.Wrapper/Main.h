@@ -11,15 +11,15 @@ extern "C" {
 #endif
 
 	__declspec(dllexport) int WINAPI GetFileHandler(LPCSTR path);
-	__declspec(dllexport) bool WINAPI CloseFileHandler(int index);
+	__declspec(dllexport) bool WINAPI CloseFileHandler();
 
-	__declspec(dllexport) int WINAPI ReadString(int index, BSTR* output);
-	__declspec(dllexport) int WINAPI ReadBytes(int index, unsigned char* buffer, int length);
-	__declspec(dllexport) unsigned char WINAPI ReadByte(int index);
-	__declspec(dllexport) short WINAPI ReadInt16(int index);
-	__declspec(dllexport) int WINAPI ReadInt32(int index);
-	__declspec(dllexport) float WINAPI ReadSingle(int index);
-	__declspec(dllexport) bool WINAPI ReadBoolean(int index);
+	__declspec(dllexport) int WINAPI ReadString(BSTR* output);
+	__declspec(dllexport) int WINAPI ReadBytes(unsigned char* buffer, int length);
+	__declspec(dllexport) unsigned char WINAPI ReadByte();
+	__declspec(dllexport) short WINAPI ReadInt16();
+	__declspec(dllexport) int WINAPI ReadInt32();
+	__declspec(dllexport) float WINAPI ReadSingle();
+	__declspec(dllexport) bool WINAPI ReadBoolean();
 
 	__declspec(dllexport) bool WINAPI Encrypt(
 		AESSettings* settings,

@@ -87,61 +87,61 @@ Public Sub LoadItems()
 
     Index = GetFileHandler(App.Path & "\Data Files\Data\Items.dat")
 
-    If Index > 0 Then
+    If Index = 0 Then
         Dim n As Long
 
-        MaximumItems = ReadInt32(Index)
+        MaximumItems = ReadInt32()
 
         If MaximumItems > 0 Then
             ReDim Item(1 To MaximumItems)
 
             For i = 1 To MaximumItems
-                Item(i).Id = ReadInt32(Index)
+                Item(i).Id = ReadInt32()
 
                 Name = String(255, vbNullChar)
                 Description = String(1024, vbNullChar)
                 Sound = String(255, vbNullChar)
 
-                Call ReadString(Index, Name)
-                Call ReadString(Index, Description)
-                Call ReadString(Index, Sound)
+                Call ReadString(Name)
+                Call ReadString(Description)
+                Call ReadString(Sound)
 
                 Item(i).Name = Replace$(Name, vbNullChar, vbNullString)
                 Item(i).Description = Replace$(Description, vbNullChar, vbNullString)
                 Item(i).Sound = Replace$(Sound, vbNullChar, vbNullString)
 
-                Item(i).IconId = ReadInt32(Index)
-                Item(i).Type = ReadInt32(Index)
-                Item(i).Rarity = ReadInt32(Index)
-                Item(i).Bind = ReadInt32(Index)
-                Item(i).Level = ReadInt32(Index)
-                Item(i).Price = ReadInt32(Index)
+                Item(i).IconId = ReadInt32()
+                Item(i).Type = ReadInt32()
+                Item(i).Rarity = ReadInt32()
+                Item(i).Bind = ReadInt32()
+                Item(i).Level = ReadInt32()
+                Item(i).Price = ReadInt32()
 
-                Item(i).MaxStack = ReadInt32(Index)
+                Item(i).MaxStack = ReadInt32()
                 Item(i).Stackable = Item(i).MaxStack > 0
 
-                Item(i).GashaBoxId = ReadInt32(Index)
-                Item(i).RecipeId = ReadInt32(Index)
-                Item(i).EquipmentId = ReadInt32(Index)
-                Item(i).SkillId = ReadInt32(Index)
-                Item(i).Cooldown = ReadInt32(Index)
-                Item(i).Interval = ReadInt32(Index)
-                Item(i).Duration = ReadInt32(Index)
-                Item(i).EffectId = ReadInt32(Index)
-                Item(i).EffectLevel = ReadInt32(Index)
-                Item(i).EffectDuration = ReadInt32(Index)
-                Item(i).ClassId = ReadInt32(Index)
-                Item(i).UpgradeId = ReadInt32(Index)
-                Item(i).MaximumLevel = ReadInt32(Index)
+                Item(i).GashaBoxId = ReadInt32()
+                Item(i).RecipeId = ReadInt32()
+                Item(i).EquipmentId = ReadInt32()
+                Item(i).SkillId = ReadInt32()
+                Item(i).Cooldown = ReadInt32()
+                Item(i).Interval = ReadInt32()
+                Item(i).Duration = ReadInt32()
+                Item(i).EffectId = ReadInt32()
+                Item(i).EffectLevel = ReadInt32()
+                Item(i).EffectDuration = ReadInt32()
+                Item(i).ClassId = ReadInt32()
+                Item(i).UpgradeId = ReadInt32()
+                Item(i).MaximumLevel = ReadInt32()
 
                 For n = 1 To Vitals.Vital_Count - 1
-                    Item(i).RecoveryVital(n) = ReadInt32(Index)
+                    Item(i).RecoveryVital(n) = ReadInt32()
                 Next
 
             Next
         End If
     End If
 
-    Call CloseFileHandler(Index)
+    Call CloseFileHandler
 End Sub
 

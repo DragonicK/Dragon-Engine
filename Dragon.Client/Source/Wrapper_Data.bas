@@ -2,14 +2,14 @@ Attribute VB_Name = "Wrapper_Data"
 Option Explicit
 
 Public Declare Function GetFileHandler Lib "Dragon.Wrapper.dll" Alias "_GetFileHandler@4" (ByVal File As String) As Long
-Public Declare Function CloseFileHandler Lib "Dragon.Wrapper.dll" Alias "_CloseFileHandler@4" (ByVal Index As Long) As Boolean
-Public Declare Function ReadString Lib "Dragon.Wrapper.dll" Alias "_ReadString@8" (ByVal Index As Long, ByRef Output As String) As Long
-Public Declare Function ReadByte Lib "Dragon.Wrapper.dll" Alias "_ReadByte@4" (ByVal Index As Long) As Byte
-Public Declare Function ReadBytes Lib "Dragon.Wrapper.dll" Alias "_ReadBytes@12" (ByVal Index As Long, ByRef DestIntPtr As Long, ByVal BytesLength As Long) As Long
-Public Declare Function ReadInt16 Lib "Dragon.Wrapper.dll" Alias "_ReadInt16@4" (ByVal Index As Long) As Integer
-Public Declare Function ReadInt32 Lib "Dragon.Wrapper.dll" Alias "_ReadInt32@4" (ByVal Index As Long) As Long
-Public Declare Function ReadSingle Lib "Dragon.Wrapper.dll" Alias "_ReadSingle@4" (ByVal Index As Long) As Single
-Public Declare Function ReadBoolean Lib "Dragon.Wrapper.dll" Alias "_ReadBoolean@4" (ByVal Index As Long) As Boolean
+Public Declare Sub CloseFileHandler Lib "Dragon.Wrapper.dll" Alias "_CloseFileHandler@0" ()
+Public Declare Function ReadString Lib "Dragon.Wrapper.dll" Alias "_ReadString@4" (ByRef Output As String) As Long
+Public Declare Function ReadByte Lib "Dragon.Wrapper.dll" Alias "_ReadByte@0" () As Byte
+Public Declare Function ReadBytes Lib "Dragon.Wrapper.dll" Alias "_ReadBytes@8" (ByRef DestIntPtr As Long, ByVal BytesLength As Long) As Long
+Public Declare Function ReadInt16 Lib "Dragon.Wrapper.dll" Alias "_ReadInt16@0" () As Integer
+Public Declare Function ReadInt32 Lib "Dragon.Wrapper.dll" Alias "_ReadInt32@0" () As Long
+Public Declare Function ReadSingle Lib "Dragon.Wrapper.dll" Alias "_ReadSingle@0" () As Single
+Public Declare Function ReadBoolean Lib "Dragon.Wrapper.dll" Alias "_ReadBoolean@0" () As Boolean
 
 Public Declare Function Encrypt Lib "Dragon.Wrapper.dll" Alias "_Encrypt@20" (ByVal SettingsLngPtr As Long, ByVal SourceLngPtr As Long, ByVal SourceLength As Long, ByRef DestLngPtr As Long, ByRef DestLengthLngPtr As Long) As Boolean
 Public Declare Function Decrypt Lib "Dragon.Wrapper.dll" Alias "_Decrypt@20" (ByVal SettingsLngPtr As Long, ByVal SourceLngPtr As Long, ByVal SourceLength As Long, ByRef DestLngPtr As Long, ByRef DestLengthLngPtr As Long) As Boolean

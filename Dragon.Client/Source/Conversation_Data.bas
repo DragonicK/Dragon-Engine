@@ -58,12 +58,12 @@ Public Sub LoadConversations()
     Dim ChatCount As Long
     Dim OptionCount As Long
     Dim n As Long
-    Dim x As Long
+    Dim X As Long
 
     Index = GetFileHandler(App.Path & "\Data Files\Data\Conversations.dat")
 
-    If Index > 0 Then
-        MaxConversations = ReadInt32(Index)
+    If Index = 0 Then
+        MaxConversations = ReadInt32()
 
         If MaxConversations > 0 Then
             ReDim Conversations(1 To MaxConversations)
@@ -71,15 +71,15 @@ Public Sub LoadConversations()
             For i = 1 To MaxConversations
                 Name = String(255, vbNullChar)
 
-                Conversations(i).Id = ReadInt32(Index)
+                Conversations(i).Id = ReadInt32()
 
-                Call ReadString(Index, Name)
+                Call ReadString(Name)
 
                 Conversations(i).Name = Replace$(Name, vbNullChar, vbNullString)
-                Conversations(i).Type = ReadInt32(Index)
-                Conversations(i).QuestId = ReadInt32(Index)
+                Conversations(i).Type = ReadInt32()
+                Conversations(i).QuestId = ReadInt32()
 
-                ChatCount = ReadInt32(Index)
+                ChatCount = ReadInt32()
                 Conversations(i).ChatCount = ChatCount
 
                 If ChatCount > 0 Then
@@ -88,42 +88,42 @@ Public Sub LoadConversations()
                     For n = 1 To ChatCount
                         Text = String(255, vbNullChar)
 
-                        OptionCount = ReadInt32(Index)
+                        OptionCount = ReadInt32()
 
-                        Call ReadString(Index, Text)
+                        Call ReadString(Text)
 
                         With Conversations(i).Chats(n)
                             .Text = Replace$(Text, vbNullChar, vbNullString)
-                            .Event = ReadInt32(Index)
-                            .Data1 = ReadInt32(Index)
-                            .Data2 = ReadInt32(Index)
-                            .Data3 = ReadInt32(Index)
+                            .Event = ReadInt32()
+                            .Data1 = ReadInt32()
+                            .Data2 = ReadInt32()
+                            .Data3 = ReadInt32()
                             .OptionCount = OptionCount
                             
                             ReDim .Reply(1 To OptionCount)
                         End With
 
-                        For x = 1 To OptionCount
-                            Conversations(i).Chats(n).Reply(x).Target = ReadInt32(Index)
+                        For X = 1 To OptionCount
+                            Conversations(i).Chats(n).Reply(X).Target = ReadInt32()
 
-                            Call ReadString(Index, Text)
+                            Call ReadString(Text)
 
-                            Conversations(i).Chats(n).Reply(x).Text = Replace$(Text, vbNullChar, vbNullString)
+                            Conversations(i).Chats(n).Reply(X).Text = Replace$(Text, vbNullChar, vbNullString)
                         Next
                     Next
                 End If
 
-                Call ReadString(Index, Text)
+                Call ReadString(Text)
 
                 Conversations(i).MeanwhileText = Replace$(Text, vbNullChar, vbNullString)
 
-                Call ReadString(Index, Text)
+                Call ReadString(Text)
 
                 Conversations(i).CompletedText = Replace$(Text, vbNullChar, vbNullString)
             Next
         End If
     End If
 
-    Call CloseFileHandler(Index)
+    Call CloseFileHandler
 
 End Sub

@@ -14,55 +14,49 @@ using namespace System::Runtime::InteropServices;
 int ConvertStringToHexadecimal(System::String^ string, BSTR* output);
 
 int WINAPI GetFileHandler(LPCSTR path) {
-	auto file = gcnew System::String(path);
-
-	return FileManager::Instance->Open(file);
+	return FileManager::Instance().Open(path);
 }
 
-bool WINAPI CloseFileHandler(int index) {
-	return FileManager::Instance->Close(index);
+bool WINAPI CloseFileHandler( ) {
+	FileManager::Instance().Close();
+
+	return 0;
 }
 
-int WINAPI ReadString(int index, BSTR* output) {
-	auto s = FileManager::Instance->ReadString(index);
-
-	std::wstring ws;
-
-	StringToWideString(s, ws);
+int WINAPI ReadString(BSTR* output) {
+	auto ws = FileManager::Instance().ReadString();
 
 	*output = ConvertWideStringToBSTR(ws);
 
-	return s->Length;
+	return static_cast<int>(ws.length());
 }
 
-int WINAPI ReadBytes(int index, unsigned char* buffer, int length) {
-	auto bytes = FileManager::Instance->ReadBytes(index, length);
+int WINAPI ReadBytes(unsigned char* buffer, int length) {
+	auto bytes = FileManager::Instance().ReadBytes(length);
 
-	pin_ptr<unsigned char>_buffer = &bytes[0];
+	memcpy_s(buffer, bytes.size(), bytes.data(), bytes.size());
 
-	memcpy_s(buffer, bytes->Length, _buffer, bytes->Length);
-
-	return bytes->Length;
+	return static_cast<int>(bytes.size());
 }
 
-unsigned char WINAPI ReadByte(int index) {
-	return FileManager::Instance->ReadByte(index);
+unsigned char WINAPI ReadByte() {
+	return FileManager::Instance().ReadByte();
 }
 
-short WINAPI ReadInt16(int index) {
-	return FileManager::Instance->ReadInt16(index);
+short WINAPI ReadInt16() {
+	return FileManager::Instance().ReadInt16();
 }
 
-int WINAPI ReadInt32(int index) {
-	return FileManager::Instance->ReadInt32(index);
+int WINAPI ReadInt32() {
+	return FileManager::Instance().ReadInt32();
 }
 
-float WINAPI ReadSingle(int index) {
-	return FileManager::Instance->ReadSingle(index);
+float WINAPI ReadSingle() {
+	return FileManager::Instance().ReadSingle();
 }
 
-bool WINAPI ReadBoolean(int index) {
-	return FileManager::Instance->ReadBoolean(index);
+bool WINAPI ReadBoolean() {
+	return FileManager::Instance().ReadBoolean();
 }
 
 bool WINAPI Encrypt(AESSettings* settings, unsigned char* source, int sourceLength, unsigned char* dest, int* destLength) {
@@ -114,7 +108,7 @@ int WINAPI ConvertToHexadecimal(unsigned char* source, int length, BSTR* output)
 
 	std::wstring ws;
 
-	StringToWideString(computed, ws);
+	//StringToWideString(computed, ws);
 
 	*output = ConvertWideStringToBSTR(ws);
 
@@ -177,7 +171,7 @@ int ConvertStringToHexadecimal(System::String^ string, BSTR* output) {
 
 	std::wstring ws;
 
-	StringToWideString(id, ws);
+	//StringToWideString(id, ws);
 
 	*output = ConvertWideStringToBSTR(ws);
 

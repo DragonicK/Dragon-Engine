@@ -80,58 +80,58 @@ Public Sub LoadPassives()
 
     Index = GetFileHandler(App.Path & "\Data Files\Data\Passives.dat")
 
-    If Index > 0 Then
-        MaxPassives = ReadInt32(Index)
+    If Index = 0 Then
+        MaxPassives = ReadInt32()
 
         If MaxPassives > 0 Then
             ReDim Passive(1 To MaxPassives)
 
             For i = 1 To MaxPassives
-                Passive(i).Id = ReadInt32(Index)
+                Passive(i).Id = ReadInt32()
 
                 Name = String(255, vbNullChar)
                 Description = String(1024, vbNullChar)
 
-                Call ReadString(Index, Name)
-                Call ReadString(Index, Description)
+                Call ReadString(Name)
+                Call ReadString(Description)
 
-                Passive(i).Type = ReadInt32(Index)
-                Passive(i).TargetType = ReadInt32(Index)
-                Passive(i).Element = ReadInt32(Index)
-                Passive(i).AttributeId = ReadInt32(Index)
-                Passive(i).UpgradeId = ReadInt32(Index)
-                Passive(i).SkillTargetId = ReadInt32(Index)
-                Passive(i).Amplification = ReadSingle(Index)
-                Passive(i).Range = ReadInt32(Index)
-                Passive(i).CastTime = ReadInt32(Index)
-                Passive(i).Cooldown = ReadInt32(Index)
-                Passive(i).Stun = ReadInt32(Index)
-                Passive(i).Cost = ReadInt32(Index)
+                Passive(i).Type = ReadInt32()
+                Passive(i).TargetType = ReadInt32()
+                Passive(i).Element = ReadInt32()
+                Passive(i).AttributeId = ReadInt32()
+                Passive(i).UpgradeId = ReadInt32()
+                Passive(i).SkillTargetId = ReadInt32()
+                Passive(i).Amplification = ReadSingle()
+                Passive(i).Range = ReadInt32()
+                Passive(i).CastTime = ReadInt32()
+                Passive(i).Cooldown = ReadInt32()
+                Passive(i).Stun = ReadInt32()
+                Passive(i).Cost = ReadInt32()
 
-                Passive(i).EffectChangeType = ReadInt32(Index)
-                Passive(i).Activation = ReadInt32(Index)
-                Passive(i).Conditional = ReadInt32(Index)
-                Passive(i).ActivationResult = ReadInt32(Index)
-                Passive(i).ActivationChance = ReadInt32(Index)
+                Passive(i).EffectChangeType = ReadInt32()
+                Passive(i).Activation = ReadInt32()
+                Passive(i).Conditional = ReadInt32()
+                Passive(i).ActivationResult = ReadInt32()
+                Passive(i).ActivationChance = ReadInt32()
 
-                Passive(i).Effect.EffectType = ReadInt32(Index)
-                Passive(i).Effect.VitalType = ReadInt32(Index)
-                Passive(i).Effect.TargetType = ReadInt32(Index)
-                Passive(i).Effect.Direction = ReadInt32(Index)
-                Passive(i).Effect.Damage = ReadInt32(Index)
-                Passive(i).Effect.DamagePerLevel = ReadInt32(Index)
-                Passive(i).Effect.Duration = ReadInt32(Index)
-                Passive(i).Effect.Interval = ReadInt32(Index)
-                Passive(i).Effect.StunDuration = ReadInt32(Index)
-                Passive(i).Effect.MapId = ReadInt32(Index)
-                Passive(i).Effect.X = ReadInt32(Index)
-                Passive(i).Effect.Y = ReadInt32(Index)
-                Passive(i).Effect.EffectId = ReadInt32(Index)
+                Passive(i).Effect.EffectType = ReadInt32()
+                Passive(i).Effect.VitalType = ReadInt32()
+                Passive(i).Effect.TargetType = ReadInt32()
+                Passive(i).Effect.Direction = ReadInt32()
+                Passive(i).Effect.Damage = ReadInt32()
+                Passive(i).Effect.DamagePerLevel = ReadInt32()
+                Passive(i).Effect.Duration = ReadInt32()
+                Passive(i).Effect.Interval = ReadInt32()
+                Passive(i).Effect.StunDuration = ReadInt32()
+                Passive(i).Effect.MapId = ReadInt32()
+                Passive(i).Effect.X = ReadInt32()
+                Passive(i).Effect.Y = ReadInt32()
+                Passive(i).Effect.EffectId = ReadInt32()
             Next
         End If
     End If
     
-    Call CloseFileHandler(Index)
+    Call CloseFileHandler
 
 End Sub
 

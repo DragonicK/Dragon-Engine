@@ -105,11 +105,11 @@ Private Sub ReadModel(ByRef Model As ModelRec, ByVal File As String)
 
     Index = GetFileHandler(FileName)
 
-    If Index > 0 Then
-        Model.Id = ReadInt32(Index)
+    If Index = 0 Then
+        Model.Id = ReadInt32()
 
         Name = String(512, vbNullChar)
-        Call ReadString(Index, Name)
+        Call ReadString(Name)
 
         Call ReadDirection(Model.Attack, Index)
         Call ReadDirection(Model.Death, Index)
@@ -120,7 +120,7 @@ Private Sub ReadModel(ByRef Model As ModelRec, ByVal File As String)
         Call ReadDirection(Model.Running, Index)
         Call ReadDirection(Model.Idle, Index)
 
-        Model.SpecialCount = ReadInt32(Index)
+        Model.SpecialCount = ReadInt32()
 
         If Model.SpecialCount > 0 Then
             ReDim Model.Special(1 To Model.SpecialCount)
@@ -130,7 +130,7 @@ Private Sub ReadModel(ByRef Model As ModelRec, ByVal File As String)
             Next
         End If
 
-        Model.EmoteCount = ReadInt32(Index)
+        Model.EmoteCount = ReadInt32()
 
         If Model.EmoteCount > 0 Then
             ReDim Model.Emote(1 To Model.EmoteCount)
@@ -142,7 +142,7 @@ Private Sub ReadModel(ByRef Model As ModelRec, ByVal File As String)
         
     End If
 
-    Call CloseFileHandler(Index)
+    Call CloseFileHandler
 
 End Sub
 
@@ -152,8 +152,8 @@ Private Sub ReadDirection(ByRef Direction As DirectionRec, ByVal Index As Long)
     
     Name = String(512, vbNullChar)
     
-    Id = ReadInt32(Index)
-    Call ReadString(Index, Name)
+    Id = ReadInt32()
+    Call ReadString(Name)
     
     Call ReadMovement(Direction.Up, Index)
     Call ReadMovement(Direction.Down, Index)
@@ -167,11 +167,11 @@ Private Sub ReadMovement(ByRef Movement As MovementRec, ByVal Index As Long)
 
     Name = String(512, vbNullChar)
 
-    Movement.Count = ReadInt32(Index)
-    Call ReadString(Index, Name)
-    Movement.Time = ReadInt32(Index)
-    Movement.Continuously = ReadBoolean(Index)
-    Movement.WaitResponse = ReadBoolean(Index)
+    Movement.Count = ReadInt32()
+    Call ReadString(Name)
+    Movement.Time = ReadInt32()
+    Movement.Continuously = ReadBoolean()
+    Movement.WaitResponse = ReadBoolean()
 
     If Movement.Count > 0 Then
         ReDim Movement.Frames(1 To Movement.Count)
@@ -201,16 +201,16 @@ Private Sub ReadFrame(ByRef Frame As FrameRec, ByVal Index As Long)
     Dim Success As Boolean
 
     Name = String(512, vbNullChar)
-    Call ReadString(Index, Name)
+    Call ReadString(Name)
 
-    Length = ReadInt32(Index)
+    Length = ReadInt32()
 
     If Length > 0 Then
         Dim Buffer() As Byte
 
         ReDim Buffer(0 To Length - 1)
 
-        Call ReadBytes(Index, ByVal VarPtr(Buffer(0)), Length)
+        Call ReadBytes(ByVal VarPtr(Buffer(0)), Length)
 
         Dim DecryptedLength As Long
         Dim Decrypted() As Byte
@@ -228,13 +228,13 @@ Private Sub ReadFrame(ByRef Frame As FrameRec, ByVal Index As Long)
         End If
     End If
 
-    Frame.Width = ReadInt32(Index)
-    Frame.Height = ReadInt32(Index)
-    Frame.CanMove = ReadBoolean(Index)
-    Frame.SendAttack = ReadInt32(Index)
-    Frame.CastSkillId = ReadInt32(Index)
-    Frame.AnimationId = ReadInt32(Index)
-    Frame.AnimationX = ReadInt32(Index)
-    Frame.AnimationY = ReadInt32(Index)
+    Frame.Width = ReadInt32()
+    Frame.Height = ReadInt32()
+    Frame.CanMove = ReadBoolean()
+    Frame.SendAttack = ReadInt32()
+    Frame.CastSkillId = ReadInt32()
+    Frame.AnimationId = ReadInt32()
+    Frame.AnimationX = ReadInt32()
+    Frame.AnimationY = ReadInt32()
 
 End Sub

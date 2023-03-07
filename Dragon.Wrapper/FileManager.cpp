@@ -1,131 +1,147 @@
 #include "FileManager.h"
 
+#define BYTE 1
+#define INT32 4
+#define INT16 2
+
 namespace Dragon::Wrapper::IO {
 
-	FileManager::FileManager() {
-		auto streams = gcnew Dictionary<int, FileStream^>();
-		auto readers = gcnew Dictionary<int, BinaryReader^>();
+	int FileManager::Open(LPCSTR file) {
+		stream = std::ifstream(file, std::ios::binary);
+
+		if (!stream.is_open()) {
+			std::cerr << "Failed to open file" << std::endl;
+			return 1;
+		}
+
+		return 0;
 	}
 
-	int FileManager::Open(System::String^ file) {
-		if (File::Exists(file)) {
-			auto stream = gcnew FileStream(file, FileMode::Open, FileAccess::Read);
+	void FileManager::Close() {
+		stream.close();
+	}
 
-			if (stream != nullptr) {
-				int index;
+	std::wstring FileManager::ReadString() {
+		int length = Read7BitEncodedInt();
 
-				for (index = 1; index < System::Int32::MaxValue; ++index) {
-					if (!streams.ContainsKey(index)) {
-						streams[index] = stream;
+		std::vector<char> buffer(length);
 
-						readers[index] = gcnew BinaryReader(stream);
+		stream.read(buffer.data(), length);
 
-						break;
-					}
-				}
+		int wstring_length = MultiByteToWideChar(CP_UTF8, 0, buffer.data(), length, NULL, 0);
 
-				return index;
+		std::wstring utf16_data(wstring_length, L'\0');
+
+		MultiByteToWideChar(CP_UTF8, 0, buffer.data(), length, &utf16_data[0], wstring_length);
+
+		return utf16_data;
+	}
+
+	char FileManager::ReadByte() {
+		char byteReadJustNow;
+
+		stream.read(&byteReadJustNow, BYTE);
+
+		return byteReadJustNow;
+	}
+
+	std::vector<unsigned char> FileManager::ReadBytes(int length) {
+		std::vector<unsigned char> buffer(length);
+
+		stream.read(reinterpret_cast<char*>(buffer.data()), length);
+
+		return buffer;
+	}
+
+	int16_t FileManager::ReadInt16() {
+		char charArray[INT16];
+
+		stream.read(charArray, INT16);
+
+		int16_t result = 0;
+
+		char* resultPtr = reinterpret_cast<char*>(&result);
+
+		for (int i = 0; i < INT16; ++i) {
+			resultPtr[i] = charArray[i];
+		}
+
+		return result;
+	}
+
+	int32_t FileManager::ReadInt32() {
+		char charArray[INT32];
+
+		stream.read(charArray, INT32);
+
+		int32_t result = 0;
+
+		char* resultPtr = reinterpret_cast<char*>(&result);
+
+		for (int i = 0; i < INT32; ++i) {
+			resultPtr[i] = charArray[i];
+		}
+
+		return result;
+	}
+
+	float FileManager::ReadSingle() {
+		char charArray[INT32];
+
+		stream.read(charArray, INT32);
+
+		union {
+			char char_array[INT32];
+			float float_value;
+		} uFloat {};
+
+		for (int i = 0; i < INT32; i++) {
+			uFloat.char_array[i] = charArray[i];
+		}
+
+		return uFloat.float_value;
+	}
+
+	bool FileManager::ReadBoolean() {
+		return ReadByte();
+	}
+
+	int FileManager::Read7BitEncodedInt() {
+		// Unlike writing, we can't delegate to the 64-bit read on
+		// 64-bit platforms. The reason for this is that we want to
+		// stop consuming bytes if we encounter an integer overflow.
+
+		uint32_t result = 0;
+		uint8_t byteReadJustNow;
+
+		// Read the integer 7 bits at a time. The high bit
+		// of the byte when on means to continue reading more bytes.
+		//
+		// There are two failure cases: we've read more than 5 bytes,
+		// or the fifth byte is about to cause integer overflow.
+		// This means that we can read the first 4 bytes without
+		// worrying about integer overflow.
+
+		const int MaxBytesWithoutOverflow = 4;
+		for (int shift = 0; shift < MaxBytesWithoutOverflow * 7; shift += 7) {
+			// ReadByte handles end of stream cases for us.
+			byteReadJustNow = ReadByte();
+			result |= (byteReadJustNow & 0x7Fu) << shift;
+
+			if (byteReadJustNow <= 0x7Fu) {
+				return static_cast<int>(result); // early exit
 			}
 		}
 
-		return 0;
-	}
-
-	bool FileManager::Close(int index) {
-		if (readers.ContainsKey(index)) {
-			auto reader = readers[index];
-
-			reader->Close();
-
-			readers.Remove(index);
+		// Read the 5th byte. Since we already read 28 bits,
+		// the value of this byte must fit within 4 bits (32 - 28),
+		// and it must not have the high bit set.
+		byteReadJustNow = ReadByte();
+		if (byteReadJustNow > 0b1111u) {
+			throw std::runtime_error("Bad 7-bit integer format");
 		}
 
-		if (streams.ContainsKey(index)) {
-			auto stream = streams[index];
-
-			stream->Close();
-
-			streams.Remove(index);
-
-			return true;
-		}
-
-		return false;
-	}
-
-	System::String^ FileManager::ReadString(int index) {
-		if (IsValidIndex(index)) {
-			auto reader = readers[index];
-			return reader->ReadString();
-		}
-
-		return System::String::Empty;
-	}
-
-	unsigned char FileManager::ReadByte(int index) {
-		if (IsValidIndex(index)) {
-			auto reader = readers[index];
-			return reader->ReadByte();
-		}
-
-		return 0;
-	}
-
-	array<unsigned char>^ FileManager::ReadBytes(int index, int length) {
-		if (IsValidIndex(index)) {
-			auto reader = readers[index];
-			return reader->ReadBytes(length);
-		}
-
-		return nullptr;
-	}
-
-	short FileManager::ReadInt16(int index) {
-		if (IsValidIndex(index)) {
-			auto reader = readers[index];
-			return reader->ReadInt16();
-		}
-
-		return 0;
-	}
-
-	int FileManager::ReadInt32(int index) {
-		if (IsValidIndex(index)) {
-			auto reader = readers[index];
-			return reader->ReadInt32();
-		}
-
-		return 0;
-	}
-
-	float FileManager::ReadSingle(int index) {
-		if (IsValidIndex(index)) {
-			auto reader = readers[index];
-			return reader->ReadSingle();
-		}
-
-		return 0;
-	}
-
-	bool FileManager::ReadBoolean(int index) {
-		if (IsValidIndex(index)) {
-			bool read;
-
-			try {
-				auto reader = readers[index];
-				read = reader->ReadBoolean();
-			}
-			catch (System::Exception^ ex) {
-				throw ex;
-			}
-
-			return read;
-		}
-
-		return false;
-	}
-
-	bool FileManager::IsValidIndex(int index) {
-		return (streams.ContainsKey(index) && readers.ContainsKey(index));
+		result |= static_cast<uint32_t>(byteReadJustNow) << (MaxBytesWithoutOverflow * 7);
+		return static_cast<int>(result);
 	}
 }

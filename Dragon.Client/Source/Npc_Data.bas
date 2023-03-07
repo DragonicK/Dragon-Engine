@@ -41,8 +41,8 @@ Public Sub LoadNpcs()
 
     Index = GetFileHandler(App.Path & "\Data Files\Data\Npcs.dat")
 
-    If Index > 0 Then
-        MaximumNpcs = ReadInt32(Index)
+    If Index = 0 Then
+        MaximumNpcs = ReadInt32()
 
         If MaximumNpcs > 0 Then
             ReDim Npc(1 To MaximumNpcs)
@@ -53,25 +53,25 @@ Public Sub LoadNpcs()
                 Sound = String(512, vbNullChar)
                 Greetings = String(512, vbNullChar)
 
-                Npc(i).Id = ReadInt32(Index)
-                Call ReadString(Index, Name)
-                Call ReadString(Index, Title)
-                Call ReadString(Index, Sound)
-                Npc(i).Behaviour = ReadInt32(Index)
-                Npc(i).ModelId = ReadInt32(Index)
-                Npc(i).Level = ReadInt32(Index)
-                Npc(i).AttributeId = ReadInt32(Index)
-                Npc(i).Experience = ReadInt32(Index)
+                Npc(i).Id = ReadInt32()
+                Call ReadString(Name)
+                Call ReadString(Title)
+                Call ReadString(Sound)
+                Npc(i).Behaviour = ReadInt32()
+                Npc(i).ModelId = ReadInt32()
+                Npc(i).Level = ReadInt32()
+                Npc(i).AttributeId = ReadInt32()
+                Npc(i).Experience = ReadInt32()
 
                 Npc(i).Name = Replace$(Name, vbNullChar, vbNullString)
                 Npc(i).Title = Replace$(Title, vbNullChar, vbNullString)
                 Npc(i).Sound = Replace$(Sound, vbNullChar, vbNullString)
 
-                Call ReadString(Index, Greetings)
+                Call ReadString(Greetings)
                 
                 Npc(i).Greetings = Replace$(Greetings, vbNullChar, vbNullString)
                 
-                Count = ReadInt32(Index)
+                Count = ReadInt32()
 
                 Npc(i).ConversationCount = Count
 
@@ -79,7 +79,7 @@ Public Sub LoadNpcs()
                     ReDim Npc(i).Conversations(1 To Count)
 
                     For n = 1 To Count
-                        Npc(i).Conversations(n) = ReadInt32(Index)
+                        Npc(i).Conversations(n) = ReadInt32()
                     Next
                 End If
 
@@ -87,7 +87,7 @@ Public Sub LoadNpcs()
         End If
     End If
 
-    Call CloseFileHandler(Index)
+    Call CloseFileHandler
 
 End Sub
 

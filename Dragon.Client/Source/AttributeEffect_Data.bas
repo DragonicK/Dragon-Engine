@@ -48,37 +48,37 @@ Public Sub LoadAttributeEffects()
 
     Index = GetFileHandler(App.Path & "\Data Files\Data\Effects.dat")
     
-    If Index > 0 Then
-        MaxAttributeEffects = ReadInt32(Index)
+    If Index = 0 Then
+        MaxAttributeEffects = ReadInt32()
         If MaxAttributeEffects > 0 Then
             ReDim AttributeEffect(0 To MaxAttributeEffects)
 
             For i = 1 To MaxAttributeEffects
-                AttributeEffect(i).Id = ReadInt32(Index)
+                AttributeEffect(i).Id = ReadInt32()
                 
                 Name = String(255, vbNullChar)
                 Description = String(512, vbNullChar)
                 
-                Call ReadString(Index, Name)
-                Call ReadString(Index, Description)
+                Call ReadString(Name)
+                Call ReadString(Description)
                 
                 AttributeEffect(i).Name = Replace$(Name, vbNullChar, vbNullString)
                 AttributeEffect(i).Description = Replace$(Description, vbNullChar, vbNullString)
                 
-                AttributeEffect(i).EffectType = ReadInt32(Index)
-                AttributeEffect(i).IconId = ReadInt32(Index)
-                AttributeEffect(i).Duration = ReadInt32(Index)
-                AttributeEffect(i).Dispelled = ReadBoolean(Index)
-                AttributeEffect(i).RemoveOnDeath = ReadBoolean(Index)
-                AttributeEffect(i).Unlimited = ReadBoolean(Index)
-                AttributeEffect(i).AttributeId = ReadInt32(Index)
-                AttributeEffect(i).UpgradeId = ReadInt32(Index)
-                AttributeEffect(i).Override = ReadInt32(Index)
+                AttributeEffect(i).EffectType = ReadInt32()
+                AttributeEffect(i).IconId = ReadInt32()
+                AttributeEffect(i).Duration = ReadInt32()
+                AttributeEffect(i).Dispelled = ReadBoolean()
+                AttributeEffect(i).RemoveOnDeath = ReadBoolean()
+                AttributeEffect(i).Unlimited = ReadBoolean()
+                AttributeEffect(i).AttributeId = ReadInt32()
+                AttributeEffect(i).UpgradeId = ReadInt32()
+                AttributeEffect(i).Override = ReadInt32()
             Next
         End If
     End If
 
-    Call CloseFileHandler(Index)
+    Call CloseFileHandler
  
 End Sub
 

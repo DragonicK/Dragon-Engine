@@ -95,60 +95,60 @@ Public Sub LoadQuests()
     Index = GetFileHandler(App.Path & "\Data Files\Data\Quests.dat")
 
     If Index > 0 Then
-        MaximumQuests = ReadInt32(Index)
+        MaximumQuests = ReadInt32()
 
         If MaximumQuests > 0 Then
             ReDim Quests(1 To MaximumQuests)
 
             For i = 1 To MaximumQuests
                 With Quests(i)
-                    .Id = ReadInt32(Index)
+                    .Id = ReadInt32()
                     Title = String(255, vbNullChar)
                     Summary = String(255, vbNullChar)
                     
-                    Call ReadString(Index, Title)
-                    Call ReadString(Index, Summary)
+                    Call ReadString(Title)
+                    Call ReadString(Summary)
                     
                     .Title = Replace$(Title, vbNullChar, vbNullString)
                     .Summary = Replace$(Summary, vbNullChar, vbNullString)
-                    .Type = ReadInt32(Index)
-                    .Repeatable = ReadInt32(Index)
-                    .Shareable = ReadInt32(Index)
-                    .SelectableReward = ReadInt32(Index)
-                    .SelectableRewardCount = ReadInt32(Index)
+                    .Type = ReadInt32()
+                    .Repeatable = ReadInt32()
+                    .Shareable = ReadInt32()
+                    .SelectableReward = ReadInt32()
+                    .SelectableRewardCount = ReadInt32()
                     
-                    .StepCount = ReadInt32(Index)
+                    .StepCount = ReadInt32()
                     
                     If .StepCount > 0 Then
                         ReDim .Steps(1 To .StepCount)
                                                 
                         For X = 1 To .StepCount
-                            Call ReadString(Index, Title)
-                            Call ReadString(Index, Summary)
+                            Call ReadString(Title)
+                            Call ReadString(Summary)
                             
                             .Steps(X).Title = Replace$(Title, vbNullChar, vbNullString)
                             .Steps(X).Summary = Replace$(Summary, vbNullChar, vbNullString)
-                            .Steps(X).ActionType = ReadInt32(Index)
-                            .Steps(X).Requirement.EntityId = ReadInt32(Index)
-                            .Steps(X).Requirement.Value = ReadInt32(Index)
-                            .Steps(X).Requirement.X = ReadInt32(Index)
-                            .Steps(X).Requirement.Y = ReadInt32(Index)
+                            .Steps(X).ActionType = ReadInt32()
+                            .Steps(X).Requirement.EntityId = ReadInt32()
+                            .Steps(X).Requirement.Value = ReadInt32()
+                            .Steps(X).Requirement.X = ReadInt32()
+                            .Steps(X).Requirement.Y = ReadInt32()
                         Next
                     End If
                     
-                    .RewardCount = ReadInt32(Index)
+                    .RewardCount = ReadInt32()
                     
                     If .RewardCount > 0 Then
                         ReDim .Rewards(1 To .RewardCount)
                         
                         For Y = 1 To .RewardCount
-                            .Rewards(Y).Id = ReadInt32(Index)
-                            .Rewards(Y).Value = ReadInt32(Index)
-                            .Rewards(Y).Level = ReadInt32(Index)
-                            .Rewards(Y).Bound = ReadBoolean(Index)
-                            .Rewards(Y).AttributeId = ReadInt32(Index)
-                            .Rewards(Y).UpgradeId = ReadInt32(Index)
-                            .Rewards(Y).Type = ReadInt32(Index)
+                            .Rewards(Y).Id = ReadInt32()
+                            .Rewards(Y).Value = ReadInt32()
+                            .Rewards(Y).Level = ReadInt32()
+                            .Rewards(Y).Bound = ReadBoolean()
+                            .Rewards(Y).AttributeId = ReadInt32()
+                            .Rewards(Y).UpgradeId = ReadInt32()
+                            .Rewards(Y).Type = ReadInt32()
                         Next
                     End If
                     
@@ -158,6 +158,6 @@ Public Sub LoadQuests()
         End If
     End If
     
-    Call CloseFileHandler(Index)
+    Call CloseFileHandler
 
 End Sub

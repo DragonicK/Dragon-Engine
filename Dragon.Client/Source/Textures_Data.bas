@@ -67,8 +67,8 @@ Public Function LoadTexturePack(ByRef Counter As Long, ByRef Path As String) As 
 
     Index = GetFileHandler(Path)
 
-    If Index > 0 Then
-        If CheckFilePassword(Index, Password) Then
+    If Index = 0 Then
+        If CheckFilePassword(Password) Then
             Dim Settings As AesSettings
 
             Settings.CipherMode = AesCipherMode.AesCipherMode_CBC
@@ -89,7 +89,7 @@ Public Function LoadTexturePack(ByRef Counter As Long, ByRef Path As String) As 
             Dim Decrypted() As Byte
             Dim DecryptedLength As Long
   
-            Counter = ReadInt32(Index)
+            Counter = ReadInt32()
 
             ReDim Textures(0 To Counter)
 
@@ -97,16 +97,19 @@ Public Function LoadTexturePack(ByRef Counter As Long, ByRef Path As String) As 
                 Name = String(1024, vbNullChar)
                 Extension = String(1024, vbNullChar)
 
-                Call ReadString(Index, Name)
-                Call ReadString(Index, Extension)
+                Call ReadString(Name)
+                Call ReadString(Extension)
 
-                Width = ReadInt32(Index)
-                Height = ReadInt32(Index)
+                Name = Replace$(Name, vbNullChar, vbNullString)
+                Extension = Replace$(Extension, vbNullChar, vbNullString)
+                    
+                Width = ReadInt32()
+                Height = ReadInt32()
 
-                EncryptedLength = ReadInt32(Index)
+                EncryptedLength = ReadInt32()
                 ReDim Encrypted(0 To EncryptedLength - 1)
 
-                Call ReadBytes(Index, ByVal VarPtr(Encrypted(0)), EncryptedLength)
+                Call ReadBytes(ByVal VarPtr(Encrypted(0)), EncryptedLength)
                 
                 ReDim Decrypted(0 To EncryptedLength - 1)
 
@@ -126,7 +129,7 @@ Public Function LoadTexturePack(ByRef Counter As Long, ByRef Path As String) As 
         End If
     End If
 
-    Call CloseFileHandler(Index)
+    Call CloseFileHandler
 
 End Function
 
@@ -147,7 +150,7 @@ Public Function LoadTexture(ByRef Data() As Byte, Optional ByVal DontReuse As Bo
     Set mTexture(mTextures).Texture = D3DX.CreateTextureFromFileInMemoryEx(D3DDevice, Data(0), AryCount(Data), mTexture(mTextures).W, mTexture(mTextures).H, D3DX_DEFAULT, 0, D3DFMT_A8R8G8B8, D3DPOOL_MANAGED, D3DX_FILTER_POINT, D3DX_FILTER_POINT, 0, ByVal 0, ByVal 0)
 End Function
 
-Private Function CheckFilePassword(ByVal FileHandlerIndex As Long, ByVal Password As String) As Boolean
+Private Function CheckFilePassword(ByVal Password As String) As Boolean
     Dim Settings As AesSettings
     Dim Encrypted() As Byte
     Dim EncryptedLength As Long
@@ -156,11 +159,27 @@ Private Function CheckFilePassword(ByVal FileHandlerIndex As Long, ByVal Passwor
     Dim Success As Boolean
     Dim i As Long
 
-    EncryptedLength = ReadInt32(FileHandlerIndex)
+    EncryptedLength = ReadInt32()
 
     ReDim Encrypted(0 To EncryptedLength - 1)
+    
+    Dim Satanas As Long
 
-    Call ReadBytes(FileHandlerIndex, ByVal VarPtr(Encrypted(0)), EncryptedLength)
+    Satanas = ReadBytes(ByVal VarPtr(Encrypted(0)), EncryptedLength)
+    
+    Satanas = Encrypted(0)
+    Satanas = Encrypted(1)
+    Satanas = Encrypted(2)
+    Satanas = Encrypted(3)
+    Satanas = Encrypted(4)
+    Satanas = Encrypted(5)
+    Satanas = Encrypted(6)
+    Satanas = Encrypted(7)
+    Satanas = Encrypted(8)
+    Satanas = Encrypted(9)
+    Satanas = Encrypted(10)
+    Satanas = Encrypted(11)
+    
 
     Settings.CipherMode = AesCipherMode.AesCipherMode_CBC
     Settings.PaddingMode = AesPaddingMode.AesPaddingMode_PKCS7

@@ -76,59 +76,59 @@ Public Sub LoadEquipments()
 
     Index = GetFileHandler(App.Path & "\Data Files\Data\Equipments.dat")
 
-    If Index > 0 Then
+    If Index = 0 Then
         Dim n As Long
 
-        MaximumEquipments = ReadInt32(Index)
+        MaximumEquipments = ReadInt32()
 
         If MaximumEquipments > 0 Then
             ReDim Equipment(1 To MaximumEquipments)
 
             For i = 1 To MaximumEquipments
-                Id = ReadInt32(Index)
+                Id = ReadInt32()
 
                 Name = String(255, vbNullChar)
 
-                Call ReadString(Index, Name)
+                Call ReadString(Name)
 
-                Equipment(i).Type = ReadInt32(Index)
-                Equipment(i).HandStyle = ReadInt32(Index)
-                Equipment(i).Proficiency = ReadInt32(Index)
-                Equipment(i).ModelId = ReadInt32(Index)
-                Equipment(i).UpgradeId = ReadInt32(Index)
-                Equipment(i).EquipmentSetId = ReadInt32(Index)
-                Equipment(i).DisassembleId = ReadInt32(Index)
-                Equipment(i).MaxSockets = ReadInt32(Index)
-                Equipment(i).BaseAttackSpeed = ReadInt32(Index)
-                Equipment(i).AttackAnimationId = ReadInt32(Index)
+                Equipment(i).Type = ReadInt32()
+                Equipment(i).HandStyle = ReadInt32()
+                Equipment(i).Proficiency = ReadInt32()
+                Equipment(i).ModelId = ReadInt32()
+                Equipment(i).UpgradeId = ReadInt32()
+                Equipment(i).EquipmentSetId = ReadInt32()
+                Equipment(i).DisassembleId = ReadInt32()
+                Equipment(i).MaxSockets = ReadInt32()
+                Equipment(i).BaseAttackSpeed = ReadInt32()
+                Equipment(i).AttackAnimationId = ReadInt32()
 
-                Equipment(i).MaximumSkills = ReadInt32(Index)
+                Equipment(i).MaximumSkills = ReadInt32()
                 
                 If Equipment(i).MaximumSkills > 0 Then
                     ReDim Equipment(i).Skills(1 To Equipment(i).MaximumSkills)
 
                     For n = 1 To Equipment(i).MaximumSkills
-                        Equipment(i).Skills(n).Id = ReadInt32(Index)
-                        Equipment(i).Skills(n).Level = ReadInt32(Index)
-                        Equipment(i).Skills(n).UnlockAtLevel = ReadInt32(Index)
+                        Equipment(i).Skills(n).Id = ReadInt32()
+                        Equipment(i).Skills(n).Level = ReadInt32()
+                        Equipment(i).Skills(n).UnlockAtLevel = ReadInt32()
                     Next
                 End If
 
-                Equipment(i).MaxAttributes = ReadInt32(Index)
+                Equipment(i).MaxAttributes = ReadInt32()
 
                 If Equipment(i).MaxAttributes > 0 Then
                     ReDim Equipment(i).Attributes(1 To Equipment(i).MaxAttributes)
 
                     For n = 1 To Equipment(i).MaxAttributes
-                        Equipment(i).Attributes(n).AttributeId = ReadInt32(Index)
-                        Equipment(i).Attributes(n).Chance = ReadInt32(Index)
+                        Equipment(i).Attributes(n).AttributeId = ReadInt32()
+                        Equipment(i).Attributes(n).Chance = ReadInt32()
                     Next
                 End If
             Next
         End If
     End If
 
-    Call CloseFileHandler(Index)
+    Call CloseFileHandler
 
 End Sub
 

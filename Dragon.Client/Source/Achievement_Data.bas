@@ -111,64 +111,64 @@ Public Sub LoadAchievements()
 
     Index = GetFileHandler(App.Path & "\Data Files\Data\Achievements.dat")
 
-    If Index > 0 Then
-        MaxAchievements = ReadInt32(Index)
+    If Index = 0 Then
+        MaxAchievements = ReadInt32()
 
         If MaxAchievements > 0 Then
             ReDim Achievement(1 To MaxAchievements)
 
             For i = 1 To MaxAchievements
                 With Achievement(i)
-                    .Id = ReadInt32(Index)
+                    .Id = ReadInt32()
 
                     Name = String(255, vbNullChar)
                     Description = String(1024, vbNullChar)
 
-                    Call ReadString(Index, Name)
-                    Call ReadString(Index, Description)
+                    Call ReadString(Name)
+                    Call ReadString(Description)
 
                     .Name = Replace(Name, vbNullChar, vbNullString)
                     .Description = Replace(Description, vbNullChar, vbNullString)
 
-                    .Rarity = ReadInt32(Index)
-                    .Points = ReadInt32(Index)
-                    .AttributeId = ReadInt32(Index)
-                    .Category = ReadInt32(Index)
+                    .Rarity = ReadInt32()
+                    .Points = ReadInt32()
+                    .AttributeId = ReadInt32()
+                    .Category = ReadInt32()
 
-                    .RequirementCount = ReadInt32(Index)
+                    .RequirementCount = ReadInt32()
 
                     If .RequirementCount > 0 Then
                         ReDim .Requirements(1 To .RequirementCount)
 
                         For n = 1 To .RequirementCount
-                            .Requirements(n).Id = ReadInt32(Index)
-                            .Requirements(n).Value = ReadInt32(Index)
-                            .Requirements(n).Level = ReadInt32(Index)
-                            .Requirements(n).Count = ReadInt32(Index)
-                            .Requirements(n).Rarity = ReadInt32(Index)
-                            .Requirements(n).Equipment = ReadInt32(Index)
-                            .Requirements(n).PrimaryType = ReadInt32(Index)
-                            .Requirements(n).SecondaryType = ReadInt32(Index)
+                            .Requirements(n).Id = ReadInt32()
+                            .Requirements(n).Value = ReadInt32()
+                            .Requirements(n).Level = ReadInt32()
+                            .Requirements(n).Count = ReadInt32()
+                            .Requirements(n).Rarity = ReadInt32()
+                            .Requirements(n).Equipment = ReadInt32()
+                            .Requirements(n).PrimaryType = ReadInt32()
+                            .Requirements(n).SecondaryType = ReadInt32()
 
-                            Call ReadString(Index, Description)
+                            Call ReadString(Description)
 
                             .Requirements(n).Description = Replace(Description, vbNullChar, vbNullString)
                         Next
                     End If
 
-                    .RewardCount = ReadInt32(Index)
+                    .RewardCount = ReadInt32()
 
                     If .RewardCount > 0 Then
                         ReDim .Rewards(1 To .RewardCount)
 
                         For n = 1 To .RewardCount
-                            .Rewards(n).Type = ReadInt32(Index)
-                            .Rewards(n).Id = ReadInt32(Index)
-                            .Rewards(n).Value = ReadInt32(Index)
-                            .Rewards(n).Level = ReadInt32(Index)
-                            .Rewards(n).Bound = ReadBoolean(Index)
-                            .Rewards(n).AttributeId = ReadInt32(Index)
-                            .Rewards(n).UpgradeId = ReadInt32(Index)
+                            .Rewards(n).Type = ReadInt32()
+                            .Rewards(n).Id = ReadInt32()
+                            .Rewards(n).Value = ReadInt32()
+                            .Rewards(n).Level = ReadInt32()
+                            .Rewards(n).Bound = ReadBoolean()
+                            .Rewards(n).AttributeId = ReadInt32()
+                            .Rewards(n).UpgradeId = ReadInt32()
                         Next
                     End If
 
@@ -178,7 +178,7 @@ Public Sub LoadAchievements()
         End If
     End If
 
-    Call CloseFileHandler(Index)
+    Call CloseFileHandler
 
 End Sub
 

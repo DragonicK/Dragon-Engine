@@ -38,8 +38,8 @@ Public Sub LoadNotificationIcons()
     Dim i As Long
     Index = GetFileHandler(App.Path & "\Data Files\Data\Icons.dat")
 
-    If Index > 0 Then
-        MaximumNotificationIcons = ReadInt32(Index)
+    If Index = 0 Then
+        MaximumNotificationIcons = ReadInt32()
 
         If MaximumNotificationIcons > 0 Then
             ReDim NotificationIcon(1 To MaximumNotificationIcons)
@@ -47,15 +47,15 @@ Public Sub LoadNotificationIcons()
             For i = 1 To MaximumNotificationIcons
 
                 With NotificationIcon(i)
-                    .Id = ReadInt32(Index)
+                    .Id = ReadInt32()
                     .Name = String(512, vbNullChar)
                     .Description = String(512, vbNullChar)
 
-                    Call ReadString(Index, .Name)
-                    Call ReadString(Index, .Description)
+                    Call ReadString(.Name)
+                    Call ReadString(.Description)
 
-                    .IconId = ReadInt32(Index)
-                    .IconType = ReadInt32(Index)
+                    .IconId = ReadInt32()
+                    .IconType = ReadInt32()
 
                     .Name = Replace$(.Name, vbNullChar, vbNullString)
                     .Description = Replace$(.Description, vbNullChar, vbNullString)
@@ -65,6 +65,6 @@ Public Sub LoadNotificationIcons()
         End If
     End If
 
-    Call CloseFileHandler(Index)
+    Call CloseFileHandler
 End Sub
 

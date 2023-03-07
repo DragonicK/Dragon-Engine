@@ -1,37 +1,42 @@
 #pragma once
 
-using namespace System::IO;
-using namespace System::Collections::Generic;
+#include <Windows.h>
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include <locale>
+#include <codecvt>
+#include <string>
 
 namespace Dragon::Wrapper::IO {
 
-	ref class FileManager {
+	class FileManager {
 	public:
-		static property FileManager^ Instance {
-			FileManager^ get() {
-				return m_Instance;
-			}
+		static FileManager& Instance() {
+			static FileManager instance;
+
+			return instance;
 		}
 
-		FileManager();
+		int Open(LPCSTR file);
+		void Close();
 
-		int Open(System::String^ file);
-		bool Close(int index);
+		char ReadByte();
+		int16_t ReadInt16();
+		int32_t ReadInt32();
+		float ReadSingle();
+		bool ReadBoolean();
 
-		System::String^ ReadString(int index);
-		unsigned char ReadByte(int index);
-		array<unsigned char>^ ReadBytes(int index, int length);
-		short ReadInt16(int index);
-		int ReadInt32(int index);
-		float ReadSingle(int index);
-		bool ReadBoolean(int index);
+		std::wstring ReadString();
+		std::vector<unsigned char> ReadBytes(int length);
 
 	private:
-		static FileManager^ m_Instance = gcnew FileManager;
+		std::ifstream stream;
 
-		Dictionary<int, FileStream^> streams;
-		Dictionary<int, BinaryReader^> readers;
+		FileManager() {} 
+		FileManager(const FileManager&) = delete; 
+		FileManager& operator=(const FileManager&) = delete; 
 
-		bool IsValidIndex(int index);
+		int Read7BitEncodedInt();
 	};
 }

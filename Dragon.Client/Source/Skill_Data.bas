@@ -109,78 +109,78 @@ Public Sub LoadSkills()
 
     Index = GetFileHandler(App.Path & "\Data Files\Data\Skills.dat")
 
-    If Index > 0 Then
+    If Index = 0 Then
         Dim i As Long
         Dim n As Long
         Dim Length As Long
 
-        MaximumSkills = ReadInt32(Index)
+        MaximumSkills = ReadInt32()
 
         If MaximumSkills > 0 Then
             ReDim Skill(1 To MaximumSkills)
 
             For i = 1 To MaximumSkills
-                Skill(i).Id = ReadInt32(Index)
+                Skill(i).Id = ReadInt32()
                 
                 Name = String(255, vbNullChar)
                 Description = String(1024, vbNullChar)
                 Sound = String(255, vbNullChar)
                 
-                Call ReadString(Index, Name)
-                Call ReadString(Index, Description)
-                Call ReadString(Index, Sound)
+                Call ReadString(Name)
+                Call ReadString(Description)
+                Call ReadString(Sound)
                 
                 Skill(i).Name = Replace$(Name, vbNullChar, vbNullString)
                 Skill(i).Description = Replace$(Description, vbNullChar, vbNullString)
                 Skill(i).Sound = Replace$(Sound, vbNullChar, vbNullString)
-                Skill(i).IconId = ReadInt32(Index)
-                Skill(i).Type = ReadInt32(Index)
-                Skill(i).AttributeType = ReadInt32(Index)
-                Skill(i).TargetType = ReadInt32(Index)
-                Skill(i).ElementType = ReadInt32(Index)
-                Skill(i).CostType = ReadInt32(Index)
-                Skill(i).EffectType = ReadInt32(Index)
-                Skill(i).MaximumLevel = ReadInt32(Index)
-                Skill(i).Amplification = ReadSingle(Index)
-                Skill(i).AmplificationPerLevel = ReadSingle(Index)
-                Skill(i).Range = ReadInt32(Index)
-                Skill(i).Cost = ReadInt32(Index)
-                Skill(i).CostPerLevel = ReadInt32(Index)
-                Skill(i).CastTime = ReadInt32(Index)
-                Skill(i).Cooldown = ReadInt32(Index)
-                Skill(i).StunDuration = ReadInt32(Index)
-                Skill(i).CastAnimationId = ReadInt32(Index)
-                Skill(i).AttackAnimationId = ReadInt32(Index)
-                Skill(i).PassiveSkillId = ReadInt32(Index)
+                Skill(i).IconId = ReadInt32()
+                Skill(i).Type = ReadInt32()
+                Skill(i).AttributeType = ReadInt32()
+                Skill(i).TargetType = ReadInt32()
+                Skill(i).ElementType = ReadInt32()
+                Skill(i).CostType = ReadInt32()
+                Skill(i).EffectType = ReadInt32()
+                Skill(i).MaximumLevel = ReadInt32()
+                Skill(i).Amplification = ReadSingle()
+                Skill(i).AmplificationPerLevel = ReadSingle()
+                Skill(i).Range = ReadInt32()
+                Skill(i).Cost = ReadInt32()
+                Skill(i).CostPerLevel = ReadInt32()
+                Skill(i).CastTime = ReadInt32()
+                Skill(i).Cooldown = ReadInt32()
+                Skill(i).StunDuration = ReadInt32()
+                Skill(i).CastAnimationId = ReadInt32()
+                Skill(i).AttackAnimationId = ReadInt32()
+                Skill(i).PassiveSkillId = ReadInt32()
 
-                Length = ReadInt32(Index)
+                Length = ReadInt32()
                 Skill(i).EffectCount = Length
 
                 If Length > 0 Then
                     ReDim Skill(i).Effect(1 To Length)
 
                     For n = 1 To Length
-                        Skill(i).Effect(n).EffectType = ReadInt32(Index)
-                        Skill(i).Effect(n).VitalType = ReadInt32(Index)
-                        Skill(i).Effect(n).TargetType = ReadInt32(Index)
-                        Skill(i).Effect(n).Direction = ReadInt32(Index)
-                        Skill(i).Effect(n).Damage = ReadInt32(Index)
-                        Skill(i).Effect(n).DamagePerLevel = ReadInt32(Index)
-                        Skill(i).Effect(n).Duration = ReadInt32(Index)
-                        Skill(i).Effect(n).Interval = ReadInt32(Index)
-                        Skill(i).Effect(n).StunDuration = ReadInt32(Index)
-                        Skill(i).Effect(n).MapId = ReadInt32(Index)
-                        Skill(i).Effect(n).X = ReadInt32(Index)
-                        Skill(i).Effect(n).Y = ReadInt32(Index)
-                        Skill(i).Effect(n).EffectId = ReadInt32(Index)
-                        Skill(i).Effect(n).Trigger = ReadInt32(Index)
+                        Skill(i).Effect(n).EffectType = ReadInt32()
+                        Skill(i).Effect(n).VitalType = ReadInt32()
+                        Skill(i).Effect(n).TargetType = ReadInt32()
+                        Skill(i).Effect(n).Direction = ReadInt32()
+                        Skill(i).Effect(n).Damage = ReadInt32()
+                        Skill(i).Effect(n).DamagePerLevel = ReadInt32()
+                        Skill(i).Effect(n).Duration = ReadInt32()
+                        Skill(i).Effect(n).Interval = ReadInt32()
+                        Skill(i).Effect(n).StunDuration = ReadInt32()
+                        Skill(i).Effect(n).MapId = ReadInt32()
+                        Skill(i).Effect(n).X = ReadInt32()
+                        Skill(i).Effect(n).Y = ReadInt32()
+                        Skill(i).Effect(n).EffectId = ReadInt32()
+                        Skill(i).Effect(n).Trigger = ReadInt32()
                     Next
                 End If
             Next
         End If
     End If
 
-    Call CloseFileHandler(Index)
+    Call CloseFileHandler
 
 End Sub
 
