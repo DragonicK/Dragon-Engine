@@ -24,9 +24,11 @@ Private ChatSmallWindowIndex As Long
 
 Public Sub CreateWindow_ChatSmall()
     ' Create window
-    CreateWindow "winChatSmall", "", zOrder_Win, 8, 438, 0, 0, 0, False, , , , , , , , , , , , , , , , False, , GetAddress(AddressOf OnDraw_ChatSmall), , True
+    CreateWindow "winChatSmall", "", zOrder_Win, 12, 438, 0, 0, 0, False, , , , , , , , , , , , , , , , False, , GetAddress(AddressOf OnDraw_ChatSmall), , True
+    
     ' Set the index for spawning controls
     zOrder_Con = 1
+    
     ' Chat Label
     CreateLabel WindowCount, "lblMsg", 12, 127, 286, 25, "Pressione 'Enter' para abrir o chat.", FontRegular, Grey
     
@@ -36,13 +38,13 @@ End Sub
 Private Sub OnDraw_ChatSmall()
     Dim xO As Long, yO As Long
  
-    If actChatWidth < 160 Then actChatWidth = 160
+    If actChatWidth < 160 Then actChatWidth = 240
     If actChatHeight < 10 Then actChatHeight = 10
 
     xO = Windows(ChatSmallWindowIndex).Window.Left + 10
     yO = ScreenHeight - 16 - actChatHeight - 8
 
-    ' draw the background
+    ' Draw the background
     RenderDesign DesignTypes.DesignChatSmallShadow, xO, yO, actChatWidth, actChatHeight
     
     ' call the chat render
@@ -50,28 +52,45 @@ Private Sub OnDraw_ChatSmall()
 End Sub
 
 Public Sub CreateWindow_Chat()
+    Dim xO As Long
+    Dim winWidth As Long
+    Dim winHeight As Long
+    Dim Padding As Long
+    
 ' Create window
-    CreateWindow "winChat", "", zOrder_Win, 8, 422, 352, 152, 0, False, , , , , , , , , , , , , , , , False
+    CreateWindow "winChat", "", zOrder_Win, 10, ScreenHeight - 194, 368, 182, 0, False, , , , , , , , , , , , , , , , False
 
     ' Set the index for spawning controls
     zOrder_Con = 1
+    
+    xO = Windows(WindowCount).Window.Left
+    winWidth = Windows(WindowCount).Window.Width
+    winHeight = Windows(WindowCount).Window.Height
+    Padding = 28
+    
+    ' Bakground Chat
+    CreatePictureBox WindowCount, "", 0, Padding, winWidth, winHeight - Padding - 30, , , , , , , , DesignTypes.DesignWindowWithoutTopBar, DesignTypes.DesignWindowWithoutTopBar, DesignTypes.DesignWindowWithoutTopBar
 
-    ' Channel boxes
-    CreateCheckbox WindowCount, "chkGame", 10, 2, 49, 23, 1, "Jogo", FontRegular, , , , , DesignTypes.DesignCheckBoxChat, , , GetAddress(AddressOf CheckBoxChat_Game)
-    CreateCheckbox WindowCount, "chkMap", 60, 2, 49, 23, 1, "Mapa", FontRegular, , , , , DesignTypes.DesignCheckBoxChat, , , GetAddress(AddressOf CheckBoxChat_Map)
-    CreateCheckbox WindowCount, "chkGlobal", 110, 2, 49, 23, 1, "Global", FontRegular, , , , , DesignTypes.DesignCheckBoxChat, , , GetAddress(AddressOf CheckBoxChat_Global)
-    CreateCheckbox WindowCount, "chkParty", 160, 2, 49, 23, 1, "Grupo", FontRegular, , , , , DesignTypes.DesignCheckBoxChat, , , GetAddress(AddressOf CheckBoxChat_Party)
-    CreateCheckbox WindowCount, "chkGuild", 210, 2, 49, 23, 1, "Guild", FontRegular, , , , , DesignTypes.DesignCheckBoxChat, , , GetAddress(AddressOf CheckBoxChat_Guild)
-    CreateCheckbox WindowCount, "chkPrivate", 260, 2, 49, 23, 1, "Privado", FontRegular, , , , , DesignTypes.DesignCheckBoxChat, , , GetAddress(AddressOf CheckBoxChat_Private)
-    ' Blank picturebox - ondraw wrapper
+    ' Channel Buttons
+    CreateCheckbox WindowCount, "chkGame", (72 + 2) * 0, 0, 72, 26, 1, "Jogo", FontRegular, , , , , DesignTypes.DesignCheckBoxChat, , , GetAddress(AddressOf CheckBoxChat_Game)
+    CreateCheckbox WindowCount, "chkMap", (72 + 2) * 1, 0, 72, 26, 1, "Mapa", FontRegular, , , , , DesignTypes.DesignCheckBoxChat, , , GetAddress(AddressOf CheckBoxChat_Map)
+    CreateCheckbox WindowCount, "chkGlobal", (72 + 2) * 2, 0, 72, 26, 1, "Global", FontRegular, , , , , DesignTypes.DesignCheckBoxChat, , , GetAddress(AddressOf CheckBoxChat_Global)
+    CreateCheckbox WindowCount, "chkParty", (72 + 2) * 3, 0, 72, 26, 1, "Grupo", FontRegular, , , , , DesignTypes.DesignCheckBoxChat, , , GetAddress(AddressOf CheckBoxChat_Party)
+    'CreateCheckbox WindowCount, "chkGuild", 74, 0, 73, 26, 1, "Guild", FontRegular, , , , , DesignTypes.DesignCheckBoxChat, , , GetAddress(AddressOf CheckBoxChat_Guild)
+    CreateCheckbox WindowCount, "chkPrivate", (72 + 2) * 4, 0, 72, 26, 1, "Privado", FontRegular, , , , , DesignTypes.DesignCheckBoxChat, , , GetAddress(AddressOf CheckBoxChat_Private)
+    
+    ' Text
     CreatePictureBox WindowCount, "picNull", 0, 0, 0, 0, , , , , , , , , , , , , , , , GetAddress(AddressOf OnDraw_Chat)
-    ' Chat button
-    CreateButton WindowCount, "btnChat", 296, 124 + 16, 48, 20, "Dizer", FontRegular, , , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf ButtonSay_Click)
+    
     ' Chat Textbox
-    CreateTextbox WindowCount, "txtChat", 12, 127 + 16, 286, 25, , Fonts.FontRegular
-    ' buttons
-    CreateButton WindowCount, "btnUp", 328, 28, 11, 13, , , , , , , Tex_GUI(3), Tex_GUI(4), Tex_GUI(5), , , , , , GetAddress(AddressOf ButtonChat_Up)
-    CreateButton WindowCount, "btnDown", 327, 122, 11, 13, , , , , , , Tex_GUI(6), Tex_GUI(7), Tex_GUI(8), , , , , , GetAddress(AddressOf ButtonChat_Down)
+    CreateTextbox WindowCount, "txtChat", 0, winHeight - 30, winWidth, 30, , Fonts.FontRegular, , Alignment.AlignLeft, , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, , , , , , , 8, 8
+    
+    ' Chat Button
+    CreateButton WindowCount, "btnChat", 272, winHeight - 28, 94, 26, "Dizer", FontRegular, , , , , , , , DesignTypes.DesignGreen, DesignTypes.DesignGreenHover, DesignTypes.DesignGreenClick, , , GetAddress(AddressOf ButtonSay_Click)
+    
+    ' Scrool Buttons
+    CreateButton WindowCount, "btnUp", winWidth - 24, 38, 12, 13, , , , , , , Tex_GUI(3), Tex_GUI(4), Tex_GUI(5), , , , , , GetAddress(AddressOf ButtonChat_Up)
+    CreateButton WindowCount, "btnDown", winWidth - 24, 128, 12, 13, , , , , , , Tex_GUI(6), Tex_GUI(7), Tex_GUI(8), , , , , , GetAddress(AddressOf ButtonChat_Down)
 
     ' Custom Handlers for mouse up
     Windows(WindowCount).Controls(GetControlIndex("winChat", "btnUp")).EntityCallBack(entStates.MouseUp) = GetAddress(AddressOf ButtonChat_Up_MouseUp)
@@ -79,8 +98,7 @@ Public Sub CreateWindow_Chat()
 
     ' Set the active control
     SetActiveControl WindowCount, GetControlIndex("winChat", "txtChat")
-    
-    Windows(WindowCount).Controls(GetControlIndex("winChat", "txtChat")).TextLimit = 50
+    Windows(WindowCount).Controls(GetControlIndex("winChat", "txtChat")).TextLimit = 35
 
     ' sort out the tabs
     With Windows(WindowCount)
@@ -88,7 +106,7 @@ Public Sub CreateWindow_Chat()
         .Controls(GetControlIndex("winChat", "chkMap")).Value = Options.ChannelState(ChatChannel.ChannelMap)
         .Controls(GetControlIndex("winChat", "chkGlobal")).Value = Options.ChannelState(ChatChannel.ChannelGlobal)
         .Controls(GetControlIndex("winChat", "chkParty")).Value = Options.ChannelState(ChatChannel.ChannelParty)
-        .Controls(GetControlIndex("winChat", "chkGuild")).Value = Options.ChannelState(ChatChannel.ChannelGuild)
+        '.Controls(GetControlIndex("winChat", "chkGuild")).Value = Options.ChannelState(ChatChannel.ChannelGuild)
         .Controls(GetControlIndex("winChat", "chkPrivate")).Value = Options.ChannelState(ChatChannel.ChannelPrivate)
     End With
     
@@ -101,7 +119,7 @@ Private Sub RenderChat()
 
     ' set the position
     xO = 19
-    yO = ScreenHeight - 41    '545 + 14
+    yO = ScreenHeight - 46
 
     ' loop through chat
     rLines = 1
@@ -181,16 +199,6 @@ Public Sub AddText(ByVal Text As String, ByVal Color As ColorType, Optional ByVa
 End Sub
 
 Private Sub OnDraw_Chat()
-    Dim xO As Long, yO As Long
- 
-    xO = Windows(WindowIndex).Window.Left
-    yO = Windows(WindowIndex).Window.Top + 16
-
-    ' draw the box
-    RenderDesign DesignTypes.DesignOpenChat, xO, yO, 352, 152
-    ' draw the input box
-    RenderDesign DesignTypes.DesignTextBox, xO + 7, yO + 123, 352, 22
-    ' call the chat render
     RenderChat
 End Sub
 
@@ -298,3 +306,20 @@ Public Sub ScrollChatBox(ByVal Direction As Byte)
         End If
     End If
 End Sub
+
+Public Sub Resize_WinChat()
+    Dim WindowChatIndex As Long
+    Dim WindowSmallChatIndex As Long
+    
+    ' Get The Window
+    WindowChatIndex = GetWindowIndex("winChat")
+    WindowSmallChatIndex = GetWindowIndex("winChatSmall")
+    
+    ' Position Chat
+    Windows(WindowChatIndex).Window.Top = ScreenHeight - 194
+    
+    ' Postition Chat Small
+    Windows(WindowSmallChatIndex).Window.Top = ScreenHeight - 162
+    
+End Sub
+
