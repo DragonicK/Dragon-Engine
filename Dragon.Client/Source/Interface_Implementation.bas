@@ -674,13 +674,12 @@ Public Sub RenderEntity(winNum As Long, entNum As Long)
                 If .Value = 0 Then .Alpha = 150 Else .Alpha = 255
 
                 ' Render box
-                RenderTexture Tex_GUI(36), .Left + xO, .Top + yO, 0, 0, 49, 23, 49, 23, DX8Colour(White, .Alpha)
+                'RenderTexture Tex_GUI(36), .Left + xO, .Top + yO, 0, 0, 49, 23, 49, 23, DX8Colour(White, .Alpha)
+                RenderDesign DesignTypes.DesignBackgroundOval, .Left + xO, .Top + yO, .Width, .Height, D3DColorARGB(255, 255, 255, 255)
 
                 ' Render text
-                Left = .Left + (49 / 2) - (TextWidth(Font(.Font), .Text) / 2) + xO
-
-                ' Render text
-                RenderText Font(.Font), .Text, Left, .Top + yO + 4, .TextColour, .Alpha
+                Left = .Left + (.Width / 2) - (TextWidth(Font(.Font), .Text) / 2)
+                RenderText Font(.Font), Trim$(.Text), Left + xO + 2, .Top + yO + 5, .TextColour, .Alpha
             End Select
 
             ' Render ComboBoxes

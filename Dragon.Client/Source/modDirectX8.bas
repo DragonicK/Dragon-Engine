@@ -1063,11 +1063,7 @@ Public Sub ResizeGUI()
     ' move hotbar
     Windows(GetWindowIndex("winHotbar")).Window.Left = ScreenWidth - 430    ' (ScreenWidth / 2) - (Windows(GetWindowIndex("winHotbar")).Window.Width / 2) ' ScreenWidth - 430
     Windows(GetWindowIndex("winHotbar")).Window.Top = 15    ' ScreenHeight - 50
-        
-    ' move chat
-    Windows(GetWindowIndex("winChat")).Window.Top = ScreenHeight - 178
-    Windows(GetWindowIndex("winChatSmall")).Window.Top = ScreenHeight - 162
-    
+
     ' move menu
     ' Windows(GetWindowIndex("winMenu")).Window.Left = ScreenWidth - 236
     ' Windows(GetWindowIndex("winMenu")).Window.Top = ScreenHeight - 37
@@ -1115,11 +1111,12 @@ Public Sub ResizeGUI()
     CentraliseWindow GetWindowIndex("winCraft")
     CentraliseWindow GetWindowIndex("winAchievement")
     CentraliseWindow GetWindowIndex("winLoot")
-    CentraliseWindow GetWindowIndex("winLoginFooter"), ScreenHeight - 35
+    
     
     Resize_WinModelFooter
     Resize_WinLoginFooter
     Resize_WinLoading
+    Resize_WinChat
 
 End Sub
 
