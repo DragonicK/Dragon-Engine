@@ -1486,11 +1486,6 @@ Public Sub CreateWindow_Bars()
     CreateLabel WindowCount, "lblEXP", 15, 48, 209, 12, "0/0", FontRegular, White, Alignment.AlignCenter
 End Sub
 
-Public Sub CreateWindow_QuickSlot()
-
-' Create window
-    CreateWindow "winHotbar", "", zOrder_Win, 372, 10, 418, 36, 0, , , , , , , , , , , , , GetAddress(AddressOf QuickSlot_MouseMove), GetAddress(AddressOf QuickSlot_MouseDown), GetAddress(AddressOf QuickSlot_MouseMove), GetAddress(AddressOf QuickSlot_DblClick), False, False, GetAddress(AddressOf DrawHotbar)
-End Sub
 
 Public Sub CreateWindow_Description()
 
