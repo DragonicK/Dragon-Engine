@@ -1,4 +1,4 @@
-Attribute VB_Name = "modTypes"
+Attribute VB_Name = "Character_Data"
 Option Explicit
 
 Public Player(1 To MaxPlayers) As PlayerRec
@@ -48,6 +48,3 @@ Private Type PlayerRec
     SavedX As Long
     SavedY As Long
 End Type
-
-
-

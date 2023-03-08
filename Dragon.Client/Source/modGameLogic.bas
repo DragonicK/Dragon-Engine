@@ -1,37 +1,7 @@
 Attribute VB_Name = "modGameLogic"
 Option Explicit
 
-Public Function IsHotbar(StartX As Long, StartY As Long) As Long
-    Dim TempRec As RECT
-    Dim i As Long
 
-    For i = 1 To MaximumQuickSlot
-        If QuickSlot(i).Slot Then
-            With TempRec
-                .Top = StartY + HotbarTop
-                .Bottom = .Top + PIC_Y
-                .Left = StartX + HotbarLeft + ((i - 1) * HotbarOffsetX)
-                .Right = .Left + PIC_X
-            End With
-
-            If currMouseX >= TempRec.Left And currMouseX <= TempRec.Right Then
-                If currMouseY >= TempRec.Top And currMouseY <= TempRec.Bottom Then
-                    IsHotbar = i
-                    Exit Function
-                End If
-            End If
-        End If
-    Next
-End Function
-
-Public Sub UseItem()
-' Check for subscript out of range
-    If InventoryItemSelected < 1 Or InventoryItemSelected > MaxInventoryPerTab Then
-        Exit Sub
-    End If
-
-    Call SendUseItem(InventoryItemSelected)
-End Sub
 
 Public Function ConvertCurrency(ByVal Amount As Long) As String
 

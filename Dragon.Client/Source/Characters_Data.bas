@@ -10,3 +10,5 @@ Public CharMinutes(1 To MAX_CHARS) As Long
 Public CharSeconds(1 To MAX_CHARS) As Long
 Public CharDate(1 To MAX_CHARS) As Date
 Public CharEnabled(1 To MAX_CHARS) As Boolean
+
+

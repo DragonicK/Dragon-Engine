@@ -49,3 +49,29 @@ Public Sub DrawHotbar()
         RenderText Font(Fonts.FontRegular), sS, xO + 4, yO + 19, White
     Next
 End Sub
+
+Public Function IsHotbar(StartX As Long, StartY As Long) As Long
+    Dim TempRec As RECT
+    Dim i As Long
+
+    For i = 1 To MaximumQuickSlot
+        If QuickSlot(i).Slot Then
+            With TempRec
+                .Top = StartY + HotbarTop
+                .Bottom = .Top + PIC_Y
+                .Left = StartX + HotbarLeft + ((i - 1) * HotbarOffsetX)
+                .Right = .Left + PIC_X
+            End With
+
+            If currMouseX >= TempRec.Left And currMouseX <= TempRec.Right Then
+                If currMouseY >= TempRec.Top And currMouseY <= TempRec.Bottom Then
+                    IsHotbar = i
+                    Exit Function
+                End If
+            End If
+        End If
+    Next
+End Function
+
+
+
