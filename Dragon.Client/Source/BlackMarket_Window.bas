@@ -21,14 +21,14 @@ Public Sub CreateWindow_CashShop()
     Dim i As Long
 
     ' Create window
-    CreateWindow "winCashShop", "MERCADO NEGRO", zOrder_Win, 0, 0, 450, 410, 0, False, Fonts.FontRegular, , 2, 7, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar
+    CreateWindow "winCashShop", "MERCADO NEGRO", zOrder_Win, 0, 0, 450, 410, 0, False, Fonts.FontRegular, , 2, 7, DesignTypes.DesignWindowWithTopBarAndNavBar, DesignTypes.DesignWindowWithTopBarAndNavBar, DesignTypes.DesignWindowWithTopBarAndNavBar
     ' Centralise it
     CentraliseWindow WindowCount
     ' Set the index for spawning controls
     zOrder_Con = 1
     ' Close button
     CreateButton WindowCount, "btnClose", Windows(WindowCount).Window.Width - 33, 11, 22, 22, , , , , , , Tex_GUI(TextureControl_CloseNormal), Tex_GUI(TextureControl_CloseHover), Tex_GUI(TextureControl_CloseClick), , , , , , GetAddress(AddressOf ButtonMenu_CashShop)
-    CreateLabel WindowCount, "lblBalance", 0, 60, 450, 22, "Meu Balanço: $ 195,454.011", FontRegular, Gold, Alignment.AlignCenter
+    CreateLabel WindowCount, "lblBalance", 0, 50, 450, 22, "MEU BALANÇO: $ 195,454.011", FontRegular, Gold, Alignment.AlignCenter
 
     'CreatePictureBox WindowCount, "picBack", 20, LeftListY + 45, 364, 290, , , , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox
 
@@ -565,7 +565,7 @@ Public Sub UpdateCashControlValue()
         Text = "0"
     End If
 
-    Windows(WindowIndex).Controls(GetControlIndex("winCashShop", "lblBalance")).Text = "Meu Balanço: $ " & Text
+    Windows(WindowIndex).Controls(GetControlIndex("winCashShop", "lblBalance")).Text = "MEU BALANÇO: $ " & Text
 End Sub
 
 Public Sub UpdateBlackMarketItemList()

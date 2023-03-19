@@ -60,7 +60,7 @@ Private Descriptions As RequirementDescriptionRec
 Public Sub CreateWindow_Achievement()
     Dim i As Long
 
-    CreateWindow "winAchievement", "CONQUISTAS", zOrder_Win, 0, 0, 630, 360, 0, False, Fonts.FontRegular, , 2, 7, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, , , , , , , , , , , GetAddress(AddressOf RenderAchievement)
+    CreateWindow "winAchievement", "CONQUISTAS", zOrder_Win, 0, 0, 630, 360, 0, False, Fonts.FontRegular, , 2, 7, DesignTypes.DesignWindowWithTopBarAndNavBar, DesignTypes.DesignWindowWithTopBarAndNavBar, DesignTypes.DesignWindowWithTopBarAndNavBar, , , , , , , , , , , GetAddress(AddressOf RenderAchievement)
     ' Centralise it
     CentraliseWindow WindowCount
 

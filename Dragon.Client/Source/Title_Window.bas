@@ -42,7 +42,7 @@ End Sub
 
 Public Sub CreateWindow_Title()
 ' Create the window
-    CreateWindow "winTitle", "TÍTULOS", zOrder_Win, 0, 0, 208, 520, 0, , Fonts.FontRegular, , 3, 5, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, , , , , , , , , , , GetAddress(AddressOf RenderWindowTitle)
+    CreateWindow "winTitle", "TÍTULOS", zOrder_Win, 0, 0, 208, 520, 0, , Fonts.FontRegular, , 3, 5, DesignTypes.DesignWindowWithTopBarAndDoubleNavBar, DesignTypes.DesignWindowWithTopBarAndDoubleNavBar, DesignTypes.DesignWindowWithTopBarAndDoubleNavBar, , , , , , , , , , , GetAddress(AddressOf RenderWindowTitle)
 
     ' Centralise it
     CentraliseWindow WindowCount
@@ -54,7 +54,7 @@ Public Sub CreateWindow_Title()
     CreateButton WindowCount, "btnClose", Windows(WindowCount).Window.Width - 33, 11, 22, 22, , , , , , , Tex_GUI(TextureControl_CloseNormal), Tex_GUI(TextureControl_CloseHover), Tex_GUI(TextureControl_CloseClick), , , , , , GetAddress(AddressOf Button_CloseTitle)
 
     ' Labels
-    CreateLabel WindowCount, "lblTitleCount", 0, 49, 205, , "Quantidade: 0/" & MaxPlayerTitles, FontRegular, White, Alignment.AlignCenter
+    CreateLabel WindowCount, "lblTitleCount", 0, 49, 205, , "Títulos: 0/" & MaxPlayerTitles, FontRegular, Gold, Alignment.AlignCenter
     CreateLabel WindowCount, "lblTitleActivated", 0, 76, 205, , "Nenhum", FontRegular, ColorType.White, Alignment.AlignCenter
 
     ' PictureBox
@@ -388,11 +388,11 @@ Public Sub ClearTitleWindow()
 
     Windows(WindowIndex).Controls(GetControlIndex("winTitle", "lblTitleActivated")).Text = "Nenhum"
     Windows(WindowIndex).Controls(GetControlIndex("winTitle", "lblTitleActivated")).TextColour = White
-    Windows(WindowIndex).Controls(GetControlIndex("winTitle", "lblTitleCount")).Text = "Quantidade: 0/" & MaxPlayerTitles
+    Windows(WindowIndex).Controls(GetControlIndex("winTitle", "lblTitleCount")).Text = "Títulos: 0/" & MaxPlayerTitles
 End Sub
 
 Public Sub UpdateTitleCount(ByVal TitleCount As Long)
-    Windows(WindowIndex).Controls(GetControlIndex("winTitle", "lblTitleCount")).Text = "Quantidade: " & TitleCount & "/" & MaxPlayerTitles
+    Windows(WindowIndex).Controls(GetControlIndex("winTitle", "lblTitleCount")).Text = "Títulos: " & TitleCount & "/" & MaxPlayerTitles
 End Sub
 
 Public Sub UpdateActiveTitle(ByVal TitleNum As Long)

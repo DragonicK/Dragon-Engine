@@ -61,7 +61,7 @@ Private Const Sended As String = "Data de Envio: "
 Public Sub CreateWindow_Mail()
     Dim i As Long
     ' Create window
-    CreateWindow "winMail", "CORREIO", zOrder_Win, 0, 0, 400, 460, 0, False, Fonts.FontRegular, , 2, 7, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, , , , , , GetAddress(AddressOf WindowMail_MouseDown), , , , , GetAddress(AddressOf Draw_Mail)
+    CreateWindow "winMail", "CORREIO", zOrder_Win, 0, 0, 400, 460, 0, False, Fonts.FontRegular, , 2, 7, DesignTypes.DesignWindowWithTopBarAndNavBar, DesignTypes.DesignWindowWithTopBarAndNavBar, DesignTypes.DesignWindowWithTopBarAndNavBar, , , , , , GetAddress(AddressOf WindowMail_MouseDown), , , , , GetAddress(AddressOf Draw_Mail)
     ' Centralise it
     CentraliseWindow WindowCount
     ' Set the index for spawning controls
@@ -70,7 +70,7 @@ Public Sub CreateWindow_Mail()
     ' Close button
     CreateButton WindowCount, "btnClose", Windows(WindowCount).Window.Width - 33, 11, 22, 22, , , , , , , Tex_GUI(TextureControl_CloseNormal), Tex_GUI(TextureControl_CloseHover), Tex_GUI(TextureControl_CloseClick), , , , , , GetAddress(AddressOf ButtonMenu_Mail)
 
-    CreateButton WindowCount, "btnRead", 0, 42, 200, 26, "LER", FontRegular, Gold, , , , , , , , , , , , GetAddress(AddressOf Button_ShowRead)
+    CreateButton WindowCount, "btnRead", 0, 42, 200, 26, "LER", FontRegular, Green, , , , , , , , , , , , GetAddress(AddressOf Button_ShowRead)
     CreateButton WindowCount, "btnWrite", 200, 42, 200, 26, "ESCREVER", FontRegular, , , , , , , , , , , , , GetAddress(AddressOf Button_ShowWrite)
 
     ' Read Mail
@@ -626,9 +626,9 @@ Private Sub Button_ShowRead()
         Exit Sub
     End If
 
-    Windows(WindowIndex).Controls(ButtonReadIndex).TextColour = Gold
-    Windows(WindowIndex).Controls(ButtonReadIndex).TextColourHover = Gold
-    Windows(WindowIndex).Controls(ButtonReadIndex).TextColourClick = Gold
+    Windows(WindowIndex).Controls(ButtonReadIndex).TextColour = Green
+    Windows(WindowIndex).Controls(ButtonReadIndex).TextColourHover = Green
+    Windows(WindowIndex).Controls(ButtonReadIndex).TextColourClick = Green
 
     Windows(WindowIndex).Controls(ButtonWriteIndex).TextColour = White
     Windows(WindowIndex).Controls(ButtonWriteIndex).TextColourHover = White
@@ -649,9 +649,9 @@ Private Sub Button_ShowWrite()
     Windows(WindowIndex).Controls(ButtonReadIndex).TextColourHover = White
     Windows(WindowIndex).Controls(ButtonReadIndex).TextColourClick = White
 
-    Windows(WindowIndex).Controls(ButtonWriteIndex).TextColour = Gold
-    Windows(WindowIndex).Controls(ButtonWriteIndex).TextColourHover = Gold
-    Windows(WindowIndex).Controls(ButtonWriteIndex).TextColourClick = Gold
+    Windows(WindowIndex).Controls(ButtonWriteIndex).TextColour = Green
+    Windows(WindowIndex).Controls(ButtonWriteIndex).TextColourHover = Green
+    Windows(WindowIndex).Controls(ButtonWriteIndex).TextColourClick = Green
 
     SendMailItemInventoryIndex = 0
     SendMailItemValue = 1

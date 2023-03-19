@@ -21,7 +21,7 @@ Public Sub CreateWindow_Skills()
     SetSkillPageCount
 
     ' Create window
-    CreateWindow "winSkills", "HABILIDADES", zOrder_Win, 0, 0, 300, 410, 0, False, Fonts.FontRegular, , 2, 7, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, , , , , GetAddress(AddressOf Skills_MouseMove), GetAddress(AddressOf Skills_MouseDown), GetAddress(AddressOf Skills_MouseMove), GetAddress(AddressOf Skills_DblClick), , , GetAddress(AddressOf DrawSkills)
+    CreateWindow "winSkills", "HABILIDADES", zOrder_Win, 0, 0, 300, 410, 0, False, Fonts.FontRegular, , 2, 7, DesignTypes.DesignWindowWithTopBarAndNavBar, DesignTypes.DesignWindowWithTopBarAndNavBar, DesignTypes.DesignWindowWithTopBarAndNavBar, , , , , GetAddress(AddressOf Skills_MouseMove), GetAddress(AddressOf Skills_MouseDown), GetAddress(AddressOf Skills_MouseMove), GetAddress(AddressOf Skills_DblClick), , , GetAddress(AddressOf DrawSkills)
     ' Centralise it
     CentraliseWindow WindowCount
 
@@ -177,9 +177,9 @@ Private Sub Button_ShowSkill()
     Windows(WindowIndex).Controls(BtnPassive).TextColourHover = White
     Windows(WindowIndex).Controls(BtnPassive).TextColourClick = White
 
-    Windows(WindowIndex).Controls(BtnActive).TextColour = Gold
-    Windows(WindowIndex).Controls(BtnActive).TextColourHover = Gold
-    Windows(WindowIndex).Controls(BtnActive).TextColourClick = Gold
+    Windows(WindowIndex).Controls(BtnActive).TextColour = Green
+    Windows(WindowIndex).Controls(BtnActive).TextColourHover = Green
+    Windows(WindowIndex).Controls(BtnActive).TextColourClick = Green
 End Sub
 
 Private Sub Button_ShowPassive()
@@ -196,9 +196,9 @@ Private Sub Button_ShowPassive()
     Windows(WindowIndex).Controls(BtnActive).TextColourHover = White
     Windows(WindowIndex).Controls(BtnActive).TextColourClick = White
 
-    Windows(WindowIndex).Controls(BtnPassive).TextColour = Gold
-    Windows(WindowIndex).Controls(BtnPassive).TextColourHover = Gold
-    Windows(WindowIndex).Controls(BtnPassive).TextColourClick = Gold
+    Windows(WindowIndex).Controls(BtnPassive).TextColour = Green
+    Windows(WindowIndex).Controls(BtnPassive).TextColourHover = Green
+    Windows(WindowIndex).Controls(BtnPassive).TextColourClick = Green
 End Sub
 
 Private Sub MovePageUp()

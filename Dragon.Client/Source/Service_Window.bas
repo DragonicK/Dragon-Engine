@@ -43,7 +43,7 @@ End Sub
 
 Public Sub CreateWindow_Services()
 ' Create window
-    CreateWindow "winServices", "SERVIÇO PREMIUM", zOrder_Win, 0, 0, 220, 505, 0, False, Fonts.FontRegular, , 2, 7, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, , , , , , , , , , , GetAddress(AddressOf RenderServices)
+    CreateWindow "winServices", "SERVIÇO PREMIUM", zOrder_Win, 0, 0, 220, 505, 0, False, Fonts.FontRegular, , 2, 7, DesignTypes.DesignWindowWithTopBarAndNavBar, DesignTypes.DesignWindowWithTopBarAndNavBar, DesignTypes.DesignWindowWithTopBarAndNavBar, , , , , , , , , , , GetAddress(AddressOf RenderServices)
     ' Centralise it
     CentraliseWindow WindowCount
 

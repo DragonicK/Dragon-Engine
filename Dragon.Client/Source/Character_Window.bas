@@ -69,7 +69,7 @@ Public Sub CreateWindow_Character()
     CreatePictureBox WindowCount, "btnGreyStat_5", 180, 332, 15, 15, False, , , , Tex_GUI(30), Tex_GUI(31), Tex_GUI(32)
     CreatePictureBox WindowCount, "btnGreyStat_6", 180, 352, 15, 15, False, , , , Tex_GUI(30), Tex_GUI(31), Tex_GUI(32)
 
-    CreateCheckbox WindowCount, "chkView", 30, 76, 35, , False, "VISUALIZAR EQUIPAMENTO", FontRegular, ColorType.Gold, , , , DesignTypes.DesignCheckBox, , , GetAddress(AddressOf Button_ViewVisibility)
+    CreateCheckbox WindowCount, "chkView", 30, 76, 32, 32, False, "VISUALIZAR EQUIPAMENTO", FontRegular, ColorType.Gold, , , , DesignTypes.DesignCheckBox, , , GetAddress(AddressOf Button_ViewVisibility)
 
     AttributePage = DefaultPage
 
