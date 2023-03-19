@@ -128,3 +128,49 @@ Public Sub Resize_WinLoginFooter()
     ' Realignment Label Widget
     Windows(WindowIndex).Controls(ControlIndex).Align = Alignment.AlignCenter
 End Sub
+
+Public Sub Login(Name As String, Password As String)
+    TcpInit AUTH_SERVER_IP, AUTH_SERVER_PORT
+
+    If ConnectToServer Then
+    HideWindows
+        Call SetStatus("Enviando informações de login.")
+        Call SendAuthLogin(Name, Password)
+        ' save details
+        If Options.SaveUser Then Options.Username = Name Else Options.Username = vbNullString
+        SaveOptions
+        Exit Sub
+    Else
+        ShowWindow GetWindowIndex("winLogin")
+        ShowWindow GetWindowIndex("winLoginFooter")
+        ShowDialogue "Problema de Conexao", "Não pode conectar-se ao servidor de login.", "Tente novamente mais tarde.", DialogueTypeAlert
+    End If
+
+End Sub
+
+Public Sub AttemptLogin()
+    TcpInit GameServerIp, GameServerPort
+
+    ' send login packet
+    If ConnectToServer Then
+        SendLogin Windows(GetWindowIndex("winLogin")).Controls(GetControlIndex("winLogin", "txtUser")).Text
+        Exit Sub
+    End If
+
+    If Not IsConnected Then
+        ShowWindow GetWindowIndex("winLogin")
+        ShowWindow GetWindowIndex("winLoginFooter")
+        ShowDialogue "Problema de Conexao", "Não pode conectar-se ao game server.", "Tente novamente depois.", DialogueTypeAlert
+    End If
+End Sub
+
+Public Function IsLoginLegal(ByVal Username As String, ByVal Password As String) As Boolean
+
+    If LenB(Trim$(Username)) >= 3 Then
+        If LenB(Trim$(Password)) >= 3 Then
+            IsLoginLegal = True
+        End If
+    End If
+
+End Function
+

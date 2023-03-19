@@ -137,3 +137,35 @@ Private Sub ButtonNewChar_Accept()
     End If
 
 End Sub
+
+Private Sub AddChar(Name As String, Sex As Long, Class As Long, Sprite As Long)
+
+    If ConnectToServer Then
+        HideWindows
+        Call SetStatus("Enviando informações do personagem.")
+        Call SendAddChar(Name, Sex, Class, Sprite)
+        Exit Sub
+    Else
+        ShowWindow GetWindowIndex("winLogin")
+        ShowWindow GetWindowIndex("winLoginFooter")
+        ShowDialogue "Problema de Conexao", "Não pode conectar-se ao servidor de jogo.", "", DialogueTypeAlert
+    End If
+
+End Sub
+
+Public Function IsStringLegal(ByVal sInput As String) As Boolean
+    Dim i As Long, tmpNum As Long
+    ' Prevent high ascii chars
+    tmpNum = Len(sInput)
+
+    For i = 1 To tmpNum
+
+        If Asc(Mid$(sInput, i, 1)) < vbKeySpace Or Asc(Mid$(sInput, i, 1)) > vbKeyF15 Then
+            ShowDialogue "Models ilegais", "O nome contém caracteres não permitidos.", "", DialogueTypeAlert
+            Exit Function
+        End If
+
+    Next
+
+    IsStringLegal = True
+End Function

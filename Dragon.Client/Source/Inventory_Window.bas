@@ -385,3 +385,28 @@ Public Sub UpdateInventoryCurrency()
         Windows(GetWindowIndex("winInventory")).Controls(GetControlIndex("winInventory", "lblGold")).Text = "Ouro: " & Format$(Value, "#,###,###,###")
     End If
 End Sub
+
+Public Sub ShowInvDesc(X As Long, Y As Long, InvNum As Long)
+
+    If InvNum <= 0 Or InvNum > MaxInventory Then Exit Sub
+    Dim ItemNum As Long
+
+    ItemNum = GetInventoryItemNum(InvNum)
+
+    If ItemNum > 0 Then
+         Dim Inventory As InventoryRec
+    
+         Inventory.Num = GetInventoryItemNum(InvNum)
+         Inventory.Value = GetInventoryItemValue(InvNum)
+         Inventory.Level = GetInventoryItemLevel(InvNum)
+         Inventory.Bound = GetInventoryItemBound(InvNum)
+         Inventory.AttributeId = GetInventoryItemAttributeId(InvNum)
+         Inventory.UpgradeId = GetInventoryItemUpgradeId(InvNum)
+    
+        If Item(ItemNum).Type = ItemType.ItemType_Heraldry Then
+            Call ShowHeraldryDescription(X, Y, Inventory, Item(ItemNum).Price)
+        Else
+            ShowItemDesc X, Y, Inventory
+        End If
+    End If
+End Sub

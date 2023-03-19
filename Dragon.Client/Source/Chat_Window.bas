@@ -323,3 +323,42 @@ Public Sub Resize_WinChat()
     
 End Sub
 
+Public Sub AddChatBubble(ByVal Target As Long, ByVal TargetType As Byte, ByVal Msg As String, ByVal Colour As Long)
+    Dim i As Long, Index As Long
+    ' set the global index
+    ChatBubbleIndex = ChatBubbleIndex + 1
+
+    ' reset to yourself for eventing
+    If TargetType = 0 Then
+        TargetType = TargetTypePlayer
+        If Target = 0 Then Target = MyIndex
+    End If
+
+    If ChatBubbleIndex < 1 Or ChatBubbleIndex > MAX_BYTE Then ChatBubbleIndex = 1
+    ' default to new bubble
+    Index = ChatBubbleIndex
+
+    ' loop through and see if that player/npc already has a chat bubble
+    For i = 1 To MAX_BYTE
+        If ChatBubble(i).TargetType = TargetType Then
+            If ChatBubble(i).Target = Target Then
+                ' reset master index
+                If ChatBubbleIndex > 1 Then ChatBubbleIndex = ChatBubbleIndex - 1
+                ' we use this one now, yes?
+                Index = i
+                Exit For
+            End If
+        End If
+    Next
+
+    ' set the bubble up
+    With ChatBubble(Index)
+        .Target = Target
+        .TargetType = TargetType
+        .Msg = Msg
+        .Colour = Colour
+        .Timer = GetTickCount
+        .Active = True
+    End With
+End Sub
+

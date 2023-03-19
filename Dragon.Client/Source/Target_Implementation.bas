@@ -109,3 +109,137 @@ Public Sub DrawTargetHover()
     Next
 End Sub
 
+Public Sub FindNearestTarget()
+    Dim i As Long, X As Long, Y As Long, x2 As Long, y2 As Long, xDif As Long, yDif As Long
+    Dim bestX As Long, bestY As Long, bestIndex As Long
+    x2 = GetPlayerX(MyIndex)
+    y2 = GetPlayerY(MyIndex)
+    bestX = 255
+    bestY = 255
+
+    For i = 1 To Npc_HighIndex
+
+        If MapNpc(i).Num > 0 Then
+            If Not GetNpcDead(i) Then
+                X = MapNpc(i).X
+                Y = MapNpc(i).Y
+
+                ' find the difference - x
+                If X < x2 Then
+                    xDif = x2 - X
+                ElseIf X > x2 Then
+                    xDif = X - x2
+                Else
+                    xDif = 0
+                End If
+
+                ' find the difference - y
+                If Y < y2 Then
+                    yDif = y2 - Y
+                ElseIf Y > y2 Then
+                    yDif = Y - y2
+                Else
+                    yDif = 0
+                End If
+
+                ' best so far?
+                If (xDif + yDif) < (bestX + bestY) Then
+                    bestX = xDif
+                    bestY = yDif
+                    bestIndex = i
+                End If
+            End If
+        End If
+
+    Next
+
+    ' target the best
+    If bestIndex > 0 And bestIndex <> MyTargetIndex Then
+        SendPlayerTarget bestIndex, TargetTypeNpc
+        Call OpenTargetWindow
+    End If
+End Sub
+
+Public Sub FindTarget()
+    Dim i As Long, X As Long, Y As Long
+
+    ' check players
+    For i = 1 To Player_HighIndex
+
+        If IsPlaying(i) And GetPlayerMap(MyIndex) = GetPlayerMap(i) Then
+            X = (GetPlayerX(i) * 32) + Player(i).xOffset + 32
+            Y = (GetPlayerY(i) * 32) + Player(i).yOffset + 32
+
+            If X >= GlobalX_Map And X <= GlobalX_Map + 32 Then
+                If Y >= GlobalY_Map And Y <= GlobalY_Map + 32 Then
+
+                    If MyTargetType = TargetTypeLoot And MyTargetIndex > 0 Then
+                        Call SendCloseLoot
+                    End If
+
+                    ' found our target!
+                    SendPlayerTarget i, TargetTypePlayer
+                    Call OpenTargetWindow
+
+                    Exit Sub
+                End If
+            End If
+        End If
+
+    Next
+
+    ' check npcs
+    For i = 1 To Npc_HighIndex
+
+        If MapNpc(i).Num > 0 Then
+            If Not GetNpcDead(i) Then
+                X = (MapNpc(i).X * 32) + MapNpc(i).xOffset + 32
+                Y = (MapNpc(i).Y * 32) + MapNpc(i).yOffset + 32
+
+                If X >= GlobalX_Map And X <= GlobalX_Map + 32 Then
+                    If Y >= GlobalY_Map And Y <= GlobalY_Map + 32 Then
+
+                        If MyTargetType = TargetTypeLoot And MyTargetIndex > 0 Then
+                            Call SendCloseLoot
+                        End If
+
+                        ' found our target!
+                        SendPlayerTarget i, TargetTypeNpc
+                        Call OpenTargetWindow
+                        Exit Sub
+                    End If
+                End If
+            End If
+        End If
+    Next
+
+    For i = 1 To Corpse_HighIndex
+        If Corpse(i).LootId > 0 Then
+            X = Corpse(i).X + 32
+            Y = Corpse(i).Y + 32
+
+            If X >= GlobalX_Map And X <= GlobalX_Map + 32 Then
+                If Y >= GlobalY_Map And Y <= GlobalY_Map + 32 Then
+
+                    If MyTargetType = TargetTypeLoot And MyTargetIndex = Corpse(i).LootId Then
+                        If Windows(GetWindowIndex("winLoot")).Window.Visible Then
+                            Exit Sub
+                        End If
+                    ElseIf MyTargetType = TargetTypeLoot And MyTargetIndex <> Corpse(i).LootId Then
+                        Call SendCloseLoot
+                    End If
+
+                    ' found our target!
+                    SendPlayerTarget Corpse(i).LootId, TargetTypeLoot
+                    Exit Sub
+                End If
+            End If
+
+        End If
+    Next
+
+    ' case else, close if its open
+    Call CloseTargetWindow
+
+End Sub
+

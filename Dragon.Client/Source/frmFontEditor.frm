@@ -720,19 +720,13 @@ Private Sub Form_Load()
     PageIndex = 1
 
     ReDim FontNames(1 To Fonts.Fonts_Count - 1)
-
-    FontNames(1) = "OpenSansRegular_11"
-    FontNames(2) = "OpenSansBold_11"
-    FontNames(3) = "OpenSansItalic_11"
-    FontNames(4) = "OpenSansEffect_11"
-    FontNames(5) = "OpenSansDamage"
+    
+    FontNames(1) = "FontRegular"
+    FontNames(2) = "OpenSans_Damage"
 
     ComboFonts.Clear
 
-    ComboFonts.AddItem "OpenSans Regular"
-    ComboFonts.AddItem "OpenSans Bold"
-    ComboFonts.AddItem "OpenSans Italic"
-    ComboFonts.AddItem "OpenSans Effect"
+    ComboFonts.AddItem "FontRegular"
     ComboFonts.AddItem "OpenSans Damage"
 
     ComboFonts.ListIndex = 0

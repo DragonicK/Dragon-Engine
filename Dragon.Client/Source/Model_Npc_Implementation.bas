@@ -1,6 +1,19 @@
 Attribute VB_Name = "Model_Npc_Implementation"
 Option Explicit
 
+Public Sub ClearMapNpc(ByVal Index As Long)
+    Call ZeroMemory(ByVal VarPtr(MapNpc(Index)), LenB(MapNpc(Index)))
+    MapNpc(Index).Dead = True
+End Sub
+
+Sub ClearMapNpcs()
+    Dim i As Long
+
+    For i = 1 To MaxMapNpcs
+        Call ClearMapNpc(i)
+    Next
+End Sub
+
 Public Sub DrawNpcName(ByVal Index As Long)
     If MapNpc(Index).Vital(HP) <= 0 Then
         Exit Sub

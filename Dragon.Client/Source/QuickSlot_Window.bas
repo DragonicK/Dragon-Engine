@@ -73,5 +73,14 @@ Public Function IsHotbar(StartX As Long, StartY As Long) As Long
     Next
 End Function
 
+Public Sub SwitchHotbar(OldSlot As Long, NewSlot As Long)
+    If OldSlot < 1 Or OldSlot > MaximumQuickSlot Then
+        Exit Sub
+    End If
 
+    If NewSlot < 1 Or NewSlot > MaximumQuickSlot Then
+        Exit Sub
+    End If
 
+    Call SendSwapQuickSlot(OldSlot, NewSlot)
+End Sub

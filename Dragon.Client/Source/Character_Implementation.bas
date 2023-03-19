@@ -506,6 +506,9 @@ Public Sub ClearData()
     Call ClearTitleWindow
 End Sub
 
- 
+ Public Sub ClearPlayer(ByVal Index As Long)
+    Call ZeroMemory(ByVal VarPtr(Player(Index)), LenB(Player(Index)))
+    Player(Index).Name = vbNullString
+End Sub
 
 
