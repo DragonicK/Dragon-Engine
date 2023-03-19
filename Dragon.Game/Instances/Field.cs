@@ -174,11 +174,13 @@ public sealed class Field : IMap, IInstance {
         var x = entity.X;
         var y = entity.Y;
 
-        if (Enum.IsDefined(typeof(Direction), direction)) {
-            var dir = (Direction)direction;
+        if (!entity.IsFixed) {
+            if (Enum.IsDefined(typeof(Direction), direction)) {
+                var dir = (Direction)direction;
 
-            if (CheckForDirection(dir, x, y)) {
-                ExecuteMove(index, dir, MovementType.Walking);
+                if (CheckForDirection(dir, x, y)) {
+                    ExecuteMove(index, dir, MovementType.Walking);
+                }
             }
         }
     }
