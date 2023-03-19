@@ -1,6 +1,0 @@
-{
-  "Date": "2021年12月17日 3:54:46",
-  "Name": "Character Creation Excpetion",
-  "Message": "An error ocurred by akaruz ... Invalid object name \u0027CharacterAchievementProgress\u0027.",
-  "Warning": "Error"
-}

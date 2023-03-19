@@ -1,6 +1,0 @@
-{
-  "Date": "2021年12月19日 18:54:50",
-  "Name": "Connection Approval",
-  "Message": "ConnectionId: 1 IpAddress: 127.0.0.1",
-  "Warning": "Success"
-}
