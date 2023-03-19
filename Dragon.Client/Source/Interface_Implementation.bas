@@ -650,8 +650,10 @@ Public Sub RenderEntity(winNum As Long, entNum As Long)
                 ' Empty?
                 If .Value = 0 Then texNum = Tex_GUI(1) Else texNum = Tex_GUI(2)
 
-                ' Render box
-                RenderTexture texNum, .Left + xO, .Top + yO, 0, 0, 18, 18, 18, 18
+                ' Render Box - Border
+                RenderEntity_Square TextureDesign(TextureDesignBorderGrey), .Left + xO - 5, .Top + yO - 3, 18, 18, 2, .Alpha
+                ' Render Box
+                RenderTexture texNum, .Left + xO - 5, .Top + yO - 3, 0, 0, 18, 18, 18, 18
 
                 ' Find text position
                 Select Case .Align
