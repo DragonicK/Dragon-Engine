@@ -2,6 +2,5 @@
 
 public enum ActionMessageType {
     Static,
-    Scroll,
-    Screen
+    Scroll
 }

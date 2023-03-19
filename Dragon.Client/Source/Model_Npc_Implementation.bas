@@ -1,6 +1,43 @@
 Attribute VB_Name = "Model_Npc_Implementation"
 Option Explicit
 
+Public Sub DrawNpcName(ByVal Index As Long)
+    If MapNpc(Index).Vital(HP) <= 0 Then
+        Exit Sub
+    End If
+
+    Dim TextX As Long, TextY As Long, Text As String, TextSize As Long, NpcNum As Long, Colour As Long
+    NpcNum = MapNpc(Index).Num
+    Text = Npc(NpcNum).Name
+
+    TextSize = TextWidth(Font(Fonts.FontRegular), Text)
+
+    If Npc(NpcNum).Behaviour = NPC_BEHAVIOUR_MONSTER Or Npc(NpcNum).Behaviour = NPC_BEHAVIOUR_BOSS Then
+        ' get the colour
+        If Npc(NpcNum).Level > GetPlayerLevel(MyIndex) Then
+            Colour = BrightRed
+        End If
+
+        If Npc(NpcNum).Level = GetPlayerLevel(MyIndex) Then
+            Colour = Gold
+        End If
+
+        If Npc(NpcNum).Level < GetPlayerLevel(MyIndex) Then
+            Colour = Grey
+        End If
+    Else
+        Colour = White
+    End If
+
+    TextX = MapNpc(Index).X * PIC_X + MapNpc(Index).xOffset + (PIC_X \ 2) - (TextSize \ 2) - 3
+    TextY = MapNpc(Index).Y * PIC_Y + MapNpc(Index).yOffset - 32
+
+    Call RenderText(Font(Fonts.FontRegular), Text, ConvertMapX(TextX), ConvertMapY(TextY), Colour)
+
+End Sub
+
+
+
 Public Sub ProcessNpcMovements(ByVal MapNpcNum As Long)
 ' Processa o ataque enquanto está em movimento.
     If MapNpc(MapNpcNum).Attacking = 1 And MapNpc(MapNpcNum).Moving > 0 Then

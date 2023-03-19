@@ -1,23 +1,16 @@
-Attribute VB_Name = "modDirectX8"
+Attribute VB_Name = "DirectX8_Implementation"
 Option Explicit
 
-Public CallSaveScreen As Boolean
+' Public CallSaveScreen As Boolean
 
 ' Variables
 Public DX8 As DirectX8
-Attribute DX8.VB_VarUserMemId = 1073741859
 Public D3D As Direct3D8
-Attribute D3D.VB_VarUserMemId = 1073741860
 Public D3DX As D3DX8
-Attribute D3DX.VB_VarUserMemId = 1073741861
 Public D3DDevice As Direct3DDevice8
-Attribute D3DDevice.VB_VarUserMemId = 1073741862
 Public DXVB As Direct3DVertexBuffer8
-Attribute DXVB.VB_VarUserMemId = 1073741863
 Public D3DWindow As D3DPRESENT_PARAMETERS
-Attribute D3DWindow.VB_VarUserMemId = 1073741864
 Public mhWnd As Long
-Attribute mhWnd.VB_VarUserMemId = 1073741865
 
 Public Const FVF As Long = D3DFVF_XYZRHW Or D3DFVF_TEX1 Or D3DFVF_DIFFUSE    'Or D3DFVF_SPECULAR
 
@@ -50,28 +43,15 @@ Public Type Vertex
 End Type
 
 Public mClip As RECT
-Attribute mClip.VB_VarUserMemId = 1073741867
 Public Box(0 To 3) As Vertex
-Attribute Box.VB_VarUserMemId = 1073741868
 Public mTexture() As TextureStruct
-Attribute mTexture.VB_VarUserMemId = 1073741869
 Public mTextures As Long
-Attribute mTextures.VB_VarUserMemId = 1073741870
 Public CurrentTexture As Long
-Attribute CurrentTexture.VB_VarUserMemId = 1073741871
 
 Public ScreenWidth As Long, ScreenHeight As Long
-Attribute ScreenWidth.VB_VarUserMemId = 1073741872
-Attribute ScreenHeight.VB_VarUserMemId = 1073741872
 Public TileWidth As Long, TileHeight As Long
-Attribute TileWidth.VB_VarUserMemId = 1073741874
-Attribute TileHeight.VB_VarUserMemId = 1073741874
 Public ScreenX As Long, ScreenY As Long
-Attribute ScreenX.VB_VarUserMemId = 1073741876
-Attribute ScreenY.VB_VarUserMemId = 1073741876
 Public CurResolution As Byte, isFullscreen As Boolean
-Attribute CurResolution.VB_VarUserMemId = 1073741878
-Attribute isFullscreen.VB_VarUserMemId = 1073741878
 
 Public Sub InitDX8(ByVal hWnd As Long)
     Dim DispMode As D3DDISPLAYMODE, Width As Long, Height As Long
@@ -1090,6 +1070,7 @@ Public Sub SaveScreen()
     Set BackBuffer = D3DDevice.GetBackBuffer(0, D3DBACKBUFFER_TYPE_MONO)
     Call D3DX.SaveSurfaceToFile(App.Path & "\File.Png", D3DXIFF_PNG, BackBuffer, Palette, RECT)
 End Sub
+
 
 
 

@@ -17,67 +17,6 @@ Public Function ConvertCurrency(ByVal Amount As Long) As String
 
 End Function
 
-Public Sub CreateActionMsg(ByVal Message As String, ByVal Color As Integer, ByVal MsgType As Byte, ByVal FontType As Byte, ByVal X As Long, ByVal Y As Long)
-    Dim i As Long
-    ActionMsgIndex = ActionMsgIndex + 1
-
-    If ActionMsgIndex >= MAX_BYTE Then ActionMsgIndex = 1
-
-    With ActionMsg(ActionMsgIndex)
-        .Message = Message
-        .Color = Color
-        .Type = MsgType
-        .Created = GetTickCount
-        .Scroll = 1
-        .X = X
-        .Y = Y
-        .FontType = FontType
-        .Alpha = 255
-    End With
-
-    If ActionMsg(ActionMsgIndex).Type = ACTIONMsgSCROLL Then
-        ActionMsg(ActionMsgIndex).Y = ActionMsg(ActionMsgIndex).Y + Rand(-2, 6)
-        ActionMsg(ActionMsgIndex).X = ActionMsg(ActionMsgIndex).X + Rand(-8, 8)
-    End If
-
-    ' find the new high index
-    For i = MAX_BYTE To 1 Step -1
-
-        If ActionMsg(i).Created > 0 Then
-            Action_HighIndex = i + 1
-            Exit For
-        End If
-
-    Next
-
-    ' make sure we don't overflow
-    If Action_HighIndex > MAX_BYTE Then Action_HighIndex = MAX_BYTE
-End Sub
-
-Public Sub ClearActionMsg(ByVal Index As Byte)
-    Dim i As Long
-    ActionMsg(Index).Message = vbNullString
-    ActionMsg(Index).Created = 0
-    ActionMsg(Index).Type = 0
-    ActionMsg(Index).Color = 0
-    ActionMsg(Index).Scroll = 0
-    ActionMsg(Index).X = 0
-    ActionMsg(Index).Y = 0
-    ActionMsg(Index).FontType = 0
-
-    ' find the new high index
-    For i = MAX_BYTE To 1 Step -1
-
-        If ActionMsg(i).Created > 0 Then
-            Action_HighIndex = i + 1
-            Exit For
-        End If
-
-    Next
-
-    ' make sure we don't overflow
-    If Action_HighIndex > MAX_BYTE Then Action_HighIndex = MAX_BYTE
-End Sub
 
 Public Sub CheckAnimInstance(ByVal Index As Long)
     Dim Looptime As Long

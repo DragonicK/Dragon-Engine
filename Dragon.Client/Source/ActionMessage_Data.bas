@@ -22,6 +22,7 @@ Private Type ActionMsgRec
     Timer As Long
     Alpha As Long
     FontType As Byte
+    TickCount As Long
 End Type
 
 Public Type ChatBubbleRec

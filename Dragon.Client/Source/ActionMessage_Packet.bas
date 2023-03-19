@@ -1,4 +1,6 @@
 Attribute VB_Name = "ActionMessage_Packet"
+Option Explicit
+
 Public Sub HandleActionMessage(ByVal Index As Long, ByRef Data() As Byte, ByVal StartAddr As Long, ByVal ExtraVar As Long)
     Dim Buffer As clsBuffer
     Dim X As Long, Y As Long, Message As String, Color As Long, tmpType As Long, FontType As Byte

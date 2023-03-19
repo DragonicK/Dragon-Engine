@@ -1,6 +1,52 @@
 Attribute VB_Name = "Model_Player_Implementation"
 Option Explicit
 
+Public Sub DrawPlayerName(ByVal Index As Long)
+    Dim TextX As Long, TextY As Long, Text As String, TextSize As Long, Colour As Long
+    Dim i As Long
+
+    Text = Trim$(GetPlayerName(Index))
+    TextSize = TextWidth(Font(Fonts.FontRegular), Text)
+    Colour = White
+
+    If Index = MyIndex Then
+        If Party.Leader > 0 Then
+            Colour = Blue
+        End If
+    Else
+        Colour = White
+
+        If Party.Leader > 0 Then
+            For i = 1 To Party.MemberCount
+                If Party.Member(i).Name = GetPlayerName(Index) Then
+                    Colour = Blue
+                    Exit For
+                End If
+            Next
+        End If
+    End If
+
+    If GetPlayerPK(Index) > 0 Then Colour = BrightRed
+
+    TextX = Player(Index).X * PIC_X + Player(Index).xOffset + (PIC_X \ 2) - (TextSize \ 2) - 3
+    TextY = Player(Index).Y * PIC_Y + Player(Index).yOffset - 32
+
+    Call RenderText(Font(Fonts.FontRegular), Text, ConvertMapX(TextX), ConvertMapY(TextY), Colour)
+
+    If GetPlayerTitle(Index) > 0 And GetPlayerTitle(Index) <= MaximumTitles Then
+        Text = Trim$(Title(GetPlayerTitle(Index)).Name)
+        TextSize = TextWidth(Font(Fonts.FontRegular), Text)
+
+        Colour = GetRarityColor(Title(GetPlayerTitle(Index)).Rarity)
+
+        TextX = Player(Index).X * PIC_X + Player(Index).xOffset + (PIC_X \ 2) - (TextSize \ 2)
+        TextY = Player(Index).Y * PIC_Y + Player(Index).yOffset - 45
+
+        Call RenderText(Font(Fonts.FontRegular), Text, ConvertMapX(TextX), ConvertMapY(TextY), Colour)
+    End If
+
+End Sub
+
 Public Function CanPlayerMoveInMovement(ByVal Index As Long) As Boolean
 
     If Player(Index).Attacking = 1 Then
