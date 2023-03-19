@@ -7,19 +7,19 @@ using Dragon.Game.Parties;
 using Dragon.Game.Manager;
 using Dragon.Game.Players;
 using Dragon.Game.Instances;
+using Dragon.Game.Network;
 
 namespace Dragon.Game.Services;
 
 public class InstanceService : IService, IUpdatableService {
-    public ServicePriority Priority => ServicePriority.Mid;
-    public MapPassphrase? Passphrases { get; private set; }
+    public ServicePriority Priority => ServicePriority.Last;
     public ContentService? ContentService { get; private set; }
     public ConfigurationService? Configuration { get; private set; }
+    public PassphraseService? PassphraseService { get; private set; }
     public PacketSenderService? PacketSenderService { get; private set; }
     public IDictionary<int, IInstance> Instances { get; set; }
     public IDictionary<int, TradeManager> Trades { get; set; }
     public IDictionary<int, PartyManager> Parties { get; set; }
-
     public InstanceService() {
         Instances = new Dictionary<int, IInstance>();
         Trades = new Dictionary<int, TradeManager>();
@@ -27,7 +27,6 @@ public class InstanceService : IService, IUpdatableService {
     }
 
     public void Start() {
-        LoadPassphrases();
         LoadFields();
 
         var maximum = Configuration!.Trade.Maximum;
@@ -35,47 +34,13 @@ public class InstanceService : IService, IUpdatableService {
     }
 
     public void Stop() {
-        Passphrases?.Clear();
+ 
     }
 
     public void Update(int deltaTime) {
-        var tradeTimeOut = Configuration!.Trade.AcceptTimeOut;
-
-        foreach (var (id, trade) in Trades) {
-            if (trade.CanConclude()) {
-                trade.ExecuteTrade();
-            }
-
-            if (trade.State == TradeState.Waiting) {
-                trade.AcceptTimeOut++;
-
-                if (trade.AcceptTimeOut >= tradeTimeOut) {
-                    trade.UpdateFailed();
-                }
-            }
-            else if (trade.State == TradeState.Failed) {
-                Trades.Remove(id);
-            }
-            else if (trade.State == TradeState.Concluded) {
-                Trades.Remove(id);
-            }
-        }
-
-        foreach (var (id, party) in Parties) {
-            if (party.State == PartyState.Waiting) {
-
-                if (party.IsCreationFailed()) {
-                    party.UpdateFailedCreation();
-                }
-            }
-            else if (party.State == PartyState.Created) {
-                party.CheckForPendingInvitations();
-                party.CheckForDisconnectedMembers();
-            }
-            else if (party.State == PartyState.Disbanded) {
-                Parties.Remove(id);
-            }
-        }
+        UpdateTrades();
+        UpdateParties();
+        UpdateInstances();
     }
 
     public int RegisterTrade(IPlayer starter, IPlayer invited) {
@@ -117,28 +82,10 @@ public class InstanceService : IService, IUpdatableService {
         return 0;
     }
 
-    private void LoadPassphrases() {
-        const string File = "./Server/Passphrases.json";
-
-        if (!Json.FileExists(File)) {
-            var instance = new MapPassphrase();
-            instance.Add(1, "be10ea8c4e5d464cc0e75621ceb360e4");
-            instance.Add(2, "be10ea8c4e5d464cc0e75621ceb360e4");
-            instance.Add(3, "be10ea8c4e5d464cc0e75621ceb360e4");
-
-            Json.Save(File, instance);
-        }
-        else {
-            Passphrases = Json.Get<MapPassphrase>(File);
-
-            if (Passphrases is not null) {
-                Json.Save(File, Passphrases);
-            }
-        }
-    }
-
     private void LoadFields() {
-        var loader = new InstanceLoader("./Server/Fields", Configuration!, ContentService!.Maps);
+        var sender = PacketSenderService!.PacketSender;
+
+        var loader = new InstanceLoader("./Server/Fields", Configuration!, ContentService!.Maps, sender);
 
         var manager = new InstanceEntityManager() {
             Npcs = ContentService!.Npcs,
@@ -151,6 +98,54 @@ public class InstanceService : IService, IUpdatableService {
 
         foreach (var (_, instance) in Instances) {
             manager.CreateEntities(instance);
+        }
+    }
+
+    private void UpdateTrades() {
+        var tradeTimeOut = Configuration!.Trade.AcceptTimeOut;
+
+        foreach (var (id, trade) in Trades) {
+            if (trade.CanConclude()) {
+                trade.ExecuteTrade();
+            }
+
+            if (trade.State == TradeState.Waiting) {
+                trade.AcceptTimeOut++;
+
+                if (trade.AcceptTimeOut >= tradeTimeOut) {
+                    trade.UpdateFailed();
+                }
+            }
+            else if (trade.State == TradeState.Failed) {
+                Trades.Remove(id);
+            }
+            else if (trade.State == TradeState.Concluded) {
+                Trades.Remove(id);
+            }
+        }
+    }
+
+    private void UpdateParties() {
+        foreach (var (id, party) in Parties) {
+            if (party.State == PartyState.Waiting) {
+
+                if (party.IsCreationFailed()) {
+                    party.UpdateFailedCreation();
+                }
+            }
+            else if (party.State == PartyState.Created) {
+                party.CheckForPendingInvitations();
+                party.CheckForDisconnectedMembers();
+            }
+            else if (party.State == PartyState.Disbanded) {
+                Parties.Remove(id);
+            }
+        }
+    }
+
+    private void UpdateInstances() {
+        foreach (var (_, instance) in Instances) {
+            instance.Execute();  
         }
     }
 }

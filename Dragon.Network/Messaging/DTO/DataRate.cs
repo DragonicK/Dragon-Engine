@@ -2,6 +2,7 @@
 
 public struct DataRate {
     public int Character { get; set; }
+    public int Talent { get; set; }
     public int Party { get; set; }
     public int Guild { get; set; }
     public int Skill { get; set; }

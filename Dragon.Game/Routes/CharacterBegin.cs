@@ -21,6 +21,7 @@ public sealed class CharacterBegin {
     public LoggerService? LoggerService { get; init; }
     public ContentService? ContentService { get; init; }
     public InstanceService? InstanceService { get; init; }
+    public PassphraseService? PassphraseService { get; init; }
     public DatabaseService? DatabaseService { get; init; }
     public CharacterService? CharacterService { get; init; }
     public ConfigurationService? Configuration { get; init; }
@@ -97,7 +98,7 @@ public sealed class CharacterBegin {
     }
 
     private MapPassphrase? GetMapPassphrase() {
-        return InstanceService?.Passphrases;
+        return PassphraseService?.Passphrases;
     }
 
     private Task WriteExceptionLog(string username, string message) {

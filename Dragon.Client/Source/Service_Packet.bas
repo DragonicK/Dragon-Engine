@@ -15,8 +15,8 @@ Public Sub HandleServerRates(ByVal Index As Long, ByRef Data() As Byte, ByVal St
     ServerService.Name = ServerText
     ServerService.EndTime = vbNullString
 
-    ServerService.Talent = 0
     ServerService.Character = Buffer.ReadLong
+    ServerService.Talent = Buffer.ReadLong
     ServerService.Party = Buffer.ReadLong
     ServerService.Guild = Buffer.ReadLong
     ServerService.Skill = Buffer.ReadLong

@@ -23,7 +23,7 @@ namespace Dragon.Game.Network;
 public sealed partial class PacketSender : IPacketSender {
     public IOutgoingMessageWriter? Writer { get; set; }
     public IConfiguration? Configuration { get; set; }
-    public MapPassphrase? Passphrases { get; set; }
+    public PassphraseService? PassphraseService { get; set; }
     public InstanceService? InstanceService { get; set; }
 
 
@@ -93,9 +93,11 @@ public sealed partial class PacketSender : IPacketSender {
     }
 
     public void SendLoadMap(IPlayer player) {
+        var passphrases = PassphraseService!.Passphrases;
+
         var id = player.Character.Map;
-        var key = Passphrases!.GetKey(id);
-        var iv = Passphrases!.GetIv(id);
+        var key = passphrases!.GetKey(id);
+        var iv = passphrases!.GetIv(id);
 
         var packet = new SpLoadMap() {
             MapId = id,

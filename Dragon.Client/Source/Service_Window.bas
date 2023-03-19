@@ -53,8 +53,8 @@ Public Sub CreateWindow_Services()
     ' Close button
     CreateButton WindowCount, "btnClose", Windows(WindowCount).Window.Width - 33, 11, 22, 22, , , , , , , Tex_GUI(TextureControl_CloseNormal), Tex_GUI(TextureControl_CloseHover), Tex_GUI(TextureControl_CloseClick), , , , , , GetAddress(AddressOf ButtonMenu_Services)
 
-    CreateButton WindowCount, "btnBonus", 0, 42, 80, 26, "BONUS", FontRegular, Green, , , , , , , , , , , , GetAddress(AddressOf ShowBonusRates)
-    CreateButton WindowCount, "btnServer", 70, 42, 80, 26, "SERVIDOR", FontRegular, , , , , , , , , , , , , GetAddress(AddressOf ShowServerRate)
+    CreateButton WindowCount, "btnBonus", 0, 42, 75, 26, "BONUS", FontRegular, Green, , , , , , , , , , , , GetAddress(AddressOf ShowBonusRates)
+    CreateButton WindowCount, "btnServer", 65, 42, 80, 26, "SERVIDOR", FontRegular, , , , , , , , , , , , , GetAddress(AddressOf ShowServerRate)
     CreateButton WindowCount, "btnService", 135, 42, 80, 26, "SERVIÇO", FontRegular, , , , , , , , , , , , , GetAddress(AddressOf ShowServiceRates)
 
     CreateLabel WindowCount, "lblName", 0, OffSetY - 10, 220, 15, "BONUS TOTAL", FontRegular, White, Alignment.AlignCenter

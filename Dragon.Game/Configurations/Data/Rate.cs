@@ -4,6 +4,7 @@ namespace Dragon.Game.Configurations.Data;
 
 public class Rate {
     public float Character { get; set; }
+    public float Talent { get; set; }
     public float Party { get; set; }
     public float Guild { get; set; }
     public float Skill { get; set; }
@@ -21,6 +22,7 @@ public class Rate {
         Skill = 1;
         Craft = 1;
         Quest = 1;
+        Talent = 1;
         Character = 1;
 
         GoldChance = 1;

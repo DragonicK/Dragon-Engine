@@ -27,12 +27,14 @@ using Dragon.Core.Serialization;
 
 using Dragon.Game.Administrator;
 using Dragon.Game.Instances;
+using Dragon.Network.Messaging.SharedPackets;
 
 namespace Dragon.Game.Services;
 
 public class ContentService : IService {
     public ServicePriority Priority => ServicePriority.Mid;
     public ConfigurationService? Configuration { get; init; }
+    public PacketSenderService? PacketSenderService { get; init; }
     public LoggerService? LoggerService { get; init; }
     public IDatabase<IClass> Classes { get; }
     public IDatabase<IMap> Maps { get; set; }
@@ -344,7 +346,9 @@ public class ContentService : IService {
     }
 
     private void LoadInstances() {
-        var loader = new InstanceLoader("./Server/Instances", Configuration!, Maps);
+        var sender = PacketSenderService!.PacketSender;
+
+        var loader = new InstanceLoader("./Server/Instances", Configuration!, Maps, sender);
 
         loader.LoadInstances();
 

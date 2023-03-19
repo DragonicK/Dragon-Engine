@@ -24,4 +24,5 @@ public interface IInstance {
     IPlayer? Get(int index);
     IList<IPlayer> GetPlayers();
     bool IsBlocked(int x, int y);
+    void Execute();
 }

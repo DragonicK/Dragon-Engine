@@ -138,7 +138,7 @@ Public Sub HandleInstanceEntityMove(ByVal Index As Long, ByRef Data() As Byte, B
     
     Buffer.WriteBytes Data()
 
-    Index = Buffer.ReadLong
+    Index = Buffer.ReadLong + 1
     X = Buffer.ReadLong
     Y = Buffer.ReadLong
     Dir = Buffer.ReadLong
@@ -169,7 +169,7 @@ Public Sub HandleInstanceEntityMove(ByVal Index As Long, ByRef Data() As Byte, B
             .xOffset = PIC_X * -1
             
         End Select
-
+        
     End With
 
 End Sub

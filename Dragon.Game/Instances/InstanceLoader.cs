@@ -3,6 +3,7 @@ using Dragon.Core.Model.Maps;
 using Dragon.Core.Serialization;
 
 using Dragon.Game.Regions;
+using Dragon.Game.Network;
 using Dragon.Game.Configurations;
 
 namespace Dragon.Game.Instances;
@@ -12,13 +13,15 @@ public sealed class InstanceLoader {
 
     private readonly IConfiguration _configuration;
     private readonly IDatabase<IMap> _maps;
+    private readonly IPacketSender _sender;
     private readonly string _folder;
 
     private int processed;
 
-    public InstanceLoader(string folder, IConfiguration configuration, IDatabase<IMap> maps) {
+    public InstanceLoader(string folder, IConfiguration configuration, IDatabase<IMap> maps, IPacketSender sender) {
         _maps = maps;
         _folder = folder;
+        _sender = sender;
         _configuration = configuration;
 
         Instances = new Dictionary<int, IInstance>();
@@ -65,7 +68,7 @@ public sealed class InstanceLoader {
                 var map = _maps[region.MapId];
 
                 if (map is not null) {
-                    var field = new Field(map, region, _configuration);
+                    var field = new Field(map, region, _configuration, _sender);
 
                     Instances.Add(field.Id, field);
                 }

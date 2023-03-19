@@ -34,5 +34,7 @@ public class InstanceEntity : IEntity, IInstanceEntity {
         Effects = new EntityEffect();
         Attributes = new EntityAttribute();
         Vitals = new EntityVital();
+
+        Combat = null;
     }
 }

@@ -87,6 +87,7 @@ public sealed partial class PacketSender {
         var packet = new SpServerRates() {
             Rates = new DataRate() {
                 Character = Convert.ToInt32(rates.Character * Multiplier),
+                Talent = Convert.ToInt32(rates.Talent * Multiplier),
                 Party = Convert.ToInt32(rates.Party * Multiplier),
                 Guild = Convert.ToInt32(rates.Guild * Multiplier),
                 Skill = Convert.ToInt32(rates.Skill * Multiplier),
