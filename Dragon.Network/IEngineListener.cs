@@ -1,4 +1,5 @@
 ﻿using Dragon.Core.GeoIpCountry;
+using Dragon.Core.Logs;
 using Dragon.Network.Incoming;
 using Dragon.Network.Outgoing;
 
@@ -8,6 +9,7 @@ public interface IEngineListener {
     int Port { get; set; }
     int BackLog { get; set; }
     int MaximumConnections { get; set; }
+    ILogger? Logger { get; set; }
     IGeoIpAddress GeoIpAddress { get; init; }
     IIndexGenerator IndexGenerator { get; init; }
     IIncomingMessageQueue IncomingMessageQueue { get; init; }

@@ -2,6 +2,7 @@
 using System.Net.Sockets;
 
 using Dragon.Core.GeoIpCountry;
+using Dragon.Core.Logs;
 using Dragon.Network.Incoming;
 using Dragon.Network.Outgoing;
 
@@ -11,6 +12,7 @@ public class EngineListener : IEngineListener {
     public int Port { get; set; }
     public int BackLog { get; set; }
     public int MaximumConnections { get; set; }
+    public ILogger? Logger { get; set; }
     public IGeoIpAddress GeoIpAddress { get; init; }
     public IIndexGenerator IndexGenerator { get; init; }
     public IConnectionRepository ConnectionRepository { get; init; }
@@ -41,41 +43,46 @@ public class EngineListener : IEngineListener {
     }
 
     private void OnAccept(IAsyncResult ar) {
-        var socket = listener!.EndAccept(ar);
+        try {
+            var socket = listener!.EndAccept(ar);
 
-        if (socket is not null) {
-            var ipAddress = socket.RemoteEndPoint!.ToString();
+            if (socket is not null) {
+                var ipAddress = socket.RemoteEndPoint!.ToString();
 
-            ipAddress = ipAddress!.Remove(ipAddress.IndexOf(':'));
+                ipAddress = ipAddress!.Remove(ipAddress.IndexOf(':'));
 
-            if (CanAccept(ipAddress)) {
-                var index = IndexGenerator.GetNextIndex();
-                var connection = ConnectionRepository.AddClientFromId(index);
+                if (CanAccept(ipAddress)) {
+                    var index = IndexGenerator.GetNextIndex();
+                    var connection = ConnectionRepository.AddClientFromId(index);
 
-                if (connection is null) {
-                    ConnectionRepository.RemoveFromId(index);
-                    connection = ConnectionRepository.AddClientFromId(index);
+                    if (connection is null) {
+                        ConnectionRepository.RemoveFromId(index);
+                        connection = ConnectionRepository.AddClientFromId(index);
+                    }
+
+                    socket.Blocking = false;
+                    socket.NoDelay = true;
+
+                    connection.Socket = socket;
+                    connection.IpAddress = ipAddress;
+                    connection.IncomingMessageQueue = IncomingMessageQueue;
+                    connection.OnDisconnect += OnConnectionDisconnected;
+
+                    connection.StartBeginReceive();
+
+                    RaiseConnectionApproval(connection);
                 }
-
-                socket.Blocking = false;
-                socket.NoDelay = true;
-
-                connection.Socket = socket;
-                connection.IpAddress = ipAddress;
-                connection.IncomingMessageQueue = IncomingMessageQueue;
-                connection.OnDisconnect += OnConnectionDisconnected;
-
-                connection.StartBeginReceive();
-
-                RaiseConnectionApproval(connection);
+                else {
+                    socket.Close();
+                }
             }
-            else {
-                socket.Close();
+
+            if (accepting) {
+                listener.BeginAccept(OnAccept, null);
             }
         }
-
-        if (accepting) {
-            listener.BeginAccept(OnAccept, null);
+        catch (Exception ex) {
+            Logger?.Write(WarningLevel.Error, GetType().Name, ex.Message);
         }
     }
 

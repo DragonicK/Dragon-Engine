@@ -33,8 +33,9 @@ public class ListenerService : IService {
             IncomingMessageQueue = incomingMessage!,
             OutgoingMessageWriter = outgoingWriter!,
             ConnectionRepository = repository!,
+            Logger = LoggerService!.Logger,
             IndexGenerator = generator!,
-            GeoIpAddress = geoIp!,
+            GeoIpAddress = geoIp!
         };
 
         ServerListener.ConnectionApprovalEvent += WriteFromConnectionApproval;
