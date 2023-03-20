@@ -35,9 +35,11 @@ public sealed class Starter {
 
         dir.Add("./Server");
         dir.Add("./Server/Logs");
+        dir.Add("./Server/Maps");
         dir.Add("./Server/Shops");
         dir.Add("./Server/Fields");
         dir.Add("./Server/Gashas");
+        dir.Add("./Server/Classes");
         dir.Add("./Server/Content");
         dir.Add("./Server/Upgrades");
         dir.Add("./Server/Premiums");
