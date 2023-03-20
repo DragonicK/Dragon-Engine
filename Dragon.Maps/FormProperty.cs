@@ -49,14 +49,14 @@ public partial class FormProperty : Form {
     private void ChangeFont(Control control) {
         var controls = control.Controls;
 
-        ChangeFontStye(control);
+        ChangeFontStyle(control);
 
         foreach (Control _control in controls) {
-            ChangeFontStye(_control);
+            ChangeFontStyle(_control);
         }
     }
 
-    private void ChangeFontStye(Control control) {
+    private void ChangeFontStyle(Control control) {
         control.Font = _jetBrainsMono.GetFont(FontStyle.Regular);
     }
 

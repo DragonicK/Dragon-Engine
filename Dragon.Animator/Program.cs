@@ -19,6 +19,7 @@ namespace Dragon.Animator {
             var directories = new EngineDirectory();
 
             directories.Add("./Content");
+            directories.Add("./Resource");
 
             directories.Create();
 

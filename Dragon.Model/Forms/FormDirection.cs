@@ -85,14 +85,14 @@ public partial class FormDirection : Form {
     private void ChangeFont(Control control) {
         var controls = control.Controls;
 
-        ChangeFontStye(control);
+        ChangeFontStyle(control);
 
         if (control is MenuStrip) {
             var menu = control as MenuStrip;
 
             if (menu is not null) {
                 foreach (ToolStripItem item in menu.Items) {
-                    ChangeFontStye(item);
+                    ChangeFontStyle(item);
                 }
             }
         }
@@ -102,13 +102,13 @@ public partial class FormDirection : Form {
         }
     }
 
-    private void ChangeFontStye(Control control) {
+    private void ChangeFontStyle(Control control) {
         if (JetBrainsMono is not null) {
             control.Font = JetBrainsMono.GetFont(FontStyle.Regular);
         }
     }
 
-    private void ChangeFontStye(ToolStripItem control) {
+    private void ChangeFontStyle(ToolStripItem control) {
         if (JetBrainsMono is not null) {
             control.Font = JetBrainsMono.GetFont(FontStyle.Regular);
         }

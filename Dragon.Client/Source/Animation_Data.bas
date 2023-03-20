@@ -32,7 +32,7 @@ Public Type AnimInstanceRec
     X As Long
     Y As Long
     ' used for locking to players/npcs
-    lockIndex As Long
+    LockIndex As Long
     LockType As Byte
     IsCasting As Byte
     ' timing
