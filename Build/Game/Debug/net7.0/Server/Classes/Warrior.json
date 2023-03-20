@@ -45,7 +45,7 @@
     "Evasion": 0,
     "Parry": 0,
     "Block": 0,
-    "MagicAttack": 0,
+    "MagicAttack": 10,
     "MagicDefense": 0,
     "MagicAccuracy": 0,
     "MagicResist": 0,
@@ -198,9 +198,9 @@
         "Strength": 0,
         "Agility": 0,
         "Constitution": 0,
-        "Intelligence": 0,
-        "Spirit": 0,
-        "Will": 0
+        "Intelligence": 10,
+        "Spirit": 1,
+        "Will": 1
       }
     },
     "MagicDefense": {

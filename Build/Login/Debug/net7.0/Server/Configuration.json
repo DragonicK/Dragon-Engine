@@ -19,7 +19,6 @@
   "FilterIpLifeTime": 120000,
   "IpMaxAttempt": 20,
   "IpMaxAccessCount": 20,
-  "Delay": 45,
   "LoginServer": {
     "Ip": "0.0.0.0",
     "Port": 7001

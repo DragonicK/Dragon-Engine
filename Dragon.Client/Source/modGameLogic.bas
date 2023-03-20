@@ -16,52 +16,6 @@ Public Function ConvertCurrency(ByVal Amount As Long) As String
 End Function
 
 
-Public Sub CheckAnimInstance(ByVal Index As Long)
-    Dim Looptime As Long
-    Dim Layer As Long
-    Dim FrameCount As Long
-
-    ' if doesn't exist then exit sub
-    If AnimInstance(Index).Animation <= 0 Then Exit Sub
-    If AnimInstance(Index).Animation >= MAX_ANIMATIONS Then Exit Sub
-
-    For Layer = 0 To 1
-
-        If AnimInstance(Index).Used(Layer) Then
-            Looptime = Animation(AnimInstance(Index).Animation).Looptime(Layer)
-            FrameCount = Animation(AnimInstance(Index).Animation).FrameCount(Layer)
-
-            ' if zero'd then set so we don't have extra loop and/or frame
-            If AnimInstance(Index).FrameIndex(Layer) = 0 Then AnimInstance(Index).FrameIndex(Layer) = 1
-            If AnimInstance(Index).LoopIndex(Layer) = 0 Then AnimInstance(Index).LoopIndex(Layer) = 1
-
-            ' check if frame timer is set, and needs to have a frame change
-            If AnimInstance(Index).Timer(Layer) + Looptime <= GetTickCount Then
-
-                ' check if out of range
-                If AnimInstance(Index).FrameIndex(Layer) >= FrameCount Then
-                    AnimInstance(Index).LoopIndex(Layer) = AnimInstance(Index).LoopIndex(Layer) + 1
-
-                    If AnimInstance(Index).LoopIndex(Layer) > Animation(AnimInstance(Index).Animation).LoopCount(Layer) Then
-                        AnimInstance(Index).Used(Layer) = False
-                    Else
-                        AnimInstance(Index).FrameIndex(Layer) = 1
-                    End If
-
-                Else
-                    AnimInstance(Index).FrameIndex(Layer) = AnimInstance(Index).FrameIndex(Layer) + 1
-                End If
-
-                AnimInstance(Index).Timer(Layer) = GetTickCount
-            End If
-        End If
-    Next
-
-    ' if neither layer is used, clear
-    If AnimInstance(Index).Used(0) = False And AnimInstance(Index).Used(1) = False Then ClearAnimInstance (Index)
-End Sub
-
-
 Public Sub SetBarWidth(ByRef MaxWidth As Long, ByRef Width As Long)
     Dim barDifference As Long
 

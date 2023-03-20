@@ -22,6 +22,10 @@ mono_crash.*
 [Bb]uild/Maps/
 # Packer 
 [Bb]uild/Packer/
+# Animator 
+[Bb]uild/Animator/
+# Animator 
+[Bb]uild/Fonts/
 # Game Debug
 [Bb]uild/Game/Debug/net7.0/runtimes/
 [Bb]uild/Game/Debug/net7.0/*.*
@@ -34,6 +38,7 @@ mono_crash.*
 # Login Release
 [Bb]uild/Login/Release/net7.0/runtimes/
 [Bb]uild/Login/Release/net7.0/*.*
+
 # Logs
 [Bb]uild/Game/Debug/net7.0/Server/Logs/*.*
 [Bb]uild/Login/Debug/net7.0/Server/Logs/*.*

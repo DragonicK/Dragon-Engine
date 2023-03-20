@@ -213,6 +213,100 @@ Public Sub HandlePlayerStats(ByVal Index As Long, ByRef Data() As Byte, ByVal St
 
     End With
 
+End Sub
+
+Public Sub HandlePlayerData(ByVal Index As Long, ByRef Data() As Byte, ByVal StartAddr As Long, ByVal ExtraVar As Long)
+    Dim i As Long, X As Long, Dead As Byte
+    Dim Buffer As clsBuffer
+
+    Set Buffer = New clsBuffer
+    Buffer.WriteBytes Data()
+
+    i = Buffer.ReadLong
+
+    Call SetPlayerName(i, Buffer.ReadString)
+    Call SetPlayerAccess(i, Buffer.ReadLong)
+    Call SetPlayerClass(i, Buffer.ReadLong)
+    Call SetPlayerSprite(i, Buffer.ReadLong)
+    Call SetPlayerLevel(i, Buffer.ReadLong)
+    Call SetPlayerMap(i, Buffer.ReadLong)
+    Call SetPlayerX(i, Buffer.ReadInteger)
+    Call SetPlayerY(i, Buffer.ReadInteger)
+    Call SetPlayerDirection(i, Buffer.ReadLong)
+    Call SetPlayerTitle(i, Buffer.ReadLong)
+    Call SetPlayerDead(i, Buffer.ReadByte)
+
+    ' Check if the player is the client player
+    If i = MyIndex Then
+        ' Reset directions
+        WDown = False
+        ADown = False
+        SDown = False
+        DDown = False
+
+        With Windows(GetWindowIndex("winCharacter"))
+            .Controls(GetControlIndex("winCharacter", "lblName")).Text = UCase$(GetPlayerName(MyIndex)) & " LV. " & GetPlayerLevel(MyIndex)
+            .Controls(GetControlIndex("winCharacter", "lblClass")).Text = UCase$(Class(GetPlayerClass(MyIndex)).Name)
+        End With
+
+        Call UpdateActiveTitle(GetPlayerTitle(MyIndex))
+    End If
+
+    ' Define a sprite do jogador.
+    Call SetPlayerModelIndex(i)
+
+    ' Make sure they aren't walking
+    Player(i).Moving = 0
+    Player(i).xOffset = 0
+    Player(i).yOffset = 0
+End Sub
+
+Public Sub HandlePlayerHp(ByVal Index As Long, ByRef Data() As Byte, ByVal StartAddr As Long, ByVal ExtraVar As Long)
+    Dim Buffer As clsBuffer, pIndex As Long
+
+    Set Buffer = New clsBuffer
+    Buffer.WriteBytes Data()
+
+    pIndex = Buffer.ReadLong
+
+    Call SetPlayerMaxVital(pIndex, Vitals.HP, Buffer.ReadLong)
+    Call SetPlayerVital(pIndex, Vitals.HP, Buffer.ReadLong)
+
+    If pIndex = MyIndex Then
+        ' set max width
+        If GetPlayerVital(MyIndex, Vitals.HP) > 0 Then
+            BarWidth_GuiHP_Max = ((GetPlayerVital(MyIndex, Vitals.HP) / 209) / (GetPlayerMaxVital(MyIndex, Vitals.HP) / 209)) * 209
+        Else
+            BarWidth_GuiHP_Max = 0
+        End If
+
+        ' Update GUI
+        UpdateStats_UI
+    End If
+
+End Sub
+
+Public Sub HandlePlayerMp(ByVal Index As Long, ByRef Data() As Byte, ByVal StartAddr As Long, ByVal ExtraVar As Long)
+    Dim Buffer As clsBuffer, pIndex As Long
+
+    Set Buffer = New clsBuffer
+    Buffer.WriteBytes Data()
+
+    pIndex = Buffer.ReadLong
+
+    Call SetPlayerMaxVital(pIndex, Vitals.MP, Buffer.ReadLong)
+    Call SetPlayerVital(pIndex, Vitals.MP, Buffer.ReadLong)
+
+    If pIndex = MyIndex Then
+        ' set max width
+        If GetPlayerVital(MyIndex, Vitals.MP) > 0 Then
+            BarWidth_GuiSP_Max = ((GetPlayerVital(MyIndex, Vitals.MP) / 209) / (GetPlayerMaxVital(MyIndex, Vitals.MP) / 209)) * 209
+        Else
+            BarWidth_GuiSP_Max = 0
+        End If
+        ' Update GUI
+        UpdateStats_UI
+    End If
 
 End Sub
 
@@ -239,3 +333,12 @@ Public Sub HandleExperience(ByVal Index As Long, ByRef Data() As Byte, ByVal Sta
     ' Update GUI
     UpdateStats_UI
 End Sub
+
+Public Sub HandleClearPlayers(ByVal Index As Long, ByRef Data() As Byte, ByVal StartAddr As Long, ByVal ExtraVar As Long)
+    Dim i As Long
+
+    For i = 1 To MaxPlayers
+        Call ClearPlayer(i)
+    Next
+End Sub
+

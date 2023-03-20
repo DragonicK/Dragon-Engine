@@ -225,7 +225,33 @@ Public Sub HandleTradeInvite(ByVal Index As Long, ByRef Data() As Byte, ByVal St
     ShowDialogue "Convite para negociação", Character & " convidou você para uma negociação.", "Voce gostaria de aceitar?", DialogueTypeTrade, DialogueStyleYesNo
 End Sub
 
+Public Sub HandleTradeRequest(ByVal Index As Long, ByRef Data() As Byte, ByVal StartAddr As Long, ByVal ExtraVar As Long)
+    'Dim Buffer As clsBuffer, TheName As String, Top As Long
 
+    'Set Buffer = New clsBuffer
+    'Buffer.WriteBytes Data()
+
+    'TheName = Buffer.ReadString
+
+  '  Set Buffer = Nothing
+
+    ' cache name and show invitation
+  '  Dialogue.DataString = TheName
+    
+  '  ShowWindow GetWindowIndex("winInvite_Trade")
+    
+  '  Windows(GetWindowIndex("winInvite_Trade")).Controls(GetControlIndex("winInvite_Trade", "btnInvite")).Text = ColourChar & White & TheName & ColourChar & "-1" & " convidou voce para uma negociacao."
+    
+   ' AddText Trim$(TheName) & " has invited you to trade.", White
+    ' loop through
+    'Top = ScreenHeight - 80
+
+    'If Windows(GetWindowIndex("winInvite_Party")).Window.Visible Then
+    '    Top = Top - 37
+    'End If
+
+   ' Windows(GetWindowIndex("winInvite_Trade")).Window.Top = Top
+End Sub
 
 
 

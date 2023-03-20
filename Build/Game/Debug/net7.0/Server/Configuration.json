@@ -59,6 +59,7 @@
   },
   "Rates": {
     "Character": 1,
+    "Talent": 1,
     "Party": 1,
     "Guild": 1,
     "Skill": 1,
