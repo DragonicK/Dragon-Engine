@@ -85,6 +85,12 @@ Public Sub LoadItems()
     Dim Description As String
     Dim Sound As String
 
+    If Not FileExist(App.Path & "\Data Files\Data\Items.dat") Then
+        MsgBox ("\Data Files\Data\Items not found.")
+
+        Exit Sub
+    End If
+
     Index = GetFileHandler(App.Path & "\Data Files\Data\Items.dat")
 
     If Index = 0 Then

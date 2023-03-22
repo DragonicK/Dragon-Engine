@@ -1,4 +1,5 @@
 ﻿using Dragon.Core.Model.DisplayIcon;
+
 using Dragon.Network.Messaging.DTO;
 
 namespace Dragon.Network.Messaging.SharedPackets;

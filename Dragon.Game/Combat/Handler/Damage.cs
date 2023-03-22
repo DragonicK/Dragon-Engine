@@ -20,7 +20,11 @@ public class Damage : ISkill {
 
     public bool CouldSelect(Target target, SkillEffect effect) {
         if (Player!.Target is IInstanceEntity entity) {
-            if (entity is not null) {
+             if (entity is not null) {
+                if (entity.Vitals.Get(Vital.HP) <= 0) {
+                    return false;
+                }
+
                 return entity.Behaviour == NpcBehaviour.Monster || entity.Behaviour == NpcBehaviour.Boss;
             }
         }
@@ -100,7 +104,7 @@ public class Damage : ISkill {
             var entities = instance.Entities;
 
             foreach (var entity in entities) {
-                if (!entity.IsDead) {
+                if (entity.Vitals.Get(Vital.HP) > 0) {
                     x2 = entity.X;
                     y2 = entity.Y;
 

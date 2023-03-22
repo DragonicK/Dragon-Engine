@@ -13,6 +13,8 @@ using Dragon.Game.Services;
 using Dragon.Game.Instances;
 
 using Dragon.Game.Combat.Handler;
+using System.Formats.Asn1;
+using System;
 
 namespace Dragon.Game.Combat;
 
@@ -99,6 +101,12 @@ public class PlayerCombat : IEntityCombat {
                 if (Skills.Contains(id)) {
                     var data = Skills[id]!;
 
+                    if (IsTargetDead()) {
+                        PacketSender!.SendMessage(SystemMessage.InvalidTarget, QbColor.BrigthRed, Player!, new string[] { id.ToString() });
+
+                        return;
+                    }
+
                     if (!IsCostEnough(data.CostType, inventory.Cost)) {
                         PacketSender!.SendMessage(SystemMessage.InsuficientMana, QbColor.BrigthRed, Player!, new string[] { id.ToString() });
 
@@ -109,7 +117,9 @@ public class PlayerCombat : IEntityCombat {
                         PacketSender!.SendMessage(SystemMessage.InvalidRange, QbColor.BrigthRed, Player!);
 
                         return;
-                    }
+                    }         
+
+                    PacketSender.SendAnimation(GetInstance()!, data.CastAnimationId, Player.GetX(), Player.GetY(), TargetType.Player, Player.IndexOnInstance, false);
 
                     if (CouldSelectTargetByPrimaryEffect(data)) {
                         Current = inventory;
@@ -184,6 +194,13 @@ public class PlayerCombat : IEntityCombat {
                         var damaged = handler.GetDamage(targets[i], inventory, type);
 
                         handler.Inflict(damaged, targets[i], instance, effect);
+
+                        var lockType = targets[i].Type;
+                        var x = targets[i].Entity.GetX();
+                        var y = targets[i].Entity.GetY();
+                        var index = targets[i].Entity.IndexOnInstance;
+
+                        PacketSender.SendAnimation(instance, data.AttackAnimationId, x, y, lockType, index, false);
                     }
                 }
             }
@@ -229,6 +246,18 @@ public class PlayerCombat : IEntityCombat {
         }
 
         return false;
+    }
+
+    private bool IsTargetDead() {
+        if (Player!.TargetType != TargetType.None) {
+            var target = Player!.Target;
+
+            if (target is not null) {
+                return target.Vitals.Get(Vital.HP) <= 0;
+            }
+        }
+
+        return true;
     }
 
     private bool IsTargetInRange(int range) {

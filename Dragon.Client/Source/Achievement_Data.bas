@@ -109,6 +109,12 @@ Public Sub LoadAchievements()
     Dim Name As String
     Dim Description As String
 
+    If Not FileExist(App.Path & "\Data Files\Data\Achievements.dat") Then
+        MsgBox ("\Data Files\Data\Achievements not found.")
+
+        Exit Sub
+    End If
+
     Index = GetFileHandler(App.Path & "\Data Files\Data\Achievements.dat")
 
     If Index = 0 Then

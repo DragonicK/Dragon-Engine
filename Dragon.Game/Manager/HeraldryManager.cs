@@ -70,12 +70,11 @@ public class HeraldryManager {
         var item = GetItemFromInventory(index);
 
         if (item is not null) {
-            if (item.ClassCode > 0) {
-                if (item.ClassCode != Player!.Character.ClassCode) {
-                    var parameters = new string[] { item.ClassCode.ToString() };
 
-                    PacketSender!.SendMessage(SystemMessage.OnlyClassCodeCanUseItem, QbColor.Red, Player, parameters);
-                }
+            if (item.ClassCode != Player!.Character.ClassCode) {
+                var parameters = new string[] { item.ClassCode.ToString() };
+
+                PacketSender!.SendMessage(SystemMessage.OnlyClassCodeCanUseItem, QbColor.Red, Player, parameters);
             }
             else {
                 if (item!.RequiredLevel > Player!.Character.Level) {

@@ -59,6 +59,12 @@ Public Sub LoadAttributes(ByRef Attributes() As AttributesRec, ByRef MaxAttribut
     Dim Name As String
     Dim Description As String
 
+    If Not FileExist(App.Path & "\Data Files\Data\Titles.dat") Then
+        MsgBox ("\Data Files\Data\" & FileName & " not found.")
+
+        Exit Sub
+    End If
+
     Index = GetFileHandler(App.Path & "\Data Files\Data\" & FileName)
 
     If Index = 0 Then

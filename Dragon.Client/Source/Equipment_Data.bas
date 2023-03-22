@@ -74,6 +74,12 @@ Public Sub LoadEquipments()
     Dim Name As String
     Dim Description As String
 
+    If Not FileExist(App.Path & "\Data Files\Data\Equipments.dat") Then
+        MsgBox ("\Data Files\Data\Equipments not found.")
+
+        Exit Sub
+    End If
+
     Index = GetFileHandler(App.Path & "\Data Files\Data\Equipments.dat")
 
     If Index = 0 Then
@@ -103,7 +109,7 @@ Public Sub LoadEquipments()
                 Equipment(i).AttackAnimationId = ReadInt32()
 
                 Equipment(i).MaximumSkills = ReadInt32()
-                
+
                 If Equipment(i).MaximumSkills > 0 Then
                     ReDim Equipment(i).Skills(1 To Equipment(i).MaximumSkills)
 

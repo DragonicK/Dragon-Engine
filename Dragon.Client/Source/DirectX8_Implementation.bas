@@ -49,9 +49,16 @@ Public mTextures As Long
 Public CurrentTexture As Long
 
 Public ScreenWidth As Long, ScreenHeight As Long
+Attribute ScreenHeight.VB_VarUserMemId = 1073741836
 Public TileWidth As Long, TileHeight As Long
+Attribute TileWidth.VB_VarUserMemId = 1073741838
+Attribute TileHeight.VB_VarUserMemId = 1073741838
 Public ScreenX As Long, ScreenY As Long
+Attribute ScreenX.VB_VarUserMemId = 1073741840
+Attribute ScreenY.VB_VarUserMemId = 1073741840
 Public CurResolution As Byte, isFullscreen As Boolean
+Attribute CurResolution.VB_VarUserMemId = 1073741842
+Attribute isFullscreen.VB_VarUserMemId = 1073741842
 
 Public Sub InitDX8(ByVal hWnd As Long)
     Dim DispMode As D3DDISPLAYMODE, Width As Long, Height As Long
@@ -170,7 +177,7 @@ Sub DestroyDX8()
     'For i = 1 To mTextures
     '    mTexture(i).Data
     'Next
-    
+
     If Not DX8 Is Nothing Then Set DX8 = Nothing
     If Not D3D Is Nothing Then Set D3D = Nothing
     If Not D3DX Is Nothing Then Set D3DX = Nothing
@@ -203,7 +210,7 @@ Public Sub ResetGFX()
 
     ' Ground
     GroundCount = MaxGroundParallax
-    
+
     If GroundCount > 0 Then
         ReDim GroundParallaxTemp(1 To GroundCount)
 
@@ -217,7 +224,7 @@ Public Sub ResetGFX()
 
     ' Fringe
     FringeCount = MaxFringeParallax
-    
+
     If FringeCount > 0 Then
         ReDim FringeParallaxTemp(1 To FringeCount)
 
@@ -434,7 +441,7 @@ Public Sub DrawChatBubble(ByVal Index As Long)
         Case Else
             Exit Sub
         End Select
-        
+
         Colour = ChatBubble(Index).Colour
 
         ' word wrap
@@ -710,10 +717,10 @@ Public Sub Render_Graphics()
     ' render target
     Call UpdateTargetWindow
 
-    DrawPartyActiveIcons
+    Call DrawPartyActiveIcons
 
     ' draw the bars
-    DrawBars
+    Call DrawBars
 
     ' draw player names
     If Not ScreenshotMode Then
@@ -734,13 +741,15 @@ Public Sub Render_Graphics()
     ' draw npc names
     If Not ScreenshotMode Then
         For i = 1 To Npc_HighIndex
-            If MapNpc(i).Num > 0 Then
-                PosX = MapNpc(i).X * 32
-                PosY = MapNpc(i).Y * 32
+            If Not MapNpc(i).Dead Then
+                If MapNpc(i).Num > 0 Then
+                    PosX = MapNpc(i).X * 32
+                    PosY = MapNpc(i).Y * 32
 
-                If PlayerX < PosX + Right And PlayerY < PosY + Bottom Then
-                    If PosX < PlayerX + Right And PosY < PlayerY + Bottom Then
-                        Call DrawNpcName(i)
+                    If PlayerX < PosX + Right And PlayerY < PosY + Bottom Then
+                        If PosX < PlayerX + Right And PosY < PlayerY + Bottom Then
+                            Call DrawNpcName(i)
+                        End If
                     End If
                 End If
             End If
@@ -766,10 +775,10 @@ Public Sub Render_Graphics()
     End If
 
     ' Draw Player icons
-    DrawPlayerActiveIcons
+    Call DrawPlayerActiveIcons
 
     ' Draw dead panel above all windows
-    UpdateDeadPanel
+    Call UpdateDeadPanel
 
     ' Render entities
     If Not hideGUI And Not ScreenshotMode Then RenderEntities
@@ -785,7 +794,7 @@ Public Sub Render_Graphics()
     End If
 
     ' draw map name
-    RenderMapName
+    Call RenderMapName
 
     ' End the rendering
     Call D3DDevice.EndScene
@@ -896,7 +905,7 @@ End Sub
 
 Public Sub SetResolution()
     Dim Width As Long, Height As Long
-    
+
     CurResolution = Options.Resolution
     GetResolutionSize CurResolution, Width, Height
     Resize Width, Height
@@ -922,7 +931,7 @@ Public Sub ResizeGUI()
     ' move menu
     ' Windows(GetWindowIndex("winMenu")).Window.Left = ScreenWidth - 236
     ' Windows(GetWindowIndex("winMenu")).Window.Top = ScreenHeight - 37
-    
+
     ' move invitations
     Windows(GetWindowIndex("winInvite_Party")).Window.Left = ScreenWidth - 234
     Windows(GetWindowIndex("winInvite_Party")).Window.Top = ScreenHeight - 100
@@ -935,22 +944,22 @@ Public Sub ResizeGUI()
 
     Windows(GetWindowIndex("winInvite_Trade")).Window.Left = ScreenWidth - 234
     Windows(GetWindowIndex("winInvite_Trade")).Window.Top = Top
-    
+
     ' re-size right-click background
     Windows(GetWindowIndex("winRightClickBG")).Window.Width = ScreenWidth
     Windows(GetWindowIndex("winRightClickBG")).Window.Height = ScreenHeight
-    
+
     ' re-size black background
     Windows(GetWindowIndex("winBlank")).Window.Width = ScreenWidth
     Windows(GetWindowIndex("winBlank")).Window.Height = ScreenHeight
-    
+
     ' re-size combo background
     Windows(GetWindowIndex("winComboMenuBG")).Window.Width = ScreenWidth
     Windows(GetWindowIndex("winComboMenuBG")).Window.Height = ScreenHeight
-    
+
     ' centralise windows
     CentraliseWindow GetWindowIndex("winLogin")
-    
+
     CentraliseWindow GetWindowIndex("winModels")
     CentraliseWindow GetWindowIndex("winDialogue")
     CentraliseWindow GetWindowIndex("winClasses")
@@ -966,8 +975,8 @@ Public Sub ResizeGUI()
     CentraliseWindow GetWindowIndex("winCraft")
     CentraliseWindow GetWindowIndex("winAchievement")
     CentraliseWindow GetWindowIndex("winLoot")
-    
-    
+
+
     Resize_WinModelFooter
     Resize_WinLoginFooter
     Resize_WinLoading

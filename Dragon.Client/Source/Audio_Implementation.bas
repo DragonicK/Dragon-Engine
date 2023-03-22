@@ -265,33 +265,33 @@ Private Function GetSoundIndex(ByRef Sound As String) As Long
 
 End Function
 
-Public Sub PlayMapSound(ByVal X As Long, ByVal Y As Long, ByVal EntityType As SoundEntity, ByVal EntityNum As Long)
+Public Sub PlayMapSound(ByVal X As Long, ByVal Y As Long, ByVal entityType As SoundEntity, ByVal entityNum As Long)
     Dim soundName As String
 
-    If EntityNum <= 0 Then Exit Sub
+    If entityNum <= 0 Then Exit Sub
 
     ' find the sound
-    Select Case EntityType
+    Select Case entityType
 
     Case SoundEntity.SeAnimation
-        If EntityNum > MAX_ANIMATIONS Then Exit Sub
-        soundName = Animation(EntityNum).Sound
+        If entityNum > MaximumAnimations Then Exit Sub
+        soundName = Animation(entityNum).Sound
 
     Case SoundEntity.SeItem
-        If EntityNum > MaximumItems Then Exit Sub
-        soundName = Item(EntityNum).Sound
+        If entityNum > MaximumItems Then Exit Sub
+        soundName = Item(entityNum).Sound
 
     Case SoundEntity.SeNpc
-        If EntityNum > MaximumNpcs Then Exit Sub
-        soundName = Npc(EntityNum).Sound
+        If entityNum > MaximumNpcs Then Exit Sub
+        soundName = Npc(entityNum).Sound
 
     Case SoundEntity.SeResource
         ' If entityNum > MAX_RESOURCES Then Exit Sub
         ' soundName = Trim$(Resource(entityNum).Sound)
 
     Case SoundEntity.SeSpell
-        If EntityNum > MaximumSkills Then Exit Sub
-        soundName = Skill(EntityNum).Sound
+        If entityNum > MaximumSkills Then Exit Sub
+        soundName = Skill(entityNum).Sound
 
     Case Else
         Exit Sub

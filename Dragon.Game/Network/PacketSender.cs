@@ -4,19 +4,16 @@ using Dragon.Network.Messaging.DTO;
 using Dragon.Network.Messaging.SharedPackets;
 
 using Dragon.Core.Model;
-using Dragon.Core.Model.Maps;
 using Dragon.Core.Model.Shops;
-using Dragon.Core.Model.Mailing;
 using Dragon.Core.Model.Premiums;
 using Dragon.Core.Model.Upgrades;
 using Dragon.Core.Model.Characters;
 
-using Dragon.Game.Manager;
 using Dragon.Game.Players;
 using Dragon.Game.Services;
-using Dragon.Game.Messages;
 using Dragon.Game.Instances;
 using Dragon.Game.Configurations;
+
 
 namespace Dragon.Game.Network;
 
@@ -1266,6 +1263,26 @@ public sealed partial class PacketSender : IPacketSender {
         var msg = Writer!.CreateMessage(packet);
 
         msg.DestinationPeers.Add(player.GetConnection().Id);
+        msg.TransmissionTarget = TransmissionTarget.Destination;
+
+        Writer.Enqueue(msg);
+    }
+
+    public void SendAnimation(IInstance instance, int animation, int x, int y, TargetType lockType, int lockIndex, bool isCasting) {
+        var list = instance.GetPlayers().Select(p => p.GetConnection().Id);
+
+        var packet = new SpAnimation() {
+            Animation = animation,
+            X = x, 
+            Y = y, 
+            LockType = lockType, 
+            LockIndex = lockIndex,
+            IsCasting = isCasting
+        };
+
+        var msg = Writer!.CreateMessage(packet);
+
+        msg.DestinationPeers.AddRange(list);
         msg.TransmissionTarget = TransmissionTarget.Destination;
 
         Writer.Enqueue(msg);

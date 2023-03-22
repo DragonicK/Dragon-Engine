@@ -86,7 +86,6 @@ Public Const PIC_Y As Long = 32
 ' ********************************************************
 ' General constants
 Public Const MaxPlayers As Long = 200
-Public Const MAX_ANIMATIONS As Byte = 50
 Public Const MAX_LEVELS As Byte = 25
 
 Public Const MAX_CONVS As Byte = 100

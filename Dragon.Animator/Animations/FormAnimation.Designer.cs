@@ -23,6 +23,7 @@
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
+            components = new System.ComponentModel.Container();
             MenuStrip = new MenuStrip();
             FileMenuItem = new ToolStripMenuItem();
             MenuSave = new ToolStripMenuItem();
@@ -33,6 +34,8 @@
             ButtonAdd = new Button();
             ListIndex = new ListBox();
             GroupData = new GroupBox();
+            label11 = new Label();
+            TextSound = new TextBox();
             label10 = new Label();
             TextName = new TextBox();
             label9 = new Label();
@@ -57,6 +60,8 @@
             TextLowerFrame = new TextBox();
             TextLowerLoop = new TextBox();
             TextLowerSprite = new TextBox();
+            CasterTime = new System.Windows.Forms.Timer(components);
+            AttackTimer = new System.Windows.Forms.Timer(components);
             MenuStrip.SuspendLayout();
             GroupList.SuspendLayout();
             GroupData.SuspendLayout();
@@ -155,6 +160,8 @@
             // 
             // GroupData
             // 
+            GroupData.Controls.Add(label11);
+            GroupData.Controls.Add(TextSound);
             GroupData.Controls.Add(label10);
             GroupData.Controls.Add(TextName);
             GroupData.Controls.Add(label9);
@@ -168,6 +175,24 @@
             GroupData.TabIndex = 6;
             GroupData.TabStop = false;
             GroupData.Text = "Data";
+            // 
+            // label11
+            // 
+            label11.AutoSize = true;
+            label11.Location = new Point(258, 22);
+            label11.Name = "label11";
+            label11.Size = new Size(49, 15);
+            label11.TabIndex = 11;
+            label11.Text = "Sound:";
+            // 
+            // TextSound
+            // 
+            TextSound.Location = new Point(258, 40);
+            TextSound.Name = "TextSound";
+            TextSound.Size = new Size(192, 23);
+            TextSound.TabIndex = 10;
+            TextSound.Text = ".none";
+            TextSound.TextChanged += TextSound_TextChanged;
             // 
             // label10
             // 
@@ -404,6 +429,16 @@
             TextLowerSprite.Text = "0";
             TextLowerSprite.TextChanged += TextLowerSprite_TextChanged;
             // 
+            // CasterTime
+            // 
+            CasterTime.Enabled = true;
+            CasterTime.Tick += CastTimer_Tick;
+            // 
+            // AttackTimer
+            // 
+            AttackTimer.Enabled = true;
+            AttackTimer.Tick += AttackTimer_Tick;
+            // 
             // FormAnimation
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -468,5 +503,9 @@
         private TextBox TextName;
         private Label label9;
         private TextBox TextId;
+        private Label label11;
+        private TextBox TextSound;
+        private System.Windows.Forms.Timer CasterTime;
+        private System.Windows.Forms.Timer AttackTimer;
     }
 }

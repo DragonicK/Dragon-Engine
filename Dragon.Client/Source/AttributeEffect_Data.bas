@@ -46,6 +46,12 @@ Public Sub LoadAttributeEffects()
     Dim Name As String
     Dim Description As String
 
+    If Not FileExist(App.Path & "\Data Files\Data\Effects.dat") Then
+        MsgBox ("\Data Files\Data\Effects not found.")
+
+        Exit Sub
+    End If
+
     Index = GetFileHandler(App.Path & "\Data Files\Data\Effects.dat")
     
     If Index = 0 Then

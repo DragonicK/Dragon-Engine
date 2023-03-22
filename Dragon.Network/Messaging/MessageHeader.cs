@@ -140,5 +140,7 @@ public enum MessageHeader {
     RequestViewEquipment,
     ViewEquipment,
     ViewEquipmentVisibility,
-    Settings
+    Settings,
+    Animation,
+    CancelAnimation
 }

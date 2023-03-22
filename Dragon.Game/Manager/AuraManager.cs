@@ -1,4 +1,5 @@
-﻿using Dragon.Core.Content;
+﻿using Dragon.Core.Model;
+using Dragon.Core.Content;
 using Dragon.Core.Model.Effects;
 
 using Dragon.Game.Parties;
@@ -109,12 +110,14 @@ public class AuraManager {
             var player = member.Player;
 
             if (player is not null) {
-                var x2 = player.Character.X;
-                var y2 = player.Character.Y;
+                if (player.Vitals.Get(Vital.HP) > 0) {
+                    var x2 = player.Character.X;
+                    var y2 = player.Character.Y;
 
-                if (!player.Effects.Contains(id)) {
-                    if (IsInRange(range, x, y, x2, y2)) {
-                        manager.GiveEffect(player, id, level, 0, true);
+                    if (!player.Effects.Contains(id)) {
+                        if (IsInRange(range, x, y, x2, y2)) {
+                            manager.GiveEffect(player, id, level, 0, true);
+                        }
                     }
                 }
             }

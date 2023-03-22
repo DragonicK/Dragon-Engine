@@ -46,11 +46,17 @@ Public Sub LoadEquipmentSets()
     Dim Name As String
     Dim Description As String
 
+    If Not FileExist(App.Path & "\Data Files\Data\EquipmentSets.dat") Then
+        MsgBox ("\Data Files\Data\EquipmentSets not found.")
+
+        Exit Sub
+    End If
+
     Index = GetFileHandler(App.Path & "\Data Files\Data\EquipmentSets.dat")
 
     If Index = 0 Then
         Dim n As Long
-        
+
         MaxEquipmentSets = ReadInt32()
 
         If MaxEquipmentSets > 0 Then
@@ -77,7 +83,7 @@ Public Sub LoadEquipmentSets()
                     Next
                 End If
             Next
-            
+
         End If
     End If
 

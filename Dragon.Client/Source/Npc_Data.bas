@@ -39,6 +39,12 @@ Public Sub LoadNpcs()
     Dim Greetings As String
     Dim Count As Long
 
+    If Not FileExist(App.Path & "\Data Files\Data\Npcs.dat") Then
+        MsgBox ("\Data Files\Data\Npcs not found.")
+
+        Exit Sub
+    End If
+
     Index = GetFileHandler(App.Path & "\Data Files\Data\Npcs.dat")
 
     If Index = 0 Then
@@ -68,9 +74,9 @@ Public Sub LoadNpcs()
                 Npc(i).Sound = Replace$(Sound, vbNullChar, vbNullString)
 
                 Call ReadString(Greetings)
-                
+
                 Npc(i).Greetings = Replace$(Greetings, vbNullChar, vbNullString)
-                
+
                 Count = ReadInt32()
 
                 Npc(i).ConversationCount = Count

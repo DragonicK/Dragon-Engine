@@ -27,6 +27,7 @@ Public Sub Main()
 
     ClearServices
 
+    LoadAnimations
     LoadNotificationIcons
     LoadTitles
     LoadTitleAttributes
@@ -49,7 +50,6 @@ Public Sub Main()
     LoadPassiveAttributes
     LoadPassiveEnhancements
     LoadItems
-    ' LoadAnimations
     LoadConversations
     LoadQuests
 

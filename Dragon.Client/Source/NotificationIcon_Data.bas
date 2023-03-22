@@ -36,6 +36,13 @@ End Function
 Public Sub LoadNotificationIcons()
     Dim Index As Long
     Dim i As Long
+
+    If Not FileExist(App.Path & "\Data Files\Data\Icons.dat") Then
+        MsgBox ("\Data Files\Data\Icons.dat not found.")
+
+        Exit Sub
+    End If
+
     Index = GetFileHandler(App.Path & "\Data Files\Data\Icons.dat")
 
     If Index = 0 Then

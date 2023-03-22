@@ -3,7 +3,7 @@ Option Explicit
 
 Public Sub DrawAnimation(ByVal Index As Long, ByVal Layer As Long)
     Dim Sprite As Integer, sRECT As GeomRec, Width As Long, Height As Long, FrameCount As Long
-    Dim X As Long, Y As Long, lockIndex As Long
+    Dim X As Long, Y As Long, LockIndex As Long
 
     If AnimInstance(Index).Animation = 0 Then
         ClearAnimInstance Index
@@ -17,8 +17,8 @@ Public Sub DrawAnimation(ByVal Index As Long, ByVal Layer As Long)
     'SetTexture Tex_Anim(Sprite)
     FrameCount = Animation(AnimInstance(Index).Animation).FrameCount(Layer)
     ' total width divided by frame count
-    Width = Animation(AnimInstance(Index).Animation).W(Layer)     'mTexture(Tex_Anim(Sprite)).width / frameCount
-    Height = Animation(AnimInstance(Index).Animation).H(Layer)     'mTexture(Tex_Anim(Sprite)).height
+    Width = Animation(AnimInstance(Index).Animation).DestWidth(Layer)      'mTexture(Tex_Anim(Sprite)).width / frameCount
+    Height = Animation(AnimInstance(Index).Animation).DestHeight(Layer)      'mTexture(Tex_Anim(Sprite)).height
 
     With sRECT
         .Top = (Height * ((AnimInstance(Index).FrameIndex(Layer) - 1) \ AnimColumns))
@@ -29,41 +29,34 @@ Public Sub DrawAnimation(ByVal Index As Long, ByVal Layer As Long)
 
     ' change x or y if locked
     If AnimInstance(Index).LockType > TargetTypeNone Then    ' if <> none
-
         ' is a player
         If AnimInstance(Index).LockType = TargetTypePlayer Then
             ' quick save the index
-            lockIndex = AnimInstance(Index).lockIndex
+            LockIndex = AnimInstance(Index).LockIndex
 
             ' check if is ingame
-            If IsPlaying(lockIndex) Then
+            If IsPlaying(LockIndex) Then
 
                 ' check if on same map
-                If GetPlayerMap(lockIndex) = GetPlayerMap(MyIndex) Then
+                If GetPlayerMap(LockIndex) = GetPlayerMap(MyIndex) Then
                     ' is on map, is playing, set x & y
-                    X = (GetPlayerX(lockIndex) * PIC_X) + 16 - (Width / 2) + Player(lockIndex).xOffset
-                    Y = (GetPlayerY(lockIndex) * PIC_Y) + 16 - (Height / 2) + Player(lockIndex).yOffset
+                    X = (GetPlayerX(LockIndex) * PIC_X) + 16 - (Width / 2) + Player(LockIndex).xOffset
+                    Y = (GetPlayerY(LockIndex) * PIC_Y) + 16 - (Height / 2) + Player(LockIndex).yOffset
                 End If
             End If
 
         ElseIf AnimInstance(Index).LockType = TargetTypeNpc Then
             ' quick save the index
-            lockIndex = AnimInstance(Index).lockIndex
+            LockIndex = AnimInstance(Index).LockIndex
 
             ' check if NPC exists
-            If MapNpc(lockIndex).Num > 0 Then
-
+            If MapNpc(LockIndex).Num > 0 Then
                 ' check if alive
-                ' If MapNpc(lockindex).Vital(Vitals.HP) > 0 Then
-                ' exists, is alive, set x & y
-                X = (MapNpc(lockIndex).X * PIC_X) + 16 - (Width / 2) + MapNpc(lockIndex).xOffset
-                Y = (MapNpc(lockIndex).Y * PIC_Y) + 16 - (Height / 2) + MapNpc(lockIndex).yOffset
-                ' Else
-                ' npc not alive anymore, kill the animation
-                '  ClearAnimInstance Index
-                ' Exit Sub
-                ' End If
-
+                If MapNpc(LockIndex).Vital(Vitals.HP) > 0 Then
+                    ' exists, is alive, set x & y
+                    X = (MapNpc(LockIndex).X * PIC_X) + 16 - (Width / 2) + MapNpc(LockIndex).xOffset
+                    Y = (MapNpc(LockIndex).Y * PIC_Y) + 16 - (Height / 2) + MapNpc(LockIndex).yOffset
+                End If
             Else
                 ' npc not alive anymore, kill the animation
                 ClearAnimInstance Index
@@ -90,10 +83,9 @@ Public Sub CheckAnimInstance(ByVal Index As Long)
 
     ' if doesn't exist then exit sub
     If AnimInstance(Index).Animation <= 0 Then Exit Sub
-    If AnimInstance(Index).Animation >= MAX_ANIMATIONS Then Exit Sub
+    If AnimInstance(Index).Animation > MaximumAnimations Then Exit Sub
 
     For Layer = 0 To 1
-
         If AnimInstance(Index).Used(Layer) Then
             Looptime = Animation(AnimInstance(Index).Animation).Looptime(Layer)
             FrameCount = Animation(AnimInstance(Index).Animation).FrameCount(Layer)

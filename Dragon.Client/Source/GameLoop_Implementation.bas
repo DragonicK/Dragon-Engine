@@ -131,8 +131,10 @@ Public Sub GameLoop()
             SetBarWidth BarWidth_TargetMP_Max, BarWidth_TargetMP
 
             For i = 1 To Npc_HighIndex
-                If MapNpc(i).Num > 0 Then
-                    SetBarWidth BarWidth_NpcHP_Max(i), BarWidth_NpcHP(i)
+                If Not MapNpc(i).Dead Then
+                    If MapNpc(i).Num > 0 Then
+                        SetBarWidth BarWidth_NpcHP_Max(i), BarWidth_NpcHP(i)
+                    End If
                 End If
             Next
 

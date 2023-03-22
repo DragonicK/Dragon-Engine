@@ -60,6 +60,12 @@ Public Sub LoadConversations()
     Dim n As Long
     Dim X As Long
 
+    If Not FileExist(App.Path & "\Data Files\Data\Conversations.dat") Then
+        MsgBox ("\Data Files\Data\Conversations not found.")
+
+        Exit Sub
+    End If
+
     Index = GetFileHandler(App.Path & "\Data Files\Data\Conversations.dat")
 
     If Index = 0 Then
@@ -99,7 +105,7 @@ Public Sub LoadConversations()
                             .Data2 = ReadInt32()
                             .Data3 = ReadInt32()
                             .OptionCount = OptionCount
-                            
+
                             ReDim .Reply(1 To OptionCount)
                         End With
 

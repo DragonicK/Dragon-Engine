@@ -142,6 +142,8 @@ Public Enum EnginePacket
     PViewEquipment
     PViewEquipmentVisibility
     PSettings
+    PAnimation
+    PCancelAnimation
     
     PPacketCount
 End Enum

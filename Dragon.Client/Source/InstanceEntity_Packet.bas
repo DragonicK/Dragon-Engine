@@ -121,7 +121,9 @@ Public Sub HandleInstanceEntityVital(ByVal Index As Long, ByRef Data() As Byte, 
         For i = 1 To Vitals.Vital_Count - 1
             .MaxVital(i) = Buffer.ReadLong
         Next
-        
+
+        .Dead = .Vital(HP) <= 0
+
     End With
 
     Set Buffer = Nothing

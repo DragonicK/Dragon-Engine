@@ -11,6 +11,7 @@ public partial class FormMain : Form {
     public JetBrainsMono? JetBrainsMono { get; set; }
     public Configuration Configuration { get; private set; }
     public IDatabase<Animation> Animations { get; private set; }
+    public List<Bitmap> Resources { get; private set; }
 
     private const string _File = "Configuration.json";
 
@@ -34,6 +35,10 @@ public partial class FormMain : Form {
             FileName = "Animations.dat",
             Folder = "./Content"
         };
+
+        Resources = new List<Bitmap>();
+
+        LoadResources();
     }
 
     private void MenuExit_Click(object sender, EventArgs e) {
@@ -72,6 +77,18 @@ public partial class FormMain : Form {
         }
     }
 
+    private void LoadResources() {
+        const string Resource = "./Resource";
+
+        if (Directory.Exists(Resource)) {
+            var files = Directory.GetFiles(Resource);
+
+            foreach (var file in files) {
+                Resources.Add(new Bitmap(file));
+            }
+        }
+    }
+
     private void FormMain_Load(object sender, EventArgs e) {
         ChangeFont(this);
     }
@@ -80,7 +97,7 @@ public partial class FormMain : Form {
         Animations.Clear();
         Animations.Load();
 
-        var f = new FormAnimation(Configuration, Animations);
+        var f = new FormAnimation(Configuration, Animations, Resources);
 
         ChangeFont(f);
 

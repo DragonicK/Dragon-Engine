@@ -97,10 +97,9 @@ Public Sub InitMessages()
     HandleDataSub(EnginePacket.PShopOpen) = GetAddress(AddressOf HandleShopOpen)
     HandleDataSub(EnginePacket.PViewEquipment) = GetAddress(AddressOf HandleViewEquipment)
     HandleDataSub(EnginePacket.PSettings) = GetAddress(AddressOf HandleSettings)
+    HandleDataSub(EnginePacket.PAnimation) = GetAddress(AddressOf HandleAnimation)
+    HandleDataSub(EnginePacket.PCancelAnimation) = GetAddress(AddressOf HandleCancelAnimation)
    
-   ' HandleDataSub(SAnimation) = GetAddress(AddressOf HandleAnimation)
-    ' HandleDataSub(SCancelAnimation) = GetAddress(AddressOf HandleCancelAnimation)
-    
   
     
     ' HandleDataSub(SNpcAttack) = GetAddress(AddressOf HandleNpcAttack)

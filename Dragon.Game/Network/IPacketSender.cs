@@ -117,4 +117,5 @@ public interface IPacketSender {
     void SendShopOpen(IPlayer player, Shop shop);
     void SendViewEquipment(IPlayer player, IPlayer source);
     void SendSettings(IPlayer player);
+    void SendAnimation(IInstance instance, int animation, int x, int y, TargetType lockType, int lockIndex, bool isCasting);
 }

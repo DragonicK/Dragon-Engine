@@ -9,4 +9,9 @@ public class AnimationFrame {
     public int Width { get; set; }
     public int Height { get; set; }
     public int LoopTime { get; set; }
+
+    public AnimationFrame() {
+        Width = 192;
+        Height = 192;
+    }
 }

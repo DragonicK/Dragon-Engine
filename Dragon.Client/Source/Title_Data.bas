@@ -21,6 +21,12 @@ Public Sub LoadTitles()
     Dim Name As String
     Dim Description As String
 
+    If Not FileExist(App.Path & "\Data Files\Data\Titles.dat") Then
+        MsgBox ("\Data Files\Data\Titles.dat not found.")
+
+        Exit Sub
+    End If
+
     Index = GetFileHandler(App.Path & "\Data Files\Data\Titles.dat")
 
     If Index = 0 Then

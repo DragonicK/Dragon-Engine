@@ -8,12 +8,34 @@ namespace Dragon.Animator.Animations {
         public IDatabase<Animation> Database { get; }
         public Animation? Element { get; private set; }
         public Configuration Configuration { get; private set; }
+        public List<Bitmap> Resources { get; private set; }
         public int SelectedIndex { get; private set; } = Util.NotSelected;
 
-        public FormAnimation(Configuration configuration, IDatabase<Animation> database) {
+        private const int AnimationColumn = 5;
+        private const int PictureWidth = 192;
+        private const int PictureHeight = 192;
+
+        readonly Graphics lowerGraphics;
+        readonly Graphics upperGraphics;
+
+        int lowerIndex;
+        int lowerSourceX;
+        int lowerSourceY;
+        int lowerCount;
+
+        int upperIndex;
+        int upperSourceX;
+        int upperSourceY;
+        int upperCount;
+
+        public FormAnimation(Configuration configuration, IDatabase<Animation> database, List<Bitmap> resources) {
             InitializeComponent();
 
+            lowerGraphics = PictureLower.CreateGraphics();
+            upperGraphics = PictureUpper.CreateGraphics();
+
             Configuration = configuration;
+            Resources = resources;
             Database = database;
 
             Element = null;
@@ -43,22 +65,36 @@ namespace Dragon.Animator.Animations {
             if (Element is not null) {
                 TextId.Text = Element.Id.ToString();
                 TextName.Text = Element.Name;
+                TextSound.Text = Element.Sound;
 
                 TextLowerSprite.Text = Element.LowerFrame.Sprite.ToString();
-                TextLowerLoop.Text = Element.LowerFrame.LoopCount.ToString(); 
+                TextLowerLoop.Text = Element.LowerFrame.LoopCount.ToString();
                 TextLowerFrame.Text = Element.LowerFrame.FrameCount.ToString();
                 TextLowerTime.Text = Element.LowerFrame.LoopTime.ToString();
 
                 TextUpperSprite.Text = Element.UpperFrame.Sprite.ToString();
-                TextUpperLoop.Text = Element.UpperFrame.LoopCount.ToString(); 
-                TextUpperFrame.Text = Element.UpperFrame.FrameCount.ToString();    
-                TextUpperTime.Text = Element.UpperFrame.LoopTime.ToString();   
+                TextUpperLoop.Text = Element.UpperFrame.LoopCount.ToString();
+                TextUpperFrame.Text = Element.UpperFrame.FrameCount.ToString();
+                TextUpperTime.Text = Element.UpperFrame.LoopTime.ToString();
             }
         }
 
         private void Clear() {
-            TextId.Text = "0";
+            const string Zero = "0";
+
+            TextId.Text = Zero;
             TextName.Text = string.Empty;
+            TextSound.Text = ".none";
+
+            TextLowerSprite.Text = Zero;
+            TextLowerLoop.Text = Zero;
+            TextLowerFrame.Text = Zero;
+            TextLowerTime.Text = Zero;
+
+            TextUpperSprite.Text = Zero;
+            TextUpperLoop.Text = Zero;
+            TextUpperFrame.Text = Zero;
+            TextUpperTime.Text = Zero;
         }
 
         private void SetEnabled(bool enabled) {
@@ -170,6 +206,12 @@ namespace Dragon.Animator.Animations {
             }
         }
 
+        private void TextSound_TextChanged(object sender, EventArgs e) {
+            if (Element is not null) {
+                Element.Sound = TextSound.Text;
+            }
+        }
+
         #region Cast Frame
 
         private void TextLowerSprite_TextChanged(object sender, EventArgs e) {
@@ -192,7 +234,13 @@ namespace Dragon.Animator.Animations {
 
         private void TextLowerTime_TextChanged(object sender, EventArgs e) {
             if (Element is not null) {
-                Element.LowerFrame.LoopTime = Util.GetValue(TextLowerTime.Text.Trim());
+                var value = Util.GetValue(TextLowerTime.Text.Trim());
+
+                Element.LowerFrame.LoopTime = value;
+
+                if (value > 0) {
+                    CasterTime.Interval = value;
+                }
             }
         }
 
@@ -220,10 +268,66 @@ namespace Dragon.Animator.Animations {
 
         private void TextUpperTime_TextChanged(object sender, EventArgs e) {
             if (Element is not null) {
-                Element.UpperFrame.LoopTime = Util.GetValue(TextUpperTime.Text.Trim());
+                var value = Util.GetValue(TextUpperTime.Text.Trim());
+
+                Element.UpperFrame.LoopTime = value;
+
+                if (value > 0) {
+                    AttackTimer.Interval = value;
+                }
             }
         }
 
         #endregion
+
+        private void CastTimer_Tick(object sender, EventArgs e) {
+            if (Resources.Count > 0) {
+                if (Element is not null) {
+                   Draw(lowerGraphics, Element.LowerFrame, ref lowerIndex, ref lowerCount, ref lowerSourceX, ref lowerSourceY);
+                }
+            }
+        }
+
+        private void AttackTimer_Tick(object sender, EventArgs e) {
+            if (Resources.Count > 0) {
+                if (Element is not null) {
+                   Draw(upperGraphics, Element.UpperFrame, ref upperIndex, ref upperCount, ref upperSourceX, ref upperSourceY);
+                }
+            }
+        }
+
+        private void Draw(Graphics g, AnimationFrame frame, ref int index, ref int count, ref int x, ref int y) {
+            var sprite = frame.Sprite - 1;
+            var total = frame.FrameCount;
+            var width = frame.Width;
+            var height = frame.Height;
+
+            if (sprite > -1 && sprite < Resources.Count) {
+                if (index > AnimationColumn) {
+                    x = 0;
+                    y += 1;
+
+                    index = 0;
+                }
+                else {
+                    x++;
+                }
+
+                ++index;
+
+                if (count > total) {
+                    index = 0;
+                    count = 0;
+
+                    x = 0;
+                    y = 0;
+                }
+
+                count++;
+
+                g.Clear(Color.Transparent);
+                g.DrawImage(Resources[sprite], new Rectangle(0, 0, width, height), new RectangleF(x * PictureWidth, y * PictureHeight, width, height), GraphicsUnit.Pixel);
+            }
+        }
     }
 }

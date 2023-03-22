@@ -1,7 +1,7 @@
 Attribute VB_Name = "Animation_Packet"
 Option Explicit
 
-Private Sub HandleAnimation(ByVal Index As Long, ByRef Data() As Byte, ByVal StartAddr As Long, ByVal ExtraVar As Long)
+Public Sub HandleAnimation(ByVal Index As Long, ByRef Data() As Byte, ByVal StartAddr As Long, ByVal ExtraVar As Long)
     Dim Buffer As clsBuffer, X As Long, Y As Long
     Set Buffer = New clsBuffer
     Buffer.WriteBytes Data()
@@ -11,9 +11,9 @@ Private Sub HandleAnimation(ByVal Index As Long, ByRef Data() As Byte, ByVal Sta
 
     With AnimInstance(AnimationIndex)
         .Animation = Buffer.ReadLong
-        .X = Buffer.ReadInteger
-        .Y = Buffer.ReadInteger
-        .LockType = Buffer.ReadByte
+        .X = Buffer.ReadLong
+        .Y = Buffer.ReadLong
+        .LockType = Buffer.ReadLong
         .LockIndex = Buffer.ReadLong
         .IsCasting = Buffer.ReadByte
         .Used(0) = True
@@ -31,6 +31,9 @@ Private Sub HandleAnimation(ByVal Index As Long, ByRef Data() As Byte, ByVal Sta
             X = GetPlayerX(.LockIndex)
             Y = GetPlayerY(.LockIndex)
         ElseIf .LockType = TargetTypeNpc Then
+            ' Increase + 1 because npc index.
+            .LockIndex = .LockIndex + 1
+
             X = MapNpc(.LockIndex).X
             Y = MapNpc(.LockIndex).Y
         End If
@@ -39,7 +42,7 @@ Private Sub HandleAnimation(ByVal Index As Long, ByRef Data() As Byte, ByVal Sta
     PlayMapSound X, Y, SoundEntity.SeAnimation, AnimInstance(AnimationIndex).Animation
 End Sub
 
-Private Sub HandleCancelAnimation(ByVal Index As Long, ByRef Data() As Byte, ByVal StartAddr As Long, ByVal ExtraVar As Long)
+Public Sub HandleCancelAnimation(ByVal Index As Long, ByRef Data() As Byte, ByVal StartAddr As Long, ByVal ExtraVar As Long)
     Dim theIndex As Long, Buffer As clsBuffer, i As Long
     Set Buffer = New clsBuffer
     Buffer.WriteBytes Data()

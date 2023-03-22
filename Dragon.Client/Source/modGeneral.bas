@@ -1,7 +1,6 @@
 Attribute VB_Name = "modGeneral"
 Option Explicit
 
-
 Public Sub LogoutGame()
     Dim i As Long
     isLogging = True

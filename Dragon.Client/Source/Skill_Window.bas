@@ -34,7 +34,6 @@ Public Sub CreateWindow_Skills()
     CreateButton WindowCount, "btnActive", 38, 42, 100, 26, "ATIVA", FontRegular, Green, , , , , , , , , , , , GetAddress(AddressOf Button_ShowSkill)
     CreateButton WindowCount, "btnPassive", 173, 42, 100, 26, "PASSIVA", FontRegular, , , , , , , , , , , , , GetAddress(AddressOf Button_ShowPassive)
     
-    
     CreateButton WindowCount, "btnUpAttributes", ListX * 27, ListY * 8, 15, 15, , , , , , , Tex_GUI(44), Tex_GUI(45), Tex_GUI(46), , , , , , GetAddress(AddressOf MovePageUp)
     CreateButton WindowCount, "btnDownAttributes", ListX * 27, (ListY * 36) + 28, 15, 15, , , , , , , Tex_GUI(47), Tex_GUI(48), Tex_GUI(49), , , , , , GetAddress(AddressOf MovePageDown)
     

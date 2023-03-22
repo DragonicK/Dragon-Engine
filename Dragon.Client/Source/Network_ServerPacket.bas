@@ -7,8 +7,6 @@ Public Enum ServerPackets
     SNpcAttack
     SNpcDead
     SSound
-    SAnimation
-    SCancelAnimation
     
     SPlayerAchievement
     SUpdateAchievement

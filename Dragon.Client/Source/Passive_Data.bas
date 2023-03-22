@@ -78,6 +78,12 @@ Public Sub LoadPassives()
     Dim Name As String
     Dim Description As String
 
+    If Not FileExist(App.Path & "\Data Files\Data\Passives.dat") Then
+        MsgBox ("\Data Files\Data\Passives not found.")
+
+        Exit Sub
+    End If
+
     Index = GetFileHandler(App.Path & "\Data Files\Data\Passives.dat")
 
     If Index = 0 Then
@@ -130,7 +136,7 @@ Public Sub LoadPassives()
             Next
         End If
     End If
-    
+
     Call CloseFileHandler
 
 End Sub

@@ -107,6 +107,12 @@ Public Sub LoadSkills()
     Dim Description As String
     Dim Sound As String
 
+    If Not FileExist(App.Path & "\Data Files\Data\Skills.dat") Then
+        MsgBox ("\Data Files\Data\Skills not found.")
+
+        Exit Sub
+    End If
+
     Index = GetFileHandler(App.Path & "\Data Files\Data\Skills.dat")
 
     If Index = 0 Then
@@ -121,15 +127,15 @@ Public Sub LoadSkills()
 
             For i = 1 To MaximumSkills
                 Skill(i).Id = ReadInt32()
-                
+
                 Name = String(255, vbNullChar)
                 Description = String(1024, vbNullChar)
                 Sound = String(255, vbNullChar)
-                
+
                 Call ReadString(Name)
                 Call ReadString(Description)
                 Call ReadString(Sound)
-                
+
                 Skill(i).Name = Replace$(Name, vbNullChar, vbNullString)
                 Skill(i).Description = Replace$(Description, vbNullChar, vbNullString)
                 Skill(i).Sound = Replace$(Sound, vbNullChar, vbNullString)

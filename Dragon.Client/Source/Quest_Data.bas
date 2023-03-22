@@ -92,6 +92,12 @@ Public Sub LoadQuests()
     Dim Title As String
     Dim Summary As String
 
+    If Not FileExist(App.Path & "\Data Files\Data\Quests.dat") Then
+        MsgBox ("\Data Files\Data\Quests not found.")
+
+        Exit Sub
+    End If
+
     Index = GetFileHandler(App.Path & "\Data Files\Data\Quests.dat")
 
     If Index > 0 Then
@@ -105,10 +111,10 @@ Public Sub LoadQuests()
                     .Id = ReadInt32()
                     Title = String(255, vbNullChar)
                     Summary = String(255, vbNullChar)
-                    
+
                     Call ReadString(Title)
                     Call ReadString(Summary)
-                    
+
                     .Title = Replace$(Title, vbNullChar, vbNullString)
                     .Summary = Replace$(Summary, vbNullChar, vbNullString)
                     .Type = ReadInt32()
@@ -116,16 +122,16 @@ Public Sub LoadQuests()
                     .Shareable = ReadInt32()
                     .SelectableReward = ReadInt32()
                     .SelectableRewardCount = ReadInt32()
-                    
+
                     .StepCount = ReadInt32()
-                    
+
                     If .StepCount > 0 Then
                         ReDim .Steps(1 To .StepCount)
-                                                
+
                         For X = 1 To .StepCount
                             Call ReadString(Title)
                             Call ReadString(Summary)
-                            
+
                             .Steps(X).Title = Replace$(Title, vbNullChar, vbNullString)
                             .Steps(X).Summary = Replace$(Summary, vbNullChar, vbNullString)
                             .Steps(X).ActionType = ReadInt32()
@@ -135,12 +141,12 @@ Public Sub LoadQuests()
                             .Steps(X).Requirement.Y = ReadInt32()
                         Next
                     End If
-                    
+
                     .RewardCount = ReadInt32()
-                    
+
                     If .RewardCount > 0 Then
                         ReDim .Rewards(1 To .RewardCount)
-                        
+
                         For Y = 1 To .RewardCount
                             .Rewards(Y).Id = ReadInt32()
                             .Rewards(Y).Value = ReadInt32()
@@ -151,13 +157,13 @@ Public Sub LoadQuests()
                             .Rewards(Y).Type = ReadInt32()
                         Next
                     End If
-                    
+
                 End With
 
             Next
         End If
     End If
-    
+
     Call CloseFileHandler
 
 End Sub

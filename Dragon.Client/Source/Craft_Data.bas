@@ -21,6 +21,12 @@ Public Sub LoadRecipes()
     Dim Name As String
     Dim Description As String
 
+    If Not FileExist(App.Path & "\Data Files\Data\Recipes.dat") Then
+        MsgBox ("\Data Files\Data\Recipes not found.")
+
+        Exit Sub
+    End If
+
     Index = GetFileHandler(App.Path & "\Data Files\Data\Recipes.dat")
 
     If Index = 0 Then
