@@ -43,6 +43,16 @@ namespace Dragon.Animator.Animations {
             if (Element is not null) {
                 TextId.Text = Element.Id.ToString();
                 TextName.Text = Element.Name;
+
+                TextLowerSprite.Text = Element.LowerFrame.Sprite.ToString();
+                TextLowerLoop.Text = Element.LowerFrame.LoopCount.ToString(); 
+                TextLowerFrame.Text = Element.LowerFrame.FrameCount.ToString();
+                TextLowerTime.Text = Element.LowerFrame.LoopTime.ToString();
+
+                TextUpperSprite.Text = Element.UpperFrame.Sprite.ToString();
+                TextUpperLoop.Text = Element.UpperFrame.LoopCount.ToString(); 
+                TextUpperFrame.Text = Element.UpperFrame.FrameCount.ToString();    
+                TextUpperTime.Text = Element.UpperFrame.LoopTime.ToString();   
             }
         }
 
@@ -118,6 +128,99 @@ namespace Dragon.Animator.Animations {
                         }
                     }
                 }
+            }
+        }
+
+        #endregion
+
+        private void TextId_Validated(object sender, EventArgs e) {
+            if (Element is not null) {
+                var lastId = Element.Id;
+                var id = Util.GetValue(TextId);
+
+                if (id > 0) {
+                    if (id == lastId) {
+                        return;
+                    }
+
+                    if (Database.Contains(id)) {
+                        MessageBox.Show($"The Id {id} is already in use.");
+                    }
+                    else {
+                        Database.Remove(Element.Id);
+                        Element.Id = id;
+                        Database.Add(id, Element);
+
+                        Util.UpdateList(Database, ListIndex);
+                    }
+                }
+                else {
+                    MessageBox.Show($"Maybe failed to get Id. Any Id cannot be zero.");
+                }
+            }
+        }
+
+        private void TextName_TextChanged(object sender, EventArgs e) {
+            if (Element is not null) {
+                Element.Name = TextName.Text;
+
+                if (SelectedIndex > Util.NotSelected) {
+                    ListIndex.Items[SelectedIndex] = $"{Element.Id}: {Element.Name}";
+                }
+            }
+        }
+
+        #region Cast Frame
+
+        private void TextLowerSprite_TextChanged(object sender, EventArgs e) {
+            if (Element is not null) {
+                Element.LowerFrame.Sprite = Util.GetValue(TextLowerSprite.Text.Trim());
+            }
+        }
+
+        private void TextLowerLoop_TextChanged(object sender, EventArgs e) {
+            if (Element is not null) {
+                Element.LowerFrame.LoopCount = Util.GetValue(TextLowerLoop.Text.Trim());
+            }
+        }
+
+        private void TextLowerFrame_TextChanged(object sender, EventArgs e) {
+            if (Element is not null) {
+                Element.LowerFrame.FrameCount = Util.GetValue(TextLowerFrame.Text.Trim());
+            }
+        }
+
+        private void TextLowerTime_TextChanged(object sender, EventArgs e) {
+            if (Element is not null) {
+                Element.LowerFrame.LoopTime = Util.GetValue(TextLowerTime.Text.Trim());
+            }
+        }
+
+        #endregion
+
+        #region Attack Frame
+
+        private void TextUpperSprite_TextChanged(object sender, EventArgs e) {
+            if (Element is not null) {
+                Element.UpperFrame.Sprite = Util.GetValue(TextUpperSprite.Text.Trim());
+            }
+        }
+
+        private void TextUpperLoop_TextChanged(object sender, EventArgs e) {
+            if (Element is not null) {
+                Element.UpperFrame.LoopCount = Util.GetValue(TextUpperLoop.Text.Trim());
+            }
+        }
+
+        private void TextUpperFrame_TextChanged(object sender, EventArgs e) {
+            if (Element is not null) {
+                Element.UpperFrame.FrameCount = Util.GetValue(TextUpperFrame.Text.Trim());
+            }
+        }
+
+        private void TextUpperTime_TextChanged(object sender, EventArgs e) {
+            if (Element is not null) {
+                Element.UpperFrame.LoopTime = Util.GetValue(TextUpperTime.Text.Trim());
             }
         }
 

@@ -77,6 +77,9 @@ public partial class FormMain : Form {
     }
 
     private void MenuAnimation_Click(object sender, EventArgs e) {
+        Animations.Clear();
+        Animations.Load();
+
         var f = new FormAnimation(Configuration, Animations);
 
         ChangeFont(f);

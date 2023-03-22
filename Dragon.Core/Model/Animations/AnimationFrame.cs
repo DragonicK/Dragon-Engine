@@ -8,4 +8,5 @@ public class AnimationFrame {
     public int OffsetY { get; set; }
     public int Width { get; set; }
     public int Height { get; set; }
+    public int LoopTime { get; set; }
 }

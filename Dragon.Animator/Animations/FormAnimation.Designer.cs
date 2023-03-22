@@ -184,6 +184,7 @@
             TextName.Name = "TextName";
             TextName.Size = new Size(192, 23);
             TextName.TabIndex = 8;
+            TextName.TextChanged += TextName_TextChanged;
             // 
             // label9
             // 
@@ -200,6 +201,8 @@
             TextId.Name = "TextId";
             TextId.Size = new Size(192, 23);
             TextId.TabIndex = 6;
+            TextId.Text = "0";
+            TextId.Validated += TextId_Validated;
             // 
             // groupBox3
             // 
@@ -271,6 +274,8 @@
             TextUpperTime.Name = "TextUpperTime";
             TextUpperTime.Size = new Size(192, 23);
             TextUpperTime.TabIndex = 3;
+            TextUpperTime.Text = "0";
+            TextUpperTime.TextChanged += TextUpperTime_TextChanged;
             // 
             // TextUpperFrame
             // 
@@ -278,6 +283,8 @@
             TextUpperFrame.Name = "TextUpperFrame";
             TextUpperFrame.Size = new Size(192, 23);
             TextUpperFrame.TabIndex = 2;
+            TextUpperFrame.Text = "0";
+            TextUpperFrame.TextChanged += TextUpperFrame_TextChanged;
             // 
             // TextUpperLoop
             // 
@@ -285,6 +292,8 @@
             TextUpperLoop.Name = "TextUpperLoop";
             TextUpperLoop.Size = new Size(192, 23);
             TextUpperLoop.TabIndex = 1;
+            TextUpperLoop.Text = "0";
+            TextUpperLoop.TextChanged += TextUpperLoop_TextChanged;
             // 
             // TextUpperSprite
             // 
@@ -292,6 +301,8 @@
             TextUpperSprite.Name = "TextUpperSprite";
             TextUpperSprite.Size = new Size(192, 23);
             TextUpperSprite.TabIndex = 0;
+            TextUpperSprite.Text = "0";
+            TextUpperSprite.TextChanged += TextUpperSprite_TextChanged;
             // 
             // groupBox2
             // 
@@ -363,6 +374,8 @@
             TextLowerTime.Name = "TextLowerTime";
             TextLowerTime.Size = new Size(192, 23);
             TextLowerTime.TabIndex = 3;
+            TextLowerTime.Text = "0";
+            TextLowerTime.TextChanged += TextLowerTime_TextChanged;
             // 
             // TextLowerFrame
             // 
@@ -370,6 +383,8 @@
             TextLowerFrame.Name = "TextLowerFrame";
             TextLowerFrame.Size = new Size(192, 23);
             TextLowerFrame.TabIndex = 2;
+            TextLowerFrame.Text = "0";
+            TextLowerFrame.TextChanged += TextLowerFrame_TextChanged;
             // 
             // TextLowerLoop
             // 
@@ -377,6 +392,8 @@
             TextLowerLoop.Name = "TextLowerLoop";
             TextLowerLoop.Size = new Size(192, 23);
             TextLowerLoop.TabIndex = 1;
+            TextLowerLoop.Text = "0";
+            TextLowerLoop.TextChanged += TextLowerLoop_TextChanged;
             // 
             // TextLowerSprite
             // 
@@ -384,6 +401,8 @@
             TextLowerSprite.Name = "TextLowerSprite";
             TextLowerSprite.Size = new Size(192, 23);
             TextLowerSprite.TabIndex = 0;
+            TextLowerSprite.Text = "0";
+            TextLowerSprite.TextChanged += TextLowerSprite_TextChanged;
             // 
             // FormAnimation
             // 
