@@ -164,6 +164,7 @@
             Name = "FormMain";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Animator";
+            FormClosed += FormMain_FormClosed;
             Load += FormMain_Load;
             MenuStrip.ResumeLayout(false);
             MenuStrip.PerformLayout();

@@ -12,10 +12,11 @@ public partial class FormMain : Form {
     public Configuration Configuration { get; private set; }
     public IDatabase<Animation> Animations { get; private set; }
 
+    private const string _File = "Configuration.json";
+
     public FormMain() {
         InitializeComponent();
 
-        const string _File = "Configuration.json";
 
         if (File.Exists(_File)) {
             Configuration = Json.Get<Configuration>(_File)!;
@@ -81,5 +82,9 @@ public partial class FormMain : Form {
         ChangeFont(f);
 
         f.Show();
+    }
+
+    private void FormMain_FormClosed(object sender, FormClosedEventArgs e) {
+        Json.Save(_File, Configuration);
     }
 }
