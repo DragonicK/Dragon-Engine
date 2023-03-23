@@ -16,7 +16,7 @@ public class Npc {
     public Npc() {
         Name = string.Empty;
         Title = string.Empty;
-        Sound = string.Empty;
+        Sound = "None.";
         Greetings = string.Empty;
 
         Conversations = new List<int>();

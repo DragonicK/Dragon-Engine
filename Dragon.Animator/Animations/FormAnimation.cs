@@ -84,7 +84,7 @@ namespace Dragon.Animator.Animations {
 
             TextId.Text = Zero;
             TextName.Text = string.Empty;
-            TextSound.Text = ".none";
+            TextSound.Text = ".None";
 
             TextLowerSprite.Text = Zero;
             TextLowerLoop.Text = Zero;
@@ -283,7 +283,7 @@ namespace Dragon.Animator.Animations {
         private void CastTimer_Tick(object sender, EventArgs e) {
             if (Resources.Count > 0) {
                 if (Element is not null) {
-                   Draw(lowerGraphics, Element.LowerFrame, ref lowerIndex, ref lowerCount, ref lowerSourceX, ref lowerSourceY);
+                    Draw(lowerGraphics, Element.LowerFrame, ref lowerIndex, ref lowerCount, ref lowerSourceX, ref lowerSourceY);
                 }
             }
         }
@@ -291,7 +291,7 @@ namespace Dragon.Animator.Animations {
         private void AttackTimer_Tick(object sender, EventArgs e) {
             if (Resources.Count > 0) {
                 if (Element is not null) {
-                   Draw(upperGraphics, Element.UpperFrame, ref upperIndex, ref upperCount, ref upperSourceX, ref upperSourceY);
+                    Draw(upperGraphics, Element.UpperFrame, ref upperIndex, ref upperCount, ref upperSourceX, ref upperSourceY);
                 }
             }
         }

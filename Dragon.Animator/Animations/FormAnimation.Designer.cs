@@ -191,7 +191,7 @@
             TextSound.Name = "TextSound";
             TextSound.Size = new Size(192, 23);
             TextSound.TabIndex = 10;
-            TextSound.Text = ".none";
+            TextSound.Text = ".None";
             TextSound.TextChanged += TextSound_TextChanged;
             // 
             // label10

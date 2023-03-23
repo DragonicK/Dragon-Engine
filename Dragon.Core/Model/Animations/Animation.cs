@@ -3,7 +3,7 @@
 public class Animation {
     public int Id { get; set; }
     public string Name { get; set; } = string.Empty;
-    public string Sound { get; set; } = ".none";
+    public string Sound { get; set; } = "None.";
     public AnimationFrame UpperFrame { get; set; }
     public AnimationFrame LowerFrame { get; set; }
 
