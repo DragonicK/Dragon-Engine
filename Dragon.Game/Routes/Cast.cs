@@ -22,7 +22,7 @@ public sealed class Cast {
                 if (index > 0) {
                     index--;
 
-                    player.Combat.Cast(index);
+                    player.Combat.BufferSkill(index);
                 }
             }
         }

@@ -37,6 +37,8 @@ Public Type AnimInstanceRec
     ' counting the loop
     LoopIndex(0 To 1) As Long
     FrameIndex(0 To 1) As Long
+    LastX As Long
+    LastY As Long
 End Type
 
 Public Sub ClearAnimation(ByVal Index As Long)

@@ -16,7 +16,7 @@ using Dragon.Game.Instances;
 
 namespace Dragon.Game.Combat.Handler;
 
-public class Buff : ISkill {
+public class Buff : ICombatHandler {
     public IPlayer? Player { get; set; }
     public IDatabase<Skill>? Skills { get; set; }
     public IDatabase<Effect>? Effects { get; set; }

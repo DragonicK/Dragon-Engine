@@ -13,8 +13,6 @@ using Dragon.Game.Services;
 using Dragon.Game.Instances;
 
 using Dragon.Game.Combat.Handler;
-using System.Formats.Asn1;
-using System;
 
 namespace Dragon.Game.Combat;
 
@@ -30,12 +28,16 @@ public class PlayerCombat : IEntityCombat {
     public CharacterSkill? Current { get; private set; }
     public Skill? CurrentData { get; private set; }
 
-    public ISkill Healing { get; set; }
-    public ISkill HoT { get; set; }
-    public ISkill Damage { get; set; }
-    public ISkill DoT { get; set; }
-    public ISkill Effect { get; set; }
-    public ISkill Aura { get; set; }
+    public ICombatHandler Healing { get; set; }
+    public ICombatHandler HoT { get; set; }
+    public ICombatHandler Damage { get; set; }
+    public ICombatHandler DoT { get; set; }
+    public ICombatHandler Effect { get; set; }
+    public ICombatHandler Aura { get; set; }
+
+    public bool IsBufferedSkill { get; set; }
+    public int BufferedSkillIndex { get; set; }
+    public int BufferedSkillTime { get; set; }
 
     public PlayerCombat(IPlayer player, IPacketSender sender, ContentService content, InstanceService instanceService) {
         Player = player;
@@ -91,7 +93,48 @@ public class PlayerCombat : IEntityCombat {
         };
     }
 
-    public void Cast(int index) {
+    public void BufferSkill(int index) {
+        if (Skills is not null) {
+            var inventory = Player.Skills.Get(index);
+
+            if (inventory is not null) {
+                var id = inventory.SkillId;
+
+                if (Skills.Contains(id)) {
+                    var data = Skills[id]!;
+
+                    if (IsTargetDead()) {
+                        PacketSender!.SendClearCast(Player);
+                        PacketSender!.SendMessage(SystemMessage.InvalidTarget, QbColor.BrigthRed, Player!, new string[] { id.ToString() });
+
+                        return;
+                    }
+
+                    if (!IsCostEnough(data.CostType, inventory.Cost)) {
+                        PacketSender!.SendClearCast(Player);
+                        PacketSender!.SendMessage(SystemMessage.InsuficientMana, QbColor.BrigthRed, Player!, new string[] { id.ToString() });
+
+                        return;
+                    }
+
+                    if (!IsTargetInRange(inventory)) {
+                        PacketSender!.SendClearCast(Player);
+                        PacketSender!.SendMessage(SystemMessage.InvalidRange, QbColor.BrigthRed, Player!);
+
+                        return;
+                    }
+
+                    PacketSender.SendAnimation(GetInstance()!, data.CastAnimationId, Player.GetX(), Player.GetY(), TargetType.Player, Player.IndexOnInstance, true);
+
+                    IsBufferedSkill = true;
+                    BufferedSkillIndex = index;
+                    BufferedSkillTime = Environment.TickCount + (inventory.CastTime * 1000);
+                }
+            }
+        }
+    }
+
+    public void CastSkill(int index) {
         if (Skills is not null) {
             var inventory = Player.Skills.Get(index);
 
@@ -119,8 +162,6 @@ public class PlayerCombat : IEntityCombat {
                         return;
                     }         
 
-                    PacketSender.SendAnimation(GetInstance()!, data.CastAnimationId, Player.GetX(), Player.GetY(), TargetType.Player, Player.IndexOnInstance, false);
-
                     if (CouldSelectTargetByPrimaryEffect(data)) {
                         Current = inventory;
                         CurrentData = data;
@@ -135,6 +176,12 @@ public class PlayerCombat : IEntityCombat {
                 }
             }
         }
+    }
+
+    public void ClearBufferedSkill() {
+        IsBufferedSkill = false;
+        BufferedSkillIndex = 0;
+        BufferedSkillTime = 0;
     }
 
     private void ProcessSkill(CharacterSkill inventory, Skill data, Target target) {
@@ -173,7 +220,7 @@ public class PlayerCombat : IEntityCombat {
     private void ProcessEffect(IInstance instance, SkillEffectType type, SkillEffect? effect, CharacterSkill inventory, Skill data, Target target) {
         if (effect is not null) {
             IList<Target> targets;
-            ISkill? handler = null;
+            ICombatHandler? handler = null;
 
             switch (type) {
                 case SkillEffectType.Aura: handler = Aura; break;
@@ -301,8 +348,7 @@ public class PlayerCombat : IEntityCombat {
     };
 
     private bool IsInRange(int range, int x1, int y1, int x2, int y2) {
-        var r = Convert.ToInt32(Math.Sqrt(Math.Pow((x1 - x2), 2) + Math.Pow((y1 - y2), 2)));
-        return r <= range;
+        return Convert.ToInt32(Math.Sqrt(Math.Pow((x1 - x2), 2) + Math.Pow((y1 - y2), 2))) <= range;
     }
 
     private IInstance? GetInstance() {

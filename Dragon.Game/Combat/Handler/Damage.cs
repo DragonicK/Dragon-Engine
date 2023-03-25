@@ -12,7 +12,7 @@ using Dragon.Game.Instances;
 
 namespace Dragon.Game.Combat.Handler;
 
-public class Damage : ISkill {
+public class Damage : ICombatHandler {
     public IPlayer? Player { get; set; }
     public IDatabase<Skill>? Skills { get; set; }
     public IPacketSender? PacketSender { get; set; }

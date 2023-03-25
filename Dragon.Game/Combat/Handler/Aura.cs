@@ -13,7 +13,7 @@ using Dragon.Game.Instances;
 
 namespace Dragon.Game.Combat.Handler;
 
-public class Aura : ISkill {
+public class Aura : ICombatHandler {
     public IPlayer? Player { get; set; }
     public IDatabase<Effect>? Effects { get; set; }
     public IPacketSender? PacketSender { get; set; }

@@ -26,7 +26,7 @@ Public Enum ServerPackets
     SRollDiceItem
       
     SCooldown
-    SClearSpellBuffer
+    
     SStunned
     ' Make sure SMsgCOUNT is below everything else
     SMsgCOUNT

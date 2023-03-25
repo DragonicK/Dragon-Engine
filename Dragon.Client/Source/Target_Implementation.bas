@@ -243,3 +243,12 @@ Public Sub FindTarget()
 
 End Sub
 
+Public Sub ShouldCloseTargetWindow(ByVal TargetType As Long, ByVal TargetIndex As Long)
+    If MyTargetType = TargetType Then
+        If MyTargetIndex = TargetIndex Then
+            Call SendPlayerTarget(0, TargetTypeNone)
+            Call CloseTargetWindow
+        End If
+    End If
+End Sub
+

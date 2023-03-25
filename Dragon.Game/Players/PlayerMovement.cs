@@ -49,6 +49,12 @@ public class PlayerMovement {
             if (instances.ContainsKey(instanceId)) {
                 var instance = instances[instanceId];
 
+                if (Player.Combat.IsBufferedSkill) {
+                    Player.Combat.ClearBufferedSkill();
+                    PacketSender!.SendClearCast(Player);
+                    PacketSender!.SendCancelAnimation(instance, Player.IndexOnInstance);
+                }
+
                 PacketSender!.SendPlayerMovement(Player, movement, instance);
             }
         }

@@ -5,7 +5,7 @@ using Dragon.Game.Instances;
 
 namespace Dragon.Game.Combat;
 
-public interface ISkill {
+public interface ICombatHandler {
     IList<Target> GetTarget(Target target, IInstance instance, CharacterSkill inventory, SkillEffect effect);
     bool CouldSelect(Target target, SkillEffect effect);
     Damaged GetDamage(Target target, CharacterSkill inventory, SkillEffectType type);

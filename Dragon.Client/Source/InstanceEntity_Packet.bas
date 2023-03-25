@@ -123,8 +123,13 @@ Public Sub HandleInstanceEntityVital(ByVal Index As Long, ByRef Data() As Byte, 
         Next
 
         .Dead = .Vital(HP) <= 0
+        
+        If .Dead Then
+            Call ShouldCloseTargetWindow(TargetTypeNpc, Index)
+        End If
 
     End With
+
 
     Set Buffer = Nothing
 End Sub
