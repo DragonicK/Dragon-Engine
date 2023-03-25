@@ -1303,6 +1303,15 @@ public sealed partial class PacketSender : IPacketSender {
         Writer.Enqueue(msg);
     }
 
+    public void SendSkillCooldown(IPlayer player, int index) {
+        var msg = Writer!.CreateMessage(new SpSkillCooldown() { Index = index});
+
+        msg.DestinationPeers.Add(player.GetConnection().Id);
+        msg.TransmissionTarget = TransmissionTarget.Destination;
+
+        Writer.Enqueue(msg);
+    }
+
     public void SendClearCast(IPlayer player) {
         var msg = Writer!.CreateMessage(new SpClearCast());
 

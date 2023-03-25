@@ -175,3 +175,20 @@ Public Sub HandlePassiveUpdate(ByVal Index As Long, ByRef Data() As Byte, ByVal 
     Set Buffer = Nothing
 End Sub
 
+Public Sub HandleSkillCooldown(ByVal Index As Long, ByRef Data() As Byte, ByVal StartAddr As Long, ByVal ExtraVar As Long)
+    Dim Buffer As clsBuffer
+    Dim Slot As Long
+    
+    Set Buffer = New clsBuffer
+    
+    Buffer.WriteBytes Data()
+    
+    Slot = Buffer.ReadLong
+    
+    Slot = Slot + 1
+    
+    SpellCd(Slot) = GetTickCount
+    
+    Set Buffer = Nothing
+End Sub
+

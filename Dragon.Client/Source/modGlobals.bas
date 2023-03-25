@@ -91,8 +91,6 @@ Public MusicCache() As String
 Public SoundCache() As String
 Public HasPopulated As Boolean
 
-
-
 ' Gui
 Public inChat As Boolean
 

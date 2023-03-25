@@ -145,6 +145,7 @@ Public Enum EnginePacket
     PSettings
     PAnimation
     PCancelAnimation
+    PSkillCooldown
     
     PPacketCount
 End Enum

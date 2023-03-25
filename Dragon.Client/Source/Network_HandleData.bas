@@ -100,7 +100,7 @@ Public Sub InitMessages()
     HandleDataSub(EnginePacket.PAnimation) = GetAddress(AddressOf HandleAnimation)
     HandleDataSub(EnginePacket.PCancelAnimation) = GetAddress(AddressOf HandleCancelAnimation)
     HandleDataSub(EnginePacket.PClearCast) = GetAddress(AddressOf HandleClearCast)
-  
+    HandleDataSub(EnginePacket.PSkillCooldown) = GetAddress(AddressOf HandleSkillCooldown)
     
     ' HandleDataSub(SNpcAttack) = GetAddress(AddressOf HandleNpcAttack)
     ' HandleDataSub(STarget) = GetAddress(AddressOf HandleTarget)
@@ -119,9 +119,6 @@ Public Sub InitMessages()
     ' HandleDataSub(SSortLootList) = GetAddress(AddressOf HandleSortLootList)
     ' HandleDataSub(SEnableDropTakeItem) = GetAddress(AddressOf HandleEnableDropTakeItem)
     ' HandleDataSub(SRollDiceItem) = GetAddress(AddressOf HandleRollDiceItem)
-
- 
-    ' HandleDataSub(SCooldown) = GetAddress(AddressOf HandleCooldown)
     ' HandleDataSub(SStunned) = GetAddress(AddressOf HandleStunned)
 End Sub
 
@@ -221,7 +218,6 @@ Public Sub HandleInGame(ByVal Index As Long, ByRef Data() As Byte, ByVal StartAd
     GameLoop
 End Sub
 
-
 Private Sub HandleAttack(ByVal Index As Long, ByRef Data() As Byte, ByVal StartAddr As Long, ByVal ExtraVar As Long)
     Dim i As Long
     Dim Buffer As clsBuffer
@@ -278,19 +274,6 @@ Private Sub HandleSendPing(ByVal Index As Long, ByRef Data() As Byte, ByVal Star
     PingEnd = GetTickCount
     Ping = PingEnd - PingStart
 End Sub
-
-
-Private Sub HandleCooldown(ByVal Index As Long, ByRef Data() As Byte, ByVal StartAddr As Long, ByVal ExtraVar As Long)
-    Dim Buffer As clsBuffer
-    Dim Slot As Long
-    Set Buffer = New clsBuffer
-    Buffer.WriteBytes Data()
-    Slot = Buffer.ReadLong
-    SpellCd(Slot) = GetTickCount
-    Set Buffer = Nothing
-End Sub
-
-
 
 Private Sub HandleStunned(ByVal Index As Long, ByRef Data() As Byte, ByVal StartAddr As Long, ByVal ExtraVar As Long)
     Dim Buffer As clsBuffer

@@ -110,6 +110,13 @@ public class PlayerCombat : IEntityCombat {
                         return;
                     }
 
+                    if (!CouldCastOnSelf(inventory)) {
+                        PacketSender!.SendClearCast(Player);
+                        PacketSender!.SendMessage(SystemMessage.InvalidTarget, QbColor.BrigthRed, Player!, new string[] { id.ToString() });
+
+                        return;
+                    }
+
                     if (!IsCostEnough(data.CostType, inventory.Cost)) {
                         PacketSender!.SendClearCast(Player);
                         PacketSender!.SendMessage(SystemMessage.InsuficientMana, QbColor.BrigthRed, Player!, new string[] { id.ToString() });
@@ -150,6 +157,12 @@ public class PlayerCombat : IEntityCombat {
                         return;
                     }
 
+                    if (!CouldCastOnSelf(inventory)) {
+                        PacketSender!.SendMessage(SystemMessage.InvalidTarget, QbColor.BrigthRed, Player!, new string[] { id.ToString() });
+
+                        return;
+                    }
+
                     if (!IsCostEnough(data.CostType, inventory.Cost)) {
                         PacketSender!.SendMessage(SystemMessage.InsuficientMana, QbColor.BrigthRed, Player!, new string[] { id.ToString() });
 
@@ -171,7 +184,7 @@ public class PlayerCombat : IEntityCombat {
                             Type = Player!.TargetType
                         };
 
-                        ProcessSkill(inventory, data, target);
+                        ProcessSkill(inventory, data, target, index);
                     }
                 }
             }
@@ -184,7 +197,7 @@ public class PlayerCombat : IEntityCombat {
         BufferedSkillTime = 0;
     }
 
-    private void ProcessSkill(CharacterSkill inventory, Skill data, Target target) {
+    private void ProcessSkill(CharacterSkill inventory, Skill data, Target target, int inventoryIndex) {
         var instance = GetInstance();
 
         if (instance is not null) {
@@ -212,12 +225,12 @@ public class PlayerCombat : IEntityCombat {
                         break;
                 }
 
-                ProcessEffect(instance, type, effect, inventory, data, target);
+                ProcessEffect(instance, type, effect, inventory, data, target, inventoryIndex);
             }
         }
     }
 
-    private void ProcessEffect(IInstance instance, SkillEffectType type, SkillEffect? effect, CharacterSkill inventory, Skill data, Target target) {
+    private void ProcessEffect(IInstance instance, SkillEffectType type, SkillEffect? effect, CharacterSkill inventory, Skill data, Target target, int inventoryIndex) {
         if (effect is not null) {
             IList<Target> targets;
             ICombatHandler? handler = null;
@@ -238,16 +251,17 @@ public class PlayerCombat : IEntityCombat {
 
                 if (targets.Count > 0) {
                     for (var i = 0; i < targets.Count; ++i) {
-                        var damaged = handler.GetDamage(targets[i], inventory, type);
-
-                        handler.Inflict(damaged, targets[i], instance, effect);
-
                         var lockType = targets[i].Type;
                         var x = targets[i].Entity.GetX();
                         var y = targets[i].Entity.GetY();
                         var index = targets[i].Entity.IndexOnInstance;
 
+                        PacketSender.SendSkillCooldown(Player, inventoryIndex);
                         PacketSender.SendAnimation(instance, data.AttackAnimationId, x, y, lockType, index, false);
+
+                        var damaged = handler.GetDamage(targets[i], inventory, type);
+
+                        handler.Inflict(damaged, targets[i], instance, effect);
                     }
                 }
             }
@@ -360,5 +374,37 @@ public class PlayerCombat : IEntityCombat {
         }
 
         return null;
+    }
+
+    private bool CouldCastOnSelf(CharacterSkill inventory) {
+        if (Player!.TargetType == TargetType.Player) {
+            var target = Player!.Target;
+
+            if (target == Player) {
+                var effects = inventory.Effects;
+
+                if (effects.ContainsKey(SkillEffectType.Damage)) {
+                    return false;
+                }
+
+                if (effects.ContainsKey(SkillEffectType.DoT)) {
+                    return false;
+                }
+
+                if (effects.ContainsKey(SkillEffectType.Immobilize)) {
+                    return false;
+                }
+
+                if (effects.ContainsKey(SkillEffectType.Dispel)) {
+                    return false;
+                }
+
+                if (effects.ContainsKey(SkillEffectType.Silence)) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
     }
 }

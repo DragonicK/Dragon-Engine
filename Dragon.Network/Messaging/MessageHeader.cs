@@ -143,5 +143,6 @@ public enum MessageHeader {
     ViewEquipmentVisibility,
     Settings,
     Animation,
-    CancelAnimation
+    CancelAnimation,
+    SkillCooldown
 }

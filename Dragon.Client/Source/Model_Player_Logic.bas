@@ -312,7 +312,7 @@ Public Sub CheckMovement()
 End Sub
 
 Public Sub CastSpell(ByVal SpellSlot As Long)
-    ' Check for subscript out of range
+' Check for subscript out of range
     If SpellSlot < 1 Or SpellSlot > MaxPlayerSkill Then
         Exit Sub
     End If
@@ -337,6 +337,10 @@ Public Sub CastSpell(ByVal SpellSlot As Long)
     Dim SkillId As Long
 
     SkillId = PlayerSkill(SpellSlot).Id
+
+    If Not CouldCastOnSelf(SkillId) Then
+        Exit Sub
+    End If
 
     If Skill(SkillId).CostType = SkillCostType.SkillCostType_HP Then
         VitalType = Vitals.HP
@@ -374,4 +378,40 @@ Public Sub CastSpell(ByVal SpellSlot As Long)
     End If
 
 End Sub
+
+Private Function CouldCastOnSelf(ByVal SkillId As Long) As Boolean
+
+    With Skill(SkillId)
+        If MyTargetIndex = MyIndex And MyTargetType = TargetTypePlayer Then
+            If .EffectCount > 0 Then
+                If .Effect(1).EffectType = SkillEffectType_Damage Then
+                    Exit Function
+                End If
+
+                If .Effect(1).EffectType = SkillEffectType_Dot Then
+                    Exit Function
+                End If
+
+                If .Effect(1).EffectType = SkillEffectType_Immobilize Then
+                    Exit Function
+                End If
+
+                If .Effect(1).EffectType = SkillEffectType_Dispel Then
+                    Exit Function
+                End If
+
+                If .Effect(1).EffectType = SkillEffectType_Dispel Then
+                    Exit Function
+                End If
+
+                If .Effect(1).EffectType = SkillEffectType_Silence Then
+                    Exit Function
+                End If
+            End If
+        End If
+    End With
+
+    CouldCastOnSelf = True
+
+End Function
 

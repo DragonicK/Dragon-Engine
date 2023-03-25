@@ -120,4 +120,5 @@ public interface IPacketSender {
     void SendAnimation(IInstance instance, int animation, int x, int y, TargetType lockType, int lockIndex, bool isCasting);
     void SendCancelAnimation(IInstance instance, int lockIndex);
     void SendClearCast(IPlayer player);
+    void SendSkillCooldown(IPlayer player, int index);
 }

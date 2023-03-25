@@ -43,8 +43,10 @@ public class EngineListener : IEngineListener {
     }
 
     private void OnAccept(IAsyncResult ar) {
+        Socket? socket = null;
+
         try {
-            var socket = listener!.EndAccept(ar);
+            socket = listener!.EndAccept(ar);
 
             if (socket is not null) {
                 var ipAddress = socket.RemoteEndPoint!.ToString();
@@ -82,6 +84,8 @@ public class EngineListener : IEngineListener {
             }
         }
         catch (Exception ex) {
+            socket?.Disconnect(false);
+
             Logger?.Write(WarningLevel.Error, GetType().Name, ex.Message);
         }
     }
