@@ -312,7 +312,7 @@ Public Sub CheckMovement()
 End Sub
 
 Public Sub CastSpell(ByVal SpellSlot As Long)
-' Check for subscript out of range
+    ' Check for subscript out of range
     If SpellSlot < 1 Or SpellSlot > MaxPlayerSkill Then
         Exit Sub
     End If

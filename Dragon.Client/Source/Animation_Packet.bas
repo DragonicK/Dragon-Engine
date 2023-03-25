@@ -43,17 +43,20 @@ Public Sub HandleAnimation(ByVal Index As Long, ByRef Data() As Byte, ByVal Star
 End Sub
 
 Public Sub HandleCancelAnimation(ByVal Index As Long, ByRef Data() As Byte, ByVal StartAddr As Long, ByVal ExtraVar As Long)
-    Dim theIndex As Long, Buffer As clsBuffer, i As Long
+    Dim Buffer As clsBuffer, i As Long
+
     Set Buffer = New clsBuffer
+
     Buffer.WriteBytes Data()
-    theIndex = Buffer.ReadLong
+    Index = Buffer.ReadLong
+
     Set Buffer = Nothing
+
     ' find the casting animation
     For i = 1 To MAX_BYTE
         If AnimInstance(i).LockType = TargetTypePlayer Then
-            If AnimInstance(i).LockIndex = theIndex Then
+            If AnimInstance(i).LockIndex = Index Then
                 If AnimInstance(i).IsCasting = 1 Then
-                    ' clear it
                     ClearAnimInstance i
                 End If
             End If

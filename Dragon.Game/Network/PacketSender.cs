@@ -1288,6 +1288,30 @@ public sealed partial class PacketSender : IPacketSender {
         Writer.Enqueue(msg);
     }
 
+    public void SendCancelAnimation(IInstance instance, int lockIndex) {
+        var list = instance.GetPlayers().Select(p => p.GetConnection().Id);
+
+        var packet = new SpCancelAnimation() {
+            Index = lockIndex
+        };
+
+        var msg = Writer!.CreateMessage(packet);
+
+        msg.DestinationPeers.AddRange(list);
+        msg.TransmissionTarget = TransmissionTarget.Destination;
+
+        Writer.Enqueue(msg);
+    }
+
+    public void SendClearCast(IPlayer player) {
+        var msg = Writer!.CreateMessage(new SpClearCast());
+
+        msg.DestinationPeers.Add(player.GetConnection().Id);
+        msg.TransmissionTarget = TransmissionTarget.Destination;
+
+        Writer.Enqueue(msg);
+    }
+
     private SpPlayerData CreatePlayerDataPacket(IPlayer player) {
         var character = player.Character;
         var model = character.CostumeModel;

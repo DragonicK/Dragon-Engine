@@ -99,7 +99,7 @@ Public Sub InitMessages()
     HandleDataSub(EnginePacket.PSettings) = GetAddress(AddressOf HandleSettings)
     HandleDataSub(EnginePacket.PAnimation) = GetAddress(AddressOf HandleAnimation)
     HandleDataSub(EnginePacket.PCancelAnimation) = GetAddress(AddressOf HandleCancelAnimation)
-   
+    HandleDataSub(EnginePacket.PClearCast) = GetAddress(AddressOf HandleClearCast)
   
     
     ' HandleDataSub(SNpcAttack) = GetAddress(AddressOf HandleNpcAttack)
@@ -122,7 +122,6 @@ Public Sub InitMessages()
 
  
     ' HandleDataSub(SCooldown) = GetAddress(AddressOf HandleCooldown)
-    ' HandleDataSub(SClearSpellBuffer) = GetAddress(AddressOf HandleClearSpellBuffer)
     ' HandleDataSub(SStunned) = GetAddress(AddressOf HandleStunned)
 End Sub
 
@@ -291,10 +290,6 @@ Private Sub HandleCooldown(ByVal Index As Long, ByRef Data() As Byte, ByVal Star
     Set Buffer = Nothing
 End Sub
 
-Private Sub HandleClearSpellBuffer(ByVal Index As Long, ByRef Data() As Byte, ByVal StartAddr As Long, ByVal ExtraVar As Long)
-    SpellBuffer = 0
-    SpellBufferTimer = 0
-End Sub
 
 
 Private Sub HandleStunned(ByVal Index As Long, ByRef Data() As Byte, ByVal StartAddr As Long, ByVal ExtraVar As Long)

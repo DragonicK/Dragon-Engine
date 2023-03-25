@@ -97,6 +97,7 @@ public enum MessageHeader {
     Passive,
     PassiveUpdate,
     Cast,
+    ClearCast,
     PartyRequest,
     PartyInvite,
     AcceptParty,

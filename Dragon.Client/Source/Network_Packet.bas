@@ -98,6 +98,7 @@ Public Enum EnginePacket
     PPassive
     PPassiveUpdate
     PCast
+    PClearCast
     PPartyRequest
     PPartyInvite
     PAcceptParty

@@ -122,34 +122,39 @@ Public Sub HandlePlayerXY(ByVal Index As Long, ByRef Data() As Byte, ByVal Start
     Player(pIndex).yOffset = 0
 End Sub
 
-Public Sub CheckAttack()
-    Dim Buffer As clsBuffer
-    Dim AttackSpeed As Long
+Public Sub HandleClearCast(ByVal Index As Long, ByRef Data() As Byte, ByVal StartAddr As Long, ByVal ExtraVar As Long)
+    SpellBuffer = 0
+    SpellBufferTimer = 0
+End Sub
 
-    If ControlDown Then
-        If SpellBuffer > 0 Then Exit Sub    ' currently casting a spell, can't attack
-        If StunDuration > 0 Then Exit Sub    ' stunned, can't attack
+Public Sub CheckAttack()
+    'Dim Buffer As clsBuffer
+    'Dim AttackSpeed As Long
+
+  '  If ControlDown Then
+  '      If SpellBuffer > 0 Then Exit Sub    ' currently casting a spell, can't attack
+ '       If StunDuration > 0 Then Exit Sub    ' stunned, can't attack
 
         ' speed from weapon
-        AttackSpeed = 1000
+'        AttackSpeed = 1000
 
-        If Player(MyIndex).AttackTimer + AttackSpeed < GetTickCount Then
-            If Player(MyIndex).Attacking = 0 Then
+        'If Player(MyIndex).AttackTimer + AttackSpeed < GetTickCount Then
+            'If Player(MyIndex).Attacking = 0 Then
 
-                Call StartAttackMovement(MyIndex)
+                'Call StartAttackMovement(MyIndex) '
 
-                With Player(MyIndex)
-                    .Attacking = 1
-                    .AttackTimer = GetTickCount
-                End With
-
-                Set Buffer = New clsBuffer
-                Buffer.WriteLong CAttack
-                SendData Buffer.ToArray()
-                Set Buffer = Nothing
-            End If
-        End If
-    End If
+  '              With Player(MyIndex)
+  '                  .Attacking = 1
+ '                   .AttackTimer = GetTickCount
+ '               End With
+'
+ '               Set Buffer = New clsBuffer
+ '               Buffer.WriteLong CAttack
+  '              SendData Buffer.ToArray()
+ '               Set Buffer = Nothing
+ '           End If
+ '       End If
+ '   End If
 
 End Sub
 
