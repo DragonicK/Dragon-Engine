@@ -28,7 +28,7 @@ public class Buff : ICombatHandler {
     private int Duration;
     private Effect? AttributeEffect;
 
-    public bool CouldSelect(Target target, SkillEffect effect) {
+    public bool CanSelect(Target target, SkillEffect effect) {
         AttributeEffect = Effects![effect.EffectId];
 
         if (AttributeEffect is not null) {
@@ -63,7 +63,7 @@ public class Buff : ICombatHandler {
 
                 break;
             case SkillTargetType.Single:
-                if (CouldSelect(target, effect)) {
+                if (CanSelect(target, effect)) {
                     list.Add(target);
                 }
                 else {
@@ -75,7 +75,7 @@ public class Buff : ICombatHandler {
 
                 break;
             case SkillTargetType.AoE:
-                if (CouldSelect(target, effect)) {
+                if (CanSelect(target, effect)) {
                     list.Add(target);
 
                     SetAoETarget(list, instance, target, range);

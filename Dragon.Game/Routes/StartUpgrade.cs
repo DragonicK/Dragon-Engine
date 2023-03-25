@@ -25,7 +25,7 @@ public sealed class StartUpgrade {
             if (player is not null) {
                 if (IsValidInventory(player)) {
 
-                    var manager = new UpgradeManager() {
+                    var manager = new ItemUpgradeManager() {
                         Configuration = Configuration,
                         ContentService = ContentService,
                         PacketSender = sender,

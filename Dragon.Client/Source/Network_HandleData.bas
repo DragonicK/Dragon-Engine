@@ -101,9 +101,10 @@ Public Sub InitMessages()
     HandleDataSub(EnginePacket.PCancelAnimation) = GetAddress(AddressOf HandleCancelAnimation)
     HandleDataSub(EnginePacket.PClearCast) = GetAddress(AddressOf HandleClearCast)
     HandleDataSub(EnginePacket.PSkillCooldown) = GetAddress(AddressOf HandleSkillCooldown)
+    HandleDataSub(EnginePacket.PTarget) = GetAddress(AddressOf HandleTarget)
+    
     
     ' HandleDataSub(SNpcAttack) = GetAddress(AddressOf HandleNpcAttack)
-    ' HandleDataSub(STarget) = GetAddress(AddressOf HandleTarget)
     ' HandleDataSub(SSound) = GetAddress(AddressOf HandleSound)
     ' HandleDataSub(SPlayerAchievement) = GetAddress(AddressOf HandlePlayerAchievement)
     ' HandleDataSub(SUpdateAchievement) = GetAddress(AddressOf HandleUpdatePlayerAchievement)
@@ -282,23 +283,6 @@ Private Sub HandleStunned(ByVal Index As Long, ByRef Data() As Byte, ByVal Start
     StunDuration = Buffer.ReadLong
     Set Buffer = Nothing
 End Sub
-
-Private Sub HandleTarget(ByVal Index As Long, ByRef Data() As Byte, ByVal StartAddr As Long, ByVal ExtraVar As Long)
-    Dim Buffer As clsBuffer
-    Set Buffer = New clsBuffer
-    Buffer.WriteBytes Data()
-    MyTargetIndex = Buffer.ReadLong
-    MyTargetType = Buffer.ReadByte
-    Set Buffer = Nothing
-
-    If MyTargetIndex <= 0 Then
-        Call CloseTargetWindow
-    Else
-        Call OpenTargetWindow
-    End If
-End Sub
-
-
 
 
 Private Sub HandleSound(ByVal Index As Long, ByRef Data() As Byte, ByVal StartAddr As Long, ByVal ExtraVar As Long)

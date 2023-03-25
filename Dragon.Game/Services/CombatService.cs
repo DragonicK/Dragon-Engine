@@ -5,7 +5,6 @@ using Dragon.Core.Model.Entity;
 using Dragon.Core.Model.BlackMarket;
 
 using Dragon.Game.Deaths;
-using Dragon.Game.Combat.Formulas;
 using Dragon.Game.Players;
 
 namespace Dragon.Game.Services;
@@ -29,18 +28,19 @@ public class CombatService : IService, IUpdatableService {
             if (player is not null) {
                 if (player.InGame) {
                     if (player.Combat.IsBufferedSkill) {
-                        ProcessCastSkill(player);
+                        ExecuteCastSkill(player);
                     }
                 }
             }
         }
     }
 
-    private void ProcessCastSkill(IPlayer player) {
-        var index = player.Combat.BufferedSkillIndex;
+    private void ExecuteCastSkill(IPlayer player) {
         var timer = player.Combat.BufferedSkillTime;
 
         if (Environment.TickCount >= timer) {
+            var index = player.Combat.BufferedSkillIndex;
+
             player.Combat.CastSkill(index);
 
             player.Combat.IsBufferedSkill = false;

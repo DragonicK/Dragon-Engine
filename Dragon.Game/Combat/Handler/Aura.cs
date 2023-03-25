@@ -24,7 +24,7 @@ public class Aura : ICombatHandler {
     private int Range;
     private Effect? AttributeEffect;
 
-    public bool CouldSelect(Target target, SkillEffect effect) {
+    public bool CanSelect(Target target, SkillEffect effect) {
         return true;
     }
 

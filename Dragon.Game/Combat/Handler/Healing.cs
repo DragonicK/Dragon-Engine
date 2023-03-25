@@ -19,7 +19,7 @@ public class Healing : ICombatHandler {
     public IPacketSender? PacketSender { get; set; }
     public InstanceService? InstanceService { get; set; }
 
-    public bool CouldSelect(Target target, SkillEffect effect) {
+    public bool CanSelect(Target target, SkillEffect effect) {
         if (Player!.Target is IInstanceEntity entity) {
             if (entity is not null) {
                 return entity.Behaviour != NpcBehaviour.Monster && entity.Behaviour != NpcBehaviour.Boss;
@@ -74,7 +74,7 @@ public class Healing : ICombatHandler {
 
                 break;
             case SkillTargetType.Single:
-                if (CouldSelect(target, effect)) {
+                if (CanSelect(target, effect)) {
                     list.Add(target);
                 }
                 else {
@@ -86,7 +86,7 @@ public class Healing : ICombatHandler {
 
                 break;
             case SkillTargetType.AoE:
-                if (CouldSelect(target, effect)) {
+                if (CanSelect(target, effect)) {
                     list.Add(target);
                 }
                 else {

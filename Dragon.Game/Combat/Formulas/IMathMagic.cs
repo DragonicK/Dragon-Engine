@@ -1,7 +1,0 @@
-﻿using Dragon.Core.Model.Entity;
-
-namespace Dragon.Game.Combat.Formulas;
-
-public interface IMathMagic {
-    bool CanCriticalAttack(IEntity attacker, IEntity receiver);
-}

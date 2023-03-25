@@ -338,7 +338,7 @@ Public Sub CastSpell(ByVal SpellSlot As Long)
 
     SkillId = PlayerSkill(SpellSlot).Id
 
-    If Not CouldCastOnSelf(SkillId) Then
+    If Not CanCastOnSelf(SkillId) Then
         Exit Sub
     End If
 
@@ -379,39 +379,42 @@ Public Sub CastSpell(ByVal SpellSlot As Long)
 
 End Sub
 
-Private Function CouldCastOnSelf(ByVal SkillId As Long) As Boolean
+Private Function CanCastOnSelf(ByVal SkillId As Long) As Boolean
+    Dim FirstEffect As Long
+    
+    FirstEffect = 1
 
     With Skill(SkillId)
         If MyTargetIndex = MyIndex And MyTargetType = TargetTypePlayer Then
             If .EffectCount > 0 Then
-                If .Effect(1).EffectType = SkillEffectType_Damage Then
+                If .Effect(FirstEffect).EffectType = SkillEffectType_Damage Then
                     Exit Function
                 End If
 
-                If .Effect(1).EffectType = SkillEffectType_Dot Then
+                If .Effect(FirstEffect).EffectType = SkillEffectType_Dot Then
                     Exit Function
                 End If
 
-                If .Effect(1).EffectType = SkillEffectType_Immobilize Then
+                If .Effect(FirstEffect).EffectType = SkillEffectType_Immobilize Then
                     Exit Function
                 End If
 
-                If .Effect(1).EffectType = SkillEffectType_Dispel Then
+                If .Effect(FirstEffect).EffectType = SkillEffectType_Dispel Then
                     Exit Function
                 End If
 
-                If .Effect(1).EffectType = SkillEffectType_Dispel Then
+                If .Effect(FirstEffect).EffectType = SkillEffectType_Dispel Then
                     Exit Function
                 End If
 
-                If .Effect(1).EffectType = SkillEffectType_Silence Then
+                If .Effect(FirstEffect).EffectType = SkillEffectType_Silence Then
                     Exit Function
                 End If
             End If
         End If
     End With
 
-    CouldCastOnSelf = True
+    CanCastOnSelf = True
 
 End Function
 

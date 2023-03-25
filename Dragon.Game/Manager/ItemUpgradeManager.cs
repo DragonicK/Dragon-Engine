@@ -10,7 +10,7 @@ using Dragon.Game.Configurations;
 
 namespace Dragon.Game.Manager;
 
-public class UpgradeManager {
+public class ItemUpgradeManager {
     public IPlayer? Player { get; init; }
     public IConfiguration? Configuration { get; init; }
     public IPacketSender? PacketSender { get; init; }

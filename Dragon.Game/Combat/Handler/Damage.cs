@@ -18,7 +18,7 @@ public class Damage : ICombatHandler {
     public IPacketSender? PacketSender { get; set; }
     public InstanceService? InstanceService { get; set; }
 
-    public bool CouldSelect(Target target, SkillEffect effect) {
+    public bool CanSelect(Target target, SkillEffect effect) {
         if (Player!.Target is IInstanceEntity entity) {
              if (entity is not null) {
                 if (entity.Vitals.Get(Vital.HP) <= 0) {
@@ -66,7 +66,7 @@ public class Damage : ICombatHandler {
 
         switch (targetType) {
             case SkillTargetType.Single:
-                if (CouldSelect(target, effect)) {
+                if (CanSelect(target, effect)) {
                     list.Add(target);
                 }
 

@@ -24,8 +24,6 @@ Public Enum ServerPackets
     SSortLootList
     SEnableDropTakeItem
     SRollDiceItem
-      
-    SCooldown
     
     SStunned
     ' Make sure SMsgCOUNT is below everything else

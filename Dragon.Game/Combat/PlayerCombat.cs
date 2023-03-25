@@ -204,7 +204,7 @@ public class PlayerCombat : IEntityCombat {
             foreach (var (type, effect) in inventory.Effects) {
                 switch (type) {
                     case SkillEffectType.Damage:
-                        if (!Damage.CouldSelect(target, effect)) {
+                        if (!Damage.CanSelect(target, effect)) {
                             PacketSender!.SendMessage(SystemMessage.InvalidTarget, QbColor.BrigthRed, Player!);
 
                             continue;
@@ -213,7 +213,7 @@ public class PlayerCombat : IEntityCombat {
                         break;
 
                     case SkillEffectType.DoT:
-                        if (!DoT.CouldSelect(target, effect)) {
+                        if (!DoT.CanSelect(target, effect)) {
                             PacketSender!.SendMessage(SystemMessage.InvalidTarget, QbColor.BrigthRed, Player!);
 
                             continue;
