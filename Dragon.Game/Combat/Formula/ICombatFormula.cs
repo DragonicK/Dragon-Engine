@@ -1,6 +1,6 @@
 ﻿using Dragon.Core.Model.Entity;
 
-namespace Dragon.Game.Combat;
+namespace Dragon.Game.Combat.Formula;
 
 public interface ICombatFormula {
     bool CanDodgeAttack(IEntity attacker, IEntity receiver);

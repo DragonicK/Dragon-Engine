@@ -9,14 +9,17 @@ using Dragon.Game.Players;
 using Dragon.Game.Network;
 using Dragon.Game.Services;
 using Dragon.Game.Instances;
+using Dragon.Game.Combat.Common;
 
 namespace Dragon.Game.Combat.Handler;
 
-public class Damage : ICombatHandler {
-    public IPlayer? Player { get; set; }
-    public IDatabase<Skill>? Skills { get; set; }
-    public IPacketSender? PacketSender { get; set; }
-    public InstanceService? InstanceService { get; set; }
+public class Damage : ISkillHandler {
+    public IPlayer? Player { get; init; }
+    public IDatabase<Skill>? Skills { get; init; }
+    public IEntityDeath? PlayerDeath { get; init; }
+    public IEntityDeath? EntityDeath { get; init; }
+    public IPacketSender? PacketSender { get; init; }
+    public InstanceService? InstanceService { get; init; }
 
     public bool CanSelect(Target target, SkillEffect effect) {
         if (Player!.Target is IInstanceEntity entity) {
@@ -91,6 +94,15 @@ public class Damage : ICombatHandler {
             PacketSender!.SendInstanceEntityVital(instance, target.Entity.IndexOnInstance);
 
             SendDamage(vital, damaged.Value, target.Entity, instance);
+
+            if (target.Entity.Vitals.Get(Vital.HP) <= 0) {
+                if (target.Entity is IPlayer) {
+                    PlayerDeath?.Execute(Player, target.Entity);
+                }
+                else if (target.Entity is IInstanceEntity) {
+                    EntityDeath?.Execute(Player, target.Entity);
+                }
+            }
         }
     }
 

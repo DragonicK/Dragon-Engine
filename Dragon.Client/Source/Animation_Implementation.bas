@@ -120,3 +120,7 @@ Public Sub CheckAnimInstance(ByVal Index As Long)
     If AnimInstance(Index).Used(0) = False And AnimInstance(Index).Used(1) = False Then ClearAnimInstance (Index)
 End Sub
 
+Public Sub ClearAnimInstance(ByVal Index As Long)
+    Call ZeroMemory(ByVal VarPtr(AnimInstance(Index)), LenB(AnimInstance(Index)))
+End Sub
+

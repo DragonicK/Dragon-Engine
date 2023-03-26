@@ -20,7 +20,7 @@ public class JoinGame {
     public ContentService? ContentService { get; init; }
 
     public void Join() {
-        Player!.Combat = new PlayerCombat(Player, PacketSender!, ContentService!, InstanceService!);
+        Player!.Combat = new PlayerCombat(Player, Configuration!, PacketSender!, ContentService!, InstanceService!);
 
         #region Titles
 

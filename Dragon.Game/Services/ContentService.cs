@@ -27,7 +27,7 @@ using Dragon.Core.Serialization;
 
 using Dragon.Game.Administrator;
 using Dragon.Game.Instances;
-using Dragon.Network.Messaging.SharedPackets;
+using Dragon.Game.Manager;
 
 namespace Dragon.Game.Services;
 

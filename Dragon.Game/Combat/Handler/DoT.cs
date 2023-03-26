@@ -9,12 +9,16 @@ using Dragon.Game.Players;
 using Dragon.Game.Network;
 using Dragon.Game.Services;
 using Dragon.Game.Instances;
+using Dragon.Game.Combat.Common;
+using Dragon.Game.Combat.Death;
 
 namespace Dragon.Game.Combat.Handler;
 
-public class DoT : ICombatHandler {
+public class DoT : ISkillHandler {
     public IPlayer? Player { get; set; }
     public IDatabase<Skill>? Skills { get; set; }
+    public IEntityDeath? PlayerDeath { get; init; }
+    public IEntityDeath? EntityDeath { get; init; }
     public IPacketSender? PacketSender { get; set; }
     public InstanceService? InstanceService { get; set; }
 
@@ -87,6 +91,15 @@ public class DoT : ICombatHandler {
             PacketSender!.SendInstanceEntityVital(instance, target.Entity.IndexOnInstance);
 
             SendDamage(vital, damaged.Value, target.Entity, instance);
+
+            if (target.Entity.Vitals.Get(Vital.HP) <= 0) {
+                if (target.Entity is IPlayer) {
+                    PlayerDeath?.Execute(Player, target.Entity);
+                }
+                else if (target.Entity is IInstanceEntity) {
+                    EntityDeath?.Execute(Player, target.Entity);
+                }
+            }
         }
     }
 

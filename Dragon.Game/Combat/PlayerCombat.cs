@@ -12,12 +12,17 @@ using Dragon.Game.Network;
 using Dragon.Game.Services;
 using Dragon.Game.Instances;
 
+using Dragon.Game.Combat.Common;
 using Dragon.Game.Combat.Handler;
+using Dragon.Game.Configurations;
+using Dragon.Game.Combat.Death;
+using Microsoft.IdentityModel.Protocols;
 
 namespace Dragon.Game.Combat;
 
 public class PlayerCombat : IEntityCombat {
     public IPlayer Player { get; init; }
+    public IConfiguration Configuration { get; init; }
     public IPacketSender PacketSender { get; private set; }
     public IDatabase<Npc>? Npcs { get; private set; }
     public IDatabase<Skill>? Skills { get; private set; }
@@ -25,29 +30,46 @@ public class PlayerCombat : IEntityCombat {
     public IDatabase<GroupAttribute>? NpcAttributes { get; private set; }
     public InstanceService? InstanceService { get; private set; }
 
-    public CharacterSkill? Current { get; private set; }
+    public CharacterSkill? CurrentSlot { get; private set; }
     public Skill? CurrentData { get; private set; }
 
-    public ICombatHandler Healing { get; set; }
-    public ICombatHandler HoT { get; set; }
-    public ICombatHandler Damage { get; set; }
-    public ICombatHandler DoT { get; set; }
-    public ICombatHandler Effect { get; set; }
-    public ICombatHandler Aura { get; set; }
+    public ISkillHandler Healing { get; private set; }
+    public ISkillHandler HoT { get; private set; }
+    public ISkillHandler Damage { get; private set; }
+    public ISkillHandler DoT { get; private set; }
+    public ISkillHandler Effect { get; private set; }
+    public ISkillHandler Aura { get; private set; }
+    public IEntityDeath EntityDeath { get; private set; }
+    public IEntityDeath PlayerDeath { get; private set; }
 
     public bool IsBufferedSkill { get; set; }
     public int BufferedSkillIndex { get; set; }
     public int BufferedSkillTime { get; set; }
 
-    public PlayerCombat(IPlayer player, IPacketSender sender, ContentService content, InstanceService instanceService) {
+    public PlayerCombat(IPlayer player, IConfiguration configuration, IPacketSender sender, ContentService contentService, InstanceService instanceService) {
         Player = player;
         PacketSender = sender;
+        Configuration = configuration;
         InstanceService = instanceService;
 
-        Npcs = content.Npcs;
-        Skills = content.Skills;
-        Effects = content.Effects;
-        NpcAttributes = content.NpcAttributes;
+        Npcs = contentService.Npcs;
+        Skills = contentService.Skills;
+        Effects = contentService.Effects;
+        NpcAttributes = contentService.NpcAttributes;
+
+        EntityDeath = new EntityDeath() {
+            PacketSender = sender,
+            Configuration = configuration,
+            ContentService = contentService,
+            InstanceService = instanceService
+        };
+
+        PlayerDeath = new PlayerDeath() {
+            PacketSender = sender,
+            Configuration = configuration,
+            ContentService = contentService,
+            InstanceService = instanceService
+        };
 
         Healing = new Healing() {
             Player = player,
@@ -67,14 +89,18 @@ public class PlayerCombat : IEntityCombat {
             Player = player,
             Skills = Skills,
             PacketSender = sender,
-            InstanceService = InstanceService
+            InstanceService = InstanceService,
+            EntityDeath = EntityDeath, 
+            PlayerDeath = PlayerDeath
         };
 
         DoT = new DoT() {
             Player = player,
             Skills = Skills,
             PacketSender = sender,
-            InstanceService = InstanceService
+            InstanceService = InstanceService,
+            EntityDeath = EntityDeath,
+            PlayerDeath = PlayerDeath
         };
 
         Effect = new Buff() {
@@ -93,9 +119,9 @@ public class PlayerCombat : IEntityCombat {
         };
     }
 
-    public void BufferSkill(int index) {
+    public void BufferSkill(int slotIndex) {
         if (Skills is not null) {
-            var inventory = Player.Skills.Get(index);
+            var inventory = Player.Skills.Get(slotIndex);
 
             if (inventory is not null) {
                 var id = inventory.SkillId;
@@ -134,16 +160,16 @@ public class PlayerCombat : IEntityCombat {
                     PacketSender.SendAnimation(GetInstance()!, data.CastAnimationId, Player.GetX(), Player.GetY(), TargetType.Player, Player.IndexOnInstance, true);
 
                     IsBufferedSkill = true;
-                    BufferedSkillIndex = index;
+                    BufferedSkillIndex = slotIndex;
                     BufferedSkillTime = Environment.TickCount + (inventory.CastTime * 1000);
                 }
             }
         }
     }
 
-    public void CastSkill(int index) {
+    public void CastSkill(int slotIndex) {
         if (Skills is not null) {
-            var inventory = Player.Skills.Get(index);
+            var inventory = Player.Skills.Get(slotIndex);
 
             if (inventory is not null) {
                 var id = inventory.SkillId;
@@ -176,7 +202,7 @@ public class PlayerCombat : IEntityCombat {
                     }         
 
                     if (CouldSelectTargetByPrimaryEffect(data)) {
-                        Current = inventory;
+                        CurrentSlot = inventory;
                         CurrentData = data;
 
                         var target = new Target() {
@@ -184,7 +210,7 @@ public class PlayerCombat : IEntityCombat {
                             Type = Player!.TargetType
                         };
 
-                        ProcessSkill(inventory, data, target, index);
+                        ExecuteSkill(inventory, data, target, slotIndex);
                     }
                 }
             }
@@ -195,9 +221,12 @@ public class PlayerCombat : IEntityCombat {
         IsBufferedSkill = false;
         BufferedSkillIndex = 0;
         BufferedSkillTime = 0;
+
+        CurrentSlot = null;
+        CurrentData = null;
     }
 
-    private void ProcessSkill(CharacterSkill inventory, Skill data, Target target, int inventoryIndex) {
+    private void ExecuteSkill(CharacterSkill inventory, Skill data, Target target, int inventoryIndex) {
         var instance = GetInstance();
 
         if (instance is not null) {
@@ -225,15 +254,15 @@ public class PlayerCombat : IEntityCombat {
                         break;
                 }
 
-                ProcessEffect(instance, type, effect, inventory, data, target, inventoryIndex);
+                ExecuteEffect(instance, type, effect, inventory, data, target, inventoryIndex);
             }
         }
     }
 
-    private void ProcessEffect(IInstance instance, SkillEffectType type, SkillEffect? effect, CharacterSkill inventory, Skill data, Target target, int inventoryIndex) {
+    private void ExecuteEffect(IInstance instance, SkillEffectType type, SkillEffect? effect, CharacterSkill inventory, Skill data, Target target, int inventoryIndex) {
         if (effect is not null) {
             IList<Target> targets;
-            ICombatHandler? handler = null;
+            ISkillHandler? handler = null;
 
             switch (type) {
                 case SkillEffectType.Aura: handler = Aura; break;

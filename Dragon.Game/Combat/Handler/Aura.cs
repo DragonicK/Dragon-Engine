@@ -10,10 +10,11 @@ using Dragon.Game.Players;
 using Dragon.Game.Network;
 using Dragon.Game.Services;
 using Dragon.Game.Instances;
+using Dragon.Game.Combat.Common;
 
 namespace Dragon.Game.Combat.Handler;
 
-public class Aura : ICombatHandler {
+public class Aura : ISkillHandler {
     public IPlayer? Player { get; set; }
     public IDatabase<Effect>? Effects { get; set; }
     public IPacketSender? PacketSender { get; set; }

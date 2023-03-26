@@ -206,7 +206,6 @@ public sealed partial class PacketSender : IPacketSender {
 
             Writer.Enqueue(msg);
         }
-
     }
 
     public void SendPlayerVital(IPlayer player) {

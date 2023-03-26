@@ -97,7 +97,7 @@ public class EffectService : IService, IUpdatableService {
             sender.SendAttributes(player);
             sender.SendPlayerVital(player, instance);
 
-            sender.SendDisplayIcon(ref icon, DisplayIconTarget.Player, (IEntity)player, instance);
+            sender.SendDisplayIcon(ref icon, DisplayIconTarget.Player, player, instance);
         }
     }
 

@@ -91,9 +91,6 @@ Public Function Rand(ByVal Low As Long, ByVal High As Long) As Long
     Rand = Int((High - Low + 1) * Rnd) + Low
 End Function
 
-
-
-
 Public Sub ChkDir(ByVal tDir As String, ByVal tName As String)
     If LCase$(Dir$(tDir & tName, vbDirectory)) <> tName Then Call MkDir(tDir & tName)
 End Sub
@@ -104,10 +101,6 @@ Public Function FileExist(ByVal FileName As String) As Boolean
     End If
 End Function
 
-
-Sub ClearAnimInstance(ByVal Index As Long)
-    Call ZeroMemory(ByVal VarPtr(AnimInstance(Index)), LenB(AnimInstance(Index)))
-End Sub
 
 
 

@@ -13,10 +13,11 @@ using Dragon.Game.Players;
 using Dragon.Game.Network;
 using Dragon.Game.Services;
 using Dragon.Game.Instances;
+using Dragon.Game.Combat.Common;
 
 namespace Dragon.Game.Combat.Handler;
 
-public class Buff : ICombatHandler {
+public class Buff : ISkillHandler {
     public IPlayer? Player { get; set; }
     public IDatabase<Skill>? Skills { get; set; }
     public IDatabase<Effect>? Effects { get; set; }
