@@ -25,6 +25,7 @@ public class Player : IPlayer {
     public int Cash { get; set; }
     public int ShopId { get; set; }
     public bool InGame { get; set; }
+    public bool IsDead { get; set; }
     public IConnection Connection { get; set; }
     public IEntityAttribute Attributes { get; set; }
     public IEntityVital Vitals { get; set; }

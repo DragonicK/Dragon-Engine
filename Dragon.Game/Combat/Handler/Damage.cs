@@ -95,7 +95,7 @@ public class Damage : ISkillHandler {
 
             SendDamage(vital, damaged.Value, target.Entity, instance);
 
-            if (target.Entity.Vitals.Get(Vital.HP) <= 0) {
+            if (!target.Entity.IsDead) {
                 if (target.Entity is IPlayer) {
                     PlayerDeath?.Execute(Player, target.Entity);
                 }
@@ -116,14 +116,14 @@ public class Damage : ISkillHandler {
             var entities = instance.Entities;
 
             foreach (var entity in entities) {
-                if (entity.Vitals.Get(Vital.HP) > 0) {
+                if (!entity.IsDead) {
                     x2 = entity.X;
                     y2 = entity.Y;
 
                     if (entity.Behaviour == NpcBehaviour.Monster || entity.Behaviour == NpcBehaviour.Boss) {
                         if (IsInRange(range, x1, y1, x2, y2)) {
                             list.Add(new Target() {
-                                Entity = (IEntity)entity,
+                                Entity = entity,
                                 Type = TargetType.Npc
                             });
                         }
@@ -134,8 +134,7 @@ public class Damage : ISkillHandler {
     }
 
     private bool IsInRange(int range, int x1, int y1, int x2, int y2) {
-        var r = Convert.ToInt32(Math.Sqrt(Math.Pow((x1 - x2), 2) + Math.Pow((y1 - y2), 2)));
-        return r <= range;
+        return Convert.ToInt32(Math.Sqrt(Math.Pow((x1 - x2), 2) + Math.Pow((y1 - y2), 2))) <= range;
     }
 
     private Vital GetFromVitalType(SkillVitalType vitalType) => vitalType switch {

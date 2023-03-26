@@ -162,7 +162,7 @@ public class Buff : ISkillHandler {
 
             foreach (var entity in entities) {
                 if (entity != primary.Entity) {
-                    if (CouldApplyEffect((IEntity)entity)) {
+                    if (CouldApplyEffect(entity)) {
                         if (!entity.IsDead) {
                             x2 = entity.X;
                             y2 = entity.Y;
@@ -170,7 +170,7 @@ public class Buff : ISkillHandler {
                             if (entity.Behaviour != NpcBehaviour.Monster && entity.Behaviour != NpcBehaviour.Boss) {
                                 if (IsInRange(range, x1, y1, x2, y2)) {
                                     list.Add(new Target() {
-                                        Entity = (IEntity)entity,
+                                        Entity = entity,
                                         Type = TargetType.Npc
                                     });
                                 }

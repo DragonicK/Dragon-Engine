@@ -9,6 +9,7 @@ public interface IEntity {
     IEntity? Target { get; set; }
     TargetType TargetType { get; set; }
     int IndexOnInstance { get; set; }
+    bool IsDead { get; set; }
 
     public int GetX();
     public int GetY();

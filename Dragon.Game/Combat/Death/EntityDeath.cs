@@ -29,27 +29,51 @@ public class EntityDeath : IEntityDeath {
         var player = attacker as IPlayer;
         var entity = receiver as IInstanceEntity;
 
-        GiveAttackerExperience(player, entity);
+        if (player is not null && entity is not null) {
+            var instance = GetInstance(player)!;
 
-        entity.IsDead = true;
-        entity.Target = null;
-        entity.TargetType = TargetType.None;
+            entity.IsDead = true;
 
-        // clear player targets
-        // remove effects
-        // update vitals
-        // send corpse / box loot
+            entity.Vitals.Set(Vital.HP, 0);
+            entity.Vitals.Set(Vital.MP, 0);
+            entity.Vitals.Set(Vital.Special, 0);
+
+            ClearEntityTarget(entity);
+            GiveAttackerExperience(player, entity, instance);
+            ClearInstancePlayerTargets(player, entity, instance);
+
+            // remove effects
+            // send corpse / box loot
+        }
     }
 
-    private void GiveAttackerExperience(IPlayer player, IInstanceEntity entity) {
+    private void ClearEntityTarget(IInstanceEntity entity) {
+        entity.Target = null;
+        entity.TargetType = TargetType.None;
+    }
+
+    private void ClearInstancePlayerTargets(IPlayer attacker, IInstanceEntity entity, IInstance instance) {
+        foreach (var player in instance.GetPlayers()) {
+            if (player != attacker) {
+                if (player.TargetType == TargetType.Npc) {
+                    if (player.Target == entity) {
+                        player.Target = null;
+                        player.TargetType = TargetType.None;
+
+                        PacketSender!.SendTarget(player, TargetType.None, 0);
+                    }
+                }
+            }
+        }
+    }
+
+    private void GiveAttackerExperience(IPlayer player, IInstanceEntity entity, IInstance instance) {
         var exp = expHandler!.GetExperience(player, entity);
 
         if (exp > 0) {
             player.Character.Experience += exp;
 
             if (expHandler.CheckForLevelUp(player)) { 
-                var instance = GetInstance(player)!;
-
                 player.AllocateAttributes();
 
                 PacketSender!.SendAttributes(player);

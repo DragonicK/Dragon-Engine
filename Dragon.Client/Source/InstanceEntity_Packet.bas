@@ -24,12 +24,16 @@ Public Sub HandleInstanceEntities(ByVal Index As Long, ByRef Data() As Byte, ByV
 
             For n = 1 To Vitals.Vital_Count - 1
                 .Vital(n) = Buffer.ReadLong
+
+                If .Vital(n) < 0 Then .Vital(n) = 0
             Next
 
             n = Buffer.ReadLong
 
             For n = 1 To Vitals.Vital_Count - 1
                 .MaxVital(n) = Buffer.ReadLong
+
+                If .MaxVital(n) < 0 Then .MaxVital(n) = 0
             Next
 
             .Dead = .Vital(HP) <= 0
@@ -59,12 +63,16 @@ Public Sub HandleInstanceEntity(ByVal Index As Long, ByRef Data() As Byte, ByVal
 
         For n = 1 To Vitals.Vital_Count - 1
             .Vital(n) = Buffer.ReadLong
+
+            If .Vital(n) < 0 Then .Vital(n) = 0
         Next
 
         n = Buffer.ReadLong
 
         For n = 1 To Vitals.Vital_Count - 1
             .MaxVital(n) = Buffer.ReadLong
+
+            If .MaxVital(n) < 0 Then .MaxVital(n) = 0
         Next
 
         .Dead = .Vital(HP) <= 0
@@ -114,16 +122,20 @@ Public Sub HandleInstanceEntityVital(ByVal Index As Long, ByRef Data() As Byte, 
 
         For i = 1 To Vitals.Vital_Count - 1
             .Vital(i) = Buffer.ReadLong
+
+            If .Vital(i) < 0 Then .Vital(i) = 0
         Next
 
         i = Buffer.ReadLong
 
         For i = 1 To Vitals.Vital_Count - 1
             .MaxVital(i) = Buffer.ReadLong
+
+            If .MaxVital(i) < 0 Then .MaxVital(i) = 0
         Next
 
         .Dead = .Vital(HP) <= 0
-        
+
         If .Dead Then
             Call ShouldCloseTargetWindow(TargetTypeNpc, Index)
         End If

@@ -10,7 +10,6 @@ using Dragon.Game.Network;
 using Dragon.Game.Services;
 using Dragon.Game.Instances;
 using Dragon.Game.Combat.Common;
-using Dragon.Game.Combat.Death;
 
 namespace Dragon.Game.Combat.Handler;
 
@@ -92,7 +91,7 @@ public class DoT : ISkillHandler {
 
             SendDamage(vital, damaged.Value, target.Entity, instance);
 
-            if (target.Entity.Vitals.Get(Vital.HP) <= 0) {
+            if (!target.Entity.IsDead) {
                 if (target.Entity is IPlayer) {
                     PlayerDeath?.Execute(Player, target.Entity);
                 }
@@ -131,8 +130,7 @@ public class DoT : ISkillHandler {
     }
 
     private bool IsInRange(int range, int x1, int y1, int x2, int y2) {
-        var r = Convert.ToInt32(Math.Sqrt(Math.Pow((x1 - x2), 2) + Math.Pow((y1 - y2), 2)));
-        return r <= range;
+        return Convert.ToInt32(Math.Sqrt(Math.Pow((x1 - x2), 2) + Math.Pow((y1 - y2), 2))) <= range;
     }
 
     private Vital GetFromVitalType(SkillVitalType vitalType) => vitalType switch {
