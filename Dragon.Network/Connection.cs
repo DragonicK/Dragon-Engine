@@ -102,6 +102,8 @@ public class Connection : IConnection {
             }
         }
         catch (Exception ex) {
+            Socket?.Disconnect(false);
+
             Logger?.Write(WarningLevel.Error, GetType().Name, ex.Message);
         }
     }
@@ -111,6 +113,8 @@ public class Connection : IConnection {
             Socket?.EndSend(ar);
         }
         catch (Exception ex) {
+            Socket?.Disconnect(false);
+
             Logger?.Write(WarningLevel.Error, GetType().Name, ex.Message);
         }
     }
