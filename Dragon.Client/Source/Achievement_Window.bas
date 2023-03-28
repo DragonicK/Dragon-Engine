@@ -60,7 +60,7 @@ Private Descriptions As RequirementDescriptionRec
 Public Sub CreateWindow_Achievement()
     Dim i As Long
 
-    CreateWindow "winAchievement", "CONQUISTAS", zOrder_Win, 0, 0, 630, 360, 0, False, Fonts.FontRegular, , 2, 7, DesignTypes.DesignWindowWithTopBarAndNavBar, DesignTypes.DesignWindowWithTopBarAndNavBar, DesignTypes.DesignWindowWithTopBarAndNavBar, , , , , , , , , , , GetAddress(AddressOf RenderAchievement)
+    CreateWindow "winAchievement", "CONQUISTAS", zOrder_Win, 0, 0, 690, 360, 0, False, Fonts.FontRegular, , 2, 7, DesignTypes.DesignWindowWithTopBarAndNavBar, DesignTypes.DesignWindowWithTopBarAndNavBar, DesignTypes.DesignWindowWithTopBarAndNavBar, , , , , , , , , , , GetAddress(AddressOf RenderAchievement)
     ' Centralise it
     CentraliseWindow WindowCount
 
@@ -99,12 +99,12 @@ Public Sub CreateWindow_Achievement()
     CreateButton WindowCount, "btnDown", 210, 315, 15, 15, , , , , , , Tex_GUI(47), Tex_GUI(48), Tex_GUI(49), , , , , , GetAddress(AddressOf MovePageDown)
 
     'Arrow
-    CreateButton WindowCount, "btnScrollUp", 608, 80, 15, 15, , , , , , , Tex_GUI(44), Tex_GUI(45), Tex_GUI(46), , , , , , GetAddress(AddressOf Scroll_RequirementUp)
-    CreateButton WindowCount, "btnScrollDown", 608, 330, 15, 15, , , , , , , Tex_GUI(47), Tex_GUI(48), Tex_GUI(49), , , , , , GetAddress(AddressOf Scroll_RequirementDown)
+    CreateButton WindowCount, "btnScrollUp", 668, 80, 15, 15, , , , , , , Tex_GUI(44), Tex_GUI(45), Tex_GUI(46), , , , , , GetAddress(AddressOf Scroll_RequirementUp)
+    CreateButton WindowCount, "btnScrollDown", 668, 330, 15, 15, , , , , , , Tex_GUI(47), Tex_GUI(48), Tex_GUI(49), , , , , , GetAddress(AddressOf Scroll_RequirementDown)
 
     'Scroll
-    CreateButton WindowCount, "ScrollUp", 610, 98, 8, 110, , , , , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf Scroll_RequirementUp)
-    CreateButton WindowCount, "ScrollDown", 610, 208, 8, 110, , , , , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf Scroll_RequirementDown)
+    CreateButton WindowCount, "ScrollUp", 670, 98, 8, 110, , , , , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf Scroll_RequirementUp)
+    CreateButton WindowCount, "ScrollDown", 670, 208, 8, 110, , , , , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf Scroll_RequirementDown)
 
     ' Set the default values
     CategoryIndex = AchievementCategory_Summary

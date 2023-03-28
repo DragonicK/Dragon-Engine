@@ -184,6 +184,7 @@ Module=Animation_Data; Source\Animation_Data.bas
 Module=Animation_Implementation; Source\Animation_Implementation.bas
 Module=Animation_Packet; Source\Animation_Packet.bas
 Module=Dialogue_Packet; Source\Dialogue_Packet.bas
+Module=Chat_Implementation; Source\Chat_Implementation.bas
 IconForm="frmMain"
 Startup="Sub Main"
 HelpFile=""

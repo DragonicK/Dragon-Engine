@@ -14,29 +14,42 @@ Private Const Path_Gradient As String = "\Data Files\Graphics\TextureGradient.pa
 Private Const Path_GUI As String = "\Data Files\Graphics\TextureInterface.pak"
 Private Const Path_Misc As String = "\Data Files\Graphics\TextureMisc.pak"
 Private Const Path_Surface As String = "\Data Files\Graphics\Surface.pak"
+Private Const Path_Boxes As String = "\Data Files\Graphics\Boxes.pak"
 
 Private Const DefaultText As String = "This is a text!"
 Private Const SecurityText As String = "This is a complement"
 
 ' Texture wrapper
-Public Tex_Anim() As Long, Tex_Item() As Long, Tex_Face() As Long
-Public Tex_Spellicon() As Long, Tex_Fog() As Long, Tex_GUI() As Long, TextureDesign() As Long, Tex_Gradient() As Long, Tex_Surface() As Long
+Public Tex_Anim() As Long
+Public Tex_Item() As Long
+Public Tex_Face() As Long
+Public Tex_Spellicon() As Long
 Attribute Tex_Spellicon.VB_VarUserMemId = 1073741828
+Public Tex_Fog() As Long
+Public Tex_GUI() As Long
+Public TextureDesign() As Long
+Public Tex_Gradient() As Long
+Public Tex_Surface() As Long
 Public Tex_Misc() As Long
+Public Tex_Boxes() As Long
 
 Public Tex_Bars As Long, Tex_Fader As Long, Tex_Blank As Long
 Attribute Tex_Bars.VB_VarUserMemId = 1073741834
 
 ' Texture count
-Public Count_Anim As Long, Count_GUI As Long, Count_Design As Long, Count_Gradient As Long, Count_Face As Long
+Public Count_Anim As Long
 Attribute Count_Anim.VB_VarUserMemId = 1073741841
-Attribute Count_GUI.VB_VarUserMemId = 1073741841
-Attribute Count_Design.VB_VarUserMemId = 1073741841
-Attribute Count_Gradient.VB_VarUserMemId = 1073741841
-Attribute Count_Face.VB_VarUserMemId = 1073741841
-Public Count_Item As Long, Count_Spellicon As Long, Count_Fog As Long, Count_Surface As Long
+Public Count_GUI As Long
+Public Count_Design As Long
+Public Count_Gradient As Long
+Public Count_Face As Long
+Public Count_Item As Long
 Attribute Count_Item.VB_VarUserMemId = 1073741846
+Public Count_Spellicon As Long
+Public Count_Fog As Long
+Public Count_Surface As Long
 Public Count_Misc As Long
+Public Count_Boxes As Long
 
 Public Sub LoadTextures()
 ' Arrays
@@ -50,7 +63,8 @@ Public Sub LoadTextures()
     Tex_GUI = LoadTexturePack(Count_GUI, App.Path & Path_GUI)
     Tex_Surface = LoadTexturePack(Count_Surface, App.Path & Path_Surface)
     Tex_Misc = LoadTexturePack(Count_Misc, App.Path & Path_Misc)
-            
+    Tex_Boxes = LoadTexturePack(Count_Misc, App.Path & Path_Boxes)
+
     Tex_Bars = Tex_Misc(TextureMisc.TextureMisc_Bars)
     Tex_Fader = Tex_Misc(TextureMisc.TextureMisc_Fader)
     Tex_Blank = Tex_Misc(TextureMisc.TextureMisc_Blank)
@@ -62,6 +76,12 @@ Public Function LoadTexturePack(ByRef Counter As Long, ByRef Path As String) As 
     Dim Password As String
     Dim Index As Long
     Dim i As Long
+
+    If Not FileExist(Path) Then
+        Call MsgBox("File '" & Path & "' not found.")
+
+        Exit Function
+    End If
 
     Password = "dwHandle" & SecurityText
 
@@ -88,7 +108,7 @@ Public Function LoadTexturePack(ByRef Counter As Long, ByRef Path As String) As 
             Dim EncryptedLength As Long
             Dim Decrypted() As Byte
             Dim DecryptedLength As Long
-  
+
             Counter = ReadInt32()
 
             ReDim Textures(0 To Counter)
@@ -102,7 +122,7 @@ Public Function LoadTexturePack(ByRef Counter As Long, ByRef Path As String) As 
 
                 Name = Replace$(Name, vbNullChar, vbNullString)
                 Extension = Replace$(Extension, vbNullChar, vbNullString)
-                    
+
                 Width = ReadInt32()
                 Height = ReadInt32()
 
@@ -110,7 +130,7 @@ Public Function LoadTexturePack(ByRef Counter As Long, ByRef Path As String) As 
                 ReDim Encrypted(0 To EncryptedLength - 1)
 
                 Call ReadBytes(ByVal VarPtr(Encrypted(0)), EncryptedLength)
-                
+
                 ReDim Decrypted(0 To EncryptedLength - 1)
 
                 Success = Decrypt(ByVal VarPtr(Settings), ByVal VarPtr(Encrypted(0)), EncryptedLength, ByVal VarPtr(Decrypted(0)), ByVal VarPtr(DecryptedLength))

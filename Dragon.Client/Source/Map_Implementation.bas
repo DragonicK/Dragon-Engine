@@ -1,6 +1,23 @@
 Attribute VB_Name = "Map_Implementation"
 Option Explicit
 
+Public Sub RenderMapName()
+    Dim zonetype As String, Colour As Long
+
+    If CurrentMap.MapData.Moral = 0 Then
+        zonetype = "Pvp Ativo"
+        Colour = Red
+    ElseIf CurrentMap.MapData.Moral = 1 Then
+        zonetype = "Zona Segura"
+        Colour = White
+    ElseIf CurrentMap.MapData.Moral = 2 Then
+        zonetype = "Câmara de Boss"
+        Colour = Grey
+    End If
+
+    RenderText Font(Fonts.FontRegular), Trim$(CurrentMap.MapData.Name) & " - " & zonetype, ScreenWidth - 15 - TextWidth(Font(Fonts.FontRegular), Trim$(CurrentMap.MapData.Name) & " - " & zonetype), 45, Colour, 255
+End Sub
+
 Public Function UpdateMapView() As RECT
     Dim OffsetX As Long, OffSetY As Long, StartX As Long, StartY As Long, EndX As Long, EndY As Long
 
