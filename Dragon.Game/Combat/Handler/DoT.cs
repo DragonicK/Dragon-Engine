@@ -91,6 +91,8 @@ public class DoT : ISkillHandler {
 
             SendDamage(vital, damaged.Value, target.Entity, instance);
 
+            target.Entity.IsDead = target.Entity.Vitals.Get(Vital.HP) <= 0;
+
             if (!target.Entity.IsDead) {
                 if (target.Entity is IPlayer) {
                     PlayerDeath?.Execute(Player, target.Entity);

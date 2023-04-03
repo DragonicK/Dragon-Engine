@@ -95,7 +95,9 @@ public class Damage : ISkillHandler {
 
             SendDamage(vital, damaged.Value, target.Entity, instance);
 
-            if (!target.Entity.IsDead) {
+            target.Entity.IsDead = target.Entity.Vitals.Get(Vital.HP) <= 0;
+
+            if (target.Entity.IsDead) {
                 if (target.Entity is IPlayer) {
                     PlayerDeath?.Execute(Player, target.Entity);
                 }

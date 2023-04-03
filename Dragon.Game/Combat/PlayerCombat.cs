@@ -16,7 +16,6 @@ using Dragon.Game.Combat.Common;
 using Dragon.Game.Combat.Handler;
 using Dragon.Game.Configurations;
 using Dragon.Game.Combat.Death;
-using Microsoft.IdentityModel.Protocols;
 
 namespace Dragon.Game.Combat;
 
