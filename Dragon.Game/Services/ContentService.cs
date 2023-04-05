@@ -7,6 +7,7 @@ using Dragon.Core.Model.Maps;
 using Dragon.Core.Model.Shops;
 using Dragon.Core.Model.Items;
 using Dragon.Core.Model.Quests;
+using Dragon.Core.Model.Chests;
 using Dragon.Core.Model.Gashas;
 using Dragon.Core.Model.Skills;
 using Dragon.Core.Model.Titles;
@@ -27,7 +28,6 @@ using Dragon.Core.Serialization;
 
 using Dragon.Game.Administrator;
 using Dragon.Game.Instances;
-using Dragon.Game.Manager;
 
 namespace Dragon.Game.Services;
 
@@ -63,6 +63,7 @@ public class ContentService : IService {
     public IDatabase<GroupAttribute> NpcAttributes { get; }
     public IDatabase<NotificationIcon> NotificationIcons { get; }
     public IDatabase<Gasha> Gashas { get; }
+    public IDatabase<Chest> Chests { get; }
     public IDatabase<Premium> Premiums { get; }
     public IDatabase<Upgrade> Upgrades { get; }
     public IDatabase<Conversation> Conversations { get; }
@@ -213,6 +214,10 @@ public class ContentService : IService {
             Folder = "./Server/Gashas"
         };
 
+        Chests = new Chests() {
+            Folder = "./Server/Chests"
+        };
+
         Premiums = new Premiums() {
             Folder = "./Server/Premiums"
         };
@@ -278,6 +283,7 @@ public class ContentService : IService {
         NpcAttributes.Load();
         NotificationIcons.Load();
         Gashas.Load();
+        Chests.Load();
         Premiums.Load();
         Upgrades.Load();
         Conversations.Load();

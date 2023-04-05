@@ -85,6 +85,7 @@ public class GashaManager {
 
                         if (!CanStackItem(item, reward)) {
                             GiveGashaItem(false, reward, inventory);
+
                             PacketSender!.SendInventoryUpdate(Player!, inventory.InventoryIndex);
 
                             var parameters = new string[] {
