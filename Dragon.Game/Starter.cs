@@ -47,6 +47,14 @@ public sealed class Starter {
         dir.Add("./Server/BlackMarket");
         dir.Add("./Server/Experiences");
 
+        dir.Add("./Server/BlackMarket/Pet");
+        dir.Add("./Server/BlackMarket/Boost");
+        dir.Add("./Server/BlackMarket/Supply");
+        dir.Add("./Server/BlackMarket/Package");
+        dir.Add("./Server/BlackMarket/Service");
+        dir.Add("./Server/BlackMarket/Consumable");
+        dir.Add("./Server/BlackMarket/Promotional");
+
         dir.Create();
     }
 
