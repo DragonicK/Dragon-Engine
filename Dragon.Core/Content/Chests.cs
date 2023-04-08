@@ -56,6 +56,10 @@ public class Chests : Database<Chest>  {
             if (item.Id > 0) {
                 chest?.Items.Add(item);
             }
+
+            if (!Contains(id)) {
+                values.Add(id, chest!);
+            }
         }
     }
 
