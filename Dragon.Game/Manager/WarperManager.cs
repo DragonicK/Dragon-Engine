@@ -1,4 +1,6 @@
-﻿using Dragon.Game.Network;
+﻿using Dragon.Core.Model;
+
+using Dragon.Game.Network;
 using Dragon.Game.Players;
 using Dragon.Game.Services;
 using Dragon.Game.Instances;
@@ -74,9 +76,12 @@ public class WarperManager {
         var added = instance.Add(Player!);
 
         if (added) {
-            // TODO
-            // Clear Target
+            Player!.Target = null;
+            Player.TargetType = TargetType.None;
 
+            PacketSender!.SendTarget(Player, TargetType.None, 0);
+
+            // TODO
             // map.SendCorpseTo(player);
 
             //var action = new RequirementEntry() {
@@ -99,6 +104,8 @@ public class WarperManager {
 
             PacketSender!.SendPlayerDataTo(Player, instance);
             PacketSender!.SendPlayersOnMapTo(Player, instance);
+
+            PacketSender!.SendChests(Player, instance);
 
             foreach (var player in instance.GetPlayers()) {
                 PacketSender!.SendPlayerVital(player, instance);

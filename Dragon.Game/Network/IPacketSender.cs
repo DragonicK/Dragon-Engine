@@ -123,4 +123,5 @@ public interface IPacketSender {
     void SendClearCast(IPlayer player);
     void SendSkillCooldown(IPlayer player, int index);
     void SendChest(IInstance instance, IInstanceChest chest);
+    void SendChests(IPlayer player, IInstance instance);
 }

@@ -1,27 +1,27 @@
 [
   {
     "Id": 1,
-    "Sprite": 1,
+    "Sprite": 6,
     "MaximumDisplayedItems": 0
   },
   {
     "Id": 2,
-    "Sprite": 2,
-    "MaximumDisplayedItems": 0
-  },
-  {
-    "Id": 3,
     "Sprite": 3,
     "MaximumDisplayedItems": 0
   },
   {
-    "Id": 4,
+    "Id": 3,
     "Sprite": 4,
     "MaximumDisplayedItems": 0
   },
   {
+    "Id": 4,
+    "Sprite": 1,
+    "MaximumDisplayedItems": 0
+  },
+  {
     "Id": 5,
-    "Sprite": 5,
+    "Sprite": 9,
     "MaximumDisplayedItems": 0
   }
 ]

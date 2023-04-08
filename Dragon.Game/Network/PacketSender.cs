@@ -14,6 +14,8 @@ using Dragon.Game.Services;
 using Dragon.Game.Instances;
 using Dragon.Game.Configurations;
 using Dragon.Game.Instances.Chests;
+using Dragon.Core.Model.Chests;
+using System.Collections.Generic;
 
 namespace Dragon.Game.Network;
 
@@ -1341,8 +1343,31 @@ public sealed partial class PacketSender : IPacketSender {
         Writer.Enqueue(msg);
     }
 
-    public void SendChests(IInstance instance) {
+    public void SendChests(IPlayer player, IInstance instance) {
+        var chests = instance.Chests;
+        var count = chests.Count;
 
+        var packet = new SpChests {
+            Chests = new DataChest[count]
+        };
+
+        var index = 0;
+
+        foreach (var (_, chest) in chests) {
+            packet.Chests[index].Index = chest.Index;
+            packet.Chests[index].X = chest.X;
+            packet.Chests[index].Y = chest.Y;
+            packet.Chests[index].Sprite = chest.Chest.Sprite;
+
+            ++index;
+        }
+
+        var msg = Writer!.CreateMessage(packet);
+
+        msg.DestinationPeers.Add(player.GetConnection().Id);
+        msg.TransmissionTarget = TransmissionTarget.Destination;
+
+        Writer.Enqueue(msg);
     }
 
 
