@@ -5,6 +5,7 @@ namespace Dragon.Core.Model.Chests;
 public class Chest {
     public int Id { get; set; }
     public int Sprite { get; set; }
+    public int MaximumDisplayedItems { get; set; } = 20;
 
     [JsonIgnore]
     public int Count {

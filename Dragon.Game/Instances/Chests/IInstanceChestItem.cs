@@ -7,6 +7,6 @@ public interface IInstanceChestItem : IInstanceChestCurrency {
     public int AttributeId { get; set; }
     public int UpgradeId { get; set; }
     public bool IsCurrency { get; set; }
-    public int CharacterIdFromRollDiceWinner { get; set; }
+    public long CharacterIdFromRollDiceWinner { get; set; }
     public int WinnerTimeLimit { get; set; }
 }

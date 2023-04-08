@@ -30,10 +30,9 @@ public class ConfigurationService : IService, IConfiguration {
     public BlackMarket BlackMarket { get; set; }
     public Rate Rates { get; set; }
     public Character Character { get; set; }
-    public Corpse Corpse { get; set; }
     public Craft Craft { get; set; }
     public Guild Guild { get; set; }
-    public Loot Loot { get; set; }
+    public Drop Drop { get; set; }
     public Map Map { get; set; }
     public Mail Mail { get; set; }
     public Party Party { get; set; }
@@ -46,12 +45,11 @@ public class ConfigurationService : IService, IConfiguration {
     public ConfigurationService() {
         BlackMarket = new BlackMarket();
         Character = new Character();
-        Corpse = new Corpse();
         Craft = new Craft();
         Guild = new Guild();
         Mail = new Mail();
         Map = new Map();
-        Loot = new Loot();
+        Drop = new Drop();
         Party = new Party();
         Player = new Player();
         Rates = new Rate();

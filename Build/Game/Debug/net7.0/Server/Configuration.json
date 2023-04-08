@@ -113,8 +113,8 @@
   },
   "Loot": {
     "MaximumItems": 0,
-    "ObjectDuration": 0,
-    "MonsterDuration": 0,
+    "ObjectDuration": 180,
+    "MonsterDuration": 180,
     "BossDuration": 0,
     "RollDiceDuration": 0,
     "WinnerTimeLimit": 0

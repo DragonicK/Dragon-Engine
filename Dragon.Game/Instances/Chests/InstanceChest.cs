@@ -5,8 +5,8 @@ public class InstanceChest : IInstanceChest {
     public int X { get; set; }
     public int Y { get; set; }
     public int ChestId { get; set; }
-    public int OpenedByCharacterId { get; set; }
-    public int KilledByCharacterId { get; set; }
+    public long OpenedByCharacterId { get; set; }
+    public long KilledByCharacterId { get; set; }
     public int PartyId { get; set; }
     public int RemainingTime { get; set; }
     public IInstance Instance { get; set; }

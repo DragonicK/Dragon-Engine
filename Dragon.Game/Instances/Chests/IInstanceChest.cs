@@ -5,8 +5,8 @@ public interface IInstanceChest {
     int X { get; set; }
     int Y { get; set; }
     int ChestId { get; set; }
-    int OpenedByCharacterId { get; set; }
-    int KilledByCharacterId { get; set; }
+    long OpenedByCharacterId { get; set; }
+    long KilledByCharacterId { get; set; }
     int PartyId { get; set; }
     int RemainingTime { get; set; }
     IInstance Instance { get; set; }

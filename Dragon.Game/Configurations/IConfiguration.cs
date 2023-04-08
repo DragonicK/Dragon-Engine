@@ -1,5 +1,4 @@
 ﻿using Dragon.Network;
-
 using Dragon.Database;
 
 using Dragon.Core.Jwt;
@@ -24,10 +23,9 @@ public interface IConfiguration {
     #region Game Configuration
     BlackMarket BlackMarket { get; set; }
     Character Character { get; set; }
-    Corpse Corpse { get; set; }
     Craft Craft { get; set; }
     Guild Guild { get; set; }
-    Loot Loot { get; set; }
+    Drop Drop { get; set; }
     Mail Mail { get; set; }
     Map Map { get; set; }
     Party Party { get; set; }

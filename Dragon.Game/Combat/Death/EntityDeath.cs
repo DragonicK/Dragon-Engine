@@ -43,7 +43,7 @@ public class EntityDeath : IEntityDeath {
             ClearInstancePlayerTargets(player, entity, instance);
 
             // remove effects
-            // send corpse / box loot
+            // send box loot
         }
     }
 
