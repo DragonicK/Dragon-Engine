@@ -5,6 +5,7 @@ using Dragon.Core.Services;
 using Dragon.Core.Model.Npcs;
 using Dragon.Core.Model.Maps;
 using Dragon.Core.Model.Shops;
+using Dragon.Core.Model.Drops;
 using Dragon.Core.Model.Items;
 using Dragon.Core.Model.Quests;
 using Dragon.Core.Model.Chests;
@@ -69,6 +70,7 @@ public class ContentService : IService {
     public IDatabase<Conversation> Conversations { get; }
     public IDatabase<Shop> Shops { get; }
     public IDatabase<Quest> Quests { get; }
+    public IDatabase<Drop> Drops { get; }
     public ICommandRepository CommandRepository { get; }
     public Experience PlayerExperience { get; }
     public Experience GuildExperience { get; }
@@ -240,6 +242,10 @@ public class ContentService : IService {
             FileName = "Quests.dat"
         };
 
+        Drops = new Drops() {
+            Folder = "./Server/Drops"
+        };
+
         CommandRepository = new CommandRepository();
 
         PlayerExperience = LoadExperience(new Experience(), "Player");
@@ -289,6 +295,7 @@ public class ContentService : IService {
         Conversations.Load();
         Shops.Load();
         Quests.Load();
+        Drops.Load();
 
         LoadInstances();
     }

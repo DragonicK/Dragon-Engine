@@ -73,16 +73,16 @@ public class Chests : Database<Chest>  {
         var file = $"./Server/{FileInformation}";
 
         if (!File.Exists(file)) {
-            Json.Save(file, new List<ChestSprite> {
-                new ChestSprite() { Id = 1, Sprite = 1 },
-                new ChestSprite() { Id = 2, Sprite = 2 },
-                new ChestSprite() { Id = 3, Sprite = 3 },
-                new ChestSprite() { Id = 4, Sprite = 4 },
-                new ChestSprite() { Id = 5, Sprite = 5 }
+            Json.Save(file, new List<ChestInformation> {
+                new ChestInformation() { Id = 1, Sprite = 1, MaximumDisplayedItems = 15 },
+                new ChestInformation() { Id = 2, Sprite = 2, MaximumDisplayedItems = 15 },
+                new ChestInformation() { Id = 3, Sprite = 3, MaximumDisplayedItems = 15 },
+                new ChestInformation() { Id = 4, Sprite = 4, MaximumDisplayedItems = 15 },
+                new ChestInformation() { Id = 5, Sprite = 5, MaximumDisplayedItems = 15 }
             });
         }
 
-        var chests = Json.Get<List<ChestSprite>>(file);
+        var chests = Json.Get<List<ChestInformation>>(file);
 
         chests?.ForEach(x => {
             var id = x.Id;
@@ -100,6 +100,8 @@ public class Chests : Database<Chest>  {
                 }
             }
         });
+
+        Json.Save(file, chests);
     }
 
     private void SaveDefault() {

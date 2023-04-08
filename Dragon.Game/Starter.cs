@@ -36,6 +36,7 @@ public sealed class Starter {
         dir.Add("./Server");
         dir.Add("./Server/Logs");
         dir.Add("./Server/Maps");
+        dir.Add("./Server/Drops");
         dir.Add("./Server/Shops");
         dir.Add("./Server/Fields");
         dir.Add("./Server/Chests");
