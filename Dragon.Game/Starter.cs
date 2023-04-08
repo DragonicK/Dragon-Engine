@@ -38,6 +38,7 @@ public sealed class Starter {
         dir.Add("./Server/Maps");
         dir.Add("./Server/Shops");
         dir.Add("./Server/Fields");
+        dir.Add("./Server/Chests");
         dir.Add("./Server/Gashas");
         dir.Add("./Server/Classes");
         dir.Add("./Server/Content");
@@ -54,10 +55,6 @@ public sealed class Starter {
         dir.Add("./Server/BlackMarket/Service");
         dir.Add("./Server/BlackMarket/Consumable");
         dir.Add("./Server/BlackMarket/Promotional");
-
-        dir.Add("./Server/Chests");
-        dir.Add("./Server/Chests/Example Region");
-        dir.Add("./Server/Chests/Example Gold Chest");
 
         dir.Create();
     }
