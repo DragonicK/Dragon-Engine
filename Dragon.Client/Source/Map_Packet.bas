@@ -32,7 +32,7 @@ Public Sub HandleLoadMap(ByVal Index As Long, ByRef Data() As Byte, ByVal StartA
 
     Call ClearMapNpcs
     Call ClearMap
-    Call ClearCorpses
+    Call ClearChests
 
     Call CopyMapProperty(MapNum)
     Call LoadMapParallax(MapNum, Key, IV)

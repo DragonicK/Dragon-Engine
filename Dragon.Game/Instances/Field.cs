@@ -8,6 +8,7 @@ using Dragon.Game.Players;
 using Dragon.Game.Regions;
 using Dragon.Game.Network;
 using Dragon.Game.Configurations;
+using Dragon.Game.Instances.Chests;
 
 namespace Dragon.Game.Instances;
 
@@ -36,13 +37,14 @@ public sealed class Field : IMap, IInstance {
     /// </summary>
     public IList<IRegionEntity> RegionEntities { get; set; }
     public IIndexGenerator IndexGenerator { get; set; }
+    public IDictionary<int, IInstanceChest> Chests { get; set; }
 
     private readonly IDictionary<int, IPlayer> players;
     private readonly IPacketSender _sender;
     private readonly Random _random;
 
     private readonly int MaximumPlayers;
-    private readonly int MaximumCorpses;
+    private readonly int MaximumChests;
     private readonly int MaximumNpcs;
 
     public Field(IMap map, Region region, IConfiguration configuration, IPacketSender sender) {
@@ -73,8 +75,9 @@ public sealed class Field : IMap, IInstance {
 
         MaximumPlayers = configuration.Map.MaximumPlayers;
         MaximumNpcs = configuration.Map.MaximumNpcs;
-        MaximumCorpses = configuration.Map.MaximumCorpses;
+        MaximumChests = configuration.Map.MaximumCorpses;
 
+        Chests = new Dictionary<int, IInstanceChest>(MaximumChests);
         Entities = new List<IInstanceEntity>(MaximumNpcs);
 
         IndexGenerator = new IndexGenerator(MaximumPlayers);
@@ -82,6 +85,20 @@ public sealed class Field : IMap, IInstance {
         _random = new Random();
 
         _sender = sender;
+    }
+
+    public int Add(IInstanceChest chest) {
+        for (var i = 1; i <= MaximumChests; ++i) {
+            if (!Chests.ContainsKey(i)) {
+                chest.Index = i;
+
+                Chests.Add(i, chest);
+
+                return i;
+            }
+        }
+
+        return 0;
     }
 
     public bool Add(IPlayer player) {

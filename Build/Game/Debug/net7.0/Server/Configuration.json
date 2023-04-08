@@ -95,14 +95,6 @@
       }
     ]
   },
-  "Corpse": {
-    "MaximumItems": 20,
-    "ObjectDuration": 180,
-    "MonsterDuration": 180,
-    "BossDuration": 600,
-    "RollDiceDuration": 30,
-    "WinnerTimeLimit": 60
-  },
   "Craft": {
     "MaximumLevel": 20
   },
@@ -111,13 +103,11 @@
     "Delete": true,
     "MaximumMembers": 100
   },
-  "Loot": {
-    "MaximumItems": 0,
-    "ObjectDuration": 180,
+  "Drop": {
     "MonsterDuration": 180,
-    "BossDuration": 0,
-    "RollDiceDuration": 0,
-    "WinnerTimeLimit": 0
+    "BossDuration": 600,
+    "RollDiceDuration": 30,
+    "WinnerTimeLimit": 60
   },
   "Map": {
     "MaximumNpcs": 255,

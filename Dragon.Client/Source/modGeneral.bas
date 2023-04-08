@@ -10,7 +10,7 @@ Public Sub LogoutGame()
     ClearParty
     ClearServices
     ClearCraft
-    ClearCorpses
+    ClearChests
     ClearInventories
 
     DestroyTCP

@@ -28,8 +28,4 @@
     <ProjectReference Include="..\Dragon.Network\Dragon.Network.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="EntityDrop\" />
-  </ItemGroup>
-
 </Project>

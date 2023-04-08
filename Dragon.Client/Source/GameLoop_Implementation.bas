@@ -200,8 +200,8 @@ Public Sub GameLoop()
 
         ' fading
         If fadeTmr < Tick Then
-            ' Disappear corpse
-            Call ProcessCorpseFadeAlpha
+            ' Disappear boxes
+            Call ProcessChestsFadeAlpha
 
             fadeTmr = Tick + 45
         End If

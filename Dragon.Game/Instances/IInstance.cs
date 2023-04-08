@@ -2,6 +2,7 @@
 using Dragon.Game.Players;
 using Dragon.Game.Regions;
 using Dragon.Game.Configurations;
+using Dragon.Game.Instances.Chests;
 
 namespace Dragon.Game.Instances;
 
@@ -15,8 +16,10 @@ public interface IInstance {
     IConfiguration Configuration { get; }
     IList<IRegionEntity> RegionEntities { get; set; }
     IList<IInstanceEntity> Entities { get; set; }
+    IDictionary<int, IInstanceChest> Chests { get; set; }
     IIndexGenerator IndexGenerator { get; set; }
 
+    int Add(IInstanceChest chest);
     bool Add(IPlayer player);
     bool Contains(IPlayer player);
     bool Contains(int index);

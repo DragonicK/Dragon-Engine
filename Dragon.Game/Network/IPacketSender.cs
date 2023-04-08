@@ -14,6 +14,7 @@ using Dragon.Game.Manager;
 using Dragon.Game.Players;
 using Dragon.Game.Messages;
 using Dragon.Game.Instances;
+using Dragon.Game.Instances.Chests;
 
 namespace Dragon.Game.Network;
 
@@ -121,4 +122,5 @@ public interface IPacketSender {
     void SendCancelAnimation(IInstance instance, int lockIndex);
     void SendClearCast(IPlayer player);
     void SendSkillCooldown(IPlayer player, int index);
+    void SendChest(IInstance instance, IInstanceChest chest);
 }

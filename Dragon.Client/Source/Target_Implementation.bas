@@ -49,7 +49,6 @@ Public Sub DrawTargetHover()
     If Dialogue.Index > 0 Then Exit Sub
 
     For i = 1 To Player_HighIndex
-
         If IsPlaying(i) And GetPlayerMap(MyIndex) = GetPlayerMap(i) Then
             X = (Player(i).X * 32) + Player(i).xOffset + 32
             Y = (Player(i).Y * 32) + Player(i).yOffset + 32
@@ -87,26 +86,6 @@ Public Sub DrawTargetHover()
         End If
     Next
 
-    For i = 1 To Corpse_HighIndex
-        If Corpse(i).LootId > 0 Then
-            X = Corpse(i).X + 32
-            Y = Corpse(i).Y + 32
-
-            If X >= GlobalX_Map And X <= GlobalX_Map + 32 Then
-                If Y >= GlobalY_Map And Y <= GlobalY_Map + 32 Then
-                    X = X - 48
-                    Y = Y - 23
-                    X = ConvertMapX(X)
-                    Y = ConvertMapY(Y)
-
-                    ' found our target!
-                    RenderParallaxTexture TargetTexture(TargetFrameIndex), X, Y, 0, 0, TargetWidth, TargetHeight, TargetWidth, TargetHeight, D3DColorARGB(140, 255, 255, 255)
-                    Exit Sub
-                End If
-            End If
-
-        End If
-    Next
 End Sub
 
 Public Sub FindNearestTarget()
@@ -210,31 +189,6 @@ Public Sub FindTarget()
                     End If
                 End If
             End If
-        End If
-    Next
-
-    For i = 1 To Corpse_HighIndex
-        If Corpse(i).LootId > 0 Then
-            X = Corpse(i).X + 32
-            Y = Corpse(i).Y + 32
-
-            If X >= GlobalX_Map And X <= GlobalX_Map + 32 Then
-                If Y >= GlobalY_Map And Y <= GlobalY_Map + 32 Then
-
-                    If MyTargetType = TargetTypeLoot And MyTargetIndex = Corpse(i).LootId Then
-                        If Windows(GetWindowIndex("winLoot")).Window.Visible Then
-                            Exit Sub
-                        End If
-                    ElseIf MyTargetType = TargetTypeLoot And MyTargetIndex <> Corpse(i).LootId Then
-                        Call SendCloseLoot
-                    End If
-
-                    ' found our target!
-                    SendPlayerTarget Corpse(i).LootId, TargetTypeLoot
-                    Exit Sub
-                End If
-            End If
-
         End If
     Next
 

@@ -1,20 +1,24 @@
 ﻿using Dragon.Core.Model;
 using Dragon.Core.Model.Entity;
 
+using Dragon.Core.Logs;
 using Dragon.Game.Network;
 using Dragon.Game.Players;
 using Dragon.Game.Services;
 using Dragon.Game.Instances;
 using Dragon.Game.Configurations;
+using Dragon.Game.Instances.Chests;
 
 namespace Dragon.Game.Combat.Death;
 
 public class EntityDeath : IEntityDeath {
-
+    
+    public ILogger? Logger { get; init; }
     public IPacketSender? PacketSender { get; init; }
     public ContentService? ContentService { get; init; }
     public IConfiguration? Configuration { get; init; }
     public InstanceService? InstanceService { get; init; }
+
 
     private ExperienceHandler? expHandler;
 
@@ -43,7 +47,28 @@ public class EntityDeath : IEntityDeath {
             ClearInstancePlayerTargets(player, entity, instance);
 
             // remove effects
-            // send box loot
+
+            var agent = new ChestManagement() {
+                Player = player,
+                Configuration = Configuration,
+                Drops = ContentService!.Drops,
+                Chests = ContentService.Chests
+            };
+
+            var chest = agent.CreateInstanceChest(entity, instance);
+
+            if (chest is not null) {
+                if (chest.Items.Count > 0) {
+                    var index = instance.Add(chest);
+
+                    if (index > 0) {
+                        PacketSender!.SendChest(instance, chest);
+                    }
+                    else {
+                        Logger?.Write(WarningLevel.Warning, GetType().Name, "Failed to add chest to instance.");
+                    }
+                }
+            }
         }
     }
 

@@ -1,11 +1,11 @@
 {
   "ChestId": 1,
   "ContentType": 0,
-  "Id": 2,
+  "Id": 3,
   "Value": 1,
   "Level": 0,
   "Bound": false,
   "AttributeId": 0,
   "UpgradeId": 0,
-  "Chance": 0
+  "Chance": 1
 }

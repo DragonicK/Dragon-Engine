@@ -17,7 +17,7 @@ Public Enum ServerPackets
     
     SAttack
     
-    SMapLoot
+    
     SUpdateLootState
     SOpenLoot
     SCloseLoot

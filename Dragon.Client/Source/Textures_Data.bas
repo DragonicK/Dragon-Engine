@@ -14,7 +14,7 @@ Private Const Path_Gradient As String = "\Data Files\Graphics\TextureGradient.pa
 Private Const Path_GUI As String = "\Data Files\Graphics\TextureInterface.pak"
 Private Const Path_Misc As String = "\Data Files\Graphics\TextureMisc.pak"
 Private Const Path_Surface As String = "\Data Files\Graphics\Surface.pak"
-Private Const Path_Boxes As String = "\Data Files\Graphics\Boxes.pak"
+Private Const Path_Chest As String = "\Data Files\Graphics\Chests.pak"
 
 Private Const DefaultText As String = "This is a text!"
 Private Const SecurityText As String = "This is a complement"
@@ -31,7 +31,7 @@ Public TextureDesign() As Long
 Public Tex_Gradient() As Long
 Public Tex_Surface() As Long
 Public Tex_Misc() As Long
-Public Tex_Boxes() As Long
+Public Tex_Chest() As Long
 
 Public Tex_Bars As Long, Tex_Fader As Long, Tex_Blank As Long
 Attribute Tex_Bars.VB_VarUserMemId = 1073741834
@@ -49,7 +49,7 @@ Public Count_Spellicon As Long
 Public Count_Fog As Long
 Public Count_Surface As Long
 Public Count_Misc As Long
-Public Count_Boxes As Long
+Public Count_Chest As Long
 
 Public Sub LoadTextures()
 ' Arrays
@@ -63,7 +63,7 @@ Public Sub LoadTextures()
     Tex_GUI = LoadTexturePack(Count_GUI, App.Path & Path_GUI)
     Tex_Surface = LoadTexturePack(Count_Surface, App.Path & Path_Surface)
     Tex_Misc = LoadTexturePack(Count_Misc, App.Path & Path_Misc)
-    Tex_Boxes = LoadTexturePack(Count_Misc, App.Path & Path_Boxes)
+    Tex_Chest = LoadTexturePack(Count_Chest, App.Path & Path_Chest)
 
     Tex_Bars = Tex_Misc(TextureMisc.TextureMisc_Bars)
     Tex_Fader = Tex_Misc(TextureMisc.TextureMisc_Fader)

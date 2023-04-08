@@ -144,5 +144,6 @@ public enum MessageHeader {
     Settings,
     Animation,
     CancelAnimation,
-    SkillCooldown
+    SkillCooldown,
+    Chests
 }

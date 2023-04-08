@@ -381,7 +381,7 @@ End Sub
 
 Private Function CanCastOnSelf(ByVal SkillId As Long) As Boolean
     Dim FirstEffect As Long
-    
+
     FirstEffect = 1
 
     With Skill(SkillId)

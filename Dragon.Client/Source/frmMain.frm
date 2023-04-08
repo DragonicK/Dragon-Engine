@@ -3,7 +3,7 @@ Object = "{248DD890-BB45-11CF-9ABC-0080C7E7B78D}#1.0#0"; "mswinsck.ocx"
 Begin VB.Form frmMain 
    BackColor       =   &H00FFFFFF&
    BorderStyle     =   1  'Fixed Single
-   Caption         =   "Twilight Online"
+   Caption         =   "Dragon Engine"
    ClientHeight    =   10800
    ClientLeft      =   45
    ClientTop       =   375

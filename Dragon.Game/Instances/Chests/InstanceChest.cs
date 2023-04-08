@@ -1,10 +1,12 @@
-﻿namespace Dragon.Game.Instances.Chests;
+﻿using Dragon.Core.Model.Chests;
+
+namespace Dragon.Game.Instances.Chests;
 
 public class InstanceChest : IInstanceChest {
     public int Index { get; set; }
     public int X { get; set; }
     public int Y { get; set; }
-    public int ChestId { get; set; }
+    public Chest Chest { get; set; }
     public long OpenedByCharacterId { get; set; }
     public long KilledByCharacterId { get; set; }
     public int PartyId { get; set; }

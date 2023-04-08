@@ -166,7 +166,7 @@ Private Sub ProcessNpcDeathMovement(ByVal MapNpcNum As Long)
     If Anim = Models(ModelIndex).Death.Up.Count - 1 Then
         MapNpc(MapNpcNum).FrameIndex = Models(ModelIndex).Death.Up.Count
 
-        Call AddNpcCorpse(MapNpcNum)
+        'Call AddNpcCorpse(MapNpcNum)
 
         MapNpc(MapNpcNum).X = 0
         MapNpc(MapNpcNum).Y = 0

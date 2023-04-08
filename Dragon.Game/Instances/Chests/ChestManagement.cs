@@ -35,7 +35,7 @@ public class ChestManagement {
                 var chest = GetChest(drops);
 
                 if (chest is not null) {
-                    instanceChest.ChestId = chest.Id;
+                    instanceChest.Chest = chest;
                     instanceChest.PartyId = Player!.PartyId;
                     instanceChest.KilledByCharacterId = Player.Character.CharacterId;
                     instanceChest.RemainingTime = Configuration!.Drop.MonsterDuration;
@@ -61,7 +61,11 @@ public class ChestManagement {
                     instanceChest.Items.Add(created);
                 }
             }
-        }
+
+            if (chest.MaximumDisplayedItems >= instanceChest.Items.Count) {
+                return;
+            }
+        } 
     }
 
     private IInstanceChestItem? CreateInstanceItem(ChestItem item) {
@@ -87,9 +91,14 @@ public class ChestManagement {
     }
 
     private Chest? GetChest(Drop drops) {
-        var count = drops.Chests.Count;
-        var index = random.Next(0, count);
-        var id = drops.Chests[index];
+        var id = drops.Chests.Count == 1 ? drops.Chests[0] : 0;
+
+        if (id == 0) { 
+            var count = drops.Chests.Count;
+            var index = random.Next(0, count);
+
+            id = drops.Chests[index];
+        }
 
         if (Chests!.Contains(id)) {
             return Chests[id];

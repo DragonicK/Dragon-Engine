@@ -13,7 +13,7 @@ Public Sub Main()
     InitializePlayerMails
 
     ReDim DescText(1 To 1)
-
+       
     LoadMachineId
 
     ' Load Options

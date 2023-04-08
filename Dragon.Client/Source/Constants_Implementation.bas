@@ -93,8 +93,8 @@ Public Const MAX_CHARS As Byte = 3
 Public Const MAX_PLAYER_ICON_EFFECT As Long = 30
 
 ' Website
-Public Const GAME_NAME As String = "Twilight Online"
-Public Const GAME_WEBSITE As String = "http://www.twilightonline.com"
+Public Const GAME_NAME As String = "Dragon Engine"
+Public Const GAME_WEBSITE As String = "https://www.aldeiarpg.com/"
 
 ' Sex constants
 Public Const SEX_MALE As Byte = 0

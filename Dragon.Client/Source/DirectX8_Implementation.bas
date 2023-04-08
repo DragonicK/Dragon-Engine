@@ -516,6 +516,8 @@ Public Sub Render_Graphics()
     ' Render lower tiles
     Call DrawMapGround
 
+    Call DrawChests
+
     ' draw animations
     If Count_Anim > 0 Then
         For i = 1 To MAX_BYTE
@@ -535,21 +537,6 @@ Public Sub Render_Graphics()
         PlayerY = GetPlayerY(MyIndex) * 32
         Right = Camera.Right
         Bottom = Camera.Bottom
-
-        ' Corpses Lower
-        For i = 1 To Corpse_HighIndex
-            If Corpse(i).CanDrawCorpse Then
-                PosX = Corpse(i).X
-                PosY = Corpse(i).Y
-
-                If PlayerX < PosX + Right And PlayerY < PosY + Bottom Then
-                    If PosX < PlayerX + Right And PosY < PlayerY + Bottom Then
-                        Call DrawCorpseLower(i)
-                        Call DrawCorpseUpper(i)
-                    End If
-                End If
-            End If
-        Next
 
         ' Players Lower
         For i = 1 To Player_HighIndex
