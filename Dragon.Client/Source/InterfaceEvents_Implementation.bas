@@ -3,8 +3,10 @@ Option Explicit
 Public Declare Sub GetCursorPos Lib "user32" (lpPoint As POINTAPI)
 Public Declare Function ScreenToClient Lib "user32" (ByVal hWnd As Long, lpPoint As POINTAPI) As Long
 Public Declare Function EntityCallBack Lib "user32.dll" Alias "CallWindowProcA" (ByVal lpPrevWndFunc As Long, ByVal Window As Long, ByRef Control As Long, ByVal Forced As Long, ByVal lParam As Long) As Long
+
 Public Const VK_LBUTTON = &H1
 Public Const VK_RBUTTON = &H2
+
 Public lastMouseX As Long, lastMouseY As Long
 Attribute lastMouseY.VB_VarUserMemId = 1073741824
 Public currMouseX As Long, currMouseY As Long
@@ -17,6 +19,13 @@ Public mouseClick(1 To 2) As Long
 Attribute mouseClick.VB_VarUserMemId = 1073741830
 Public lastMouseClick(1 To 2) As Long
 Attribute lastMouseClick.VB_VarUserMemId = 1073741831
+
+Public Function Clamp(ByVal Value As Long, ByVal Min As Long, ByVal Max As Long) As Long
+    Clamp = Value
+
+    If Value < Min Then Clamp = Min
+    If Value > Max Then Clamp = Max
+End Function
 
 Public Function MouseX(Optional ByVal hWnd As Long) As Long
     Dim lpPoint As POINTAPI
@@ -404,23 +413,6 @@ Public Sub Bars_OnDraw()
     
 End Sub
 
-' ############
-' ## Target ##
-' ############
-Public Sub Target_OnDraw()
-    Dim xO As Long, yO As Long, Width As Long, WindowIndex As Long
-
-    WindowIndex = GetWindowIndex("winTarget")
-
-    If Windows(WindowIndex).Window.Visible = False Then Exit Sub
-
-    xO = Windows(WindowIndex).Window.Left
-    yO = Windows(WindowIndex).Window.Top
-
-    RenderTexture Tex_GUI(19), xO + 15, yO + 30, 0, 0, BarWidth_TargetHP, 13, BarWidth_TargetHP, 13
-    RenderTexture Tex_GUI(21), xO + 15, yO + 47, 0, 0, BarWidth_TargetMP, 13, BarWidth_TargetMP, 13
-End Sub
-
 ' ##########
 ' ## Menu ##
 ' ##########
@@ -525,10 +517,6 @@ Public Sub btnMenu_Currency()
 
 End Sub
 
-' ###############
-' ## Character ##
-' ###############
-
 
 ' #################
 ' ## Description ##
@@ -560,326 +548,6 @@ Public Sub Description_OnDraw()
     ' close
     HideWindow GetWindowIndex("winDescription")
 End Sub
-
-' ##############
-' ## Drag Box ##
-' ##############
-
-Public Sub DragBox_OnDraw()
-    Dim xO As Long, yO As Long, texNum As Long, WinIndex As Long
-
-    WinIndex = GetWindowIndex("winDragBox")
-    xO = Windows(WinIndex).Window.Left
-    yO = Windows(WinIndex).Window.Top
-
-    ' get texture num
-    With DragBox
-        Select Case .Type
-        Case PartItem
-            If .Value Then
-                texNum = Tex_Item(Item(.Value).IconId)
-            End If
-        Case PartSpell
-            If .Value Then
-                texNum = Tex_Spellicon(Skill(.Value).IconId)
-            End If
-        End Select
-    End With
-
-    ' draw texture
-    RenderTexture texNum, xO, yO, 0, 0, 32, 32, 32, 32
-End Sub
-
-
-Public Sub DragBox_Check()
-    Dim WinIndex As Long, i As Long, curWindow As Long, curControl As Long, tmpRec As RECT
-
-    WinIndex = GetWindowIndex("winDragBox")
-
-    ' can't drag nuthin'
-    If DragBox.Type = PartNone Then Exit Sub
-
-    ' check for other windows
-    For i = 1 To WindowCount
-        With Windows(i).Window
-            If .Visible Then
-                ' can't drag to self
-                If .Name <> "winDragBox" Then
-                    If currMouseX >= .Left And currMouseX <= .Left + .Width Then
-                        If currMouseY >= .Top And currMouseY <= .Top + .Height Then
-                            If curWindow = 0 Then curWindow = i
-                            If .zOrder > Windows(curWindow).Window.zOrder Then curWindow = i
-                        End If
-                    End If
-                End If
-            End If
-        End With
-    Next
-
-    ' we have a window - check if we can drop
-    If curWindow Then
-        Select Case Windows(curWindow).Window.Name
-        Case "winWarehouse"
-            If DragBox.Origin = OriginWarehouse Then
-                Call DragBox_WarehouseToWarehouse
-            End If
-
-            If DragBox.Origin = OriginInventory Then
-                If DragBox.Type = PartItem Then
-
-                    If Item(GetInventoryItemNum(DragBox.Slot)).Stackable = 0 Then
-                        SendDepositItem DragBox.Slot, 1
-                    Else
-                        ShowDialogue "Depositar Item", "Insira a quantidade para deposito", "", DialogueTypeDepositItem, DialogueStyleInput, DragBox.Slot
-                    End If
-
-                End If
-            End If
-
-        Case "winInventory"
-            ' Heraldry to Inventory
-            If DragBox.Origin = OriginHeraldry Then
-                Call DragBox_CheckHeraldryToInventory
-            End If
-
-            If DragBox.Origin = OriginUpgrade Then
-                Call DragBox_CheckItemUpgradeToInventory
-            End If
-
-            If DragBox.Origin = OriginInventory Then
-                ' it's from the inventory!
-                If DragBox.Type = PartItem Then
-                    ' find the slot to switch with
-                    For i = 1 To MaxInventoryPerTab
-                        With tmpRec
-                            .Top = Windows(curWindow).Window.Top + InvTop + ((InvOffsetY + 32) * ((i - 1) \ InvColumns))
-                            .Bottom = .Top + 32
-                            .Left = Windows(curWindow).Window.Left + InvLeft + ((InvOffsetX + 32) * (((i - 1) Mod InvColumns)))
-                            .Right = .Left + 32
-                        End With
-
-                        If currMouseX >= tmpRec.Left And currMouseX <= tmpRec.Right Then
-                            If currMouseY >= tmpRec.Top And currMouseY <= tmpRec.Bottom Then
-                                ' switch the slots
-                                If DragBox.Slot <> i + (InventoryentoryTabIndex * MaxInventoryPerTab) And CanSwapInvItems Then SendSwapInventory DragBox.Slot, i + (InventoryentoryTabIndex * MaxInventoryPerTab)
-                                Exit For
-                            End If
-                        End If
-                    Next
-                End If
-            End If
-
-            If DragBox.Origin = OriginWarehouse Then
-                If DragBox.Type = PartItem Then
-                    If Item(GetWarehouseItemNum(DragBox.Slot)).Stackable = 0 Then
-                        SendWithdrawItem DragBox.Slot, 1
-                    Else
-                        ShowDialogue "Retirar Item", "Insira a quantidade que deseja retirar", "", DialogueTypeWithdrawItem, DialogueStyleInput, DragBox.Slot
-                    End If
-                End If
-            End If
-
-        Case "winHotbar"
-            Call DragBox_CheckHotBar(curWindow)
-
-        Case "winItemUpgrade"
-            Call DragBox_CheckInventoryToItemUpgrade
-
-        Case "winHeraldry"
-            Call DragBox_CheckInventoryToHeraldry
-            
-        Case "winMail"
-            Call DragBox_CheckInventoryToMail
-
-        End Select
-    Else
-        ' no windows found - dropping on bare map
-        Select Case DragBox.Origin
-        Case PartTypeOrigins.OriginInventory
-            ShowDialogue "DESTRUIR ITEM", "Deseja realmente destruir o item?", "", DialogueTypeDestroyItem, DialogueStyleYesNo, DragBox.Slot
-            
-        Case PartTypeOrigins.OriginSpells
-            ' dialogue
-            
-        Case PartTypeOrigins.OriginQuickSlot
-            SendQuickSlotChange 0, 0, DragBox.Slot
-            
-        End Select
-    End If
-
-    ' close window
-    HideWindow WinIndex
-    
-    With DragBox
-        .Type = PartNone
-        .Slot = 0
-        .Origin = OriginNone
-        .Value = 0
-    End With
-End Sub
-
-Private Sub DragBox_CheckHotBar(ByVal curWindow As Long)
-    Dim i As Long
-    Dim tmpRec As RECT
-
-    If DragBox.Origin <> OriginNone Then
-        If DragBox.Type <> PartNone Then
-            ' find the slot
-            For i = 1 To MaximumQuickSlot
-                With tmpRec
-                    .Top = Windows(curWindow).Window.Top + HotbarTop
-                    .Bottom = .Top + 32
-                    .Left = Windows(curWindow).Window.Left + HotbarLeft + ((i - 1) * HotbarOffsetX)
-                    .Right = .Left + 32
-                End With
-
-                If currMouseX >= tmpRec.Left And currMouseX <= tmpRec.Right Then
-                    If currMouseY >= tmpRec.Top And currMouseY <= tmpRec.Bottom Then
-                        ' set the hotbar slot
-
-                        If DragBox.Origin <> OriginQuickSlot Then
-                            If DragBox.Type = PartItem Then
-                                SendQuickSlotChange 1, DragBox.Slot, i
-                            ElseIf DragBox.Type = PartSpell Then
-                                SendQuickSlotChange 2, DragBox.Slot, i
-                            End If
-                        Else
-                            ' SWITCH the hotbar slots
-                            If DragBox.Slot <> i Then SwitchHotbar DragBox.Slot, i
-                        End If
-                        ' exit early
-                        Exit For
-                    End If
-                End If
-            Next
-        End If
-    End If
-End Sub
-
-' ############
-' ## QuickSlot ##
-' ############
-
-Public Sub QuickSlot_MouseDown()
-    Dim SlotNum As Long, WinIndex As Long
-
-    ' is there an item?
-    SlotNum = IsHotbar(Windows(GetWindowIndex("winHotbar")).Window.Left, Windows(GetWindowIndex("winHotbar")).Window.Top)
-
-    If SlotNum Then
-        With DragBox
-            If QuickSlot(SlotNum).SType = 1 Then    ' inventory
-                .Type = PartItem
-            ElseIf QuickSlot(SlotNum).SType = 2 Then    ' spell
-                .Type = PartSpell
-            End If
-            .Value = QuickSlot(SlotNum).Slot
-            .Origin = OriginQuickSlot
-            .Slot = SlotNum
-        End With
-
-        WinIndex = GetWindowIndex("winDragBox")
-        With Windows(WinIndex).Window
-            .State = MouseDown
-            .Left = lastMouseX - 16
-            .Top = lastMouseY - 16
-            .MovedX = clickedX - .Left
-            .MovedY = clickedY - .Top
-        End With
-        ShowWindow WinIndex, , False
-
-        ' stop dragging inventory
-        Windows(GetWindowIndex("winHotbar")).Window.State = Normal
-    End If
-
-    ' show desc. if needed
-    QuickSlot_MouseMove
-End Sub
-
-Public Sub QuickSlot_DblClick()
-    Dim SlotNum As Long
-
-    SlotNum = IsHotbar(Windows(GetWindowIndex("winHotbar")).Window.Left, Windows(GetWindowIndex("winHotbar")).Window.Top)
-
-    If SlotNum Then
-        SendQuickSlotUse SlotNum
-    End If
-
-    ' show desc. if needed
-    QuickSlot_MouseMove
-End Sub
-
-Public Sub QuickSlot_MouseMove()
-    Dim SlotNum As Long, X As Long, Y As Long
-
-    ' exit out early if dragging
-    If DragBox.Type <> PartNone Then Exit Sub
-
-    SlotNum = IsHotbar(Windows(GetWindowIndex("winHotbar")).Window.Left, Windows(GetWindowIndex("winHotbar")).Window.Top)
-
-    If SlotNum Then
-        ' make sure we're not dragging the item
-        If DragBox.Origin = OriginQuickSlot And DragBox.Slot = SlotNum Then Exit Sub
-
-        Dim WinDescription As Long
-        Dim Inventory As InventoryRec
-
-        WinDescription = GetWindowIndex("winDescription")
-
-        ' calc position
-        X = Windows(GetWindowIndex("winHotbar")).Window.Left - Windows(WinDescription).Window.Width
-        Y = Windows(GetWindowIndex("winHotbar")).Window.Top - 4
-
-        ' offscreen?
-        If X < 0 Then
-            ' switch to right
-            X = Windows(GetWindowIndex("winHotbar")).Window.Left + Windows(GetWindowIndex("winHotbar")).Window.Width
-        End If
-
-        If Y + Windows(WinDescription).Window.Height >= ScreenHeight Then
-            Y = ScreenHeight - Windows(WinDescription).Window.Height
-        End If
-
-        ' go go go
-        Select Case QuickSlot(SlotNum).SType
-        Case 1    ' inventory
-            Inventory.Num = QuickSlot(SlotNum).Slot
-
-            ShowItemDesc X, Y, Inventory
-        Case 2    ' spells
-            ShowSkillDesc X, Y, FindSkillSlot(QuickSlot(SlotNum).Slot), QuickSlot(SlotNum).Slot, FindSkillLevel(QuickSlot(SlotNum).Slot)
-        End Select
-    End If
-End Sub
-
-Private Function FindSkillSlot(ByVal SkillNum As Long) As Long
-    FindSkillSlot = 0
-    If SkillNum <= 0 Then Exit Function
-
-    Dim i As Long
-
-    For i = 1 To MaxPlayerSkill
-        If PlayerSkill(i).Id = SkillNum Then
-            FindSkillSlot = i
-            Exit Function
-        End If
-    Next
-End Function
-
-Private Function FindSkillLevel(ByVal SkillNum As Long) As Long
-    FindSkillLevel = 0
-    If SkillNum <= 0 Then Exit Function
-
-    Dim i As Long
-
-    For i = 1 To MaxPlayerSkill
-        If PlayerSkill(i).Id = SkillNum Then
-            FindSkillLevel = PlayerSkill(i).Level
-            Exit Function
-        End If
-    Next
-
-End Function
 
 ' Right Click Menu
 Sub RightClick_Close()
@@ -953,85 +621,3 @@ Sub CloseComboMenu()
     HideWindow GetWindowIndex("winComboMenu")
 End Sub
 
-Public Sub OpenTargetWindow()
-    If Player(MyIndex).Dead Then Exit Sub
-
-    Windows(GetWindowIndex("winTarget")).Window.Visible = True
-End Sub
-
-Public Sub CloseTargetWindow()
-    Windows(GetWindowIndex("winTarget")).Window.Visible = False
-End Sub
-
-Public Sub UpdateTargetWindow()
-' Se nao ha alvo, fecha a janela e sai do metodo.
-    If MyTargetIndex <= 0 Or MyTargetType = TargetTypeLoot Then
-        Call CloseTargetWindow
-        Exit Sub
-    End If
-
-    Dim WindowIndex As Long, ControlHPIndex As Long, ControlSPIndex As Long, ControlNameIndex As Long
-    Dim Percentage As Single, Width As Long
-
-    WindowIndex = GetWindowIndex("winTarget")
-    ControlHPIndex = GetControlIndex("winTarget", "lblHP")
-    ControlSPIndex = GetControlIndex("winTarget", "lblMP")
-    ControlNameIndex = GetControlIndex("winTarget", "lblName")
-
-    If MyTargetType = TargetTypeNpc Then
-        Dim NpcNum As Long
-        NpcNum = MapNpc(MyTargetIndex).Num
-
-        If NpcNum > 0 Then
-            Windows(WindowIndex).Controls(ControlNameIndex).Text = "Lv. " & Npc(NpcNum).Level & " " & Trim$(Npc(NpcNum).Name)
-            Windows(WindowIndex).Controls(ControlHPIndex).Text = MapNpc(MyTargetIndex).Vital(HP) & "/" & MapNpc(MyTargetIndex).MaxVital(HP)
-            Windows(WindowIndex).Controls(ControlSPIndex).Text = MapNpc(MyTargetIndex).Vital(MP) & "/" & MapNpc(MyTargetIndex).MaxVital(MP)
-
-            If MapNpc(MyTargetIndex).Vital(HP) > 0 Then
-                Percentage = CSng(MapNpc(MyTargetIndex).Vital(HP) / MapNpc(MyTargetIndex).MaxVital(HP))
-                Width = 209 * Percentage
-
-                BarWidth_TargetHP_Max = Width
-            Else
-                BarWidth_TargetHP_Max = 0
-            End If
-
-            If MapNpc(MyTargetIndex).Vital(MP) > 0 Then
-                Percentage = CSng(MapNpc(MyTargetIndex).Vital(MP) / MapNpc(MyTargetIndex).MaxVital(MP))
-                Width = 209 * Percentage
-
-                BarWidth_TargetMP_Max = Width
-            Else
-                BarWidth_TargetMP_Max = 0
-            End If
-
-        End If
-
-    ElseIf MyTargetType = TargetTypePlayer Then
-
-        Windows(WindowIndex).Controls(ControlNameIndex).Text = "Lv. " & Player(MyTargetIndex).Level & " " & Trim$(Player(MyTargetIndex).Name)
-        Windows(WindowIndex).Controls(ControlHPIndex).Text = Player(MyTargetIndex).Vital(HP) & "/" & Player(MyTargetIndex).MaxVital(HP)
-        Windows(WindowIndex).Controls(ControlSPIndex).Text = Player(MyTargetIndex).Vital(MP) & "/" & Player(MyTargetIndex).MaxVital(MP)
-
-        If GetPlayerVital(MyTargetIndex, Vitals.HP) > 0 Then
-            Percentage = CSng(GetPlayerVital(MyTargetIndex, Vitals.HP) / GetPlayerMaxVital(MyTargetIndex, Vitals.HP))
-            Width = 209 * Percentage
-
-            BarWidth_TargetHP_Max = Width
-        Else
-            BarWidth_TargetHP_Max = 0
-        End If
-
-        If GetPlayerVital(MyTargetIndex, Vitals.MP) > 0 Then
-            Percentage = CSng(GetPlayerVital(MyTargetIndex, Vitals.MP) / GetPlayerMaxVital(MyTargetIndex, Vitals.MP))
-            Width = 209 * Percentage
-
-            BarWidth_TargetMP_Max = Width
-        Else
-            BarWidth_TargetMP_Max = 0
-        End If
-    End If
-
-    Call DrawTargetActiveIcons
-
-End Sub

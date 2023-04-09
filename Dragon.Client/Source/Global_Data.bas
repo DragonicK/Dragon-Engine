@@ -1,4 +1,4 @@
-Attribute VB_Name = "modGlobals"
+Attribute VB_Name = "Global_Data"
 Option Explicit
 
 Public GameServerPort As Long
@@ -27,7 +27,6 @@ Public DescText() As TextColourRec
 
 ' Block Swap Items
 Public CanSwapInvItems As Boolean
-
 
 ' Elastic bars
 Public BarWidth_NpcHP(1 To MaxMapNpcs) As Long
@@ -168,11 +167,6 @@ Public FadeAlpha As Long
 
 ' Screenshot Mode
 Public ScreenshotMode As Long
-
-' Conv
-Public ConvOptions As Long
-Public OptPos(1 To 4) As Long
-Public OptHeight As Long
 
 ' Right Click Menu
 Public PlayerMenuIndex As Long

@@ -1574,29 +1574,7 @@ Public Sub CreateWindow_Invitations()
     CreateButton WindowCount, "btnInvite", 11, 12, 201, 14, ColourChar & White & "Richard " & ColourChar & "-1" & "convidou voce para um grupo.", FontRegular, Grey, , , , , , , , , , , , 0, , , , , Green
 End Sub
 
-Public Sub CreateWindow_Target()
 
-' Create window
-    CreateWindow "winTarget", "", zOrder_Win, 255, 10, 239, 78, 0, True, Fonts.FontRegular, , 2, 7, DesignTypes.DesignWindowWithoutTopBar, DesignTypes.DesignWindowWithoutTopBar, DesignTypes.DesignWindowWithoutTopBar, , , , , , , , , , , GetAddress(AddressOf Target_OnDraw)
-
-    zOrder_Con = 1
-
-    ' Bar HP
-    CreatePictureBox WindowCount, "picHP_Blank", 15, 30, 209, 13, , , , , Tex_GUI(18), Tex_GUI(18), Tex_GUI(18)
-
-    ' Bar SP
-    CreatePictureBox WindowCount, "picSP_Blank", 15, 47, 209, 13, , , , , Tex_GUI(20), Tex_GUI(20), Tex_GUI(20)
-
-    ' Label HP
-    CreateLabel WindowCount, "lblHP", 15, 29, 209, 12, "0/0", FontRegular, White, Alignment.AlignCenter
-
-    ' Label MP
-    CreateLabel WindowCount, "lblMP", 15, 46, 209, 12, "0/0", FontRegular, White, Alignment.AlignCenter
-
-    ' Label Name
-    CreateLabel WindowCount, "lblName", 0, 10, 239, 25, "Name", FontRegular, White, Alignment.AlignCenter
-
-End Sub
 
 ' Rendering & Initialisation
 Public Sub InitGUI()

@@ -197,6 +197,80 @@ Public Sub FindTarget()
 
 End Sub
 
+Public Sub UpdateTargetWindow()
+    ' Se nao ha alvo, fecha a janela e sai do metodo.
+    If MyTargetIndex <= 0 Or MyTargetType = TargetTypeLoot Then
+        Call CloseTargetWindow
+        Exit Sub
+    End If
+
+    Dim WindowIndex As Long, ControlHPIndex As Long, ControlSPIndex As Long, ControlNameIndex As Long
+    Dim Percentage As Single, Width As Long
+
+    WindowIndex = GetWindowIndex("winTarget")
+    ControlHPIndex = GetControlIndex("winTarget", "lblHP")
+    ControlSPIndex = GetControlIndex("winTarget", "lblMP")
+    ControlNameIndex = GetControlIndex("winTarget", "lblName")
+
+    If MyTargetType = TargetTypeNpc Then
+        Dim NpcNum As Long
+        NpcNum = MapNpc(MyTargetIndex).Num
+
+        If NpcNum > 0 Then
+            Windows(WindowIndex).Controls(ControlNameIndex).Text = "Lv. " & Npc(NpcNum).Level & " " & Trim$(Npc(NpcNum).Name)
+            Windows(WindowIndex).Controls(ControlHPIndex).Text = MapNpc(MyTargetIndex).Vital(HP) & "/" & MapNpc(MyTargetIndex).MaxVital(HP)
+            Windows(WindowIndex).Controls(ControlSPIndex).Text = MapNpc(MyTargetIndex).Vital(MP) & "/" & MapNpc(MyTargetIndex).MaxVital(MP)
+
+            If MapNpc(MyTargetIndex).Vital(HP) > 0 Then
+                Percentage = CSng(MapNpc(MyTargetIndex).Vital(HP) / MapNpc(MyTargetIndex).MaxVital(HP))
+                Width = 209 * Percentage
+
+                BarWidth_TargetHP_Max = Width
+            Else
+                BarWidth_TargetHP_Max = 0
+            End If
+
+            If MapNpc(MyTargetIndex).Vital(MP) > 0 Then
+                Percentage = CSng(MapNpc(MyTargetIndex).Vital(MP) / MapNpc(MyTargetIndex).MaxVital(MP))
+                Width = 209 * Percentage
+
+                BarWidth_TargetMP_Max = Width
+            Else
+                BarWidth_TargetMP_Max = 0
+            End If
+
+        End If
+
+    ElseIf MyTargetType = TargetTypePlayer Then
+
+        Windows(WindowIndex).Controls(ControlNameIndex).Text = "Lv. " & Player(MyTargetIndex).Level & " " & Trim$(Player(MyTargetIndex).Name)
+        Windows(WindowIndex).Controls(ControlHPIndex).Text = Player(MyTargetIndex).Vital(HP) & "/" & Player(MyTargetIndex).MaxVital(HP)
+        Windows(WindowIndex).Controls(ControlSPIndex).Text = Player(MyTargetIndex).Vital(MP) & "/" & Player(MyTargetIndex).MaxVital(MP)
+
+        If GetPlayerVital(MyTargetIndex, Vitals.HP) > 0 Then
+            Percentage = CSng(GetPlayerVital(MyTargetIndex, Vitals.HP) / GetPlayerMaxVital(MyTargetIndex, Vitals.HP))
+            Width = 209 * Percentage
+
+            BarWidth_TargetHP_Max = Width
+        Else
+            BarWidth_TargetHP_Max = 0
+        End If
+
+        If GetPlayerVital(MyTargetIndex, Vitals.MP) > 0 Then
+            Percentage = CSng(GetPlayerVital(MyTargetIndex, Vitals.MP) / GetPlayerMaxVital(MyTargetIndex, Vitals.MP))
+            Width = 209 * Percentage
+
+            BarWidth_TargetMP_Max = Width
+        Else
+            BarWidth_TargetMP_Max = 0
+        End If
+    End If
+
+    Call DrawTargetActiveIcons
+
+End Sub
+
+
 Public Sub ShouldCloseTargetWindow(ByVal TargetType As Long, ByVal TargetIndex As Long)
     If MyTargetType = TargetType Then
         If MyTargetIndex = TargetIndex Then

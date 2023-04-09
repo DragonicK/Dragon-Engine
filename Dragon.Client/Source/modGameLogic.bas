@@ -15,7 +15,6 @@ Public Function ConvertCurrency(ByVal Amount As Long) As String
 
 End Function
 
-
 Public Sub SetBarWidth(ByRef MaxWidth As Long, ByRef Width As Long)
     Dim barDifference As Long
 
@@ -38,13 +37,6 @@ Public Sub SetBarWidth(ByRef MaxWidth As Long, ByRef Width As Long)
     End If
 
 End Sub
-
-Public Function Clamp(ByVal Value As Long, ByVal Min As Long, ByVal Max As Long) As Long
-    Clamp = Value
-
-    If Value < Min Then Clamp = Min
-    If Value > Max Then Clamp = Max
-End Function
 
 Public Sub ShowEqDesc(X As Long, Y As Long, eqNum As Long)
     If eqNum <= 0 Or eqNum > PlayerEquipments.PlayerEquipment_Count - 1 Then
@@ -73,7 +65,7 @@ Public Sub AddDescInfo(Text As String, Optional Colour As Long = White)
     DescText(Count + 1).Colour = Colour
 End Sub
 
-Sub ShowPlayerMenu(Index As Long, X As Long, Y As Long)
+Public Sub ShowPlayerMenu(Index As Long, X As Long, Y As Long)
     PlayerMenuIndex = Index
     If PlayerMenuIndex = 0 Then Exit Sub
     Windows(GetWindowIndex("winPlayerMenu")).Window.Left = X - 5
@@ -93,8 +85,9 @@ Public Function ByteToInt(ByVal B1 As Long, ByVal B2 As Long) As Long
     ByteToInt = B1 * 256 + B2
 End Function
 
-Sub UpdateStats_UI()
-' set the bar labels
+Public Sub UpdateStats_UI()
+    ' set the bar labels
+    
     With Windows(GetWindowIndex("winBars"))
         .Controls(GetControlIndex("winBars", "lblHP")).Text = GetPlayerVital(MyIndex, HP) & "/" & GetPlayerMaxVital(MyIndex, HP)
         .Controls(GetControlIndex("winBars", "lblMP")).Text = GetPlayerVital(MyIndex, MP) & "/" & GetPlayerMaxVital(MyIndex, MP)

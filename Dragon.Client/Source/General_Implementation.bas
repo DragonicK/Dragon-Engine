@@ -1,8 +1,9 @@
-Attribute VB_Name = "modGeneral"
+Attribute VB_Name = "General_Implementation"
 Option Explicit
 
 Public Sub LogoutGame()
     Dim i As Long
+
     isLogging = True
     InGame = False
 
@@ -12,13 +13,13 @@ Public Sub LogoutGame()
     ClearCraft
     ClearChests
     ClearInventories
+    ClearAnimations
 
-    DestroyTCP
-
-    ' destroy the animations loaded
     For i = 1 To MAX_BYTE
         Call ClearAnimInstance(i)
     Next
+
+    DestroyTCP
 
     For i = 1 To MAX_CHARS
         CharPendingExclusion(i) = False
@@ -30,8 +31,12 @@ Public Sub LogoutGame()
 
     ' destroy temp values
     MyIndex = 0
+    MyTargetType = 0
+    MyTargetIndex = 0
+
     InventoryItemSelected = 0
     InventoryentoryTabIndex = 0
+    
     SpellBuffer = 0
     SpellBufferTimer = 0
 
@@ -49,8 +54,9 @@ Public Sub LogoutGame()
 End Sub
 
 Public Sub DestroyGame()
-
     If Not CanDestroyGame Then
+        Dim frm As Form
+
         CanDestroyGame = True
 
         DestroyDX8
@@ -60,24 +66,15 @@ Public Sub DestroyGame()
         ' destroy music & sound engines
         Destroy_Music
 
-        Call UnloadAllForms
+        For Each frm In VB.Forms
+            Unload frm
+        Next
 
         End
-
     End If
 End Sub
 
-Public Sub UnloadAllForms()
-    Dim frm As Form
-
-    For Each frm In VB.Forms
-        Unload frm
-    Next
-
-End Sub
-
 Public Sub SetStatus(ByVal caption As String)
-   
     If Len(Trim$(caption)) > 0 Then
         ShowWindow GetWindowIndex("winLoading")
         Windows(GetWindowIndex("winLoading")).Controls(GetControlIndex("winLoading", "lblLoading")).Text = caption

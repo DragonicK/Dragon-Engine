@@ -111,7 +111,7 @@ Public Sub Main()
     inMenu = True
 
     ' show login window
-    ShowWindow GetWindowIndex("winLogin")
+    ShowWindow GetWindowIndex("winLoot")
     ShowWindow GetWindowIndex("winLoginFooter")
     
     inSmallChat = True
