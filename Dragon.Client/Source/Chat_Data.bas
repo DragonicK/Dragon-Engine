@@ -357,7 +357,7 @@ Public Function GetSystemMessage(ByVal Header As SystemMessage, ByVal ParamCount
 
     Case SystemMessage.ReceivedCurrency
         If ParamCount >= 2 Then
-            Dim CurData As Currency_Data
+            Dim CurData As CurrencyRec
 
             Id = Val(Parameters(1))
             Value = Val(Parameters(2))

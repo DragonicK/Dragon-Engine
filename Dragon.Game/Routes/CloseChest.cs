@@ -27,7 +27,8 @@ namespace Dragon.Game.Routes {
                         Chests = ContentService!.Chests,
                         Drops = ContentService!.Drops,
                         InstanceService = InstanceService,
-                        PacketSender = PacketSenderService!.PacketSender
+                        PacketSender = PacketSenderService!.PacketSender,
+                        PlayerRepository = repository
                     };
 
                     manager.CloseChest();

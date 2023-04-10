@@ -7,6 +7,7 @@ using Dragon.Game.Manager;
 using Dragon.Game.Network;
 using Dragon.Game.Players;
 using Dragon.Game.Services;
+using Dragon.Game.Repository;
 using Dragon.Game.Configurations;
 
 namespace Dragon.Game.Server;
@@ -16,11 +17,14 @@ public class JoinGame {
     public IPlayer? Player { get; init; }
     public IConfiguration? Configuration { get; init; }
     public IPacketSender? PacketSender { get; init; }
+    public IPlayerRepository? PlayerRepository { get; init; }
     public InstanceService? InstanceService { get; init; }
     public ContentService? ContentService { get; init; }
 
     public void Join() {
-        Player!.Combat = new PlayerCombat(Player, Configuration!, PacketSender!, ContentService!, InstanceService!);
+        Player!.Combat = new PlayerCombat(Player, Configuration!, PacketSender!, ContentService!, InstanceService!) {
+            PlayerRepository = PlayerRepository
+        };
 
         #region Titles
 

@@ -23,6 +23,7 @@ public interface IInstance {
     bool Contains(IPlayer player);
     bool Contains(int index);
     bool Remove(IPlayer player);
+    bool Remove(IInstanceChest chest);
     IPlayer? GetPlayer(int index);
     IInstanceChest? GetChest(int index);
     IList<IPlayer> GetPlayers();

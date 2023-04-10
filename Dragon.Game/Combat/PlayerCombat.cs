@@ -16,12 +16,14 @@ using Dragon.Game.Combat.Common;
 using Dragon.Game.Combat.Handler;
 using Dragon.Game.Configurations;
 using Dragon.Game.Combat.Death;
+using Dragon.Game.Repository;
 
 namespace Dragon.Game.Combat;
 
 public class PlayerCombat : IEntityCombat {
     public IPlayer Player { get; init; }
     public IConfiguration Configuration { get; init; }
+    public IPlayerRepository? PlayerRepository { get; init; }
     public IPacketSender PacketSender { get; private set; }
     public IDatabase<Npc>? Npcs { get; private set; }
     public IDatabase<Skill>? Skills { get; private set; }
@@ -60,14 +62,16 @@ public class PlayerCombat : IEntityCombat {
             PacketSender = sender,
             Configuration = configuration,
             ContentService = contentService,
-            InstanceService = instanceService
+            InstanceService = instanceService,
+            PlayerRepository = PlayerRepository
         };
 
         PlayerDeath = new PlayerDeath() {
             PacketSender = sender,
             Configuration = configuration,
             ContentService = contentService,
-            InstanceService = instanceService
+            InstanceService = instanceService,
+            PlayerRepository = PlayerRepository
         };
 
         Healing = new Healing() {
@@ -339,10 +343,12 @@ public class PlayerCombat : IEntityCombat {
 
     private bool IsTargetDead() {
         if (Player!.TargetType != TargetType.None) {
-            var target = Player!.Target;
+            if (Player!.TargetType != TargetType.Chest) {
+                var target = Player!.Target;
 
-            if (target is not null) {
-                return target.Vitals.Get(Vital.HP) <= 0;
+                if (target is not null) {
+                    return target.Vitals.Get(Vital.HP) <= 0;
+                }
             }
         }
 

@@ -297,8 +297,8 @@ Public Sub UpdateChestItemList()
                 Call SetControlImage(i, Tex_Item(CurRec.IconId))
             End If
         Else
-            Windows(WindowIndex).Controls(ControlNameIndex).Text = ""
-            Windows(WindowIndex).Controls(ControlCountIndex).Text = ""
+            Windows(WindowIndex).Controls(ControlNameIndex).Text = vbNullString
+            Windows(WindowIndex).Controls(ControlCountIndex).Text = vbNullString
 
             Call SetControlImage(i, 0)
         End If

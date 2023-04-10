@@ -147,8 +147,11 @@ public enum MessageHeader {
     SkillCooldown,
     Chests,
     CloseChest,
+    UpdateChestState,
     ChestItemList,
     TakeItemFromChest,
     SortChestItemList,
+    UpdateChestItemList,
+    EnableChestTakeItem,
     RollDiceResult
 }

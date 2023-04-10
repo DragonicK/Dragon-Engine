@@ -16,11 +16,6 @@ Public Enum ServerPackets
     SRessurrection
     
     SAttack
-    
-    SUpdateLootState
-    SSortLootList
-    
-    SEnableDropTakeItem
     SRollDiceItem
     
     SStunned

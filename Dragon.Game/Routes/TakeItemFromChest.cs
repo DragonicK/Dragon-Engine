@@ -24,6 +24,7 @@ namespace Dragon.Game.Routes {
                     if (player is not null) {
                         var manager = new ChestManager() {
                             Player = player,
+                            PlayerRepository = repository,
                             Configuration = Configuration,
                             Chests = ContentService!.Chests,
                             Drops = ContentService!.Drops,

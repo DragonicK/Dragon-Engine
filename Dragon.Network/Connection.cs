@@ -104,7 +104,9 @@ public class Connection : IConnection {
         catch (Exception ex) {
             Socket?.Disconnect(false);
 
-            Logger?.Write(WarningLevel.Error, GetType().Name, ex.Message);
+            Logger?.Write(WarningLevel.Error, GetType().Name, $"OnReceive: {ex.Message}");
+
+            Disconnect();
         }
     }
 
@@ -115,7 +117,9 @@ public class Connection : IConnection {
         catch (Exception ex) {
             Socket?.Disconnect(false);
 
-            Logger?.Write(WarningLevel.Error, GetType().Name, ex.Message);
+            Logger?.Write(WarningLevel.Error, GetType().Name, $"OnSend: {ex.Message}");
+
+            Disconnect();
         }
     }
 }

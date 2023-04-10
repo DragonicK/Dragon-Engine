@@ -12,7 +12,7 @@ public interface IInstanceChest : IEntity {
     long CreateFromCharacterId { get; set; }
     int PartyId { get; set; }
     int RemainingTime { get; set; }
-    bool IsOpen { get; set; }
+    ChestState State { get; set; }
     IInstance Instance { get; set; }
     IList<IInstanceChestItem> Items { get; set; }
 }

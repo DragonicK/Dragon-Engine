@@ -28,15 +28,8 @@ Public Sub HandleCloseChest(ByVal Index As Long, ByRef Data() As Byte, ByVal Sta
     HideWindow GetWindowIndex("winChestItem")
 End Sub
 
-Public Sub HandleEnableDropTakeItem(ByVal Index As Long, ByRef Data() As Byte, ByVal StartAddr As Long, ByVal ExtraVar As Long)
-    Dim Buffer As clsBuffer
-    Set Buffer = New clsBuffer
-
-    Buffer.WriteBytes Data
-
-    CanSendTakeItemFromChest = Buffer.ReadByte
-
-    Set Buffer = Nothing
+Public Sub HandleEnableChestTakeItem(ByVal Index As Long, ByRef Data() As Byte, ByVal StartAddr As Long, ByVal ExtraVar As Long)
+    CanSendTakeItemFromChest = True
 End Sub
 
 Public Sub HandleChestItemList(ByVal Index As Long, ByRef Data() As Byte, ByVal StartAddr As Long, ByVal ExtraVar As Long)
@@ -105,6 +98,41 @@ Public Sub HandleSortChestItemList(ByVal Index As Long, ByRef Data() As Byte, By
 
     ' Libera o pacote para envio.
     CanSendTakeItemFromChest = True
+
+End Sub
+
+Public Sub HandleUpdateChestItemList(ByVal Index As Long, ByRef Data() As Byte, ByVal StartAddr As Long, ByVal ExtraVar As Long)
+    Dim WindowIndex As Long
+
+    WindowIndex = GetWindowIndex("winChestItem")
+
+    If Windows(WindowIndex).Window.Visible Then
+        Dim Buffer As clsBuffer
+
+        Set Buffer = New clsBuffer
+        Buffer.WriteBytes Data
+
+        Index = Buffer.ReadLong + 1
+
+        If Index > 0 Then
+            ChestItem(Index).ItemType = Buffer.ReadLong
+            ChestItem(Index).CurrencyType = Buffer.ReadLong
+            ChestItem(Index).Num = Buffer.ReadLong
+            ChestItem(Index).Value = Buffer.ReadLong
+            ChestItem(Index).Level = Buffer.ReadLong
+            ChestItem(Index).UpgradeId = Buffer.ReadLong
+            ChestItem(Index).AttributeId = Buffer.ReadLong
+            ChestItem(Index).Bound = Buffer.ReadByte
+        End If
+
+        Set Buffer = Nothing
+
+        ' Libera o pacote para envio.
+        CanSendTakeItemFromChest = True
+
+        Call UpdateChestItemList
+    End If
+
 
 End Sub
 

@@ -1,22 +1,28 @@
 Attribute VB_Name = "Chest_Implementation"
 Option Explicit
 
-Public Sub AddChest(ByVal Id As Long, ByVal X As Long, ByVal Y As Long, ByVal Sprite As Long, ByVal IsLooted As Boolean)
+Public Sub AddChest(ByVal Id As Long, ByVal X As Long, ByVal Y As Long, ByVal Sprite As Long, ByVal State As ChestState)
     Dim i As Long
-    
+
     For i = 1 To MaximumChests
-        If Chests(i).Id = 0 Then
-            Chests(i).Id = Id
-            Chests(i).X = X * PIC_X
-            Chests(i).Y = Y * PIC_Y
-            Chests(i).Sprite = Sprite
-            Chests(i).AlreadyLooted = False
-            Chests(i).Alpha = 255
-            
-            Exit For
-        End If
+        With Chests(i)
+            If .Id = 0 Then
+                .Id = Id
+                .X = X * PIC_X
+                .Y = Y * PIC_Y
+                .Sprite = Sprite
+                .Alpha = 255
+                .State = State
+
+                If .State = ChestState_Empty Then
+                    .AlreadyLooted = True
+                End If
+
+                Exit For
+            End If
+        End With
     Next
-    
+
     CalculateHighIndex
 End Sub
 
@@ -48,6 +54,7 @@ Public Sub ClearChest(ByVal Index As Long)
     Chests(Index).Alpha = 0
     Chests(Index).Sprite = 0
     Chests(Index).AlreadyLooted = False
+    Chests(Index).State = ChestState.ChestState_Closed
 End Sub
 
 Public Sub ProcessChestsFadeAlpha()
@@ -67,6 +74,7 @@ End Sub
 
 Public Sub DrawChests()
     Dim i As Long, X As Long, Y As Long
+    Dim SourceX As Long, SourceY As Long
 
     For i = 1 To Chests_HighIndex
         With Chests(i)
@@ -74,7 +82,17 @@ Public Sub DrawChests()
                 X = ConvertMapX(.X)
                 Y = ConvertMapY(.Y)
 
-                Call RenderTexture(Tex_Chest(.Sprite), X, Y, 0, 0, PIC_X, PIC_Y, PIC_X, PIC_Y)
+                If .State = ChestState_Closed Then
+                    SourceX = 0
+                    SourceY = 0
+
+                ElseIf .State = ChestState_Open Or .State = ChestState_Empty Then
+                    SourceX = 3 * PIC_X
+                    SourceY = 3 * PIC_Y
+                End If
+
+                Call RenderTexture(Tex_Chest(.Sprite), X, Y, SourceX, SourceY, PIC_X, PIC_Y, PIC_X, PIC_Y)
+
             End If
         End With
     Next

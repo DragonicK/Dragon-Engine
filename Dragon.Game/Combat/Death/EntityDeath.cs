@@ -8,6 +8,7 @@ using Dragon.Game.Services;
 using Dragon.Game.Instances;
 using Dragon.Game.Manager;
 using Dragon.Game.Configurations;
+using Dragon.Game.Repository;
 
 namespace Dragon.Game.Combat.Death;
 
@@ -17,6 +18,7 @@ public class EntityDeath : IEntityDeath {
     public IPacketSender? PacketSender { get; init; }
     public ContentService? ContentService { get; init; }
     public IConfiguration? Configuration { get; init; }
+    public IPlayerRepository? PlayerRepository { get; init; }
     public InstanceService? InstanceService { get; init; }
 
 
@@ -50,9 +52,12 @@ public class EntityDeath : IEntityDeath {
 
             var agent = new ChestManager() {
                 Player = player,
+                PacketSender = PacketSender,
                 Configuration = Configuration,
                 Drops = ContentService!.Drops,
-                Chests = ContentService.Chests
+                Chests = ContentService.Chests,
+                InstanceService = InstanceService,
+                PlayerRepository = PlayerRepository
             };
 
             var chest = agent.CreateInstanceChest(entity, instance);

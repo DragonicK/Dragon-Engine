@@ -7,11 +7,10 @@ using Dragon.Game.Network;
 using Dragon.Game.Players;
 using Dragon.Game.Services;
 using Dragon.Game.Instances;
+using Dragon.Game.Repository;
 using Dragon.Game.Configurations;
 using Dragon.Game.Instances.Chests;
 using Dragon.Game.Configurations.Data;
-using Dragon.Core.Model.Items;
-using System.Numerics;
 
 namespace Dragon.Game.Manager;
 
@@ -22,6 +21,7 @@ public class ChestManager {
     public IConfiguration? Configuration { get; init; }
     public IPacketSender? PacketSender { get; init; }
     public InstanceService? InstanceService { get; init; }
+    public IPlayerRepository? PlayerRepository { get; init; }
 
     private readonly Random random;
 
@@ -131,11 +131,12 @@ public class ChestManager {
             if (chest is not null) {
                 if (CanOpenChest(chest)) {
                     chest.OpenedByCharacterId = Player!.Character.CharacterId;
-                    chest.IsOpen = true;
+                    chest.State = ChestState.Open;
 
                     Player.Target = chest;
                     Player.TargetType = TargetType.Chest;
 
+                    PacketSender!.SendUpdateChestState(instance, chest);
                     PacketSender!.SendChestItems(Player, chest);
                 }
             }
@@ -207,7 +208,7 @@ public class ChestManager {
                         canTakeItem = TakeCurrency(item);
                     }
                     else {
-                        TakeItem(item);
+                        canTakeItem = TakeItem(item);
                     }
 
                     if (canTakeItem) {
@@ -215,14 +216,81 @@ public class ChestManager {
 
                         PacketSender!.SendSortChestItemList(Player, index);
                     }
+                    else {
+                        PacketSender!.SendEnableTakeItemFromChest(Player);
+                    }
+
+                    var instance = GetInstance();
+
+                    CheckForEmptyChest(instance, chest);
                 }
             }
         }
     }
 
-    private void TakeItem(IInstanceChestItem item) {
+    private void CheckForEmptyChest(IInstance? instance, IInstanceChest chest) {
+        if (chest.Items.Count == 0) {
+            var id = chest.OpenedByCharacterId;
 
+            chest.State = ChestState.Empty;
+
+            if (id > 0) {
+                var player = PlayerRepository!.FindByCharacterId(id);
+
+                if (player is not null) {
+                    player.Target = null;
+                    player.TargetType = TargetType.None;
+
+                    PacketSender!.SendCloseChest(player, chest);
+                    PacketSender!.SendTarget(player, TargetType.None, 0);
+                }
+            }
+
+            if (instance is not null) {
+                instance.Remove(chest);
+
+                PacketSender!.SendUpdateChestState(instance, chest);
+            }
+        }
     }
+
+    #endregion
+
+    #region Take Item
+
+
+    private bool TakeItem(IInstanceChestItem item) {
+        if (item.CharacterIdFromRollDiceWinner > 0) {
+            if (Environment.TickCount >= item.WinnerTimeLimit) {
+                item.CharacterIdFromRollDiceWinner = 0;
+
+                return false;
+            }
+
+            var winner = PlayerRepository!.FindByCharacterId(item.CharacterIdFromRollDiceWinner);
+
+            if (winner is not null) {
+                //    return AddItem(winner, drop);
+            }
+        }
+        else {
+            //// Se estiver um grupo, adiciona na lista de rolagem.
+            //if (PartyCollectedItem.AddCollectedItem(player, corpse, drop)) {
+            //    return;
+            //}
+            //// Do contrário, adiciona ao inventário.
+            //else {
+            //    canTakeItem = AddItem(player, drop);
+            //}
+        }
+
+        return false;
+    }
+
+
+    #endregion
+
+    #region Take Currency
 
     private bool TakeCurrency(IInstanceChestCurrency item) {
         var added = false;
@@ -239,13 +307,13 @@ public class ChestManager {
 
         if (added) {
             PacketSender!.SendCurrencyUpdate(Player, item.Currency);
-            PacketSender!.SendMessage(SystemMessage.ReceivedCurrency, QbColor.Gold, new string[] { ((int)item.Currency).ToString(), item.Value.ToString() });
+            PacketSender!.SendMessage(SystemMessage.ReceivedCurrency, QbColor.Gold, Player, new string[] { ((int)item.Currency).ToString(), item.Value.ToString() });
         }
 
         if (added && rest > 0) {
             item.Value = rest;
 
-            // UpdateDropItems(corpse);
+            PacketSender!.SendUpdateChestItem(Player, (IInstanceChestItem)item);
 
             return false;
         }
@@ -272,10 +340,21 @@ public class ChestManager {
             }
 
             if (totalPlayers > 0) {
-                if (PartyShareCurrency(item, party, totalPlayers, out var rest)) {
-                    if (rest > 0) {
-                        return PartyShareCurrency(item, party, totalPlayers, out _);
+                if (PartyShareCurrency(item.Currency, item.Value, party, totalPlayers, out var rest)) {
+                    var module = item.Value % totalPlayers;
+
+                    if (module > 0) {
+                        if (CanAddCurrency(Player, item.Currency, module, out _)) {
+                            PacketSender!.SendCurrencyUpdate(Player, item.Currency);
+                            PacketSender!.SendMessage(SystemMessage.ReceivedCurrency, QbColor.Gold, Player, new string[] { ((int)item.Currency).ToString(), module.ToString() });
+                        }                   
                     }
+
+                    if (rest > 0) {
+                        return PartyShareCurrency(item.Currency, rest, party, totalPlayers, out _);
+                    }
+
+                    return true;
                 }
             }
         }
@@ -283,9 +362,9 @@ public class ChestManager {
         return false;
     }
 
-    private bool PartyShareCurrency(IInstanceChestCurrency item, PartyManager party, int totalPlayers, out int restAdded) {
+    private bool PartyShareCurrency(CurrencyType currencyType, int currencyValue, PartyManager party, int totalPlayers, out int restAdded) {
         var totalRest = 0;
-        var currency = item.Value / totalPlayers;
+        var currency = currencyValue / totalPlayers;
 
         if (currency > 0) {
             var members = party.Members;
@@ -295,9 +374,9 @@ public class ChestManager {
                     if (!member.Disconnected) {
                         var player = member.Player;
 
-                        if (CanAddCurrency(player, item.Currency, item.Value, out var rest)) {
-                            PacketSender!.SendCurrencyUpdate(player, item.Currency);
-                            PacketSender!.SendMessage(SystemMessage.ReceivedCurrency, QbColor.Gold, new string[] { ((int)item.Currency).ToString(), (item.Value - rest).ToString() });
+                        if (CanAddCurrency(player, currencyType, currencyValue, out var rest)) {
+                            PacketSender!.SendCurrencyUpdate(player, currencyType);
+                            PacketSender!.SendMessage(SystemMessage.ReceivedCurrency, QbColor.Gold, player, new string[] { ((int)currencyType).ToString(), (currencyValue - rest).ToString() });
                         }
                         else {
                             PacketSender!.SendMessage(SystemMessage.TheCurrencyCannotBeAdded, QbColor.BrigthRed, player);

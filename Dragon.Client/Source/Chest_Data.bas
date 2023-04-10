@@ -14,6 +14,12 @@ Public Enum ChestAnimation
     ChestAnimation_Final = 3
 End Enum
 
+Public Enum ChestState
+    ChestState_Closed
+    ChestState_Open
+    ChestState_Empty
+End Enum
+
 Private Type ChestRec
     Id As Long
     X As Long
@@ -21,5 +27,6 @@ Private Type ChestRec
     Alpha As Long
     Sprite As Long
     AlreadyLooted As Boolean
+    State As ChestState
 End Type
 

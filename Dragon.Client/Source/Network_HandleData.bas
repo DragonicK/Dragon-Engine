@@ -106,10 +106,11 @@ Public Sub InitMessages()
     HandleDataSub(EnginePacket.PCloseChest) = GetAddress(AddressOf HandleCloseChest)
     HandleDataSub(EnginePacket.PChestItemList) = GetAddress(AddressOf HandleChestItemList)
     HandleDataSub(EnginePacket.PSortChestItemList) = GetAddress(AddressOf HandleSortChestItemList)
-   
-   
-    ' HandleDataSub(SUpdateLootState) = GetAddress(AddressOf HandleUpdateLootState)
-    ' HandleDataSub(SEnableDropTakeItem) = GetAddress(AddressOf HandleEnableDropTakeItem)
+    HandleDataSub(EnginePacket.PUpdateChestItemList) = GetAddress(AddressOf HandleUpdateChestItemList)
+    HandleDataSub(EnginePacket.PUpdateChestState) = GetAddress(AddressOf HandleUpdateChestState)
+    HandleDataSub(EnginePacket.PEnableChestTakeItem) = GetAddress(AddressOf HandleEnableChestTakeItem)
+
+    '
     ' HandleDataSub(SRollDiceItem) = GetAddress(AddressOf HandleRollDiceItem)
     ' HandleDataSub(SNpcAttack) = GetAddress(AddressOf HandleNpcAttack)
     ' HandleDataSub(SSound) = GetAddress(AddressOf HandleSound)
@@ -285,7 +286,6 @@ Private Sub HandleStunned(ByVal Index As Long, ByRef Data() As Byte, ByVal Start
     Set Buffer = Nothing
 End Sub
 
-
 Private Sub HandleSound(ByVal Index As Long, ByRef Data() As Byte, ByVal StartAddr As Long, ByVal ExtraVar As Long)
     Dim Buffer As clsBuffer
     Dim X As Long, Y As Long, entityType As Long, entityNum As Long
@@ -302,7 +302,6 @@ Private Sub HandleSound(ByVal Index As Long, ByRef Data() As Byte, ByVal StartAd
 
     PlayMapSound X, Y, entityType, entityNum
 End Sub
-
 
 Private Sub HandleChatUpdate(ByVal Index As Long, ByRef Data() As Byte, ByVal StartAddr As Long, ByVal ExtraVar As Long)
     Dim Buffer As clsBuffer, NpcNum As Long
@@ -329,7 +328,6 @@ Private Sub HandleChatUpdate(ByVal Index As Long, ByRef Data() As Byte, ByVal St
        ' OpenNpcChat NpcNum, Conv(ConversationNum).Conv(CurrentChat).Conv, Conv(ConversationNum).Conv(CurrentChat).rText
     End If
 End Sub
-
 
 Private Sub HandleCheckPing(ByVal Index As Long, ByRef Data() As Byte, ByVal StartAddr As Long, ByVal ExtraVar As Long)
     Dim ClientRequest As Byte

@@ -9,7 +9,6 @@ namespace Dragon.Game.Routes;
 public sealed class Target {
     public IConnection? Connection { get; set; }
     public PacketTarget? Packet { get; set; }
-    //public LoggerService? LoggerService { get; init; }
     public ContentService? ContentService { get; init; }
     public ConnectionService? ConnectionService { get; init; }
     public PacketSenderService? PacketSenderService { get; init; }
@@ -28,7 +27,9 @@ public sealed class Target {
                     Player = player,
                     PacketSender = sender,
                     ContentService = ContentService,
-                    InstanceService = InstanceService
+                    InstanceService = InstanceService,
+                    ConnectionService = ConnectionService,
+                    PlayerRepository = repository
                 };
 
                 manager.ProcessTarget(Packet!.Index, Packet.TargetType);

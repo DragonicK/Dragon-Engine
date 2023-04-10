@@ -16,6 +16,8 @@ using Dragon.Game.Configurations;
 using Dragon.Game.Instances.Chests;
 using Dragon.Core.Model.Chests;
 using System.Collections.Generic;
+using System.Net.Sockets;
+using Dragon.Core.Model.Items;
 
 namespace Dragon.Game.Network;
 
@@ -1356,6 +1358,15 @@ public sealed partial class PacketSender : IPacketSender {
         Writer.Enqueue(msg);
     }
 
+    public void SendCloseChest(IPlayer player, IInstanceChest chest) {
+        var msg = Writer!.CreateMessage(new PacketCloseChest() { Index = chest.Index });
+
+        msg.DestinationPeers.Add(player.GetConnection().Id);
+        msg.TransmissionTarget = TransmissionTarget.Destination;
+
+        Writer.Enqueue(msg);
+    }
+
     public void SendChest(IInstance instance, IInstanceChest chest) {
         var list = instance.GetPlayers().Select(p => p.GetConnection().Id);
 
@@ -1366,6 +1377,7 @@ public sealed partial class PacketSender : IPacketSender {
         packet.Chests[0].Index = chest.Index;
         packet.Chests[0].X = chest.X;
         packet.Chests[0].Y = chest.Y;
+        packet.Chests[0].State = chest.State;
         packet.Chests[0].Sprite = chest.Chest.Sprite;
  
         var msg = Writer!.CreateMessage(packet);
@@ -1390,6 +1402,7 @@ public sealed partial class PacketSender : IPacketSender {
             packet.Chests[index].Index = chest.Index;
             packet.Chests[index].X = chest.X;
             packet.Chests[index].Y = chest.Y;
+            packet.Chests[index].State = chest.State;
             packet.Chests[index].Sprite = chest.Chest.Sprite;
 
             ++index;
@@ -1403,8 +1416,55 @@ public sealed partial class PacketSender : IPacketSender {
         Writer.Enqueue(msg);
     }
 
+    public void SendUpdateChestState(IInstance instance, IInstanceChest chest) {
+        var list = instance.GetPlayers().Select(p => p.GetConnection().Id);
+ 
+        var msg = Writer!.CreateMessage(new SpUpdateChestState() { Index = chest.Index, State = chest.State });
+
+        msg.DestinationPeers.AddRange(list);
+        msg.TransmissionTarget = TransmissionTarget.Destination;
+
+        Writer.Enqueue(msg);
+    }
+
     public void SendSortChestItemList(IPlayer player, int removedIndex) {
         var msg = Writer!.CreateMessage(new SpSortChestItemList() { Index = removedIndex });
+
+        msg.DestinationPeers.Add(player.GetConnection().Id);
+        msg.TransmissionTarget = TransmissionTarget.Destination;
+
+        Writer.Enqueue(msg);
+    }
+
+    public void SendUpdateChestItem(IPlayer player, IInstanceChestItem item) {
+        var chestItem = new DataChestItem();
+
+        if (item.IsCurrency) {
+            chestItem.ContentType = ChestContentType.Currency;
+            chestItem.CurrencyType = (CurrencyType)item.Id;
+        }
+
+        chestItem.Id = item.Id;
+        chestItem.Value = item.Value;
+        chestItem.Level = item.Level;
+        chestItem.UpgradeId = item.UpgradeId;
+        chestItem.AttributeId = item.AttributeId;
+        chestItem.Bound = item.Bound;
+
+        var packet = new SpUpdateChestItemList() {
+            Item = chestItem
+        };
+
+        var msg = Writer!.CreateMessage(packet); 
+
+        msg.DestinationPeers.Add(player.GetConnection().Id);
+        msg.TransmissionTarget = TransmissionTarget.Destination;
+
+        Writer.Enqueue(msg);
+    }
+
+    public void SendEnableTakeItemFromChest(IPlayer player) {
+        var msg = Writer!.CreateMessage(new SpEnableChestTakeItem());
 
         msg.DestinationPeers.Add(player.GetConnection().Id);
         msg.TransmissionTarget = TransmissionTarget.Destination;

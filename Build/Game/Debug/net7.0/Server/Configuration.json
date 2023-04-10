@@ -107,7 +107,7 @@
     "MonsterDuration": 180,
     "BossDuration": 600,
     "RollDiceDuration": 30,
-    "WinnerTimeLimit": 60
+    "WinnerTimeLimit": 600
   },
   "Map": {
     "MaximumNpcs": 255,

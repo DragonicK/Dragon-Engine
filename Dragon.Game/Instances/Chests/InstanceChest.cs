@@ -13,7 +13,7 @@ public class InstanceChest : IInstanceChest {
     public long OpenedByCharacterId { get; set; }
     public long CreateFromCharacterId { get; set; }
     public int PartyId { get; set; }
-    public bool IsOpen { get; set; }
+    public ChestState State { get; set; }
     public int RemainingTime { get; set; }
     public IInstance Instance { get; set; }
     public IList<IInstanceChestItem> Items { get; set; }

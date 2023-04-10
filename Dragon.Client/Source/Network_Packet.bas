@@ -148,9 +148,12 @@ Public Enum EnginePacket
     PSkillCooldown
     PChests
     PCloseChest
+    PUpdateChestState
     PChestItemList
     PTakeItemFromChest
     PSortChestItemList
+    PUpdateChestItemList
+    PEnableChestTakeItem
     PRollDiceResult
 
     PPacketCount

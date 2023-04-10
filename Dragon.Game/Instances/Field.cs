@@ -9,6 +9,7 @@ using Dragon.Game.Regions;
 using Dragon.Game.Network;
 using Dragon.Game.Configurations;
 using Dragon.Game.Instances.Chests;
+using Dragon.Game.Configurations.Data;
 
 namespace Dragon.Game.Instances;
 
@@ -136,6 +137,16 @@ public sealed class Field : IMap, IInstance {
 
             CalculateHighIndex();
 
+            return true;
+        }
+
+        return false;
+    }
+
+    public bool Remove(IInstanceChest chest) {
+        if (chests.ContainsKey(chest.Index)) {
+            chests.Remove(chest.Index);
+ 
             return true;
         }
 

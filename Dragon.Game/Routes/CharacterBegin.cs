@@ -1,5 +1,4 @@
 ﻿using Dragon.Network;
-using Dragon.Network.Outgoing;
 using Dragon.Network.Messaging.SharedPackets;
 
 using Dragon.Core.Logs;
@@ -83,7 +82,8 @@ public sealed class CharacterBegin {
             PacketSender = GetSender(),
             Configuration = Configuration,
             InstanceService = InstanceService,
-            ContentService = ContentService
+            ContentService = ContentService,
+            PlayerRepository = ConnectionService!.PlayerRepository
         };
 
         game.Join();

@@ -3,6 +3,7 @@
 using Dragon.Game.Network;
 using Dragon.Game.Services;
 using Dragon.Game.Configurations;
+using Dragon.Game.Repository;
 
 namespace Dragon.Game.Combat.Death;
 
@@ -11,6 +12,7 @@ public class PlayerDeath : IEntityDeath {
     public ContentService? ContentService { get; init; }
     public IConfiguration? Configuration { get; init; }
     public InstanceService? InstanceService { get; init; }
+    public IPlayerRepository? PlayerRepository { get; init; }
 
     private ExperienceHandler? expHandler;
 

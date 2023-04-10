@@ -6,6 +6,7 @@ using Dragon.Game.Services;
 using Dragon.Game.Players;
 using Dragon.Game.Instances;
 using Dragon.Game.Network;
+using Dragon.Game.Repository;
 
 namespace Dragon.Game.Manager;
 
@@ -14,12 +15,11 @@ public class TargetManager {
     public IPacketSender? PacketSender { get; init; }
     public InstanceService? InstanceService { get; init; }
     public ContentService? ContentService { get; init; }
+    public IPlayerRepository? PlayerRepository { get; init; }
     public ConfigurationService? Configuration { get; init; }
+    public ConnectionService? ConnectionService { get; init; }
 
     public void ProcessTarget(int index, TargetType targetType) {
-        Player!.TargetType = targetType;
-        Player!.Target = targetType == TargetType.None ? null : GetEntity(index, targetType);
-
         if (Player!.IsWarehouseOpen) {
             return;
         }
@@ -28,34 +28,68 @@ public class TargetManager {
             return;
         }
 
+        var lastTargetType = Player!.TargetType;
+     
+        Player!.TargetType = targetType;
+        Player!.Target = targetType == TargetType.None ? null : GetEntity(index, targetType);
+
+        if (lastTargetType == TargetType.Chest) {
+            if (targetType != TargetType.Chest) {
+                CloseChest();
+            }
+        }
+
         if (Player!.TargetType == TargetType.Npc) {
-            var entity = Player!.Target;
+            SelectEntityNpc();
+        }
 
-            if (entity is not null) {
-                var npc = GetNpc(entity.Id);
+        if (Player!.TargetType == TargetType.Chest) {
+            OpenChest(index);
+        }
+    }
 
-                if (npc is not null) {
-                    if (npc.Behaviour != NpcBehaviour.Monster && npc.Behaviour != NpcBehaviour.Boss) {
-                        if (npc.Conversations.Count > 0) {
-                            PacketSender!.SendConversation(Player!, npc.Id);
-                        }
+    private void SelectEntityNpc() {
+        var entity = Player!.Target;
+
+        if (entity is not null) {
+            var npc = GetNpc(entity.Id);
+
+            if (npc is not null) {
+                if (npc.Behaviour != NpcBehaviour.Monster && npc.Behaviour != NpcBehaviour.Boss) {
+                    if (npc.Conversations.Count > 0) {
+                        PacketSender!.SendConversation(Player!, npc.Id);
                     }
                 }
             }
         }
+    }
 
-        if (Player!.TargetType == TargetType.Chest) {
-            var manager = new ChestManager() {
-                Player = Player,
-                PacketSender = PacketSender,
-                Configuration = Configuration,
-                Drops = ContentService!.Drops,
-                Chests = ContentService!.Chests,
-                InstanceService = InstanceService
-            };
+    private void OpenChest(int index) {
+        var manager = new ChestManager() {
+            Player = Player,
+            PacketSender = PacketSender,
+            Configuration = Configuration,
+            Drops = ContentService!.Drops,
+            Chests = ContentService!.Chests,
+            InstanceService = InstanceService,
+            PlayerRepository = PlayerRepository
+        };
 
-            manager.OpenChest(index);
-        }
+        manager.OpenChest(index);
+    }
+
+    private void CloseChest() {
+        var manager = new ChestManager() {
+            Player = Player,
+            PacketSender = PacketSender,
+            Configuration = Configuration,
+            Drops = ContentService!.Drops,
+            Chests = ContentService!.Chests,
+            InstanceService = InstanceService,
+            PlayerRepository = PlayerRepository
+        };
+
+        manager.CloseChest();
     }
 
     private IEntity? GetEntity(int index, TargetType targetType) {
