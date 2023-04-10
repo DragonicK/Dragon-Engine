@@ -32,7 +32,7 @@ public class ConfigurationService : IService, IConfiguration {
     public Character Character { get; set; }
     public Craft Craft { get; set; }
     public Guild Guild { get; set; }
-    public Drop Drop { get; set; }
+    public ChestDrop ChestDrop { get; set; }
     public Map Map { get; set; }
     public Mail Mail { get; set; }
     public Party Party { get; set; }
@@ -49,14 +49,14 @@ public class ConfigurationService : IService, IConfiguration {
         Guild = new Guild();
         Mail = new Mail();
         Map = new Map();
-        Drop = new Drop();
         Party = new Party();
         Player = new Player();
         Rates = new Rate();
-        Ressurrection = new Ressurrection();
         Trade = new Trade();
-        ProhibitedNames = new ProhibitedNames();
         Messages = new Message();
+        ChestDrop = new ChestDrop();
+        Ressurrection = new Ressurrection();
+        ProhibitedNames = new ProhibitedNames();
 
         JwtSettings = new JwtSettings() {
             SecurityKey = "7c8f9ad03beee8a2fe4275af8bb52c2e4559eca9",

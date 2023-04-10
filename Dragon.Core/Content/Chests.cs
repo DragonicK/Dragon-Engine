@@ -59,7 +59,12 @@ public class Chests : Database<Chest>  {
         if (id > 0) {
             var chest = Contains(id) ? this[id] : new Chest() { Id = id };
 
-            if (item.Id > 0) {
+            if (item.ContentType == ChestContentType.Item) {
+                if (item.Id > 0) {
+                    chest?.Items.Add(item);
+                }
+            }
+            else {
                 chest?.Items.Add(item);
             }
 

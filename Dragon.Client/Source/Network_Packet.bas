@@ -147,7 +147,12 @@ Public Enum EnginePacket
     PCancelAnimation
     PSkillCooldown
     PChests
-    
+    PCloseChest
+    PChestItemList
+    PTakeItemFromChest
+    PSortChestItemList
+    PRollDiceResult
+
     PPacketCount
 End Enum
 

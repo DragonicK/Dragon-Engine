@@ -19,13 +19,13 @@ public class PlayerCurrency : IPlayerCurrency {
     public bool Add(CurrencyType currencyType, int value) {
         var currency = GetCurrency(currencyType);
 
-        var r = currency.CurrencyValue + value;
+        long sum = currency.CurrencyValue + value;
 
-        if (r > int.MaxValue) {
+        if (sum > int.MaxValue) {
             return false;
         }
 
-        currency.CurrencyValue = r;
+        currency.CurrencyValue = Convert.ToInt32(sum);
 
         return true;
     }

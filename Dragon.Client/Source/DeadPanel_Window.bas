@@ -53,9 +53,11 @@ Public Sub CreateWindow_DeadPanel()
 
     X = (Width / 2) - 119
     Y = (Heigth / 2) - 300
+    
+    ''GetAddress(AddressOf Target_OnDraw)
 
-    CreateWindow "winDeadPanel", "", zOrder_Win, X, Y, 239, 150, 0, True, Fonts.FontRegular, , 2, 7, DesignTypes.DesignWindowWithoutTopBar, DesignTypes.DesignWindowWithoutTopBar, DesignTypes.DesignWindowWithoutTopBar, , , , , , , , , False, , GetAddress(AddressOf Target_OnDraw)
-
+    CreateWindow "winDeadPanel", "", zOrder_Win, X, Y, 239, 150, 0, True, Fonts.FontRegular, , 2, 7, DesignTypes.DesignWindowWithoutTopBar, DesignTypes.DesignWindowWithoutTopBar, DesignTypes.DesignWindowWithoutTopBar, , , , , , , , , False
+    
     zOrder_Con = 1
 
     CreateLabel WindowCount, "lblTime", 0, 15, 239, 25, "Tempo: 360 segundo(s)", FontRegular, White, Alignment.AlignCenter

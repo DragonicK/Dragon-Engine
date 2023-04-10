@@ -17,11 +17,9 @@ Public Enum ServerPackets
     
     SAttack
     
-    
     SUpdateLootState
-    SOpenLoot
-    SCloseLoot
     SSortLootList
+    
     SEnableDropTakeItem
     SRollDiceItem
     

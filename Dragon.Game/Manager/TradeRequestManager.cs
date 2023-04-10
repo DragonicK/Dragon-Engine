@@ -39,7 +39,7 @@ public class TradeRequestManager {
         if (instances.ContainsKey(instanceId)) {
             var instance = instances[instanceId];
             if (index != starter.IndexOnInstance) {
-                var invited = instance.Get(index);
+                var invited = instance.GetPlayer(index);
 
                 SendInvite(starter, invited);
             }

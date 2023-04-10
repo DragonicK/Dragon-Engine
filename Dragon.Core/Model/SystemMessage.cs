@@ -63,5 +63,8 @@ public enum SystemMessage {
     InsuficientCurrency,
     ItemCannotBeSold,
     ItemHasBeenSold,
-    ViewEquipmentIsDisabled
+    ViewEquipmentIsDisabled,
+    ChestDoesNotBelongYou,
+    ChestIsOpenedByAnotherPlayer,
+    ReceivedCurrency
 }

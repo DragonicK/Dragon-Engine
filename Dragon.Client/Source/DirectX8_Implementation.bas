@@ -516,8 +516,6 @@ Public Sub Render_Graphics()
     ' Render lower tiles
     Call DrawMapGround
 
-    Call DrawChests
-
     ' draw animations
     If Count_Anim > 0 Then
         For i = 1 To MAX_BYTE
@@ -530,6 +528,8 @@ Public Sub Render_Graphics()
     ' blt the hover icon
     Call DrawTarget
     Call DrawTargetHover
+
+    Call DrawChests
 
     ' Y-based render. Renders Players, Npcs and Resources based on Y-axis.
     If Model_Count > 0 Then
@@ -877,7 +877,7 @@ Public Sub ResizeGUI()
     CentraliseWindow GetWindowIndex("winItemUpgrade")
     CentraliseWindow GetWindowIndex("winCraft")
     CentraliseWindow GetWindowIndex("winAchievement")
-    CentraliseWindow GetWindowIndex("winLoot")
+    CentraliseWindow GetWindowIndex("winChestItem")
 
 
     Resize_WinModelFooter

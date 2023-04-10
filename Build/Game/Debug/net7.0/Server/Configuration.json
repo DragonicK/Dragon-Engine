@@ -103,7 +103,7 @@
     "Delete": true,
     "MaximumMembers": 100
   },
-  "Drop": {
+  "ChestDrop": {
     "MonsterDuration": 180,
     "BossDuration": 600,
     "RollDiceDuration": 30,

@@ -25,7 +25,7 @@ public interface IConfiguration {
     Character Character { get; set; }
     Craft Craft { get; set; }
     Guild Guild { get; set; }
-    Drop Drop { get; set; }
+    ChestDrop ChestDrop { get; set; }
     Mail Mail { get; set; }
     Map Map { get; set; }
     Party Party { get; set; }

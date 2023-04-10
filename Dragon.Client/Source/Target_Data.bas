@@ -11,7 +11,7 @@ Public TargetTexture() As TextureStruct
 Public Const TargetTypeNone As Byte = 0
 Public Const TargetTypePlayer As Byte = 1
 Public Const TargetTypeNpc As Byte = 2
-Public Const TargetTypeLoot As Byte = 3
+Public Const TargetTypeChest As Byte = 3
 
 Public Const Path_Target As String = "\Data Files\Graphics\Target\"
 

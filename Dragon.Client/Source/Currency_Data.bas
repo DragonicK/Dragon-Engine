@@ -13,7 +13,7 @@ Private Const MaximumCurrency As Long = 100
 Private PlayerCurrency(0 To MaximumCurrency) As PlayerCurrencyRec
 Private CurrencyData(0 To MaximumCurrency) As CurrencyRec
 
-Private Type PlayerCurrencyRec
+Public Type PlayerCurrencyRec
     Id As Long
     Value As Long
 End Type
@@ -25,7 +25,7 @@ Public Type CurrencyRec
     IconId As Long
 End Type
 
-Public Sub InitializeCurrency()
+Public Sub InitializeDefaultCurrency()
     Dim i As Long
     
     CurrencyData(0).Id = CurrencyType.Currency_Gold

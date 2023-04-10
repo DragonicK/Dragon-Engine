@@ -30,6 +30,9 @@ Public Sub DrawTarget()
         ElseIf MyTargetType = TargetTypeNpc Then
             X = (MapNpc(MyTargetIndex).X * 32) + MapNpc(MyTargetIndex).xOffset
             Y = (MapNpc(MyTargetIndex).Y * 32) + MapNpc(MyTargetIndex).yOffset
+        ElseIf MyTargetType = TargetTypeChest Then
+            X = Chests(MyTargetIndex).X
+            Y = Chests(MyTargetIndex).Y + 6
         End If
     Else
         Exit Sub
@@ -86,6 +89,27 @@ Public Sub DrawTargetHover()
         End If
     Next
 
+    For i = 1 To Chests_HighIndex
+        With Chests(i)
+            If .Id > 0 And Not .AlreadyLooted Then
+                X = .X + 32
+                Y = .Y + 32
+
+                If X >= GlobalX_Map And X <= GlobalX_Map + 32 Then
+                    If Y >= GlobalY_Map And Y <= GlobalY_Map + 32 Then
+                        X = X - 48
+                        Y = Y - 17
+                        X = ConvertMapX(X)
+                        Y = ConvertMapY(Y)
+
+                        RenderParallaxTexture TargetTexture(TargetFrameIndex), X, Y, 0, 0, TargetWidth, TargetHeight, TargetWidth, TargetHeight, D3DColorARGB(140, 255, 255, 255)
+                    End If
+                End If
+            End If
+
+        End With
+    Next
+
 End Sub
 
 Public Sub FindNearestTarget()
@@ -139,7 +163,7 @@ Public Sub FindNearestTarget()
     End If
 End Sub
 
-Public Sub FindTarget()
+Public Sub FindTarget(Optional ByVal FromClick As Boolean)
     Dim i As Long, X As Long, Y As Long
 
     ' check players
@@ -152,12 +176,12 @@ Public Sub FindTarget()
             If X >= GlobalX_Map And X <= GlobalX_Map + 32 Then
                 If Y >= GlobalY_Map And Y <= GlobalY_Map + 32 Then
 
-                    If MyTargetType = TargetTypeLoot And MyTargetIndex > 0 Then
-                        Call SendCloseLoot
+                    If MyTargetType = TargetTypeChest And MyTargetIndex > 0 Then
+                        Call SendCloseChest
                     End If
 
                     ' found our target!
-                    SendPlayerTarget i, TargetTypePlayer
+                    Call SendPlayerTarget(i, TargetTypePlayer)
                     Call OpenTargetWindow
 
                     Exit Sub
@@ -169,7 +193,6 @@ Public Sub FindTarget()
 
     ' check npcs
     For i = 1 To Npc_HighIndex
-
         If MapNpc(i).Num > 0 Then
             If Not GetNpcDead(i) Then
                 X = (MapNpc(i).X * 32) + MapNpc(i).xOffset + 32
@@ -178,12 +201,12 @@ Public Sub FindTarget()
                 If X >= GlobalX_Map And X <= GlobalX_Map + 32 Then
                     If Y >= GlobalY_Map And Y <= GlobalY_Map + 32 Then
 
-                        If MyTargetType = TargetTypeLoot And MyTargetIndex > 0 Then
-                            Call SendCloseLoot
+                        If MyTargetType = TargetTypeChest And MyTargetIndex > 0 Then
+                            Call SendCloseChest
                         End If
 
                         ' found our target!
-                        SendPlayerTarget i, TargetTypeNpc
+                        Call SendPlayerTarget(i, TargetTypeNpc)
                         Call OpenTargetWindow
                         Exit Sub
                     End If
@@ -192,14 +215,37 @@ Public Sub FindTarget()
         End If
     Next
 
+    ' Check chests
+
+    For i = 1 To Chests_HighIndex
+        With Chests(i)
+            If .Id > 0 And Not .AlreadyLooted Then
+                X = .X + 32
+                Y = .Y + 32
+
+                If X >= GlobalX_Map And X <= GlobalX_Map + 32 Then
+                    If Y >= GlobalY_Map And Y <= GlobalY_Map + 32 Then
+                        MyTargetType = TargetTypeChest
+                        MyTargetIndex = i
+                        
+                        Call SendPlayerTarget(i, TargetTypeChest)
+                        Call OpenTargetWindow
+                        Exit Sub
+                    End If
+                End If
+
+            End If
+        End With
+    Next
+
     ' case else, close if its open
     Call CloseTargetWindow
 
 End Sub
 
 Public Sub UpdateTargetWindow()
-    ' Se nao ha alvo, fecha a janela e sai do metodo.
-    If MyTargetIndex <= 0 Or MyTargetType = TargetTypeLoot Then
+' Se nao ha alvo, fecha a janela e sai do metodo.
+    If MyTargetIndex <= 0 Or MyTargetType > TargetTypeChest Then
         Call CloseTargetWindow
         Exit Sub
     End If
@@ -264,12 +310,21 @@ Public Sub UpdateTargetWindow()
         Else
             BarWidth_TargetMP_Max = 0
         End If
+
+    ElseIf MyTargetType = TargetTypeChest Then
+        Windows(WindowIndex).Controls(ControlNameIndex).Text = "Lv. 1 - Baú"
+        Windows(WindowIndex).Controls(ControlHPIndex).Text = "1/1"
+        Windows(WindowIndex).Controls(ControlSPIndex).Text = "1/1"
+        
+        Width = 209
+
+        BarWidth_TargetHP_Max = Width
+        BarWidth_TargetMP_Max = Width
     End If
 
     Call DrawTargetActiveIcons
 
 End Sub
-
 
 Public Sub ShouldCloseTargetWindow(ByVal TargetType As Long, ByVal TargetIndex As Long)
     If MyTargetType = TargetType Then

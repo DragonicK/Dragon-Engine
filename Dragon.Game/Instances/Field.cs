@@ -37,9 +37,10 @@ public sealed class Field : IMap, IInstance {
     /// </summary>
     public IList<IRegionEntity> RegionEntities { get; set; }
     public IIndexGenerator IndexGenerator { get; set; }
-    public IDictionary<int, IInstanceChest> Chests { get; set; }
 
+    private readonly IDictionary<int, IInstanceChest> chests;
     private readonly IDictionary<int, IPlayer> players;
+
     private readonly IPacketSender _sender;
     private readonly Random _random;
 
@@ -77,22 +78,22 @@ public sealed class Field : IMap, IInstance {
         MaximumNpcs = configuration.Map.MaximumNpcs;
         MaximumChests = configuration.Map.MaximumCorpses;
 
-        Chests = new Dictionary<int, IInstanceChest>(MaximumChests);
         Entities = new List<IInstanceEntity>(MaximumNpcs);
 
         IndexGenerator = new IndexGenerator(MaximumPlayers);
         players = new Dictionary<int, IPlayer>(MaximumPlayers);
-        _random = new Random();
+        chests = new Dictionary<int, IInstanceChest>(MaximumChests);
 
+        _random = new Random();
         _sender = sender;
     }
 
     public int Add(IInstanceChest chest) {
         for (var i = 1; i <= MaximumChests; ++i) {
-            if (!Chests.ContainsKey(i)) {
+            if (!chests.ContainsKey(i)) {
                 chest.Index = i;
 
-                Chests.Add(i, chest);
+                chests.Add(i, chest);
 
                 return i;
             }
@@ -141,7 +142,7 @@ public sealed class Field : IMap, IInstance {
         return false;
     }
 
-    public IPlayer? Get(int index) {
+    public IPlayer? GetPlayer(int index) {
         if (players.ContainsKey(index)) {
             return players[index];
         }
@@ -149,8 +150,20 @@ public sealed class Field : IMap, IInstance {
         return null;
     }
 
+    public IInstanceChest? GetChest(int index) {
+        if (chests.ContainsKey(index)) {
+            return chests[index];
+        }
+
+        return null;
+    }
+
     public IList<IPlayer> GetPlayers() {
         return players.Select(p => p.Value).ToList();
+    }
+
+    public IList<IInstanceChest> GetChests() {
+        return chests.Select(p => p.Value).ToList();
     }
 
     public bool IsBlocked(int x, int y) {

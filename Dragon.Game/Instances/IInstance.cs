@@ -16,7 +16,6 @@ public interface IInstance {
     IConfiguration Configuration { get; }
     IList<IRegionEntity> RegionEntities { get; set; }
     IList<IInstanceEntity> Entities { get; set; }
-    IDictionary<int, IInstanceChest> Chests { get; set; }
     IIndexGenerator IndexGenerator { get; set; }
 
     int Add(IInstanceChest chest);
@@ -24,8 +23,10 @@ public interface IInstance {
     bool Contains(IPlayer player);
     bool Contains(int index);
     bool Remove(IPlayer player);
-    IPlayer? Get(int index);
+    IPlayer? GetPlayer(int index);
+    IInstanceChest? GetChest(int index);
     IList<IPlayer> GetPlayers();
+    IList<IInstanceChest> GetChests();
     bool IsBlocked(int x, int y);
     void Execute();
 }

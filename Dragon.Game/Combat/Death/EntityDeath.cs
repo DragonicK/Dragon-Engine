@@ -6,8 +6,8 @@ using Dragon.Game.Network;
 using Dragon.Game.Players;
 using Dragon.Game.Services;
 using Dragon.Game.Instances;
+using Dragon.Game.Manager;
 using Dragon.Game.Configurations;
-using Dragon.Game.Instances.Chests;
 
 namespace Dragon.Game.Combat.Death;
 
@@ -48,7 +48,7 @@ public class EntityDeath : IEntityDeath {
 
             // remove effects
 
-            var agent = new ChestManagement() {
+            var agent = new ChestManager() {
                 Player = player,
                 Configuration = Configuration,
                 Drops = ContentService!.Drops,

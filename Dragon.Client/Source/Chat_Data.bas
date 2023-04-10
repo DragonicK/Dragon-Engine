@@ -65,6 +65,10 @@ Public Enum SystemMessage
     ItemCannotBeSold
     ItemHasBeenSold
     ViewEquipmentIsDisabled
+    ChestDoesNotBelongYou
+    ChestIsOpenedByAnotherPlayer
+    ReceivedCurrency
+    
 End Enum
 
 Public Function GetSystemMessage(ByVal Header As SystemMessage, ByVal ParamCount As Long, ByRef Parameters() As String) As String
@@ -177,6 +181,7 @@ Public Function GetSystemMessage(ByVal Header As SystemMessage, ByVal ParamCount
                 GetSystemMessage = "Você aprendeu uma habilidade."
             End If
         End If
+
     Case SystemMessage.YouObtainedItem
         If ParamCount >= 2 Then
             Id = Val(Parameters(1))
@@ -340,10 +345,27 @@ Public Function GetSystemMessage(ByVal Header As SystemMessage, ByVal ParamCount
                 GetSystemMessage = "Você vendeu " & Value & " itens."
             End If
         End If
-        
+
     Case SystemMessage.ViewEquipmentIsDisabled
         GetSystemMessage = "O jogador desabilitou a visualização de equipmento."
-        
+
+    Case SystemMessage.ChestDoesNotBelongYou
+        GetSystemMessage = "O báu não pertence a você."
+
+    Case SystemMessage.ChestIsOpenedByAnotherPlayer
+        GetSystemMessage = "O báu está sendo vasculhado por outra pessoa."
+
+    Case SystemMessage.ReceivedCurrency
+        If ParamCount >= 2 Then
+            Dim CurData As Currency_Data
+
+            Id = Val(Parameters(1))
+            Value = Val(Parameters(2))
+
+            CurData = GetCurrencyData(Id)
+            GetSystemMessage = "Você obteve " & Value & " " & CurData.Name & "."
+        End If
+
     End Select
 
 End Function

@@ -1313,6 +1313,40 @@ public sealed partial class PacketSender : IPacketSender {
         Writer.Enqueue(msg);
     }
 
+    public void SendChestItems(IPlayer player, IInstanceChest chest) {
+        var items = chest.Items;
+        var count = items.Count;
+
+        var packet = new SpChestItemList() {
+            Items = new DataChestItem[count]
+        };
+
+        var index = 0;
+
+        foreach (var item in items) {
+            if (item.IsCurrency) {
+                packet.Items[index].ContentType = ChestContentType.Currency;
+                packet.Items[index].CurrencyType = (CurrencyType)item.Id;
+            }
+
+            packet.Items[index].Id = item.Id;
+            packet.Items[index].Value = item.Value;
+            packet.Items[index].Level = item.Level;
+            packet.Items[index].UpgradeId = item.UpgradeId;
+            packet.Items[index].AttributeId = item.AttributeId;
+            packet.Items[index].Bound = item.Bound;
+
+            ++index;
+        }
+
+        var msg = Writer!.CreateMessage(packet);
+
+        msg.DestinationPeers.Add(player.GetConnection().Id);
+        msg.TransmissionTarget = TransmissionTarget.Destination;
+
+        Writer.Enqueue(msg);
+    }
+
     public void SendClearCast(IPlayer player) {
         var msg = Writer!.CreateMessage(new SpClearCast());
 
@@ -1321,7 +1355,6 @@ public sealed partial class PacketSender : IPacketSender {
 
         Writer.Enqueue(msg);
     }
-
 
     public void SendChest(IInstance instance, IInstanceChest chest) {
         var list = instance.GetPlayers().Select(p => p.GetConnection().Id);
@@ -1344,7 +1377,7 @@ public sealed partial class PacketSender : IPacketSender {
     }
 
     public void SendChests(IPlayer player, IInstance instance) {
-        var chests = instance.Chests;
+        var chests = instance.GetChests();
         var count = chests.Count;
 
         var packet = new SpChests {
@@ -1353,7 +1386,7 @@ public sealed partial class PacketSender : IPacketSender {
 
         var index = 0;
 
-        foreach (var (_, chest) in chests) {
+        foreach (var chest in chests) {
             packet.Chests[index].Index = chest.Index;
             packet.Chests[index].X = chest.X;
             packet.Chests[index].Y = chest.Y;
@@ -1370,6 +1403,14 @@ public sealed partial class PacketSender : IPacketSender {
         Writer.Enqueue(msg);
     }
 
+    public void SendSortChestItemList(IPlayer player, int removedIndex) {
+        var msg = Writer!.CreateMessage(new SpSortChestItemList() { Index = removedIndex });
+
+        msg.DestinationPeers.Add(player.GetConnection().Id);
+        msg.TransmissionTarget = TransmissionTarget.Destination;
+
+        Writer.Enqueue(msg);
+    }
 
     private SpPlayerData CreatePlayerDataPacket(IPlayer player) {
         var character = player.Character;

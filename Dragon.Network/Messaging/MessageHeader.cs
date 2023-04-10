@@ -145,5 +145,10 @@ public enum MessageHeader {
     Animation,
     CancelAnimation,
     SkillCooldown,
-    Chests
+    Chests,
+    CloseChest,
+    ChestItemList,
+    TakeItemFromChest,
+    SortChestItemList,
+    RollDiceResult
 }

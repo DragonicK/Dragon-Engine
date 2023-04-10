@@ -10,10 +10,6 @@ Public Enum ClientPackets
     
     CAttack
     
-    CCloseLoot
-    CTakeLootItem
-    CRollDiceResult
-    
     ' Make sure CMsgCOUNT is below everything else
     CMsgCOUNT
 End Enum

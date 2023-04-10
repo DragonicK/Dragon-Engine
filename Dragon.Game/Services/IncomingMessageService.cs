@@ -19,6 +19,7 @@ public class IncomingMessageService : IService {
     public IServiceContainer? Services { get; private set; }
     public ISerializer? Serializer { get; private set; }
     public ConnectionService? ConnectionService { get; private set; }
+    public LoggerService? LoggerService { get; private set; }
 
     public void Start() {
         Serializer = new MessageSerializer();
@@ -31,7 +32,11 @@ public class IncomingMessageService : IService {
             PacketRouter = PacketRouter
         };
 
-        IncomingMessageEventHandler = new IncomingMessageEventHandler(MessageRepository, IncomingMessageParser, Serializer);
+        IncomingMessageEventHandler = new IncomingMessageEventHandler(MessageRepository, 
+                                                        IncomingMessageParser,
+                                                        Serializer,
+                                                        LoggerService!.Logger!);
+
         IncomingMessageQueue = new IncomingMessageQueue(IncomingMessageEventHandler);
 
         IncomingMessageQueue.Start();
@@ -45,7 +50,7 @@ public class IncomingMessageService : IService {
         var types = GetTypes();
         var messages = MessageRepository!.Messages;
 
-        PacketRouter = new PacketRouter(Services!);
+        PacketRouter = new PacketRouter(Services!, LoggerService!.Logger!);
 
         foreach (var (_, type) in messages) {
             AddTypeThatHasProperty(types!, type);

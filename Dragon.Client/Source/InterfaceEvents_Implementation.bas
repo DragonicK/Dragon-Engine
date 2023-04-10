@@ -91,7 +91,7 @@ Public Sub HandleMouseInput()
                         ' left click
                         If (mouseClick(VK_LBUTTON) And lastMouseClick(VK_LBUTTON) = 0) Then
                             ' targetting
-                            FindTarget
+                            Call FindTarget
                             ' right click
                         ElseIf (mouseClick(VK_RBUTTON) And lastMouseClick(VK_RBUTTON) = 0) Then
                             If ShiftDown Then

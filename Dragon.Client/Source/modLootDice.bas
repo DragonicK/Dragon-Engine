@@ -197,7 +197,7 @@ Private Sub SendRollDiceResult(ByVal Rolled As Boolean)
     Dim Buffer As clsBuffer
     Set Buffer = New clsBuffer
 
-    Buffer.WriteLong CRollDiceResult
+    Buffer.WriteLong PRollDiceResult
     If Rolled Then Buffer.WriteByte 2
     If Not Rolled Then Buffer.WriteByte 1
 

@@ -103,7 +103,14 @@ Public Sub InitMessages()
     HandleDataSub(EnginePacket.PSkillCooldown) = GetAddress(AddressOf HandleSkillCooldown)
     HandleDataSub(EnginePacket.PTarget) = GetAddress(AddressOf HandleTarget)
     HandleDataSub(EnginePacket.PChests) = GetAddress(AddressOf HandleChests)
-
+    HandleDataSub(EnginePacket.PCloseChest) = GetAddress(AddressOf HandleCloseChest)
+    HandleDataSub(EnginePacket.PChestItemList) = GetAddress(AddressOf HandleChestItemList)
+    HandleDataSub(EnginePacket.PSortChestItemList) = GetAddress(AddressOf HandleSortChestItemList)
+   
+   
+    ' HandleDataSub(SUpdateLootState) = GetAddress(AddressOf HandleUpdateLootState)
+    ' HandleDataSub(SEnableDropTakeItem) = GetAddress(AddressOf HandleEnableDropTakeItem)
+    ' HandleDataSub(SRollDiceItem) = GetAddress(AddressOf HandleRollDiceItem)
     ' HandleDataSub(SNpcAttack) = GetAddress(AddressOf HandleNpcAttack)
     ' HandleDataSub(SSound) = GetAddress(AddressOf HandleSound)
     ' HandleDataSub(SPlayerAchievement) = GetAddress(AddressOf HandlePlayerAchievement)
@@ -113,12 +120,7 @@ Public Sub InitMessages()
     ' HandleDataSub(SRessurrection) = GetAddress(AddressOf HandleRessurection)
     ' HandleDataSub(SAttack) = GetAddress(AddressOf HandleAttack)
     ' HandleDataSub(SNpcDead) = GetAddress(AddressOf HandleNpcDead)
-    ' HandleDataSub(SUpdateLootState) = GetAddress(AddressOf HandleUpdateLootState)
-    ' HandleDataSub(SOpenLoot) = GetAddress(AddressOf HandleOpenLoot)
-    ' HandleDataSub(SCloseLoot) = GetAddress(AddressOf HandleCloseLoot)
-    ' HandleDataSub(SSortLootList) = GetAddress(AddressOf HandleSortLootList)
-    ' HandleDataSub(SEnableDropTakeItem) = GetAddress(AddressOf HandleEnableDropTakeItem)
-    ' HandleDataSub(SRollDiceItem) = GetAddress(AddressOf HandleRollDiceItem)
+
     ' HandleDataSub(SStunned) = GetAddress(AddressOf HandleStunned)
 End Sub
 

@@ -56,7 +56,7 @@ Public Sub Main()
     InitPlayerAchievementArray
     AllocateAllAchievements
 
-    InitializeCurrency
+    InitializeDefaultCurrency
     InitializeClasses
 
     ' load dx8
@@ -111,7 +111,7 @@ Public Sub Main()
     inMenu = True
 
     ' show login window
-    ShowWindow GetWindowIndex("winLoot")
+    ShowWindow GetWindowIndex("winLogin")
     ShowWindow GetWindowIndex("winLoginFooter")
     
     inSmallChat = True

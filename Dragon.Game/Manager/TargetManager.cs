@@ -11,9 +11,10 @@ namespace Dragon.Game.Manager;
 
 public class TargetManager {
     public IPlayer? Player { get; init; }
+    public IPacketSender? PacketSender { get; init; }
     public InstanceService? InstanceService { get; init; }
     public ContentService? ContentService { get; init; }
-    public IPacketSender? PacketSender { get; init; }
+    public ConfigurationService? Configuration { get; init; }
 
     public void ProcessTarget(int index, TargetType targetType) {
         Player!.TargetType = targetType;
@@ -42,6 +43,19 @@ public class TargetManager {
                 }
             }
         }
+
+        if (Player!.TargetType == TargetType.Chest) {
+            var manager = new ChestManager() {
+                Player = Player,
+                PacketSender = PacketSender,
+                Configuration = Configuration,
+                Drops = ContentService!.Drops,
+                Chests = ContentService!.Chests,
+                InstanceService = InstanceService
+            };
+
+            manager.OpenChest(index);
+        }
     }
 
     private IEntity? GetEntity(int index, TargetType targetType) {
@@ -49,12 +63,15 @@ public class TargetManager {
 
         if (instance is not null) {
             if (targetType == TargetType.Player) {
-                return instance.Get(index);
+                return instance.GetPlayer(index);
             }
             else if (targetType == TargetType.Npc) {
                 index--;
 
-                return instance.Entities[index] as IEntity;
+                return instance.Entities[index];
+            }
+            else if (targetType == TargetType.Chest) {
+                return instance.GetChest(index);
             }
         }
 

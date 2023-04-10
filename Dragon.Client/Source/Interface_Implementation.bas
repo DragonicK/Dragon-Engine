@@ -1623,7 +1623,7 @@ Public Sub InitGUI()
     CreateWindow_Services
     CreateWindow_Heraldry
     CreateWindow_ItemUpgrade
-    CreateWindow_Loot
+    CreateWindow_ChestItems
     CreateWindow_LootDice
     CreateWindow_CashShop
     CreateWindow_Mail

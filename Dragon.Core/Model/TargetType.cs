@@ -4,6 +4,6 @@ public enum TargetType {
     None,
     Player,
     Npc,
-    Loot,
+    Chest,
     Object
 }
