@@ -208,7 +208,7 @@ public class ChestManager {
                         canTakeItem = TakeCurrency(item);
                     }
                     else {
-                        canTakeItem = TakeItem(item);
+                        canTakeItem = TakeItem(chest, item);
                     }
 
                     if (canTakeItem) {
@@ -258,8 +258,7 @@ public class ChestManager {
 
     #region Take Item
 
-
-    private bool TakeItem(IInstanceChestItem item) {
+    private bool TakeItem(IInstanceChest chest, IInstanceChestItem item) {
         if (item.CharacterIdFromRollDiceWinner > 0) {
             if (Environment.TickCount >= item.WinnerTimeLimit) {
                 item.CharacterIdFromRollDiceWinner = 0;
@@ -274,6 +273,12 @@ public class ChestManager {
             }
         }
         else {
+            if (chest.PartyId > 0) {
+
+            }
+            else {
+
+            }
             //// Se estiver um grupo, adiciona na lista de rolagem.
             //if (PartyCollectedItem.AddCollectedItem(player, corpse, drop)) {
             //    return;
@@ -325,6 +330,7 @@ public class ChestManager {
     }
 
     private bool CanSharePartyCurrency(IInstanceChestCurrency item) {
+        var currentMapId = Player!.Character.Map;
         var party = GetParty();
 
         if (party is not null) {
@@ -334,7 +340,9 @@ public class ChestManager {
             foreach (var member in members) {
                 if (member?.Player is not null) {
                     if (!member.Disconnected) {
-                        totalPlayers++;
+                        if (currentMapId == member.Player.Character.Map) {
+                            totalPlayers++;
+                        }
                     }
                 }
             }
@@ -363,8 +371,9 @@ public class ChestManager {
     }
 
     private bool PartyShareCurrency(CurrencyType currencyType, int currencyValue, PartyManager party, int totalPlayers, out int restAdded) {
-        var totalRest = 0;
         var currency = currencyValue / totalPlayers;
+        var currentMapId = Player!.Character.Map;
+        var totalRest = 0;
 
         if (currency > 0) {
             var members = party.Members;
@@ -372,17 +381,19 @@ public class ChestManager {
             foreach (var member in members) {
                 if (member?.Player is not null) {
                     if (!member.Disconnected) {
-                        var player = member.Player;
+                        if (currentMapId == member.Player.Character.Map) {
+                            var player = member.Player;
 
-                        if (CanAddCurrency(player, currencyType, currencyValue, out var rest)) {
-                            PacketSender!.SendCurrencyUpdate(player, currencyType);
-                            PacketSender!.SendMessage(SystemMessage.ReceivedCurrency, QbColor.Gold, player, new string[] { ((int)currencyType).ToString(), (currencyValue - rest).ToString() });
-                        }
-                        else {
-                            PacketSender!.SendMessage(SystemMessage.TheCurrencyCannotBeAdded, QbColor.BrigthRed, player);
-                        }
+                            if (CanAddCurrency(player, currencyType, currencyValue, out var rest)) {
+                                PacketSender!.SendCurrencyUpdate(player, currencyType);
+                                PacketSender!.SendMessage(SystemMessage.ReceivedCurrency, QbColor.Gold, player, new string[] { ((int)currencyType).ToString(), (currencyValue - rest).ToString() });
+                            }
+                            else {
+                                PacketSender!.SendMessage(SystemMessage.TheCurrencyCannotBeAdded, QbColor.BrigthRed, player);
+                            }
 
-                        totalRest += rest;
+                            totalRest += rest;
+                        }
                     }
                 }
             }
