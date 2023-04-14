@@ -11,6 +11,7 @@ using Dragon.Game.Repository;
 using Dragon.Game.Configurations;
 using Dragon.Game.Instances.Chests;
 using Dragon.Game.Configurations.Data;
+using System.Reflection;
 
 namespace Dragon.Game.Manager;
 
@@ -269,24 +270,42 @@ public class ChestManager {
             var winner = PlayerRepository!.FindByCharacterId(item.CharacterIdFromRollDiceWinner);
 
             if (winner is not null) {
-                //    return AddItem(winner, drop);
+                return AddItem(winner, item);
             }
         }
         else {
             if (chest.PartyId > 0) {
-
+                //// Se estiver um grupo, adiciona na lista de rolagem.
+                //if (PartyCollectedItem.AddCollectedItem(player, corpse, drop)) {
+                //    return;
+                //}
             }
             else {
-
+                return AddItem(Player, item);
             }
-            //// Se estiver um grupo, adiciona na lista de rolagem.
-            //if (PartyCollectedItem.AddCollectedItem(player, corpse, drop)) {
-            //    return;
-            //}
-            //// Do contrário, adiciona ao inventário.
-            //else {
-            //    canTakeItem = AddItem(player, drop);
-            //}
+        }
+
+        return false;
+    }
+
+    private bool AddItem(IPlayer player, IInstanceChestItem item) {
+        var empty = player!.Inventories.FindFreeInventory(player.Character.MaximumInventories);
+
+        if (empty is not null) {
+            empty.ItemId = item.Id;
+            empty.Value = item.Value;
+            empty.Level = item.Level;
+            empty.Bound = item.Bound;
+            empty.UpgradeId = item.UpgradeId;
+            empty.AttributeId = item.AttributeId;
+
+            PacketSender!.SendInventoryUpdate(player, empty.InventoryIndex);
+            PacketSender!.SendMessage(SystemMessage.ReceivedItem, QbColor.BrigthCyan, player, new string[] { item.Id.ToString(), item.Value.ToString() });
+
+            return true;
+        }
+        else {
+            PacketSender!.SendMessage(SystemMessage.InventoryFull, QbColor.BrigthRed, player);
         }
 
         return false;

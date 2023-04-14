@@ -66,5 +66,6 @@ public enum SystemMessage {
     ViewEquipmentIsDisabled,
     ChestDoesNotBelongYou,
     ChestIsOpenedByAnotherPlayer,
-    ReceivedCurrency
+    ReceivedCurrency,
+    ReceivedItem
 }

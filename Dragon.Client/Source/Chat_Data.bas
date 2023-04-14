@@ -68,7 +68,7 @@ Public Enum SystemMessage
     ChestDoesNotBelongYou
     ChestIsOpenedByAnotherPlayer
     ReceivedCurrency
-    
+    ReceivedItem
 End Enum
 
 Public Function GetSystemMessage(ByVal Header As SystemMessage, ByVal ParamCount As Long, ByRef Parameters() As String) As String
@@ -365,6 +365,23 @@ Public Function GetSystemMessage(ByVal Header As SystemMessage, ByVal ParamCount
             CurData = GetCurrencyData(Id)
             GetSystemMessage = "Você obteve " & Value & " " & CurData.Name & "."
         End If
+
+    Case SystemMessage.ReceivedItem
+        If ParamCount >= 2 Then
+            Id = Val(Parameters(1))
+            Value = Val(Parameters(2))
+
+            If Id >= 1 And Id <= MaximumItems Then
+                If Value > 1 Then
+                    GetSystemMessage = "Você obteve " & Value & " " & Item(Id).Name & "."
+                Else
+                    GetSystemMessage = "Você obteve " & Item(Id).Name & "."
+                End If
+            Else
+                GetSystemMessage = "Você obteve " & Value & " itens."
+            End If
+        End If
+
 
     End Select
 

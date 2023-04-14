@@ -91,7 +91,7 @@ Public Sub DrawChests()
                     SourceY = 3 * PIC_Y
                 End If
 
-                Call RenderTexture(Tex_Chest(.Sprite), X, Y, SourceX, SourceY, PIC_X, PIC_Y, PIC_X, PIC_Y)
+                Call RenderTexture(Tex_Chest(.Sprite), X, Y, SourceX, SourceY, PIC_X, PIC_Y, PIC_X, PIC_Y, DX8Colour(White, .Alpha))
 
             End If
         End With
