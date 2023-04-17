@@ -32,7 +32,7 @@ public class IncomingMessageService : IService {
             PacketRouter = PacketRouter
         };
 
-        IncomingMessageEventHandler = new IncomingMessageEventHandler(MessageRepository, IncomingMessageParser, Serializer);
+        IncomingMessageEventHandler = new IncomingMessageEventHandler(MessageRepository, IncomingMessageParser, Serializer, LoggerService.Logger);
         IncomingMessageQueue = new IncomingMessageQueue(IncomingMessageEventHandler);
 
         IncomingMessageQueue.Start();
