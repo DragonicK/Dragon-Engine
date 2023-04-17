@@ -1,5 +1,7 @@
 #pragma once
 
+#include <Windows.h>
+
 namespace Dragon::Wrapper::Cryptography {
 
     const int ArrayInit[] = { 0x243F6A88, 0x85A308D3, 0x13198A2E, 0x03707344, 0xA4093822, 0x299F31D0,
@@ -137,14 +139,14 @@ namespace Dragon::Wrapper::Cryptography {
             return instance;
         }
 
-        void UpdateKey(unsigned char* udpatedKey, int length);
-        void Cipher(unsigned char* buffer, int offset, int length);
-        void Decipher(unsigned char* buffer, int offset, int length);
+        void UpdateKey(byte* udpatedKey, int length);
+        void Cipher(byte* buffer, int offset, int length);
+        bool Decipher(byte* buffer, int offset, int length);
 
     private:
         const int KeyLength = 16;
 
-        unsigned char key[16] = { 0x6b, 0x60, 0xcb, 0x5b, 0x82, 0xce, 0x90, 0xb1, 0xcc, 0x2b, 0x6c, 0x55, 0x6c, 0x6c, 0x6c, 0x6c };
+        byte key[16] = { 0x6b, 0x60, 0xcb, 0x5b, 0x82, 0xce, 0x90, 0xb1, 0xcc, 0x2b, 0x6c, 0x55, 0x6c, 0x6c, 0x6c, 0x6c };
         int pArray[18];
         int sBoxes[4][256];
 
@@ -154,8 +156,10 @@ namespace Dragon::Wrapper::Cryptography {
 
         int F(int x);
         void InitArrays();
-        int ByteArrayToInteger(unsigned char* buffer, int offset);
-        void InitSBox(unsigned char buffer[], int length, int sBox[]);
-        void IntegerToByteArray(int value, unsigned char* buffer, int offset);
+        int ByteArrayToInteger(byte* buffer, int offset);
+        void InitSBox(byte buffer[], int length, int sBox[]);
+        void IntegerToByteArray(int value, byte* buffer, int offset);
+        void AppendCheckSum(byte* raw, int offset, int length);
+        bool VerifyCheckSum(byte* data, int offset, int length);
     };
 }

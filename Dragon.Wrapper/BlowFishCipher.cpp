@@ -1,9 +1,8 @@
 #include "BlowFishCipher.h"
-#include <Windows.h>
 
 namespace Dragon::Wrapper::Cryptography {
 
-	void BlowFishCipher::UpdateKey(unsigned char* udpatedKey, int length) {
+	void BlowFishCipher::UpdateKey(byte* udpatedKey, int length) {
 		memcpy_s(key, length, udpatedKey, length);
 
 		memcpy_s(sBoxes[0], 256, ZeroBoxInit, 256);
@@ -45,7 +44,7 @@ namespace Dragon::Wrapper::Cryptography {
 		}
 	}
 
-	void BlowFishCipher::InitSBox(unsigned char buffer[], int length,  int sBox[]) {
+	void BlowFishCipher::InitSBox(byte buffer[], int length,  int sBox[]) {
 		for (int j = 0; j < 256; j += 2) {
 			Cipher(buffer, 0, length);
 
@@ -54,7 +53,7 @@ namespace Dragon::Wrapper::Cryptography {
 		}
 	}
 		 
-	void BlowFishCipher::Cipher(unsigned char* buffer, int offset, int length) {
+	void BlowFishCipher::Cipher(byte* buffer, int offset, int length) {
 		int blockNumber = length >> 3;
 		int p;
 
@@ -83,9 +82,11 @@ namespace Dragon::Wrapper::Cryptography {
 			IntegerToByteArray(xl, buffer, p);
 			IntegerToByteArray(xr, buffer, p + 4);
 		}
+
+		AppendCheckSum(buffer, 0, length);
 	}
 
-	void BlowFishCipher::Decipher(unsigned char* buffer, int offset, int length) {
+	bool BlowFishCipher::Decipher(byte* buffer, int offset, int length) {
 		int blocks = length >> 3;
 		int p;
 
@@ -114,6 +115,8 @@ namespace Dragon::Wrapper::Cryptography {
 			IntegerToByteArray(lb, buffer, p);
 			IntegerToByteArray(rb, buffer, p + 4);
 		}
+
+		return VerifyCheckSum(buffer, 0, length);
 	}
 
 	int BlowFishCipher::F(int x) {
@@ -135,14 +138,68 @@ namespace Dragon::Wrapper::Cryptography {
 		return y;
 	}
 
-	int BlowFishCipher::ByteArrayToInteger(unsigned char* buffer, int offset) {
+	int BlowFishCipher::ByteArrayToInteger(byte* buffer, int offset) {
 		return (buffer[offset + 3] & 0xFF) << 24 | (buffer[offset + 2] & 0xFF) << 16 | (buffer[offset + 1] & 0xFF) << 8 | (buffer[offset] & 0xFF);
 	}
 
-	void BlowFishCipher::IntegerToByteArray(int value, unsigned char* buffer, int offset) {
+	void BlowFishCipher::IntegerToByteArray(int value, byte* buffer, int offset) {
 		buffer[offset] = (unsigned char)(value & 0xFF);
 		buffer[offset + 1] = (unsigned char)(value >> 8 & 0xFF);
 		buffer[offset + 2] = (unsigned char)(value >> 16 & 0xFF);
 		buffer[offset + 3] = (unsigned char)(value >> 24 & 0xFF);
+	}
+
+	void BlowFishCipher::AppendCheckSum(byte* raw, int offset, int length) {
+		long chksum = 0;
+		int count = length - 4;
+		long ecx;
+		int i;
+
+		for (i = offset; i < count; i += 4) {
+			ecx = raw[i] & 0xff;
+			ecx |= raw[i + 1] << 8 & 0xff00;
+			ecx |= raw[i + 2] << 0x10 & 0xff0000;
+			ecx |= raw[i + 3] << 0x18 & 0xff000000;
+			chksum ^= ecx;
+		}
+
+		ecx = raw[i] & 0xff;
+		ecx |= raw[i + 1] << 8 & 0xff00;
+		ecx |= raw[i + 2] << 0x10 & 0xff0000;
+		ecx |= raw[i + 3] << 0x18 & 0xff000000;
+		raw[i] = (byte)(chksum & 0xff);
+		raw[i + 1] = (byte)(chksum >> 0x08 & 0xff);
+		raw[i + 2] = (byte)(chksum >> 0x10 & 0xff);
+		raw[i + 3] = (byte)(chksum >> 0x18 & 0xff);
+	}
+
+	bool BlowFishCipher::VerifyCheckSum(byte* data, int offset, int length) {
+		if ((length & 3) != 0 || (length <= 4)) {
+			return false;
+		}
+
+		long chksum = 0;
+		int count = length - 4;
+		long check;
+		int i;
+
+		for (i = offset; i < count; i += 4) {
+			check = data[i] & 0xff;
+			check |= data[i + 1] << 8 & 0xff00;
+			check |= data[i + 2] << 0x10 & 0xff0000;
+			check |= data[i + 3] << 0x18 & 0xff000000;
+			chksum ^= check;
+		}
+
+		check = data[i] & 0xff;
+		check |= data[i + 1] << 8 & 0xff00;
+		check |= data[i + 2] << 0x10 & 0xff0000;
+		check |= data[i + 3] << 0x18 & 0xff000000;
+		check = data[i] & 0xff;
+		check |= data[i + 1] << 8 & 0xff00;
+		check |= data[i + 2] << 0x10 & 0xff0000;
+		check |= data[i + 3] << 0x18 & 0xff000000;
+
+		return 0 == chksum;
 	}
 }

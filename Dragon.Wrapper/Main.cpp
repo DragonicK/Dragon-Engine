@@ -3,6 +3,7 @@
 #include "Hardware.h"
 #include "AESManaged.h"
 #include "FileManager.h"
+#include "BlowFishCipher.h"
 #include "WideStringConversion.h"
 
 using namespace Dragon::Wrapper::IO;
@@ -11,7 +12,18 @@ using namespace Dragon::Wrapper::Cryptography;
 
 using namespace System::Runtime::InteropServices;
 
-int ConvertStringToHexadecimal(System::String^ string, BSTR* output);
+int ConvertStringToHexadecimal(System::String^ string, BSTR* output) {
+	auto buffer = Hash::Instance->Compute(string);
+	auto id = Hash::Instance->ConvertToHexadecimal(buffer);
+
+	std::wstring ws;
+
+	*output = ConvertWideStringToBSTR(ws);
+
+	return id->Length;
+}
+
+#pragma region File Handler
 
 int WINAPI GetFileHandler(LPCSTR path) {
 	return FileManager::Instance().Open(path);
@@ -29,14 +41,6 @@ int WINAPI ReadString(BSTR* output) {
 	*output = ConvertWideStringToBSTR(ws);
 
 	return static_cast<int>(ws.length());
-}
-
-int WINAPI ReadBytes(unsigned char* buffer, int length) {
-	auto bytes = FileManager::Instance().ReadBytes(length);
-
-	memcpy_s(buffer, bytes.size(), bytes.data(), bytes.size());
-
-	return static_cast<int>(bytes.size());
 }
 
 unsigned char WINAPI ReadByte() {
@@ -58,6 +62,18 @@ float WINAPI ReadSingle() {
 bool WINAPI ReadBoolean() {
 	return FileManager::Instance().ReadBoolean();
 }
+
+int WINAPI ReadBytes(unsigned char* buffer, int length) {
+	auto bytes = FileManager::Instance().ReadBytes(length);
+
+	memcpy_s(buffer, bytes.size(), bytes.data(), bytes.size());
+
+	return static_cast<int>(bytes.size());
+}
+
+#pragma endregion
+
+#pragma region AES Managed
 
 bool WINAPI Encrypt(AESSettings* settings, unsigned char* source, int sourceLength, unsigned char* dest, int* destLength) {
 	auto _source = gcnew array<unsigned char>(sourceLength);
@@ -81,38 +97,6 @@ bool WINAPI Decrypt(AESSettings* settings, unsigned char* source, int sourceLeng
 	auto result = AESManaged::Instance->Decrypt(settings, _source, sourceLength, dest, destLength);
 
 	return result;
-}
-
-int WINAPI Compute(LPCSTR input, unsigned char* dest) {
-	auto data = gcnew System::String(input);
-	auto hash = Hash::Instance;
-
-	auto computed = hash->Compute(data);
-
-	pin_ptr<unsigned char> buffer = &computed[0];
-
-	memcpy_s(dest, computed->Length, buffer, computed->Length);
-
-	return computed->Length;
-}
-
-int WINAPI ConvertToHexadecimal(unsigned char* source, int length, BSTR* output) {
-	auto data = gcnew array<unsigned char>(length);
-	auto hash = Hash::Instance;
-
-	pin_ptr<unsigned char> buffer = &data[0];
-
-	memcpy_s(buffer, length, source, length);
-
-	auto computed = hash->ConvertToHexadecimal(data);
-
-	std::wstring ws;
-
-	//StringToWideString(computed, ws);
-
-	*output = ConvertWideStringToBSTR(ws);
-
-	return computed->Length;
 }
 
 int WINAPI CreateKey(LPCSTR passphrase, unsigned char* dest) {
@@ -141,6 +125,44 @@ int WINAPI CreateIv(LPCSTR passphrase, unsigned char* dest) {
 	return computed->Length;
 }
 
+#pragma endregion
+
+#pragma region Hash
+
+int WINAPI Compute(LPCSTR input, unsigned char* dest) {
+	auto data = gcnew System::String(input);
+	auto hash = Hash::Instance;
+
+	auto computed = hash->Compute(data);
+
+	pin_ptr<unsigned char> buffer = &computed[0];
+
+	memcpy_s(dest, computed->Length, buffer, computed->Length);
+
+	return computed->Length;
+}
+
+int WINAPI ConvertToHexadecimal(unsigned char* source, int length, BSTR* output) {
+	auto data = gcnew array<unsigned char>(length);
+	auto hash = Hash::Instance;
+
+	pin_ptr<unsigned char> buffer = &data[0];
+
+	memcpy_s(buffer, length, source, length);
+
+	auto computed = hash->ConvertToHexadecimal(data);
+
+	std::wstring ws;
+
+	*output = ConvertWideStringToBSTR(ws);
+
+	return computed->Length;
+}
+
+#pragma endregion
+
+#pragma region Machine Id
+
 int WINAPI GetCPUId(BSTR* output) {
 	return ConvertStringToHexadecimal(Hardware::Instance->GetCPUId(), output);
 }
@@ -165,15 +187,20 @@ int WINAPI GetMacAddressId(BSTR* output) {
 	return ConvertStringToHexadecimal(Hardware::Instance->GetMacAddressId(), output);
 }
 
-int ConvertStringToHexadecimal(System::String^ string, BSTR* output) {
-	auto buffer = Hash::Instance->Compute(string);
-	auto id = Hash::Instance->ConvertToHexadecimal(buffer);
+#pragma endregion
 
-	std::wstring ws;
+#pragma region BlowFishCipher 
 
-	//StringToWideString(id, ws);
-
-	*output = ConvertWideStringToBSTR(ws);
-
-	return id->Length;
+void WINAPI UpdateKey(unsigned char* buffer, int length) {
+	BlowFishCipher::Instance().UpdateKey(buffer, length);
 }
+
+void WINAPI Cipher(unsigned char* buffer, int length) {
+	BlowFishCipher::Instance().Cipher(buffer, 0, length);
+}
+
+bool WINAPI Decipher(unsigned char* buffer, int length) {
+	return BlowFishCipher::Instance().Decipher(buffer, 0, length);
+}
+
+#pragma endregion
