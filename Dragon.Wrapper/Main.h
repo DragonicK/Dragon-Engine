@@ -50,6 +50,10 @@ extern "C" {
 	__declspec(dllexport) int WINAPI GetVideoId(BSTR* output);
 	__declspec(dllexport) int WINAPI GetMacAddressId(BSTR* output);
 
+	__declspec(dllexport) void WINAPI Cipher(unsigned char* buffer, int length);
+	__declspec(dllexport) bool WINAPI Decipher(unsigned char* buffer, int length);
+	__declspec(dllexport) void WINAPI UpdateKey(unsigned char* buffer, int length);
+
 #ifdef __cplusplus
 }
 #endif
