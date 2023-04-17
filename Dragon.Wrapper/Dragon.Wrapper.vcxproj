@@ -25,6 +25,7 @@
     <ClInclude Include="AESKeySize.h" />
     <ClInclude Include="AESManaged.h" />
     <ClInclude Include="AESPaddingMode.h" />
+    <ClInclude Include="BlowFishCipher.h" />
     <ClInclude Include="FileManager.h" />
     <ClInclude Include="Hardware.h" />
     <ClInclude Include="Hash.h" />
@@ -34,6 +35,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AESManaged.cpp" />
+    <ClCompile Include="BlowFishCipher.cpp" />
     <ClCompile Include="FileManager.cpp" />
     <ClCompile Include="Hardware.cpp" />
     <ClCompile Include="Hash.cpp" />
