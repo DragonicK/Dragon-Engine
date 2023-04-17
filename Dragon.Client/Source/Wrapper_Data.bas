@@ -27,6 +27,10 @@ Public Declare Function GetBoardId Lib "Dragon.Wrapper.dll" Alias "_GetBoardId@4
 Public Declare Function GetVideoId Lib "Dragon.Wrapper.dll" Alias "_GetVideoId@4" (ByRef Output As String) As Long
 Public Declare Function GetMacAddressId Lib "Dragon.Wrapper.dll" Alias "_GetMacAddressId@4" (ByRef Output As String) As Long
 
+Public Declare Sub Cipher Lib "Dragon.Wrapper.dll" Alias "_Cipher@8" (ByVal BufferLngPtr As Long, ByVal Length As Long)
+Public Declare Function Decipher Lib "Dragon.Wrapper.dll" Alias "_Decipher@8" (ByVal BufferLngPtr As Long, ByVal Length As Long) As Boolean
+Public Declare Sub UpdateKey Lib "Dragon.Wrapper.dll" Alias "_UpdateKey@8" (ByVal BufferLngPtr As Long, ByVal Length As Long)
+
 ' The API uses 16 bytes fixed length key. Do not change.
 ' A API usa uma chave de tamanho fixa 16 bytes. Não trocar
 Public Const AesKeyLength As Long = 16
