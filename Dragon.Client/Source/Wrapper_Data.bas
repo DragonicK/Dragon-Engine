@@ -30,6 +30,7 @@ Public Declare Function GetMacAddressId Lib "Dragon.Wrapper.dll" Alias "_GetMacA
 Public Declare Sub Cipher Lib "Dragon.Wrapper.dll" Alias "_Cipher@8" (ByVal BufferLngPtr As Long, ByVal Length As Long)
 Public Declare Function Decipher Lib "Dragon.Wrapper.dll" Alias "_Decipher@8" (ByVal BufferLngPtr As Long, ByVal Length As Long) As Boolean
 Public Declare Sub UpdateKey Lib "Dragon.Wrapper.dll" Alias "_UpdateKey@8" (ByVal BufferLngPtr As Long, ByVal Length As Long)
+Public Declare Sub AppendCheckSum Lib "Dragon.Wrapper.dll" Alias "_AppendCheckSum@12" (ByVal BufferLngPtr As Long, ByVal Offset As Long, ByVal Length As Long)
 
 ' The API uses 16 bytes fixed length key. Do not change.
 ' A API usa uma chave de tamanho fixa 16 bytes. Não trocar
