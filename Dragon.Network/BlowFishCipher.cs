@@ -130,9 +130,9 @@ public class BlowFishCipher : IEngineCrypto {
 
     private const int KeyLength = 16;
 
-    private readonly byte[] cipherKey = new byte[] { 0x6b, 0x60, 0xcb, 0x5b, 0x82, 0xce, 0x90, 0xb1, 0xcc, 0x2b, 0x6c, 0x55, 0x6c, 0x6c, 0x6c, 0x6c };
-    private readonly int[] pArray;
-    private readonly int[][] sBoxes;
+    private byte[] cipherKey = new byte[] { 0x6b, 0x60, 0xcb, 0x5b, 0x82, 0xce, 0x90, 0xb1, 0xcc, 0x2b, 0x6c, 0x55, 0x6c, 0x6c, 0x6c, 0x6c };
+    private int[] pArray;
+    private int[][] sBoxes;
 
     public BlowFishCipher() {
         pArray = new int[18];
@@ -217,7 +217,7 @@ public class BlowFishCipher : IEngineCrypto {
             IntegerToByteArray(rb, buffer, p + 4);
         }
 
-        return VerifyCheckSum(buffer, offset, length);
+        return VerifyCheckSum(buffer, offset, length); 
     }
 
     private void InitArrays() {
