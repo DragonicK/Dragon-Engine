@@ -28,12 +28,14 @@ public class IncomingMessageQueue : IIncomingMessageQueue {
         disruptor.Halt();
     }
 
-    public void Enqueue(int fromId, byte[] buffer) {
+    public void Enqueue(IConnection connection, int fromId, byte[] buffer) {
         if (ringbuffer is not null) {
             var sequence = ringbuffer.Next();
             var entry = ringbuffer[sequence];
 
             entry.FromId = fromId;
+            entry.Connection = connection;
+
             entry.SetContent(buffer);
 
             ringbuffer.Publish(sequence);

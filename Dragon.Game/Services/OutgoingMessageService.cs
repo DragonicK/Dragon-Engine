@@ -22,7 +22,7 @@ public class OutgoingMessageService : IService {
         Serializer = new MessageSerializer();
 
         OutgoingMessagePublisher = new OutgoingMessagePublisher(repository);
-        OutgoingMessageEventHandler = new OutgoingMessageEventHandler(OutgoingMessagePublisher);
+        OutgoingMessageEventHandler = new OutgoingMessageEventHandler( OutgoingMessagePublisher);
         OutgoingMessageQueue = new OutgoingMessageQueue(OutgoingMessageEventHandler);
         OutgoingMessageWriter = new OutgoingMessageWriter(OutgoingMessageQueue, Serializer);
 

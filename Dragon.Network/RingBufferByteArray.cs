@@ -5,6 +5,7 @@ public class RingBufferByteArray {
     private const int ListSize = 256;
 
     public int FromId { get; set; }
+    public IConnection? Connection { get; set; }
     public byte[] ByteBuffer { get; private set; }
     public int Length { get; private set; }
     public TransmissionTarget TransmissionTarget { get; set; }
@@ -25,15 +26,16 @@ public class RingBufferByteArray {
         Length = buffer.Length;
     }
 
-    public void GetContent(ref byte[] target) {
+    public void GetContent(ref byte[] target, int offset) {
         if (Length > target.Length) {
             target = new byte[Length];
         }
 
-        Buffer.BlockCopy(ByteBuffer, 0, target, 0, Length);
+        Buffer.BlockCopy(ByteBuffer, 0, target, offset, Length);
     }
 
     public void Reset() {
+        Connection = null;
         DestinationPeers.Clear();
 
         Array.Clear(ByteBuffer, 0, ByteBuffer.Length);

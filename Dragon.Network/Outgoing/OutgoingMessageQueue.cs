@@ -33,7 +33,7 @@ public class OutgoingMessageQueue : IOutgoingMessageQueue {
         var entry = ringbuffer[sequence];
 
         var bytes = new byte[buffer.Length];
-        buffer.GetContent(ref bytes);
+        buffer.GetContent(ref bytes, 0);
 
         entry.FromId = buffer.FromId;
         entry.DestinationPeers = buffer.DestinationPeers;

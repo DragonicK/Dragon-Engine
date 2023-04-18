@@ -24,17 +24,22 @@ public class OutgoingMessagePublisher : IOutgoingMessagePublisher {
     }
 
     private void Broadcast(IList<int> destination, int except, byte[] buffer) {
-        IConnection connection;
-        int id;
-
         for (var i = 0; i < destination.Count; i++) {
-            id = destination[i];
+            var id = destination[i];
 
             if (except != id) {
-                connection = ConnectionRepository.GetFromId(id);
+                var connection = ConnectionRepository.GetFromId(id);
 
                 if (connection is not null) {
                     if (connection.Connected) {
+                        var length = buffer.Length - 4;
+                        var crypto = connection.CryptoEngine;
+
+                        crypto.AppendCheckSum(buffer, 4, length);
+                        crypto.Cipher(buffer, 4, length);
+
+                        IntegerToByteArray(length, buffer, 0);
+
                         connection.Send(buffer);
                     }
                 }
@@ -64,5 +69,12 @@ public class OutgoingMessagePublisher : IOutgoingMessagePublisher {
                 }
             }
         }
+    }
+
+    private void IntegerToByteArray(int value, byte[] buffer, int offset) {
+        buffer[offset] = (byte)(value & 0xFF);
+        buffer[offset + 1] = (byte)(value >> 8 & 0xFF);
+        buffer[offset + 2] = (byte)(value >> 16 & 0xFF);
+        buffer[offset + 3] = (byte)(value >> 24 & 0xFF);
     }
 }

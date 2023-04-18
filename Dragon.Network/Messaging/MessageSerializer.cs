@@ -8,6 +8,14 @@ public class MessageSerializer : ISerializer {
 
         WriteClass(type, buffer);
 
+        var length = buffer.Length() + 4;
+
+        length += 8 - length % 8;
+
+        var remaining = length - buffer.Length();
+
+        buffer.WriteEmptyBytes(remaining);
+
         return buffer.ToArray();
     }
 

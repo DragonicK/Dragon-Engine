@@ -1,7 +1,6 @@
 ﻿using Dragon.Core.Logs;
 
 using Dragon.Network.Messaging;
-
 using System.Diagnostics;
 
 namespace Dragon.Network.Incoming;
@@ -11,8 +10,6 @@ public class IncomingMessageEventHandler : IIncomingMessageEventHandler {
     public IIncomingMessageParser IncomingMessageParser { get; }
     public ISerializer Serializer { get; }
     public ILogger Logger { get; }
-
-    // Todo Add ICryptography.
 
     public IncomingMessageEventHandler(
         IMessageRepository<MessageHeader> messageRepository,
@@ -27,30 +24,43 @@ public class IncomingMessageEventHandler : IIncomingMessageEventHandler {
     }
 
     public void OnEvent(RingBufferByteArray buffer, long sequence, bool endOfBatch) {
-        var id = buffer.FromId;
+        var connection = buffer.Connection!;
         var bytes = new byte[buffer.Length];
 
-        buffer.GetContent(ref bytes);
+        buffer.GetContent(ref bytes, 0);
         buffer.Reset();
 
-        // Todo Decrypt bytes
+        var crypto = connection.CryptoEngine;
 
-        var value = BitConverter.ToInt32(bytes, 0);
+        if (crypto.Decipher(bytes, 0, bytes.Length)) {
+            var value = BitConverter.ToInt32(bytes, 0);
 
-        if (Enum.IsDefined(typeof(MessageHeader), value)) {
-            var header = (MessageHeader)value;
-
-            if (MessageRepository.Contains(header)) {
-                var type = MessageRepository.GetMessage(header);
-                dynamic packet = Serializer.Deserialize(bytes, type);
-
-                IncomingMessageParser.Process(id, packet);
+            if (Enum.IsDefined(typeof(MessageHeader), value)) {
+                Execute(value, bytes, connection);
+            }
+            else {
+                WriteWarning(value, bytes, connection);
             }
         }
         else {
-            if (Debugger.IsAttached) {
-                Logger.Warning("Invalid Header Received", $"From Id: {id} Header: {value} Length: {bytes.Length} ");
-            }
+            Logger.Warning("Invalid CheckSum", $"From Id: {connection.Id} Length: {bytes.Length} ");
+        }
+    }
+
+    private void Execute(int value, byte[] buffer, IConnection connection) {
+        var header = (MessageHeader)value;
+
+        if (MessageRepository.Contains(header)) {
+            var type = MessageRepository.GetMessage(header);
+            dynamic packet = Serializer.Deserialize(buffer, type);
+
+            IncomingMessageParser.Process(connection, packet);
+        }
+    }
+
+    private void WriteWarning(int value, byte[] buffer, IConnection connection) {
+        if (Debugger.IsAttached) {
+            Logger.Warning("Invalid Header Received", $"From Id: {connection.Id} Header: {value} Length: {buffer.Length} ");
         }
     }
 }

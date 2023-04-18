@@ -4,5 +4,5 @@ public interface IIncomingMessageQueue {
     IIncomingMessageEventHandler IncomingMessageEventHandler { get; }
     void Start();
     void Stop();
-    void Enqueue(int fromId, byte[] buffer);
+    void Enqueue(IConnection connection, int fromId, byte[] buffer);
 }

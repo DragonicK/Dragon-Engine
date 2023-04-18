@@ -1,4 +1,5 @@
 ﻿using System.Net.Sockets;
+
 using Dragon.Core.Logs;
 using Dragon.Network.Incoming;
 
@@ -11,6 +12,7 @@ public class Connection : IConnection {
     public Socket? Socket { get; set; }
     public ILogger? Logger { get; set; }
     public bool Connected => connected;
+    public IEngineCrypto CryptoEngine { get; set; }
     public IIncomingMessageQueue? IncomingMessageQueue { get; set; }
     public EventHandler<IConnection>? OnDisconnect { get; set; }
 
@@ -31,6 +33,8 @@ public class Connection : IConnection {
     private bool connected = false;
 
     public Connection() {
+        CryptoEngine = new BlowFishCipher();
+
         IpAddress = string.Empty;
 
         buffer = new byte[BufferSize];
@@ -82,7 +86,7 @@ public class Connection : IConnection {
                         // Remove the first packet (Size of Packet).
                         msg.ReadInt32();
 
-                        IncomingMessageQueue?.Enqueue(Id, msg.ReadBytes(pLength));
+                        IncomingMessageQueue?.Enqueue(this, Id, msg.ReadBytes(pLength));
                     }
 
                     pLength = 0;
@@ -121,5 +125,9 @@ public class Connection : IConnection {
 
             Disconnect();
         }
+    }
+
+    public void UpdateKey(byte[] key) {
+        CryptoEngine.UpdateKey(key);
     }
 }

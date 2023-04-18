@@ -165,4 +165,14 @@ public sealed class ByteBuffer {
             return string.Empty;
         }
     }
+
+    public void WriteEmptyBytes(int length) {
+        if (buffer.Length + length > buffer.Capacity) {
+            buffer.Capacity = (int)(buffer.Length + length);
+        }
+
+        for (var i = 0; i < length; ++i) {
+            buffer.WriteByte(0);
+        }
+    }
 }

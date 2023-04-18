@@ -9,10 +9,12 @@ public interface IConnection {
     string IpAddress { get; set; }
     Socket? Socket { get; set; }
     bool Authenticated { get; set; }
+    IEngineCrypto CryptoEngine { get; set; }
     IIncomingMessageQueue? IncomingMessageQueue { get; set; }
     EventHandler<IConnection>? OnDisconnect { get; set; }
 
     void StartBeginReceive();
     void Disconnect();
     void Send(byte[] buffer);
+    void UpdateKey(byte[] buffer);
 }
