@@ -5,10 +5,12 @@ namespace Dragon::Wrapper::Cryptography {
 	void BlowFishCipher::UpdateKey(byte* udpatedKey, int length) {
 		memcpy_s(key, length, udpatedKey, length);
 
-		memcpy_s(sBoxes[0], 256, ZeroBoxInit, 256);
-		memcpy_s(sBoxes[1], 256, FirstBoxInit, 256);
-		memcpy_s(sBoxes[2], 256, SecondBoxInit, 256);
-		memcpy_s(sBoxes[3], 256, ThirdBoxInit, 256);
+		const int size = 256 * sizeof(int);
+
+		memcpy_s(sBoxes[0], size, ZeroBoxInit, size);
+		memcpy_s(sBoxes[1], size, FirstBoxInit, size);
+		memcpy_s(sBoxes[2], size, SecondBoxInit, size);
+		memcpy_s(sBoxes[3], size, ThirdBoxInit, size);
 
 		InitArrays();
 	}
