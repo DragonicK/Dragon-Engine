@@ -84,8 +84,6 @@ namespace Dragon::Wrapper::Cryptography {
 			IntegerToByteArray(xl, buffer, p);
 			IntegerToByteArray(xr, buffer, p + 4);
 		}
-
-		AppendCheckSum(buffer, 0, length);
 	}
 
 	bool BlowFishCipher::Decipher(byte* buffer, int offset, int length) {
@@ -152,56 +150,32 @@ namespace Dragon::Wrapper::Cryptography {
 	}
 
 	void BlowFishCipher::AppendCheckSum(byte* raw, int offset, int length) {
-		long chksum = 0;
-		int count = length - 4;
-		long ecx;
+		int sum = 0;
 		int i;
 
-		for (i = offset; i < count; i += 4) {
-			ecx = raw[i] & 0xff;
-			ecx |= raw[i + 1] << 8 & 0xff00;
-			ecx |= raw[i + 2] << 0x10 & 0xff0000;
-			ecx |= raw[i + 3] << 0x18 & 0xff000000;
-			chksum ^= ecx;
+		for (i = offset; i < length - 2; ++i) {
+			sum += raw[i];
 		}
 
-		ecx = raw[i] & 0xff;
-		ecx |= raw[i + 1] << 8 & 0xff00;
-		ecx |= raw[i + 2] << 0x10 & 0xff0000;
-		ecx |= raw[i + 3] << 0x18 & 0xff000000;
-		raw[i] = (byte)(chksum & 0xff);
-		raw[i + 1] = (byte)(chksum >> 0x08 & 0xff);
-		raw[i + 2] = (byte)(chksum >> 0x10 & 0xff);
-		raw[i + 3] = (byte)(chksum >> 0x18 & 0xff);
+		sum %= 0x100;
+
+		raw[length - 2] = (byte)((sum >> 4) + 0x30);
+		raw[length - 1] = (byte)((sum & 0xF) + 0x30);
 	}
 
 	bool BlowFishCipher::VerifyCheckSum(byte* data, int offset, int length) {
-		if ((length & 3) != 0 || (length <= 4)) {
-			return false;
-		}
-
-		long chksum = 0;
-		int count = length - 4;
-		long check;
+		int sum = 0;
 		int i;
 
-		for (i = offset; i < count; i += 4) {
-			check = data[i] & 0xff;
-			check |= data[i + 1] << 8 & 0xff00;
-			check |= data[i + 2] << 0x10 & 0xff0000;
-			check |= data[i + 3] << 0x18 & 0xff000000;
-			chksum ^= check;
+		for (i = offset; i < length - 2; ++i) {
+			sum += data[i];
 		}
 
-		check = data[i] & 0xff;
-		check |= data[i + 1] << 8 & 0xff00;
-		check |= data[i + 2] << 0x10 & 0xff0000;
-		check |= data[i + 3] << 0x18 & 0xff000000;
-		check = data[i] & 0xff;
-		check |= data[i + 1] << 8 & 0xff00;
-		check |= data[i + 2] << 0x10 & 0xff0000;
-		check |= data[i + 3] << 0x18 & 0xff000000;
+		sum %= 0x100;
 
-		return 0 == chksum;
+		auto x = (byte)((sum >> 4) + 0x30);
+		auto y = (byte)((sum & 0xF) + 0x30);
+
+		return data[length - 2] == x && data[length - 1] == y;
 	}
 }

@@ -203,4 +203,8 @@ bool WINAPI Decipher(unsigned char* buffer, int length) {
 	return BlowFishCipher::Instance().Decipher(buffer, 0, length);
 }
 
+void WINAPI AppendCheckSum(unsigned char* raw, int offset, int length) {
+	BlowFishCipher::Instance().AppendCheckSum(raw, offset, length);
+}
+
 #pragma endregion

@@ -142,6 +142,7 @@ namespace Dragon::Wrapper::Cryptography {
         void UpdateKey(byte* udpatedKey, int length);
         void Cipher(byte* buffer, int offset, int length);
         bool Decipher(byte* buffer, int offset, int length);
+        void AppendCheckSum(byte* raw, int offset, int length);
 
     private:
         const int KeyLength = 16;
@@ -159,7 +160,6 @@ namespace Dragon::Wrapper::Cryptography {
         int ByteArrayToInteger(byte* buffer, int offset);
         void InitSBox(byte buffer[], int length, int sBox[]);
         void IntegerToByteArray(int value, byte* buffer, int offset);
-        void AppendCheckSum(byte* raw, int offset, int length);
         bool VerifyCheckSum(byte* data, int offset, int length);
     };
 }

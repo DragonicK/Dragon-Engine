@@ -1,7 +1,6 @@
 #pragma once
 
 #include <Windows.h>
-
 #include "AESSettings.h"
 
 using namespace Dragon::Wrapper::Cryptography;
@@ -53,6 +52,7 @@ extern "C" {
 	__declspec(dllexport) void WINAPI Cipher(unsigned char* buffer, int length);
 	__declspec(dllexport) bool WINAPI Decipher(unsigned char* buffer, int length);
 	__declspec(dllexport) void WINAPI UpdateKey(unsigned char* buffer, int length);
+	__declspec(dllexport) void WINAPI AppendCheckSum(unsigned char* raw, int offset, int length);
 
 #ifdef __cplusplus
 }
