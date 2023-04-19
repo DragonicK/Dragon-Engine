@@ -2,9 +2,9 @@
 
 namespace Dragon::Wrapper::Cryptography {
 
-	void BlowFishCipher::UpdateKey(byte* udpatedKey, int length) {
+	void BlowFishCipher::UpdateKey(unsigned char* udpatedKey, int length) {
 		memcpy_s(key, length, udpatedKey, length);
-
+	
 		const int size = 256 * sizeof(int);
 
 		memcpy_s(sBoxes[0], size, ZeroBoxInit, size);
@@ -32,7 +32,9 @@ namespace Dragon::Wrapper::Cryptography {
 			pArray[i] = ArrayInit[i] ^ data;
 		}
 
-		auto buffer = new unsigned char[8];
+		unsigned char buffer[8];
+
+		memset(buffer, 0, 8);
 
 		for (int i = 0; i < 18; i += 2) {
 			Cipher(buffer, 0, 8);
