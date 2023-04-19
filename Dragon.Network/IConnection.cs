@@ -15,6 +15,6 @@ public interface IConnection {
 
     void StartBeginReceive();
     void Disconnect();
-    void Send(byte[] buffer);
     void UpdateKey(byte[] buffer);
+    void Send(byte[] buffer, int length);
 }

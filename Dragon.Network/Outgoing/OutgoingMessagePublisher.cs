@@ -32,15 +32,7 @@ public class OutgoingMessagePublisher : IOutgoingMessagePublisher {
 
                 if (connection is not null) {
                     if (connection.Connected) {
-                        var length = buffer.Length - 4;
-                        var crypto = connection.CryptoEngine;
-
-                        crypto.AppendCheckSum(buffer, 4, length);
-                        crypto.Cipher(buffer, 4, length);
-
-                        IntegerToByteArray(length, buffer, 0);
-
-                        connection.Send(buffer);
+                        Send(buffer, connection);
                     }
                 }
             }
@@ -55,7 +47,7 @@ public class OutgoingMessagePublisher : IOutgoingMessagePublisher {
 
             if (connection is not null) {
                 if (connection.Connected) {
-                    connection.Send(buffer);
+                    Send(buffer, connection);
                 }
             }
         }
@@ -65,12 +57,28 @@ public class OutgoingMessagePublisher : IOutgoingMessagePublisher {
         foreach (var (id, connection) in ConnectionRepository) {
             if (connection is not null) {
                 if (connection.Connected) {
-                    connection.Send(buffer);
+                    Send(buffer, connection);
                 }
             }
         }
     }
 
+    private void Send(byte[] buffer, IConnection connection) {
+        var length = buffer.Length;
+        var crypto = connection.CryptoEngine;
+
+        var tmp = new byte[buffer.Length];
+
+        Buffer.BlockCopy(buffer, 0, tmp, 0, buffer.Length);
+
+        crypto.AppendCheckSum(tmp, 0, length);
+        crypto.Cipher(tmp, 4, length);
+
+        IntegerToByteArray(length - 4, tmp, 0);
+
+        connection.Send(tmp, length);
+    }
+     
     private void IntegerToByteArray(int value, byte[] buffer, int offset) {
         buffer[offset] = (byte)(value & 0xFF);
         buffer[offset + 1] = (byte)(value >> 8 & 0xFF);

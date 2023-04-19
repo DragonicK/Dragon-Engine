@@ -132,46 +132,38 @@ Sub HandleData(ByRef Data() As Byte)
     Set Buffer = New clsBuffer
     Buffer.WriteBytes Data()
 
-   ' Dim Length As Long
-  '  Dim Key As Byte
-  '  Dim KeyIndex As Byte
-  '  Dim Iv As Byte
-  '  Dim IvIndex As Byte
-  '  Dim DecryptedBytes() As Byte
-  '  Dim Success As Boolean
-  '  Dim ErrorDescription As String
+    If Buffer.ExecuteDecipher Then
+        MsgType = Buffer.ReadLong
 
-   ' Length = Buffer.ReadLong
-  '  Key = Buffer.ReadByte
-  '  KeyIndex = Buffer.ReadByte
-  ' ' Iv = Buffer.ReadByte
-  '  IvIndex = Buffer.ReadByte
+        If MsgType < 0 Then
+            DestroyGame
+            Exit Sub
+        End If
 
-  '  DecryptedBytes = ConnectionAES.Decrypt(Buffer.ReadBytes(Length), CreateKey(KeyType_Key, KeyIndex, Key), CreateKey(KeyType_Iv, IvIndex, Iv), Success)
+        If MsgType >= EnginePacket.PPacketCount Then
+            DestroyGame
+            Exit Sub
+        End If
 
-  '  If Not Success Then
-  '      GoTo Error
-  '  End If
-
-   ' Buffer.Flush
-
-    MsgType = Buffer.ReadLong
-
-    If MsgType < 0 Then
-        DestroyGame
+        CallWindowProc HandleDataSub(MsgType), 1, Buffer.ReadBytes(Buffer.Length), 0, 0
         Exit Sub
-    End If
 
-    If MsgType >= EnginePacket.PPacketCount Then
-        DestroyGame
-        Exit Sub
-    End If
+    Else
+      '  MsgBox "Ocorreu um erro ao receber e processar os dados."
+        ' DestroyGame
+        
+        Dim XOXOTAS() As Byte
 
-    CallWindowProc HandleDataSub(MsgType), 1, Buffer.ReadBytes(Buffer.Length), 0, 0
-    Exit Sub
+        XOXOTAS = Buffer.ToArray()
+        
+        Dim a As Long
+        
+       a = 10
+
+    End If
 
 Error:
-    MsgBox "Não foi possível ler os dados."
+    MsgBox "Ocorreu um erro ao receber e processar os dados."
     DestroyGame
 End Sub
 

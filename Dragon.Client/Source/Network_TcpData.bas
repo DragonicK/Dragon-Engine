@@ -99,46 +99,23 @@ Function IsPlaying(ByVal Index As Long) As Boolean
 
 End Function
 
-Sub SendData(ByRef Data() As Byte)
+Public Sub SendData(ByRef Data() As Byte)
 
     If IsConnected Then
+        Dim Length As Long
+        Dim Ciphed() As Byte
+           
+        Ciphed = CreateEncryptedPacket(Data)
+       
         Dim Buffer As clsBuffer
         Set Buffer = New clsBuffer
-                        
-        Buffer.WriteLong (UBound(Data) - LBound(Data)) + 1
-        Buffer.WriteBytes Data()
-
-        'Dim TempBuffer() As Byte
-        'Dim Key As Byte
-        'Dim Iv As Byte
-        'Dim KeyIndex As Long
-        'Dim IvIndex As Long
-        'Dim Success As Boolean
-        'Dim ErrorDescription As String
-        'Dim Length As Long
-
-        'Key = Rand(0, 255)
-        'KeyIndex = Rand(0, KeySize)
-        'Iv = Rand(0, 255)
-        'IvIndex = Rand(0, IvSize)
-
-        'TempBuffer = ConnectionAES.Encrypt(Data, CreateKey(KeyType_Key, KeyIndex, Key), CreateKey(KeyType_Iv, IvIndex, Iv), Success)
-
-        'If Not Success Then
-        '    GoTo Error
-        'End If
-
-       ' Length = (UBound(TempBuffer) - LBound(TempBuffer)) + 1
-
-      '  Buffer.PreAllocate Length + 12
-      '  Buffer.WriteLong Length + 8
-      '  Buffer.WriteLong Length
-      '  Buffer.WriteByte Key
-      '  Buffer.WriteByte KeyIndex
-      '  Buffer.WriteByte Iv
-      '  Buffer.WriteByte IvIndex
-      '  Buffer.WriteBytes TempBuffer
-
+        
+        Length = ((UBound(Ciphed) - LBound(Ciphed)) + 1)
+               
+        Buffer.PreAllocate Length + 4
+        Buffer.WriteLong Length
+        Buffer.WriteBytes Ciphed()
+        
         frmMain.Socket.SendData Buffer.ToArray()
 
         Set Buffer = Nothing
@@ -149,6 +126,28 @@ Error:
     MsgBox "Ocorreu um erro ao enviar os dados para o servidor."
     DestroyGame
 End Sub
+
+Private Function CreateEncryptedPacket(ByRef Data() As Byte) As Byte()
+    Dim Buffer() As Byte
+    Dim Length As Long
+    Dim BufferLength As Long
+
+    Length = (UBound(Data) - LBound(Data)) + 1
+    
+    BufferLength = ((UBound(Data) - LBound(Data)) + 1) + 4
+    BufferLength = BufferLength + 8 - BufferLength Mod 8
+
+    ReDim Buffer(0 To BufferLength - 1)
+
+    CopyMemory Buffer(0), Data(0), Length
+
+    Call AppendCheckSum(ByVal VarPtr(Buffer(0)), 0, BufferLength)
+
+    Call Cipher(ByVal VarPtr(Buffer(0)), BufferLength)
+
+    CreateEncryptedPacket = Buffer
+
+End Function
 
 Public Sub GetPing()
     Dim Buffer As clsBuffer

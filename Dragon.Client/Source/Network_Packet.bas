@@ -1,6 +1,44 @@
 Attribute VB_Name = "Network_Packet"
 Option Explicit
 
+' Packets sent by client to server
+Public Enum ClientPackets
+    CRequestNewMap = 5000
+           
+    CRessurrectSelf
+    CRessurrectByPlayer
+    
+    CAttack
+    
+    ' Make sure CMsgCOUNT is below everything else
+    CMsgCOUNT
+End Enum
+
+
+' The order of the packets must match with the server's packet enumeration
+' Packets sent by server to client
+Public Enum ServerPackets
+    SNpcAttack
+    SNpcDead
+    SSound
+    
+    SPlayerAchievement
+    SUpdateAchievement
+    
+    SDeadPanelOperation
+    SPlayerDead
+    SRessurrection
+    
+    SAttack
+    SRollDiceItem
+    
+    SStunned
+    ' Make sure SMsgCOUNT is below everything else
+    SMsgCOUNT
+End Enum
+
+
+
 Public Enum EnginePacket
     PCheckPing = 1
     PAlertMessage

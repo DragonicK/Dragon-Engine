@@ -16,20 +16,11 @@ public class Connection : IConnection {
     public IIncomingMessageQueue? IncomingMessageQueue { get; set; }
     public EventHandler<IConnection>? OnDisconnect { get; set; }
 
-    /// <summary>
-    /// Tempo limite de leitura em microsegundos.
-    /// </summary>
-    public const int ReceiveTimeOut = 15 * 1000 * 1000;
+    private const int ReceiveBufferSize = 1024;
 
-    /// <summary>
-    /// Tempo limite de envio em microsegundos.
-    /// </summary>
-    public const int SendTimeOut = 15 * 1000 * 1000;
+    private readonly byte[] data;
+    private readonly ByteBuffer reader;
 
-    private const int BufferSize = 1024;
-
-    private readonly ByteBuffer msg;
-    private readonly byte[] buffer;
     private bool connected = false;
 
     public Connection() {
@@ -37,8 +28,9 @@ public class Connection : IConnection {
 
         IpAddress = string.Empty;
 
-        buffer = new byte[BufferSize];
-        msg = new ByteBuffer(BufferSize);
+        data = new byte[ReceiveBufferSize];
+
+        reader = new ByteBuffer(ReceiveBufferSize);
 
         connected = true;
     }
@@ -51,12 +43,12 @@ public class Connection : IConnection {
         OnDisconnect?.Invoke(null, this);
     }
 
-    public void Send(byte[] buffer) {
-        Socket?.BeginSend(buffer, 0, buffer.Length, SocketFlags.None, OnSend, null);
+    public void Send(byte[] buffer, int length) {
+        Socket?.BeginSend(buffer, 0, length, SocketFlags.None, OnSend, null);
     }
 
     public void StartBeginReceive() {
-        Socket?.BeginReceive(buffer, 0, BufferSize, SocketFlags.None, OnReceive, null);
+        Socket?.BeginReceive(data, 0, ReceiveBufferSize, SocketFlags.None, OnReceive, null);
     }
 
     private void OnReceive(IAsyncResult ar) {
@@ -69,30 +61,28 @@ public class Connection : IConnection {
             else {
                 var pLength = 0;
 
-                msg.Write(buffer, length);
+                reader.Write(data, length);
+                Array.Clear(data, 0, length);
 
-                Array.Clear(buffer, 0, length);
-
-                if (msg.Length() >= 4) {
-                    pLength = msg.ReadInt32(false);
+                if (reader.Length() >= 4) {
+                    pLength = reader.ReadInt32(false);
 
                     if (pLength <= 0) {
                         return;
                     }
                 }
 
-                while (pLength > 0 && pLength <= msg.Length() - 4) {
-                    if (pLength <= msg.Length() - 4) {
-                        // Remove the first packet (Size of Packet).
-                        msg.ReadInt32();
+                while (pLength > 0 && pLength <= reader.Length() - 4) {
+                    if (pLength <= reader.Length() - 4) {
+                        reader.ReadInt32();
 
-                        IncomingMessageQueue?.Enqueue(this, Id, msg.ReadBytes(pLength));
+                        IncomingMessageQueue?.Enqueue(this, Id, reader.ReadBytes(pLength));
                     }
 
                     pLength = 0;
 
-                    if (msg.Length() >= 4) {
-                        pLength = msg.ReadInt32(false);
+                    if (reader.Length() >= 4) {
+                        pLength = reader.ReadInt32(false);
 
                         if (pLength < 0) {
                             return;
@@ -100,14 +90,12 @@ public class Connection : IConnection {
                     }
                 }
 
-                msg.Trim();
+                reader.Trim();
 
-                Socket.BeginReceive(buffer, 0, BufferSize, SocketFlags.None, OnReceive, null);
+                Socket.BeginReceive(data, 0, ReceiveBufferSize, SocketFlags.None, OnReceive, null);
             }
         }
         catch (Exception ex) {
-            Socket?.Disconnect(false);
-
             Logger?.Write(WarningLevel.Error, GetType().Name, $"OnReceive: {ex.Message}");
 
             Disconnect();
@@ -119,8 +107,6 @@ public class Connection : IConnection {
             Socket?.EndSend(ar);
         }
         catch (Exception ex) {
-            Socket?.Disconnect(false);
-
             Logger?.Write(WarningLevel.Error, GetType().Name, $"OnSend: {ex.Message}");
 
             Disconnect();

@@ -194,3 +194,7 @@ End Function
 Public Function ToString() As String
     ToString = StrConv(Buffer, vbUnicode, LOCALE_BRAZIL)
 End Function
+
+Public Function ExecuteDecipher() As Boolean
+    ExecuteDecipher = Decipher(ByVal VarPtr(Buffer(0)), Count())
+End Function

@@ -9,19 +9,21 @@ Public Declare Function GetTickCount Lib "kernel32" () As Long
 Public Declare Sub ZeroMemory Lib "kernel32.dll" Alias "RtlZeroMemory" (Destination As Any, ByVal Length As Long)
 
 Public Sub Main()
+    Call UpdateCipherKey
+
     MaxPlayerMail = 20
     InitializePlayerMails
 
     ReDim DescText(1 To 1)
-       
+
     LoadMachineId
 
     ' Load Options
     LoadOptions
-    
+
     ' check the resolution
     CheckResolution
-    
+
     ' load maps
     LoadMapsProperties
 
@@ -103,9 +105,9 @@ Public Sub Main()
     PaperdollOrder(2) = Equipments.Helmet
     PaperdollOrder(3) = Equipments.Shield
     PaperdollOrder(4) = Equipments.Weapon
-    
+
     HideWindows
-    
+
     ' show the main menu
     frmMain.Show
     inMenu = True
@@ -113,7 +115,7 @@ Public Sub Main()
     ' show login window
     ShowWindow GetWindowIndex("winLogin")
     ShowWindow GetWindowIndex("winLoginFooter")
-    
+
     inSmallChat = True
     ' Set the loop going
     FadeAlpha = 255

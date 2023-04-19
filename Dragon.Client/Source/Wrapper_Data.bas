@@ -36,6 +36,8 @@ Public Declare Sub AppendCheckSum Lib "Dragon.Wrapper.dll" Alias "_AppendCheckSu
 ' A API usa uma chave de tamanho fixa 16 bytes. Não trocar
 Public Const AesKeyLength As Long = 16
 
+Public CipherKey(0 To 15) As Byte
+
 ' Do not change variable order and types.
 ' Não trocar a ordem das variáveis e nem os tipos de dados.
 Public Type AesSettings
@@ -72,3 +74,24 @@ Public Enum AesPaddingMode
     ' The ISO10126 padding string consists of random data before the length.
     AesPaddingMode_ISO10126 = 5
 End Enum
+
+Public Sub UpdateCipherKey()
+    CipherKey(0) = &H6B
+    CipherKey(1) = &H60
+    CipherKey(2) = &HCB
+    CipherKey(3) = &H5B
+    CipherKey(4) = &H82
+    CipherKey(5) = &HCE
+    CipherKey(6) = &H90
+    CipherKey(7) = &HB1
+    CipherKey(8) = &HCC
+    CipherKey(9) = &H2B
+    CipherKey(10) = &H6C
+    CipherKey(11) = &H55
+    CipherKey(12) = &H6C
+    CipherKey(13) = &H6C
+    CipherKey(14) = &H6C
+    CipherKey(15) = &H6C
+    
+    Call UpdateKey(ByVal VarPtr(CipherKey(0)), 16)
+End Sub
