@@ -1,5 +1,5 @@
 Attribute VB_Name = "Login_Packet"
-Public Sub SendLogin(ByVal Name As String)
+Public Sub SendGameLogin()
     Dim Buffer As clsBuffer
     Set Buffer = New clsBuffer
     
@@ -26,7 +26,7 @@ Public Sub SendAuthLogin(ByVal Name As String, ByVal Password As String)
     Buffer.WriteString CPUId
     Buffer.WriteString VideoId
     Buffer.WriteString MacAddressId
-    Buffer.WriteString MotherboardId
+    Buffer.WriteString MotherBoardId
      
     SendData Buffer.ToArray()
     Set Buffer = Nothing
@@ -43,7 +43,7 @@ Public Sub HandleAuthenticationResult(ByVal Index As Long, ByRef Data() As Byte,
     LoginToken = Buffer.ReadString
     
     Set Buffer = Nothing
-    
+
     ' try and login to game server
     AttemptLogin
 End Sub

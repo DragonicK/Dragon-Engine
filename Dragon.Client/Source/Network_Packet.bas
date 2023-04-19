@@ -41,6 +41,7 @@ End Enum
 
 Public Enum EnginePacket
     PCheckPing = 1
+    PUpdateCipherKey
     PAlertMessage
     PAuthentication
     PAuthenticationResult

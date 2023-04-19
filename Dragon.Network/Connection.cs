@@ -1,7 +1,9 @@
 ﻿using System.Net.Sockets;
 
 using Dragon.Core.Logs;
+using Dragon.Network.Security;
 using Dragon.Network.Incoming;
+using System.Security.Cryptography;
 
 namespace Dragon.Network;
 
@@ -12,6 +14,7 @@ public class Connection : IConnection {
     public Socket? Socket { get; set; }
     public ILogger? Logger { get; set; }
     public bool Connected => connected;
+    public byte[] CipherKey { get; set; }
     public IEngineCrypto CryptoEngine { get; set; }
     public IIncomingMessageQueue? IncomingMessageQueue { get; set; }
     public EventHandler<IConnection>? OnDisconnect { get; set; }
@@ -24,13 +27,15 @@ public class Connection : IConnection {
     private bool connected = false;
 
     public Connection() {
-        CryptoEngine = new BlowFishCipher();
-
         IpAddress = string.Empty;
 
         data = new byte[ReceiveBufferSize];
 
         reader = new ByteBuffer(ReceiveBufferSize);
+
+        CryptoEngine = new BlowFishCipher();
+
+        CipherKey = RandomNumberGenerator.GetBytes(16);
 
         connected = true;
     }

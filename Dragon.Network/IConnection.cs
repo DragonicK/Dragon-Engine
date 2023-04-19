@@ -1,4 +1,5 @@
 ﻿using System.Net.Sockets;
+using Dragon.Network.Security;
 using Dragon.Network.Incoming;
 
 namespace Dragon.Network;
@@ -6,8 +7,9 @@ namespace Dragon.Network;
 public interface IConnection {
     int Id { get; set; }
     bool Connected { get; }
-    string IpAddress { get; set; }
     Socket? Socket { get; set; }
+    byte[] CipherKey { get; set; }
+    string IpAddress { get; set; }
     bool Authenticated { get; set; }
     IEngineCrypto CryptoEngine { get; set; }
     IIncomingMessageQueue? IncomingMessageQueue { get; set; }

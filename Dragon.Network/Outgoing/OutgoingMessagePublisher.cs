@@ -77,6 +77,12 @@ public class OutgoingMessagePublisher : IOutgoingMessagePublisher {
         IntegerToByteArray(length - 4, tmp, 0);
 
         connection.Send(tmp, length);
+
+        if (!connection.CryptoEngine.IsKeyAlreadyUdpated) {
+            connection.UpdateKey(connection.CipherKey);
+
+            connection.CryptoEngine.IsKeyAlreadyUdpated = true;
+        }
     }
      
     private void IntegerToByteArray(int value, byte[] buffer, int offset) {

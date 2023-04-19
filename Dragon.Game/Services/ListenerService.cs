@@ -55,9 +55,10 @@ public class ListenerService : IService {
 
     private void WriteFromConnectionApproval(object? sender, IConnection connection) {
         var join = new JoinServer() {
-            Logger = LoggerService!.Logger,
+            Connection = connection,
             Configuration = Configuration,
-            Connection = connection
+            Logger = LoggerService!.Logger,
+            OutgoingMessageService = OutgoingMessageService
         };
 
         join.AcceptConnection();

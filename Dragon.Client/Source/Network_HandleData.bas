@@ -9,6 +9,7 @@ End Function
 
 Public Sub InitMessages()
     HandleDataSub(EnginePacket.PCheckPing) = GetAddress(AddressOf HandleCheckPing)
+    HandleDataSub(EnginePacket.PUpdateCipherKey) = GetAddress(AddressOf HandleUpdateCipherKey)
     HandleDataSub(EnginePacket.PAlertMessage) = GetAddress(AddressOf HandleAlertMsg)
     HandleDataSub(EnginePacket.PAuthenticationResult) = GetAddress(AddressOf HandleAuthenticationResult)
     HandleDataSub(EnginePacket.PModels) = GetAddress(AddressOf HandlePlayerModels)

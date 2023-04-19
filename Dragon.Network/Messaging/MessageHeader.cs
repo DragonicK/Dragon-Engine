@@ -2,6 +2,7 @@
 
 public enum MessageHeader {
     Ping = 1,
+    UpdateCipherKey,
     AlertMessage,
     Authentication,
     AuthenticationResult,

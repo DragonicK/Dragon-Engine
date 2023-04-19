@@ -1,5 +1,7 @@
 Attribute VB_Name = "Login_Window"
 Public LoginToken As String
+Public Username As String
+Public Passphrase As String
 
 Private Const LogoWidth As Long = 512
 Private Const LogoHeight As Long = 142
@@ -74,14 +76,12 @@ Public Sub CreateWindow_LoginFooter()
 End Sub
 
 Private Sub btnLogin_Click()
-    Dim user As String, pass As String
-
     With Windows(GetWindowIndex("winLogin"))
-        user = .Controls(GetControlIndex("winLogin", "txtUser")).Text
-        pass = .Controls(GetControlIndex("winLogin", "txtPass")).Text
+        Username = .Controls(GetControlIndex("winLogin", "txtUser")).Text
+        Passphrase = .Controls(GetControlIndex("winLogin", "txtPass")).Text
     End With
 
-    Login user, pass
+    Login Username, Passphrase
 End Sub
 
 Private Sub chkSaveUser_Click()
@@ -130,12 +130,14 @@ Public Sub Resize_WinLoginFooter()
 End Sub
 
 Public Sub Login(Name As String, Password As String)
+    Call UpdateCipherKey
+
     TcpInit AUTH_SERVER_IP, AUTH_SERVER_PORT
 
     If ConnectToServer Then
-    HideWindows
+        HideWindows
+
         Call SetStatus("Enviando informações de login.")
-        Call SendAuthLogin(Name, Password)
         ' save details
         If Options.SaveUser Then Options.Username = Name Else Options.Username = vbNullString
         SaveOptions
@@ -149,11 +151,13 @@ Public Sub Login(Name As String, Password As String)
 End Sub
 
 Public Sub AttemptLogin()
+    Call UpdateCipherKey
+    
     TcpInit GameServerIp, GameServerPort
 
     ' send login packet
     If ConnectToServer Then
-        SendLogin Windows(GetWindowIndex("winLogin")).Controls(GetControlIndex("winLogin", "txtUser")).Text
+        Call SetStatus("Tentando conexão com o servidor de mundo.")
         Exit Sub
     End If
 

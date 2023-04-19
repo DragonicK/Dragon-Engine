@@ -9,8 +9,6 @@ Public Declare Function GetTickCount Lib "kernel32" () As Long
 Public Declare Sub ZeroMemory Lib "kernel32.dll" Alias "RtlZeroMemory" (Destination As Any, ByVal Length As Long)
 
 Public Sub Main()
-    Call UpdateCipherKey
-
     MaxPlayerMail = 20
     InitializePlayerMails
 

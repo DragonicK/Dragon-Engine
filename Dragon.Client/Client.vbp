@@ -190,6 +190,7 @@ Module=Target_Window; Source\Target_Window.bas
 Module=DragBox_Implementation; Source\DragBox_Implementation.bas
 Module=ChestLoot_Window; Source\ChestLoot_Window.bas
 Module=ChestLoot_Packet; Source\ChestLoot_Packet.bas
+Module=Enum_GameState; Source\Enum_GameState.bas
 IconForm="frmMain"
 Startup="Sub Main"
 HelpFile=""
