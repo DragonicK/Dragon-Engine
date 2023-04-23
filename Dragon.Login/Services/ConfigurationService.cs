@@ -65,7 +65,9 @@ public class ConfigurationService : IService, IConfiguration {
             Port = 7003,
         };
 
-        ClientVersion = new ClientVersion();
+        ClientVersion = new ClientVersion() {
+            ClientMajor = 2
+        };
 
         Smtp = new SmtpConfiguration();
 
