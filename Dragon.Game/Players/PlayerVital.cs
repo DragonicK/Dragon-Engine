@@ -56,6 +56,10 @@ public class PlayerVital : IEntityVital, IPlayerVital {
         }
 
         maximum[(int)vital] = value;
+
+        if (Get(vital) > maximum[(int)vital]) {
+            Set(vital, value);
+        }
     }
 
     public void Add(Vital vital, int value) {
