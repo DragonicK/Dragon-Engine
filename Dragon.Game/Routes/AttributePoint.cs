@@ -29,6 +29,8 @@ public sealed class AttributePoint {
                     player.AllocateAttributes();
 
                     sender?.SendAttributes(player);
+                    sender?.SendPlayerVital(player);
+                    sender?.SendPartyVital(player);
                 }
             }
         }
