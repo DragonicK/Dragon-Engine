@@ -6,14 +6,14 @@ public class OutgoingMessageQueue : IOutgoingMessageQueue {
     private const int BufferSize = 4096;
 
     private RingBuffer<RingBufferByteArray>? ringbuffer;
-    private readonly Disruptor<RingBufferByteArray> disruptor;
+    private Disruptor<RingBufferByteArray> disruptor;
 
     public IOutgoingMessageEventHandler OutgoingMessageEventHandler { get; }
 
     public OutgoingMessageQueue(IOutgoingMessageEventHandler outgoingMessageEventHandler) {
         OutgoingMessageEventHandler = outgoingMessageEventHandler;
 
-        disruptor = new Disruptor<RingBufferByteArray>(() => new RingBufferByteArray(), BufferSize, TaskScheduler.Default, ProducerType.Multi, new SpinWaitWaitStrategy());
+        disruptor = new Disruptor<RingBufferByteArray>(() => new RingBufferByteArray(), BufferSize, TaskScheduler.Default, ProducerType.Multi, new BlockingWaitStrategy());
 
         disruptor.HandleEventsWith(OutgoingMessageEventHandler);
     }
@@ -28,20 +28,16 @@ public class OutgoingMessageQueue : IOutgoingMessageQueue {
         disruptor.Halt();
     }
 
-    public void Enqueue(RingBufferByteArray buffer) {
+    public RingBufferByteArray GetNextSequence() {
         var sequence = ringbuffer!.Next();
-        var entry = ringbuffer[sequence];
+        var buffer = ringbuffer[sequence];
 
-        var bytes = new byte[buffer.Length];
-        buffer.GetContent(ref bytes, 0);
+        buffer.Sequence = sequence;
 
-        entry.FromId = buffer.FromId;
-        entry.DestinationPeers = buffer.DestinationPeers;
-        entry.ExceptDestination = buffer.ExceptDestination;
-        entry.TransmissionTarget = buffer.TransmissionTarget;
+        return buffer;
+    }
 
-        entry.SetContent(bytes);
-
-        ringbuffer.Publish(sequence);
+    public void Enqueue(RingBufferByteArray ringBuffer) {
+        ringbuffer.Publish(ringBuffer.Sequence);
     }
 }

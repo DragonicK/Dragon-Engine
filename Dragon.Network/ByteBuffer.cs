@@ -143,23 +143,16 @@ public sealed class ByteBuffer {
     public string ReadString(bool peek = true) {
         try {
             var length = ReadInt32(peek);
-            var s = new StringBuilder(length);
-
+            var values = new byte[length];
+  
             buffer.Position = readPos;
-
-            for (var i = readPos; i < length + readPos; i++) {
-                var value = buffer.ReadByte();
-
-                if (value != -1) {
-                    s.Append(Convert.ToChar(value));
-                }
-            }
+            buffer.Read(values, 0, length);
 
             if (peek) {
                 readPos += length;
             }
 
-            return s.ToString();
+            return Encoding.ASCII.GetString(values);
         }
         catch {
             return string.Empty;

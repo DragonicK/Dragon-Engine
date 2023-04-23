@@ -7,23 +7,23 @@ public class OutgoingMessagePublisher : IOutgoingMessagePublisher {
         ConnectionRepository = connectionRepository;
     }
 
-    public void Broadcast(TransmissionTarget peers, IList<int> destination, int exceptDestination, byte[] buffer) {
+    public void Broadcast(TransmissionTarget peers, IList<int> destination, int exceptDestination, byte[] buffer, int length) {
         switch (peers) {
             case TransmissionTarget.Destination:
-                Broadcast(destination, buffer);
+                Broadcast(ref destination, ref buffer, length);
                 break;
 
             case TransmissionTarget.Broadcast:
-                Broadcast(buffer);
+                Broadcast(ref buffer, length);
                 break;
 
             case TransmissionTarget.BroadcastExcept:
-                Broadcast(destination, exceptDestination, buffer);
+                Broadcast(ref destination, exceptDestination, ref buffer, length);
                 break;
         }
     }
 
-    private void Broadcast(IList<int> destination, int except, byte[] buffer) {
+    private void Broadcast(ref IList<int> destination, int except, ref byte[] buffer, int length) {
         for (var i = 0; i < destination.Count; i++) {
             var id = destination[i];
 
@@ -32,14 +32,14 @@ public class OutgoingMessagePublisher : IOutgoingMessagePublisher {
 
                 if (connection is not null) {
                     if (connection.Connected) {
-                        Send(buffer, connection);
+                        Send(ref buffer, connection, length);
                     }
                 }
             }
         }
     }
 
-    private void Broadcast(IList<int> destination, byte[] buffer) {
+    private void Broadcast(ref IList<int> destination, ref byte[] buffer, int length) {
         IConnection connection;
 
         for (var i = 0; i < destination.Count; i++) {
@@ -47,34 +47,33 @@ public class OutgoingMessagePublisher : IOutgoingMessagePublisher {
 
             if (connection is not null) {
                 if (connection.Connected) {
-                    Send(buffer, connection);
+                    Send(ref buffer, connection, length);
                 }
             }
         }
     }
 
-    private void Broadcast(byte[] buffer) {
-        foreach (var (id, connection) in ConnectionRepository) {
+    private void Broadcast(ref byte[] buffer, int length) {
+        foreach (var (_, connection) in ConnectionRepository) {
             if (connection is not null) {
                 if (connection.Connected) {
-                    Send(buffer, connection);
+                    Send(ref buffer, connection, length);
                 }
             }
         }
     }
 
-    private void Send(byte[] buffer, IConnection connection) {
-        var length = buffer.Length;
+    private void Send(ref byte[] buffer, IConnection connection, int length) {
         var crypto = connection.CryptoEngine;
 
-        var tmp = new byte[buffer.Length];
+        var tmp = new byte[length];
 
-        Buffer.BlockCopy(buffer, 0, tmp, 0, buffer.Length);
+        Buffer.BlockCopy(buffer, 0, tmp, 0, length);
 
         crypto.AppendCheckSum(tmp, 0, length);
         crypto.Cipher(tmp, 4, length);
 
-        IntegerToByteArray(length - 4, tmp, 0);
+        IntegerToByteArray(length - 4, ref tmp, 0);
 
         connection.Send(tmp, length);
 
@@ -85,7 +84,7 @@ public class OutgoingMessagePublisher : IOutgoingMessagePublisher {
         }
     }
      
-    private void IntegerToByteArray(int value, byte[] buffer, int offset) {
+    private void IntegerToByteArray(int value, ref byte[] buffer, int offset) {
         buffer[offset] = (byte)(value & 0xFF);
         buffer[offset + 1] = (byte)(value >> 8 & 0xFF);
         buffer[offset + 2] = (byte)(value >> 16 & 0xFF);

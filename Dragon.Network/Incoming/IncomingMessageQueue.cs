@@ -13,7 +13,7 @@ public class IncomingMessageQueue : IIncomingMessageQueue {
     public IncomingMessageQueue(IIncomingMessageEventHandler incomingMessageEventHandler) {
         IncomingMessageEventHandler = incomingMessageEventHandler;
 
-        disruptor = new Disruptor<RingBufferByteArray>(() => new RingBufferByteArray(), BufferSize, TaskScheduler.Default, ProducerType.Single, new SpinWaitWaitStrategy());
+        disruptor = new Disruptor<RingBufferByteArray>(() => new RingBufferByteArray(), BufferSize, TaskScheduler.Default, ProducerType.Single, new BlockingWaitStrategy());
 
         disruptor.HandleEventsWith(IncomingMessageEventHandler);
     }
@@ -36,7 +36,7 @@ public class IncomingMessageQueue : IIncomingMessageQueue {
             entry.FromId = fromId;
             entry.Connection = connection;
 
-            entry.SetContent(buffer);
+            entry.SetContent(buffer, buffer.Length);
 
             ringbuffer.Publish(sequence);
         }

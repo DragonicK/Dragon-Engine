@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Disruptor" Version="4.0.0" />
+    <PackageReference Include="Disruptor" Version="5.0.0" />
   </ItemGroup>
 
   <ItemGroup>

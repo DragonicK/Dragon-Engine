@@ -8,15 +8,12 @@ public class OutgoingMessageEventHandler : IOutgoingMessageEventHandler {
     }
 
     public void OnEvent(RingBufferByteArray buffer, long sequence, bool endOfBatch) {
-        var bytes = new byte[buffer.Length + 4];
-
-        buffer.GetContent(ref bytes, 4);
-
         OutgoingMessagePublisher.Broadcast(
             buffer.TransmissionTarget,
             buffer.DestinationPeers,
             buffer.ExceptDestination,
-            bytes
+            buffer.ByteBuffer,
+            buffer.Length
         );
 
         buffer.Reset();

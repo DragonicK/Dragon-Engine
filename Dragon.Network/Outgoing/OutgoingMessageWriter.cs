@@ -10,10 +10,11 @@ public class OutgoingMessageWriter : IOutgoingMessageWriter {
     }
 
     public RingBufferByteArray CreateMessage(object packet) {
-        var ringbuffer = new RingBufferByteArray();
+        var entry = OutgoingMessageQueue.GetNextSequence();
 
-        ringbuffer.SetContent(Serializer.Serialize(packet));
-        return ringbuffer;
+        entry.SetOutgoingContent(Serializer.Serialize(packet));
+
+        return entry;
     }
 
     public void Enqueue(RingBufferByteArray buffer) {
