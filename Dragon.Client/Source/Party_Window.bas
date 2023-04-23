@@ -18,9 +18,9 @@ Public Sub CreateWindow_Party()
         ' Empty Bars - SP
         CreatePictureBox WindowCount, "picEmptyBar_SP" & i, 58, 44 + (OffSetY * (i - 1)), 173, 9, , , , , Tex_GUI(41), Tex_GUI(41), Tex_GUI(41)
         ' Filled bars - HP
-        CreatePictureBox WindowCount, "picBar_HP" & i, 58, 34 + (OffSetY * (i - 1)), 173, 9, , , , , Tex_GUI(64), Tex_GUI(40), Tex_GUI(40)
+        CreatePictureBox WindowCount, "picBar_HP" & i, 58, 34 + (OffSetY * (i - 1)), 173, 9, , , , , Tex_GUI(40), Tex_GUI(40), Tex_GUI(40)
         ' Filled bars - SP
-        CreatePictureBox WindowCount, "picBar_SP" & i, 58, 44 + (OffSetY * (i - 1)), 173, 9, , , , , Tex_GUI(42), Tex_GUI(42), Tex_GUI(42)
+        CreatePictureBox WindowCount, "picBar_SP" & i, 58, 44 + (OffSetY * (i - 1)), 173, 9, , , , , Tex_GUI(42), Tex_GUI(41), Tex_GUI(41)
         ' Models
         CreatePictureBox WindowCount, "picChar" & i, 20, 20 + (OffSetY * (i - 1)), 32, 32    ', , , , , Tex_Char(1), Tex_Char(1), Tex_Char(1)
     Next
@@ -62,7 +62,7 @@ Public Sub CreateWindow_Party()
 End Sub
 
 Public Sub UpdatePartyInterface()
-    Dim i As Long, image(0 To 5) As Long, X As Long, CharacterNum As Long, Height As Long, cIn As Long
+    Dim i As Long, image(0 To 5) As Long, x As Long, CharacterNum As Long, Height As Long, cIn As Long
 
     ' unload it if we're not in a party
     If Party.Leader = 0 Then
