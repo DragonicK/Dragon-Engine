@@ -140,6 +140,8 @@ public class JoinGame {
 
         SendExperience();
 
+        Player.AllocateAttributes();
+
         PacketSender!.SendWarehouse(Player);
         PacketSender!.SendCash(Player);
         PacketSender!.SendMails(Player);

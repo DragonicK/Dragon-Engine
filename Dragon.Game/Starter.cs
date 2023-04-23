@@ -64,13 +64,16 @@ public sealed class Starter {
         const int Delay = 999;
 
         var services = Services.GetContainer().GetUpdatableServices();
+        var count = services.Length;
 
         running = true;
 
         while (running) {
-            var count = services.Length;
-
-            Parallel.For(0, count, index => services[index].Update(Delay));
+    
+            for (var i = 0; i < count; i++) {
+                services[i].Update(Delay);
+            }
+            // Parallel.For(0, count, index => services[index].Update(Delay));
 
             await Task.Delay(Delay);
         }

@@ -202,8 +202,9 @@ public class ChestManager {
 
                     index--;
 
-                    var canTakeItem = false;
                     var item = chest.Items[index];
+
+                    bool canTakeItem;
 
                     if (item.IsCurrency) {
                         canTakeItem = TakeCurrency(item);
@@ -311,7 +312,6 @@ public class ChestManager {
         return false;
     }
 
-
     #endregion
 
     #region Take Currency
@@ -321,17 +321,24 @@ public class ChestManager {
         var rest = 0;
 
         if (Player!.PartyId > 0) {
-            if (!CanSharePartyCurrency(item)) {
-                added = CanAddCurrency(Player, item.Currency, item.Value, out rest);
+            added = CanSharePartyCurrency(item);
+
+            if (!added) { 
+                if (CanAddCurrency(Player, item.Currency, item.Value, out rest)) {
+                    added = true;
+
+                    PacketSender!.SendCurrencyUpdate(Player, item.Currency);
+                    PacketSender!.SendMessage(SystemMessage.ReceivedCurrency, QbColor.Gold, Player, new string[] { ((int)item.Currency).ToString(), item.Value.ToString() });
+                }
             }
         }
         else {
-            added = CanAddCurrency(Player, item.Currency, item.Value, out rest);
-        }
+            if (CanAddCurrency(Player, item.Currency, item.Value, out rest)) {
+                added = true;
 
-        if (added) {
-            PacketSender!.SendCurrencyUpdate(Player, item.Currency);
-            PacketSender!.SendMessage(SystemMessage.ReceivedCurrency, QbColor.Gold, Player, new string[] { ((int)item.Currency).ToString(), item.Value.ToString() });
+                PacketSender!.SendCurrencyUpdate(Player, item.Currency);
+                PacketSender!.SendMessage(SystemMessage.ReceivedCurrency, QbColor.Gold, Player, new string[] { ((int)item.Currency).ToString(), item.Value.ToString() });
+            }
         }
 
         if (added && rest > 0) {
@@ -403,9 +410,9 @@ public class ChestManager {
                         if (currentMapId == member.Player.Character.Map) {
                             var player = member.Player;
 
-                            if (CanAddCurrency(player, currencyType, currencyValue, out var rest)) {
+                            if (CanAddCurrency(player, currencyType, currency, out var rest)) {
                                 PacketSender!.SendCurrencyUpdate(player, currencyType);
-                                PacketSender!.SendMessage(SystemMessage.ReceivedCurrency, QbColor.Gold, player, new string[] { ((int)currencyType).ToString(), (currencyValue - rest).ToString() });
+                                PacketSender!.SendMessage(SystemMessage.ReceivedCurrency, QbColor.Gold, player, new string[] { ((int)currencyType).ToString(), (currency - rest).ToString() });
                             }
                             else {
                                 PacketSender!.SendMessage(SystemMessage.TheCurrencyCannotBeAdded, QbColor.BrigthRed, player);

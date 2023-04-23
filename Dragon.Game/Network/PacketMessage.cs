@@ -45,7 +45,6 @@ public sealed partial class PacketSender {
 
     public void SendMessage(Message message, IInstance instance) {
         var players = instance.GetPlayers();
-        var list = players.Select(p => p.GetConnection().Id);
 
         var packet = new PacketBroadcastMessage() {
             AccountLevel = message.AccountLevel,
@@ -57,7 +56,10 @@ public sealed partial class PacketSender {
 
         var msg = Writer!.CreateMessage(packet);
 
-        msg.DestinationPeers.AddRange(list);
+        foreach (var player in players) {
+            msg.DestinationPeers.Add(player.GetConnection().Id);
+        }
+
         msg.TransmissionTarget = TransmissionTarget.Destination;
 
         Writer.Enqueue(msg);
@@ -65,7 +67,6 @@ public sealed partial class PacketSender {
 
     public void SendMessageBubble(Bubble bubble, IInstance instance) {
         var players = instance.GetPlayers();
-        var list = players.Select(p => p.GetConnection().Id);
 
         var packet = new SpMessageBubble() {
             TargetType = bubble.TargetType,
@@ -76,7 +77,10 @@ public sealed partial class PacketSender {
 
         var msg = Writer!.CreateMessage(packet);
 
-        msg.DestinationPeers.AddRange(list);
+        foreach (var player in players) {
+            msg.DestinationPeers.Add(player.GetConnection().Id);
+        }
+
         msg.TransmissionTarget = TransmissionTarget.Destination;
 
         Writer.Enqueue(msg);
@@ -113,7 +117,6 @@ public sealed partial class PacketSender {
 
     public void SendMessage(SystemMessage message, QbColor color, IInstance instance, string[]? parameters = null) {
         var players = instance.GetPlayers();
-        var list = players.Select(p => p.GetConnection().Id);
 
         var packet = new SpSystemMessage() {
             Color = color,
@@ -123,7 +126,10 @@ public sealed partial class PacketSender {
 
         var msg = Writer!.CreateMessage(packet);
 
-        msg.DestinationPeers.AddRange(list);
+        foreach (var player in players) {
+            msg.DestinationPeers.Add(player.GetConnection().Id);
+        }
+
         msg.TransmissionTarget = TransmissionTarget.Destination;
 
         Writer.Enqueue(msg);
@@ -149,7 +155,6 @@ public sealed partial class PacketSender {
 
     public void SendMessage(Damage damage, IInstance instance) {
         var players = instance.GetPlayers();
-        var list = players.Select(p => p.GetConnection().Id);
 
         var packet = new SpActionMessage() {
             MessageType = damage.MessageType,
@@ -162,7 +167,10 @@ public sealed partial class PacketSender {
 
         var msg = Writer!.CreateMessage(packet);
 
-        msg.DestinationPeers.AddRange(list);
+        foreach (var player in players) {
+            msg.DestinationPeers.Add(player.GetConnection().Id);
+        }
+
         msg.TransmissionTarget = TransmissionTarget.Destination;
 
         Writer.Enqueue(msg);

@@ -49,10 +49,13 @@ public sealed class BroadcastMessage {
                             ProcessGuildMessage(player);
                             break;
                     }
-
                 }
             }
         }
+
+        Packet.Name = null;
+        Packet.Text = null;
+        Packet = null;
     }
 
     private void ProcessMapMessage(IPlayer player) {
