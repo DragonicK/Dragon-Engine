@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <BaseOutputPath>..\Build\Chat</BaseOutputPath>
+    <BaseIntermediateOutputPath />
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Dragon.Core\Dragon.Core.csproj" />
+    <ProjectReference Include="..\Dragon.Network\Dragon.Network.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Routes\" />
+  </ItemGroup>
+
+</Project>
