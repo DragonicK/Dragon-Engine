@@ -1,6 +1,6 @@
 ﻿namespace Dragon.Login;
 
-public class Program {
+public sealed class Program {
     static Starter? Server { get; set; }
 
     static void Main(string[] args) {

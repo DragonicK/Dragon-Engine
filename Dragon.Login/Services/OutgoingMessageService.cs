@@ -6,7 +6,7 @@ using Dragon.Core.Services;
 
 namespace Dragon.Login.Services;
 
-public class OutgoingMessageService : IService {
+public sealed class OutgoingMessageService : IService {
     public ServicePriority Priority => ServicePriority.Mid;
     public IOutgoingMessageQueue? OutgoingMessageQueue { get; private set; }
     public IOutgoingMessageEventHandler? OutgoingMessageEventHandler { get; private set; }

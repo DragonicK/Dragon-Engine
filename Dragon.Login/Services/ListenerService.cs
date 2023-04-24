@@ -5,7 +5,7 @@ using Dragon.Login.Server;
 
 namespace Dragon.Login.Services;
 
-public class ListenerService : IService {
+public sealed class ListenerService : IService {
     public ServicePriority Priority => ServicePriority.Low;
     public IEngineListener? ServerListener { get; private set; }
     public ConnectionService? ConnectionService { get; private set; }

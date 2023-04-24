@@ -9,7 +9,7 @@ using Dragon.Login.Network;
 
 namespace Dragon.Login.Services;
 
-public class IncomingMessageService : IService {
+public sealed class IncomingMessageService : IService {
     public ServicePriority Priority => ServicePriority.High;
     public IMessageRepository<MessageHeader>? MessageRepository { get; private set; }
     public IIncomingMessageParser? IncomingMessageParser { get; private set; }

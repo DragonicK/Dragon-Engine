@@ -3,7 +3,7 @@ using Dragon.Core.Services;
 
 namespace Dragon.Login.Services;
 
-public class LoggerService : IService {
+public sealed class LoggerService : IService {
     public ServicePriority Priority => ServicePriority.First;
     public ILogger? Logger { get; private set; }
     public ConfigurationService? Configuration { get; private set; }

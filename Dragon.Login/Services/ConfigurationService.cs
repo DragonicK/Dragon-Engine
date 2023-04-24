@@ -15,7 +15,7 @@ using Dragon.Login.Configurations;
 
 namespace Dragon.Login.Services;
 
-public class ConfigurationService : IService, IConfiguration {
+public sealed class ConfigurationService : IService, IConfiguration {
     public ServicePriority Priority => ServicePriority.First;
     public JwtSettings JwtSettings { get; set; }
     public bool Maintenance { get; set; }

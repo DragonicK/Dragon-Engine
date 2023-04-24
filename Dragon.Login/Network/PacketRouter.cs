@@ -3,7 +3,7 @@ using Dragon.Core.Services;
 
 namespace Dragon.Login.Network;
 
-public class PacketRouter : IPacketRouter {
+public sealed class PacketRouter : IPacketRouter {
     private readonly Dictionary<Type, Type> routes;
     private readonly IServiceInjector injector;
 

@@ -3,7 +3,7 @@ using Dragon.Core.Services;
 
 namespace Dragon.Login.Services;
 
-public class ConnectionService : IService {
+public sealed class ConnectionService : IService {
     public ServicePriority Priority => ServicePriority.High;
     public IConnectionRepository? ConnectionRepository { get; private set; }
     public IIndexGenerator? IndexGenerator { get; private set; }

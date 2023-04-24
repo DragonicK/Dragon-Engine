@@ -3,7 +3,7 @@ using Dragon.Core.GeoIpCountry;
 
 namespace Dragon.Login.Services;
 
-public class GeoIpService : IService {
+public sealed class GeoIpService : IService {
     public ServicePriority Priority => ServicePriority.High;
     public IGeoIpAddress? GeoIpAddress { get; private set; }
     public LoggerService? LoggerService { get; private set; }
