@@ -12,35 +12,40 @@ using System.Security.Cryptography;
 namespace Dragon.Login.Server;
 
 public sealed class JoinServer {
-    public ILogger? Logger { get; init; }
-    public IConnection? Connection { get; init; }
+    public LoggerService? LoggerService { get; init; }
     public IConfiguration? Configuration { get; init; }
     public OutgoingMessageService? OutgoingMessageService { get; init; }
 
-    public void AcceptConnection() {
-        var id = Connection is not null ? Connection.Id : 0;
-        var ipAddress = Connection is not null ? Connection.IpAddress : string.Empty;
+    public void AcceptConnection(IConnection connection) {
+        var logger = GetLogger();
 
-        Logger?.Info(GetType().Name, $"Approval Id: {id} IpAddress: {ipAddress}");
+        var id = connection is not null ? connection.Id : 0;
+        var ipAddress = connection is not null ? connection.IpAddress : string.Empty;
+
+        logger?.Info(GetType().Name, $"Approval Id: {id} IpAddress: {ipAddress}");
 
         const int CipherKeyLength = 16;
 
-        Logger?.Info(GetType().Name, $"Generating Cipher Key Id: {id}");
+        logger?.Info(GetType().Name, $"Generating Cipher Key Id: {id}");
 
-        Connection!.CipherKey = RandomNumberGenerator.GetBytes(CipherKeyLength);
+        connection!.CipherKey = RandomNumberGenerator.GetBytes(CipherKeyLength);
 
         var writer = OutgoingMessageService!.OutgoingMessageWriter!;
- 
+
         var msg = writer.CreateMessage(new SpUpdateCipherKey() {
             GameState = GameState.Login,
-            Key = Connection.CipherKey,
-        }); 
+            Key = connection.CipherKey,
+        });
 
-        msg.DestinationPeers.Add(Connection!.Id);
+        msg.DestinationPeers.Add(connection!.Id);
         msg.TransmissionTarget = TransmissionTarget.Destination;
 
         writer.Enqueue(msg);
 
-        Logger?.Info(GetType().Name, $"Cipher Key Sended Id: {id}");
+        logger?.Info(GetType().Name, $"Cipher Key Sended Id: {id}");
+    }
+
+    private ILogger? GetLogger() {
+        return LoggerService!.Logger;
     }
 }
