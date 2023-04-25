@@ -1,31 +1,23 @@
 ﻿using Dragon.Network;
-using Dragon.Core.Services;
 
 namespace Dragon.Login.Network;
 
 public sealed class PacketRouter : IPacketRouter {
-    private readonly Dictionary<Type, Type> routes;
-    private readonly IServiceInjector injector;
+    private readonly Dictionary<Type, IRoute> routes;
 
-    public PacketRouter(IServiceContainer container) {
-        routes = new Dictionary<Type, Type>();
-        injector = new ServiceInjector(container);
+    public PacketRouter() {
+        routes = new Dictionary<Type, IRoute>();
     }
 
-    public void Add(Type key, Type value) => routes.Add(key, value);
+    public void Add(Type key, IRoute value) => routes.Add(key, value);
 
-    private bool Contains(dynamic packet) => routes.ContainsKey(packet.GetType());
+    private bool Contains(object packet) => routes.ContainsKey(packet.GetType());
 
-    public void Process(IConnection connection, dynamic packet) {
+    public void Process(IConnection connection, object packet) {
         if (Contains(packet)) {
-            dynamic created = Activator.CreateInstance(routes[packet.GetType()]);
+            var route = routes[packet.GetType()];
 
-            injector.Inject(created);
-
-            created.Connection = connection;
-            created.Packet = packet;
-
-            created.Process();
+            route.Process(connection, packet);
         }
     }
 }

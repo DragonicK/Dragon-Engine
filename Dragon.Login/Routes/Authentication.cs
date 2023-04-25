@@ -1,5 +1,6 @@
 ﻿using Dragon.Network;
 using Dragon.Network.Outgoing;
+using Dragon.Network.Messaging;
 using Dragon.Network.Messaging.SharedPackets;
 
 using Dragon.Database;
@@ -14,44 +15,47 @@ using Dragon.Core.Cryptography;
 using Dragon.Core.Model.Accounts;
 
 using Dragon.Login.Services;
+using Dragon.Login.Network;
 
 namespace Dragon.Login.Routes;
 
-public sealed class Authentication {
-    public IConnection? Connection { get; set; }
-    public CpAuthentication? Packet { get; set; }
-    public OutgoingMessageService? OutgoingMessageService { get; init; }
-    public ConfigurationService? Configuration { get; init; }
-    public DatabaseService? DatabaseService { get; init; }
-    public LoggerService? LoggerService { get; init; }
+public sealed class Authentication : IRoute {
+    public MessageHeader Header => MessageHeader.Authentication;
+    public LoggerService? LoggerService { get; set; }
+    public GeoIpService? GeoIpService { get; set; }
+    public DatabaseService? DatabaseService { get; set; }
+    public ConnectionService? ConnectionService { get; set; }
+    public ConfigurationService? ConfigurationService { get; set; }
+    public OutgoingMessageService? OutgoingMessageService { get; set; }
 
-    private IDatabaseFactory? factory;
-    private Account? account;
-
-    public async void Process() {
+    public async void Process(IConnection connection, object packet) {
+        var received = packet as CpAuthentication;
         var logger = GetLogger();
-
-        if (Packet is not null) {
+        
+        if (received is not null) {
             var token = string.Empty;
-            var version = Packet.Version;
-            var username = Packet.Username;
-            var passphrase = Packet.Passphrase;
+            var version = received.Version;
+            var username = received.Username;
+            var passphrase = received.Passphrase;
 
-            factory = GetFactory();
+            var factory = GetFactory();
 
             try {
-                using var handler = factory.GetMembershipHandler(Configuration!.DatabaseMembership);
-                var result = await GetAuthenticationResultAsync(handler, version, username, passphrase);
+                using var handler = factory.GetMembershipHandler(ConfigurationService!.DatabaseMembership);
+
+                var account = await GetAccountAsync(handler, username);
+
+                var result = GetAuthenticationResult(version, account, passphrase);
 
                 if (result == AuthenticationResult.Success) {
-                    token = GenerateToken();
+                    token = GenerateToken(account);
 
-                    SendResult(token);
+                    SendResult(connection, token);
 
-                    await UpdateLastLoginDataAsync(handler);
+                    await UpdateLastLoginDataAsync(connection, handler, account);
                 }
                 else {
-                    SendResult(result);
+                    SendResult(connection, result);
                 }
 
                 await WriteTokenLog(result, username, token);
@@ -65,7 +69,7 @@ public sealed class Authentication {
         }
     }
 
-    private string GenerateToken() {
+    private string GenerateToken(Account account) {
         var tokenData = new JwtTokenData() {
             CharacterId = 0,
             Username = account!.Username,
@@ -73,28 +77,30 @@ public sealed class Authentication {
             AccountLevel = account!.AccountLevelCode
         };
 
-        var handler = new JwtTokenHandler(Configuration!.JwtSettings);
+        var handler = new JwtTokenHandler(ConfigurationService!.JwtSettings);
 
         return handler.GerenateToken(tokenData);
     }
 
-    private async Task<AuthenticationResult> GetAuthenticationResultAsync(MembershipHandler handler, ClientVersion version, string username, string passphrase) {
-        if (Configuration!.Maintenance) {
+    private async Task<Account> GetAccountAsync(MembershipHandler handler, string username) {
+        return await handler.GetAccountWithLockAsync(username);
+    }
+
+    private AuthenticationResult GetAuthenticationResult(ClientVersion version, Account? account, string passphrase) {
+        if (ConfigurationService!.Maintenance) {
             return AuthenticationResult.Maintenance;
         }
 
-        if (Configuration!.ClientVersion != version) {
+        if (ConfigurationService!.ClientVersion != version) {
             return AuthenticationResult.VersionOutdated;
         }
-
-        account = await handler.GetAccountWithLockAsync(username);
 
         if (account is null) {
             return AuthenticationResult.WrongUserData;
         }
 
         if (account.AccountLock is not null) {
-            if (!IsBanExpired()) {
+            if (!IsBanExpired(account)) {
                 return AuthenticationResult.AccountIsBanned;
             }
         }
@@ -103,21 +109,21 @@ public sealed class Authentication {
             return AuthenticationResult.AccountIsNotActivated;
         }
 
-        if (!IsPassphraseOk(passphrase)) {
+        if (!IsPassphraseOk(account, passphrase)) {
             return AuthenticationResult.WrongUserData;
         }
 
         return AuthenticationResult.Success;
     }
 
-    private bool IsPassphraseOk(string passphrase) {
+    private bool IsPassphraseOk(Account account, string passphrase) {
         var salt = Hash.ComputeToHex(account?.Username + passphrase);
         var password = Hash.ComputeToHex(passphrase + salt);
 
-        return account!.Passphrase.CompareTo(password) == 0;
+        return account?.Passphrase.CompareTo(password) == 0;
     }
 
-    private bool IsBanExpired() {
+    private bool IsBanExpired(Account account) {
         var isExpired = true;
 
         account?.AccountLock?.ForEach(
@@ -139,9 +145,9 @@ public sealed class Authentication {
         return isExpired;
     }
 
-    private Task<int> UpdateLastLoginDataAsync(MembershipHandler handler) {
+    private Task<int> UpdateLastLoginDataAsync(IConnection connection, MembershipHandler handler, Account account) {
         account!.LastLoginDate = DateTime.Now;
-        account!.LastLoginIp = Connection!.IpAddress;
+        account!.LastLoginIp = connection.IpAddress;
 
         return handler.PutAccountAsync(account);
     }
@@ -150,24 +156,26 @@ public sealed class Authentication {
         return DateTime.Now.CompareTo(date) == 1;
     }
 
-    private void SendResult(string token) {
+    private void SendResult(IConnection connection, string token) {
         var writer = GetMessageWriter();
 
+        var server = ConfigurationService!.GameServer;
+
         var p = new SpAuthenticationResult() {
-            IpAddress = Configuration!.GameServer.Ip,
-            Port = Configuration!.GameServer.Port,
+            IpAddress = server.Ip,
+            Port = server.Port,
             Token = token
         };
 
         var msg = writer!.CreateMessage(p);
 
-        msg.DestinationPeers.Add(Connection!.Id);
+        msg.DestinationPeers.Add(connection!.Id);
         msg.TransmissionTarget = TransmissionTarget.Destination;
 
         writer.Enqueue(msg);
     }
 
-    private void SendResult(AuthenticationResult result) {
+    private void SendResult(IConnection connection, AuthenticationResult result) {
         var writer = GetMessageWriter();
 
         var packet = new SpAlertMessage() {
@@ -176,7 +184,7 @@ public sealed class Authentication {
 
         var msg = writer!.CreateMessage(packet);
 
-        msg.DestinationPeers.Add(Connection!.Id);
+        msg.DestinationPeers.Add(connection!.Id);
         msg.TransmissionTarget = TransmissionTarget.Destination;
 
         writer.Enqueue(msg);

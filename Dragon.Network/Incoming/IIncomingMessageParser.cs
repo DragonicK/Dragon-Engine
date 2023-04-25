@@ -2,6 +2,5 @@
 
 public interface IIncomingMessageParser {
     IConnectionRepository? ConnectionRepository { get; init; }
-    IPacketRouter? PacketRouter { get; init; }
-    void Process(IConnection connection, dynamic packet);
+    void Process(IConnection connection, object packet);
 }

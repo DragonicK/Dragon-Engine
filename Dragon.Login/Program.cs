@@ -25,6 +25,10 @@ public sealed class Program {
         Server = new Starter();
         Server.Start();
 
+        ConsoleWrite("Executing GC Collect");
+
+        GC.Collect();
+
         ConsoleWrite("Server Started");
     }
 

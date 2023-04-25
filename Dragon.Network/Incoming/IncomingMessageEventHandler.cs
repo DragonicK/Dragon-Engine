@@ -53,7 +53,7 @@ public class IncomingMessageEventHandler : IIncomingMessageEventHandler {
 
         if (MessageRepository.Contains(header)) {
             var type = MessageRepository.GetMessage(header);
-            dynamic packet = Serializer.Deserialize(buffer, type);
+            var packet = Serializer.Deserialize(buffer, type);
 
             IncomingMessageParser.Process(connection, packet);
         }
