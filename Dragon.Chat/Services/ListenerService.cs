@@ -16,6 +16,9 @@ public sealed class ListenerService : IService {
     public GeoIpService? GeoIpService { get; private set; }
     public bool IsRunning { get; private set; } = false;
 
+    private JoinServer? JoinServer { get; set; }
+    private LeftServer? LeftServer { get; set; }
+
     public void Start() {
         var repository = ConnectionService!.ConnectionRepository;
         var queue = IncomingMessageService!.IncomingMessageQueue;
@@ -23,6 +26,19 @@ public sealed class ListenerService : IService {
         var generator = ConnectionService.IndexGenerator;
         var incomingMessage = IncomingMessageService.IncomingMessageQueue;
         var outgoingWriter = OutgoingMessageService!.OutgoingMessageWriter;
+
+        JoinServer = new JoinServer() {
+            LoggerService = LoggerService,
+            Configuration = Configuration,
+            OutgoingMessageService = OutgoingMessageService
+        };
+
+        LeftServer = new LeftServer() {
+            GeoIpService = GeoIpService,
+            Configuration = Configuration,
+            LoggerService = LoggerService,
+            ConnectionService = ConnectionService
+        };
 
         ServerListener = new EngineListener() {
             MaximumConnections = Configuration!.MaximumConnections,
@@ -51,38 +67,14 @@ public sealed class ListenerService : IService {
     }
 
     private void WriteFromConnectionApproval(object? sender, IConnection connection) {
-        var join = new JoinServer() {
-            Connection = connection,
-            Configuration = Configuration,
-            Logger = LoggerService!.Logger,
-            OutgoingMessageService = OutgoingMessageService
-        };
-
-        join.AcceptConnection();
+        JoinServer?.AcceptConnection(connection);
     }
 
     private void WriteFromConnectionRefuse(object? sender, IConnection connection) {
-        var left = new LeftServer() {
-            ConnectionRepository = ConnectionService!.ConnectionRepository,
-            GeoIpAddress = GeoIpService!.GeoIpAddress,
-            Logger = LoggerService!.Logger,
-            Configuration = Configuration,
-            Connection = connection
-        };
-
-        left.RefuseConnection();
+        LeftServer?.RefuseConnection(connection);
     }
 
     private void WriteFromConnectionDisconnect(object? sender, IConnection connection) {
-        var left = new LeftServer() {
-            ConnectionRepository = ConnectionService!.ConnectionRepository,
-            IndexGenerator = ConnectionService.IndexGenerator,
-            GeoIpAddress = GeoIpService!.GeoIpAddress,
-            Logger = LoggerService!.Logger,
-            Configuration = Configuration,
-            Connection = connection
-        };
-
-        left.DisconnectConnection();
+        LeftServer?.DisconnectConnection(connection);
     }
 }

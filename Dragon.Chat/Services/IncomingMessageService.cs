@@ -43,29 +43,41 @@ public sealed class IncomingMessageService : IService {
     }
 
     private void CreatePacketRouter() {
-        var types = GetTypes();
+        var routes = GetRoutedTypes();
         var messages = MessageRepository!.Messages;
 
-        PacketRouter = new PacketRouter(Services!);
+        PacketRouter = new PacketRouter();
 
-        foreach (var (_, type) in messages) {
-            AddTypeThatHasProperty(types!, type);
-        }
-    }
+        var injector = new ServiceInjector(Services!);
 
-    private void AddTypeThatHasProperty(Type[] types, Type property) {
-        foreach (var type in types) {
-            if (GetPropertyFromType(type, property) is not null) {
-                PacketRouter?.Add(property, type);
+        if (routes is not null) {
+            foreach (var (header, type) in messages) {
+                var route = GetRouteFromMessage(header, routes);
+
+                if (route is not null) {
+                    injector.Inject(route);
+
+                    PacketRouter.Add(type, route);
+                }
             }
         }
     }
 
-    private static PropertyInfo? GetPropertyFromType(Type type, Type property) {
-        return type.GetProperties().Where(p => p.PropertyType.Equals(property)).FirstOrDefault();
+    private IRoute? GetRouteFromMessage(MessageHeader header, Type[]? routes) {
+        foreach (var route in routes) {
+            var instance = Activator.CreateInstance(route) as IRoute;
+
+            if (instance is not null) {
+                if (instance.Header == header) {
+                    return instance;
+                }
+            }
+        }
+
+        return null;
     }
 
-    private Type[]? GetTypes() {
+    private Type[]? GetRoutedTypes() {
         var assembly = Assembly.GetEntryAssembly();
 
         if (assembly is null) {
@@ -74,7 +86,7 @@ public sealed class IncomingMessageService : IService {
 
         return assembly
             .GetTypes()
-            .Where(t => t.IsClass)
+            .Where(t => t.IsClass && t.GetInterface("IRoute") is not null)
             .ToArray();
     }
 }
