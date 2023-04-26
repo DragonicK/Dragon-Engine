@@ -73,7 +73,6 @@ public sealed class Starter {
             for (var i = 0; i < count; i++) {
                 services[i].Update(Delay);
             }
-            // Parallel.For(0, count, index => services[index].Update(Delay));
 
             await Task.Delay(Delay);
         }
