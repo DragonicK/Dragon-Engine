@@ -4,7 +4,7 @@ using Dragon.Game.Players;
 
 namespace Dragon.Game.Services;
 
-public class CombatService : IService, IUpdatableService {
+public sealed class CombatService : IService, IUpdatableService {
     public ServicePriority Priority => ServicePriority.Last;
     public ConnectionService? ConnectionService { get; private set; }
 

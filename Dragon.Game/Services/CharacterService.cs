@@ -10,7 +10,7 @@ using Dragon.Game.Repository;
 
 namespace Dragon.Game.Services;
 
-public class CharacterService : IService, IUpdatableService {
+public sealed class CharacterService : IService, IUpdatableService {
     public ServicePriority Priority => ServicePriority.Low;
     public IPlayerRepository? Repository { get; private set; }
     public IDatabaseFactory? Factory { get; private set; }

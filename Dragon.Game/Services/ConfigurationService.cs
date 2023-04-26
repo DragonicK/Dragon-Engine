@@ -13,7 +13,7 @@ using Dragon.Game.Configurations.Data;
 
 namespace Dragon.Game.Services;
 
-public class ConfigurationService : IService, IConfiguration {
+public sealed class ConfigurationService : IService, IConfiguration {
     public ServicePriority Priority { get; private set; } = ServicePriority.First;
     public JwtSettings JwtSettings { get; set; }
     public bool Debug { get; set; }

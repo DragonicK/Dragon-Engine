@@ -32,7 +32,7 @@ using Dragon.Game.Instances;
 
 namespace Dragon.Game.Services;
 
-public class ContentService : IService {
+public sealed class ContentService : IService {
     public ServicePriority Priority => ServicePriority.Mid;
     public ConfigurationService? Configuration { get; init; }
     public PacketSenderService? PacketSenderService { get; init; }

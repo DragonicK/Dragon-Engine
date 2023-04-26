@@ -1,15 +1,14 @@
 ﻿using Dragon.Core.Services;
-using Dragon.Core.Model.Entity;
 using Dragon.Core.Model.DisplayIcon;
 
-using Dragon.Game.Network;
 using Dragon.Game.Manager;
 using Dragon.Game.Players;
 using Dragon.Game.Instances;
+using Dragon.Game.Network.Senders;
 
 namespace Dragon.Game.Services;
 
-public class EffectService : IService, IUpdatableService {
+public sealed class EffectService : IService, IUpdatableService {
     public ServicePriority Priority => ServicePriority.Last;
     public ContentService? ContentService { get; private set; }
     public InstanceService? InstanceService { get; private set; }

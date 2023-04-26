@@ -5,7 +5,7 @@ using Dragon.Game.Server;
 
 namespace Dragon.Game.Services;
 
-public class ListenerService : IService {
+public sealed class ListenerService : IService {
     public ServicePriority Priority => ServicePriority.Low;
     public IEngineListener? ServerListener { get; private set; }
     public ConnectionService? ConnectionService { get; private set; }
@@ -19,6 +19,9 @@ public class ListenerService : IService {
     public DatabaseService? DatabaseService { get; private set; }
     public bool IsRunning { get; private set; } = false;
 
+    private JoinServer? JoinServer { get; set; }
+    private LeftServer? LeftServer { get; set; }
+
     public void Start() {
         var repository = ConnectionService!.ConnectionRepository;
         var queue = IncomingMessageService!.IncomingMessageQueue;
@@ -26,6 +29,21 @@ public class ListenerService : IService {
         var generator = ConnectionService.IndexGenerator;
         var incomingMessage = IncomingMessageService.IncomingMessageQueue;
         var outgoingWriter = OutgoingMessageService!.OutgoingMessageWriter;
+
+        JoinServer = new JoinServer() {
+            LoggerService = LoggerService,
+            Configuration = Configuration,
+            OutgoingMessageService = OutgoingMessageService
+        };
+
+        LeftServer = new LeftServer() {
+            GeoIpService = GeoIpService,
+            Configuration = Configuration,
+            LoggerService = LoggerService,
+            ConnectionService = ConnectionService
+        };
+
+        LeftServer.InitializeContent();
 
         ServerListener = new EngineListener() {
             MaximumConnections = Configuration!.MaximumConnections,
@@ -54,43 +72,14 @@ public class ListenerService : IService {
     }
 
     private void WriteFromConnectionApproval(object? sender, IConnection connection) {
-        var join = new JoinServer() {
-            Connection = connection,
-            Configuration = Configuration,
-            Logger = LoggerService!.Logger,
-            OutgoingMessageService = OutgoingMessageService
-        };
-
-        join.AcceptConnection();
+        JoinServer?.AcceptConnection(connection);
     }
 
     private void WriteFromConnectionRefuse(object? sender, IConnection connection) {
-        var join = new LeftServer() {
-            ConnectionRepository = ConnectionService!.ConnectionRepository,
-            PlayerRepository = ConnectionService.PlayerRepository,
-            IndexGenerator = ConnectionService.IndexGenerator,
-            GeoIpAddress = GeoIpService!.GeoIpAddress,
-            Logger = LoggerService!.Logger,
-            Configuration = Configuration,
-            Connection = connection
-        };
-
-        join.RefuseConnection();
+        LeftServer?.RefuseConnection(connection);
     }
 
     private void WriteFromConnectionDisconnect(object? sender, IConnection connection) {
-        var left = new LeftServer() {
-            ConnectionRepository = ConnectionService!.ConnectionRepository,
-            PlayerRepository = ConnectionService.PlayerRepository,
-            IndexGenerator = ConnectionService.IndexGenerator,
-            PacketSenderService = PacketSenderService,
-            GeoIpAddress = GeoIpService!.GeoIpAddress,
-            Logger = LoggerService!.Logger,
-            DatabaseService = DatabaseService,
-            Configuration = Configuration,
-            Connection = connection
-        };
-
-        left.DisconnectConnection();
+        LeftServer?.DisconnectConnection(connection);
     }
 }

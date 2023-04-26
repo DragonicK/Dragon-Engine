@@ -7,7 +7,7 @@ using Dragon.Game.Configurations;
 
 namespace Dragon.Game.Services;
 
-public class DatabaseService : IService {
+public sealed class DatabaseService : IService {
     public ServicePriority Priority => ServicePriority.High;
     public IDatabaseFactory? DatabaseFactory { get; private set; }
     public LoggerService? LoggerService { get; private set; }

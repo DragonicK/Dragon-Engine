@@ -1,10 +1,12 @@
 ﻿using Dragon.Network;
+
 using Dragon.Core.Services;
+
 using Dragon.Game.Repository;
 
 namespace Dragon.Game.Services;
 
-public class ConnectionService : IService, IUpdatableService {
+public sealed class ConnectionService : IService, IUpdatableService {
     public ServicePriority Priority => ServicePriority.High;
     public IConnectionRepository? ConnectionRepository { get; private set; }
     public IPlayerRepository? PlayerRepository { get; private set; }

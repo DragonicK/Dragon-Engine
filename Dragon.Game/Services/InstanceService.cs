@@ -1,17 +1,14 @@
 ﻿using Dragon.Core.Model;
 using Dragon.Core.Services;
-using Dragon.Core.Serialization;
-using Dragon.Core.Model.Maps;
 
 using Dragon.Game.Parties;
 using Dragon.Game.Manager;
 using Dragon.Game.Players;
 using Dragon.Game.Instances;
-using Dragon.Game.Network;
 
 namespace Dragon.Game.Services;
 
-public class InstanceService : IService, IUpdatableService {
+public sealed class InstanceService : IService, IUpdatableService {
     public ServicePriority Priority => ServicePriority.Last;
     public ContentService? ContentService { get; private set; }
     public ConfigurationService? Configuration { get; private set; }

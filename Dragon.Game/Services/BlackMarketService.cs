@@ -5,7 +5,7 @@ using Dragon.Core.Model.BlackMarket;
 
 namespace Dragon.Game.Services;
 
-public class BlackMarketService : IService, IUpdatableService {
+public sealed class BlackMarketService : IService, IUpdatableService {
     public ServicePriority Priority => ServicePriority.Last;
     public ILogger? Logger { get; private set; }
     public BlackMarketShop? BlackMarket { get; private set; }
