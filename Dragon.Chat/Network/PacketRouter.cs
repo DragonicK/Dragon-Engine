@@ -3,13 +3,13 @@
 namespace Dragon.Chat.Network;
 
 public sealed class PacketRouter : IPacketRouter {
-    private readonly Dictionary<Type, IRoute> routes;
+    private readonly Dictionary<Type, IPacketRoute> routes;
 
     public PacketRouter() {
-        routes = new Dictionary<Type, IRoute>();
+        routes = new Dictionary<Type, IPacketRoute>();
     }
 
-    public void Add(Type key, IRoute value) => routes.Add(key, value);
+    public void Add(Type key, IPacketRoute value) => routes.Add(key, value);
 
     private bool Contains(object packet) => routes.ContainsKey(packet.GetType());
 

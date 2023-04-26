@@ -1,21 +1,19 @@
 ﻿using Dragon.Network;
 using Dragon.Network.Messaging;
 
-using Dragon.Core.Services;
-
 using Dragon.Chat.Network;
-using Dragon.Chat.Services;
+using Dragon.Core.Services;
 
 namespace Dragon.Chat.Routes;
 
-public sealed class Ping : IRoute {
+public sealed class Ping : PacketRoute, IPacketRoute {
     public MessageHeader Header => MessageHeader.Ping;
-    public IServiceContainer? ServiceContainer { get; set; }
-    public LoggerService? LoggerService { get; set; }
-    public GeoIpService? GeoIpService { get; set; }
-    public ConnectionService? ConnectionService { get; set; }
-    public ConfigurationService? ConfigurationService { get; set; }
-    public OutgoingMessageService? OutgoingMessageService { get; set; }
 
-    public void Process(IConnection connection, object packet) { }
+    public void StartInjection(IServiceInjector injector) {
+
+    }
+
+    public void Process(IConnection connection, object packet) { 
+
+    }
 }
