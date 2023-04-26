@@ -2,7 +2,7 @@
 
 namespace Dragon.Login.Network;
 
-public abstract class Route {
+public abstract class PacketRoute {
     public GeoIpService? GeoIpService { get; set; }
     public LoggerService? LoggerService { get; set; }
     public DatabaseService? DatabaseService { get; set; }

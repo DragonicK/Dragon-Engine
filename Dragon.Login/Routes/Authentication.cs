@@ -15,11 +15,16 @@ using Dragon.Core.Cryptography;
 using Dragon.Core.Model.Accounts;
 
 using Dragon.Login.Network;
+using Dragon.Core.Services;
 
 namespace Dragon.Login.Routes;
 
-public sealed class Authentication : Route, IRoute {
+public sealed class Authentication : PacketRoute, IPacketRoute {
     public MessageHeader Header =>  MessageHeader.Authentication;
+
+    public void StartInjection(IServiceInjector injector) {
+
+    }
 
     public async void Process(IConnection connection, object packet) {
         var received = packet as CpAuthentication;

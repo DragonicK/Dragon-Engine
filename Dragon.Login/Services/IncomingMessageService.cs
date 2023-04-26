@@ -5,6 +5,7 @@ using Dragon.Network.Incoming;
 using Dragon.Network.Messaging;
 
 using Dragon.Core.Services;
+
 using Dragon.Login.Network;
 
 namespace Dragon.Login.Services;
@@ -57,15 +58,17 @@ public sealed class IncomingMessageService : IService {
                 if (route is not null) {
                     injector.Inject(route);
 
+                    route.StartInjection(injector);
+
                     PacketRouter.Add(type, route);
                 }
             }
         }
     }
 
-    private IRoute? GetRouteFromMessage(MessageHeader header, Type[] routes) {
+    private IPacketRoute? GetRouteFromMessage(MessageHeader header, Type[] routes) {
         foreach (var route in routes) {
-            var instance = Activator.CreateInstance(route) as IRoute;
+            var instance = Activator.CreateInstance(route) as IPacketRoute;
 
             if (instance is not null) {
                 if (instance.Header == header) {
@@ -86,7 +89,7 @@ public sealed class IncomingMessageService : IService {
 
         return assembly
             .GetTypes()
-            .Where(t => t.IsClass && t.GetInterface("IRoute") is not null)
+            .Where(t => t.IsClass && t.GetInterface("IPacketRoute") is not null)
             .ToArray();
     }
 }

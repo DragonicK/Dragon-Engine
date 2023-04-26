@@ -3,6 +3,6 @@
 namespace Dragon.Login.Network;
 
 public interface IPacketRouter {
-    void Add(Type key, IRoute value);
+    void Add(Type key, IPacketRoute value);
     void Process(IConnection connection, object packet);
 }
