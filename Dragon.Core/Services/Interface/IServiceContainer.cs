@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Dragon.Core.Services;
+﻿namespace Dragon.Core.Services;
 
 public interface IServiceContainer {
     int Count { get; }

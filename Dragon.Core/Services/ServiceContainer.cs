@@ -23,7 +23,7 @@ public class ServiceContainer : IServiceContainer {
     public IUpdatableService[] GetUpdatableServices() {
         var list = new List<IUpdatableService>();
 
-        foreach (var (key, value) in container) {
+        foreach (var (_, value) in container) {
             if (value is IUpdatableService service) {
                 list.Add(service);
             }
