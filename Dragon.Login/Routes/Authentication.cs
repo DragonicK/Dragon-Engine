@@ -14,19 +14,12 @@ using Dragon.Core.Common;
 using Dragon.Core.Cryptography;
 using Dragon.Core.Model.Accounts;
 
-using Dragon.Login.Services;
 using Dragon.Login.Network;
 
 namespace Dragon.Login.Routes;
 
-public sealed class Authentication : IRoute {
-    public MessageHeader Header => MessageHeader.Authentication;
-    public LoggerService? LoggerService { get; set; }
-    public GeoIpService? GeoIpService { get; set; }
-    public DatabaseService? DatabaseService { get; set; }
-    public ConnectionService? ConnectionService { get; set; }
-    public ConfigurationService? ConfigurationService { get; set; }
-    public OutgoingMessageService? OutgoingMessageService { get; set; }
+public sealed class Authentication : Route, IRoute {
+    public MessageHeader Header =>  MessageHeader.Authentication;
 
     public async void Process(IConnection connection, object packet) {
         var received = packet as CpAuthentication;
