@@ -1,6 +1,5 @@
 ﻿using Dragon.Core.Model;
-
-using Dragon.Game.Network;
+using Dragon.Game.Network.Senders;
 using Dragon.Game.Players;
 using Dragon.Game.Services;
 
