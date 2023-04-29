@@ -1,45 +1,55 @@
-﻿using Dragon.Network;
-
-using Dragon.Core.Logs;
-
-using Dragon.Game.Configurations;
+﻿using Dragon.Core.Logs;
 using Dragon.Core.Model;
+using Dragon.Core.Services;
+
+using Dragon.Network;
 using Dragon.Network.Messaging.SharedPackets;
-using System.Security.Cryptography;
+
 using Dragon.Game.Services;
+
+using System.Security.Cryptography;
 
 namespace Dragon.Game.Server;
 
 public sealed class JoinServer {
-    public ILogger? Logger { get; init; }
-    public IConnection? Connection { get; init; }
-    public IConfiguration? Configuration { get; init; }
-    public OutgoingMessageService? OutgoingMessageService { get; init; }
+    public LoggerService? LoggerService { get; private set; }
+    public ConfigurationService? Configuration { get; private set; }
+    public OutgoingMessageService? OutgoingMessageService { get; private set; }
 
-    public void AcceptConnection() {
-        var id = Connection is not null ? Connection.Id : 0;
-        var ipAddress = Connection is not null ? Connection.IpAddress : string.Empty;
+    public JoinServer(IServiceContainer services) {
+        new ServiceInjector(services).Inject(this);
+    }
 
-        Logger?.Info(GetType().Name, $"Approval Id: {id} IpAddress: {ipAddress}");
+    public void AcceptConnection(IConnection connection) {
+        var logger = GetLogger();
+
+        var id = connection is not null ? connection.Id : 0;
+        var ipAddress = connection is not null ? connection.IpAddress : string.Empty;
+
+        logger?.Info(GetType().Name, $"Approval Id: {id} IpAddress: {ipAddress}");
 
         const int CipherKeyLength = 16;
 
-        Logger?.Info(GetType().Name, $"Generating Cipher Key Id: {id}");
+        logger?.Info(GetType().Name, $"Generating Cipher Key Id: {id}");
 
-        Connection!.CipherKey = RandomNumberGenerator.GetBytes(CipherKeyLength);
+        connection!.CipherKey = RandomNumberGenerator.GetBytes(CipherKeyLength);
 
         var writer = OutgoingMessageService!.OutgoingMessageWriter!;
 
         var msg = writer.CreateMessage(new SpUpdateCipherKey() {
-            GameState = GameState.Game,
-            Key = Connection.CipherKey,
+            GameState = GameState.Login,
+            Key = connection.CipherKey,
         });
 
-        msg.DestinationPeers.Add(Connection!.Id);
+        msg.DestinationPeers.Add(connection!.Id);
         msg.TransmissionTarget = TransmissionTarget.Destination;
 
         writer.Enqueue(msg);
 
-        Logger?.Info(GetType().Name, $"Cipher Key Sended Id: {id}");
+        logger?.Info(GetType().Name, $"Cipher Key Sended Id: {id}");
+    }
+
+    private ILogger? GetLogger() {
+        return LoggerService!.Logger;
     }
 }

@@ -8,6 +8,7 @@ namespace Dragon.Game.Services;
 public sealed class ListenerService : IService {
     public ServicePriority Priority => ServicePriority.Low;
     public IEngineListener? ServerListener { get; private set; }
+    public IServiceContainer? ServiceContainer { get; private set; }
     public ConnectionService? ConnectionService { get; private set; }
     public IncomingMessageService? IncomingMessageService { get; private set; }
     public OutgoingMessageService? OutgoingMessageService { get; private set; }
@@ -19,8 +20,8 @@ public sealed class ListenerService : IService {
     public DatabaseService? DatabaseService { get; private set; }
     public bool IsRunning { get; private set; } = false;
 
-    private JoinServer? JoinServer { get; set; }
-    private LeftServer? LeftServer { get; set; }
+    private JoinServer? JoinServer;
+    private LeaveServer? LeaveServer;
 
     public void Start() {
         var repository = ConnectionService!.ConnectionRepository;
@@ -30,20 +31,8 @@ public sealed class ListenerService : IService {
         var incomingMessage = IncomingMessageService.IncomingMessageQueue;
         var outgoingWriter = OutgoingMessageService!.OutgoingMessageWriter;
 
-        JoinServer = new JoinServer() {
-            LoggerService = LoggerService,
-            Configuration = Configuration,
-            OutgoingMessageService = OutgoingMessageService
-        };
-
-        LeftServer = new LeftServer() {
-            GeoIpService = GeoIpService,
-            Configuration = Configuration,
-            LoggerService = LoggerService,
-            ConnectionService = ConnectionService
-        };
-
-        LeftServer.InitializeContent();
+        JoinServer = new JoinServer(ServiceContainer!);
+        LeaveServer = new LeaveServer(ServiceContainer!);
 
         ServerListener = new EngineListener() {
             MaximumConnections = Configuration!.MaximumConnections,
@@ -76,10 +65,10 @@ public sealed class ListenerService : IService {
     }
 
     private void WriteFromConnectionRefuse(object? sender, IConnection connection) {
-        LeftServer?.RefuseConnection(connection);
+        LeaveServer?.RefuseConnection(connection);
     }
 
     private void WriteFromConnectionDisconnect(object? sender, IConnection connection) {
-        LeftServer?.DisconnectConnection(connection);
+        LeaveServer?.DisconnectConnection(connection);
     }
 }
