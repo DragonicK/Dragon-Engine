@@ -11,6 +11,7 @@ public sealed class GeoIpService : IService {
 
     public void Start() {
         const string File = "./Server/GeoIPCountryWhois.csv";
+        const string Message = "Failed to read GeoIPCountryWhois";
 
         if (Configuration is not null) {
             GeoIpAddress = new GeoIpAddress(Configuration.BlockedCountry);
@@ -21,7 +22,7 @@ public sealed class GeoIpService : IService {
             var logger = LoggerService?.Logger;
 
             if (!success) {
-                logger?.Error(GetType().Name, "Failed to read GeoIPCountryWhois");
+                logger?.Error(GetType().Name, Message);
             }
         }
     }

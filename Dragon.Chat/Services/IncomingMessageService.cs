@@ -16,7 +16,8 @@ public sealed class IncomingMessageService : IService {
     public IIncomingMessageQueue? IncomingMessageQueue { get; private set; }
     public IIncomingMessageEventHandler? IncomingMessageEventHandler { get; private set; }
     public IPacketRouter? PacketRouter { get; private set; }
-    public IServiceContainer? Services { get; private set; }
+    public IServiceContainer? ServiceContainer { get; private set; }
+    public IServiceInjector? ServiceInjector { get; private set; }
     public ISerializer? Serializer { get; private set; }
     public LoggerService? LoggerService { get; private set; }
     public ConnectionService? ConnectionService { get; private set; }
@@ -24,6 +25,7 @@ public sealed class IncomingMessageService : IService {
     public void Start() {
         Serializer = new MessageSerializer();
         MessageRepository = new MessageRepository();
+        ServiceInjector = new ServiceInjector(ServiceContainer!);
 
         CreatePacketRouter();
 
@@ -48,17 +50,11 @@ public sealed class IncomingMessageService : IService {
 
         PacketRouter = new PacketRouter();
 
-        var injector = new ServiceInjector(Services!);
-
         if (routes is not null) {
             foreach (var (header, type) in messages) {
                 var route = GetRouteFromMessage(header, routes);
 
                 if (route is not null) {
-                    injector.Inject(route);
-
-                    route.StartInjection(injector);
-
                     PacketRouter.Add(type, route);
                 }
             }
@@ -67,7 +63,7 @@ public sealed class IncomingMessageService : IService {
 
     private IPacketRoute? GetRouteFromMessage(MessageHeader header, Type[] routes) {
         foreach (var route in routes) {
-            var instance = Activator.CreateInstance(route) as IPacketRoute;
+            var instance = Activator.CreateInstance(route, ServiceInjector) as IPacketRoute;
 
             if (instance is not null) {
                 if (instance.Header == header) {
@@ -88,7 +84,7 @@ public sealed class IncomingMessageService : IService {
 
         return assembly
             .GetTypes()
-            .Where(t => t.IsClass && t.GetInterface("IPacketRoute") is not null)
+            .Where(t => t.IsClass && t.GetInterface(nameof(IPacketRouter)) is not null)
             .ToArray();
     }
 }

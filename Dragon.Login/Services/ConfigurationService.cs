@@ -125,7 +125,7 @@ public sealed class ConfigurationService : IService, IConfiguration {
             var property = properties.Where(p => p.Name == name).First();
 
             if (pairs.ContainsKey(name)) {
-                if (name.CompareTo("Priority") != 0) {
+                if (name.CompareTo(nameof(Priority)) != 0) {
                     property.SetValue(this, pairs[name].GetValue(configuration));
                 }
             }

@@ -1,20 +1,24 @@
 ﻿using Dragon.Core.Logs;
 using Dragon.Core.Model;
+using Dragon.Core.Services;
 
 using Dragon.Network;
 using Dragon.Network.Messaging.SharedPackets;
 
 using Dragon.Chat.Services;
-using Dragon.Chat.Configurations;
 
 using System.Security.Cryptography;
 
 namespace Dragon.Chat.Server;
 
 public sealed class JoinServer {
-    public LoggerService? LoggerService { get; init; }
-    public IConfiguration? Configuration { get; init; }
-    public OutgoingMessageService? OutgoingMessageService { get; init; }
+    public LoggerService? LoggerService { get; private set; }
+    public ConfigurationService? Configuration { get; private set; }
+    public OutgoingMessageService? OutgoingMessageService { get; private set; }
+
+    public JoinServer(IServiceInjector injector) {
+        injector.Inject(this);
+    }
 
     public void AcceptConnection(IConnection connection) {
         var logger = GetLogger();

@@ -7,6 +7,5 @@ namespace Dragon.Login.Network;
 
 public interface IPacketRoute {
     MessageHeader Header { get; }
-    void StartInjection(IServiceInjector injector);
     void Process(IConnection connection, object packet);
 }
