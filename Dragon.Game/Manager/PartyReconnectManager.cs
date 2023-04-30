@@ -1,46 +1,49 @@
 ﻿using Dragon.Core.Model;
+using Dragon.Core.Services;
 
 using Dragon.Game.Players;
-using Dragon.Game.Network;
-using Dragon.Game.Services;
 using Dragon.Game.Parties;
+using Dragon.Game.Services;
+using Dragon.Game.Network.Senders;
 
 namespace Dragon.Game.Manager;
 
-public class PartyReconnectManager {
-    public IPacketSender? PacketSender { get; init; }
-    public InstanceService? InstanceService { get; init; }
-    public IPlayer? Player { get; init; }
+public sealed class PartyReconnectManager {
+    public InstanceService? InstanceService { get; private set; }
+    public PacketSenderService? PacketSenderService { get; private set; }
 
-    public void Reconnect() {
-        if (Player is not null) {
-            var parties = InstanceService!.Parties;
+    public PartyReconnectManager(IServiceContainer services) {
+        new ServiceInjector(services).Inject(this);
+    }
 
-            foreach (var (id, party) in parties) {
-                var member = party.FindDisconnectedMember(Player);
+    public void Reconnect(IPlayer player) {
+        var sender = GetPacketSender();
+        var parties = InstanceService!.Parties;
 
-                if (member is not null) {
-                    Player.PartyId = id;
+        foreach (var (id, party) in parties) {
+            var lastMember = party.FindDisconnectedMember(player);
 
-                    member.Player = Player;
-                    member.Disconnected = false;
-                    member.DisconnectionTimeOut = 0;
+            if (lastMember is not null) {
+                player.PartyId = id;
 
-                    PacketSender!.SendParty(party);
+                lastMember.Player = player;
+                lastMember.Disconnected = false;
+                lastMember.DisconnectionTimeOut = 0;
 
-                    foreach (var _member in party.Members) {
-                        if (_member.Player is not null) {
-                            PacketSender!.SendPartyDisplayIcons(_member.Player);
-                        }
+                sender.SendParty(party);
+
+                foreach (var member in party.Members) {
+                    if (member.Player is not null) {
+                        sender!.SendPartyDisplayIcons(member.Player);
                     }
-
-                    SendReconnectedMessage(party, member);
                 }
+
+                SendReconnectedMessage(sender, party, lastMember);
             }
         }
     }
 
-    private void SendReconnectedMessage(PartyManager party, PartyMember except) {
+    private void SendReconnectedMessage(IPacketSender sender, PartyManager party, PartyMember except) {
         var parameters = new string[] { except.Character };
 
         var members = party.Members;
@@ -48,9 +51,13 @@ public class PartyReconnectManager {
         foreach (var member in members) {
             if (member != except) {
                 if (member.Player is not null) {
-                    PacketSender!.SendMessage(SystemMessage.PlayerPartyReconnected, QbColor.BrigthGreen, member.Player, parameters);
+                    sender.SendMessage(SystemMessage.PlayerPartyReconnected, QbColor.BrigthGreen, member.Player, parameters);
                 }
             }
         }
+    }
+
+    private IPacketSender GetPacketSender() {
+        return PacketSenderService!.PacketSender!;
     }
 }
