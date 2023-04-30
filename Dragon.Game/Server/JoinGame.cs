@@ -4,170 +4,177 @@ using Dragon.Core.Model.Classes;
 
 using Dragon.Game.Combat;
 using Dragon.Game.Manager;
-using Dragon.Game.Network;
 using Dragon.Game.Players;
 using Dragon.Game.Services;
+using Dragon.Core.Services;
 using Dragon.Game.Repository;
-using Dragon.Game.Configurations;
+using Dragon.Game.Network.Senders;
 
 namespace Dragon.Game.Server;
 
-public class JoinGame {
-    public ILogger? Logger { get; init; }
-    public IPlayer? Player { get; init; }
-    public IConfiguration? Configuration { get; init; }
-    public IPacketSender? PacketSender { get; init; }
-    public IPlayerRepository? PlayerRepository { get; init; }
-    public InstanceService? InstanceService { get; init; }
-    public ContentService? ContentService { get; init; }
+public sealed class JoinGame {
+    public LoggerService? LoggerService { get; private set; }
+    public ContentService? ContentService { get; private set; }
+    public InstanceService? InstanceService { get; private set; }
+    public ConfigurationService? Configuration { get; private set; }
+    public ConnectionService? ConnectionService { get; private set; }
+    public PacketSenderService? PacketSenderService { get; private set; }
 
-    public void Join() {
-        Player!.Combat = new PlayerCombat(Player, Configuration!, PacketSender!, ContentService!, InstanceService!) {
-            PlayerRepository = PlayerRepository
+    private readonly SkillManager SkillManager;
+    private readonly WarperManager WarperManager;
+    private readonly PartyReconnectManager PartyManager;
+
+    public JoinGame(IServiceContainer services) {
+        new ServiceInjector(services).Inject(this);
+
+        SkillManager = new SkillManager(services);
+        WarperManager = new WarperManager(services);
+        PartyManager = new PartyReconnectManager(services);
+    }
+
+    public void Join(IPlayer player) {
+        var logger = GetLogger();
+        var sender = GetPacketSender();
+
+        player!.Combat = new PlayerCombat(player, Configuration!, GetPacketSender(), ContentService!, InstanceService!) {
+            PlayerRepository = ConnectionService!.PlayerRepository
         };
 
         #region Titles
 
-        Player!.Titles.Titles = ContentService!.Titles;
-        Player!.Titles.TitleAttributes = ContentService!.TitleAttributes;
+        player.Titles.Titles = ContentService!.Titles;
+        player.Titles.TitleAttributes = ContentService!.TitleAttributes;
 
-        var titleId = Player.Character.TitleId;
+        var titleId = player.Character.TitleId;
 
         if (titleId > 0) {
-            Player.Titles.Equip(titleId);
+            player.Titles.Equip(titleId);
         }
 
         #endregion
 
         #region Inventories
 
-        Player!.Inventories.Items = ContentService!.Items;
+        player.Inventories.Items = ContentService!.Items;
 
         #endregion
 
         #region Warehouse
 
-        Player!.Warehouse.Items = ContentService!.Items;
+        player.Warehouse.Items = ContentService!.Items;
 
         #endregion
 
         #region Equipments
 
-        Player!.Equipments.Items = ContentService!.Items;
-        Player!.Equipments.Equipments = ContentService!.Equipments;
-        Player!.Equipments.EquipmentAttributes = ContentService!.EquipmentAttributes;
-        Player!.Equipments.EquipmentUpgrades = ContentService!.EquipmentUpgrades;
-        Player!.Equipments.EquipmentSets = ContentService!.EquipmentSets;
-        Player!.Equipments.EquipmentSetAttributes = ContentService!.EquipmentSetAttributes;
+        player.Equipments.Items = ContentService!.Items;
+        player.Equipments.Equipments = ContentService!.Equipments;
+        player.Equipments.EquipmentAttributes = ContentService!.EquipmentAttributes;
+        player.Equipments.EquipmentUpgrades = ContentService!.EquipmentUpgrades;
+        player.Equipments.EquipmentSets = ContentService!.EquipmentSets;
+        player.Equipments.EquipmentSetAttributes = ContentService!.EquipmentSetAttributes;
 
-        Player!.Equipments.UpdateAttributes();
+        player.Equipments.UpdateAttributes();
 
         #endregion
 
         #region Heraldries
 
-        Player!.Heraldries.Items = ContentService!.Items;
-        Player!.Heraldries.Heraldries = ContentService!.Heraldries;
-        Player!.Heraldries.HeraldryAttributes = ContentService!.HeraldryAttributes;
-        Player!.Heraldries.HeraldryUpgrades = ContentService!.HeraldryUpgrades;
+        player.Heraldries.Items = ContentService!.Items;
+        player.Heraldries.Heraldries = ContentService!.Heraldries;
+        player.Heraldries.HeraldryAttributes = ContentService!.HeraldryAttributes;
+        player.Heraldries.HeraldryUpgrades = ContentService!.HeraldryUpgrades;
 
-        Player!.Heraldries.UpdateAttributes();
+        player.Heraldries.UpdateAttributes();
 
         #endregion
 
         #region Effects
 
-        Player!.Effects.Effects = ContentService!.Effects;
-        Player!.Effects.EffectAttributes = ContentService!.EffectAttributes;
-        Player!.Effects.EffectUpgrades = ContentService!.EffectUpgrades;
+        player.Effects.Effects = ContentService!.Effects;
+        player.Effects.EffectAttributes = ContentService!.EffectAttributes;
+        player.Effects.EffectUpgrades = ContentService!.EffectUpgrades;
 
-        Player!.Effects.UpdateAttributes();
+        player.Effects.UpdateAttributes();
 
         #endregion
 
         #region Skills & Passives
 
-        var manager = new SkillManager() {
-            Player = Player,
-            Passives = ContentService.Passives,
-            Skills = ContentService.Skills
-        };
+        SkillManager.AllocateSkills(player);
+        SkillManager.AllocatePassives(player);
 
-        manager.AllocateSkills();
-        manager.AllocatePassives();
+        player.Passives.Skills = ContentService!.Skills;
+        player.Passives.Passives = ContentService!.Passives;
+        player.Passives.PassiveAttributes = ContentService!.PassiveAttributes;
+        player.Passives.PassiveUpgrades = ContentService!.PassiveUpgrades;
 
-        Player!.Passives.Skills = ContentService!.Skills;
-        Player!.Passives.Passives = ContentService!.Passives;
-        Player!.Passives.PassiveAttributes = ContentService!.PassiveAttributes;
-        Player!.Passives.PassiveUpgrades = ContentService!.PassiveUpgrades;
-
-        Player!.Passives.UpdateAttributes();
+        player.Passives.UpdateAttributes();
 
         #endregion
 
         #region Class
 
-        var _class = GetClass();
+        var jobClass = GetClass(player);
 
-        if (_class is not null) {
-            Player!.Class = _class;
-            Player.AllocateAttributes();
+        if (jobClass is not null) {
+            player.Class = jobClass;
+            player.AllocateAttributes();
         }
 
         #endregion
 
         #region Costume
 
-        UpdateCostume();
+        UpdateCostume(player);
 
         #endregion
 
-        PacketSender!.SendServerConfiguration(Player!);
-        PacketSender!.SendServerRates(Player);
-        PacketSender!.SendSettings(Player!);
+        sender.SendServerConfiguration(player);
+        sender.SendServerRates(player);
+        sender.SendSettings(player);
 
-        WarpToInstance();
+        WarpToInstance(player);
 
         #region Services
 
-        Player.Services.Premiums = ContentService!.Premiums;
+        player.Services.Premiums = ContentService!.Premiums;
+        player.Services.AllocateRates();
 
-        Player.Services.AllocateRates();
-
-        SendServices();
+        SendServices(player);
 
         #endregion
 
-        SendExperience();
+        SendExperience(sender, player);
 
-        Player.AllocateAttributes();
+        player.AllocateAttributes();
 
-        PacketSender!.SendWarehouse(Player);
-        PacketSender!.SendCash(Player);
-        PacketSender!.SendMails(Player);
-        PacketSender!.SendSkills(Player);
-        PacketSender!.SendPassives(Player);
-        PacketSender!.SendCurrency(Player);
-        PacketSender!.SendQuickSlot(Player);
-        PacketSender!.SendCraftData(Player);
-        PacketSender!.SendRecipes(Player);
-        PacketSender!.SendHeraldry(Player);
-        PacketSender!.SendEquipment(Player);
-        PacketSender!.SendAttributes(Player);
-        PacketSender!.SendInventory(Player);
-        PacketSender!.SendTitles(Player);
+        sender.SendWarehouse(player);
+        sender.SendCash(player);
+        sender.SendMails(player);
+        sender.SendSkills(player);
+        sender.SendPassives(player);
+        sender.SendCurrency(player);
+        sender.SendQuickSlot(player);
+        sender.SendCraftData(player);
+        sender.SendRecipes(player);
+        sender.SendHeraldry(player);
+        sender.SendEquipment(player);
+        sender.SendAttributes(player);
+        sender.SendInventory(player);
+        sender.SendTitles(player);
 
-        ReJoinParty();
+        ReJoinParty(player);
 
-        PacketSender!.SendInGame(Player);
+        sender!.SendInGame(player);
 
-        Player.InGame = true;
+        player.InGame = true;
 
-        Logger?.Info(GetType().Name, $"{Player!.Username} Joined Game");
+        logger.Info(GetType().Name, $"{player!.Username} Joined Game");
     }
 
-    private IClass? GetClass() {
-        var code = Player!.Character.ClassCode;
+    private IClass? GetClass(IPlayer player) {
+        var code = player.Character.ClassCode;
         var database = ContentService!.Classes;
 
         if (database.Contains(code)) {
@@ -177,8 +184,8 @@ public class JoinGame {
         return null;
     }
 
-    private void SendExperience() {
-        var level = Player!.Character.Level;
+    private void SendExperience(IPacketSender sender, IPlayer player) {
+        var level = player.Character.Level;
         var experience = ContentService!.PlayerExperience;
 
         var maximum = 0;
@@ -189,59 +196,51 @@ public class JoinGame {
             }
         }
 
-        var minimum = Player!.Character.Experience;
+        var minimum = player!.Character.Experience;
 
         if (minimum >= maximum) {
             minimum = maximum;
 
-            Player!.Character.Experience = minimum;
+            player.Character.Experience = minimum;
         }
 
-        PacketSender!.SendExperience(Player!, minimum, maximum);
+        sender.SendExperience(player!, minimum, maximum);
     }
 
-    private void UpdateCostume() {
+    private void UpdateCostume(IPlayer player) {
         var equipments = ContentService!.Equipments;
-        var inventory = Player!.Equipments.Get(PlayerEquipmentType.Costume);
+        var inventory = player!.Equipments.Get(PlayerEquipmentType.Costume);
 
         if (equipments is not null) {
             if (inventory is not null) {
                 if (equipments.Contains(inventory.ItemId)) {
                     var equipment = equipments[inventory.ItemId];
-                    Player.Character.CostumeModel = equipment!.ModelId;
+                    player.Character.CostumeModel = equipment!.ModelId;
                 }
             }
         }
     }
 
-    private void ReJoinParty() {
-        var manager = new PartyReconnectManager() {
-            InstanceService = InstanceService,
-            PacketSender = PacketSender,
-            Player = Player
-        };
-
-        manager.Reconnect();
+    private void ReJoinParty(IPlayer player) {
+        PartyManager.Reconnect(player);
     }
 
-    private void SendServices() {
+    private void SendServices(IPlayer player) {
         if (ContentService is not null) {
             var premiums = ContentService.Premiums;
 
             if (premiums is not null) {
-                var services = Player!.Services.ToArray();
+                var services = player.Services.ToArray();
 
                 foreach (var service in services) {
                     if (!service.Expired && service.ServiceId > 0) {
-
                         if (premiums.Contains(service.ServiceId)) {
                             var premium = premiums[service.ServiceId]!;
 
                             var date = service.EndTime;
-
                             var text = $"{date.ToShortDateString()} {date.ToShortTimeString()}";
 
-                            PacketSender!.SendPremiumService(Player, premium, text);
+                            GetPacketSender().SendPremiumService(player, premium, text);
                         }
                     }
                 }
@@ -249,21 +248,23 @@ public class JoinGame {
         }
     }
 
-    private void WarpToInstance() {
-        var instanceId = Player!.Character.Map;
-        var x = Player.Character.X;
-        var y = Player.Character.Y;
+    private void WarpToInstance(IPlayer player) {
+        var instanceId = player.Character.Map;
+        var x = player.Character.X;
+        var y = player.Character.Y;
 
         if (InstanceService!.Instances.ContainsKey(instanceId)) {
-            var warper = new WarperManager() {
-                InstanceService = InstanceService,
-                PacketSender = PacketSender,
-                Player = Player
-            };
-
             var instance = InstanceService!.Instances[instanceId];
 
-            warper.Warp(instance, x, y);
+            WarperManager.Warp(player, instance, x, y);
         }
+    }
+
+    private ILogger GetLogger() {
+        return LoggerService!.Logger!;
+    }
+
+    private IPacketSender GetPacketSender() {
+        return PacketSenderService!.PacketSender!;
     }
 }
