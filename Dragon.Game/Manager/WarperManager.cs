@@ -1,18 +1,21 @@
 ﻿using Dragon.Core.Model;
-
-using Dragon.Game.Network;
 using Dragon.Game.Players;
 using Dragon.Game.Services;
+using Dragon.Core.Services;
 using Dragon.Game.Instances;
+using Dragon.Game.Network.Senders;
 
 namespace Dragon.Game.Manager;
 
-public class WarperManager {
-    public IPlayer? Player { get; init; }
-    public IPacketSender? PacketSender { get; init; }
-    public InstanceService? InstanceService { get; init; }
+public sealed class WarperManager {
+    public InstanceService? InstanceService { get; private set; }
+    public PacketSenderService? PacketSenderService { get; private set; }
 
-    public void Warp(IInstance instance, int x, int y) {
+    public WarperManager(IServiceContainer services) {
+        new ServiceInjector(services).Inject(this);
+    }
+
+    public void Warp(IPlayer player, IInstance instance, int x, int y) {
         if (x > instance.MaximumX) {
             x = instance.MaximumX;
         }
@@ -29,57 +32,59 @@ public class WarperManager {
             y = 0;
         }
 
+        var sender = GetPacketSender();
+
         var contains = false;
 
         // Check if player is trying to teleport to same instance.
-        if (Player!.Character.Map == instance.Id) {
-            contains = instance.Contains(Player);
+        if (player.Character.Map == instance.Id) {
+            contains = instance.Contains(player);
 
             if (contains) {
-                Player.Character.X = x;
-                Player.Character.Y = y;
+                player.Character.X = x;
+                player.Character.Y = y;
 
-                PacketSender?.SendPlayerXY(Player, instance);
+                sender.SendPlayerXY(player, instance);
             }
         }
 
         if (!contains) {
-            PacketSender?.SendGettingMap(Player, true);
+            sender.SendGettingMap(player, true);
 
-            RemoveFromLastInstance(instance);
+            RemoveFromLastInstance(sender, player, instance);
 
-            AddPlayerToInstance(instance, x, y);
+            AddPlayerToInstance(sender, player, instance, x, y);
 
-            PacketSender?.SendGettingMap(Player, false);
+            sender.SendGettingMap(player, false);
         }
     }
 
-    private void RemoveFromLastInstance(IInstance instance) {
+    private void RemoveFromLastInstance(IPacketSender sender, IPlayer player, IInstance instance) {
         // Remove character from last instance.
-        var instanceId = Player!.Character.Map;
+        var instanceId = player.Character.Map;
 
         if (instanceId != instance.Id) {
-            var index = Player.IndexOnInstance;
+            var index = player.IndexOnInstance;
 
             var _instance = InstanceService!.Instances[instanceId];
 
-            var removed = _instance.Remove(Player);
+            var removed = _instance.Remove(player);
 
             if (removed) {
-                PacketSender?.SendPlayerLeft(Player, _instance, index);
-                PacketSender?.SendHighIndex(_instance);
+                sender.SendPlayerLeft(player, _instance, index);
+                sender.SendHighIndex(_instance);
             }
         }
     }
 
-    private void AddPlayerToInstance(IInstance instance, int x, int y) {
-        var added = instance.Add(Player!);
+    private void AddPlayerToInstance(IPacketSender sender, IPlayer player, IInstance instance, int x, int y) {
+        var added = instance.Add(player);
 
         if (added) {
-            Player!.Target = null;
-            Player.TargetType = TargetType.None;
+            player.Target = null;
+            player.TargetType = TargetType.None;
 
-            PacketSender!.SendTarget(Player, TargetType.None, 0);
+            sender.SendTarget(player, TargetType.None, 0);
 
             // TODO
             // map.SendCorpseTo(player);
@@ -91,26 +96,30 @@ public class WarperManager {
 
             //AchievementEngine.CheckAchievement(player, AchievementPrimaryRequirement.Instance, action);
 
-            Player!.Character.Map = instance.Id;
-            Player.Character.X = x;
-            Player.Character.Y = y;
+            player.Character.Map = instance.Id;
+            player.Character.X = x;
+            player.Character.Y = y;
 
-            PacketSender!.SendLoadMap(Player);
-            PacketSender!.SendClearPlayers(Player);
-            PacketSender!.SendPlayerIndex(Player);
-            PacketSender!.SendHighIndex(instance);
+            sender.SendLoadMap(player);
+            sender.SendClearPlayers(player);
+            sender.SendPlayerIndex(player);
+            sender.SendHighIndex(instance);
 
-            PacketSender!.SendInstanceEntities(Player, instance);
+            sender.SendInstanceEntities(player, instance);
 
-            PacketSender!.SendPlayerDataTo(Player, instance);
-            PacketSender!.SendPlayersOnMapTo(Player, instance);
+            sender.SendPlayerDataTo(player, instance);
+            sender.SendPlayersOnMapTo(player, instance);
 
-            PacketSender!.SendChests(Player, instance);
+            sender.SendChests(player, instance);
 
-            foreach (var player in instance.GetPlayers()) {
-                PacketSender!.SendPlayerVital(player, instance);
-                PacketSender!.SendDisplayIcons(player, instance);
+            foreach (var member in instance.GetPlayers()) {
+                sender.SendPlayerVital(member, instance);
+                sender.SendDisplayIcons(member, instance);
             }
         }
+    }
+
+    private IPacketSender GetPacketSender() {
+        return PacketSenderService!.PacketSender!;
     }
 }
