@@ -5,13 +5,13 @@ using Dragon.Chat.Services;
 namespace Dragon.Chat.Network;
 
 public abstract class PacketRoute {
-    public IServiceInjector ServiceInjector { get; private set; }
-    public IServiceContainer? ServiceContainer { get; private set; }
-    public GeoIpService? GeoIpService { get; private set; }
-    public LoggerService? LoggerService { get; private set; }
-    public ConnectionService? ConnectionService { get; private set; }
-    public ConfigurationService? ConfigurationService { get; private set; }
-    public OutgoingMessageService? OutgoingMessageService { get; private set; }
+    public IServiceInjector ServiceInjector { get; protected set; }
+    public IServiceContainer? ServiceContainer { get; protected set; }
+    public GeoIpService? GeoIpService { get; protected set; }
+    public LoggerService? LoggerService { get; protected set; }
+    public ConnectionService? ConnectionService { get; protected set; }
+    public ConfigurationService? ConfigurationService { get; protected set; }
+    public OutgoingMessageService? OutgoingMessageService { get; protected set; }
 
     public PacketRoute(IServiceInjector injector) {
         ServiceInjector = injector;

@@ -85,7 +85,7 @@ public sealed class IncomingMessageService : IService {
 
         return assembly
             .GetTypes()
-            .Where(t => t.IsClass && t.GetInterface(nameof(IPacketRouter)) is not null)
+            .Where(t => t.IsClass && t.GetInterface(nameof(IPacketRoute)) is not null)
             .ToArray();
     }
 }

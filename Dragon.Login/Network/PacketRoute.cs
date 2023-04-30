@@ -5,14 +5,14 @@ using Dragon.Login.Services;
 namespace Dragon.Login.Network;
 
 public abstract class PacketRoute {
-    public IServiceInjector ServiceInjector { get; private set; }
-    public IServiceContainer? ServiceContainer { get; private set; }
-    public GeoIpService? GeoIpService { get; set; }
-    public LoggerService? LoggerService { get; set; }
-    public DatabaseService? DatabaseService { get; set; }
-    public ConnectionService? ConnectionService { get; set; }
-    public ConfigurationService? ConfigurationService { get; set; }
-    public OutgoingMessageService? OutgoingMessageService { get; set; }
+    public IServiceInjector ServiceInjector { get; protected set; }
+    public IServiceContainer? ServiceContainer { get; protected set; }
+    public GeoIpService? GeoIpService { get; protected set; }
+    public LoggerService? LoggerService { get; protected set; }
+    public DatabaseService? DatabaseService { get; protected set; }
+    public ConnectionService? ConnectionService { get; protected set; }
+    public ConfigurationService? ConfigurationService { get; protected set; }
+    public OutgoingMessageService? OutgoingMessageService { get; protected set; }
 
     public PacketRoute(IServiceInjector injector) {
         ServiceInjector = injector;
