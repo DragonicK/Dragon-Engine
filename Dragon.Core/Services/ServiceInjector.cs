@@ -27,6 +27,8 @@ public class ServiceInjector : IServiceInjector {
         foreach (var (name, propertyType) in values) {
             var property = properties.Where(p => p.Name == name).First();
 
+            var x = _container[propertyType];
+
             property.SetValue(target, _container[propertyType]);
         }
     }
@@ -61,7 +63,7 @@ public class ServiceInjector : IServiceInjector {
 
 
         if (properties is not null) {
-            properties.SetValue(target, _container);
+            properties.SetValue(target, this);
         }
     }
 }
