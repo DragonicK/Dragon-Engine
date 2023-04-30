@@ -12,14 +12,15 @@ public class ServiceInjector : IServiceInjector {
 
     public void Inject(object target) {
         InjectObject(target);
-        // InjectArray(target);
-        InjectContainer(target);
+        InjectArray(target);
+        InjectContainer(target); 
+        InjectInjector(target);
     }
 
     private void InjectObject(object target) {
         var targetType = target.GetType();
         var properties = targetType.GetRuntimeProperties()
-            .Where(p => p.PropertyType.GetInterface("IService") is not null);
+            .Where(p => p.PropertyType.GetInterface(nameof(IService)) is not null);
 
         var values = properties.Select(p => (p.Name, p.PropertyType)).ToArray();
 
@@ -46,6 +47,18 @@ public class ServiceInjector : IServiceInjector {
         var properties = targetType.GetRuntimeProperties()
               .Where(p => p.PropertyType == typeof(IServiceContainer))
               .FirstOrDefault();
+
+        if (properties is not null) {
+            properties.SetValue(target, _container);
+        }
+    }
+
+    private void InjectInjector(object target) {
+        var targetType = target.GetType();
+        var properties = targetType.GetRuntimeProperties()
+              .Where(p => p.PropertyType == typeof(IServiceInjector))
+              .FirstOrDefault();
+
 
         if (properties is not null) {
             properties.SetValue(target, _container);
