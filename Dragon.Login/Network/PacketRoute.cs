@@ -10,8 +10,8 @@ public abstract class PacketRoute {
     public GeoIpService? GeoIpService { get; protected set; }
     public LoggerService? LoggerService { get; protected set; }
     public DatabaseService? DatabaseService { get; protected set; }
+    public ConfigurationService? Configuration { get; protected set; }
     public ConnectionService? ConnectionService { get; protected set; }
-    public ConfigurationService? ConfigurationService { get; protected set; }
     public OutgoingMessageService? OutgoingMessageService { get; protected set; }
 
     public PacketRoute(IServiceInjector injector) {

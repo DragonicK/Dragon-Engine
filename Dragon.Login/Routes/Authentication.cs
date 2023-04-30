@@ -36,7 +36,7 @@ public sealed class Authentication : PacketRoute, IPacketRoute {
             var factory = GetFactory();
 
             try {
-                using var handler = factory.GetMembershipHandler(ConfigurationService!.DatabaseMembership);
+                using var handler = factory.GetMembershipHandler(Configuration!.DatabaseMembership);
 
                 var account = await GetAccountAsync(handler, username);
 
@@ -72,7 +72,7 @@ public sealed class Authentication : PacketRoute, IPacketRoute {
             AccountLevel = account!.AccountLevelCode
         };
 
-        var handler = new JwtTokenHandler(ConfigurationService!.JwtSettings);
+        var handler = new JwtTokenHandler(Configuration!.JwtSettings);
 
         return handler.GerenateToken(tokenData);
     }
@@ -82,11 +82,11 @@ public sealed class Authentication : PacketRoute, IPacketRoute {
     }
 
     private AuthenticationResult GetAuthenticationResult(ClientVersion version, Account? account, string passphrase) {
-        if (ConfigurationService!.Maintenance) {
+        if (Configuration!.Maintenance) {
             return AuthenticationResult.Maintenance;
         }
 
-        if (ConfigurationService!.ClientVersion != version) {
+        if (Configuration!.ClientVersion != version) {
             return AuthenticationResult.VersionOutdated;
         }
 
@@ -154,7 +154,7 @@ public sealed class Authentication : PacketRoute, IPacketRoute {
     private void SendResult(IConnection connection, string token) {
         var writer = GetMessageWriter();
 
-        var server = ConfigurationService!.GameServer;
+        var server = Configuration!.GameServer;
 
         var p = new SpAuthenticationResult() {
             IpAddress = server.Ip,
