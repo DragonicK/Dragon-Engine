@@ -1,11 +1,11 @@
 ﻿using System.Text;
+using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
 
 namespace Dragon.Core.Jwt;
 
-public class JwtTokenHandler {
+public sealed class JwtTokenHandler {
     private readonly int minutes;
     private readonly string securityKey;
     private readonly string dataSecurityKey;
@@ -59,14 +59,12 @@ public class JwtTokenHandler {
         try {
             claims = handler.ValidateToken(token, validationParameters, out var securityToken);
         }
-        catch {
-
-        }
+        catch { }
 
         return GetJwtTokenData(claims);
     }
 
-    private JwtTokenData GetJwtTokenData(ClaimsPrincipal? claims) {
+    private static JwtTokenData GetJwtTokenData(ClaimsPrincipal? claims) {
         if (claims is null) {
             return new JwtTokenData();
         }
@@ -77,7 +75,7 @@ public class JwtTokenHandler {
         var accountLevel = claims.FindFirst(x => x.Type == "AccountLevel");
 
         return new JwtTokenData() {
-            Username = username is not null ? username.Value : String.Empty,
+            Username = username is not null ? username.Value : string.Empty,
             AccountId = accountId is not null ? int.Parse(accountId.Value) : 0,
             CharacterId = characterId is not null ? int.Parse(characterId.Value) : 0,
             AccountLevel = accountLevel is not null ? int.Parse(accountLevel.Value) : 0,
