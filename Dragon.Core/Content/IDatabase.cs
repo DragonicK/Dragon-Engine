@@ -6,6 +6,7 @@ public interface IDatabase<T> {
     int Count { get; }
     T? this[int id] { get; set; }
     void Add(int id, T item);
+    bool TryGet(int id, out T item);
     bool Contains(int id);
     void Remove(int id);
     void Clear();

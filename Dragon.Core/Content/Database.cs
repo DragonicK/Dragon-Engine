@@ -34,6 +34,14 @@ public class Database<T> : IDatabase<T> {
         values.Add(id, item);
     }
 
+    public bool TryGet(int id, out T? item) {
+        var contains = values.ContainsKey(id);
+
+        item = contains ? values[id] : default;
+
+        return contains;
+    }
+
     public bool Contains(int id) {
         return values.ContainsKey(id);
     }
