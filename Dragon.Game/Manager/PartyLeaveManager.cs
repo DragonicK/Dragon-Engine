@@ -1,8 +1,8 @@
 ﻿using Dragon.Core.Model
     ;
 using Dragon.Game.Players;
-using Dragon.Game.Network;
 using Dragon.Game.Parties;
+using Dragon.Game.Network.Senders;
 
 namespace Dragon.Game.Manager;
 

@@ -1,31 +1,35 @@
 ﻿using Dragon.Core.Model;
 using Dragon.Core.Content;
 using Dragon.Core.Model.Items;
-using Dragon.Core.Model.Entity;
 using Dragon.Core.Model.Effects;
 using Dragon.Core.Model.DisplayIcon;
 
 using Dragon.Game.Players;
-using Dragon.Game.Network;
+using Dragon.Core.Services;
 using Dragon.Game.Messages;
 using Dragon.Game.Services;
 using Dragon.Game.Instances;
+using Dragon.Game.Network.Senders;
 
 namespace Dragon.Game.Manager;
 
-public class ConsumableManager {
-    public IPlayer? Player { get; init; }
-    public IPacketSender? PacketSender { get; init; }
-    public IDatabase<Effect>? Effects { get; init; }
-    public InstanceService? InstanceService { get; init; }
+public sealed class ConsumableManager {
+    public ContentService? ContentService { get; private set; }
+    public InstanceService? InstanceService { get; private set; }
+    public PacketSenderService? PacketSenderService { get; private set; }
 
-    public void UsePotion(int index, Item item) {
-        var inventory = Player!.Inventories.FindByIndex(index);
+    public ConsumableManager(IServiceInjector injector) {
+        injector.Inject(this);
+    }
+
+    public void UsePotion(IPlayer player, int index, Item item) {
+        var inventory = player.Inventories.FindByIndex(index);
 
         if (inventory is not null) {
-            var instance = GetInstance();
+            var sender = GetPacketSender();
+            var instance = GetInstance(player);
 
-            ApplyVitals(item, instance);
+            ApplyVitals(sender, player, item, instance);
 
             inventory.Value--;
 
@@ -33,17 +37,18 @@ public class ConsumableManager {
                 inventory.Clear();
             }
 
-            PacketSender!.SendInventoryUpdate(Player, index);
+            sender!.SendInventoryUpdate(player, index);
         }
     }
 
-    public void UseConsumable(int index, Item item) {
-        var inventory = Player!.Inventories.FindByIndex(index);
+    public void UseConsumable(IPlayer player, int index, Item item) {
+        var inventory = player.Inventories.FindByIndex(index);
 
         if (inventory is not null) {
-            var instance = GetInstance();
+            var sender = GetPacketSender();
+            var instance = GetInstance(player);
 
-            ApplyEffect(item, instance);
+            ApplyEffect(sender, player, item, instance);
 
             inventory.Value--;
 
@@ -51,68 +56,70 @@ public class ConsumableManager {
                 inventory.Clear();
             }
 
-            PacketSender!.SendInventoryUpdate(Player, index);
+            sender.SendInventoryUpdate(player, index);
         }
     }
 
-    private void ApplyVitals(Item item, IInstance? instance) {
+    private void ApplyVitals(IPacketSender sender, IPlayer player, Item item, IInstance? instance) {
         var length = Enum.GetValues<Vital>().Length;
 
         for (var i = 0; i < length; ++i) {
             var value = item.Vital[i];
 
             if (value > 0) {
-                Player!.Vitals.Add((Vital)i, value);
+                player.Vitals.Add((Vital)i, value);
 
                 if (instance is not null) {
-                    PacketSender!.SendPlayerVital(Player, instance);
-                    SendActionMessage(instance, (Vital)i, value);
+                    sender.SendPlayerVital(player, instance);
+
+                    SendActionMessage(sender, player, instance, (Vital)i, value);
                 }
             }
         }
     }
 
-    private void ApplyEffect(Item item, IInstance? instance) {
+    private void ApplyEffect(IPacketSender sender, IPlayer player, Item item, IInstance? instance) {
         var id = item.EffectId;
-        var duration = item.EffectDuration;
         var level = item.EffectLevel;
+        var duration = item.EffectDuration;
 
-        if (Effects is not null) {
-            if (Effects.Contains(id)) {
-                var effect = Effects[id]!;
+        var effects = GetDatabaseEffects();
 
-                if (duration <= 0) {
-                    duration = effect.Duration;
-                }
+        effects.TryGet(id, out var effect);
 
-                var overridable = Player!.Effects.GetOverridable(effect);
+        if (effect is not null) {
+            if (duration <= 0) {
+                duration = effect.Duration;
+            }
 
-                if (overridable is not null) {
-                    SendDisplayIcon(DisplayIconOperation.Remove, overridable.EffectId, 0, 0, instance);
+            var overridable = player.Effects.GetOverridable(effect);
 
-                    overridable.EffectId = id;
-                    overridable.EffectLevel = level;
-                    overridable.EffectDuration = duration;
+            if (overridable is not null) {
+                SendDisplayIcon(sender, player, DisplayIconOperation.Remove, overridable.EffectId, 0, 0, instance);
 
-                    Player!.Effects.UpdateAttributes();
+                overridable.EffectId = id;
+                overridable.EffectLevel = level;
+                overridable.EffectDuration = duration;
 
-                    SendAttributes();
+                player.Effects.UpdateAttributes();
 
-                    SendDisplayIcon(DisplayIconOperation.Update, id, level, duration, instance);
-                }
-                else {
-                    Player!.Effects.Add(id, level, duration);
-                    Player!.Effects.UpdateAttributes();
+                SendAttributes(sender, player);
 
-                    SendAttributes();
+                SendDisplayIcon(sender, player, DisplayIconOperation.Update, id, level, duration, instance);
+            }
+            else {
+                player.Effects.Add(id, level, duration);
+                player.Effects.UpdateAttributes();
 
-                    SendDisplayIcon(DisplayIconOperation.Update, id, level, duration, instance);
-                }
+                SendAttributes(sender, player);
+
+                SendDisplayIcon(sender, player, DisplayIconOperation.Update, id, level, duration, instance);
             }
         }
+
     }
 
-    private void SendDisplayIcon(DisplayIconOperation operation, int id, int level, int duration, IInstance? instance) {
+    private void SendDisplayIcon(IPacketSender sender, IPlayer player, DisplayIconOperation operation, int id, int level, int duration, IInstance? instance) {
         if (instance is not null) {
             var icon = new DisplayIcon() {
                 Id = id,
@@ -125,63 +132,70 @@ public class ConsumableManager {
                 OperationType = operation
             };
 
-            PacketSender!.SendDisplayIcon(ref icon, DisplayIconTarget.Player, (IEntity)Player, instance);
+            sender.SendDisplayIcon(ref icon, DisplayIconTarget.Player, player, instance);
         }
     }
 
-    private void SendAttributes() {
-        Player!.AllocateAttributes();
-        PacketSender!.SendAttributes(Player);
+    private void SendAttributes(IPacketSender sender, IPlayer player) {
+        player.AllocateAttributes();
 
-        var instance = GetInstance();
+        sender.SendAttributes(player);
+
+        var instance = GetInstance(player);
 
         if (instance is not null) {
-            PacketSender!.SendPlayerVital(Player, instance);
+            sender.SendPlayerVital(player, instance);
         }
         else {
-            PacketSender!.SendPlayerVital(Player);
+            sender.SendPlayerVital(player);
         }
     }
 
-    private void SendActionMessage(IInstance instance, Vital vital, int value) {
+    private void SendActionMessage(IPacketSender sender, IPlayer player, IInstance instance, Vital vital, int value) {
         QbColor color = QbColor.HealingGreen;
 
-        int x = Player!.Character.X;
+        var y = player.Character.Y;
+        var x = player.Character.X;
 
         if (vital == Vital.HP) {
-            x = Player!.Character.X - 1;
+            x = player.Character.X - 1;
             color = QbColor.HealingGreen;
         }
         else if (vital == Vital.MP) {
-            x = Player!.Character.X + 1;
+            x = player.Character.X + 1;
             color = QbColor.DeepSkyBlue;
         }
         else if (vital == Vital.Special) {
-            x = Player!.Character.X;
+            x = player.Character.X;
             color = QbColor.Coral;
         }
 
         var damage = new Damage() {
-            Color = color,
             X = x,
-            Y = Player!.Character.Y,
+            Y = y,
+            Color = color,
+            Message = value,
             FontType = ActionMessageFontType.Damage,
-            Message = $"+{value}",
             MessageType = ActionMessageType.Scroll
         };
 
-        PacketSender!.SendMessage(damage, instance);
+        sender.SendMessage(ref damage, instance);
     }
 
-    private IInstance? GetInstance() {
-        var instanceId = Player!.Character.Map;
+    private IInstance? GetInstance(IPlayer player) {
+        var instanceId = player!.Character.Map;
         var instances = InstanceService!.Instances;
 
-        if (instances.ContainsKey(instanceId)) {
-            return instances[instanceId];
-        }
+        instances.TryGetValue(instanceId, out var instance);
 
-        return null;
+        return instance;
     }
 
+    private IPacketSender GetPacketSender() {
+        return PacketSenderService!.PacketSender!;
+    }
+
+    private IDatabase<Effect> GetDatabaseEffects() {
+        return ContentService!.Effects;
+    }
 }

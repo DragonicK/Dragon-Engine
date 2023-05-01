@@ -1,126 +1,131 @@
 ﻿using Dragon.Core.Model;
 using Dragon.Core.Content;
+using Dragon.Core.Services;
 using Dragon.Core.Model.Items;
 using Dragon.Core.Model.Gashas;
 using Dragon.Core.Model.Characters;
 
 using Dragon.Game.Players;
-using Dragon.Game.Network;
+using Dragon.Game.Services;
+using Dragon.Game.Network.Senders;
 
 namespace Dragon.Game.Manager;
 
-public class GashaManager {
-    public IPlayer? Player { get; init; }
-    public IDatabase<Item>? Items { get; init; }
-    public IDatabase<Gasha>? Gashas { get; init; }
-    public IPacketSender? PacketSender { get; init; }
+public sealed class GashaManager {
+    public ContentService? ContentService { get; private set; }
+    public PacketSenderService? PacketSenderService { get; private set; }
 
-    public void UseGasha(int index, Item item) {
-        var inventory = Player!.Inventories.FindByIndex(index);
+    private const int MaximumTries = 100;
 
-        if (Gashas is not null) {
-            if (Gashas.Contains(item.GashaBoxId)) {
-                var gasha = Gashas[item.GashaBoxId]!;
-                var count = gasha.Count;
+    public GashaManager(IServiceInjector injector) {
+        injector.Inject(this);
+    }
 
-                if (count > 0) {
-                    var maximum = Player!.Character.MaximumInventories;
-                    var empty = Player!.Inventories.FindFreeInventory(maximum);
+    public void UseGasha(IPlayer player, int index, Item item) {
+        var sender = GetPacketSender();
+        var gashas = GetDatabaseGasha();
 
-                    if (empty is not null) {
-                        if (ContinueUseGasha(empty, gasha)) {
-                            inventory!.Value--;
+        var inventory = player.Inventories.FindByIndex(index);
 
-                            if (inventory.Value <= 0) {
-                                inventory.Clear();
-                            }
+        gashas.TryGet(item.GashaBoxId, out var gasha);
 
-                            PacketSender!.SendInventoryUpdate(Player!, inventory.InventoryIndex);
+        if (gasha is not null) {
+            var count = gasha.Count;
+
+            if (count > 0) {
+                var maximum = player.Character.MaximumInventories;
+                var empty = player.Inventories.FindFreeInventory(maximum);
+
+                if (empty is not null) {
+                    if (ContinueUseGasha(sender, player, empty, gasha)) {
+                        inventory!.Value--;
+
+                        if (inventory.Value <= 0) {
+                            inventory.Clear();
                         }
-                    }
-                    else {
-                        PacketSender!.SendMessage(SystemMessage.InventoryFull, QbColor.BrigthRed, Player!);
+
+                        sender.SendInventoryUpdate(player, inventory.InventoryIndex);
                     }
                 }
                 else {
-                    PacketSender!.SendMessage(SystemMessage.ThisBoxIsEmpty, QbColor.BrigthRed, Player!);
+                    sender.SendMessage(SystemMessage.InventoryFull, QbColor.BrigthRed, player);
                 }
+            }
+            else {
+                sender.SendMessage(SystemMessage.ThisBoxIsEmpty, QbColor.BrigthRed, player);
             }
         }
     }
 
-    private bool ContinueUseGasha(CharacterInventory inventory, Gasha gasha) {
-        if (Items is not null) {
-            var maximumTries = 100;
-            var tries = 0;
+    private bool ContinueUseGasha(IPacketSender sender, IPlayer player, CharacterInventory inventory, Gasha gasha) {
+        var items = GetDatabaseItem();
 
-            var count = gasha.Count;
+        var reward = GetRandomReward(gasha);
 
-            var random = new Random();
-            var success = false;
+        if (reward is not null) {
+            items.TryGet(reward.Id, out var item);
 
-            GashaItem? reward = null;
+            if (item is not null) {
+                if (!CanStackItem(sender, player, item, reward)) {
 
-            while (!success) {
-                var index = random.Next(0, count);
-                reward = gasha[index];
+                    GiveGashaItemToInventory(false, reward, inventory);
 
-                var chance = random.NextDouble();
+                    sender.SendInventoryUpdate(player, inventory.InventoryIndex);
 
-                if (chance <= reward.Chance) {
-                    success = true;
+                    var parameters = new string[] { reward.Id.ToString(), reward.Value.ToString() };
+
+                    sender.SendMessage(SystemMessage.YouObtainedItem, QbColor.Yellow, player, parameters);
                 }
 
-                tries++;
-
-                if (tries >= maximumTries) {
-                    break;
-                }
-            }
-
-            if (success) {
-                if (reward is not null) {
-                    if (Items.Contains(reward.Id)) {
-                        var item = Items[reward.Id]!;
-
-                        if (!CanStackItem(item, reward)) {
-                            GiveGashaItem(false, reward, inventory);
-
-                            PacketSender!.SendInventoryUpdate(Player!, inventory.InventoryIndex);
-
-                            var parameters = new string[] {
-                                    reward.Id.ToString(),
-                                    reward.Value.ToString()
-                                };
-
-                            PacketSender!.SendMessage(SystemMessage.YouObtainedItem, QbColor.Yellow, Player!, parameters);
-                        }
-
-                        return true;
-                    }
-                }
+                return true;
             }
         }
-
         return false;
     }
 
-    private bool CanStackItem(Item item, GashaItem reward) {
+    private GashaItem? GetRandomReward(Gasha gasha) {
+        var tries = 0;
+        var success = false;
+        var count = gasha.Count;
+        var random = new Random();
+
+        GashaItem? reward = default;
+
+        while (!success) {
+            var index = random.Next(0, count);
+
+            reward = gasha[index];
+
+            var chance = random.NextDouble();
+
+            if (chance <= reward.Chance) {
+                success = true;
+            }
+
+            tries++;
+
+            if (tries >= MaximumTries) {
+                break;
+            }
+        }
+
+        return reward;
+    }
+
+    private bool CanStackItem(IPacketSender sender, IPlayer player, Item item, GashaItem reward) {
         if (item.MaximumStack > 0) {
-            var stacked = Player!.Inventories.FindByItemId(item.Id);
+            var stacked = player.Inventories.FindByItemId(item.Id);
 
             if (stacked is not null) {
                 if (stacked.Bound == reward.Bound && stacked.Level == reward.Level) {
 
-                    GiveGashaItem(true, reward, stacked);
-                    PacketSender!.SendInventoryUpdate(Player!, stacked.InventoryIndex);
+                    GiveGashaItemToInventory(true, reward, stacked);
 
-                    var parameters = new string[] {
-                            reward.Id.ToString(),
-                            reward.Value.ToString()
-                        };
+                    sender.SendInventoryUpdate(player, stacked.InventoryIndex);
 
-                    PacketSender!.SendMessage(SystemMessage.YouObtainedItem, QbColor.Yellow, Player!, parameters);
+                    var parameters = new string[] { reward.Id.ToString(), reward.Value.ToString() };
+
+                    sender.SendMessage(SystemMessage.YouObtainedItem, QbColor.Yellow, player, parameters);
 
                     return true;
                 }
@@ -130,7 +135,7 @@ public class GashaManager {
         return false;
     }
 
-    private void GiveGashaItem(bool isStackable, GashaItem item, CharacterInventory inventory) {
+    private void GiveGashaItemToInventory(bool isStackable, GashaItem item, CharacterInventory inventory) {
         inventory.ItemId = item.Id;
 
         if (isStackable) {
@@ -152,5 +157,17 @@ public class GashaManager {
         inventory.FusionedSocket = item.FusionedSocket;
         inventory.ActivationCount = item.ActivationCount;
         inventory.ItemSkinId = item.ItemSkinId;
+    }
+
+    private IPacketSender GetPacketSender() {
+        return PacketSenderService!.PacketSender!;
+    }
+
+    private IDatabase<Item> GetDatabaseItem() {
+        return ContentService!.Items;
+    }
+
+    private IDatabase<Gasha> GetDatabaseGasha() {
+        return ContentService!.Gashas;
     }
 }

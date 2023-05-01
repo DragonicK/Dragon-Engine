@@ -6,10 +6,10 @@ using Dragon.Core.Model.Npcs;
 
 using Dragon.Game.Players;
 using Dragon.Game.Regions;
-using Dragon.Game.Network;
 using Dragon.Game.Configurations;
 using Dragon.Game.Instances.Chests;
 using Dragon.Game.Configurations.Data;
+using Dragon.Game.Network.Senders;
 
 namespace Dragon.Game.Instances;
 

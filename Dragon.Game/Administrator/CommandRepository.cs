@@ -22,7 +22,7 @@ public class CommandRepository : ICommandRepository {
 
         var types = assembly
             .GetTypes()
-            .Where(t => t.GetInterface("IAdministratorCommand") is not null)
+            .Where(t => t.GetInterface(nameof(IAdministratorCommand)) is not null)
             .ToArray();
 
         foreach (var type in types) {

@@ -5,8 +5,8 @@ using Dragon.Core.Model.Npcs;
 using Dragon.Game.Services;
 using Dragon.Game.Players;
 using Dragon.Game.Instances;
-using Dragon.Game.Network;
 using Dragon.Game.Repository;
+using Dragon.Game.Network.Senders;
 
 namespace Dragon.Game.Manager;
 

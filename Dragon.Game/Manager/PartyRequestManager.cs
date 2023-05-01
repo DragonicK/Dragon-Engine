@@ -1,10 +1,10 @@
 ﻿using Dragon.Core.Model;
 
 using Dragon.Game.Parties;
-using Dragon.Game.Network;
 using Dragon.Game.Players;
 using Dragon.Game.Services;
 using Dragon.Game.Configurations;
+using Dragon.Game.Network.Senders;
 
 namespace Dragon.Game.Manager;
 

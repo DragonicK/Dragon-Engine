@@ -1,36 +1,40 @@
-﻿using Dragon.Network;
+﻿using Dragon.Core.Services;
+
+using Dragon.Network;
+using Dragon.Network.Messaging;
 using Dragon.Network.Messaging.SharedPackets;
 
-using Dragon.Game.Services;
+using Dragon.Game.Network;
+using Dragon.Game.Players;
 
 namespace Dragon.Game.Routes;
 
-public sealed class Direction {
-    public IConnection? Connection { get; set; }
-    public PacketPlayerDirection? Packet { get; set; }
-    public PacketSenderService? PacketSenderService { get; init; }
-    public ConnectionService? ConnectionService { get; init; }
-    public LoggerService? LoggerService { get; init; }
-    public InstanceService? InstanceService { get; init; }
+public sealed class Direction : PacketRoute, IPacketRoute {
+    public MessageHeader Header { get; set; } = MessageHeader.PlayerDirection;
 
-    public void Process() {
-        var sender = PacketSenderService!.PacketSender;
-        var repository = ConnectionService!.PlayerRepository;
+    public Direction(IServiceInjector injector) : base(injector) { }
 
-        if (Connection is not null) {
-            var player = repository!.FindByConnectionId(Connection.Id);
+    public void Process(IConnection connection, object packet) {
+        var received = packet as PacketPlayerDirection;
+
+        if (received is not null) {
+            var player = GetPlayerRepository().FindByConnectionId(connection.Id);
 
             if (player is not null) {
-                player.Character.Direction = Packet!.Direction;
-
-                var instances = InstanceService!.Instances;
-                var instanceId = player.Character.Map;
-
-                if (instances.ContainsKey(instanceId)) {
-                    var instance = instances[instanceId];
-                    sender!.SendDirection(player, instance);
-                }
+                Execute(player, received);
             }
+        }
+    }
+
+    private void Execute(IPlayer player, PacketPlayerDirection packet) {
+        player.Character.Direction = packet.Direction;
+
+        var instanceId = player.Character.Map;
+
+        GetInstances().TryGetValue(instanceId, out var instance);
+
+        if (instance is not null) {
+            GetPacketSender().SendDirection(player, instance);
         }
     }
 }

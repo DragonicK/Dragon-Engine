@@ -4,8 +4,8 @@ using Dragon.Core.Model.Effects;
 
 using Dragon.Game.Parties;
 using Dragon.Game.Players;
-using Dragon.Game.Network;
 using Dragon.Game.Services;
+using Dragon.Game.Network.Senders;
 
 namespace Dragon.Game.Manager;
 

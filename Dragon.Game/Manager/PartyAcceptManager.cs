@@ -1,15 +1,23 @@
 ﻿using Dragon.Core.Model;
-using Dragon.Game.Parties;
+using Dragon.Core.Services;
 
+using Dragon.Game.Parties;
 using Dragon.Game.Players;
-using Dragon.Game.Network;
+using Dragon.Game.Services;
+using Dragon.Game.Network.Senders;
 
 namespace Dragon.Game.Manager;
 
 public class PartyAcceptManager {
-    public IPacketSender? PacketSender { get; init; }
+    public PacketSenderService? PacketSenderService { get; private set; }
+
+    public PartyAcceptManager(IServiceInjector injector) {
+        injector.Inject(this);
+    }
 
     public void ProcessAcceptRequest(PartyManager party, IPlayer player) {
+        var sender = GetPacketSender();
+
         var invitation = FindInvitation(party, player);
 
         if (invitation is not null) {
@@ -21,7 +29,7 @@ public class PartyAcceptManager {
                 var leader = party.GetLeader();
 
                 if (leader is not null) {
-                    PacketSender!.SendMessage(SystemMessage.PartyCreated, QbColor.BrigthGreen, leader);
+                    sender.SendMessage(SystemMessage.PartyCreated, QbColor.BrigthGreen, leader);
                 }
             }
 
@@ -38,18 +46,18 @@ public class PartyAcceptManager {
             player.PartyId = party.Id;
             player.PartyInvitedId = 0;
 
-            PacketSender!.SendMessage(SystemMessage.YouJoinedParty, QbColor.BrigthGreen, player);
-            PacketSender!.SendParty(party);
+            sender.SendMessage(SystemMessage.YouJoinedParty, QbColor.BrigthGreen, player);
+            sender.SendParty(party);
 
             foreach (var member in party.Members) {
                 if (member.Player is not null) {
-                    PacketSender!.SendPartyDisplayIcons(member.Player);
+                    sender.SendPartyDisplayIcons(member.Player);
                 }
             }
         }
     }
 
-    private PartyInvitedMember? FindInvitation(PartyManager party, IPlayer player) {
+    private static PartyInvitedMember? FindInvitation(PartyManager party, IPlayer player) {
         for (var i = 0; i < party.InvitedMembers.Count; ++i) {
             var member = party.InvitedMembers[i];
 
@@ -59,5 +67,9 @@ public class PartyAcceptManager {
         }
 
         return null;
+    }
+
+    private IPacketSender GetPacketSender() {
+        return PacketSenderService!.PacketSender!;
     }
 }

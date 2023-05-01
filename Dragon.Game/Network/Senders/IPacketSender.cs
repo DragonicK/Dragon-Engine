@@ -66,8 +66,7 @@ public interface IPacketSender {
     void SendRecipes(IPlayer player);
     void SendAddRecipe(IPlayer player, int recipeId);
     void SendStartCraft(IPlayer player, int progress);
-    void SendMessage(Damage message, IPlayer player);
-    void SendMessage(Damage message, IInstance instance);
+    void SendMessage(ref Damage message, IInstance instance);
     void SendQuickSlot(IPlayer player);
     void SendQuickSlotUpdate(IPlayer player, int index);
     void SendTradeInvite(IPlayer starter, IPlayer invited);

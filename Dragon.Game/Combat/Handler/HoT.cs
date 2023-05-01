@@ -7,10 +7,10 @@ using Dragon.Core.Model.Characters;
 
 using Dragon.Game.Manager;
 using Dragon.Game.Players;
-using Dragon.Game.Network;
 using Dragon.Game.Services;
 using Dragon.Game.Instances;
 using Dragon.Game.Combat.Common;
+using Dragon.Game.Network.Senders;
 
 namespace Dragon.Game.Combat.Handler;
 
@@ -212,12 +212,12 @@ public class HoT : ISkillHandler {
             X = entity.GetX(),
             Y = entity.GetY(),
             Color = GetColor(vital),
-            Message = value.ToString(),
+            Message = value,
             FontType = ActionMessageFontType.Damage,
             MessageType = ActionMessageType.Scroll
         };
 
-        PacketSender!.SendMessage(damage, instance);
+        PacketSender!.SendMessage(ref damage, instance);
     }
 
     private QbColor GetColor(Vital vital) => vital switch {

@@ -1,7 +1,8 @@
 ﻿using Dragon.Core.Model;
+using Dragon.Core.Services;
+
 using Dragon.Game.Players;
 using Dragon.Game.Services;
-using Dragon.Core.Services;
 using Dragon.Game.Instances;
 using Dragon.Game.Network.Senders;
 
@@ -11,8 +12,8 @@ public sealed class WarperManager {
     public InstanceService? InstanceService { get; private set; }
     public PacketSenderService? PacketSenderService { get; private set; }
 
-    public WarperManager(IServiceContainer services) {
-        new ServiceInjector(services).Inject(this);
+    public WarperManager(IServiceInjector injector) {
+        injector.Inject(this);
     }
 
     public void Warp(IPlayer player, IInstance instance, int x, int y) {

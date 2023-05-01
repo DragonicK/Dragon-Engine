@@ -7,11 +7,11 @@ using Dragon.Core.Model.Characters;
 using Dragon.Core.Model.BlackMarket;
 
 using Dragon.Game.Players;
-using Dragon.Game.Network;
 using Dragon.Game.Services;
 using Dragon.Game.Repository;
 using Dragon.Game.Characters;
 using Dragon.Game.Configurations;
+using Dragon.Game.Network.Senders;
 
 namespace Dragon.Game.Manager;
 

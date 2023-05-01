@@ -1,44 +1,47 @@
-﻿using Dragon.Game.Players;
+﻿using Dragon.Core.Services;
+
+using Dragon.Game.Players;
 using Dragon.Game.Parties;
-using Dragon.Game.Network;
 using Dragon.Game.Services;
+using Dragon.Game.Network.Senders;
 
 namespace Dragon.Game.Manager;
 
-public class PartyDisconnectManager {
-    public IPacketSender? PacketSender { get; init; }
-    public IPlayer? Player { get; init; }
-    public InstanceService? InstanceService { get; init; }
+public sealed class PartyDisconnectManager {
+    public InstanceService? InstanceService { get; private set; }
+    public PacketSenderService? PacketSenderService { get; private set; }
 
     private const int MinimumPartyMember = 2;
 
-    public void ProcessDisconnect() {
-        if (Player is not null) {
-            var party = GetPartyManager(Player);
+    public PartyDisconnectManager(IServiceInjector injector) {
+        injector.Inject(this);
+    }
+
+    public void ProcessDisconnect(IPlayer player) {
+        var party = GetPartyManager(player);
+
+        if (party is not null) {
+            var members = party.Members;
+
+            foreach (var member in members) {
+                if (member.Player == player) {
+                    member.Player = null;
+                    member.Disconnected = true;
+                    member.DisconnectionTimeOut = 0;
+                }
+            }
+
+            if (party.IsEverybodyDisconnected()) {
+                party.Disband();
+            }
 
             if (party is not null) {
-                var members = party.Members;
-
-                foreach (var member in members) {
-                    if (member.Player == Player) {
-                        member.Player = null;
-                        member.Disconnected = true;
-                        member.DisconnectionTimeOut = 0;
+                if (party.State != PartyState.Disbanded) {
+                    if (members.Count >= MinimumPartyMember) {
+                        GetPacketSender().SendParty(party);
                     }
-                }
-
-                if (party.IsEverybodyDisconnected()) {
-                    party.Disband();
-                }
-
-                if (party is not null) {
-                    if (party.State != PartyState.Disbanded) {
-                        if (members.Count >= MinimumPartyMember) {
-                            PacketSender!.SendParty(party);
-                        }
-                        else {
-                            party.Disband();
-                        }
+                    else {
+                        party.Disband();
                     }
                 }
             }
@@ -47,12 +50,20 @@ public class PartyDisconnectManager {
 
     private PartyManager? GetPartyManager(IPlayer player) {
         var id = player.PartyId;
-        var parties = InstanceService!.Parties;
+        var parties = GetParties();
 
-        if (parties.ContainsKey(id)) {
-            return parties[id];
+        if (parties.TryGetValue(id, out var party)) {
+            return party;
         }
 
         return null;
+    }
+
+    private IPacketSender GetPacketSender() {
+        return PacketSenderService!.PacketSender!;
+    }
+
+    private IDictionary<int, PartyManager> GetParties() {
+        return InstanceService!.Parties;
     }
 }

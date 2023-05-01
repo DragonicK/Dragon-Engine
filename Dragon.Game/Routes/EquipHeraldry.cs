@@ -1,50 +1,45 @@
-﻿using Dragon.Network;
+﻿using Dragon.Core.Services;
+
+using Dragon.Network;
+using Dragon.Network.Messaging;
 using Dragon.Network.Messaging.SharedPackets;
 
-using Dragon.Game.Services;
 using Dragon.Game.Players;
 using Dragon.Game.Manager;
+using Dragon.Game.Network;
 
 namespace Dragon.Game.Routes;
 
-public sealed class EquipHeraldry {
-    public IConnection? Connection { get; set; }
-    public CpEquipHeraldry? Packet { get; set; }
-    public LoggerService? LoggerService { get; init; }
-    public ContentService? ContentService { get; init; }
-    public ConfigurationService? Configuration { get; init; }
-    public ConnectionService? ConnectionService { get; init; }
-    public PacketSenderService? PacketSenderService { get; init; }
+public sealed class EquipHeraldry : PacketRoute, IPacketRoute {
+    public MessageHeader Header => MessageHeader.EquipHeraldry;
 
-    public void Process() {
-        var sender = PacketSenderService!.PacketSender;
-        var instances = PacketSenderService!.InstanceService;
-        var repository = ConnectionService!.PlayerRepository;
+    private readonly HeraldryManager HeraldryManager;
 
-        if (Connection is not null) {
-            var player = repository!.FindByConnectionId(Connection.Id);
+    public EquipHeraldry(IServiceInjector injector) : base(injector) {
+        HeraldryManager = new HeraldryManager(injector);
+    }
+
+    public void Process(IConnection connection, object packet) {
+        var received = packet as CpEquipHeraldry;
+
+        if (received is not null) { 
+            var player = GetPlayerRepository().FindByConnectionId(connection.Id);
 
             if (player is not null) {
-                if (IsValidInventory(player)) {
-
-                    var manager = new HeraldryManager() {
-                        Player = player,
-                        PacketSender = sender,
-                        InstanceService = instances,
-                        Configuration = Configuration,
-                        Heraldries = ContentService!.Heraldries,
-                        Items = ContentService!.Items
-                    };
-
-                    manager.EquipHeraldryAtIndewx(Packet!.HeraldryIndex, Packet!.InventoryIndex);
-                }
+                Execute(player, received);
             }
         }
     }
 
-    private bool IsValidInventory(IPlayer player) {
-        var inventoryIndex = Packet!.InventoryIndex;
-        var heraldryIndex = Packet!.HeraldryIndex;
+    private void Execute(IPlayer player, CpEquipHeraldry packet) {
+        if (IsValidInventory(player, packet)) {
+            HeraldryManager.EquipHeraldryAtIndex(player, packet.HeraldryIndex, packet.InventoryIndex);
+        }
+    }
+
+    private bool IsValidInventory(IPlayer player, CpEquipHeraldry packet) {
+        var inventoryIndex = packet.InventoryIndex;
+        var heraldryIndex = packet.HeraldryIndex;
 
         if (heraldryIndex < 1 || inventoryIndex < 1) {
             return false;

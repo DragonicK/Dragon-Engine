@@ -1,33 +1,27 @@
-﻿using Dragon.Network;
-using Dragon.Network.Messaging.SharedPackets;
+﻿using Dragon.Core.Services;
 
-using Dragon.Game.Services;
+using Dragon.Network;
+using Dragon.Network.Messaging;
+
+using Dragon.Game.Network;
 using Dragon.Game.Manager;
 
 namespace Dragon.Game.Routes;
 
-public sealed class DeclineTradeRequest {
-    public IConnection? Connection { get; set; }
-    public CpDeclineTradeRequest? Packet { get; set; }
-    public PacketSenderService? PacketSenderService { get; init; }
-    public ConnectionService? ConnectionService { get; init; }
-    public LoggerService? LoggerService { get; init; }
-    public InstanceService? InstanceService { get; init; }
+public sealed class DeclineTradeRequest : PacketRoute, IPacketRoute {
+    public MessageHeader Header => MessageHeader.DeclineTradeRequest;
 
-    public void Process() {
-        var repository = ConnectionService!.PlayerRepository;
+    private readonly TradeDeclineManager TradeDeclineManager;
 
-        if (Connection is not null) {
-            var player = repository!.FindByConnectionId(Connection.Id);
+    public DeclineTradeRequest(IServiceInjector injector) : base(injector) {
+        TradeDeclineManager = new TradeDeclineManager(injector);
+    }
 
-            if (player is not null) {
-                var trade = new TradeDeclineManager() {
-                    InstanceService = InstanceService,
-                    PacketSender = PacketSenderService!.PacketSender
-                };
+    public void Process(IConnection connection, object packet) {
+        var player = GetPlayerRepository().FindByConnectionId(connection.Id);
 
-                trade.ProcessDeclineRequest(player);
-            }
+        if (player is not null) {
+            TradeDeclineManager.ProcessDeclineRequest(player);
         }
     }
 }

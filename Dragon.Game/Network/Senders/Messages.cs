@@ -135,25 +135,7 @@ public sealed partial class PacketSender {
         Writer.Enqueue(msg);
     }
 
-    public void SendMessage(Damage damage, IPlayer player) {
-        var packet = new SpActionMessage() {
-            MessageType = damage.MessageType,
-            FontType = damage.FontType,
-            Message = damage.Message,
-            Color = damage.Color,
-            Y = damage.Y,
-            X = damage.X
-        };
-
-        var msg = Writer!.CreateMessage(packet);
-
-        msg.DestinationPeers.Add(player.GetConnection().Id);
-        msg.TransmissionTarget = TransmissionTarget.Destination;
-
-        Writer.Enqueue(msg);
-    }
-
-    public void SendMessage(Damage damage, IInstance instance) {
+    public void SendMessage(ref Damage damage, IInstance instance) {
         var players = instance.GetPlayers();
 
         var packet = new SpActionMessage() {

@@ -1,26 +1,36 @@
 ﻿using Dragon.Core.Model;
+using Dragon.Core.Services; 
 
 using Dragon.Game.Manager;
-using Dragon.Game.Network;
 using Dragon.Game.Services;
 using Dragon.Game.Instances;
+using Dragon.Game.Network.Senders;
 
 namespace Dragon.Game.Players;
 
-public class PlayerMovement {
-    public IPlayer? Player { get; init; }
-    public IPacketSender? PacketSender { get; init; }
-    public InstanceService? InstanceService { get; init; }
+public sealed class PlayerMovement {
+    public InstanceService? InstanceService { get; private set; }
+    public PacketSenderService? PacketSenderService { get; private set; }
 
     private const int Invalid = -1;
 
-    public void Move(Direction direction, MovementType movement, int x, int y) {
-        if (Player!.Character.X != x || Player!.Character.Y != y) {
+    private readonly WarperManager WarperManager;
+
+    public PlayerMovement(IServiceInjector injector) {
+        injector.Inject(this);
+
+        WarperManager = new WarperManager(injector);
+    }
+
+    public void Move(IPlayer player, Direction direction, MovementType movement, int x, int y) {
+        var sender = GetPacketSender();
+
+        if (player.Character.X != x || player.Character.Y != y) {
             var instances = InstanceService!.Instances;
-            var instanceId = Player!.Character.Map;
+            var instanceId = player.Character.Map;
 
             if (instances.ContainsKey(instanceId)) {
-                PacketSender!.SendPlayerXY(Player, instances[instanceId]);
+                sender.SendPlayerXY(player, instances[instanceId]);
             }
         }
         else {
@@ -30,35 +40,35 @@ public class PlayerMovement {
             //    chat.Close();
             //}
 
-            Move(direction, movement);
+            Move(sender, player, direction, movement);
         }
     }
 
-    private void Move(Direction direction, MovementType movement) {
-        Player!.Character.Direction = direction;
+    private void Move(IPacketSender sender, IPlayer player, Direction direction, MovementType movement) {
+        player.Character.Direction = direction;
 
-        if (CanMove(direction)) {
-            var (x, y) = GetNextCoordinate(direction, Player.Character.X, Player.Character.Y);
+        if (CanMove(player, direction)) {
+            var (x, y) = GetNextCoordinate(direction, player.Character.X, player.Character.Y);
 
-            Player!.Character.X = x;
-            Player!.Character.Y = y;
+            player.Character.X = x;
+            player.Character.Y = y;
 
             var instances = InstanceService!.Instances;
-            var instanceId = Player!.Character.Map;
+            var instanceId = player.Character.Map;
 
-            if (instances.ContainsKey(instanceId)) {
-                var instance = instances[instanceId];
+            instances.TryGetValue(instanceId, out var instance);
 
-                if (Player.Combat.IsBufferedSkill) {
-                    Player.Combat.ClearBufferedSkill();
-                    PacketSender!.SendClearCast(Player);
-                    PacketSender!.SendCancelAnimation(instance, Player.IndexOnInstance);
+            if (instance is not null) {
+                if (player.Combat.IsBufferedSkill) {
+                    player.Combat.ClearBufferedSkill();
+
+                    sender.SendClearCast(player);
+                    sender.SendCancelAnimation(instance, player.IndexOnInstance);
                 }
 
-                PacketSender!.SendPlayerMovement(Player, movement, instance);
+                sender.SendPlayerMovement(player, movement, instance);
             }
         }
-
 
         // TODO
         //var tile = player.GetMap().Tile[player.X, player.Y];
@@ -73,31 +83,27 @@ public class PlayerMovement {
         //        }
         //    }
         //}
-
-        //// They tried to hack. 
-        //if (moved = false && result == 1) {
-        //    Warp(player.GetMap(), player.X, player.Y);
-        //}
     }
 
-    private bool CanMove(Direction direction) {
+    private bool CanMove(IPlayer player, Direction direction) {
         var instances = InstanceService!.Instances;
-        var instanceId = Player!.Character.Map;
+        var instanceId = player.Character.Map;
 
-        if (instances.ContainsKey(instanceId)) {
-            var instance = instances[instanceId];
-            var x = (int)Player!.Character.X;
-            var y = (int)Player!.Character.Y;
+        instances.TryGetValue(instanceId, out var instance);
+
+        if (instance is not null) {
+            var x = player.Character.X;
+            var y = player.Character.Y;
  
             if (direction == Direction.Up) {
                 if (y > 0) {
-                    if (CheckBlockedDirection(instance, direction)) {
+                    if (CheckBlockedDirection(player, instance, direction)) {
                         return false;
                     }
                 }
                 else {
                     if (instance.Link.Up > 0) {
-                        Warp(instance.Link.Up, x, instance.MaximumY);
+                        Warp(player, instance.Link.Up, x, instance.MaximumY);
 
                         return false;
                     }
@@ -106,13 +112,13 @@ public class PlayerMovement {
 
             if (direction == Direction.Down) {
                 if (y < instance.MaximumY) {
-                    if (CheckBlockedDirection(instance, direction)) {
+                    if (CheckBlockedDirection(player, instance, direction)) {
                         return false;
                     }
                 }
                 else {
                     if (instance.Link.Down > 0) {
-                        Warp(instance.Link.Down, x, 0);
+                        Warp(player, instance.Link.Down, x, 0);
 
                         return false;
                     }
@@ -121,13 +127,13 @@ public class PlayerMovement {
 
             if (direction == Direction.Left) {
                 if (x > 0) {
-                    if (CheckBlockedDirection(instance, direction)) {
+                    if (CheckBlockedDirection(player, instance, direction)) {
                         return false;
                     }
                 }
                 else {
                     if (instance.Link.Left > 0) {
-                        Warp(instance.Link.Left, instance.MaximumX, y);
+                        Warp(player, instance.Link.Left, instance.MaximumX, y);
 
                         return false;
                     }
@@ -136,13 +142,13 @@ public class PlayerMovement {
 
             if (direction == Direction.Right) {
                 if (x < instance.MaximumX) {
-                    if (CheckBlockedDirection(instance, direction)) {
+                    if (CheckBlockedDirection(player, instance, direction)) {
                         return false;
                     }
                 }
                 else {
                     if (instance.Link.Right > 0) {
-                        Warp(instance.Link.Right, 0, y);
+                        Warp(player, instance.Link.Right, 0, y);
 
                         return false;
                     }
@@ -153,8 +159,8 @@ public class PlayerMovement {
         return true;
     }
 
-    private bool CheckBlockedDirection(IInstance instance, Direction direction) {
-        var (x, y) = GetNextCoordinate(direction, (int)Player!.Character.X, (int)Player!.Character.Y);
+    private bool CheckBlockedDirection(IPlayer player, IInstance instance, Direction direction) {
+        var (x, y) = GetNextCoordinate(direction, player.Character.X, player.Character.Y);
 
         if (instance.IsBlocked(x, y)) {
             return true;
@@ -171,19 +177,17 @@ public class PlayerMovement {
         _ => (Invalid, Invalid)
     };
 
-    private void Warp(int newInstanceId, int x, int y) {
+    private void Warp(IPlayer player, int newInstanceId, int x, int y) {
         var instances = InstanceService!.Instances;
 
-        if (instances.ContainsKey(newInstanceId)) {
-            var instance = instances[newInstanceId];
+        instances.TryGetValue(newInstanceId, out var instance);
 
-            var warper = new WarperManager() {
-                Player = Player,
-                InstanceService = InstanceService,
-                PacketSender = PacketSender
-            };
-
-            warper.Warp(instance, x, y);
+        if (instance is not null) {
+            WarperManager.Warp(player, instance, x, y);
         }
+    }
+
+    private IPacketSender GetPacketSender() {
+        return PacketSenderService!.PacketSender!;
     }
 }

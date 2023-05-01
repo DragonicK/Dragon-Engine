@@ -7,10 +7,10 @@ using Dragon.Core.Model.Characters;
 
 using Dragon.Game.Manager;
 using Dragon.Game.Players;
-using Dragon.Game.Network;
 using Dragon.Game.Services;
 using Dragon.Game.Instances;
 using Dragon.Game.Combat.Common;
+using Dragon.Game.Network.Senders;
 
 namespace Dragon.Game.Combat.Handler;
 

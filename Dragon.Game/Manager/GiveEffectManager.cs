@@ -1,83 +1,88 @@
 ﻿using Dragon.Core.Content;
-using Dragon.Core.Model.Entity;
 using Dragon.Core.Model.Effects;
 using Dragon.Core.Model.Characters;
 using Dragon.Core.Model.DisplayIcon;
 
 using Dragon.Game.Players;
-using Dragon.Game.Network;
 using Dragon.Game.Services;
+using Dragon.Core.Services;
 using Dragon.Game.Instances;
+using Dragon.Game.Network.Senders;
 
 namespace Dragon.Game.Manager;
 
-public class GiveEffectManager {
-    public IDatabase<Effect>? Effects { get; init; }
-    public IPacketSender? PacketSender { get; init; }
-    public InstanceService? InstanceService { get; init; }
+public sealed class GiveEffectManager {
+    public ContentService? ContentService { get; private set; }
+    public InstanceService? InstanceService { get; private set; }
+    public PacketSenderService? PacketSenderService { get; private set; }
+
+    public GiveEffectManager(IServiceInjector injector) {
+        injector.Inject(this);
+    }
 
     public void RemoveEffect(IPlayer player, int id) {
-        var inventory = player!.Effects.GetEffectById(id);
+        var inventory = player.Effects.GetEffectById(id);
+        var sender = GetPacketSender();
 
         if (inventory is not null) {
             var instance = GetInstance(player);
 
-            SendDisplayIcon(DisplayIconOperation.Remove, inventory, instance, player!);
+            SendDisplayIcon(sender, DisplayIconOperation.Remove, inventory, instance, player);
 
             inventory.EffectId = 0;
             inventory.EffectLevel = 0;
             inventory.EffectDuration = 0;
             inventory.IsAura = false;
 
-            player!.Effects.UpdateAttributes();
+            player.Effects.UpdateAttributes();
 
-            SendAttributes(player, instance);
+            SendAttributes(sender, player, instance);
         }
     }
 
     public void GiveEffect(IPlayer player, int id, int level, int duration, bool isAura = false) {
-        if (Effects is not null) {
-            var effect = Effects[id];
+        var effects = GetDatabaseEffect();
+        var sender = GetPacketSender();
 
-            if (effect is not null) {
-                if (duration <= 0) {
-                    duration = effect.Duration;
-                }
+        effects.TryGet(id, out var effect);
 
-                var inventory = player!.Effects.GetEffectById(id);
+        if (effect is not null) {
+            if (duration <= 0) {
+                duration = effect.Duration;
+            }
 
-                var instance = GetInstance(player);
+            var inventory = player.Effects.GetEffectById(id);
+
+            var instance = GetInstance(player);
+
+            if (inventory is not null) {
+                inventory.EffectId = id;
+                inventory.EffectLevel = level;
+                inventory.EffectDuration = duration;
+                inventory.IsAura = isAura;
+
+                player.Effects.UpdateAttributes();
+
+                SendAttributes(sender, player, instance);
+
+                SendDisplayIcon(sender, DisplayIconOperation.Update, inventory, instance, player);
+            }
+            else {
+                inventory = player!.Effects.Add(id, level, duration, isAura);
 
                 if (inventory is not null) {
-                    inventory.EffectId = id;
-                    inventory.EffectLevel = level;
-                    inventory.EffectDuration = duration;
-                    inventory.IsAura = isAura;
+                    player.Effects.UpdateAttributes();
 
-                    player!.Effects.UpdateAttributes();
+                    SendAttributes(sender, player, instance);
 
-                    SendAttributes(player, instance);
-
-                    SendDisplayIcon(DisplayIconOperation.Update, inventory, instance, player!);
-                }
-                else {
-                    inventory = player!.Effects.Add(id, level, duration, isAura);
-
-                    if (inventory is not null) {
-                        player!.Effects.UpdateAttributes();
-
-                        SendAttributes(player, instance);
-
-                        SendDisplayIcon(DisplayIconOperation.Update, inventory, instance, player!);
-                    }
+                    SendDisplayIcon(sender, DisplayIconOperation.Update, inventory, instance, player);
                 }
             }
         }
     }
 
-    private void SendDisplayIcon(DisplayIconOperation operation, CharacterAttributeEffect inventory, IInstance? instance, IPlayer player) {
+    private void SendDisplayIcon(IPacketSender sender, DisplayIconOperation operation, CharacterAttributeEffect inventory, IInstance? instance, IPlayer player) {
         if (instance is not null) {
-
             var durationType = inventory.IsAura ? DisplayIconDuration.Unlimited : DisplayIconDuration.Limited;
 
             var icon = new DisplayIcon() {
@@ -91,20 +96,20 @@ public class GiveEffectManager {
                 OperationType = operation
             };
 
-            PacketSender!.SendDisplayIcon(ref icon, DisplayIconTarget.Player, (IEntity)player, instance);
+            sender.SendDisplayIcon(ref icon, DisplayIconTarget.Player, player, instance);
         }
     }
 
-    private void SendAttributes(IPlayer player, IInstance? instance) {
-        player!.AllocateAttributes();
+    private void SendAttributes(IPacketSender sender, IPlayer player, IInstance? instance) {
+        player.AllocateAttributes();
 
-        PacketSender!.SendAttributes(player);
+        sender.SendAttributes(player);
 
         if (instance is not null) {
-            PacketSender!.SendPlayerVital(player, instance);
+            sender.SendPlayerVital(player, instance);
         }
         else {
-            PacketSender!.SendPlayerVital(player);
+            sender.SendPlayerVital(player);
         }
     }
 
@@ -112,10 +117,16 @@ public class GiveEffectManager {
         var instanceId = player.Character.Map;
         var instances = InstanceService!.Instances;
 
-        if (instances.ContainsKey(instanceId)) {
-            return instances[instanceId];
-        }
+        instances.TryGetValue(instanceId, out var instance);
 
-        return null;
+        return instance;
+    }
+
+    private IDatabase<Effect> GetDatabaseEffect() {
+        return ContentService!.Effects!;
+    }
+
+    private IPacketSender GetPacketSender() {
+        return PacketSenderService!.PacketSender!;
     }
 }

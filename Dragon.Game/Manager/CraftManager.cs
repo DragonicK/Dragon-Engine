@@ -1,83 +1,83 @@
 ﻿using Dragon.Core.Model;
 using Dragon.Core.Content;
+using Dragon.Core.Services;
 using Dragon.Core.Model.Items;
 using Dragon.Core.Model.Crafts;
 using Dragon.Core.Model.Recipes;
 using Dragon.Core.Model.Characters;
 
-using Dragon.Game.Network;
-using Dragon.Game.Configurations;
 using Dragon.Game.Players;
+using Dragon.Game.Services;
+using Dragon.Game.Network.Senders;
 
 namespace Dragon.Game.Manager;
 
-public class CraftManager {
-    public IPlayer? Player { get; init; }
-    public IPacketSender? PacketSender { get; init; }
-    public IConfiguration? Configuration { get; init; }
-    public IDatabase<Item>? Items { get; init; }
-    public IDatabase<Recipe>? Recipes { get; init; }
-    public Experience? Experience { get; init; }
+public sealed class CraftManager {
+    public ContentService? ContentService { get; private set; }
+    public ConfigurationService? Configuration { get; private set; }
+    public PacketSenderService? PacketSenderService { get; private set; }
 
     private const int Step = 10;
 
-    public void Start(int index) {
-        if (Recipes is null) {
-            return;
-        }
+    public CraftManager(IServiceInjector injector) {
+        injector.Inject(this);
+    }
 
-        var recipeId = Player!.Recipes.GetId(index);
+    public void Start(IPlayer player, int index) {
+        var sender = GetPacketSender();
+        var recipes = GetDatabaseRecipe();
 
-        if (Recipes.Contains(recipeId)) {
-            var recipe = Recipes[recipeId];
+        var recipeId = player.Recipes.GetId(index);
 
-            if (HasRequirements(recipe!)) {
-                ContinueStartProcess(recipe!);
+        recipes.TryGet(recipeId, out var recipe);
+
+        if (recipe is not null) {
+            if (HasRequirements(player, recipe)) {
+                ContinueStartProcess(sender, player, recipe);
             }
             else {
-                PacketSender!.SendMessage(SystemMessage.YouDoNotHaveEnoughMaterial, QbColor.Red, Player!);
+                sender.SendMessage(SystemMessage.YouDoNotHaveEnoughMaterial, QbColor.Red, player);
             }
         }
     }
 
-    public void Conclude() {
-        if (Recipes is null) {
-            return;
-        }
+    public void Conclude(IPlayer player) {
+        var sender = GetPacketSender();
+        var recipes = GetDatabaseRecipe();
 
-        if (Player!.Craft.State == CraftState.Started) {
-            var recipeId = Player.Craft.ProcessingRecipeId;
+        if (player!.Craft.State == CraftState.Started) {
+            var recipeId = player.Craft.ProcessingRecipeId;
 
-            if (Recipes.Contains(recipeId)) {
-                var recipe = Recipes[recipeId];
+            recipes.TryGet(recipeId, out var recipe);
 
-                if (HasRequirements(recipe!)) {
-                    TakeRequiredItems(recipe!);
-                    ContinueConcludeProcess(recipe!);
+            if (recipe is not null) {
+                if (HasRequirements(player, recipe)) {
+                    TakeRequiredItems(sender, player, recipe);
+                    ContinueConcludeProcess(sender, player, recipe);
                 }
             }
         }
     }
 
-    private void ContinueStartProcess(Recipe recipe) {
-        var inventory = GetInventory(recipe, out var _);
+    private void ContinueStartProcess(IPacketSender sender, IPlayer player, Recipe recipe) {
+        var inventory = GetInventory(player, recipe, out var _);
 
         if (inventory is not null) {
-            Player!.Craft.ProcessingRecipeId = recipe.Id;
-            Player!.Craft.State = CraftState.Started;
+            player.Craft.ProcessingRecipeId = recipe.Id;
+            player.Craft.State = CraftState.Started;
 
-            PacketSender!.SendStartCraft(Player!, Step);
+            sender.SendStartCraft(player, Step);
         }
         else {
-            PacketSender!.SendMessage(SystemMessage.InventoryFull, QbColor.BrigthRed, Player!);
+            sender.SendMessage(SystemMessage.InventoryFull, QbColor.BrigthRed, player);
         }
     }
 
-    private void ContinueConcludeProcess(Recipe recipe) {
-        var inventory = GetInventory(recipe!, out var shouldStack);
+    private void ContinueConcludeProcess(IPacketSender sender, IPlayer player, Recipe recipe) {
+        var inventory = GetInventory(player, recipe, out var shouldStack);
 
-        Player!.Craft.State = CraftState.Stopped;
-        Player!.Craft.ProcessingRecipeId = 0;
+        player.Craft.State = CraftState.Stopped;
+        player.Craft.ProcessingRecipeId = 0;
 
         if (inventory is not null) {
             if (shouldStack) {
@@ -89,18 +89,18 @@ public class CraftManager {
                 inventory.Level = recipe.Reward.Level;
             }
 
-            PacketSender!.SendMessage(SystemMessage.ItemCreated, QbColor.BrigthGreen, Player!);
-            PacketSender!.SendInventoryUpdate(Player, inventory.InventoryIndex);
+            sender.SendMessage(SystemMessage.ItemCreated, QbColor.BrigthGreen, player);
+            sender.SendInventoryUpdate(player, inventory.InventoryIndex);
 
-            ApplyExperience(recipe);
+            ApplyExperience(sender, player, recipe);
         }
     }
 
-    private bool HasRequirements(Recipe recipe) {
+    private bool HasRequirements(IPlayer player, Recipe recipe) {
         var items = recipe.Required;
 
         for (var i = 0; i < items.Count; ++i) {
-            if (!HasItem(items[i])) {
+            if (!HasItem(player, items[i])) {
                 return false;
             }
         }
@@ -108,13 +108,13 @@ public class CraftManager {
         return true;
     }
 
-    private bool HasItem(RecipeItem required) {
+    private bool HasItem(IPlayer player, RecipeItem required) {
         if (required.Id == 0) {
             return true;
         }
 
         var count = 0;
-        var inventories = Player!.Inventories.ToList();
+        var inventories = player.Inventories.ToList();
 
         for (var i = 0; i < inventories.Count; ++i) {
             if (inventories[i].ItemId == required.Id && inventories[i].Level == required.Level) {
@@ -129,45 +129,43 @@ public class CraftManager {
         return false;
     }
 
-    private CharacterInventory? GetInventory(Recipe recipe, out bool isStacked) {
+    private CharacterInventory? GetInventory(IPlayer player, Recipe recipe, out bool isStacked) {
         isStacked = false;
 
-        if (Items is null) {
-            return null;
-        }
+        var items = GetDatabaseItem();
 
         CharacterInventory? inventory = default;
 
-        if (Items.Contains(recipe.Reward.Id)) {
-            var item = Items[recipe.Reward.Id]!;
+        items.TryGet(recipe.Reward.Id, out var item);
 
+        if (item is not null) {
             if (item.MaximumStack > 0) {
                 isStacked = true;
 
-                inventory = Player!.Inventories.FindByItemId(item.Id);
+                inventory = player.Inventories.FindByItemId(item.Id);
             }
 
             if (inventory is null) {
                 isStacked = false;
 
-                var maximum = Player!.Character.MaximumInventories;
-                inventory = Player!.Inventories.FindFreeInventory(maximum);
+                var maximum = player.Character.MaximumInventories;
+                inventory = player.Inventories.FindFreeInventory(maximum);
             }
         }
 
         return inventory;
     }
 
-    private void TakeRequiredItems(Recipe recipe) {
+    private void TakeRequiredItems(IPacketSender sender, IPlayer player, Recipe recipe) {
         var items = recipe.Required;
 
         for (var i = 0; i < items.Count; ++i) {
-            TakeRequiredItem(items[i]);
+            TakeRequiredItem(sender, player, items[i]);
         }
     }
 
-    private void TakeRequiredItem(RecipeItem required) {
-        var inventories = Player!.Inventories.ToList();
+    private void TakeRequiredItem(IPacketSender sender, IPlayer player, RecipeItem required) {
+        var inventories = player.Inventories.ToList();
         var value = required.Value;
         int rest;
 
@@ -191,8 +189,7 @@ public class CraftManager {
                     inventory.Clear();
                 }
 
-                PacketSender!.SendInventoryUpdate(Player, inventory.InventoryIndex);
-
+                sender.SendInventoryUpdate(player, inventory.InventoryIndex);
 
                 if (rest == 0) {
                     return;
@@ -200,75 +197,91 @@ public class CraftManager {
                 else {
                     value = rest;
                 }
-
             }
         }
     }
 
-    private void ApplyExperience(Recipe recipe) {
+    private void ApplyExperience(IPacketSender sender, IPlayer player, Recipe recipe) {
         var maximum = Configuration!.Craft.MaximumLevel;
-        var level = Player!.Craft.Level;
+
+        var level = player.Craft.Level;
 
         if (level < maximum) {
             var rates = Configuration!.Rates.Craft; // TODO + Service Rates
 
             var experience = Convert.ToInt32(recipe.Experience * rates);
 
-            var count = GetLevelUpCount(level, maximum, experience);
+            var count = GetLevelUpCount(player, level, maximum, experience);
 
             if (count > 0) {
-                PacketSender!.SendCraftData(Player!);
+                sender.SendCraftData(player);
             }
             else {
-                PacketSender!.SendCraftExperience(Player!);
+                sender.SendCraftExperience(player);
             }
         }
     }
 
-    private int GetLevelUpCount(int level, int maximum, int experience) {
+    private int GetLevelUpCount(IPlayer player, int level, int maximum, int experience) {
         var count = 0;
 
-        if (Experience is not null) {
-            experience += Player!.Craft.Experience;
+        var database = GetExperience();
 
-            if (level >= maximum) {
-                if (experience > Experience.Get(maximum)) {
-                    experience = Experience.Get(maximum);
+        experience += player.Craft.Experience;
 
-                    Player!.Craft.Experience = experience;
-                    Player!.Craft.NextLevelExperience = experience;
-                }
+        if (level >= maximum) {
+            if (experience > database.Get(maximum)) {
+                experience = database.Get(maximum);
 
-                return 0;
+                player.Craft.Experience = experience;
+                player.Craft.NextLevelExperience = experience;
             }
 
-            while (experience >= Experience.Get(level)) {
-                var rest = experience - Experience.Get(level);
+            return 0;
+        }
 
-                experience = rest;
+        while (experience >= database.Get(level)) {
+            var rest = experience - database.Get(level);
 
-                count++;
-                level++;
+            experience = rest;
 
-                if (level >= maximum) {
-                    break;
-                }
-            }
-
-            Player!.Craft.Level = level;
-            Player!.Craft.Experience = experience;
-            Player!.Craft.NextLevelExperience = Experience.Get(level);
+            count++;
+            level++;
 
             if (level >= maximum) {
-                if (experience > Experience.Get(maximum)) {
-                    experience = Experience.Get(maximum);
+                break;
+            }
+        }
 
-                    Player!.Craft.Experience = experience;
-                    Player!.Craft.NextLevelExperience = experience;
-                }
+        player.Craft.Level = level;
+        player.Craft.Experience = experience;
+        player.Craft.NextLevelExperience = database.Get(level);
+
+        if (level >= maximum) {
+            if (experience > database.Get(maximum)) {
+                experience = database.Get(maximum);
+
+                player.Craft.Experience = experience;
+                player.Craft.NextLevelExperience = experience;
             }
         }
 
         return count;
+    }
+
+    private IPacketSender GetPacketSender() {
+        return PacketSenderService!.PacketSender!;
+    }
+
+    private IDatabase<Item> GetDatabaseItem() {
+        return ContentService!.Items;
+    }
+
+    private IDatabase<Recipe> GetDatabaseRecipe() {
+        return ContentService!.Recipes;
+    }
+
+    private Experience GetExperience() {
+        return ContentService!.CraftExperience;
     }
 }

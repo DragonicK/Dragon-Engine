@@ -1,122 +1,134 @@
 ﻿using Dragon.Core.Model;
 using Dragon.Core.Content;
+using Dragon.Core.Services;
 using Dragon.Core.Model.Items;
 using Dragon.Core.Model.Heraldries;
 using Dragon.Core.Model.Characters;
 
 using Dragon.Game.Players;
-using Dragon.Game.Network;
-using Dragon.Game.Instances;
 using Dragon.Game.Services;
-using Dragon.Game.Configurations;
+using Dragon.Game.Instances;
+using Dragon.Game.Network.Senders;
 
 namespace Dragon.Game.Manager;
 
-public class HeraldryManager {
-    public IPlayer? Player { get; init; }
-    public IPacketSender? PacketSender { get; init; }
-    public IConfiguration? Configuration { get; init; }
-    public IDatabase<Item>? Items { get; init; }
-    public IDatabase<Heraldry>? Heraldries { get; init; }
-    public InstanceService? InstanceService { get; init; }
+public sealed class HeraldryManager {
+    public ContentService? ContentService { get; private set; }
+    public ConfigurationService? Configuration { get; private set; }
+    public InstanceService? InstanceService { get; private set; }
+    public PacketSenderService? PacketSenderService { get; private set; }
+    public ConfigurationService? ConfigurationService { get; private set; }
 
     private const int MaximumAttempts = 10;
 
-    public void UnequipHeraldry(int index) {
-        var heraldry = Player!.Heraldries.Get(index);
+    public HeraldryManager(IServiceInjector injector) {
+        injector.Inject(this);
+    }
+
+    public void UnequipHeraldry(IPlayer player, int index) {
+        var sender = GetPacketSender();
+        var heraldry = player.Heraldries.Get(index);
 
         if (heraldry is not null) {
             if (heraldry.ItemId > 0) {
-                var maximum = Player!.Character.MaximumInventories;
-                var inventory = Player!.Inventories.FindFreeInventory(maximum);
+                var maximum = player.Character.MaximumInventories;
+                var inventory = player.Inventories.FindFreeInventory(maximum);
 
                 if (inventory is not null) {
                     inventory.Apply(heraldry);
-                    Player!.Heraldries.Unequip(index);
 
-                    PacketSender!.SendInventoryUpdate(Player, inventory.InventoryIndex);
-                    PacketSender!.SendHeraldryUpdate(Player, index);
+                    player.Heraldries.Unequip(index);
 
-                    SendAttributes();
+                    sender.SendInventoryUpdate(player, inventory.InventoryIndex);
+                    sender.SendHeraldryUpdate(player, index);
+
+                    SendAttributes(sender, player);
                 }
                 else {
-                    PacketSender!.SendMessage(SystemMessage.InventoryFull, QbColor.Red, Player);
+                    sender.SendMessage(SystemMessage.InventoryFull, QbColor.Red, player);
                 }
             }
         }
     }
 
-    public void EquipHeraldry(int index, Item item) {
+    public void EquipHeraldry(IPlayer player, int index, Item item) {
+        var sender = GetPacketSender();
+
         if (item.EquipmentId > 0) {
-            var inventory = Player!.Inventories.FindByIndex(index)!;
+            var inventory = player.Inventories.FindByIndex(index)!;
 
             if (inventory.AttributeId == 0) {
-                if (CanRevealHeraldryAttribute(inventory, item)) {
-                    PacketSender!.SendInventoryUpdate(Player, index);
+                if (CanRevealHeraldryAttribute(sender, player, inventory, item)) {
+                    sender!.SendInventoryUpdate(player, index);
                 }
             }
             else {
                 var maximum = Configuration!.Player.MaximumHeraldries;
-                var heraldry = Player!.Heraldries.FindFreeHeraldry(maximum);
+                var heraldry = player!.Heraldries.FindFreeHeraldry(maximum);
 
                 if (heraldry is not null) {
-                    ContinueEquipHeraldryAtIndex(heraldry.InventoryIndex, index);
+                    ContinueEquipHeraldryAtIndex(sender, player, heraldry.InventoryIndex, index);
                 }
             }
         }
     }
 
-    public void EquipHeraldryAtIndewx(int heraldryIndex, int index) {
-        var item = GetItemFromInventory(index);
+    public void EquipHeraldryAtIndex(IPlayer player, int heraldryIndex, int index) {
+        var sender = GetPacketSender();
+
+        var item = GetItemFromInventory(player, index);
 
         if (item is not null) {
 
-            if (item.ClassCode != Player!.Character.ClassCode) {
+            if (item.ClassCode != player!.Character.ClassCode) {
                 var parameters = new string[] { item.ClassCode.ToString() };
 
-                PacketSender!.SendMessage(SystemMessage.OnlyClassCodeCanUseItem, QbColor.Red, Player, parameters);
+                sender.SendMessage(SystemMessage.OnlyClassCodeCanUseItem, QbColor.Red, player, parameters);
             }
             else {
-                if (item!.RequiredLevel > Player!.Character.Level) {
-                    PacketSender!.SendMessage(SystemMessage.YouDoNotHaveRequiredLevel, QbColor.Red, Player);
+                if (item!.RequiredLevel > player.Character.Level) {
+                    sender.SendMessage(SystemMessage.YouDoNotHaveRequiredLevel, QbColor.Red, player);
                 }
                 else {
                     if (item.Type == ItemType.Heraldry) {
-                        ContinueEquipHeraldryAtIndex(heraldryIndex, index);
+                        ContinueEquipHeraldryAtIndex(sender, player, heraldryIndex, index);
                     }
                 }
             }
         }
     }
 
-    private void ContinueEquipHeraldryAtIndex(int heraldryIndex, int index) {
-        var inventory = Player!.Inventories.FindByIndex(index);
+    private void ContinueEquipHeraldryAtIndex(IPacketSender sender, IPlayer player, int heraldryIndex, int index) {
+        var inventory = player!.Inventories.FindByIndex(index);
 
         if (inventory!.AttributeId > 0) {
-            if (Player!.Heraldries.IsEquipped(heraldryIndex)) {
-                SwapHeraldry(heraldryIndex, inventory);
+            if (player!.Heraldries.IsEquipped(heraldryIndex)) {
+                SwapHeraldry(player, heraldryIndex, inventory);
             }
             else {
-                Player!.Heraldries.Equip(heraldryIndex, inventory);
+                player.Heraldries.Equip(heraldryIndex, inventory);
                 inventory.Clear();
             }
 
-            PacketSender!.SendHeraldryUpdate(Player, heraldryIndex);
-            PacketSender!.SendInventoryUpdate(Player, index);
+            sender.SendHeraldryUpdate(player, heraldryIndex);
+            sender.SendInventoryUpdate(player, index);
 
-            SendAttributes();
+            SendAttributes(sender, player);
         }
         else {
-            PacketSender!.SendMessage(SystemMessage.NeedRevealItemAttribute, QbColor.BrigthRed, Player);
+            sender.SendMessage(SystemMessage.NeedRevealItemAttribute, QbColor.BrigthRed, player);
         }
     }
 
-    private bool CanRevealHeraldryAttribute(CharacterInventory inventory, Item item) {
+    private bool CanRevealHeraldryAttribute(IPacketSender sender, IPlayer player, CharacterInventory inventory, Item item) {
+        var heraldries = GetDatabaseHeraldries();
+        
         var heraldryId = item.EquipmentId;
         var success = false;
 
-        if (Heraldries!.Contains(heraldryId)) {
-            var heraldry = Heraldries[heraldryId];
+        heraldries.TryGet(heraldryId, out var heraldry);
+
+        if (heraldry is not null) {
             var random = new Random();
             var attempts = 0;
             var count = 0;
@@ -145,73 +157,83 @@ public class HeraldryManager {
                 }
 
                 if (success) {
-                    PacketSender!.SendMessage(SystemMessage.SuccessToRevealItemAttribute, QbColor.Red, Player!);
+                    sender.SendMessage(SystemMessage.SuccessToRevealItemAttribute, QbColor.Red, player);
                 }
                 else {
-                    PacketSender!.SendMessage(SystemMessage.FailedToRevealItemAttribute, QbColor.Red, Player!);
+                    sender.SendMessage(SystemMessage.FailedToRevealItemAttribute, QbColor.Red, player);
                 }
             }
             else {
-                PacketSender!.SendMessage(SystemMessage.CannotRevealItemAttribute, QbColor.Red, Player!);
+                sender.SendMessage(SystemMessage.CannotRevealItemAttribute, QbColor.Red, player);
             }
         }
 
         return success;
     }
 
-    private void SwapHeraldry(int index, CharacterInventory inventory) {
-        var heraldry = Player!.Heraldries.Get(index);
+    private void SwapHeraldry(IPlayer player, int index, CharacterInventory inventory) {
+        var heraldry = player.Heraldries.Get(index);
 
         if (heraldry is not null) {
             var clone = heraldry!.Clone();
 
-            Player!.Heraldries.Unequip(index);
-            Player!.Heraldries.Equip(index, inventory);
+            player.Heraldries.Unequip(index);
+            player.Heraldries.Equip(index, inventory);
 
             inventory.Clear();
             inventory.Apply(clone);
         }
     }
 
-    private Item? GetItemFromInventory(int index) {
-        if (Items is not null) {
-            var inventory = Player!.Inventories.FindByIndex(index);
+    private Item? GetItemFromInventory(IPlayer player, int index) {
+        var items = GetDatabaseItems();
 
-            if (inventory is not null) {
-                var itemId = inventory.ItemId;
+        var inventory = player.Inventories.FindByIndex(index);
 
-                if (Items.Contains(itemId)) {
-                    return Items[itemId];
-                }
-            }
+        if (inventory is not null) {
+            var itemId = inventory.ItemId;
+
+            items.TryGet(itemId, out var item);
+
+            return item;
         }
 
         return null;
     }
 
-    private void SendAttributes() {
-        Player!.AllocateAttributes();
-        PacketSender!.SendAttributes(Player);
+    private void SendAttributes(IPacketSender sender, IPlayer player) {
+        player.AllocateAttributes();
 
-        var instance = GetInstance();
+        sender.SendAttributes(player);
+
+        var instance = GetInstance(player);
 
         if (instance is not null) {
-            PacketSender!.SendPlayerVital(Player, instance);
+            sender.SendPlayerVital(player, instance);
         }
         else {
-            PacketSender!.SendPlayerVital(Player);
+            sender.SendPlayerVital(player);
         }
     }
 
-    private IInstance? GetInstance() {
-        var instanceId = Player!.Character.Map;
+    private IInstance? GetInstance(IPlayer player) {
+        var instanceId = player.Character.Map;
         var instances = InstanceService!.Instances;
 
-        if (instances.ContainsKey(instanceId)) {
-            return instances[instanceId];
-        }
+        instances.TryGetValue(instanceId, out var instance);
 
-        return null;
+        return instance;
     }
 
+    private IPacketSender GetPacketSender() {
+        return PacketSenderService!.PacketSender!;
+    }
+
+    private IDatabase<Item> GetDatabaseItems() {
+        return ContentService!.Items;
+    }
+
+    private IDatabase<Heraldry> GetDatabaseHeraldries() {
+        return ContentService!.Heraldries;
+    }
 }

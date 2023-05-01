@@ -5,10 +5,10 @@ using Dragon.Core.Model.Mailing;
 using Dragon.Core.Model.Characters;
 
 using Dragon.Game.Players;
-using Dragon.Game.Network;
 using Dragon.Game.Characters;
 using Dragon.Game.Repository;
 using Dragon.Game.Configurations;
+using Dragon.Game.Network.Senders;
 
 namespace Dragon.Game.Manager;
 

@@ -4,6 +4,7 @@ using Dragon.Core.Services;
 using Dragon.Game.Services;
 using Dragon.Game.Repository;
 using Dragon.Game.Network.Senders;
+using Dragon.Game.Instances;
 
 namespace Dragon.Game.Network;
 
@@ -35,11 +36,16 @@ public abstract class PacketRoute {
         return LoggerService!.Logger!;
     }
 
+    protected IPacketSender GetPacketSender() {
+        return PacketSenderService!.PacketSender!;
+    }
+    
+    public IDictionary<int, IInstance> GetInstances() {
+        return InstanceService!.Instances;
+    }
+
     protected IPlayerRepository GetPlayerRepository() {
         return ConnectionService!.PlayerRepository!;
     }
 
-    protected IPacketSender GetPacketSender() {
-        return PacketSenderService!.PacketSender!;
-    }
 }

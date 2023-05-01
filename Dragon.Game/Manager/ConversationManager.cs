@@ -1,29 +1,39 @@
 ﻿using Dragon.Core.Content;
+using Dragon.Core.Services;
 using Dragon.Core.Model.Shops;
-using Dragon.Core.Model.Effects;
 using Dragon.Core.Model.Conversations;
 
 using Dragon.Game.Players;
-using Dragon.Game.Network;
 using Dragon.Game.Services;
 using Dragon.Game.Instances;
+using Dragon.Game.Network.Senders;
 
 namespace Dragon.Game.Manager;
 
-public class ConversationManager {
-    public IPlayer? Player { get; init; }
-    public IDatabase<Shop>? Shops { get; init; }
-    public IDatabase<Effect>? Effects { get; init; }
-    public IDatabase<Conversation>? Conversations { get; init; }
-    public IPacketSender? PacketSender { get; init; }
-    public InstanceService? InstanceService { get; init; }
+public sealed class ConversationManager {
+    public ContentService? ContentService { get; private set; }
+    public InstanceService? InstanceService { get; private set; }
+    public PacketSenderService? PacketSenderService { get; private set; }
 
     private const int FirstChatIndex = 0;
 
-    public void ProcessOptions(int id, int chatIndex, int option) {
-        var conversation = GetConversation(id);
+    private readonly WarperManager WarperManager;
+    private readonly GiveEffectManager GiveEffectManager;
+
+    public ConversationManager(IServiceInjector injector) {
+        injector.Inject(this);
+
+        WarperManager = new WarperManager(injector);
+        GiveEffectManager = new GiveEffectManager(injector);
+    }
+
+    public void ProcessOptions(IPlayer player, int id, int chatIndex, int option) {
+        var conversations = GetDatabaseConversation();
+
+        conversations.TryGet(id, out var conversation);
 
         if (conversation is not null) {
+            var sender = GetPacketSender();
             var count = conversation.ChatCount;
 
             if (count > 0 && chatIndex <= count) {
@@ -32,27 +42,27 @@ public class ConversationManager {
                 var chat = conversation.Chats[chatIndex];
 
                 if (option != 0) {
-                    ContinueNextChatOptions(conversation, chat, id, option);
+                    ContinueNextChatOptions(sender, player, conversation, chat, id, option);
                 }
                 else {
-                    ProcessFirstChat(chat, id);
+                    ProcessFirstChat(sender, player, chat, id);
                 }
             }
         }
     }
 
-    private void ProcessFirstChat(Chat chat, int id) {
+    private void ProcessFirstChat(IPacketSender sender, IPlayer player, Chat chat, int id) {
         if (chat.Event != ConversationEvent.Close) {
-            ExecuteEventAndCanMoveToNextChat(chat);
+            ExecuteEventAndCanMoveToNextChat(sender, player, chat);
 
-            PacketSender!.SendConversationOption(Player!, id, FirstChatIndex);
+            sender.SendConversationOption(player, id, FirstChatIndex);
         }
         else {
-            PacketSender!.SendConversationClose(Player!);
+            sender.SendConversationClose(player);
         }
     }
 
-    private void ContinueNextChatOptions(Conversation conversation, Chat chat, int id, int option) {
+    private void ContinueNextChatOptions(IPacketSender sender, IPlayer player, Conversation conversation, Chat chat, int id, int option) {
         if (IsInRange(chat, option)) {
             option--;
 
@@ -61,50 +71,52 @@ public class ConversationManager {
             chat = conversation.Chats[chatIndex];
 
             if (chat.Event != ConversationEvent.Close) {
-                if (ExecuteEventAndCanMoveToNextChat(chat)) {
-                    PacketSender!.SendConversationOption(Player!, id, chatIndex);
+                if (ExecuteEventAndCanMoveToNextChat(sender, player, chat)) {
+                    sender.SendConversationOption(player, id, chatIndex);
                 }
             }
             else {
-                PacketSender!.SendConversationClose(Player!);
+                sender.SendConversationClose(player);
             }
         }
     }
 
-    private bool ExecuteEventAndCanMoveToNextChat(Chat chat) {
+    private bool ExecuteEventAndCanMoveToNextChat(IPacketSender sender, IPlayer player, Chat chat) {
         var id = chat.Data1;
         var param1 = chat.Data2;
         var param2 = chat.Data3;
 
         switch (chat.Event) {
             case ConversationEvent.OpenShop:
-                PacketSender!.SendConversationClose(Player!);
+                sender.SendConversationClose(player);
 
-                var shop = GetShop(id);
+                var shops = GetDatabaseShop();
+
+                shops.TryGet(id, out var shop);
 
                 if (shop is not null) {
-                    Player!.ShopId = id;
-                    PacketSender!.SendShopOpen(Player!, shop);
+                    player.ShopId = id;
+                    sender.SendShopOpen(player, shop);
                 }
 
                 break;
 
             case ConversationEvent.OpenBank:
-                Player!.IsWarehouseOpen = true;
-                PacketSender!.SendConversationClose(Player!);
-                PacketSender!.SendWarehouseOpen(Player!);
+                player.IsWarehouseOpen = true;
+                sender.SendConversationClose(player);
+                sender.SendWarehouseOpen(player);
 
                 return false;
 
             case ConversationEvent.OpenCraft:
-                PacketSender!.SendConversationClose(Player!);
-                PacketSender!.SendCraftOpen(Player!);
+                sender.SendConversationClose(player);
+                sender.SendCraftOpen(player);
 
                 return false;
 
             case ConversationEvent.OpenUpgrade:
-                PacketSender!.SendConversationClose(Player!);
-                PacketSender!.SendUpgradeOpen(Player!);
+                sender.SendConversationClose(player);
+                sender.SendUpgradeOpen(player);
 
                 return false;
 
@@ -113,19 +125,19 @@ public class ConversationManager {
                 return false;
 
             case ConversationEvent.GiveEffect:
-                PacketSender!.SendConversationClose(Player!);
+                sender.SendConversationClose(player);
 
-                ExecuteEffect(id, param1, param2);
+                ExecuteEffect(player, id, param1, param2);
 
                 return false;
 
             case ConversationEvent.LearnCraft:
-                PacketSender!.SendConversationClose(Player!);
+                sender.SendConversationClose(player);
 
                 return false;
 
             case ConversationEvent.StartQuest:
-                PacketSender!.SendConversationClose(Player!);
+                sender.SendConversationClose(player);
 
                 return false;
 
@@ -134,9 +146,9 @@ public class ConversationManager {
                 return true;
 
             case ConversationEvent.Teleport:
-                PacketSender!.SendConversationClose(Player!);
+                sender.SendConversationClose(player);
 
-                ExecuteWarp(id, param1, param2);
+                ExecuteWarp(player,id, param1, param2);
 
                 return false;
         }
@@ -144,27 +156,15 @@ public class ConversationManager {
         return true;
     }
 
-    private void ExecuteEffect(int id, int level, int duration) {
-        var manager = new GiveEffectManager() {
-            Effects = Effects,
-            PacketSender = PacketSender,
-            InstanceService = InstanceService
-        };
-
-        manager.GiveEffect(Player!, id, level, duration);
+    private void ExecuteEffect(IPlayer player, int id, int level, int duration) {
+        GiveEffectManager.GiveEffect(player, id, level, duration);
     }
 
-    private void ExecuteWarp(int id, int x, int y) {
+    private void ExecuteWarp(IPlayer player, int id, int x, int y) {
         var instance = GetInstance(id);
 
         if (instance is not null) {
-            var warper = new WarperManager() {
-                InstanceService = InstanceService,
-                PacketSender = PacketSender,
-                Player = Player
-            };
-
-            warper.Warp(instance, x, y);
+            WarperManager.Warp(player, instance, x, y);
         }
     }
 
@@ -176,29 +176,23 @@ public class ConversationManager {
         return chat.Reply[option].Target - 1;
     }
 
-    private Conversation? GetConversation(int id) {
-        if (Conversations is not null) {
-            return Conversations[id];
-        }
-
-        return null;
-    }
-
-    private Shop? GetShop(int id) {
-        if (Shops is not null) {
-            return Shops[id];
-        }
-
-        return null;
-    }
-
     private IInstance? GetInstance(int instanceId) {
         var instances = InstanceService!.Instances;
 
-        if (instances.ContainsKey(instanceId)) {
-            return instances[instanceId];
-        }
+        instances.TryGetValue(instanceId, out var instance);
 
-        return null;
+        return instance;
+    }
+
+    private IPacketSender GetPacketSender() {
+        return PacketSenderService!.PacketSender!;
+    }
+
+    private IDatabase<Shop> GetDatabaseShop() {
+        return ContentService!.Shops;
+    }
+
+    private IDatabase<Conversation> GetDatabaseConversation() {
+        return ContentService!.Conversations;
     }
 }

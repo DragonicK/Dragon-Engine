@@ -1,38 +1,36 @@
 ﻿using Dragon.Core.Model;
 using Dragon.Core.Content;
+using Dragon.Core.Services;
 using Dragon.Core.Model.Drops;
 using Dragon.Core.Model.Chests;
 
-using Dragon.Game.Network;
 using Dragon.Game.Players;
 using Dragon.Game.Services;
 using Dragon.Game.Instances;
 using Dragon.Game.Repository;
-using Dragon.Game.Configurations;
+using Dragon.Game.Network.Senders;
 using Dragon.Game.Instances.Chests;
-using Dragon.Game.Configurations.Data;
-using System.Reflection;
 
 namespace Dragon.Game.Manager;
 
-public class ChestManager {
-    public IPlayer? Player { get; init; }
-    public IDatabase<Drop>? Drops { get; init; }
-    public IDatabase<Chest>? Chests { get; init; }
-    public IConfiguration? Configuration { get; init; }
-    public IPacketSender? PacketSender { get; init; }
-    public InstanceService? InstanceService { get; init; }
-    public IPlayerRepository? PlayerRepository { get; init; }
+public sealed class ChestManager {
+    public ContentService? ContentService { get; private set; }
+    public InstanceService? InstanceService { get; private set; }
+    public ConfigurationService? Configuration { get; private set; }
+    public ConnectionService? ConnectionService { get; private set; }
+    public PacketSenderService? PacketSenderService { get; private set; }
 
     private readonly Random random;
 
-    public ChestManager() {
+    public ChestManager(IServiceInjector injector) {
+        injector.Inject(this);
+
         random = new Random();
     }
 
     #region Create Instance Chest 
 
-    public IInstanceChest CreateInstanceChest(IInstanceEntity entity, IInstance instance) {
+    public IInstanceChest CreateInstanceChest(IPlayer player, IInstanceEntity entity, IInstance instance) {
         var id = entity.Id;
 
         var instanceChest = new InstanceChest(instance) {
@@ -40,16 +38,18 @@ public class ChestManager {
             Y = entity.Y
         };
 
-        if (Drops!.Contains(id)) {
-            var drops = Drops[id];
+        var dbDrop = GetDatabaseDrop();
 
-            if (drops!.Chests.Count > 0) {
-                var chest = GetChest(drops);
+        dbDrop.TryGet(id, out var drop);
+
+        if (drop is not null) {
+            if (drop.Chests.Count > 0) {
+                var chest = GetChest(drop);
 
                 if (chest is not null) {
                     instanceChest.Chest = chest;
-                    instanceChest.PartyId = Player!.PartyId;
-                    instanceChest.CreateFromCharacterId = Player.Character.CharacterId;
+                    instanceChest.PartyId = player.PartyId;
+                    instanceChest.CreateFromCharacterId = player.Character.CharacterId;
                     instanceChest.RemainingTime = Configuration!.ChestDrop.MonsterDuration;
 
                     AddItems(chest, instanceChest);
@@ -102,63 +102,64 @@ public class ChestManager {
         return selected;
     }
 
-    private Chest? GetChest(Drop drops) {
-        var id = drops.Chests.Count == 1 ? drops.Chests[0] : 0;
+    private Chest? GetChest(Drop drop) {
+        var id = drop.Chests.Count == 1 ? drop.Chests[0] : 0;
 
         if (id == 0) {
-            var count = drops.Chests.Count;
+            var count = drop.Chests.Count;
             var index = random.Next(0, count);
 
-            id = drops.Chests[index];
+            id = drop.Chests[index];
         }
 
-        if (Chests!.Contains(id)) {
-            return Chests[id];
-        }
+        var dbChest = GetDatabaseChest();
 
-        return null;
+        dbChest.TryGet(id, out var chest);
+
+        return chest;
     }
 
     #endregion
 
     #region Open Chest
 
-    public void OpenChest(int index) {
-        var instance = GetInstance();
+    public void OpenChest(IPlayer player, int index) {
+        var sender = GetPacketSender();
+        var instance = GetInstance(player);
 
         if (instance is not null) {
             var chest = instance.GetChest(index);
 
             if (chest is not null) {
-                if (CanOpenChest(chest)) {
-                    chest.OpenedByCharacterId = Player!.Character.CharacterId;
+                if (CanOpenChest(sender, player, chest)) {
+                    chest.OpenedByCharacterId = player.Character.CharacterId;
                     chest.State = ChestState.Open;
 
-                    Player.Target = chest;
-                    Player.TargetType = TargetType.Chest;
+                    player.Target = chest;
+                    player.TargetType = TargetType.Chest;
 
-                    PacketSender!.SendUpdateChestState(instance, chest);
-                    PacketSender!.SendChestItems(Player, chest);
+                    sender.SendUpdateChestState(instance, chest);
+                    sender.SendChestItems(player, chest);
                 }
             }
         }
     }
 
-    private bool CanOpenChest(IInstanceChest chest) {
-        if (chest.PartyId != Player!.PartyId) {
-            PacketSender!.SendMessage(SystemMessage.ChestDoesNotBelongYou, QbColor.BrigthRed, Player);
+    private bool CanOpenChest(IPacketSender sender, IPlayer player, IInstanceChest chest) {
+        if (chest.PartyId != player.PartyId) {
+            sender.SendMessage(SystemMessage.ChestDoesNotBelongYou, QbColor.BrigthRed, player);
 
             return false;
         }
-        else if (Player.Character.CharacterId != chest.CreateFromCharacterId) {
-            PacketSender!.SendMessage(SystemMessage.ChestDoesNotBelongYou, QbColor.BrigthRed, Player);
+        else if (player.Character.CharacterId != chest.CreateFromCharacterId) {
+            sender.SendMessage(SystemMessage.ChestDoesNotBelongYou, QbColor.BrigthRed, player);
 
             return false;
         }
 
         if (chest.OpenedByCharacterId > 0) {
-            if (chest.OpenedByCharacterId != Player.Character.CharacterId) {
-                PacketSender!.SendMessage(SystemMessage.ChestIsOpenedByAnotherPlayer, QbColor.BrigthRed, Player);
+            if (chest.OpenedByCharacterId != player.Character.CharacterId) {
+                sender.SendMessage(SystemMessage.ChestIsOpenedByAnotherPlayer, QbColor.BrigthRed, player);
 
                 return false;
             }
@@ -171,9 +172,9 @@ public class ChestManager {
 
     #region Close Chest
 
-    public void CloseChest() {
-        if (Player!.TargetType == TargetType.Chest) {
-            var chest = Player.Target as IInstanceChest;
+    public void CloseChest(IPlayer player) {
+        if (player.TargetType == TargetType.Chest) {
+            var chest = player.Target as IInstanceChest;
 
             if (chest is not null) {
                 chest.OpenedByCharacterId = 0;
@@ -185,9 +186,11 @@ public class ChestManager {
 
     #region Take Item From Chest
 
-    public void TakeItem(int index) {
-        if (Player!.TargetType == TargetType.Chest) {
-            var chest = Player.Target as IInstanceChest;
+    public void TakeItem(IPlayer player, int index) {
+        var sender = GetPacketSender();
+
+        if (player.TargetType == TargetType.Chest) {
+            var chest = player.Target as IInstanceChest;
 
             if (chest is not null) {
                 if (index > chest.Items.Count) {
@@ -195,8 +198,9 @@ public class ChestManager {
                 }
 
                 if (chest.OpenedByCharacterId > 0) {
-                    if (chest.OpenedByCharacterId != Player.Character.CharacterId) {
-                        PacketSender!.SendMessage(SystemMessage.ChestIsOpenedByAnotherPlayer, QbColor.BrigthRed, Player);
+                    if (chest.OpenedByCharacterId != player.Character.CharacterId) {
+                        sender.SendMessage(SystemMessage.ChestIsOpenedByAnotherPlayer, QbColor.BrigthRed, player);
+
                         return;
                     }
 
@@ -207,51 +211,51 @@ public class ChestManager {
                     bool canTakeItem;
 
                     if (item.IsCurrency) {
-                        canTakeItem = TakeCurrency(item);
+                        canTakeItem = TakeCurrency(sender, player, item);
                     }
                     else {
-                        canTakeItem = TakeItem(chest, item);
+                        canTakeItem = TakeItem(sender, player, chest, item);
                     }
 
                     if (canTakeItem) {
                         chest.Items.RemoveAt(index);
 
-                        PacketSender!.SendSortChestItemList(Player, index);
+                        sender.SendSortChestItemList(player, index);
                     }
                     else {
-                        PacketSender!.SendEnableTakeItemFromChest(Player);
+                        sender.SendEnableTakeItemFromChest(player);
                     }
 
-                    var instance = GetInstance();
+                    var instance = GetInstance(player);
 
-                    CheckForEmptyChest(instance, chest);
+                    CheckForEmptyChest(sender, instance, chest);
                 }
             }
         }
     }
 
-    private void CheckForEmptyChest(IInstance? instance, IInstanceChest chest) {
+    private void CheckForEmptyChest(IPacketSender sender, IInstance? instance, IInstanceChest chest) {
         if (chest.Items.Count == 0) {
             var id = chest.OpenedByCharacterId;
 
             chest.State = ChestState.Empty;
 
             if (id > 0) {
-                var player = PlayerRepository!.FindByCharacterId(id);
+                var player = GetPlayerRepository().FindByCharacterId(id);
 
                 if (player is not null) {
                     player.Target = null;
                     player.TargetType = TargetType.None;
 
-                    PacketSender!.SendCloseChest(player, chest);
-                    PacketSender!.SendTarget(player, TargetType.None, 0);
+                    sender.SendCloseChest(player, chest);
+                    sender.SendTarget(player, TargetType.None, 0);
                 }
             }
 
             if (instance is not null) {
                 instance.Remove(chest);
 
-                PacketSender!.SendUpdateChestState(instance, chest);
+                sender.SendUpdateChestState(instance, chest);
             }
         }
     }
@@ -260,7 +264,7 @@ public class ChestManager {
 
     #region Take Item
 
-    private bool TakeItem(IInstanceChest chest, IInstanceChestItem item) {
+    private bool TakeItem(IPacketSender sender, IPlayer player, IInstanceChest chest, IInstanceChestItem item) {
         if (item.CharacterIdFromRollDiceWinner > 0) {
             if (Environment.TickCount >= item.WinnerTimeLimit) {
                 item.CharacterIdFromRollDiceWinner = 0;
@@ -268,10 +272,10 @@ public class ChestManager {
                 return false;
             }
 
-            var winner = PlayerRepository!.FindByCharacterId(item.CharacterIdFromRollDiceWinner);
+            var winner = GetPlayerRepository().FindByCharacterId(item.CharacterIdFromRollDiceWinner);
 
             if (winner is not null) {
-                return AddItem(winner, item);
+                return AddItem(sender, winner, item);
             }
         }
         else {
@@ -282,14 +286,14 @@ public class ChestManager {
                 //}
             }
             else {
-                return AddItem(Player, item);
+                return AddItem(sender, player, item);
             }
         }
 
         return false;
     }
 
-    private bool AddItem(IPlayer player, IInstanceChestItem item) {
+    private bool AddItem(IPacketSender sender, IPlayer player, IInstanceChestItem item) {
         var empty = player!.Inventories.FindFreeInventory(player.Character.MaximumInventories);
 
         if (empty is not null) {
@@ -300,13 +304,13 @@ public class ChestManager {
             empty.UpgradeId = item.UpgradeId;
             empty.AttributeId = item.AttributeId;
 
-            PacketSender!.SendInventoryUpdate(player, empty.InventoryIndex);
-            PacketSender!.SendMessage(SystemMessage.ReceivedItem, QbColor.BrigthCyan, player, new string[] { item.Id.ToString(), item.Value.ToString() });
+            sender.SendInventoryUpdate(player, empty.InventoryIndex);
+            sender.SendMessage(SystemMessage.ReceivedItem, QbColor.BrigthCyan, player, new string[] { item.Id.ToString(), item.Value.ToString() });
 
             return true;
         }
         else {
-            PacketSender!.SendMessage(SystemMessage.InventoryFull, QbColor.BrigthRed, player);
+            sender.SendMessage(SystemMessage.InventoryFull, QbColor.BrigthRed, player);
         }
 
         return false;
@@ -316,35 +320,35 @@ public class ChestManager {
 
     #region Take Currency
 
-    private bool TakeCurrency(IInstanceChestCurrency item) {
+    private bool TakeCurrency(IPacketSender sender, IPlayer player, IInstanceChestCurrency item) {
         var added = false;
         var rest = 0;
 
-        if (Player!.PartyId > 0) {
-            added = CanSharePartyCurrency(item);
+        if (player.PartyId > 0) {
+            added = CanSharePartyCurrency(sender, player, item);
 
             if (!added) { 
-                if (CanAddCurrency(Player, item.Currency, item.Value, out rest)) {
+                if (CanAddCurrency(player, item.Currency, item.Value, out rest)) {
                     added = true;
 
-                    PacketSender!.SendCurrencyUpdate(Player, item.Currency);
-                    PacketSender!.SendMessage(SystemMessage.ReceivedCurrency, QbColor.Gold, Player, new string[] { ((int)item.Currency).ToString(), item.Value.ToString() });
+                    sender.SendCurrencyUpdate(player, item.Currency);
+                    sender.SendMessage(SystemMessage.ReceivedCurrency, QbColor.Gold, player, new string[] { ((int)item.Currency).ToString(), item.Value.ToString() });
                 }
             }
         }
         else {
-            if (CanAddCurrency(Player, item.Currency, item.Value, out rest)) {
+            if (CanAddCurrency(player, item.Currency, item.Value, out rest)) {
                 added = true;
 
-                PacketSender!.SendCurrencyUpdate(Player, item.Currency);
-                PacketSender!.SendMessage(SystemMessage.ReceivedCurrency, QbColor.Gold, Player, new string[] { ((int)item.Currency).ToString(), item.Value.ToString() });
+                sender.SendCurrencyUpdate(player, item.Currency);
+                sender.SendMessage(SystemMessage.ReceivedCurrency, QbColor.Gold, player, new string[] { ((int)item.Currency).ToString(), item.Value.ToString() });
             }
         }
 
         if (added && rest > 0) {
             item.Value = rest;
 
-            PacketSender!.SendUpdateChestItem(Player, (IInstanceChestItem)item);
+            sender.SendUpdateChestItem(player, (IInstanceChestItem)item);
 
             return false;
         }
@@ -355,9 +359,9 @@ public class ChestManager {
         return false;
     }
 
-    private bool CanSharePartyCurrency(IInstanceChestCurrency item) {
-        var currentMapId = Player!.Character.Map;
-        var party = GetParty();
+    private bool CanSharePartyCurrency(IPacketSender sender, IPlayer player, IInstanceChestCurrency item) {
+        var currentMapId = player.Character.Map;
+        var party = GetParty(player);
 
         if (party is not null) {
             var members = party.Members;
@@ -374,18 +378,18 @@ public class ChestManager {
             }
 
             if (totalPlayers > 0) {
-                if (PartyShareCurrency(item.Currency, item.Value, party, totalPlayers, out var rest)) {
+                if (PartyShareCurrency(sender, player, item.Currency, item.Value, party, totalPlayers, out var rest)) {
                     var module = item.Value % totalPlayers;
 
                     if (module > 0) {
-                        if (CanAddCurrency(Player, item.Currency, module, out _)) {
-                            PacketSender!.SendCurrencyUpdate(Player, item.Currency);
-                            PacketSender!.SendMessage(SystemMessage.ReceivedCurrency, QbColor.Gold, Player, new string[] { ((int)item.Currency).ToString(), module.ToString() });
+                        if (CanAddCurrency(player, item.Currency, module, out _)) {
+                            sender.SendCurrencyUpdate(player, item.Currency);
+                            sender.SendMessage(SystemMessage.ReceivedCurrency, QbColor.Gold, player, new string[] { ((int)item.Currency).ToString(), module.ToString() });
                         }                   
                     }
 
                     if (rest > 0) {
-                        return PartyShareCurrency(item.Currency, rest, party, totalPlayers, out _);
+                        return PartyShareCurrency(sender, player, item.Currency, rest, party, totalPlayers, out _);
                     }
 
                     return true;
@@ -396,9 +400,9 @@ public class ChestManager {
         return false;
     }
 
-    private bool PartyShareCurrency(CurrencyType currencyType, int currencyValue, PartyManager party, int totalPlayers, out int restAdded) {
+    private bool PartyShareCurrency(IPacketSender sender, IPlayer player, CurrencyType currencyType, int currencyValue, PartyManager party, int totalPlayers, out int restAdded) {
         var currency = currencyValue / totalPlayers;
-        var currentMapId = Player!.Character.Map;
+        var currentMapId = player.Character.Map;
         var totalRest = 0;
 
         if (currency > 0) {
@@ -408,14 +412,14 @@ public class ChestManager {
                 if (member?.Player is not null) {
                     if (!member.Disconnected) {
                         if (currentMapId == member.Player.Character.Map) {
-                            var player = member.Player;
+                            var partyPlayer = member.Player;
 
-                            if (CanAddCurrency(player, currencyType, currency, out var rest)) {
-                                PacketSender!.SendCurrencyUpdate(player, currencyType);
-                                PacketSender!.SendMessage(SystemMessage.ReceivedCurrency, QbColor.Gold, player, new string[] { ((int)currencyType).ToString(), (currency - rest).ToString() });
+                            if (CanAddCurrency(partyPlayer, currencyType, currency, out var rest)) {
+                                sender.SendCurrencyUpdate(player, currencyType);
+                                sender.SendMessage(SystemMessage.ReceivedCurrency, QbColor.Gold, partyPlayer, new string[] { ((int)currencyType).ToString(), (currency - rest).ToString() });
                             }
                             else {
-                                PacketSender!.SendMessage(SystemMessage.TheCurrencyCannotBeAdded, QbColor.BrigthRed, player);
+                                sender.SendMessage(SystemMessage.TheCurrencyCannotBeAdded, QbColor.BrigthRed, partyPlayer);
                             }
 
                             totalRest += rest;
@@ -457,25 +461,37 @@ public class ChestManager {
 
     #endregion
 
-    private IInstance? GetInstance() {
+    private IInstance? GetInstance(IPlayer player) {
         var instances = InstanceService!.Instances;
-        var instanceId = Player!.Character.Map;
+        var instanceId = player.Character.Map;
 
-        if (instances.ContainsKey(instanceId)) {
-            return instances[instanceId];
-        }
+        instances.TryGetValue(instanceId, out var instance);
 
-        return null;
+        return instance;
     }
 
-    private PartyManager? GetParty() {
+    private PartyManager? GetParty(IPlayer player) {
         var parties = InstanceService!.Parties;
-        var partyId = Player!.PartyId;
+        var partyId = player.PartyId;
 
-        if (parties.ContainsKey(partyId)) {
-            return parties[partyId];
-        }
+        parties.TryGetValue(partyId, out var party);
 
-        return null;
+        return party;
+    }
+
+    private IDatabase<Drop> GetDatabaseDrop() {
+        return ContentService!.Drops;
+    }
+
+    private IDatabase<Chest> GetDatabaseChest() {
+        return ContentService!.Chests;
+    }
+
+    private IPacketSender GetPacketSender() {
+        return PacketSenderService!.PacketSender!;
+    }
+
+    private IPlayerRepository GetPlayerRepository() {
+        return ConnectionService!.PlayerRepository!;
     }
 }

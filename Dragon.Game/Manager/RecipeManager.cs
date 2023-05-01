@@ -1,38 +1,40 @@
 ﻿using Dragon.Core.Model;
 using Dragon.Core.Content;
+using Dragon.Core.Services;
 using Dragon.Core.Model.Items;
 using Dragon.Core.Model.Recipes;
 
 using Dragon.Game.Players;
-using Dragon.Game.Network;
-using Dragon.Game.Configurations;
+using Dragon.Game.Services;
+using Dragon.Game.Network.Senders;
 
 namespace Dragon.Game.Manager;
 
-public class RecipeManager {
-    public IPlayer? Player { get; init; }
-    public IDatabase<Item>? Items { get; init; }
-    public IDatabase<Recipe>? Recipes { get; init; }
-    public IPacketSender? PacketSender { get; init; }
-    public IConfiguration? Configuration { get; init; }
+public sealed class RecipeManager {
+    public ContentService? ContentService { get; private set; }
+    public ConfigurationService? Configuration { get; private set; }
+    public PacketSenderService? PacketSenderService { get; private set; }
 
-    public void UseRecipe(int index, Item item) {
-        if (Recipes is null) {
-            return;
-        }
+    public RecipeManager(IServiceInjector injector) {
+        injector.Inject(this);
+    }
 
+    public void UseRecipe(IPlayer player, int index, Item item) {
         var recipeId = item.RecipeId;
 
-        if (Recipes.Contains(recipeId)) {
-            var recipe = Recipes[recipeId]!;
-            var profession = Player!.Craft.Profession;
+        var sender = GetPacketSender();
+        var recipes = GetDatabaseRecipe();
+
+        recipes.TryGet(recipeId, out var recipe);
+
+        if (recipe is not null) {
+            var profession = player.Craft.Profession;
 
             if (profession == recipe.CraftType) {
+                if (player.Recipes.Add(recipeId)) {              
+                    sender.SendAddRecipe(player, recipeId);
 
-                if (Player.Recipes.Add(recipeId)) {
-                    PacketSender!.SendAddRecipe(Player, recipeId);
-
-                    var inventory = Player.Inventories.FindByIndex(index);
+                    var inventory = player.Inventories.FindByIndex(index);
 
                     if (inventory is not null) {
                         if (item.MaximumStack > 0) {
@@ -46,19 +48,27 @@ public class RecipeManager {
                             inventory.Clear();
                         }
 
-                        PacketSender!.SendInventoryUpdate(Player, index);
+                        sender.SendInventoryUpdate(player, index);
                     }
                 }
                 else {
-                    if (Player.Recipes.Count >= Configuration!.Player.MaximumRecipes) {
-                        PacketSender!.SendMessage(SystemMessage.RecipeListIsFull, QbColor.BrigthRed, Player!);
+                    if (player.Recipes.Count >= Configuration!.Player.MaximumRecipes) {
+                        sender.SendMessage(SystemMessage.RecipeListIsFull, QbColor.BrigthRed, player);
                     }
                 }
 
             }
             else {
-                PacketSender!.SendMessage(SystemMessage.InvalidProfession, QbColor.BrigthRed, Player!);
+                sender.SendMessage(SystemMessage.InvalidProfession, QbColor.BrigthRed, player);
             }
         }
+    }
+
+    private IDatabase<Recipe> GetDatabaseRecipe() {
+        return ContentService!.Recipes;
+    }
+
+    private IPacketSender GetPacketSender() {
+        return PacketSenderService!.PacketSender!;
     }
 }

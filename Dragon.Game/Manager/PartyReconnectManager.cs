@@ -12,8 +12,8 @@ public sealed class PartyReconnectManager {
     public InstanceService? InstanceService { get; private set; }
     public PacketSenderService? PacketSenderService { get; private set; }
 
-    public PartyReconnectManager(IServiceContainer services) {
-        new ServiceInjector(services).Inject(this);
+    public PartyReconnectManager(IServiceInjector injector) {
+        injector.Inject(this);
     }
 
     public void Reconnect(IPlayer player) {

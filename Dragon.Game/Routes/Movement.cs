@@ -1,44 +1,44 @@
-﻿using Dragon.Network;
+﻿using Dragon.Core.Services;
+
+using Dragon.Network;
+using Dragon.Network.Messaging;
 using Dragon.Network.Messaging.SharedPackets;
 
-using Dragon.Game.Services;
 using Dragon.Game.Players;
+using Dragon.Game.Network;
 
 namespace Dragon.Game.Routes;
 
-public sealed class Movement {
-    public IConnection? Connection { get; set; }
-    public PacketPlayerMovement? Packet { get; set; }
-    public LoggerService? LoggerService { get; init; }
-    public InstanceService? InstanceService { get; init; }
-    public ConnectionService? ConnectionService { get; init; }
-    public PacketSenderService? PacketSenderService { get; init; }
+public sealed class Movement : PacketRoute, IPacketRoute {
+    public MessageHeader Header { get; set; } = MessageHeader.PlayerMovement;
 
-    public void Process() {
-        if (IsValidPacket()) {
-            var sender = PacketSenderService!.PacketSender;
-            var repository = ConnectionService!.PlayerRepository;
+    private readonly PlayerMovement PlayerMovement;
 
-            if (Connection is not null) {
-                var player = repository!.FindByConnectionId(Connection.Id);
+    public Movement(IServiceInjector injector) : base(injector) {
+        PlayerMovement = new PlayerMovement(injector);
+    }
 
-                if (player is not null) {
-                    var movement = new PlayerMovement() {
-                        Player = player,
-                        PacketSender = sender,
-                        InstanceService = InstanceService
-                    };
+    public void Process(IConnection connection, object packet) {
+        var received = packet as PacketPlayerMovement;
 
-                    movement.Move(Packet!.Direction, Packet.State, Packet.X, Packet.Y);
-                }
+        if (received is not null) {
+            var player = GetPlayerRepository().FindByConnectionId(connection.Id);
+
+            if (player is not null) {
+                Execute(player, received);
             }
         }
     }
 
-    private bool IsValidPacket() {
-        var x = Packet!.X;
-        var y = Packet!.Y;
+    private void Execute(IPlayer player, PacketPlayerMovement packet) {
+        if (IsValidPacketPacket(packet)) {
+            PlayerMovement.Move(player, packet.Direction, packet.State, packet.X, packet.Y);
+        }
+    }
 
+    private bool IsValidPacketPacket(PacketPlayerMovement packet) {
+        var x = packet.X;
+        var y = packet.Y;
         if (x < 0 || y < 0) {
             return false;
         }

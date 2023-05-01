@@ -3,8 +3,8 @@ using Dragon.Core.Model.Maps;
 using Dragon.Core.Serialization;
 
 using Dragon.Game.Regions;
-using Dragon.Game.Network;
 using Dragon.Game.Configurations;
+using Dragon.Game.Network.Senders;
 
 namespace Dragon.Game.Instances;
 

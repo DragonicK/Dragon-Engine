@@ -1,25 +1,29 @@
 ﻿using Dragon.Core.Model;
 using Dragon.Core.Content;
+using Dragon.Core.Services;
 using Dragon.Core.Model.Items;
 
-using Dragon.Game.Network;
 using Dragon.Game.Players;
+using Dragon.Game.Services;
+using Dragon.Game.Network.Senders;
 
 namespace Dragon.Game.Manager;
 
-public class WarehouseManager {
-    public IPlayer? Player { get; init; }
-    public IDatabase<Item>? Items { get; init; }
-    public IPacketSender? PacketSender { get; init; }
+public sealed class WarehouseManager {
+    public ContentService? ContentService { get; init; }
+    public PacketSenderService? PacketSenderService { get; init; }
 
     private const int Invalid = -1;
 
-    public void Deposit(int fromInventoryIndex, int amount) {
-        if (Items is null) {
-            return;
-        }
+    public WarehouseManager(IServiceInjector injector) {
+        injector.Inject(this);
+    }
 
-        var inventory = Player!.Inventories.FindByIndex(fromInventoryIndex);
+    public void Deposit(IPlayer player, int fromInventoryIndex, int amount) {
+        var items = GetDatabaseItem();
+        var sender = GetPacketSender();
+
+        var inventory = player.Inventories.FindByIndex(fromInventoryIndex);
 
         if (inventory is not null) {
             var value = inventory.Value;
@@ -28,35 +32,36 @@ public class WarehouseManager {
                 amount = value;
             }
 
-            if (Items.Contains(inventory.ItemId)) {
-                var maximum = Player!.Character.MaximumWarehouse;
-                var item = Items![inventory.ItemId];
+            items.TryGet(inventory.ItemId, out var item);
+
+            if (item is not null) {
                 int index;
 
+                var maximum = player.Character.MaximumWarehouse;
+
                 if (item!.MaximumStack > 0) {
-                    index = Player!.Warehouse.Deposit(inventory, amount, maximum);
+                    index = player.Warehouse.Deposit(inventory, amount, maximum);
                 }
                 else {
-                    index = Player!.Warehouse.Deposit(inventory, maximum);
+                    index = player.Warehouse.Deposit(inventory, maximum);
                 }
 
                 if (index != Invalid) {
-                    PacketSender!.SendInventoryUpdate(Player, fromInventoryIndex);
-                    PacketSender!.SendWarehouseUpdate(Player, index);
+                    sender.SendInventoryUpdate(player, fromInventoryIndex);
+                    sender.SendWarehouseUpdate(player, index);
                 }
                 else {
-                    PacketSender!.SendMessage(SystemMessage.WarehouseFull, QbColor.Red, Player!);
+                    sender.SendMessage(SystemMessage.WarehouseFull, QbColor.Red, player);
                 }
             }
         }
     }
 
-    public void Withdraw(int fromWarehouseIndex, int amount) {
-        if (Items is null) {
-            return;
-        }
+    public void Withdraw(IPlayer player, int fromWarehouseIndex, int amount) {
+        var items = GetDatabaseItem();
+        var sender = GetPacketSender();
 
-        var warehouse = Player!.Warehouse.FindByIndex(fromWarehouseIndex);
+        var warehouse = player.Warehouse.FindByIndex(fromWarehouseIndex);
 
         if (warehouse is not null) {
             var value = warehouse.Value;
@@ -65,26 +70,36 @@ public class WarehouseManager {
                 amount = value;
             }
 
-            if (Items.Contains(warehouse.ItemId)) {
-                var maximum = Player!.Character.MaximumInventories;
-                var item = Items[warehouse.ItemId];
+            items.TryGet(warehouse.ItemId, out var item);
+
+            if (item is not null) {
                 int index;
 
+                var maximum = player.Character.MaximumInventories;
+
                 if (item!.MaximumStack > 0) {
-                    index = Player!.Inventories.Add(warehouse, amount, maximum);
+                    index = player.Inventories.Add(warehouse, amount, maximum);
                 }
                 else {
-                    index = Player!.Inventories.Add(warehouse, maximum);
+                    index = player.Inventories.Add(warehouse, maximum);
                 }
 
                 if (index != Invalid) {
-                    PacketSender!.SendInventoryUpdate(Player, index);
-                    PacketSender!.SendWarehouseUpdate(Player, fromWarehouseIndex);
+                    sender.SendInventoryUpdate(player, index);
+                    sender.SendWarehouseUpdate(player, fromWarehouseIndex);
                 }
                 else {
-                    PacketSender!.SendMessage(SystemMessage.InventoryFull, QbColor.Red, Player!);
+                    sender.SendMessage(SystemMessage.InventoryFull, QbColor.Red, player);
                 }
             }
         }
+    }
+
+    private IPacketSender GetPacketSender() {
+        return PacketSenderService!.PacketSender!;
+    }
+
+    private IDatabase<Item> GetDatabaseItem() {
+        return ContentService!.Items;
     }
 }

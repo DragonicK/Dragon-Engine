@@ -19,8 +19,8 @@ public sealed class SkillManager {
 
     private const int StarterLevel = 1;
 
-    public SkillManager(IServiceContainer services) {
-        new ServiceInjector(services).Inject(this);
+    public SkillManager(IServiceInjector injector) {
+        injector.Inject(this);
     }
 
     public void LearnFromInventory(IPlayer player, int index, Item item) {

@@ -2,13 +2,13 @@
 using Dragon.Core.Model.Entity;
 
 using Dragon.Core.Logs;
-using Dragon.Game.Network;
 using Dragon.Game.Players;
 using Dragon.Game.Services;
 using Dragon.Game.Instances;
 using Dragon.Game.Manager;
 using Dragon.Game.Configurations;
 using Dragon.Game.Repository;
+using Dragon.Game.Network.Senders;
 
 namespace Dragon.Game.Combat.Death;
 
@@ -60,7 +60,7 @@ public class EntityDeath : IEntityDeath {
                 PlayerRepository = PlayerRepository
             };
 
-            var chest = agent.CreateInstanceChest(entity, instance);
+            var chest = agent.CreateInstanceChest(player, entity, instance);
 
             if (chest is not null) {
                 if (chest.Items.Count > 0) {

@@ -1,45 +1,43 @@
-﻿using Dragon.Network;
+﻿using Dragon.Core.Services;
+
+using Dragon.Network;
+using Dragon.Network.Messaging;
 using Dragon.Network.Messaging.SharedPackets;
 
-using Dragon.Game.Services;
 using Dragon.Game.Manager;
 using Dragon.Game.Players;
+using Dragon.Game.Network;
 
 namespace Dragon.Game.Routes;
 
-public sealed class DepositItem {
-    public IConnection? Connection { get; set; }
-    public CpDepositItem? Packet { get; set; }
-    public LoggerService? LoggerService { get; init; }
-    public ContentService? ContentService { get; init; }
-    public ConfigurationService? Configuration { get; init; }
-    public ConnectionService? ConnectionService { get; init; }
-    public PacketSenderService? PacketSenderService { get; init; }
+public sealed class DepositItem : PacketRoute, IPacketRoute {
+    public MessageHeader Header => MessageHeader.DepositItem;
 
-    public void Process() {
-        if (Packet!.Amount <= 0) {
-            return;
-        }
+    private readonly WarehouseManager WarehouseManager;
 
-        var sender = PacketSenderService!.PacketSender;
-        var repository = ConnectionService!.PlayerRepository;
+    public DepositItem(IServiceInjector injector) : base(injector) {
+        WarehouseManager = new WarehouseManager(injector);
+    }
 
-        if (Connection is not null) {
-            var player = repository!.FindByConnectionId(Connection.Id);
+    public void Process(IConnection connection, object packet) {
+        var received = packet as CpDepositItem;
 
-            if (player is not null) {
-                var index = Packet!.InventoryIndex;
+        if (received is not null) {
+            if (received.Amount > 0) {
+                var player = GetPlayerRepository().FindByConnectionId(connection.Id);
 
-                if (IsValidInventory(player, index)) {
-                    var manager = new WarehouseManager() {
-                        Player = player,
-                        PacketSender = sender,
-                        Items = ContentService!.Items
-                    };
-
-                    manager.Deposit(index, Packet!.Amount);
+                if (player is not null) {
+                    Execute(player, received);
                 }
             }
+        }
+    }
+
+    private void Execute(IPlayer player, CpDepositItem packet) {
+        var index = packet.InventoryIndex;
+
+        if (IsValidInventory(player, index)) {
+            WarehouseManager.Deposit(player, index, packet.Amount);
         }
     }
 

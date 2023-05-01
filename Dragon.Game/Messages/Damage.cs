@@ -2,7 +2,7 @@
 
 namespace Dragon.Game.Messages;
 
-public sealed class Damage {
+public struct Damage {
     public ActionMessageType MessageType { get; set; }
     public ActionMessageFontType FontType { get; set; }
     public QbColor Color { get; set; }

@@ -1,9 +1,8 @@
 ﻿using Dragon.Core.Model.Entity;
-
-using Dragon.Game.Network;
 using Dragon.Game.Services;
 using Dragon.Game.Configurations;
 using Dragon.Game.Repository;
+using Dragon.Game.Network.Senders;
 
 namespace Dragon.Game.Combat.Death;
 
