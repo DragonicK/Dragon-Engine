@@ -1,8 +1,5 @@
-﻿using Dragon.Database;
-
-using Dragon.Core.Model;
-using Dragon.Core.Model.Items;
-using Dragon.Core.Model.Mailing;
+﻿using Dragon.Core.Model;
+using Dragon.Core.Services;
 using Dragon.Core.Model.Characters;
 using Dragon.Core.Model.BlackMarket;
 
@@ -10,58 +7,66 @@ using Dragon.Game.Players;
 using Dragon.Game.Services;
 using Dragon.Game.Repository;
 using Dragon.Game.Characters;
-using Dragon.Game.Configurations;
 using Dragon.Game.Network.Senders;
 
 namespace Dragon.Game.Manager;
 
-public class BlackMarketManager {
-    public IPlayer? Player { get; init; }
-    public IPacketSender? PacketSender { get; init; }
-    public IConfiguration? Configuration { get; init; }
-    public IPlayerRepository? Repository { get; init; }
-    public IDatabaseFactory? Factory { get; init; }
-    public BlackMarketShop? BlackMarket { get; init; }
-    public ContentService? ContentService { get; init; }
+public sealed class BlackMarketManager {
+    public ContentService? ContentService { get; private set; }
+    public DatabaseService? DatabaseService { get; private set; }
+    public ConfigurationService? Configuration { get; private set; }
+    public ConnectionService? ConnectionService { get; private set; }
+    public BlackMarketService? BlackMarketService { get; private set; }
+    public PacketSenderService? PacketSenderService { get; private set; }
 
-    public void SendRequestedItems(BlackMarketItemCategory category, int page) {
-        if (BlackMarket is not null) {
-            var maximum = BlackMarket.GetPageCount(category);
-            var items = BlackMarket.GetItems(category, page);
+    private readonly ICharacterDatabase CharacterDatabase;
 
-            PacketSender!.SendBlackMarketItems(Player!, items, maximum);
-        }
+    public BlackMarketManager(IServiceInjector injector) {
+        injector.Inject(this);
+
+        CharacterDatabase = new CharacterDatabase(Configuration!, DatabaseService!.DatabaseFactory!);
     }
 
-    public void ProcessPurchaseRequest(int id, int amount, string name) {
-        if (BlackMarket is not null) {
-            var item = BlackMarket.GetItem(id);
+    public void SendRequestedItems(IPlayer player, BlackMarketItemCategory category, int page) {
+        var sender = GetPacketSender();
+        var market = GetBlackMarketShop();
 
-            if (item is not null) {
-                if (item.PurchaseLimit > 0) {
-                    if (amount > item.PurchaseLimit) {
-                        amount = item.PurchaseLimit;
-                    }
-                }
+        var maximum = market.GetPageCount(category);
+        var items = market.GetItems(category, page);
 
-                if (Player!.Account.Cash < (amount * item.Price)) {
-                    PacketSender!.SendAlertMessage(Player!, AlertMessageType.NotEnoughCash, MenuResetType.None);
+        sender.SendBlackMarketItems(player, items, maximum);
+    }
+
+    public void ProcessPurchaseRequest(IPlayer player, int id, int amount, string name) {
+        var sender = GetPacketSender();
+        var market = GetBlackMarketShop();
+
+        var item = market.GetItem(id);
+
+        if (item is not null) {
+            if (item.PurchaseLimit > 0) {
+                if (amount > item.PurchaseLimit) {
+                    amount = item.PurchaseLimit;
                 }
-                else {
-                    ContinuePurchaseRequest(item, amount, name);
-                }
+            }
+
+            if (player.Account.Cash < (amount * item.Price)) {
+                sender.SendAlertMessage(player, AlertMessageType.NotEnoughCash, MenuResetType.None);
             }
             else {
-                PacketSender!.SendAlertMessage(Player!, AlertMessageType.InvalidItem, MenuResetType.None);
+                ContinuePurchaseRequest(sender, player, item, amount, name);
             }
+        }
+        else {
+            sender.SendAlertMessage(player, AlertMessageType.InvalidItem, MenuResetType.None);
         }
     }
 
-    private async void ContinuePurchaseRequest(BlackMarketItem item, int amount, string name) {
+    private async void ContinuePurchaseRequest(IPacketSender sender, IPlayer player, BlackMarketItem item, int amount, string name) {
         if (ExistItem(item)) {
-            var receiver = GetReceiver(item, name);
+            var receiver = GetReceiver(player, item, name);
 
-            var mailing = CreateMail(item, amount, name);
+            var mailing = CreateMail(player, item, amount, name);
 
             var success = true;
 
@@ -70,47 +75,43 @@ public class BlackMarketManager {
 
                 receiver.Mails.Add(mailing);
 
-                PacketSender!.SendMail(receiver, mailing);
+                sender.SendMail(receiver, mailing);
 
-                PacketSender!.SendMessage(SystemMessage.YouJustReceivedMail, QbColor.Gold, receiver);
+                sender.SendMessage(SystemMessage.YouJustReceivedMail, QbColor.Gold, receiver);
             }
             else {
-                var database = new CharacterDatabase(Configuration!, Factory!);
-
-                var id = await database.GetCharacterIdAsync(name);
+                var id = await CharacterDatabase.GetCharacterIdAsync(name);
 
                 if (id != 0) {
                     mailing.ReceiverCharacterId = id;
 
-                    await database.SaveMailAsync(mailing);
+                    await CharacterDatabase.SaveMailAsync(mailing);
                 }
                 else {
                     success = false;
 
-                    PacketSender!.SendAlertMessage(Player!.GetConnection(), AlertMessageType.InvalidRecipientName, MenuResetType.None);
+                    sender.SendAlertMessage(player.GetConnection(), AlertMessageType.InvalidRecipientName, MenuResetType.None);
                 }
-
-                database.Dispose();
             }
 
             if (success) {
-                Player!.Account.Cash -= item.Price * amount;
+                player.Account.Cash -= item.Price * amount;
 
-                PacketSender!.SendCash(Player);
-                PacketSender!.SendAlertMessage(Player!.GetConnection(), AlertMessageType.SuccessPurchase, MenuResetType.None);
+                sender.SendCash(player);
+                sender.SendAlertMessage(player.GetConnection(), AlertMessageType.SuccessPurchase, MenuResetType.None);
             }
         }
     }
 
-    private CharacterMail CreateMail(BlackMarketItem cashItem, int amount, string receiver) {
-        var id = Player!.Character.CharacterId;
+    private CharacterMail CreateMail(IPlayer player,  BlackMarketItem cashItem, int amount, string receiver) {
+        var id = player.Character.CharacterId;
         var sender = Configuration!.BlackMarket.Sender;
         var content = Configuration!.BlackMarket.PurchaseMessage;
         var subject = Configuration!.BlackMarket.PurchaseTitle;
 
-        if (string.Compare(Player!.Character.Name, receiver, true) != 0) {
+        if (string.Compare(player.Character.Name, receiver, true) != 0) {
             if (cashItem.CouldSendGift) {
-                sender = Player!.Character.Name;
+                sender = player.Character.Name;
 
                 content = Configuration.BlackMarket.GiftMessage.Replace("{NAME}", sender);
                 subject = Configuration.BlackMarket.GiftTitle;
@@ -149,11 +150,23 @@ public class BlackMarketManager {
         return false;
     }
 
-    private IPlayer? GetReceiver(BlackMarketItem item, string name) {
+    private IPlayer? GetReceiver(IPlayer player, BlackMarketItem item, string name) {
         if (!item.CouldSendGift) {
-            return Player;
+            return player;
         }
 
-        return Repository!.FindByName(name);
+        return GetPlayerRepository().FindByName(name);
+    }
+
+    private BlackMarketShop GetBlackMarketShop() {
+        return BlackMarketService!.BlackMarket!;
+    }
+
+    private IPlayerRepository GetPlayerRepository() {
+        return ConnectionService!.PlayerRepository!;
+    }
+
+    private IPacketSender GetPacketSender() {
+        return PacketSenderService!.PacketSender!;
     }
 }

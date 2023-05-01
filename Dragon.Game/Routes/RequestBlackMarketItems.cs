@@ -1,49 +1,43 @@
-﻿using Dragon.Network;
+﻿using Dragon.Core.Services;
+
+using Dragon.Network;
+using Dragon.Network.Messaging;
 using Dragon.Network.Messaging.SharedPackets;
 
-using Dragon.Game.Services;
 using Dragon.Game.Manager;
+using Dragon.Game.Network;
+using Dragon.Game.Players;
 
 namespace Dragon.Game.Routes;
 
-public sealed class RequestBlackMarketItems {
-    public IConnection? Connection { get; set; }
-    public CpRequestBlackMarketItems? Packet { get; set; }
-    public ConfigurationService? Configuration { get; set; }
-    public ConnectionService? ConnectionService { get; set; }
-    public PacketSenderService? PacketSenderService { get; set; }
-    public BlackMarketService? BlackMarketService { get; set; }
-    public ContentService? ContentService { get; set; }
-    public DatabaseService? DatabaseService { get; set; }
+public sealed class RequestBlackMarketItems : PacketRoute, IPacketRoute {
+    public MessageHeader Header => MessageHeader.RequestBlackMarketItems;
 
-    public void Process() {
-        if (IsValidPacket()) {
-            var sender = PacketSenderService!.PacketSender;
-            var repository = ConnectionService!.PlayerRepository;
-            var market = BlackMarketService!.BlackMarket;
+    private readonly BlackMarketManager BlackMarketManager;
 
-            if (Connection is not null) {
-                var player = repository!.FindByConnectionId(Connection.Id);
-
-                if (player is not null) {
-
-                    var manager = new BlackMarketManager() {
-                        Player = player,
-                        BlackMarket = market,
-                        PacketSender = sender,
-                        Repository = repository,
-                        Configuration = Configuration,
-                        ContentService = ContentService,
-                        Factory = DatabaseService!.DatabaseFactory
-                    };
-
-                    manager.SendRequestedItems(Packet!.Category, Packet.Page);
-                }
-            }
-        }
+    public RequestBlackMarketItems(IServiceInjector injector) : base(injector) {
+        BlackMarketManager = new BlackMarketManager(injector);
     }
 
-    private bool IsValidPacket() {
-        return Packet!.Page > 0;
+    public void Process(IConnection connection, object packet) {
+        var received = packet as CpRequestBlackMarketItems;
+
+        if (received is not null) {
+            var player = GetPlayerRepository().FindByConnectionId(connection.Id);
+
+            if (player is not null) {
+                Execute(player, received);
+            }
+        }      
+    }
+
+    private void Execute(IPlayer player, CpRequestBlackMarketItems packet) {
+        if (IsValidPacket(packet)) {
+            BlackMarketManager.SendRequestedItems(player, packet.Category, packet.Page);
+        }
+    }
+         
+    private bool IsValidPacket(CpRequestBlackMarketItems packet) {
+        return packet.Page > 0;
     }
 }

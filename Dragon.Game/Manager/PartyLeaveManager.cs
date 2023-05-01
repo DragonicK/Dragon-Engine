@@ -1,17 +1,25 @@
-﻿using Dragon.Core.Model
-    ;
+﻿using Dragon.Core.Model;
+using Dragon.Core.Services;
+
 using Dragon.Game.Players;
 using Dragon.Game.Parties;
+using Dragon.Game.Services;
 using Dragon.Game.Network.Senders;
 
 namespace Dragon.Game.Manager;
 
-public class PartyLeaveManager {
-    public IPacketSender? PacketSender { get; init; }
+public sealed class PartyLeaveManager {
+    public PacketSenderService? PacketSenderService { get; private set; }
 
     private const int MinimumPartyMember = 2;
 
+    public PartyLeaveManager(IServiceInjector injector) {
+        injector.Inject(this);
+    }
+
     public void ProcessLeaveRequest(PartyManager party, IPlayer player) {
+        var sender = GetPacketSender();
+
         var members = party.Members;
 
         var id = player.Character.CharacterId;
@@ -20,25 +28,24 @@ public class PartyLeaveManager {
 
         if (member is not null) {
             if (member.Index == party.LeaderIndex) {
-                // Find next leader.
                 var index = GetNextLeader(party);
 
                 if (index > 0) {
                     party.LeaderIndex = index;
 
-                    Leave(party, member, player);
+                    Leave(sender, party, member, player);
                 }
                 else {
                     party.Disband();
                 }
             }
             else {
-                Leave(party, member, player);
+                Leave(sender, party, member, player);
             }
         }
     }
 
-    private void Leave(PartyManager party, PartyMember member, IPlayer player) {
+    private void Leave(IPacketSender sender, PartyManager party, PartyMember member, IPlayer player) {
         var members = party.Members;
 
         player.PartyId = 0;
@@ -48,14 +55,14 @@ public class PartyLeaveManager {
 
         var parameters = new string[] { player.Character.Name };
 
-        foreach (var _member in members) {
-            if (_member.Player is not null) {
-                PacketSender!.SendMessage(SystemMessage.PlayerLeftParty, QbColor.BrigthRed, _member.Player, parameters);
+        foreach (var partyMember in members) {
+            if (partyMember.Player is not null) {
+                sender.SendMessage(SystemMessage.PlayerLeftParty, QbColor.BrigthRed, partyMember.Player, parameters);
             }
         }
 
-        PacketSender!.SendPartyLeave(player);
-        PacketSender!.SendMessage(SystemMessage.YouLeftParty, QbColor.BrigthRed, player);
+        sender.SendPartyLeave(player);
+        sender.SendMessage(SystemMessage.YouLeftParty, QbColor.BrigthRed, player);
 
         if (party.IsEverybodyDisconnected()) {
             party.Disband();
@@ -64,7 +71,7 @@ public class PartyLeaveManager {
         if (party is not null) {
             if (party.State != PartyState.Disbanded) {
                 if (members.Count >= MinimumPartyMember) {
-                    PacketSender!.SendParty(party);
+                    sender.SendParty(party);
                 }
                 else {
                     party.Disband();
@@ -86,5 +93,9 @@ public class PartyLeaveManager {
         }
 
         return 0;
+    }
+
+    private IPacketSender GetPacketSender() {
+        return PacketSenderService!.PacketSender!;
     }
 }

@@ -1,39 +1,40 @@
 ﻿using Dragon.Network;
+using Dragon.Network.Messaging;
 using Dragon.Network.Messaging.SharedPackets;
 
 using Dragon.Game.Players;
 using Dragon.Game.Manager;
-using Dragon.Game.Services;
+using Dragon.Game.Network;
+using Dragon.Core.Services;
 
 namespace Dragon.Game.Routes;
 
-public sealed class PartyKick {
-    public IConnection? Connection { get; set; }
-    public CpPartyKick? Packet { get; set; }
-    public InstanceService? InstanceService { get; set; }
-    public PacketSenderService? PacketSenderService { get; set; }
-    public ConnectionService? ConnectionService { get; set; }
+public sealed class PartyKick : PacketRoute, IPacketRoute {
+    public MessageHeader Header => MessageHeader.PartyKick;
 
-    public void Process() {
-        var sender = PacketSenderService!.PacketSender;
-        var repository = ConnectionService!.PlayerRepository;
+    private readonly PartyKickManager PartyKickManager;
 
-        if (Connection is not null) {
-            var player = repository!.FindByConnectionId(Connection.Id);
+    public PartyKick(IServiceInjector injector) : base(injector) {
+        PartyKickManager = new PartyKickManager(injector);
+    }
+
+    public void Process(IConnection connection, object packet) {
+        var receveid = packet as CpPartyKick;
+
+        if (receveid is not null) {
+            var player = GetPlayerRepository().FindByConnectionId(connection.Id);
 
             if (player is not null) {
-                var party = GetPartyManager(player);
-
-                if (party is not null) {
-
-                    var manager = new PartyKickManager() {
-                        PacketSender = sender
-                    };
-
-                    manager.ProcessKickRequest(party, player, Packet!.MemberIndex);
-
-                }
+                Execute(player, receveid);
             }
+        }
+    }
+
+    private void Execute(IPlayer player, CpPartyKick packet) {
+        var party = GetPartyManager(player);
+
+        if (party is not null) {
+            PartyKickManager.ProcessKickRequest(party, player, packet.MemberIndex);
         }
     }
 
@@ -41,10 +42,8 @@ public sealed class PartyKick {
         var id = player.PartyId;
         var parties = InstanceService!.Parties;
 
-        if (parties.ContainsKey(id)) {
-            return parties[id];
-        }
+        parties.TryGetValue(id, out var party);
 
-        return null;
+        return party;
     }
 }

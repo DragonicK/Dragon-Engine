@@ -1,49 +1,38 @@
-﻿using Dragon.Network;
+﻿using Dragon.Core.Services;
+
+using Dragon.Network;
+using Dragon.Network.Messaging;
 using Dragon.Network.Messaging.SharedPackets;
 
+using Dragon.Game.Network;
 using Dragon.Game.Manager;
-using Dragon.Game.Services;
 
 namespace Dragon.Game.Routes;
 
-public sealed class PurchaseBlackMarketItem {
-    public IConnection? Connection { get; set; }
-    public CpPurchaseBlackMarkteItem? Packet { get; set; }
-    public ConfigurationService? Configuration { get; set; }
-    public ConnectionService? ConnectionService { get; set; }
-    public PacketSenderService? PacketSenderService { get; set; }
-    public BlackMarketService? BlackMarketService { get; set; }
-    public ContentService? ContentService { get; set; }
-    public DatabaseService? DatabaseService { get; set; }
+public sealed class PurchaseBlackMarketItem : PacketRoute, IPacketRoute {
+    public MessageHeader Header { get; set; } = MessageHeader.PurchaseBlackMarketItem;
 
-    public void Process() {
-        if (IsValidPacket()) {
-            var sender = PacketSenderService!.PacketSender;
-            var repository = ConnectionService!.PlayerRepository;
-            var market = BlackMarketService!.BlackMarket;
+    private readonly BlackMarketManager BlackMarketManager;
 
-            if (Connection is not null) {
-                var player = repository!.FindByConnectionId(Connection.Id);
+    public PurchaseBlackMarketItem(IServiceInjector injector) : base(injector) {
+        BlackMarketManager = new BlackMarketManager(injector);
+    }
+
+    public void Process(IConnection connection, object packet) {
+        var received = packet as CpPurchaseBlackMarkteItem;
+
+        if (received is not null) {
+            if (IsValidPacket(received)) {
+                var player = GetPlayerRepository().FindByConnectionId(connection.Id);
 
                 if (player is not null) {
-
-                    var manager = new BlackMarketManager() {
-                        Player = player,
-                        BlackMarket = market,
-                        PacketSender = sender,
-                        Repository = repository,
-                        Configuration = Configuration,
-                        ContentService = ContentService,
-                        Factory = DatabaseService!.DatabaseFactory
-                    };
-
-                    manager.ProcessPurchaseRequest(Packet!.Id, Packet!.Amount, Packet!.Receiver);
+                    BlackMarketManager.ProcessPurchaseRequest(player, received.Id, received.Amount, received.Receiver);
                 }
             }
         }
     }
 
-    private bool IsValidPacket() {
-        return Packet!.Id > 0;
+    private bool IsValidPacket(CpPurchaseBlackMarkteItem packet) {
+        return packet.Id > 0;
     }
 }

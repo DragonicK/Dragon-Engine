@@ -1,59 +1,65 @@
-﻿using Dragon.Network;
+﻿using Dragon.Core.Model;
+using Dragon.Core.Services;
+
+using Dragon.Network;
+using Dragon.Network.Messaging;
 using Dragon.Network.Messaging.SharedPackets;
 
-using Dragon.Core.Model;
-
-using Dragon.Game.Services;
+using Dragon.Game.Network;
 using Dragon.Game.Manager;
 using Dragon.Game.Players;
 
 namespace Dragon.Game.Routes;
 
-public sealed class PartyRequest {
-    public IConnection? Connection { get; set; }
-    public CpPartyRequest? Packet { get; set; }
-    public PacketSenderService? PacketSenderService { get; init; }
-    public ConnectionService? ConnectionService { get; init; }
-    public ConfigurationService? Configuration { get; init; }
-    public InstanceService? InstanceService { get; init; }
-    public LoggerService? LoggerService { get; init; }
+public sealed class PartyRequest : PacketRoute, IPacketRoute {
+    public MessageHeader Header => MessageHeader.PartyRequest;
 
-    public void Process() {
-        var sender = PacketSenderService!.PacketSender;
-        var repository = ConnectionService!.PlayerRepository;
+    private readonly PartyRequestManager PartyRequestManager;
 
-        if (Connection is not null) {
-            var player = repository!.FindByConnectionId(Connection.Id);
+    public PartyRequest(IServiceInjector injector) : base(injector) {
+        PartyRequestManager = new PartyRequestManager(injector);
+    }
+
+    public void Process(IConnection connection, object packet) {
+        var received = packet as CpPartyRequest;
+
+        if (received is not null) {
+            var player = GetPlayerRepository().FindByConnectionId(connection.Id);
 
             if (player is not null) {
-                var invited = repository!.FindByName(Packet!.Character);
-
-                if (invited is not null) {
-                    var manager = new PartyRequestManager() {
-                        InstanceService = InstanceService,
-                        Configuration = Configuration,
-                        PacketSender = sender
-                    };
-
-                    var party = GetPartyManager(player);
-
-                    // Invite to an existent party.
-                    if (party is not null) {
-                        if (player != invited) {
-                            manager.ProcessRequestInvite(party, player, invited);
-                        }
-                    }
-                    // Create a new party.
-                    else {
-                        if (player != invited) {
-                            manager.ProcessRequestInvite(player, invited);
-                        }
-                    }
-                }
-                else {
-                    sender!.SendMessage(SystemMessage.PlayerIsNotOnline, QbColor.BrigthRed, player);
-                }
+                Execute(player, received);
             }
+        }       
+    }
+
+    private void Execute(IPlayer player, CpPartyRequest packet) {
+        var sender = GetPacketSender();
+        var invited = GetPlayerRepository().FindByName(packet.Character);
+
+        if (invited is not null) {
+            var party = GetPartyManager(player);
+
+            if (party is not null) {
+                InviteToParty(party, player, invited);
+            }
+            else {
+                CreateNewParty(player, invited);
+            }
+        }
+        else {
+            sender.SendMessage(SystemMessage.PlayerIsNotOnline, QbColor.BrigthRed, player);
+        }
+    }
+
+    private void InviteToParty(PartyManager party, IPlayer player, IPlayer invited) {
+        if (player != invited) {
+            PartyRequestManager.ProcessRequestInvite(party, player, invited);
+        }
+    }
+
+    private void CreateNewParty(IPlayer player, IPlayer invited) {
+        if (player != invited) {
+            PartyRequestManager.ProcessRequestInvite(player, invited);
         }
     }
 
@@ -61,10 +67,8 @@ public sealed class PartyRequest {
         var id = player.TradeId;
         var parties = InstanceService!.Parties;
 
-        if (parties.ContainsKey(id)) {
-            return parties[id];
-        }
+        parties.TryGetValue(id, out var party);
 
-        return null;
+        return party;
     }
 }

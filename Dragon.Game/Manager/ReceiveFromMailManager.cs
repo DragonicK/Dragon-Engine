@@ -1,4 +1,6 @@
-﻿using Dragon.Core.Model;
+﻿using Dragon.Core.Services;
+
+using Dragon.Core.Model;
 using Dragon.Core.Model.Items;
 using Dragon.Core.Model.Characters;
 
@@ -8,28 +10,33 @@ using Dragon.Game.Network.Senders;
 
 namespace Dragon.Game.Manager;
 
-public class ReceiveFromMailManager {
-    public IPlayer? Player { get; init; }
-    public IPacketSender? PacketSender { get; init; }
-    public ContentService? ContentService { get; init; }
+public sealed class ReceiveFromMailManager {
+    public ContentService? ContentService { get; private set; }
+    public PacketSenderService? PacketSenderService { get; private set; }
 
-    public void ReceiveCurrency(int id) {
-        var mail = Player!.Mails.Get(id);
+    public ReceiveFromMailManager(IServiceInjector injector) {
+        injector.Inject(this);
+    }
+
+    public void ReceiveCurrency(IPlayer player, int id) {
+        var sender = GetPacketSender();
+        var mail = player.Mails.Get(id);
 
         if (mail is not null) {
             if (!mail.AttachCurrencyReceiveFlag) {
-                if (Player!.Currencies.Add(CurrencyType.Gold, mail.AttachCurrency)) {
+                if (player.Currencies.Add(CurrencyType.Gold, mail.AttachCurrency)) {
                     mail.AttachCurrencyReceiveFlag = true;
 
-                    PacketSender!.SendCurrencyUpdate(Player, CurrencyType.Gold);
-                    PacketSender!.SendMailUpdate(Player!, id, mail.AttachCurrencyReceiveFlag, mail.AttachItemReceiveFlag);
+                    sender.SendCurrencyUpdate(player, CurrencyType.Gold);
+                    sender.SendMailUpdate(player, id, mail.AttachCurrencyReceiveFlag, mail.AttachItemReceiveFlag);
                 }
             }
         }
     }
 
-    public void ReceiveItem(int id) {
-        var mail = Player!.Mails.Get(id);
+    public void ReceiveItem(IPlayer player, int id) {
+        var sender = GetPacketSender();
+        var mail = player.Mails.Get(id);
 
         if (mail is not null) {
             if (!mail.AttachItemReceiveFlag) {
@@ -37,7 +44,7 @@ public class ReceiveFromMailManager {
                 var item = GetItem(attachedItem.ItemId);
 
                 if (item is not null) {
-                    var inventory = GetInventory(attachedItem.ItemId, out var isStacked);
+                    var inventory = GetInventory(player, attachedItem.ItemId, out var isStacked);
 
                     if (inventory is not null) {
                         if (isStacked) {
@@ -53,11 +60,11 @@ public class ReceiveFromMailManager {
 
                         mail.AttachItemReceiveFlag = true;
 
-                        PacketSender!.SendInventoryUpdate(Player!, inventory.InventoryIndex);
-                        PacketSender!.SendMailUpdate(Player!, id, mail.AttachCurrencyReceiveFlag, mail.AttachItemReceiveFlag);
+                        sender.SendInventoryUpdate(player, inventory.InventoryIndex);
+                        sender.SendMailUpdate(player, id, mail.AttachCurrencyReceiveFlag, mail.AttachItemReceiveFlag);
                     }
                     else {
-                        PacketSender!.SendMessage(SystemMessage.InventoryFull, QbColor.BrigthRed, Player!);
+                        sender.SendMessage(SystemMessage.InventoryFull, QbColor.BrigthRed, player);
                     }
                 }
             }
@@ -65,43 +72,42 @@ public class ReceiveFromMailManager {
     }
 
     private Item? GetItem(int id) {
-        var items = ContentService!.Items;
+        var items = ContentService!.Items!;
 
-        if (items is not null) {
-            if (items.Contains(id)) {
-                return items[id];
-            }
-        }
+        items.TryGet(id, out var item);
 
-        return null;
+        return item;
     }
 
-    private CharacterInventory? GetInventory(int id, out bool isStacked) {
+    private CharacterInventory? GetInventory(IPlayer player, int id, out bool isStacked) {
         isStacked = false;
 
-        var items = ContentService!.Items;
+        var items = ContentService!.Items!;
 
         CharacterInventory? inventory = default;
 
-        if (items.Contains(id)) {
-            var item = items[id]!;
+        items.TryGet(id, out var item);
 
+        if (item is not null) {
             if (item.MaximumStack > 0) {
                 isStacked = true;
 
-                inventory = Player!.Inventories.FindByItemId(item.Id);
+                inventory = player.Inventories.FindByItemId(item.Id);
             }
 
             if (inventory is null) {
                 isStacked = false;
 
-                var maximum = Player!.Character.MaximumInventories;
+                var maximum = player.Character.MaximumInventories;
 
-                inventory = Player!.Inventories.FindFreeInventory(maximum);
+                inventory = player.Inventories.FindFreeInventory(maximum);
             }
         }
 
         return inventory;
     }
 
+    private IPacketSender GetPacketSender() {
+        return PacketSenderService!.PacketSender!;
+    }
 }

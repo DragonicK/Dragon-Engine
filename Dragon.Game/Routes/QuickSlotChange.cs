@@ -1,56 +1,61 @@
-﻿using Dragon.Network;
+﻿using Dragon.Core.Services;
+
+using Dragon.Network;
+using Dragon.Network.Messaging;
 using Dragon.Network.Messaging.SharedPackets;
 
 using Dragon.Core.Model;
 
-using Dragon.Game.Services;
 using Dragon.Game.Players;
+using Dragon.Game.Network;
 
 namespace Dragon.Game.Routes;
 
-public sealed class QuickSlotChange {
-    public IConnection? Connection { get; set; }
-    public CpQuickSlotChange? Packet { get; set; }
-    public LoggerService? LoggerService { get; init; }
-    public ConfigurationService? Configuration { get; init; }
-    public ConnectionService? ConnectionService { get; init; }
-    public PacketSenderService? PacketSenderService { get; init; }
+public sealed class QuickSlotChange : PacketRoute, IPacketRoute {
+    public MessageHeader Header { get; set; } = MessageHeader.QuickSlotChange;
 
     private const int MaximumQuickSlot = 12;
 
-    public void Process() {
-        var sender = PacketSenderService!.PacketSender;
-        var repository = ConnectionService!.PlayerRepository;
+    public QuickSlotChange(IServiceInjector injector) : base(injector) { }
 
-        if (Connection is not null) {
-            var player = repository!.FindByConnectionId(Connection.Id);
+    public void Process(IConnection connection, object packet) {
+        var received = packet as CpQuickSlotChange;
+
+        if (received is not null) {
+            var player = GetPlayerRepository().FindByConnectionId(connection.Id);
 
             if (player is not null) {
-                if (IsValidPacket(player)) {
-                    var index = Packet!.QuickSlotIndex;
-                    var type = Packet!.QuickSlotType;
-                    var from = Packet!.FromIndex;
-
-                    switch (type) {
-                        case QuickSlotType.None:
-                            Clear(player, index);
-
-                            break;
-
-                        case QuickSlotType.Item:
-                            ChangeFromInventory(player, from, index);
-
-                            break;
-
-                        case QuickSlotType.Skill:
-                            ChangeFromSkill(player, from, index);
-
-                            break;
-                    }
-
-                    sender!.SendQuickSlotUpdate(player, index);
-                }
+                Execute(player, received);
             }
+        }
+    }
+  
+    private void Execute(IPlayer player, CpQuickSlotChange packet) {
+        if (IsValidPacket(player, packet)) {
+            var index = packet.QuickSlotIndex;
+            var type = packet.QuickSlotType;
+            var from = packet.FromIndex;
+
+            var sender = GetPacketSender();
+
+            switch (type) {
+                case QuickSlotType.None:
+                    Clear(player, index);
+
+                    break;
+
+                case QuickSlotType.Item:
+                    ChangeFromInventory(player, from, index);
+
+                    break;
+
+                case QuickSlotType.Skill:
+                    ChangeFromSkill(player, from, index);
+
+                    break;
+            }
+
+            sender.SendQuickSlotUpdate(player, index);
         }
     }
 
@@ -76,10 +81,10 @@ public sealed class QuickSlotChange {
         }
     }
 
-    private bool IsValidPacket(IPlayer player) {
-        var type = Packet!.QuickSlotType;
-        var index = Packet!.QuickSlotIndex;
-        var fromIndex = Packet!.FromIndex;
+    private bool IsValidPacket(IPlayer player, CpQuickSlotChange packet) {
+        var type = packet.QuickSlotType;
+        var index = packet.QuickSlotIndex;
+        var fromIndex = packet.FromIndex;
 
         if (type != QuickSlotType.None) {
             if (index < 1 || index > MaximumQuickSlot) {

@@ -1,34 +1,31 @@
-﻿using Dragon.Network;
+﻿using Dragon.Core.Services;
+
+using Dragon.Network;
+using Dragon.Network.Messaging;
 using Dragon.Network.Messaging.SharedPackets;
 
 using Dragon.Game.Manager;
-using Dragon.Game.Services;
+using Dragon.Game.Network;
 
 namespace Dragon.Game.Routes;
 
-public sealed class ReceiveMailCurrency {
-    public IConnection? Connection { get; set; }
-    public CpReceiveMailCurrency? Packet { get; set; }
-    public ConnectionService? ConnectionService { get; set; }
-    public PacketSenderService? PacketSenderService { get; set; }
-    public ContentService? ContentService { get; set; }
+public sealed class ReceiveMailCurrency : PacketRoute, IPacketRoute {
+    public MessageHeader Header { get; set; } = MessageHeader.ReceiveMailCurrency;
 
-    public void Process() {
-        var sender = PacketSenderService!.PacketSender;
-        var repository = ConnectionService!.PlayerRepository;
+    private readonly ReceiveFromMailManager ReceiveFromMailManager;
 
-        if (Connection is not null) {
-            var player = repository!.FindByConnectionId(Connection.Id);
+    public ReceiveMailCurrency(IServiceInjector injector) : base(injector) {
+        ReceiveFromMailManager = new ReceiveFromMailManager(injector);
+    }
+
+    public void Process(IConnection connection, object packet) {
+        var received = packet as CpReceiveMailCurrency;
+
+        if (received is not null) {
+            var player = GetPlayerRepository().FindByConnectionId(connection.Id);
 
             if (player is not null) {
-
-                var manager = new ReceiveFromMailManager() {
-                    Player = player,
-                    PacketSender = sender,
-                    ContentService = ContentService
-                };
-
-                manager.ReceiveCurrency(Packet!.Id);
+                ReceiveFromMailManager.ReceiveCurrency(player, received.Id);
             }
         }
     }

@@ -1,34 +1,31 @@
-﻿using Dragon.Network;
+﻿using Dragon.Core.Services;
+
+using Dragon.Network;
+using Dragon.Network.Messaging;
 using Dragon.Network.Messaging.SharedPackets;
 
 using Dragon.Game.Manager;
-using Dragon.Game.Services;
+using Dragon.Game.Network;
 
 namespace Dragon.Game.Routes;
 
-public sealed class ReceiveMailItem {
-    public IConnection? Connection { get; set; }
-    public CpReceiveMailItem? Packet { get; set; }
-    public ConnectionService? ConnectionService { get; set; }
-    public PacketSenderService? PacketSenderService { get; set; }
-    public ContentService? ContentService { get; set; }
+public sealed class ReceiveMailItem : PacketRoute, IPacketRoute {
+    public MessageHeader Header { get; set; } = MessageHeader.ReceiveMailItem;
 
-    public void Process() {
-        var sender = PacketSenderService!.PacketSender;
-        var repository = ConnectionService!.PlayerRepository;
+    private readonly ReceiveFromMailManager ReceiveFromMailManager;
 
-        if (Connection is not null) {
-            var player = repository!.FindByConnectionId(Connection.Id);
+    public ReceiveMailItem(IServiceInjector injector) : base(injector) {
+        ReceiveFromMailManager = new ReceiveFromMailManager(injector);
+    }
+
+    public void Process(IConnection connection, object packet) {
+        var received = packet as CpReceiveMailItem;
+
+        if (received is not null) {
+            var player = GetPlayerRepository().FindByConnectionId(connection.Id);
 
             if (player is not null) {
-
-                var manager = new ReceiveFromMailManager() {
-                    Player = player,
-                    PacketSender = sender,
-                    ContentService = ContentService
-                };
-
-                manager.ReceiveItem(Packet!.Id);
+                ReceiveFromMailManager.ReceiveItem(player, received.Id);
             }
         }
     }

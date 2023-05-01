@@ -1,17 +1,24 @@
 ﻿using Dragon.Core.Model;
+using Dragon.Core.Services;
 
 using Dragon.Game.Players;
 using Dragon.Game.Parties;
+using Dragon.Game.Services;
 using Dragon.Game.Network.Senders;
 
 namespace Dragon.Game.Manager;
 
-public class PartyKickManager {
-    public IPacketSender? PacketSender { get; init; }
+public sealed class PartyKickManager {
+    public PacketSenderService? PacketSenderService { get; private set; }
 
     private const int MinimumPartyMember = 2;
 
+    public PartyKickManager(IServiceInjector injector) {
+        injector.Inject(this);
+    }
+
     public void ProcessKickRequest(PartyManager party, IPlayer player, int index) {
+        var sender = GetPacketSender();
         var leader = party.GetLeader();
 
         if (leader == player) {
@@ -31,15 +38,15 @@ public class PartyKickManager {
                     }
                 }
 
-                Leave(party, kicked);
+                Leave(sender, party, kicked);
             }
         }
         else {
-            PacketSender!.SendMessage(SystemMessage.YouAreNotLeader, QbColor.BrigthRed, player);
+            sender.SendMessage(SystemMessage.YouAreNotLeader, QbColor.BrigthRed, player);
         }
     }
 
-    private void Leave(PartyManager party, PartyMember? kicked) {
+    private void Leave(IPacketSender sender, PartyManager party, PartyMember? kicked) {
         if (kicked is not null) {
             var members = party.Members;
 
@@ -53,12 +60,12 @@ public class PartyKickManager {
 
                 foreach (var member in members) {
                     if (member.Player is not null) {
-                        PacketSender!.SendMessage(SystemMessage.PlayerKickedFromParty, QbColor.BrigthRed, member.Player, parameters);
+                        sender.SendMessage(SystemMessage.PlayerKickedFromParty, QbColor.BrigthRed, member.Player, parameters);
                     }
                 }
 
-                PacketSender!.SendPartyLeave(kicked.Player);
-                PacketSender!.SendMessage(SystemMessage.YouKickedFromParty, QbColor.BrigthRed, kicked.Player);
+                sender.SendPartyLeave(kicked.Player);
+                sender.SendMessage(SystemMessage.YouKickedFromParty, QbColor.BrigthRed, kicked.Player);
             }
 
             if (party.IsEverybodyDisconnected()) {
@@ -68,7 +75,7 @@ public class PartyKickManager {
             if (party is not null) {
                 if (party.State != PartyState.Disbanded) {
                     if (members.Count >= MinimumPartyMember) {
-                        PacketSender!.SendParty(party);
+                        sender.SendParty(party);
                     }
                     else {
                         party.Disband();
@@ -76,5 +83,9 @@ public class PartyKickManager {
                 }
             }
         }
+    }
+
+    private IPacketSender GetPacketSender() {
+        return PacketSenderService!.PacketSender!;
     }
 }

@@ -1,37 +1,31 @@
-﻿using Dragon.Network;
-using Dragon.Network.Messaging.SharedPackets;
+﻿using Dragon.Core.Services;
 
+using Dragon.Network;
+using Dragon.Network.Messaging;
+
+using Dragon.Game.Network;
 using Dragon.Game.Players;
 using Dragon.Game.Manager;
-using Dragon.Game.Services;
 
 namespace Dragon.Game.Routes;
 
-public sealed class PartyLeave {
-    public IConnection? Connection { get; set; }
-    public PacketPartyLeave? Packet { get; set; }
-    public InstanceService? InstanceService { get; set; }
-    public PacketSenderService? PacketSenderService { get; set; }
-    public ConnectionService? ConnectionService { get; set; }
+public sealed class PartyLeave : PacketRoute, IPacketRoute {
+    public MessageHeader Header => MessageHeader.PartyLeave;
 
-    public void Process() {
-        var sender = PacketSenderService!.PacketSender;
-        var repository = ConnectionService!.PlayerRepository;
+    private readonly PartyLeaveManager PartyLeaveManager;
 
-        if (Connection is not null) {
-            var player = repository!.FindByConnectionId(Connection.Id);
+    public PartyLeave(IServiceInjector injector) : base(injector) {
+        PartyLeaveManager = new PartyLeaveManager(injector);
+    }
 
-            if (player is not null) {
-                var party = GetPartyManager(player);
+    public void Process(IConnection connection, object packet) {
+        var player = GetPlayerRepository().FindByConnectionId(connection.Id);
 
-                if (party is not null) {
+        if (player is not null) {
+            var party = GetPartyManager(player);
 
-                    var manager = new PartyLeaveManager() {
-                        PacketSender = sender
-                    };
-
-                    manager.ProcessLeaveRequest(party, player);
-                }
+            if (party is not null) {
+                PartyLeaveManager.ProcessLeaveRequest(party, player);
             }
         }
     }
@@ -40,10 +34,8 @@ public sealed class PartyLeave {
         var id = player.PartyId;
         var parties = InstanceService!.Parties;
 
-        if (parties.ContainsKey(id)) {
-            return parties[id];
-        }
+        parties.TryGetValue(id, out var party);
 
-        return null;
+        return party;
     }
 }
