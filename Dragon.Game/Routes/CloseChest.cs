@@ -1,39 +1,29 @@
-﻿using Dragon.Network;
+﻿using Dragon.Core.Services;
+
+using Dragon.Network;
+using Dragon.Network.Messaging;
 using Dragon.Network.Messaging.SharedPackets;
 
-using Dragon.Game.Services;
 using Dragon.Game.Manager;
+using Dragon.Game.Network;
 
-namespace Dragon.Game.Routes {
-    public sealed class CloseChest {
-        public IConnection? Connection { get; set; }
-        public PacketCloseChest? Packet { get; set; }
-        public ContentService? ContentService { get; init; }
-        public InstanceService? InstanceService { get; init; }
-        public ConfigurationService? Configuration { get; init; }
-        public ConnectionService? ConnectionService { get; init; }
-        public PacketSenderService? PacketSenderService { get; init; }
+namespace Dragon.Game.Routes;
 
-        public void Process() {
-            var repository = ConnectionService!.PlayerRepository;
+public sealed class CloseChest : PacketRoute, IPacketRoute {
+    public MessageHeader Header => MessageHeader.CloseChest;
+    public PacketCloseChest? Packet { get; set; }
 
-            if (Connection is not null) {
-                var player = repository!.FindByConnectionId(Connection.Id);
+    private readonly ChestManager ChestManager;
 
-                if (player is not null) {
-                    var manager = new ChestManager() {
-                        Player = player,
-                        Configuration = Configuration,
-                        Chests = ContentService!.Chests,
-                        Drops = ContentService!.Drops,
-                        InstanceService = InstanceService,
-                        PacketSender = PacketSenderService!.PacketSender,
-                        PlayerRepository = repository
-                    };
+    public CloseChest(IServiceInjector injector) : base(injector) {
+        ChestManager = new ChestManager(injector);
+    }
 
-                    manager.CloseChest();
-                }
-            }
+    public void Process(IConnection connection, object packet) {
+        var player = GetPlayerRepository().FindByConnectionId(connection.Id);
+
+        if (player is not null) {
+            ChestManager.CloseChest(player);
         }
     }
 }

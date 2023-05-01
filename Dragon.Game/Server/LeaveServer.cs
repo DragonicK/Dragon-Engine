@@ -19,10 +19,10 @@ public sealed class LeaveServer {
 
     private readonly LeaveGame LeaveManager;
 
-    public LeaveServer(IServiceContainer services) {
-        new ServiceInjector(services).Inject(this);
+    public LeaveServer(IServiceInjector injector) {
+        injector.Inject(this);
 
-        LeaveManager = new LeaveGame(services);
+        LeaveManager = new LeaveGame(injector);
     }
 
     public void DisconnectConnection(IConnection connection) {

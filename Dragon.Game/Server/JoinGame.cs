@@ -7,7 +7,6 @@ using Dragon.Game.Manager;
 using Dragon.Game.Players;
 using Dragon.Game.Services;
 using Dragon.Core.Services;
-using Dragon.Game.Repository;
 using Dragon.Game.Network.Senders;
 
 namespace Dragon.Game.Server;
@@ -24,12 +23,12 @@ public sealed class JoinGame {
     private readonly WarperManager WarperManager;
     private readonly PartyReconnectManager PartyManager;
 
-    public JoinGame(IServiceContainer services) {
-        new ServiceInjector(services).Inject(this);
+    public JoinGame(IServiceInjector injector) {
+        injector.Inject(this);
 
-        SkillManager = new SkillManager(services);
-        WarperManager = new WarperManager(services);
-        PartyManager = new PartyReconnectManager(services);
+        SkillManager = new SkillManager(injector);
+        WarperManager = new WarperManager(injector);
+        PartyManager = new PartyReconnectManager(injector);
     }
 
     public void Join(IPlayer player) {

@@ -1,4 +1,5 @@
 ﻿using Dragon.Network;
+using Dragon.Network.Messaging;
 using Dragon.Network.Messaging.SharedPackets;
 
 using Dragon.Core.Logs;
@@ -6,106 +7,98 @@ using Dragon.Core.Model;
 using Dragon.Core.Model.Characters;
 
 using Dragon.Game.Players;
-using Dragon.Game.Repository;
+using Dragon.Game.Network;
 using Dragon.Game.Services;
+using Dragon.Core.Services;
+using Dragon.Game.Network.Senders;
 
 namespace Dragon.Game.Routes;
 
-public sealed class CharacterDelete {
-    public IConnection? Connection { get; set; }
-    public CpCharacterDelete? Packet { get; set; }
-    public LoggerService? LoggerService { get; init; }
-    public CharacterService? CharacterService { get; init; }
-    public ConfigurationService? Configuration { get; init; }
-    public ConnectionService? ConnectionService { get; init; }
-    public PacketSenderService? PacketSenderService { get; init; }
+public sealed class CharacterDelete : PacketRoute, IPacketRoute {
+    public MessageHeader Header => MessageHeader.CharacterDelete;
 
-    public void Process() {
-        if (!Configuration.Character.Delete) {
-            SendCharacterDeleteIsDisabled();
-            return;
+    public CharacterDelete(IServiceInjector injector) : base(injector) { }
+
+    public void Process(IConnection connection, object packet) {
+        var sender = GetPacketSender();
+
+        if (!Configuration!.Character.Delete) {
+            SendCharacterDeleteIsDisabled(sender, connection);
         }
+        else {
+            var received = packet as CpCharacterDelete;
+
+            if (received is not null) {
+                Execute(sender, connection, received);
+            }
+        }
+    }
+
+    private void Execute(IPacketSender sender, IConnection connection, CpCharacterDelete packet) {
+        var index = packet.Index;
 
         var logger = GetLogger();
-        var index = Packet.Index;
-        var repository = GetPlayerRepository();
-        var player = repository.FindByConnectionId(Connection.Id);
+        var player = GetPlayerRepository().FindByConnectionId(connection.Id);
 
         if (IsValidPlayer(player)) {
-            if (IsValidIndex(player, index)) {
-                var character = player.Characters[index];
+            if (IsValidIndex(player!, index)) {
+                var character = player!.Characters[index];
 
-                logger?.Warning(GetType().Name, $"Requesting Exclusion From Id {character.CharacterId}");
+                logger.Warning(GetType().Name, $"Requesting Exclusion From Id {character.CharacterId}");
 
                 if (CanDelete(character)) {
-                    ExecuteExclusion(character, player);
+                    ExecuteExclusion(sender, character, player);
 
-                    logger?.Warning(GetType().Name, $"Executing Exclusion From Id {character.CharacterId}");
+                    logger.Warning(GetType().Name, $"Executing Exclusion From Id {character.CharacterId}");
                 }
             }
         }
         else {
-            WriteInvalidPlayerLog();
+            WriteInvalidPlayerLog(logger);
         }
     }
 
-    private bool IsValidIndex(IPlayer player, int index) {
+    private static bool IsValidIndex(IPlayer player, int index) {
         return index >= 0 && index < player.Characters.Count;
     }
 
-    private bool IsValidPlayer(IPlayer? player) {
+    private static bool IsValidPlayer(IPlayer? player) {
         return player is not null && player.Characters is not null;
     }
 
-    private async void ExecuteExclusion(CharacterPreview character, IPlayer player) {
-        if (!CharacterService.IsAdded(character.CharacterId)) {
+    private async void ExecuteExclusion(IPacketSender sender, CharacterPreview character, IPlayer player) {
+        if (!CharacterService!.IsAdded(character.CharacterId)) {
             var level = character.Level;
+
             var minutes = GetMinutes(level);
-            var sender = PacketSenderService.PacketSender;
 
             var request = await CharacterService.AddExclusion(character, player, minutes);
 
             character.DeleteRequest = request;
 
-            sender?.SendCharacters(player);
+            sender.SendCharacters(player);
         }
     }
 
     private int GetMinutes(int level) {
-        var minutes = 0;
         var index = GetRangeIndex(level);
 
-        if (index >= 0) {
-            minutes = Configuration.Character.DeletionLevelRanges[index].Minutes;
-        }
-
-        return minutes;
+        return index >= 0 ? Configuration!.Character.DeletionLevelRanges[index].Minutes : 0;
     }
 
     private int GetRangeIndex(int level) {
-        return Configuration.Character.DeletionLevelRanges.FindIndex(x => level >= x.Minimum && level <= x.Maximum);
+        return Configuration!.Character.DeletionLevelRanges.FindIndex(x => level >= x.Minimum && level <= x.Maximum);
     }
 
     private bool CanDelete(CharacterPreview character) {
-        return !CharacterService.IsAdded(character.CharacterId);
+        return !CharacterService!.IsAdded(character.CharacterId);
     }
 
-    private void WriteInvalidPlayerLog() {
-        var logger = GetLogger();
-
-        logger?.Warning(GetType().Name, "Character Exclusion: Player not found");
+    private void WriteInvalidPlayerLog(ILogger logger) {
+        logger.Warning(GetType().Name, "Character Exclusion: Player not found");
     }
 
-    private IPlayerRepository? GetPlayerRepository() {
-        return ConnectionService?.PlayerRepository;
-    }
-
-    private ILogger? GetLogger() {
-        return LoggerService?.Logger;
-    }
-
-    private void SendCharacterDeleteIsDisabled() {
-        var sender = PacketSenderService.PacketSender;
-        sender?.SendAlertMessage(Connection, AlertMessageType.CharacterDelete, MenuResetType.Characters);
+    private void SendCharacterDeleteIsDisabled(IPacketSender sender, IConnection connection) {
+        sender.SendAlertMessage(connection, AlertMessageType.CharacterDelete, MenuResetType.Characters);
     }
 }

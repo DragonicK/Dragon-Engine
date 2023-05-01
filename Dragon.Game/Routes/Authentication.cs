@@ -1,134 +1,124 @@
-﻿using Dragon.Network;
-using Dragon.Network.Messaging.SharedPackets;
-
-using Dragon.Core.Jwt;
+﻿using Dragon.Core.Jwt;
 using Dragon.Core.Logs;
 using Dragon.Core.Model;
+using Dragon.Core.Services;
+
+using Dragon.Network;
+using Dragon.Network.Messaging;
+using Dragon.Network.Messaging.SharedPackets;
 
 using Dragon.Game.Network;
-using Dragon.Game.Services;
 using Dragon.Game.Players;
-using Dragon.Game.Repository;
+using Dragon.Game.Services;
 using Dragon.Game.Characters;
+using Dragon.Game.Network.Senders;
 
 namespace Dragon.Game.Routes;
 
-public sealed class Authentication {
-    public IConnection? Connection { get; set; }
-    public CpGameServerLogin? Packet { get; set; }
-    public PacketSenderService? PacketSenderService { get; init; }
-    public CharacterService? CharacterService { get; init; }
-    public ConfigurationService? Configuration { get; init; }
-    public ConnectionService? ConnectionService { get; init; }
-    public DatabaseService? DatabaseService { get; init; }
-    public LoggerService? LoggerService { get; init; }
+public sealed class Authentication : PacketRoute, IPacketRoute {
+    public MessageHeader Header => MessageHeader.GameServerLogin;
 
-    public async void Process() {
-        var logger = GetLogger();
-        var jwtToken = Packet!.Token;
-        var jwtTokenData = GetValidatedData(jwtToken);
+    private readonly JwtTokenHandler JwtHandler;
+    private readonly ICharacterDatabase Database;
 
-        if (jwtTokenData.AccountId == 0) {
-            Disconnect(Connection!, AlertMessageType.Connection);
+    public Authentication(IServiceInjector injector) : base(injector) {
+        JwtHandler = new JwtTokenHandler(Configuration!.JwtSettings);
+        Database = new CharacterDatabase(Configuration!, DatabaseService!.DatabaseFactory!);
+    }
 
-            logger?.Warning(GetType().Name, $"Authentication Failed {jwtToken}");
+    public void Process(IConnection connection, object packet) {
+        var received = packet as CpGameServerLogin;
 
-            return;
+        if (received is not null) {
+            Process(connection, received);
         }
+    }
 
+    private void Process(IConnection connection, CpGameServerLogin packet) {
+        var logger = GetLogger();
+        var sender = GetPacketSender();
+
+        var jwtToken = packet.Token;
+        var jwtTokenData = JwtHandler.Validate(jwtToken);
+
+        if (jwtTokenData.AccountId > 0) {
+            Authenticate(logger, sender, connection, jwtTokenData);
+        }
+        else {
+            logger.Warning(GetType().Name, $"Authentication Failed {jwtToken}");
+
+            Disconnect(sender, connection, AlertMessageType.Connection);
+        }
+    }
+
+    private async void Authenticate(ILogger logger, IPacketSender sender, IConnection connection, JwtTokenData jwtTokenData) {
         var accountId = jwtTokenData.AccountId;
         var username = jwtTokenData.Username;
 
         var player = FindDuplicated(accountId);
         var repository = GetPlayerRepository();
 
-        logger?.Warning(GetType().Name, $"Authenticated {username}");
+        logger.Warning(GetType().Name, $"Authenticated {username}");
 
         if (player is not null) {
-            Disconnect(Connection!, AlertMessageType.DuplicatedLogin);
-            Disconnect(player.GetConnection(), AlertMessageType.TryingToLogin);
+            Disconnect(sender, connection, AlertMessageType.DuplicatedLogin);
+            Disconnect(sender, player.GetConnection(), AlertMessageType.TryingToLogin);
 
-            logger?.Error(GetType().Name, $"Duplicated Entry {username}");
+            logger.Error(GetType().Name, $"Duplicated Entry {username}");
 
             // Wait about 1 second before disconnect.
             await Task.Delay(1000);
 
             player.GetConnection().Disconnect();
 
-            repository!.Remove(player);
+            repository.Remove(player);
         }
         else {
-            player = repository!.Add(jwtTokenData, Connection!);
+            player = repository.Add(jwtTokenData, connection);
 
             try {
-                var database = new CharacterDatabase(Configuration, DatabaseService.DatabaseFactory);
-
-                player.Characters = await database.GetCharactersPreviewAsync(accountId);
-
-                database?.Dispose();
+                player.Characters = await Database.GetCharactersPreviewAsync(accountId);
             }
             catch (Exception ex) {
-                await WriteExceptionLog(username, ex.Message);
+                await WriteExceptionLog(logger, username, ex.Message);
             }
 
             if (player.Characters is not null) {
                 AddDeleteRequest(player);
 
-                var sender = GetSender();
-                sender?.SendCharacters(player);
+                sender.SendCharacters(player);
 
-                logger?.Info(GetType().Name, $"Sending characters User: {username}");
+                logger.Info(GetType().Name, $"Sending characters User: {username}");
             }
             else {
-                logger?.Info(GetType().Name, $"Failed to load characterrs User: {username}");
+                logger.Info(GetType().Name, $"Failed to load characterrs User: {username}");
             }
         }
     }
 
-    private ILogger? GetLogger() {
-        return LoggerService?.Logger;
-    }
-
-    private IPlayerRepository? GetPlayerRepository() {
-        return ConnectionService?.PlayerRepository;
-    }
-
-    private JwtTokenData GetValidatedData(string jwtToken) {
-        var handler = new JwtTokenHandler(Configuration.JwtSettings);
-
-        return handler.Validate(jwtToken);
-    }
-
     private IPlayer? FindDuplicated(long accountId) {
-        return ConnectionService?.PlayerRepository?.FindByAccountId(accountId);
+        return GetPlayerRepository().FindByAccountId(accountId);
     }
 
     private void AddDeleteRequest(IPlayer player) {
         var characters = player.Characters.ToList();
 
-        characters?.ForEach(character => {
+        characters.ForEach(character => { 
             if (character.DeleteRequest is not null) {
-                if (!CharacterService.IsAdded(character.CharacterId)) {
-                    CharacterService.AddExclusion(character.DeleteRequest);
-                }
-            }
+                if (!CharacterService!.IsAdded(character.CharacterId)) {
+                    CharacterService.AddExclusion(character.DeleteRequest); 
+                } 
+            } 
         });
     }
 
-    private void Disconnect(IConnection connection, AlertMessageType alertMessage) {
-        var sender = GetSender();
-        sender?.SendAlertMessage(connection, alertMessage, MenuResetType.None, true);
+    private void Disconnect(IPacketSender sender, IConnection connection, AlertMessageType alertMessage) {
+        sender.SendAlertMessage(connection, alertMessage, MenuResetType.None, true);
     }
 
-    private Task WriteExceptionLog(string username, string message) {
-        var logger = GetLogger();
-
-        logger?.Error(GetType().Name, $"Authentication: An error ocurred by {username} ... {message}");
+    private Task WriteExceptionLog(ILogger logger, string username, string message) {
+        logger.Error(GetType().Name, $"Authentication: An error ocurred by {username} ... {message}");
 
         return Task.CompletedTask;
-    }
-
-    private IPacketSender? GetSender() {
-        return PacketSenderService?.PacketSender;
     }
 }

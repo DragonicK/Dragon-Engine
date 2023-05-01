@@ -17,10 +17,10 @@ public sealed class LeaveGame {
 
     private readonly PartyDisconnectManager PartyManager;
 
-    public LeaveGame(IServiceContainer services) {
-        new ServiceInjector(services).Inject(this);
+    public LeaveGame(IServiceInjector injector) {
+        injector.Inject(this);
 
-        PartyManager = new PartyDisconnectManager(services);
+        PartyManager = new PartyDisconnectManager(injector);
     }
 
     public async void Leave(IPlayer? player) {

@@ -1,32 +1,24 @@
-﻿using Dragon.Network;
-using Dragon.Network.Messaging.SharedPackets;
+﻿using Dragon.Core.Services;
 
-using Dragon.Game.Services;
+using Dragon.Network;
+using Dragon.Network.Messaging;
+
+using Dragon.Game.Network;
 using Dragon.Game.Manager;
 using Dragon.Game.Players;
 
 namespace Dragon.Game.Routes;
-public sealed class ConfirmTrade {
-    public IConnection? Connection { get; set; }
-    public CpConfirmTrade? Packet { get; set; }
-    public PacketSenderService? PacketSenderService { get; init; }
-    public ConnectionService? ConnectionService { get; init; }
-    public LoggerService? LoggerService { get; init; }
-    public InstanceService? InstanceService { get; init; }
 
-    public void Process() {
-        var repository = ConnectionService!.PlayerRepository;
+public sealed class ConfirmTrade : PacketRoute, IPacketRoute {
+    public MessageHeader Header => MessageHeader.ConfirmTrade;
 
-        if (Connection is not null) {
-            var player = repository!.FindByConnectionId(Connection.Id);
+    public ConfirmTrade(IServiceInjector injector) : base(injector) { }
 
-            if (player is not null) {
-                var manager = GetTradeManager(player);
+    public void Process(IConnection connection, object packet) {
+        var player = GetPlayerRepository().FindByConnectionId(connection.Id);
 
-                if (manager is not null) {
-                    manager.Confirm(player);
-                }
-            }
+        if (player is not null) {
+            GetTradeManager(player)?.Confirm(player);
         }
     }
 
@@ -34,10 +26,8 @@ public sealed class ConfirmTrade {
         var id = player.TradeId;
         var trades = InstanceService!.Trades;
 
-        if (trades.ContainsKey(id)) {
-            return trades[id];
-        }
+        trades.TryGetValue(id, out var trade);
 
-        return null;
+        return trade;
     }
 }

@@ -1,39 +1,27 @@
-﻿using Dragon.Network;
-using Dragon.Network.Messaging.SharedPackets;
+﻿using Dragon.Core.Services;
 
-using Dragon.Game.Services;
+using Dragon.Network;
+using Dragon.Network.Messaging;
+
+using Dragon.Game.Network;
 using Dragon.Game.Manager;
 
 namespace Dragon.Game.Routes;
 
-public sealed class CompletedCraft {
-    public IConnection? Connection { get; set; }
-    public CpCompletedCraft? Packet { get; set; }
-    public LoggerService? LoggerService { get; init; }
-    public ContentService? ContentService { get; init; }
-    public ConfigurationService? Configuration { get; init; }
-    public ConnectionService? ConnectionService { get; init; }
-    public PacketSenderService? PacketSenderService { get; init; }
+public sealed class CompletedCraft : PacketRoute, IPacketRoute {
+    public MessageHeader Header => MessageHeader.CompletedCraft;
 
-    public void Process() {
-        var sender = PacketSenderService!.PacketSender;
-        var repository = ConnectionService!.PlayerRepository;
+    private readonly CraftManager CraftManager;
 
-        if (Connection is not null) {
-            var player = repository!.FindByConnectionId(Connection.Id);
+    public CompletedCraft(IServiceInjector injector) : base(injector) {
+        CraftManager = new CraftManager(injector);
+    }
 
-            if (player is not null) {
-                var manager = new CraftManager() {
-                    Player = player,
-                    PacketSender = sender,
-                    Configuration = Configuration,
-                    Items = ContentService!.Items,
-                    Recipes = ContentService!.Recipes,
-                    Experience = ContentService!.CraftExperience
-                };
+    public void Process(IConnection connection, object packet) {
+        var player = GetPlayerRepository().FindByConnectionId(connection.Id);
 
-                manager.Conclude();
-            }
+        if (player is not null) {
+            CraftManager.Conclude(player);
         }
     }
 }

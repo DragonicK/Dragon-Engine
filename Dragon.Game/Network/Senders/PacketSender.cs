@@ -15,9 +15,7 @@ using Dragon.Game.Instances;
 using Dragon.Game.Configurations;
 using Dragon.Game.Instances.Chests;
 using Dragon.Core.Model.Chests;
-using System.Collections.Generic;
-using System.Net.Sockets;
-using Dragon.Core.Model.Items;
+using Dragon.Game.Network.Senders;
 
 namespace Dragon.Game.Network;
 
@@ -26,7 +24,6 @@ public sealed partial class PacketSender : IPacketSender {
     public IConfiguration? Configuration { get; set; }
     public PassphraseService? PassphraseService { get; set; }
     public InstanceService? InstanceService { get; set; }
-
 
     public void SendGettingMap(IPlayer player, bool isGettingMap) {
         var packet = new SpGettingMap() {

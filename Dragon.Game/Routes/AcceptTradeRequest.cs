@@ -1,33 +1,28 @@
-﻿using Dragon.Network;
-using Dragon.Network.Messaging.SharedPackets;
+﻿using Dragon.Core.Services;
 
-using Dragon.Game.Services;
+using Dragon.Network;
+using Dragon.Network.Messaging;
+
+using Dragon.Game.Network;
 using Dragon.Game.Manager;
 
+
 namespace Dragon.Game.Routes;
+   
+public sealed class AcceptTradeRequest : PacketRoute, IPacketRoute {
+    public MessageHeader Header => MessageHeader.AcceptTradeRequest;
 
-public sealed class AcceptTradeRequest {
-    public IConnection? Connection { get; set; }
-    public CpAcceptTradeRequest? Packet { get; set; }
-    public PacketSenderService? PacketSenderService { get; init; }
-    public ConnectionService? ConnectionService { get; init; }
-    public LoggerService? LoggerService { get; init; }
-    public InstanceService? InstanceService { get; init; }
+    private readonly TradeAcceptManager TradeAcceptManager;
 
-    public void Process() {
-        var repository = ConnectionService!.PlayerRepository;
+    public AcceptTradeRequest(IServiceInjector injector) : base(injector) {
+        TradeAcceptManager = new TradeAcceptManager(injector);
+    }
 
-        if (Connection is not null) {
-            var player = repository!.FindByConnectionId(Connection.Id);
+    public void Process(IConnection connection, object packet) {
+        var player = GetPlayerRepository().FindByConnectionId(connection.Id);
 
-            if (player is not null) {
-                var trade = new TradeAcceptManager() {
-                    InstanceService = InstanceService,
-                    PacketSender = PacketSenderService!.PacketSender
-                };
-
-                trade.ProcessAcceptRequest(player);
-            }
+        if (player is not null) {
+            TradeAcceptManager.ProcessAcceptRequest(player);
         }
     }
 }

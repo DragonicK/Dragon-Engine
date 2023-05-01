@@ -10,11 +10,11 @@ namespace Dragon.Game.Routes;
 public sealed class Ping : PacketRoute, IPacketRoute {
     public MessageHeader Header => MessageHeader.Ping;
 
-    public void Process(IConnection connection, object packet) {
- 
+    public Ping(IServiceInjector injector) {
+        injector.Inject(this);
     }
 
-    public void StartInjection(IServiceInjector injector) {
-  
+    public void Process(IConnection connection, object packet) {
+ 
     }
 }

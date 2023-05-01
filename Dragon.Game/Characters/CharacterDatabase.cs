@@ -1,13 +1,14 @@
-﻿using Dragon.Database;
+﻿using Dragon.Core.Model.Characters;
+
+using Dragon.Database;
 using Dragon.Database.Handler;
-using Dragon.Core.Model.Characters;
 
 using Dragon.Game.Configurations;
 using Dragon.Game.Players;
 
 namespace Dragon.Game.Characters;
 
-public class CharacterDatabase : ICharacterDatabase {
+public sealed class CharacterDatabase : ICharacterDatabase {
     private readonly MembershipHandler handler;
 
     public CharacterDatabase(IConfiguration configuration, IDatabaseFactory factory) {

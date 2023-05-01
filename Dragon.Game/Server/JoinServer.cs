@@ -16,8 +16,8 @@ public sealed class JoinServer {
     public ConfigurationService? Configuration { get; private set; }
     public OutgoingMessageService? OutgoingMessageService { get; private set; }
 
-    public JoinServer(IServiceContainer services) {
-        new ServiceInjector(services).Inject(this);
+    public JoinServer(IServiceInjector injector) {
+        injector.Inject(this);
     }
 
     public void AcceptConnection(IConnection connection) {

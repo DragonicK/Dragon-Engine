@@ -1,115 +1,89 @@
 ﻿using Dragon.Network;
+using Dragon.Network.Messaging;
 using Dragon.Network.Messaging.SharedPackets;
 
 using Dragon.Core.Logs;
 using Dragon.Core.Model;
-using Dragon.Core.Model.Maps;
+using Dragon.Core.Services;
 
 using Dragon.Game.Server;
 using Dragon.Game.Network;
-using Dragon.Game.Services;
 using Dragon.Game.Players;
-using Dragon.Game.Repository;
 using Dragon.Game.Characters;
 
 namespace Dragon.Game.Routes;
 
-public sealed class CharacterBegin {
-    public IConnection? Connection { get; set; }
-    public CpCharacterBegin? Packet { get; set; }
-    public LoggerService? LoggerService { get; init; }
-    public ContentService? ContentService { get; init; }
-    public InstanceService? InstanceService { get; init; }
-    public PassphraseService? PassphraseService { get; init; }
-    public DatabaseService? DatabaseService { get; init; }
-    public CharacterService? CharacterService { get; init; }
-    public ConfigurationService? Configuration { get; init; }
-    public ConnectionService? ConnectionService { get; init; }
-    public PacketSenderService? PacketSenderService { get; init; }
+public sealed class CharacterBegin : PacketRoute, IPacketRoute {
+    public MessageHeader Header => MessageHeader.CharacterBegin;
 
-    public async void Process() {
-        var index = Packet.CharacterIndex;
+    private readonly JoinGame JoinGame;
+    private readonly ICharacterDatabase Database;
 
+    public CharacterBegin(IServiceInjector injector) : base(injector) {
+        JoinGame = new JoinGame(injector);
+        Database = new CharacterDatabase(Configuration!, DatabaseService!.DatabaseFactory!);
+    }
+
+    public void Process(IConnection connection, object packet) {
+        var received = packet as CpCharacterBegin;
+
+        if (received is not null) {
+            Execute(connection, received);
+        }
+    }
+
+    private void Execute(IConnection connection, CpCharacterBegin packet) {
+        var index = packet.CharacterIndex;
+
+        var logger = GetLogger();
+        var sender = GetPacketSender();
         var repository = GetPlayerRepository();
-        var player = repository.FindByConnectionId(Connection.Id);
 
-        if (index < Configuration.Character.Maximum) {
-            if (player.Characters is not null) {
-                var count = player.Characters.Count;
+        var player = repository.FindByConnectionId(connection.Id);
 
-                if (index < count) {
-                    var result = await LoadPlayer(player, index);
+        if (player is not null) {
+            if (index < Configuration!.Character.Maximum) {
+                ExecuteLoad(logger, player, index);
+            }
+            else {
+                sender.SendAlertMessage(player, AlertMessageType.Failed, MenuResetType.Characters);
+            }
+        }
+    }
 
-                    if (result) {
-                        CharacterService.CancelExclusion(player.Character.CharacterId);
+    private async void ExecuteLoad(ILogger logger, IPlayer player, int index) {
+        if (player.Characters is not null) {
+            var count = player.Characters.Count;
 
-                        JoinGame(player);
-                    }
+            if (index < count) {
+                var success = await LoadPlayer(logger, player, index);
+
+                if (success) {
+                    CharacterService!.CancelExclusion(player.Character.CharacterId);
+
+                    JoinGame.Join(player);
                 }
             }
         }
-        else {
-            var sender = GetSender();
-            sender?.SendAlertMessage(player, AlertMessageType.Failed, MenuResetType.Characters);
-        }
     }
 
-    private async Task<bool> LoadPlayer(IPlayer player, int index) {
+    private async Task<bool> LoadPlayer(ILogger logger, IPlayer player, int index) {
+        var success = false;
         var characterId = player.Characters[index].CharacterId;
-        var result = false;
-
-        ICharacterDatabase? database = null;
 
         try {
-            database = new CharacterDatabase(Configuration, DatabaseService.DatabaseFactory);
-
-            result = await database.LoadCharacterAsync(characterId, player);
+            success = await Database.LoadCharacterAsync(characterId, player);
         }
         catch (Exception ex) {
-            await WriteExceptionLog(player.Username, ex.Message);
-        }
-        finally {
-            database?.Dispose();
+            await WriteExceptionLog(logger, player.Username, ex.Message);
         }
 
-        return result;
+        return success;
     }
 
-    private void JoinGame(IPlayer player) {
-        var game = new JoinGame() {
-            Player = player,
-            Logger = GetLogger(),
-            PacketSender = GetSender(),
-            Configuration = Configuration,
-            InstanceService = InstanceService,
-            ContentService = ContentService,
-            PlayerRepository = ConnectionService!.PlayerRepository
-        };
-
-        game.Join();
-    }
-
-    private IPlayerRepository? GetPlayerRepository() {
-        return ConnectionService?.PlayerRepository;
-    }
-
-    private ILogger? GetLogger() {
-        return LoggerService?.Logger;
-    }
-
-    private MapPassphrase? GetMapPassphrase() {
-        return PassphraseService?.Passphrases;
-    }
-
-    private Task WriteExceptionLog(string username, string message) {
-        var logger = GetLogger();
-
-        logger?.Error(GetType().Name, $"Character: An error ocurred by {username} ... {message}");
+    private Task WriteExceptionLog(ILogger logger, string username, string message) {
+        logger.Error(GetType().Name, $"Character: An error ocurred by {username} ... {message}");
 
         return Task.CompletedTask;
-    }
-
-    private IPacketSender? GetSender() {
-        return PacketSenderService?.PacketSender;
     }
 }

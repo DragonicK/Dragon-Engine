@@ -1,24 +1,22 @@
-﻿using Dragon.Network;
-using Dragon.Network.Messaging.SharedPackets;
+﻿using Dragon.Core.Services;
 
-using Dragon.Game.Services;
+using Dragon.Network;
+using Dragon.Network.Messaging;
+
+using Dragon.Game.Network;
 
 namespace Dragon.Game.Routes;
 
-public sealed class CloseShop {
-    public IConnection? Connection { get; set; }
-    public CpShopClose? Packet { get; set; }
-    public ConnectionService? ConnectionService { get; init; }
+public sealed class CloseShop : PacketRoute, IPacketRoute {
+    public MessageHeader Header => MessageHeader.ShopClose;
 
-    public void Process() {
-        var repository = ConnectionService!.PlayerRepository;
+    public CloseShop(IServiceInjector injector) : base(injector) { }
 
-        if (Connection is not null) {
-            var player = repository!.FindByConnectionId(Connection.Id);
+    public void Process(IConnection connection, object packet) {
+        var player = GetPlayerRepository().FindByConnectionId(connection.Id);
 
-            if (player is not null) {
-                player.ShopId = 0;
-            }
+        if (player is not null) {
+            player.ShopId = 0;
         }
     }
 }

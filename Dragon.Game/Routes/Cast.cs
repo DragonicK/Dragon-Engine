@@ -1,29 +1,36 @@
-﻿using Dragon.Network;
+﻿using Dragon.Core.Services;
+
+using Dragon.Network;
+using Dragon.Network.Messaging;
 using Dragon.Network.Messaging.SharedPackets;
 
-using Dragon.Game.Services;
+using Dragon.Game.Network;
 
 namespace Dragon.Game.Routes;
 
-public sealed class Cast {
-    public IConnection? Connection { get; set; }
-    public PacketCast? Packet { get; set; }
-    public ConnectionService? ConnectionService { get; init; }
+public sealed class Cast : PacketRoute, IPacketRoute {
+    public MessageHeader Header => MessageHeader.Cast;
 
-    public void Process() {
-        var repository = ConnectionService!.PlayerRepository;
+    public Cast(IServiceInjector injector) : base(injector) { }
 
-        if (Connection is not null) {
-            var player = repository!.FindByConnectionId(Connection.Id);
+    public void Process(IConnection connection, object packet) {
+        var received = packet as PacketCast;
 
-            if (player is not null) {
-                var index = Packet!.Index;
+        if (received is not null) {
+            ExecuteCast(connection, received);
+        }
+    }
 
-                if (index > 0) {
-                    index--;
+    private void ExecuteCast(IConnection connection, PacketCast packet) {
+        var player = GetPlayerRepository().FindByConnectionId(connection.Id);
 
-                    player.Combat.BufferSkill(index);
-                }
+        if (player is not null) {
+            var index = packet.Index;
+
+            if (index > 0) {
+                index--;
+
+                player.Combat.BufferSkill(index);
             }
         }
     }

@@ -15,9 +15,8 @@ using Dragon.Game.Players;
 using Dragon.Game.Messages;
 using Dragon.Game.Instances;
 using Dragon.Game.Instances.Chests;
-using Dragon.Core.Model.Items;
 
-namespace Dragon.Game.Network;
+namespace Dragon.Game.Network.Senders;
 
 public interface IPacketSender {
     void SendPing(IPlayer player);

@@ -1,26 +1,22 @@
-﻿using Dragon.Network;
-using Dragon.Network.Messaging.SharedPackets;
+﻿using Dragon.Core.Services;
 
-using Dragon.Game.Services;
+using Dragon.Network;
+using Dragon.Network.Messaging;
+
+using Dragon.Game.Network;
 
 namespace Dragon.Game.Routes;
 
-public sealed class CloseWarehouse {
-    public IConnection? Connection { get; set; }
-    public CpWarehouseClose? Packet { get; set; }
-    public LoggerService? LoggerService { get; init; }
-    public ConfigurationService? Configuration { get; init; }
-    public ConnectionService? ConnectionService { get; init; }
+public sealed class CloseWarehouse : PacketRoute, IPacketRoute {
+    public MessageHeader Header => MessageHeader.WarehouseClose;
 
-    public void Process() {
-        var repository = ConnectionService!.PlayerRepository;
+    public CloseWarehouse(IServiceInjector injector) : base(injector) { }
 
-        if (Connection is not null) {
-            var player = repository!.FindByConnectionId(Connection.Id);
+    public void Process(IConnection connection, object packet) {
+        var player = GetPlayerRepository().FindByConnectionId(connection.Id);
 
-            if (player is not null) {
-                player.IsWarehouseOpen = false;
-            }
+        if (player is not null) {
+            player.IsWarehouseOpen = false;
         }
     }
 }

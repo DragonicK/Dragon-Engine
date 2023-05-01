@@ -9,6 +9,7 @@ public sealed class ListenerService : IService {
     public ServicePriority Priority => ServicePriority.Low;
     public IEngineListener? ServerListener { get; private set; }
     public IServiceContainer? ServiceContainer { get; private set; }
+    public IServiceInjector? ServiceInjector { get; private set; }
     public ConnectionService? ConnectionService { get; private set; }
     public IncomingMessageService? IncomingMessageService { get; private set; }
     public OutgoingMessageService? OutgoingMessageService { get; private set; }
@@ -31,8 +32,8 @@ public sealed class ListenerService : IService {
         var incomingMessage = IncomingMessageService.IncomingMessageQueue;
         var outgoingWriter = OutgoingMessageService!.OutgoingMessageWriter;
 
-        JoinServer = new JoinServer(ServiceContainer!);
-        LeaveServer = new LeaveServer(ServiceContainer!);
+        JoinServer = new JoinServer(ServiceInjector!);
+        LeaveServer = new LeaveServer(ServiceInjector!);
 
         ServerListener = new EngineListener() {
             MaximumConnections = Configuration!.MaximumConnections,

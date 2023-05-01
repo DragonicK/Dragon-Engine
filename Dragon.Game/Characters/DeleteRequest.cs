@@ -1,6 +1,6 @@
 ﻿namespace Dragon.Game.Characters;
 
-public class DeleteRequest : IDeleteRequest {
+public sealed class DeleteRequest : IDeleteRequest {
     public long Id { get; set; }
     public string Name { get; set; }
     public long AccountId { get; set; }

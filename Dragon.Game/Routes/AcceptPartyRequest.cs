@@ -1,37 +1,31 @@
-﻿using Dragon.Network;
-using Dragon.Network.Messaging.SharedPackets;
+﻿using Dragon.Core.Services;
 
-using Dragon.Game.Services;
+using Dragon.Network;
+using Dragon.Network.Messaging;
+
+using Dragon.Game.Network;
 using Dragon.Game.Manager;
 using Dragon.Game.Players;
 
 namespace Dragon.Game.Routes;
 
-public sealed class AcceptPartyRequest {
-    public IConnection? Connection { get; set; }
-    public CpAcceptPartyRequest? Packet { get; set; }
-    public PacketSenderService? PacketSenderService { get; init; }
-    public ConnectionService? ConnectionService { get; init; }
-    public LoggerService? LoggerService { get; init; }
-    public InstanceService? InstanceService { get; init; }
+public sealed class AcceptPartyRequest : PacketRoute, IPacketRoute {
+    public MessageHeader Header => MessageHeader.AcceptParty;
 
-    public void Process() {
-        var sender = PacketSenderService!.PacketSender;
-        var repository = ConnectionService!.PlayerRepository;
+    private readonly PartyAcceptManager PartyManager;
 
-        if (Connection is not null) {
-            var player = repository!.FindByConnectionId(Connection.Id);
+    public AcceptPartyRequest(IServiceInjector injector) : base(injector) {
+        PartyManager = new PartyAcceptManager(injector);
+    }
 
-            if (player is not null) {
-                var party = GetPartyManager(player);
+    public void Process(IConnection connection, object packet) {
+        var player = GetPlayerRepository().FindByConnectionId(connection.Id);
 
-                if (party is not null) {
-                    var manager = new PartyAcceptManager() {
-                        PacketSender = sender
-                    };
+        if (player is not null) {
+            var party = GetPartyManager(player);
 
-                    manager.ProcessAcceptRequest(party, player);
-                }
+            if (party is not null) {
+                PartyManager.ProcessAcceptRequest(party, player);
             }
         }
     }
@@ -40,10 +34,8 @@ public sealed class AcceptPartyRequest {
         var id = player.PartyInvitedId;
         var parties = InstanceService!.Parties;
 
-        if (parties.ContainsKey(id)) {
-            return parties[id];
-        }
+        parties.TryGetValue(id, out var party);
 
-        return null;
+        return party;
     }
 }

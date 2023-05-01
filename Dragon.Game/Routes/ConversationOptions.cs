@@ -1,50 +1,39 @@
-﻿using Dragon.Network;
+﻿using Dragon.Core.Services;
+
+using Dragon.Network;
+using Dragon.Network.Messaging;
 using Dragon.Network.Messaging.SharedPackets;
 
-using Dragon.Game.Services;
+using Dragon.Game.Network;
 using Dragon.Game.Manager;
 
 namespace Dragon.Game.Routes;
 
-public sealed class ConversationOptions {
-    public IConnection? Connection { get; set; }
-    public PacketConversationOption? Packet { get; set; }
-    public PacketSenderService? PacketSenderService { get; init; }
-    public ConnectionService? ConnectionService { get; init; }
-    public LoggerService? LoggerService { get; init; }
-    public ContentService? ContentService { get; init; }
-    public InstanceService? InstanceService { get; init; }
+public sealed class ConversationOptions : PacketRoute, IPacketRoute {
+    public MessageHeader Header => MessageHeader.ConversationOption;
 
-    public void Process() {
-        if (IsValidPacket()) {
-            var repository = ConnectionService!.PlayerRepository;
-            var sender = PacketSenderService!.PacketSender;
+    private readonly ConversationManager ConversationManager;
 
-            if (Connection is not null) {
-                var player = repository!.FindByConnectionId(Connection.Id);
+    public ConversationOptions(IServiceInjector injector) : base(injector) {
+        ConversationManager = new ConversationManager(injector);
+    }
 
-                if (player is not null) {
-                    var manager = new ConversationManager() {
-                        Player = player,
-                        PacketSender = sender,
-                        Shops = ContentService!.Shops,
-                        Effects = ContentService!.Effects,
-                        InstanceService = InstanceService,
-                        Conversations = ContentService!.Conversations
-                    };
+    public void Process(IConnection connection, object packet) {
+        var received = packet as PacketConversationOption;
 
-                    manager.ProcessOptions(Packet!.ConversationId, Packet.ChatIndex, Packet.Option);
-                }
+        if (received is not null) {
+            if (IsValidPacket(received)) {
+                ConversationManager.ProcessOptions(received.ConversationId, received.ChatIndex, received.Option);
             }
         }
     }
 
-    private bool IsValidPacket() {
-        if (Packet!.ConversationId <= 0) {
+    private bool IsValidPacket(PacketConversationOption packet) {
+        if (packet.ConversationId <= 0) {
             return false;
         }
 
-        if (Packet!.ChatIndex <= 0) {
+        if (packet.ChatIndex <= 0) {
             return false;
         }
 
