@@ -9,5 +9,5 @@ public sealed class SpActionMessage : IMessagePacket {
     public QbColor Color { get; set; }
     public int X { get; set; }
     public int Y { get; set; }
-    public string Message { get; set; } = string.Empty;
+    public int Message { get; set; }
 }
