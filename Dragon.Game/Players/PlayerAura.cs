@@ -2,7 +2,7 @@
 
 namespace Dragon.Game.Players;
 
-public class PlayerAura : IPlayerAura {
+public sealed class PlayerAura : IPlayerAura {
     public int Count => _auras.Count;
 
     private const int Capacity = 32;

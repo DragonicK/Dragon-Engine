@@ -5,7 +5,7 @@ using Dragon.Core.Model.Premiums;
 
 namespace Dragon.Game.Players;
 
-public class PlayerService : IPlayerService {
+public sealed class PlayerService : IPlayerService {
     public IDatabase<Premium>? Premiums { get; set; }
     public float Character { get; private set; }
     public float Party { get; private set; }

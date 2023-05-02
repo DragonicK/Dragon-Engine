@@ -2,7 +2,7 @@
 
 namespace Dragon.Game.Players;
 
-public class PlayerAppearance : IPlayerAppearance {
+public sealed class PlayerAppearance : IPlayerAppearance {
     private readonly CharacterAppearance _appearance;
 
     public PlayerAppearance(long characterId, CharacterAppearance appearance) {

@@ -4,7 +4,7 @@ using Dragon.Core.Model.Entity;
 
 namespace Dragon.Game.Instances.Chests;
 
-public class InstanceChest : IInstanceChest {
+public sealed class InstanceChest : IInstanceChest {
     public int Id { get; set; }
     public int Index { get; set; }
     public int X { get; set; }

@@ -1,6 +1,6 @@
 ﻿namespace Dragon.Game.Configurations.Data;
 
-public class Mail {
+public sealed class Mail {
     public bool Enabled { get; set; }
     public int MaximumAttachment { get; set; }
     public int MaximumGold { get; set; }

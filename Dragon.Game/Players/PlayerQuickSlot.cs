@@ -3,7 +3,7 @@ using Dragon.Core.Model.Characters;
 
 namespace Dragon.Game.Players;
 
-public class PlayerQuickSlot : IPlayerQuickSlot {
+public sealed class PlayerQuickSlot : IPlayerQuickSlot {
     private readonly IList<CharacterQuickSlot> _slots;
     private readonly long _characterId;
 

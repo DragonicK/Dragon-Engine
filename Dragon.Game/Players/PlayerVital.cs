@@ -4,7 +4,7 @@ using Dragon.Core.Model.Characters;
 
 namespace Dragon.Game.Players;
 
-public class PlayerVital : IEntityVital, IPlayerVital {
+public sealed class PlayerVital : IEntityVital, IPlayerVital {
     private readonly CharacterVital _vital;
 
     private readonly int[] maximum;

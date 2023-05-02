@@ -4,7 +4,7 @@ using Dragon.Core.Logs;
 
 namespace Dragon.Game.Network;
 
-public class PacketRouter : IPacketRouter {
+public sealed class PacketRouter : IPacketRouter {
     private readonly Dictionary<Type, IPacketRoute> routes;
     private readonly ILogger _logger;
 

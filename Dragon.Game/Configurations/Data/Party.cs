@@ -1,6 +1,6 @@
 ﻿namespace Dragon.Game.Configurations.Data;
 
-public class Party {
+public sealed class Party {
     public int Maximum { get; set; }
     public int MaximumLevel { get; set; }
     public int MaximumMembers { get; set; }

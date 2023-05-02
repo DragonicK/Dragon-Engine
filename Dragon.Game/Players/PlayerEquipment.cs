@@ -9,7 +9,7 @@ using Dragon.Core.Model.EquipmentSets;
 
 namespace Dragon.Game.Players;
 
-public class PlayerEquipment : IPlayerEquipment {
+public sealed class PlayerEquipment : IPlayerEquipment {
     public IEntityAttribute Attributes { get; }
     public IDatabase<Item>? Items { get; set; }
     public IDatabase<Equipment>? Equipments { get; set; }

@@ -2,7 +2,7 @@
 
 namespace Dragon.Game.Configurations.Data;
 
-public class Rate {
+public sealed class Rate {
     public float Character { get; set; }
     public float Talent { get; set; }
     public float Party { get; set; }

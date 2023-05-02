@@ -1,6 +1,6 @@
 ﻿namespace Dragon.Game.Configurations.Data;
 
-public class Map {
+public sealed class Map {
     public int MaximumNpcs { get; set; }
     public int MaximumPlayers { get; set; }
     public int MaximumCorpses { get; set; }

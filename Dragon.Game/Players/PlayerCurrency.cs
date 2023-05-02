@@ -3,7 +3,7 @@ using Dragon.Core.Model.Characters;
 
 namespace Dragon.Game.Players;
 
-public class PlayerCurrency : IPlayerCurrency {
+public sealed class PlayerCurrency : IPlayerCurrency {
     private readonly IList<CharacterCurrency> _currencies;
     private readonly long _characterId;
 

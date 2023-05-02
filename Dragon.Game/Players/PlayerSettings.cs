@@ -2,7 +2,7 @@
 
 namespace Dragon.Game.Players;
 
-public class PlayerSettings : IPlayerSettings {
+public sealed class PlayerSettings : IPlayerSettings {
     public bool ViewEquipment {
         get {
             return _settings.ViewEquipment;

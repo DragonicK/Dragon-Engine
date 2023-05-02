@@ -8,7 +8,7 @@ using Dragon.Core.Model.Characters;
 
 namespace Dragon.Game.Players;
 
-public class Player : IPlayer {
+public sealed class Player : IPlayer {
     public int Id { get; set; }
     public Account Account { get; set; }
     public long AccountId { get; set; }

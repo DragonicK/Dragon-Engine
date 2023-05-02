@@ -4,7 +4,7 @@ using Dragon.Core.Model.Entity;
 
 namespace Dragon.Game.Instances;
 
-public class InstanceEntity : IEntity, IInstanceEntity {
+public sealed class InstanceEntity : IEntity, IInstanceEntity {
     public int Id { get; set; }
     public int X { get; set; }
     public int Y { get; set; }

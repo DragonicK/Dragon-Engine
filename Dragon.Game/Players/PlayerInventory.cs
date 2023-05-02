@@ -4,7 +4,7 @@ using Dragon.Core.Model.Characters;
 
 namespace Dragon.Game.Players;
 
-public class PlayerInventory : IPlayerInventory {
+public sealed class PlayerInventory : IPlayerInventory {
     public IDatabase<Item>? Items { get; set; }
     public int Count => _inventories.Count;
 

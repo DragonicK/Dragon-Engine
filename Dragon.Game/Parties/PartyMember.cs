@@ -2,7 +2,7 @@
 
 namespace Dragon.Game.Parties;
 
-public class PartyMember {
+public sealed class PartyMember {
     public int Index { get; set; }
     public int Model { get; set; }
     public long CharacterId { get; set; }

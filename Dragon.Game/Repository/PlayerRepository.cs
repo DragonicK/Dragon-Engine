@@ -80,5 +80,4 @@ public class PlayerRepository : IPlayerRepository {
     public IDictionary<int, IPlayer> GetPlayers() {
         return players;
     }
-
 }

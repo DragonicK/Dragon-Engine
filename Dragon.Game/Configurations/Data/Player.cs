@@ -1,6 +1,6 @@
 ﻿namespace Dragon.Game.Configurations.Data;
 
-public class Player {
+public sealed class Player {
     public bool PersonalShop { get; set; }
     public int MaximumNameLength { get; set; }
     public int MaximumAuras { get; set; }

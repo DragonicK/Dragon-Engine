@@ -2,7 +2,7 @@
 
 namespace Dragon.Game.Regions;
 
-public class Region {
+public sealed class Region {
     public int Id { get; set; }
     public int MapId { get; set; }
     public InstanceType Type { get; set; }

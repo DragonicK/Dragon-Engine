@@ -6,7 +6,7 @@ using Dragon.Core.Model.Characters;
 
 namespace Dragon.Game.Players;
 
-public class PlayerEffect : IEntityEffect {
+public sealed class PlayerEffect : IEntityEffect {
     public IEntityAttribute Attributes { get; }
     public IDatabase<Effect>? Effects { get; set; }
     public IDatabase<GroupAttribute>? EffectAttributes { get; set; }

@@ -1,7 +1,7 @@
 ﻿
 namespace Dragon.Game.Configurations.Data;
 
-public class Character {
+public sealed class Character {
     public int Maximum { get; set; }
     public bool Create { get; set; }
     public bool Delete { get; set; }

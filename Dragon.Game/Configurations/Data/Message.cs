@@ -1,6 +1,6 @@
 ﻿namespace Dragon.Game.Configurations.Data;
 
-public class Message {
+public sealed class Message {
     public int MaximumLength { get; set; }
     public int SayCooldown { get; set; }
     public int SayInterval { get; set; }

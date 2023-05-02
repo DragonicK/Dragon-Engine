@@ -1,6 +1,6 @@
 ﻿namespace Dragon.Game.Configurations.Data;
 
-public class Trade {
+public sealed class Trade {
     public int Maximum { get; set; }
     public int AcceptTimeOut { get; set; }
     public int CheckIntegrityTimeOut { get; set; }

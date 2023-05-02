@@ -1,6 +1,6 @@
 ﻿namespace Dragon.Game.Configurations.Data;
 
-public class ChestDrop {
+public sealed class ChestDrop {
     public int MonsterDuration { get; set; }
     public int BossDuration { get; set; }
     public int RollDiceDuration { get; set; }

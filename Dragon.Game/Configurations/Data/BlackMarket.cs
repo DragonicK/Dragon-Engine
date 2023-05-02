@@ -1,6 +1,6 @@
 ﻿namespace Dragon.Game.Configurations.Data;
 
-public class BlackMarket {
+public sealed class BlackMarket {
     public bool Enabled { get; set; }
     public int MaximumItemPerPage { get; set; }
     public string Sender { get; set; }

@@ -2,7 +2,7 @@
 
 namespace Dragon.Game.Regions;
 
-public class RegionEntity : IRegionEntity {
+public sealed class RegionEntity : IRegionEntity {
     public int Id { get; set; }
     public int X { get; set; }
     public int Y { get; set; }

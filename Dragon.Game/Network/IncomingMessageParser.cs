@@ -3,7 +3,7 @@ using Dragon.Network.Incoming;
 
 namespace Dragon.Game.Network;
 
-public class IncomingMessageParser : IIncomingMessageParser {
+public sealed class IncomingMessageParser : IIncomingMessageParser {
     public IConnectionRepository? ConnectionRepository { get; init; }
     public IPacketRouter? PacketRouter { get; init; }
 

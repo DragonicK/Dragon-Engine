@@ -1,14 +1,13 @@
 ﻿using Dragon.Core.Model;
-using Dragon.Core.Services; 
-
-using Dragon.Game.Manager;
+using Dragon.Core.Services;
 using Dragon.Game.Services;
 using Dragon.Game.Instances;
 using Dragon.Game.Network.Senders;
+using Dragon.Game.Players;
 
-namespace Dragon.Game.Players;
+namespace Dragon.Game.Manager;
 
-public sealed class PlayerMovement {
+public sealed class PlayerMovementManager {
     public InstanceService? InstanceService { get; private set; }
     public PacketSenderService? PacketSenderService { get; private set; }
 
@@ -16,7 +15,7 @@ public sealed class PlayerMovement {
 
     private readonly WarperManager WarperManager;
 
-    public PlayerMovement(IServiceInjector injector) {
+    public PlayerMovementManager(IServiceInjector injector) {
         injector.Inject(this);
 
         WarperManager = new WarperManager(injector);
@@ -94,7 +93,7 @@ public sealed class PlayerMovement {
         if (instance is not null) {
             var x = player.Character.X;
             var y = player.Character.Y;
- 
+
             if (direction == Direction.Up) {
                 if (y > 0) {
                     if (CheckBlockedDirection(player, instance, direction)) {

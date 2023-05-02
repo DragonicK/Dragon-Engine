@@ -7,7 +7,7 @@ using Dragon.Core.Model.Entity;
 
 namespace Dragon.Game.Players;
 
-public class PlayerPassive : IPlayerPassive {
+public sealed class PlayerPassive : IPlayerPassive {
     public IEntityAttribute Attributes { get; }
     public IDatabase<Skill>? Skills { get; set; }
     public IDatabase<Passive>? Passives { get; set; }

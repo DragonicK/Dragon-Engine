@@ -2,7 +2,7 @@
 
 namespace Dragon.Game.Instances.Chests;
 
-public class InstanceChestItem : IInstanceChestItem {
+public sealed class InstanceChestItem : IInstanceChestItem {
     public int Id { get; set; }
     public int Level { get; set; }
     public int Value { get; set; }

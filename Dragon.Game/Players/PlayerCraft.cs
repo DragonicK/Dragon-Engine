@@ -3,7 +3,7 @@ using Dragon.Core.Model.Characters;
 
 namespace Dragon.Game.Players;
 
-public class PlayerCraft : IPlayerCraft {
+public sealed class PlayerCraft : IPlayerCraft {
     public int NextLevelExperience { get; set; }
     public int ProcessingRecipeId { get; set; }
     public CraftState State { get; set; }

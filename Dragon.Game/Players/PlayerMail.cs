@@ -3,7 +3,7 @@ using Dragon.Core.Model.Characters;
 
 namespace Dragon.Game.Players;
 
-public class PlayerMail : IPlayerMail {
+public sealed class PlayerMail : IPlayerMail {
     public int Count => _mails.Count;
 
     private const int MaximumIndexes = byte.MaxValue;

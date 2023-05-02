@@ -2,7 +2,7 @@
 
 namespace Dragon.Game.Parties;
 
-public class PartyInvitedMember {
+public sealed class PartyInvitedMember {
     public IPlayer? Player { get; set; }
     public int AcceptTimeOut { get; set; }
     public bool CouldBeRemoved { get; set; }

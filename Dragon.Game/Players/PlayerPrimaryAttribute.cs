@@ -3,7 +3,7 @@ using Dragon.Core.Model.Characters;
 
 namespace Dragon.Game.Players;
 
-public class PlayerPrimaryAttribute : IPlayerPrimaryAttribute {
+public sealed class PlayerPrimaryAttribute : IPlayerPrimaryAttribute {
     private readonly CharacterPrimaryAttribute _attribute;
 
     public PlayerPrimaryAttribute(long characterId, CharacterPrimaryAttribute attribute) {

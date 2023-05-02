@@ -2,7 +2,7 @@
 
 namespace Dragon.Game.Players;
 
-public class PlayerRecipe : IPlayerRecipe {
+public sealed class PlayerRecipe : IPlayerRecipe {
     public int Count => _recipes.Count;
 
     private readonly IList<CharacterRecipe> _recipes;

@@ -8,7 +8,7 @@ using Dragon.Core.Model.Attributes;
 
 namespace Dragon.Game.Players;
 
-public class PlayerHeraldry : IPlayerHeraldry {
+public sealed class PlayerHeraldry : IPlayerHeraldry {
     public IEntityAttribute Attributes { get; }
     public IDatabase<Item>? Items { get; set; }
     public IDatabase<Heraldry>? Heraldries { get; set; }

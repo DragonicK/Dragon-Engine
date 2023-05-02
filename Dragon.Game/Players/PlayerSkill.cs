@@ -2,7 +2,7 @@
 
 namespace Dragon.Game.Players;
 
-public class PlayerSkill : IPlayerSkill {
+public sealed class PlayerSkill : IPlayerSkill {
     public int Count => _skills.Count;
 
     private readonly IList<CharacterSkill> _skills;

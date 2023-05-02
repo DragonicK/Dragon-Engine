@@ -1,6 +1,6 @@
 ﻿namespace Dragon.Game.Configurations.Data;
 
-public class ProhibitedNames {
+public sealed class ProhibitedNames {
     public List<string> Names { get; set; }
 
     public ProhibitedNames() {

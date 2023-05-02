@@ -3,7 +3,7 @@ using Dragon.Core.Model.Entity;
 
 namespace Dragon.Game.Players;
 
-public class PlayerAchievement : IPlayerAchievement {
+public sealed class PlayerAchievement : IPlayerAchievement {
     public IEntityAttribute Attributes { get; }
 
     private readonly IList<CharacterAchievement> _achievements;

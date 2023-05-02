@@ -6,7 +6,7 @@ using Dragon.Core.Model.Attributes;
 
 namespace Dragon.Game.Players;
 
-public class PlayerTitle : IPlayerTitle {
+public sealed class PlayerTitle : IPlayerTitle {
     public IEntityAttribute Attributes { get; }
     public IDatabase<Title>? Titles { get; set; }
     public IDatabase<GroupAttribute>? TitleAttributes { get; set; }
