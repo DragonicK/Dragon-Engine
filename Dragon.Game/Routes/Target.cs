@@ -1,38 +1,31 @@
-﻿using Dragon.Network;
+﻿using Dragon.Core.Services;
+
+using Dragon.Network;
+using Dragon.Network.Messaging;
 using Dragon.Network.Messaging.SharedPackets;
 
+using Dragon.Game.Network;
 using Dragon.Game.Manager;
-using Dragon.Game.Services;
 
 namespace Dragon.Game.Routes;
 
-public sealed class Target {
-    public IConnection? Connection { get; set; }
-    public PacketTarget? Packet { get; set; }
-    public ContentService? ContentService { get; init; }
-    public ConnectionService? ConnectionService { get; init; }
-    public PacketSenderService? PacketSenderService { get; init; }
-    public InstanceService? InstanceService { get; init; }
+public sealed class Target : PacketRoute, IPacketRoute {
+    public MessageHeader Header => MessageHeader.Target;
 
-    public void Process() {
-        var repository = ConnectionService!.PlayerRepository;
-        var sender = PacketSenderService!.PacketSender;
+    private readonly TargetManager TargetManager;
 
-        if (Connection is not null) {
-            var player = repository!.FindByConnectionId(Connection.Id);
+    public Target(IServiceInjector injector) : base(injector) {
+        TargetManager = new TargetManager(injector);
+    }
+
+    public void Process(IConnection connection, object packet) {
+        var received = packet as PacketTarget;
+
+        if (received is not null) {
+            var player = FindByConnection(connection);
 
             if (player is not null) {
-
-                var manager = new TargetManager() {
-                    Player = player,
-                    PacketSender = sender,
-                    ContentService = ContentService,
-                    InstanceService = InstanceService,
-                    ConnectionService = ConnectionService,
-                    PlayerRepository = repository
-                };
-
-                manager.ProcessTarget(Packet!.Index, Packet.TargetType);
+                TargetManager.ProcessTarget(player, received.Index, received.TargetType);
             }
         }
     }

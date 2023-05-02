@@ -1,55 +1,58 @@
 ﻿using Dragon.Core.Model;
-using Dragon.Core.Model.Entity;
+using Dragon.Core.Services;
 using Dragon.Core.Model.Npcs;
+using Dragon.Core.Model.Entity;
 
-using Dragon.Game.Services;
 using Dragon.Game.Players;
+using Dragon.Game.Services;
 using Dragon.Game.Instances;
-using Dragon.Game.Repository;
 using Dragon.Game.Network.Senders;
 
 namespace Dragon.Game.Manager;
 
-public class TargetManager {
-    public IPlayer? Player { get; init; }
-    public IPacketSender? PacketSender { get; init; }
-    public InstanceService? InstanceService { get; init; }
-    public ContentService? ContentService { get; init; }
-    public IPlayerRepository? PlayerRepository { get; init; }
-    public ConfigurationService? Configuration { get; init; }
-    public ConnectionService? ConnectionService { get; init; }
+public sealed class TargetManager {
+    public ContentService? ContentService { get; private set; }
+    public InstanceService? InstanceService { get; private set; }
+    public ConfigurationService? Configuration { get; private set; }
+    public ConnectionService? ConnectionService { get; private set; }
+    public PacketSenderService? PacketSenderService { get; private set; }
 
-    public void ProcessTarget(int index, TargetType targetType) {
-        if (Player!.IsWarehouseOpen) {
+    private readonly ChestManager ChestManager;
+
+    public TargetManager(IServiceInjector injector) {
+        injector.Inject(this);
+
+        ChestManager = new ChestManager(injector);
+    }
+
+    public void ProcessTarget(IPlayer player, int index, TargetType targetType) {
+        if (player.IsWarehouseOpen || player.ShopId > 0) {
             return;
         }
 
-        if (Player!.ShopId > 0) {
-            return;
-        }
+        var sender = GetPacketSender();
+        var lastTargetType = player.TargetType;
 
-        var lastTargetType = Player!.TargetType;
-     
-        Player!.TargetType = targetType;
-        Player!.Target = targetType == TargetType.None ? null : GetEntity(index, targetType);
+        player.TargetType = targetType;
+        player.Target = targetType == TargetType.None ? null : GetEntity(player, index, targetType);
 
         if (lastTargetType == TargetType.Chest) {
             if (targetType != TargetType.Chest) {
-                CloseChest();
+                CloseChest(player);
             }
         }
 
-        if (Player!.TargetType == TargetType.Npc) {
-            SelectEntityNpc();
+        if (player.TargetType == TargetType.Npc) {
+            SelectEntityNpc(sender, player);
         }
 
-        if (Player!.TargetType == TargetType.Chest) {
-            OpenChest(index);
+        if (player.TargetType == TargetType.Chest) {
+            OpenChest(player, index);
         }
     }
 
-    private void SelectEntityNpc() {
-        var entity = Player!.Target;
+    private void SelectEntityNpc(IPacketSender sender, IPlayer player) {
+        var entity = player.Target;
 
         if (entity is not null) {
             var npc = GetNpc(entity.Id);
@@ -57,52 +60,30 @@ public class TargetManager {
             if (npc is not null) {
                 if (npc.Behaviour != NpcBehaviour.Monster && npc.Behaviour != NpcBehaviour.Boss) {
                     if (npc.Conversations.Count > 0) {
-                        PacketSender!.SendConversation(Player!, npc.Id);
+                        sender.SendConversation(player, npc.Id);
                     }
                 }
             }
         }
     }
 
-    private void OpenChest(int index) {
-        var manager = new ChestManager() {
-            Player = Player,
-            PacketSender = PacketSender,
-            Configuration = Configuration,
-            Drops = ContentService!.Drops,
-            Chests = ContentService!.Chests,
-            InstanceService = InstanceService,
-            PlayerRepository = PlayerRepository
-        };
-
-        manager.OpenChest(index);
+    private void OpenChest(IPlayer player, int index) {
+        ChestManager.OpenChest(player, index);
     }
 
-    private void CloseChest() {
-        var manager = new ChestManager() {
-            Player = Player,
-            PacketSender = PacketSender,
-            Configuration = Configuration,
-            Drops = ContentService!.Drops,
-            Chests = ContentService!.Chests,
-            InstanceService = InstanceService,
-            PlayerRepository = PlayerRepository
-        };
-
-        manager.CloseChest();
+    private void CloseChest(IPlayer player) {
+        ChestManager.CloseChest(player);
     }
 
-    private IEntity? GetEntity(int index, TargetType targetType) {
-        var instance = GetInstance();
+    private IEntity? GetEntity(IPlayer player, int index, TargetType targetType) {
+        var instance = GetInstance(player);
 
         if (instance is not null) {
             if (targetType == TargetType.Player) {
                 return instance.GetPlayer(index);
             }
             else if (targetType == TargetType.Npc) {
-                index--;
-
-                return instance.Entities[index];
+                return instance.Entities[--index];
             }
             else if (targetType == TargetType.Chest) {
                 return instance.GetChest(index);
@@ -112,24 +93,24 @@ public class TargetManager {
         return null;
     }
 
-    private IInstance? GetInstance() {
-        var instanceId = Player!.Character.Map;
+    private IInstance? GetInstance(IPlayer player) {
+        var instanceId = player.Character.Map;
         var instances = InstanceService!.Instances;
 
-        if (instances.ContainsKey(instanceId)) {
-            return instances[instanceId];
-        }
+        instances.TryGetValue(instanceId, out var instance);
 
-        return null;
+        return instance;
+    }
+
+    private IPacketSender GetPacketSender() {
+        return PacketSenderService!.PacketSender!;
     }
 
     private Npc? GetNpc(int id) {
         var npcs = ContentService!.Npcs;
 
-        if (npcs is not null) {
-            return npcs[id];
-        }
+        npcs.TryGet(id, out var npc);
 
-        return null;
+        return npc;
     }
 }
