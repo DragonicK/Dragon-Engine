@@ -1,41 +1,43 @@
-﻿using Dragon.Network;
+﻿using Dragon.Core.Services;
+
+using Dragon.Network;
+using Dragon.Network.Messaging;
 using Dragon.Network.Messaging.SharedPackets;
 
 using Dragon.Game.Manager;
-using Dragon.Game.Services;
+using Dragon.Game.Network;
+using Dragon.Game.Players;
 
 namespace Dragon.Game.Routes;
 
-public sealed class ShopSellItem {
-    public IConnection? Connection { get; set; }
-    public CpShopSellItem? Packet { get; set; }
-    public ContentService? ContentService { get; init; }
-    public ConnectionService? ConnectionService { get; init; }
-    public PacketSenderService? PacketSenderService { get; init; }
+public sealed class ShopSellItem : PacketRoute, IPacketRoute {
+    public MessageHeader Header => MessageHeader.ShopSellItem;
 
-    public void Process() {
-        if (IsValidPacket()) {
-            var repository = ConnectionService!.PlayerRepository;
-            var sender = PacketSenderService!.PacketSender;
+    private readonly ShopManager ShopManager;
 
-            if (Connection is not null) {
-                var player = repository!.FindByConnectionId(Connection.Id);
+    public ShopSellItem(IServiceInjector injector) : base(injector) {
+        ShopManager = new ShopManager(injector);
+    }
 
-                if (player is not null) {
-                    var manager = new ShopManager() {
-                        Player = player,
-                        PacketSender = sender,
-                        Items = ContentService!.Items,
-                        Shops = ContentService!.Shops
-                    };
+    public void Process(IConnection connection, object packet) {
+        var received = packet as CpShopSellItem;
 
-                    manager.ProcessSellRequest(Packet!.Index, Packet!.Amount);
-                }
+        if (received is not null) {
+            var player = GetPlayerRepository().FindByConnectionId(connection.Id);
+
+            if (player is not null) {
+                Execute(player, received);
             }
         }
     }
 
-    private bool IsValidPacket() {
-        return Packet!.Index >= 1 && Packet.Amount >= 1;
+    private void Execute(IPlayer player, CpShopSellItem packet) {
+        if (IsValidPacket(packet)) {
+            ShopManager.ProcessSellRequest(player, packet.Index, packet.Amount);
+        }
+    }
+
+    private bool IsValidPacket(CpShopSellItem packet) {
+        return packet.Index >= 1 && packet.Amount >= 1;
     }
 }

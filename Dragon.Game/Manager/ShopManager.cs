@@ -1,25 +1,29 @@
 ﻿using Dragon.Core.Model;
 using Dragon.Core.Content;
+using Dragon.Core.Services;
 using Dragon.Core.Model.Shops;
 using Dragon.Core.Model.Items;
 using Dragon.Core.Model.Characters;
 
 using Dragon.Game.Players;
+using Dragon.Game.Services;
 using Dragon.Game.Network.Senders;
 
 namespace Dragon.Game.Manager;
 
-public class ShopManager {
-    public IPlayer? Player { get; init; }
-    public IDatabase<Shop>? Shops { get; init; }
-    public IDatabase<Item>? Items { get; init; }
-    public IPacketSender? PacketSender { get; init; }
+public sealed class ShopManager {
+    public ContentService? ContentService { get; private set; }
+    public PacketSenderService? PacketSenderService { get; private set; }
 
     private const int SingleItemAmount = 1;
 
-    public void ProcessBuyRequest(int index, int amount) {
-        var id = Player!.ShopId;
-        var shop = GetShop(id);
+    public ShopManager(IServiceInjector injector) {
+        injector.Inject(this);
+    }
+
+    public void ProcessBuyRequest(IPlayer player, int index, int amount) {
+        var shop = GetShop(player.ShopId);
+        var sender = GetPacketSender();
 
         if (shop is not null) {
             index--;
@@ -27,21 +31,21 @@ public class ShopManager {
             if (index < shop.Items.Count) {
                 var item = shop.Items[index];
 
-                ContinueBuyRequest(item, amount);
+                ContinueBuyRequest(sender, player, item, amount);
             }
         }
     }
 
-    private void ContinueBuyRequest(ShopItem shopItem, int amount) {
+    private void ContinueBuyRequest(IPacketSender sender, IPlayer player, ShopItem shopItem, int amount) {
         var currency = shopItem.CurrencyId;
         var price = shopItem.Price;
 
         amount = amount <= 0 ? SingleItemAmount : amount;
 
-        var total = Player!.Currencies.Get(currency) - price * amount;
+        var total = player.Currencies.Get(currency) - price * amount;
 
         if (total < 0) {
-            PacketSender!.SendMessage(SystemMessage.InsuficientCurrency, QbColor.BrigthRed, Player!);
+            sender.SendMessage(SystemMessage.InsuficientCurrency, QbColor.BrigthRed, player);
         }
         else {
             var item = GetItem(shopItem.Id);
@@ -50,49 +54,46 @@ public class ShopManager {
                 CharacterInventory? inventory;
 
                 if (item.MaximumStack > 0) {
-                    inventory = AddStack(shopItem, amount);
+                    inventory = AddStack(player, shopItem, amount);
                 }
                 else {
-                    inventory = AddItem(shopItem, SingleItemAmount);
+                    inventory = AddItem(player, shopItem, SingleItemAmount);
                 }
 
                 if (inventory is not null) {
-                    var parameters = new string[] {
-                            item.Id.ToString(),
-                            amount.ToString()
-                        };
+                    var parameters = new string[] { item.Id.ToString(), amount.ToString() };
 
-                    Player!.Currencies.Subtract(currency, price * amount);
+                    player.Currencies.Subtract(currency, price * amount);
 
-                    PacketSender!.SendCurrencyUpdate(Player!, currency);
-                    PacketSender!.SendInventoryUpdate(Player!, inventory.InventoryIndex);
+                    sender.SendCurrencyUpdate(player, currency);
+                    sender.SendInventoryUpdate(player, inventory.InventoryIndex);
 
-                    PacketSender!.SendMessage(SystemMessage.YouObtainedItem, QbColor.BrigthGreen, Player!, parameters);
+                    sender.SendMessage(SystemMessage.YouObtainedItem, QbColor.BrigthGreen, player, parameters);
                 }
                 else {
-                    PacketSender!.SendMessage(SystemMessage.InventoryFull, QbColor.BrigthRed, Player!);
+                    sender.SendMessage(SystemMessage.InventoryFull, QbColor.BrigthRed, player);
                 }
             }
         }
     }
 
-    private CharacterInventory? AddStack(ShopItem item, int amount) {
-        var inventory = Player!.Inventories.FindByItemId(item.Id);
+    private CharacterInventory? AddStack(IPlayer player, ShopItem item, int amount) {
+        var inventory = player.Inventories.FindByItemId(item.Id);
 
         if (inventory is not null) {
             inventory.Value += amount;
         }
         else {
-            inventory = AddItem(item, amount);
+            inventory = AddItem(player, item, amount);
         }
 
         return inventory;
     }
 
-    private CharacterInventory? AddItem(ShopItem item, int amount) {
-        var maximum = Player!.Character.MaximumInventories;
+    private CharacterInventory? AddItem(IPlayer player, ShopItem item, int amount) {
+        var maximum = player.Character.MaximumInventories;
 
-        var inventory = Player!.Inventories.FindFreeInventory(maximum);
+        var inventory = player.Inventories.FindFreeInventory(maximum);
 
         if (inventory is not null) {
             inventory.ItemId = item.Id;
@@ -106,35 +107,36 @@ public class ShopManager {
         return inventory;
     }
 
-    public void ProcessSellRequest(int index, int amount) {
-        var shop = GetShop(Player!.ShopId);
+    public void ProcessSellRequest(IPlayer player, int index, int amount) {
+        var shop = GetShop(player.ShopId);
+        var sender = GetPacketSender();
 
         if (shop is not null) {
-            var inventory = Player!.Inventories.FindByIndex(index);
+            var inventory = player.Inventories.FindByIndex(index);
 
             if (inventory is not null) {
                 var item = GetItem(inventory.ItemId);
 
                 if (item is not null) {
                     if (item.Price <= 0) {
-                        PacketSender!.SendMessage(SystemMessage.ItemCannotBeSold, QbColor.BrigthRed, Player!);
+                        sender.SendMessage(SystemMessage.ItemCannotBeSold, QbColor.BrigthRed, player);
                     }
                     else {
-                        ContinueSellRequest(inventory, item, amount);
+                        ContinueSellRequest(sender, player, inventory, item, amount);
                     }
                 }
             }
         }
     }
 
-    private void ContinueSellRequest(CharacterInventory inventory, Item item, int amount) {
+    private void ContinueSellRequest(IPacketSender sender, IPlayer player, CharacterInventory inventory, Item item, int amount) {
         var index = inventory.InventoryIndex;
 
         amount = amount <= 0 ? SingleItemAmount : amount;
 
         var price = item.Price * amount;
 
-        if (Player!.Currencies.Add(CurrencyType.Gold, price)) {
+        if (player.Currencies.Add(CurrencyType.Gold, price)) {
             if (item.MaximumStack > 0) {
                 inventory.Value -= amount;
 
@@ -148,35 +150,43 @@ public class ShopManager {
                 inventory.Clear();
             }
 
-            PacketSender!.SendInventoryUpdate(Player!, index);
-            PacketSender!.SendCurrencyUpdate(Player!, CurrencyType.Gold);
+            sender.SendInventoryUpdate(player, index);
+            sender.SendCurrencyUpdate(player, CurrencyType.Gold);
 
-            var parameters = new string[] {
-                    item.Id.ToString(),
-                    amount.ToString()
-                };
+            var parameters = new string[] { item.Id.ToString(), amount.ToString() };
 
-            PacketSender!.SendMessage(SystemMessage.ItemHasBeenSold, QbColor.BrigthGreen, Player!, parameters);
+            sender.SendMessage(SystemMessage.ItemHasBeenSold, QbColor.BrigthGreen, player, parameters);
         }
         else {
-            PacketSender!.SendMessage(SystemMessage.TheCurrencyCannotBeAdded, QbColor.BrigthGreen, Player!);
+            sender.SendMessage(SystemMessage.TheCurrencyCannotBeAdded, QbColor.BrigthGreen, player);
         }
     }
 
     private Shop? GetShop(int id) {
-        if (Shops is not null) {
-            return Shops[id];
-        }
+        var shops = GetDatabaseShops();
 
-        return null;
+        shops.TryGet(id, out var shop);
+
+        return shop;
     }
 
     private Item? GetItem(int id) {
-        if (Items is not null) {
-            return Items[id];
-        }
+        var items = GetDatabaseItems();
 
-        return null;
+        items.TryGet(id, out var item);
+
+        return item;
     }
 
+    private IPacketSender GetPacketSender() {
+        return PacketSenderService!.PacketSender!;
+    }
+
+    private IDatabase<Shop> GetDatabaseShops() {
+        return ContentService!.Shops;
+    }
+  
+    private IDatabase<Item> GetDatabaseItems() {
+        return ContentService!.Items;
+    }
 }
