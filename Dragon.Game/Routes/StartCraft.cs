@@ -1,49 +1,44 @@
-﻿using Dragon.Network;
+﻿using Dragon.Core.Services;
+
+using Dragon.Network;
+using Dragon.Network.Messaging;
 using Dragon.Network.Messaging.SharedPackets;
 
-using Dragon.Game.Services;
-using Dragon.Game.Players;
 using Dragon.Game.Manager;
+using Dragon.Game.Network;
+using Dragon.Game.Players;
 
 namespace Dragon.Game.Routes;
 
-public sealed class StartCraft {
-    public IConnection? Connection { get; set; }
-    public CpStartCraft? Packet { get; set; }
-    public LoggerService? LoggerService { get; init; }
-    public ContentService? ContentService { get; init; }
-    public ConfigurationService? Configuration { get; init; }
-    public ConnectionService? ConnectionService { get; init; }
-    public PacketSenderService? PacketSenderService { get; init; }
+public sealed class StartCraft : PacketRoute, IPacketRoute {
+    public MessageHeader Header => MessageHeader.StartCraft;
 
-    public void Process() {
-        var sender = PacketSenderService!.PacketSender;
-        var repository = ConnectionService!.PlayerRepository;
+    private readonly CraftManager CraftManager;
 
-        if (Connection is not null) {
-            var player = repository!.FindByConnectionId(Connection.Id);
+    public StartCraft(IServiceInjector injector) : base(injector) {
+        CraftManager = new CraftManager(injector);
+    }
+
+    public void Process(IConnection connection, object packet) {
+        var received = packet as CpStartCraft;
+
+        if (received is not null) {
+            var player = FindByConnection(connection);
 
             if (player is not null) {
-                if (IsValidPacket(player)) {
-                    var index = Packet!.Index - 1;
-
-                    var manager = new CraftManager() {
-                        Player = player,
-                        PacketSender = sender,
-                        Configuration = Configuration,
-                        Items = ContentService!.Items,
-                        Recipes = ContentService!.Recipes,
-                        Experience = ContentService!.CraftExperience
-                    };
-
-                    manager.Start(index);
-                }
+                Execute(player, received);
             }
         }
     }
 
-    private bool IsValidPacket(IPlayer player) {
-        var index = Packet!.Index;
+    private void Execute(IPlayer player, CpStartCraft packet) {
+        if (IsValidPacket(player, packet)) {
+            CraftManager.Start(player, packet.Index);
+        }
+    }
+
+    private bool IsValidPacket(IPlayer player, CpStartCraft packet) {
+        var index = packet.Index;
 
         if (index <= 0) {
             return false;

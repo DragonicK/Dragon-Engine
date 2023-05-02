@@ -20,7 +20,7 @@ public sealed class CloseChest : PacketRoute, IPacketRoute {
     }
 
     public void Process(IConnection connection, object packet) {
-        var player = GetPlayerRepository().FindByConnectionId(connection.Id);
+        var player = FindByConnection(connection);
 
         if (player is not null) {
             ChestManager.CloseChest(player);

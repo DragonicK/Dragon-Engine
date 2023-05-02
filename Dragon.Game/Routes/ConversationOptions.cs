@@ -23,7 +23,7 @@ public sealed class ConversationOptions : PacketRoute, IPacketRoute {
 
         if (received is not null) {
             if (IsValidPacket(received)) {
-                var player = GetPlayerRepository().FindByConnectionId(connection.Id);
+                var player = FindByConnection(connection);
 
                 if (player is not null) {
                     ConversationManager.ProcessOptions(player, received.ConversationId, received.ChatIndex, received.Option);

@@ -22,7 +22,7 @@ public sealed class Cast : PacketRoute, IPacketRoute {
     }
 
     private void ExecuteCast(IConnection connection, PacketCast packet) {
-        var player = GetPlayerRepository().FindByConnectionId(connection.Id);
+        var player = FindByConnection(connection);
 
         if (player is not null) {
             var index = packet.Index;

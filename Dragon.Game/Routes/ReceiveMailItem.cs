@@ -22,7 +22,7 @@ public sealed class ReceiveMailItem : PacketRoute, IPacketRoute {
         var received = packet as CpReceiveMailItem;
 
         if (received is not null) {
-            var player = GetPlayerRepository().FindByConnectionId(connection.Id);
+            var player = FindByConnection(connection);
 
             if (player is not null) {
                 ReceiveFromMailManager.ReceiveItem(player, received.Id);

@@ -1,39 +1,44 @@
-﻿using Dragon.Network;
+﻿using Dragon.Core.Services;
+
+using Dragon.Network;
+using Dragon.Network.Messaging;
 using Dragon.Network.Messaging.SharedPackets;
 
-using Dragon.Game.Services;
-using Dragon.Game.Configurations;
+using Dragon.Game.Players;
+using Dragon.Game.Network;
 
 namespace Dragon.Game.Routes;
 
-public sealed class SwapQuickSlot {
-    public IConnection? Connection { get; set; }
-    public CpSwapQuickSlot? Packet { get; set; }
-    public IConfiguration? Configuration { get; init; }
-    public PacketSenderService? PacketSenderService { get; init; }
-    public ConnectionService? ConnectionService { get; init; }
-    public LoggerService? LoggerService { get; init; }
+public sealed class SwapQuickSlot : PacketRoute, IPacketRoute {
+    public MessageHeader Header => MessageHeader.SwapQuickSlot;
 
     private const int MaximumQuickSlot = 12;
 
-    public void Process() {
-        var sender = PacketSenderService!.PacketSender;
-        var repository = ConnectionService!.PlayerRepository;
+    public SwapQuickSlot(IServiceInjector injector) : base(injector) { }
 
-        if (Connection is not null) {
-            var player = repository!.FindByConnectionId(Connection.Id);
+    public void Process(IConnection connection, object packet) {
+        var received = packet as CpSwapQuickSlot;
+
+        if (received is not null) {
+            var player = FindByConnection(connection);
 
             if (player is not null) {
-                var source = Packet!.OldIndex;
-                var destination = Packet!.NewIndex;
-
-                if (CanSwap(source, destination)) {
-                    player.QuickSlots.Swap(source, destination);
-
-                    sender?.SendQuickSlotUpdate(player, source);
-                    sender?.SendQuickSlotUpdate(player, destination);
-                }
+                Execute(player, received);
             }
+        }
+    }
+
+    private void Execute(IPlayer player, CpSwapQuickSlot packet) {
+        var sender = GetPacketSender();
+
+        var source = packet.OldIndex;
+        var destination = packet.NewIndex;
+
+        if (CanSwap(source, destination)) {
+            player.QuickSlots.Swap(source, destination);
+
+            sender.SendQuickSlotUpdate(player, source);
+            sender.SendQuickSlotUpdate(player, destination);
         }
     }
 

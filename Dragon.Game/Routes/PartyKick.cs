@@ -22,7 +22,7 @@ public sealed class PartyKick : PacketRoute, IPacketRoute {
         var receveid = packet as CpPartyKick;
 
         if (receveid is not null) {
-            var player = GetPlayerRepository().FindByConnectionId(connection.Id);
+            var player = FindByConnection(connection);
 
             if (player is not null) {
                 Execute(player, receveid);

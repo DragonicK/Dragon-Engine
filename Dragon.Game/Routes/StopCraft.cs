@@ -1,25 +1,24 @@
-﻿using Dragon.Network;
-using Dragon.Network.Messaging.SharedPackets;
-
+﻿using Dragon.Core.Services;
 using Dragon.Core.Model.Crafts;
 
-using Dragon.Game.Services;
+using Dragon.Network;
+using Dragon.Network.Messaging;
+using Dragon.Network.Messaging.SharedPackets;
+
+using Dragon.Game.Network;
 
 namespace Dragon.Game.Routes;
 
-public sealed class StopCraft {
-    public IConnection? Connection { get; set; }
-    public CpStopCraft? Packet { get; set; }
-    public LoggerService? LoggerService { get; init; }
-    public ConfigurationService? Configuration { get; init; }
-    public ConnectionService? ConnectionService { get; init; }
-    public PacketSenderService? PacketSenderService { get; init; }
+public sealed class StopCraft : PacketRoute, IPacketRoute {
+    public MessageHeader Header => MessageHeader.StopCraft;
 
-    public void Process() {
-        var repository = ConnectionService!.PlayerRepository;
+    public StopCraft(IServiceInjector injector) : base(injector) { }
 
-        if (Connection is not null) {
-            var player = repository!.FindByConnectionId(Connection.Id);
+    public void Process(IConnection connection, object packet) {
+        var received = packet as CpStartUpgrade;
+
+        if (received is not null) {
+            var player = FindByConnection(connection);
 
             if (player is not null) {
                 player.Craft.ProcessingRecipeId = 0;

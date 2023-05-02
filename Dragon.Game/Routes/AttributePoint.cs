@@ -23,7 +23,7 @@ public sealed class AttributePoint : PacketRoute, IPacketRoute {
 
     private void Execute(IConnection connection, CpUseAttributePoint packet) {
         var sender = GetPacketSender();
-        var player = GetPlayerRepository().FindByConnectionId(connection.Id);
+        var player = FindByConnection(connection);
 
         if (player is not null) {
             var index = packet.Attribute;

@@ -17,7 +17,7 @@ public sealed class Administrator : PacketRoute, IPacketRoute {
     public Administrator(IServiceInjector injector) : base(injector) { }
 
     public void Process(IConnection connection, object packet) {
-        var player = GetPlayerRepository().FindByConnectionId(connection.Id);
+        var player = FindByConnection(connection);
 
         if (player is not null) {
             if (player.AccountLevel >= AccountLevel.Monitor) {

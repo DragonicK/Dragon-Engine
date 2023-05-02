@@ -23,7 +23,7 @@ public sealed class SelectedItemToUpgrade : PacketRoute, IPacketRoute {
         var received = packet as CpSelectedItemToUpgrade;
 
         if (received is not null) {
-            var player = GetPlayerRepository().FindByConnectionId(connection.Id);
+            var player = FindByConnection(connection);
 
             if (player is not null) {
                 Execute(player, received);

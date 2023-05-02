@@ -1,45 +1,43 @@
-﻿using Dragon.Network;
+﻿using Dragon.Core.Services;
+
+using Dragon.Network;
+using Dragon.Network.Messaging;
 using Dragon.Network.Messaging.SharedPackets;
 
+using Dragon.Game.Network;
 using Dragon.Game.Manager;
-using Dragon.Game.Services;
+using Dragon.Game.Players;
 
-namespace Dragon.Game.Routes {
-    public sealed class TakeItemFromChest {
-        public IConnection? Connection { get; set; }
-        public CpTakeItemFromChest? Packet { get; set; }
-        public ContentService? ContentService { get; init; }
-        public InstanceService? InstanceService { get; init; }
-        public ConfigurationService? Configuration { get; init; }
-        public ConnectionService? ConnectionService { get; init; }
-        public PacketSenderService? PacketSenderService { get; init; }
+namespace Dragon.Game.Routes;
 
-        public void Process() {
-            if (IsValid()) {
-                var repository = ConnectionService!.PlayerRepository;
+public sealed class TakeItemFromChest : PacketRoute, IPacketRoute {
+    public MessageHeader Header => MessageHeader.TakeItemFromChest;
 
-                if (Connection is not null) {
-                    var player = repository!.FindByConnectionId(Connection.Id);
+    private readonly ChestManager ChestManager;
 
-                    if (player is not null) {
-                        var manager = new ChestManager() {
-                            Player = player,
-                            PlayerRepository = repository,
-                            Configuration = Configuration,
-                            Chests = ContentService!.Chests,
-                            Drops = ContentService!.Drops,
-                            InstanceService = InstanceService,
-                            PacketSender = PacketSenderService!.PacketSender
-                        };
+    public TakeItemFromChest(IServiceInjector injector) : base(injector) {
+        ChestManager = new ChestManager(injector);
+    }
 
-                        manager.TakeItem(Packet!.Index);
-                    }
-                }
+    public void Process(IConnection connection, object packet) {
+        var received = packet as CpTakeItemFromChest;
+
+        if (received is not null) {
+            var player = FindByConnection(connection);
+
+            if (player is not null) {
+                Execute(player, received);
             }
         }
+    }
 
-        private bool IsValid() {
-            return Packet!.Index > 0;
-        }
+    private void Execute(IPlayer player, CpTakeItemFromChest packet) {
+        if (IsValidPacket(packet)) {
+            ChestManager.TakeItem(player, packet.Index);
+        }   
+    }
+
+    private bool IsValidPacket(CpTakeItemFromChest packet) {
+        return packet.Index > 0;
     }
 }

@@ -22,7 +22,7 @@ public sealed class ReceiveMailCurrency : PacketRoute, IPacketRoute {
         var received = packet as CpReceiveMailCurrency;
 
         if (received is not null) {
-            var player = GetPlayerRepository().FindByConnectionId(connection.Id);
+            var player = FindByConnection(connection);
 
             if (player is not null) {
                 ReceiveFromMailManager.ReceiveCurrency(player, received.Id);

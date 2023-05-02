@@ -30,7 +30,7 @@ public sealed class CharacterCreate : PacketRoute, IPacketRoute {
 
         if (received is not null) {
             var sender = GetPacketSender();
-            var player = GetPlayerRepository().FindByConnectionId(connection.Id);
+            var player = FindByConnection(connection);
 
             if (player is not null) {
                 if (!Configuration!.Character.Create) {

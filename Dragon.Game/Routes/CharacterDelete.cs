@@ -38,7 +38,7 @@ public sealed class CharacterDelete : PacketRoute, IPacketRoute {
         var index = packet.Index;
 
         var logger = GetLogger();
-        var player = GetPlayerRepository().FindByConnectionId(connection.Id);
+        var player = FindByConnection(connection);
 
         if (IsValidPlayer(player)) {
             if (IsValidIndex(player!, index)) {

@@ -23,7 +23,7 @@ public sealed class PurchaseBlackMarketItem : PacketRoute, IPacketRoute {
 
         if (received is not null) {
             if (IsValidPacket(received)) {
-                var player = GetPlayerRepository().FindByConnectionId(connection.Id);
+                var player = FindByConnection(connection);
 
                 if (player is not null) {
                     BlackMarketManager.ProcessPurchaseRequest(player, received.Id, received.Amount, received.Receiver);

@@ -22,7 +22,7 @@ public sealed class Movement : PacketRoute, IPacketRoute {
         var received = packet as PacketPlayerMovement;
 
         if (received is not null) {
-            var player = GetPlayerRepository().FindByConnectionId(connection.Id);
+            var player = FindByConnection(connection);
 
             if (player is not null) {
                 Execute(player, received);

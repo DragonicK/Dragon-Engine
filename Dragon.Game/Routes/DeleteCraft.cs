@@ -13,7 +13,7 @@ public sealed class DeleteCraft : PacketRoute, IPacketRoute {
     public DeleteCraft(IServiceInjector injector) : base(injector) { }
 
     public void Process(IConnection connection, object packet) {
-        //var player = GetPlayerRepository().FindByConnectionId(connection.Id);
+        //var player = FindByConnection(connection);
 
         //if (player is not null) {
         //      TODO

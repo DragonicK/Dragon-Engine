@@ -15,7 +15,7 @@ public sealed class AcceptTrade : PacketRoute, IPacketRoute {
     public AcceptTrade(IServiceInjector injector) : base(injector) { }
 
     public void Process(IConnection connection, object packet) {
-        var player = GetPlayerRepository().FindByConnectionId(connection.Id);
+        var player = FindByConnection(connection);
 
         if (player is not null) {
             var manager = GetTradeManager(player);

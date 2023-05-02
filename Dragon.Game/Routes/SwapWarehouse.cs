@@ -1,37 +1,42 @@
-﻿using Dragon.Network;
+﻿using Dragon.Core.Services;
+
+using Dragon.Network;
+using Dragon.Network.Messaging;
 using Dragon.Network.Messaging.SharedPackets;
 
-using Dragon.Game.Services;
 using Dragon.Game.Players;
+using Dragon.Game.Network;
 
 namespace Dragon.Game.Routes;
 
-public sealed class SwapWarehouse {
-    public IConnection? Connection { get; set; }
-    public CpSwapWarehouse? Packet { get; set; }
-    public LoggerService? LoggerService { get; init; }
-    public ConfigurationService? Configuration { get; init; }
-    public ConnectionService? ConnectionService { get; init; }
-    public PacketSenderService? PacketSenderService { get; init; }
+public sealed class SwapWarehouse : PacketRoute, IPacketRoute {
+    public MessageHeader Header => MessageHeader.SwapWarehouse;
 
-    public void Process() {
-        var sender = PacketSenderService!.PacketSender;
-        var repository = ConnectionService!.PlayerRepository;
+    public SwapWarehouse(IServiceInjector injector) : base(injector) { }
 
-        if (Connection is not null) {
-            var player = repository!.FindByConnectionId(Connection.Id);
+    public void Process(IConnection connection, object packet) {
+        var received = packet as CpSwapWarehouse;
+
+        if (received is not null) {
+            var player = FindByConnection(connection);
 
             if (player is not null) {
-                var source = Packet!.OldIndex;
-                var destination = Packet!.NewIndex;
-
-                if (CanSwap(player, source, destination)) {
-                    player.Warehouse.Swap(source, destination);
-
-                    sender?.SendWarehouseUpdate(player, source);
-                    sender?.SendWarehouseUpdate(player, destination);
-                }
+                Execute(player, received);
             }
+        }
+    }
+
+    private void Execute(IPlayer player, CpSwapWarehouse packet) {
+        var sender = GetPacketSender();
+
+        var source = packet.OldIndex;
+        var destination = packet.NewIndex;
+
+        if (CanSwap(player, source, destination)) {
+            player.Warehouse.Swap(source, destination);
+
+            sender.SendWarehouseUpdate(player, source);
+            sender.SendWarehouseUpdate(player, destination);
         }
     }
 
@@ -46,5 +51,4 @@ public sealed class SwapWarehouse {
 
         return true;
     }
-
 }

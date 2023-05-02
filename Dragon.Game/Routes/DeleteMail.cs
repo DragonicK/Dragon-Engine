@@ -21,7 +21,7 @@ public sealed class DeleteMail : PacketRoute, IPacketRoute {
         var received = packet as PacketDeleteMail;
 
         if (received is not null) {
-            var player = GetPlayerRepository().FindByConnectionId(connection.Id);
+            var player = FindByConnection(connection);
 
             if (player is not null) {
                 Execute(sender, player, received);

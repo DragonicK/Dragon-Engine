@@ -24,7 +24,7 @@ public sealed class DepositItem : PacketRoute, IPacketRoute {
 
         if (received is not null) {
             if (received.Amount > 0) {
-                var player = GetPlayerRepository().FindByConnectionId(connection.Id);
+                var player = FindByConnection(connection);
 
                 if (player is not null) {
                     Execute(player, received);

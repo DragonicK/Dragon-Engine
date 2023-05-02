@@ -18,7 +18,7 @@ public sealed class CompletedCraft : PacketRoute, IPacketRoute {
     }
 
     public void Process(IConnection connection, object packet) {
-        var player = GetPlayerRepository().FindByConnectionId(connection.Id);
+        var player = FindByConnection(connection);
 
         if (player is not null) {
             CraftManager.Conclude(player);

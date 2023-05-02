@@ -5,6 +5,8 @@ using Dragon.Game.Services;
 using Dragon.Game.Repository;
 using Dragon.Game.Network.Senders;
 using Dragon.Game.Instances;
+using Dragon.Game.Players;
+using Dragon.Network;
 
 namespace Dragon.Game.Network;
 
@@ -48,4 +50,7 @@ public abstract class PacketRoute {
         return ConnectionService!.PlayerRepository!;
     }
 
+    protected IPlayer? FindByConnection(IConnection connection) {
+        return GetPlayerRepository().FindByConnectionId(connection.Id);
+    }
 }

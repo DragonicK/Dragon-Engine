@@ -26,7 +26,7 @@ public sealed class QuickSlotUse : PacketRoute, IPacketRoute {
         var received = packet as CpQuickSlotUse;
 
         if (received is not null) {
-            var player = GetPlayerRepository().FindByConnectionId(connection.Id);
+            var player = FindByConnection(connection);
 
             if (player is not null) {
                 Excute(player, received);
