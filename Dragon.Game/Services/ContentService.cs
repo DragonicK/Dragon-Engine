@@ -34,6 +34,7 @@ namespace Dragon.Game.Services;
 
 public sealed class ContentService : IService {
     public ServicePriority Priority => ServicePriority.Mid;
+    public IServiceInjector? ServiceInjector { get; init; }
     public ConfigurationService? Configuration { get; init; }
     public PacketSenderService? PacketSenderService { get; init; }
     public LoggerService? LoggerService { get; init; }
@@ -246,7 +247,7 @@ public sealed class ContentService : IService {
             Folder = "./Server/Drops"
         };
 
-        CommandRepository = new CommandRepository();
+        CommandRepository = new CommandRepository(ServiceInjector!);
 
         PlayerExperience = LoadExperience(new Experience(), "Player");
         GuildExperience = LoadExperience(new Experience(), "Guild");

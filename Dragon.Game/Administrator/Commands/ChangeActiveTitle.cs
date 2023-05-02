@@ -1,43 +1,47 @@
 ﻿using Dragon.Core.Model;
-using Dragon.Game.Network.Senders;
+using Dragon.Core.Services;
+
 using Dragon.Game.Players;
 using Dragon.Game.Services;
+using Dragon.Game.Network.Senders;
 
 namespace Dragon.Game.Administrator.Commands;
 
 public sealed class ChangeActiveTitle : IAdministratorCommand {
     public AdministratorCommands Command { get; } = AdministratorCommands.SetActiveTitle;
-    public IPlayer? Administrator { get; set; }
-    public IPacketSender? PacketSender { get; set; }
-    public InstanceService? InstanceService { get; set; }
-    public ConfigurationService? Configuration { get; set; }
-    public ConnectionService? ConnectionService { get; set; }
-    public ContentService? ContentService { get; set; }
+    public ContentService? ContentService { get; private set; }
+    public InstanceService? InstanceService { get; private set; }
+    public ConfigurationService? Configuration { get; private set; }
+    public ConnectionService? ConnectionService { get; private set; }
+    public PacketSenderService? PacketSenderService { get; private set; }
 
     private const int MaximumParameters = 2;
 
-    public void Process(string[]? parameters) {
+    public ChangeActiveTitle(IServiceInjector injector) {
+        injector.Inject(this);
+    }
+
+    public void Process(IPlayer administrator, string[]? parameters) {
         if (parameters is not null) {
             if (parameters.Length >= MaximumParameters) {
-                ContinueProcess(parameters);
+                ContinueProcess(administrator, parameters);
             }
         }
     }
 
-    private void ContinueProcess(string[] parameters) {
-        if (Administrator is not null) {
-            if (Administrator.AccountLevel >= AccountLevel.Superior) {
-                int.TryParse(parameters[1], out var id);
+    private void ContinueProcess(IPlayer administrator, string[] parameters) {
+        if (administrator.AccountLevel >= AccountLevel.Superior) {
+            _ = int.TryParse(parameters[1], out var id);
 
-                var repository = ConnectionService!.PlayerRepository;
-                var target = repository!.FindByName(parameters[0].Trim());
+            var repository = ConnectionService!.PlayerRepository;
+            var target = repository!.FindByName(parameters[0].Trim());
 
-                Set(target, id);
-            }
+            Set(administrator, target, id);
         }
     }
 
-    private void Set(IPlayer? player, int id) {
+    private void Set(IPlayer administrator, IPlayer? player, int id) {
+        var sender = GetPacketSender();
         var titles = ContentService!.Titles;
 
         if (player is not null) {
@@ -48,19 +52,25 @@ public sealed class ChangeActiveTitle : IAdministratorCommand {
 
                 player.AllocateAttributes();
 
-                PacketSender!.SendAttributes(player);
+                sender.SendAttributes(player);
 
                 var instanceId = player.Character.Map;
                 var instances = InstanceService!.Instances;
 
-                if (instances.ContainsKey(instanceId)) {
-                    PacketSender!.SendTitle(player, instances[instanceId]);
-                    PacketSender!.SendPlayerVital(player, instances[instanceId]);
+                instances.TryGetValue(instanceId, out var instance);
+
+                if (instance is not null) {
+                    sender.SendTitle(player, instance);
+                    sender.SendPlayerVital(player, instance);
                 }
             }
         }
         else {
-            PacketSender!.SendMessage(SystemMessage.PlayerIsNotOnline, QbColor.Red, Administrator!);
+            sender.SendMessage(SystemMessage.PlayerIsNotOnline, QbColor.Red, administrator);
         }
+    }
+
+    private IPacketSender GetPacketSender() {
+        return PacketSenderService!.PacketSender!;
     }
 }

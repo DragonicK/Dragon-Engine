@@ -1,47 +1,51 @@
 ﻿using Dragon.Core.Model;
-using Dragon.Game.Network.Senders;
+using Dragon.Core.Services;
+
 using Dragon.Game.Players;
 using Dragon.Game.Services;
+using Dragon.Game.Network.Senders;
 
 namespace Dragon.Game.Administrator.Commands;
 
 public sealed class ChangeAttributePoint : IAdministratorCommand {
     public AdministratorCommands Command { get; } = AdministratorCommands.SetAttributePoint;
-    public IPlayer? Administrator { get; set; }
-    public IPacketSender? PacketSender { get; set; }
-    public InstanceService? InstanceService { get; set; }
-    public ConfigurationService? Configuration { get; set; }
-    public ConnectionService? ConnectionService { get; set; }
-    public ContentService? ContentService { get; set; }
+    public ContentService? ContentService { get; private set; }
+    public InstanceService? InstanceService { get; private set; }
+    public ConfigurationService? Configuration { get; private set; }
+    public ConnectionService? ConnectionService { get; private set; }
+    public PacketSenderService? PacketSenderService { get; private set; }
 
     private const int MaximumParameters = 3;
 
-    public void Process(string[]? parameters) {
+    public ChangeAttributePoint(IServiceInjector injector) {
+        injector.Inject(this);
+    }
+
+    public void Process(IPlayer administrator, string[]? parameters) {
         if (parameters is not null) {
             if (parameters.Length >= MaximumParameters) {
-                ContinueProcess(parameters);
+                ContinueProcess(administrator, parameters);
             }
         }
     }
 
-    private void ContinueProcess(string[] parameters) {
-        if (Administrator is not null) {
-            if (Administrator.AccountLevel >= AccountLevel.Superior) {
-                int.TryParse(parameters[1], out var value);
-                bool.TryParse(parameters[2], out var shouldAdd);
+    private void ContinueProcess(IPlayer administrator, string[] parameters) {
+        if (administrator.AccountLevel >= AccountLevel.Superior) {
+            _ = int.TryParse(parameters[1], out var value);
+            _ = bool.TryParse(parameters[2], out var shouldAdd);
 
-                var repository = ConnectionService!.PlayerRepository;
-                var target = repository!.FindByName(parameters[0].Trim());
+            var repository = ConnectionService!.PlayerRepository;
+            var target = repository!.FindByName(parameters[0].Trim());
 
-                Set(target, value, shouldAdd);
-            }
+            Set(administrator, target, value, shouldAdd);
         }
     }
 
-    private void Set(IPlayer? player, long value, bool shouldAdd) {
+    private void Set(IPlayer administrator, IPlayer? player, long value, bool shouldAdd) {
+        var sender = GetPacketSender();
+
         if (player is not null) {
             if (value >= 0 && value <= int.MaxValue) {
-
                 if (shouldAdd) {
                     var p = player.Character.Points;
                     player.Character.Points += CanSum(p, value) ? (int)value : 0;
@@ -50,15 +54,19 @@ public sealed class ChangeAttributePoint : IAdministratorCommand {
                     player.Character.Points = (int)value;
                 }
 
-                PacketSender!.SendAttributePoint(player);
+                sender.SendAttributePoint(player);
             }
         }
         else {
-            PacketSender!.SendMessage(SystemMessage.PlayerIsNotOnline, QbColor.Red, Administrator!);
+            sender.SendMessage(SystemMessage.PlayerIsNotOnline, QbColor.Red, administrator);
         }
     }
 
     private bool CanSum(long a, long b) {
         return (a + b) <= int.MaxValue;
+    }
+
+    private IPacketSender GetPacketSender() {
+        return PacketSenderService!.PacketSender!;
     }
 }

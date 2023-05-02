@@ -6,16 +6,17 @@ using Dragon.Network.Messaging.SharedPackets;
 
 using Dragon.Game.Players;
 using Dragon.Game.Network;
+using Dragon.Game.Manager;
 
 namespace Dragon.Game.Routes;
 
 public sealed class Movement : PacketRoute, IPacketRoute {
     public MessageHeader Header { get; set; } = MessageHeader.PlayerMovement;
 
-    private readonly PlayerMovement PlayerMovement;
+    private readonly PlayerMovementManager PlayerMovement;
 
     public Movement(IServiceInjector injector) : base(injector) {
-        PlayerMovement = new PlayerMovement(injector);
+        PlayerMovement = new PlayerMovementManager(injector);
     }
 
     public void Process(IConnection connection, object packet) {

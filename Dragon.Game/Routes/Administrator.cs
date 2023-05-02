@@ -28,25 +28,13 @@ public sealed class Administrator : PacketRoute, IPacketRoute {
 
     private void Execute(IPlayer player, CpSuperiorCommand? packet) {
         if (packet is not null) {
-            var header = packet.Command;
-            var commands = ContentService!.CommandRepository;
+            var instance = GetCommandRepository().GetType(packet.Command);
 
-            var type = commands.GetType(header);
-
-            if (type is not null) {
-                var instance = Activator.CreateInstance(type, ServiceContainer) as IAdministratorCommand;
-
-                if (instance is not null) {
-                    instance.Administrator = player;
-                    instance.ContentService = ContentService;
-                    instance.InstanceService = InstanceService;
-                    instance.Configuration = Configuration;
-                    instance.ConnectionService = ConnectionService;
-                    instance.PacketSender = PacketSenderService!.PacketSender;
-
-                    instance.Process(packet.Parameters);
-                }
-            }
+            instance?.Process(player, packet.Parameters);
         }
+    }
+
+    private ICommandRepository GetCommandRepository() {
+        return ContentService!.CommandRepository;
     }
 }

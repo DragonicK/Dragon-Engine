@@ -1,44 +1,48 @@
 ﻿using Dragon.Core.Model;
-using Dragon.Game.Network.Senders;
+using Dragon.Core.Services;
+
 using Dragon.Game.Players;
 using Dragon.Game.Services;
-
+using Dragon.Game.Network.Senders;
 
 namespace Dragon.Game.Administrator.Commands;
 
 public sealed class AddTitle : IAdministratorCommand {
     public AdministratorCommands Command { get; } = AdministratorCommands.AddTitle;
-    public IPlayer? Administrator { get; set; }
-    public IPacketSender? PacketSender { get; set; }
-    public InstanceService? InstanceService { get; set; }
-    public ConfigurationService? Configuration { get; set; }
-    public ConnectionService? ConnectionService { get; set; }
-    public ContentService? ContentService { get; set; }
+    public ContentService? ContentService { get; private set; }
+    public InstanceService? InstanceService { get; private set; }
+    public ConfigurationService? Configuration { get; private set; }
+    public ConnectionService? ConnectionService { get; private set; }
+    public PacketSenderService? PacketSenderService { get; private set; }
 
     private const int MaximumParameters = 2;
 
-    public void Process(string[]? parameters) {
+    public AddTitle(IServiceInjector injector) {
+        injector.Inject(this);
+    }
+
+    public void Process(IPlayer administrator, string[]? parameters) {
         if (parameters is not null) {
             if (parameters.Length >= MaximumParameters) {
-                ContinueProcess(parameters);
+                ContinueProcess(administrator, parameters);
             }
         }
     }
 
-    private void ContinueProcess(string[] parameters) {
-        if (Administrator is not null) {
-            if (Administrator.AccountLevel >= AccountLevel.Superior) {
-                int.TryParse(parameters[1], out var id);
+    private void ContinueProcess(IPlayer administrator, string[] parameters) {
+        if (administrator.AccountLevel >= AccountLevel.Superior) {
+            _ = int.TryParse(parameters[1], out var id);
 
-                var repository = ConnectionService!.PlayerRepository;
-                var target = repository!.FindByName(parameters[0].Trim());
+            var repository = ConnectionService!.PlayerRepository;
+            var target = repository!.FindByName(parameters[0].Trim());
 
-                Add(target, id);
-            }
+            Add(administrator, target, id);
         }
     }
 
-    private void Add(IPlayer? player, int id) {
+    private void Add(IPlayer administrator, IPlayer? player, int id) {
+        var sender = GetPacketSender();
+
         var titles = ContentService!.Titles;
 
         if (player is not null) {
@@ -46,12 +50,16 @@ public sealed class AddTitle : IAdministratorCommand {
                 var result = player!.Titles.Add(id);
 
                 if (result) {
-                    PacketSender!.SendTitles(player);
+                    sender.SendTitles(player);
                 }
             }
         }
         else {
-            PacketSender!.SendMessage(SystemMessage.PlayerIsNotOnline, QbColor.Red, Administrator!);
+            sender.SendMessage(SystemMessage.PlayerIsNotOnline, QbColor.Red, administrator);
         }
+    }
+
+    private IPacketSender GetPacketSender() {
+        return PacketSenderService!.PacketSender!;
     }
 }

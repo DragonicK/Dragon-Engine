@@ -1,4 +1,6 @@
 ﻿using Dragon.Core.Model;
+using Dragon.Core.Services;
+
 using Dragon.Game.Manager;
 using Dragon.Game.Players;
 using Dragon.Game.Services;
@@ -8,31 +10,38 @@ namespace Dragon.Game.Administrator.Commands;
 
 public sealed class WarpMeTo : IAdministratorCommand {
     public AdministratorCommands Command { get; } = AdministratorCommands.WarpMeTo;
-    public IPlayer? Administrator { get; set; }
-    public IPacketSender? PacketSender { get; set; }
-    public InstanceService? InstanceService { get; set; }
-    public ConfigurationService? Configuration { get; set; }
-    public ConnectionService? ConnectionService { get; set; }
-    public ContentService? ContentService { get; set; }
+    public ContentService? ContentService { get; private set; }
+    public InstanceService? InstanceService { get; private set; }
+    public ConfigurationService? Configuration { get; private set; }
+    public ConnectionService? ConnectionService { get; private set; }
+    public PacketSenderService? PacketSenderService { get; private set; }
 
     private const int MaximumParameters = 1;
 
-    public void Process(string[]? parameters) {
+    private readonly WarperManager WarperManager;
+
+    public WarpMeTo(IServiceInjector injector) {
+        injector.Inject(this);
+
+        WarperManager = new WarperManager(injector);
+    }
+
+    public void Process(IPlayer administrator, string[]? parameters) {
         if (parameters is not null) {
             if (parameters.Length >= MaximumParameters) {
-                if (Administrator is not null) {
-                    if (Administrator.AccountLevel >= AccountLevel.Monitor) {
-                        var repository = ConnectionService!.PlayerRepository;
-                        var destination = repository!.FindByName(parameters[0].Trim());
+                if (administrator.AccountLevel >= AccountLevel.Monitor) {
+                    var repository = ConnectionService!.PlayerRepository;
+                    var destination = repository!.FindByName(parameters[0].Trim());
 
-                        MoveToDestination(destination);
-                    }
+                    MoveToDestination(administrator, destination);
                 }
             }
         }
     }
 
-    private void MoveToDestination(IPlayer? destination) {
+    private void MoveToDestination(IPlayer administrator, IPlayer? destination) {
+        var sender = GetPacketSender();
+
         if (destination is not null) {
             var instances = InstanceService!.Instances;
 
@@ -40,23 +49,21 @@ public sealed class WarpMeTo : IAdministratorCommand {
             var x = destination.Character.X;
             var y = destination.Character.Y;
 
-            if (instances.ContainsKey(instanceId)) {
-                var instance = instances[instanceId];
+            instances.TryGetValue(instanceId, out var instance);
 
-                var warper = new WarperManager() {
-                    Player = Administrator,
-                    InstanceService = InstanceService,
-                    PacketSender = PacketSender
-                };
+            if (instance is not null) {
+                administrator.Character.X = x > instance.MaximumX ? instance.MaximumX : x;
+                administrator.Character.Y = y > instance.MaximumY ? instance.MaximumY : y;
 
-                Administrator!.Character.X = x > instance.MaximumX ? instance.MaximumX : x;
-                Administrator!.Character.Y = y > instance.MaximumY ? instance.MaximumY : y;
-
-                warper.Warp(instance, Administrator.Character.X, Administrator.Character.Y);
+                WarperManager.Warp(administrator, instance, administrator.Character.X, administrator.Character.Y);
             }
         }
         else {
-            PacketSender!.SendMessage(SystemMessage.PlayerIsNotOnline, QbColor.Red, Administrator!);
+            sender.SendMessage(SystemMessage.PlayerIsNotOnline, QbColor.Red, administrator);
         }
+    }
+
+    private IPacketSender GetPacketSender() {
+        return PacketSenderService!.PacketSender!;
     }
 }

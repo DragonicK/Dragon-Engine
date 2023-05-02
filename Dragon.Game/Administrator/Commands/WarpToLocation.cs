@@ -1,53 +1,60 @@
 ﻿using Dragon.Core.Model;
-using Dragon.Game.Services;
+using Dragon.Core.Services;
+
 using Dragon.Game.Players;
+using Dragon.Game.Services;
 using Dragon.Game.Network.Senders;
 
 namespace Dragon.Game.Administrator.Commands;
 
 public sealed class WarpToLocation : IAdministratorCommand {
     public AdministratorCommands Command { get; } = AdministratorCommands.WarpToLocation;
-    public IPlayer? Administrator { get; set; }
-    public IPacketSender? PacketSender { get; set; }
-    public InstanceService? InstanceService { get; set; }
-    public ConfigurationService? Configuration { get; set; }
-    public ConnectionService? ConnectionService { get; set; }
-    public ContentService? ContentService { get; set; }
+    public ContentService? ContentService { get; private set; }
+    public InstanceService? InstanceService { get; private set; }
+    public ConfigurationService? Configuration { get; private set; }
+    public ConnectionService? ConnectionService { get; private set; }
+    public PacketSenderService? PacketSenderService { get; private set; }
 
     private const int MaximumParameters = 2;
 
-    public void Process(string[]? parameters) {
+    public WarpToLocation(IServiceInjector injector) {
+        injector.Inject(this);
+    }
+
+    public void Process(IPlayer administrator, string[]? parameters) {
         if (parameters is not null) {
             if (parameters.Length >= MaximumParameters) {
-                int.TryParse(parameters[0], out var x);
-                int.TryParse(parameters[1], out var y);
+                _ = int.TryParse(parameters[0], out var x);
+                _ = int.TryParse(parameters[1], out var y);
 
-                if (Administrator is not null) {
-                    if (Administrator.AccountLevel >= AccountLevel.Monitor) {
-                        WarpLocation(x, y);
-                    }
+                if (administrator.AccountLevel >= AccountLevel.Monitor) {
+                    WarpLocation(administrator, x, y);
                 }
             }
         }
     }
 
-    private void WarpLocation(int x, int y) {
-        if (Administrator is not null) {
-            if (Administrator.AccountLevel >= AccountLevel.GameMaster) {
-                var instanceId = Administrator.Character.Map;
-                var instances = InstanceService!.Instances;
+    private void WarpLocation(IPlayer administrator, int x, int y) {
+        var sender = GetPacketSender();
 
-                if (instances.ContainsKey(instanceId)) {
-                    var instance = instances[instanceId];
+        if (administrator.AccountLevel >= AccountLevel.GameMaster) {
+            var instanceId = administrator.Character.Map;
+            var instances = InstanceService!.Instances;
 
-                    Administrator.Character.X = x < 0 ? 0 : x;
-                    Administrator.Character.Y = y < 0 ? 0 : y;
-                    Administrator.Character.X = x > instance.MaximumX ? instance.MaximumX : x;
-                    Administrator.Character.Y = y > instance.MaximumY ? instance.MaximumY : y;
+            instances.TryGetValue(instanceId, out var instance);
 
-                    PacketSender?.SendPlayerXY(Administrator, instance);
-                }
+            if (instance is not null) {
+                administrator.Character.X = x < 0 ? 0 : x;
+                administrator.Character.Y = y < 0 ? 0 : y;
+                administrator.Character.X = x > instance.MaximumX ? instance.MaximumX : x;
+                administrator.Character.Y = y > instance.MaximumY ? instance.MaximumY : y;
+
+                sender.SendPlayerXY(administrator, instance);
             }
         }
+    }
+
+    private IPacketSender GetPacketSender() {
+        return PacketSenderService!.PacketSender!;
     }
 }

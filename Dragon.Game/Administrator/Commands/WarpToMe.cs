@@ -1,4 +1,5 @@
 ﻿using Dragon.Core.Model;
+using Dragon.Core.Services;
 
 using Dragon.Game.Manager;
 using Dragon.Game.Services;
@@ -9,55 +10,60 @@ namespace Dragon.Game.Administrator.Commands;
 
 public sealed class WarpToMe : IAdministratorCommand {
     public AdministratorCommands Command { get; } = AdministratorCommands.WarpToMe;
-    public IPlayer? Administrator { get; set; }
-    public IPacketSender? PacketSender { get; set; }
-    public InstanceService? InstanceService { get; set; }
-    public ConfigurationService? Configuration { get; set; }
-    public ConnectionService? ConnectionService { get; set; }
-    public ContentService? ContentService { get; set; }
+    public ContentService? ContentService { get; private set; }
+    public InstanceService? InstanceService { get; private set; }
+    public ConfigurationService? Configuration { get; private set; }
+    public ConnectionService? ConnectionService { get; private set; }
+    public PacketSenderService? PacketSenderService { get; private set; }
 
     private const int MaximumParameters = 1;
 
-    public void Process(string[]? parameters) {
+    private readonly WarperManager WarperManager;
+
+    public WarpToMe(IServiceInjector injector) {
+        injector.Inject(this);
+
+        WarperManager = new WarperManager(injector);
+    }
+
+    public void Process(IPlayer administrator, string[]? parameters) {
         if (parameters is not null) {
             if (parameters.Length >= MaximumParameters) {
-                if (Administrator is not null) {
-                    if (Administrator.AccountLevel >= AccountLevel.Monitor) {
-                        var repository = ConnectionService!.PlayerRepository;
-                        var target = repository!.FindByName(parameters[0].Trim());
+                if (administrator.AccountLevel >= AccountLevel.Monitor) {
+                    var repository = ConnectionService!.PlayerRepository;
+                    var target = repository!.FindByName(parameters[0].Trim());
 
-                        MoveToAdministrator(target);
-                    }
+                    MoveToAdministrator(administrator, target);
                 }
             }
         }
     }
 
-    private void MoveToAdministrator(IPlayer? target) {
+    private void MoveToAdministrator(IPlayer administrator, IPlayer? target) {
+        var sender = GetPacketSender();
+
         if (target is not null) {
             var instances = InstanceService!.Instances;
 
-            var instanceId = Administrator!.Character.Map;
-            var x = Administrator!.Character.X;
-            var y = Administrator!.Character.Y;
+            var instanceId = administrator!.Character.Map;
+            var x = administrator!.Character.X;
+            var y = administrator!.Character.Y;
 
-            if (instances.ContainsKey(instanceId)) {
-                var instance = instances[instanceId];
+            instances.TryGetValue(instanceId, out var instance);
 
-                var warper = new WarperManager() {
-                    Player = target,
-                    InstanceService = InstanceService,
-                    PacketSender = PacketSender
-                };
-
+            if (instance is not null) {
                 target.Character.X = x > instance.MaximumX ? instance.MaximumX : x;
                 target.Character.Y = y > instance.MaximumY ? instance.MaximumY : y;
 
-                warper.Warp(instance, target.Character.X, target.Character.Y);
+                WarperManager.Warp(target, instance, target.Character.X, target.Character.Y);
             }
         }
         else {
-            PacketSender!.SendMessage(SystemMessage.PlayerIsNotOnline, QbColor.Red, Administrator!);
+            sender.SendMessage(SystemMessage.PlayerIsNotOnline, QbColor.Red, administrator);
         }
+    }
+
+    private IPacketSender GetPacketSender() {
+        return PacketSenderService!.PacketSender!;
     }
 }
