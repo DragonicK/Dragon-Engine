@@ -1,37 +1,34 @@
-﻿using Dragon.Network;
+﻿using Dragon.Core.Services;
+
+using Dragon.Network;
+using Dragon.Network.Messaging;
 using Dragon.Network.Messaging.SharedPackets;
 
-using Dragon.Game.Services;
-using Dragon.Game.Players;
 using Dragon.Game.Manager;
+using Dragon.Game.Network;
+using Dragon.Game.Players;
 
 namespace Dragon.Game.Routes;
 
-public sealed class UntradeItem {
-    public IConnection? Connection { get; set; }
-    public CpUntradeItem? Packet { get; set; }
-    public ConnectionService? ConnectionService { get; init; }
-    public LoggerService? LoggerService { get; init; }
-    public InstanceService? InstanceService { get; init; }
+public sealed class UntradeItem : PacketRoute, IPacketRoute {
+    public MessageHeader Header => MessageHeader.UntradeItem;
 
-    public void Process() {
-        var repository = ConnectionService!.PlayerRepository;
+    public UntradeItem(IServiceInjector injector) : base(injector) { }
 
-        if (Connection is not null) {
-            var player = repository!.FindByConnectionId(Connection.Id);
+    public void Process(IConnection connection, object packet) {
+        var received = packet as CpUntradeItem;
+
+        if (received is not null) {
+            var player = FindByConnection(connection);
 
             if (player is not null) {
-                var index = Packet!.InventoryIndex;
+                var index = received.InventoryIndex;
 
                 if (IsValidPacket(index)) {
-                    var manager = GetTradeManager(player);
-
-                    if (manager is not null) {
-                        manager.UntradeItem(player, index);
-                    }
+                    GetTradeManager(player)?.UntradeItem(player, index);
                 }
             }
-        }
+        }    
     }
 
     private bool IsValidPacket(int index) {
@@ -42,10 +39,8 @@ public sealed class UntradeItem {
         var id = player.TradeId;
         var trades = InstanceService!.Trades;
 
-        if (trades.ContainsKey(id)) {
-            return trades[id];
-        }
+        trades.TryGetValue(id, out var trade);
 
-        return null;
+        return trade;
     }
 }

@@ -1,43 +1,39 @@
-﻿using Dragon.Network;
+﻿using Dragon.Core.Services;
+
+using Dragon.Network;
+using Dragon.Network.Messaging;
 using Dragon.Network.Messaging.SharedPackets;
 
-using Dragon.Game.Services;
-using Dragon.Game.Players;
+using Dragon.Game.Network;
 using Dragon.Game.Manager;
-
+using Dragon.Game.Players;
+ 
 namespace Dragon.Game.Routes;
 
-public sealed class WithdrawItem {
-    public IConnection? Connection { get; set; }
-    public CpWithdrawItem? Packet { get; set; }
-    public LoggerService? LoggerService { get; init; }
-    public ContentService? ContentService { get; init; }
-    public ConfigurationService? Configuration { get; init; }
-    public ConnectionService? ConnectionService { get; init; }
-    public PacketSenderService? PacketSenderService { get; init; }
+public sealed class WithdrawItem : PacketRoute, IPacketRoute {
+    public MessageHeader Header => MessageHeader.WithdrawItem;
 
-    public void Process() {
-        if (Packet!.Amount <= 0) {
-            return;
-        }
+    private readonly WarehouseManager WarehouseManager;
 
-        var sender = PacketSenderService!.PacketSender;
-        var repository = ConnectionService!.PlayerRepository;
+    public WithdrawItem(IServiceInjector injector) : base(injector) {
+        WarehouseManager = new WarehouseManager(injector);
+    }
 
-        if (Connection is not null) {
-            var player = repository!.FindByConnectionId(Connection.Id);
+    public void Process(IConnection connection, object packet) {
+        var received = packet as CpWithdrawItem;
+
+        if (received is not null) {
+            if (received.Amount <= 0) {
+                return;
+            }
+
+            var player = FindByConnection(connection);
 
             if (player is not null) {
-                var index = Packet!.WarehouseIndex;
+                var index = received.WarehouseIndex;
 
                 if (IsValidInventory(player, index)) {
-                    var manager = new WarehouseManager() {
-                        Player = player,
-                        PacketSender = sender,
-                        Items = ContentService!.Items
-                    };
-
-                    manager.Withdraw(index, Packet!.Amount);
+                    WarehouseManager.Withdraw(player, index, received.Amount);
                 }
             }
         }

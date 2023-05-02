@@ -1,24 +1,36 @@
 ﻿using Dragon.Core.Model;
-using Dragon.Game.Network.Senders;
+using Dragon.Core.Services;
+
 using Dragon.Game.Players;
+using Dragon.Game.Services;
+using Dragon.Game.Network.Senders;
 
 namespace Dragon.Game.Manager;
 
-public class ViewEquipmentManager {
-    public IPlayer? Player { get; init; }
-    public IPacketSender? PacketSender { get; init; }
+public sealed class ViewEquipmentManager {
+    public PacketSenderService? PacketSenderService { get; private set; }
 
-    public void ProcessViewRequest(IPlayer? target) {
+    public ViewEquipmentManager(IServiceInjector injector) {
+        injector.Inject(this);
+    }
+
+    public void ProcessViewRequest(IPlayer player, IPlayer? target) {
+        var sender = GetPacketSender();
+
         if (target is not null) {
             if (target.Settings.ViewEquipment) {
-                PacketSender!.SendViewEquipment(Player!, target);
+                sender.SendViewEquipment(player, target);
             }
             else {
-                PacketSender!.SendMessage(SystemMessage.ViewEquipmentIsDisabled, QbColor.BrigthRed, Player!);
+                sender.SendMessage(SystemMessage.ViewEquipmentIsDisabled, QbColor.BrigthRed, player);
             }
         }
         else {
-            PacketSender!.SendMessage(SystemMessage.PlayerIsNotOnline, QbColor.BrigthRed, Player!);
+            sender.SendMessage(SystemMessage.PlayerIsNotOnline, QbColor.BrigthRed, player);
         }
+    }
+
+    private IPacketSender GetPacketSender() {
+        return PacketSenderService!.PacketSender!;
     }
 }

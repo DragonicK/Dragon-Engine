@@ -1,37 +1,38 @@
-﻿using Dragon.Network;
+﻿using Dragon.Core.Services;
+
+using Dragon.Network;
+using Dragon.Network.Messaging;
 using Dragon.Network.Messaging.SharedPackets;
 
-using Dragon.Game.Services;
+using Dragon.Game.Network;
 using Dragon.Game.Manager;
 using Dragon.Game.Players;
 
 namespace Dragon.Game.Routes;
 
-public sealed class TradeItem {
-    public IConnection? Connection { get; set; }
-    public CpTradeItem? Packet { get; set; }
-    public ConnectionService? ConnectionService { get; init; }
-    public LoggerService? LoggerService { get; init; }
-    public InstanceService? InstanceService { get; init; }
+public sealed class TradeItem : PacketRoute, IPacketRoute {
+    public MessageHeader Header => MessageHeader.TradeItem;
 
-    public void Process() {
-        var repository = ConnectionService!.PlayerRepository;
+    public TradeItem(IServiceInjector injector) : base(injector) { }
 
-        if (Connection is not null) {
-            var player = repository!.FindByConnectionId(Connection.Id);
+    public void Process(IConnection connection, object packet) {
+        var received = packet as CpTradeItem;
+
+        if (received is not null) {
+            var player = FindByConnection(connection);
 
             if (player is not null) {
-                var index = Packet!.InventoryIndex;
-                var amount = Packet!.Amount;
-
-                if (IsValidPacket(player, index, amount)) {
-                    var manager = GetTradeManager(player);
-
-                    if (manager is not null) {
-                        manager.TradeItem(player, index, amount);
-                    }
-                }
+                Execute(player, received);
             }
+        }
+    }
+
+    private void Execute(IPlayer player, CpTradeItem packet) {
+        if (IsValidPacket(player, packet.InventoryIndex, packet.Amount)) {
+            var index = packet.InventoryIndex;
+            var amount = packet.Amount;
+
+            GetTradeManager(player)?.TradeItem(player, index, amount);
         }
     }
 
@@ -51,10 +52,8 @@ public sealed class TradeItem {
         var id = player.TradeId;
         var trades = InstanceService!.Trades;
 
-        if (trades.ContainsKey(id)) {
-            return trades[id];
-        }
+        trades.TryGetValue(id, out var trade);
 
-        return null;
+        return trade;
     }
 }

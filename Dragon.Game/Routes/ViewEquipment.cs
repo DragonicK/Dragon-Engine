@@ -1,49 +1,47 @@
-﻿using Dragon.Network;
+﻿using Dragon.Core.Services;
+
+using Dragon.Network;
+using Dragon.Network.Messaging;
 using Dragon.Network.Messaging.SharedPackets;
 
+using Dragon.Game.Network;
 using Dragon.Game.Manager;
-using Dragon.Game.Services;
 
 namespace Dragon.Game.Routes;
 
-public sealed class ViewEquipment {
-    public IConnection? Connection { get; set; }
+public sealed class ViewEquipment : PacketRoute, IPacketRoute {
+    public MessageHeader Header => MessageHeader.RequestViewEquipment;
     public CpRequestViewEquipment? Packet { get; set; }
-    public ConnectionService? ConnectionService { get; init; }
-    public ConfigurationService? Configuration { get; init; }
-    public PacketSenderService? PacketSenderService { get; init; }
 
-    public void Process() {
-        if (IsValidPacket()) {
-            var repository = ConnectionService!.PlayerRepository;
-            var sender = PacketSenderService!.PacketSender;
+    private readonly ViewEquipmentManager ViewEquipmentManager;
 
-            if (Connection is not null) {
-                var player = repository!.FindByConnectionId(Connection.Id);
-
-                if (player is not null) {
-                    var target = repository!.FindByName(Packet!.Character);
-
-                    var manager = new ViewEquipmentManager() {
-                        Player = player,
-                        PacketSender = sender
-                    };
-
-                    manager.ProcessViewRequest(target);
-                }
-            }
-        }
+    public ViewEquipment(IServiceInjector injector) : base(injector) {
+        ViewEquipmentManager = new ViewEquipmentManager(injector);
     }
 
-    private bool IsValidPacket() {
-        if (Packet!.Character is null) {
+    public void Process(IConnection connection, object packet) {
+        var received = packet as CpRequestViewEquipment;
+
+        if (received is not null) {
+            var player = FindByConnection(connection);
+
+            if (player is not null) {
+                if (IsValidPacket(received)) {
+                    var target = GetPlayerRepository().FindByName(received.Character);
+
+                    ViewEquipmentManager.ProcessViewRequest(player, target);
+                }
+            }
+        }      
+    }
+
+    private bool IsValidPacket(CpRequestViewEquipment packet) {
+        if (packet.Character is null) {
             return false;
         }
 
-        if (Configuration is not null) {
-            if (Packet!.Character.Length > Configuration.Character.MaximumNameLength) {
-                return false;
-            }
+        if (packet.Character.Length > Configuration!.Character.MaximumNameLength) {
+            return false;
         }
 
         return true;

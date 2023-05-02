@@ -1,42 +1,35 @@
-﻿using Dragon.Network;
+﻿using Dragon.Core.Services;
+
+using Dragon.Network;
+using Dragon.Network.Messaging;
 using Dragon.Network.Messaging.SharedPackets;
 
-using Dragon.Game.Services;
 using Dragon.Game.Players;
 using Dragon.Game.Manager;
+using Dragon.Game.Network;
 
 namespace Dragon.Game.Routes;
 
-public sealed class UseItem {
-    public IConnection? Connection { get; set; }
-    public CpUseItem? Packet { get; set; }
-    public LoggerService? LoggerService { get; init; }
-    public ContentService? ContentService { get; init; }
-    public ConfigurationService? Configuration { get; init; }
-    public ConnectionService? ConnectionService { get; init; }
-    public PacketSenderService? PacketSenderService { get; init; }
+public sealed class UseItem : PacketRoute, IPacketRoute {
+    public MessageHeader Header => MessageHeader.UseItem;
 
-    public void Process() {
-        var sender = PacketSenderService!.PacketSender;
-        var instances = PacketSenderService!.InstanceService;
-        var repository = ConnectionService!.PlayerRepository;
+    private readonly ItemManager ItemManager;
 
-        if (Connection is not null) {
-            var player = repository!.FindByConnectionId(Connection.Id);
+    public UseItem(IServiceInjector injector) : base(injector) {
+        ItemManager = new ItemManager(injector);
+    }
+
+    public void Process(IConnection connection, object packet) {
+        var received = packet as CpUseItem;
+
+        if (received is not null) {
+            var player = FindByConnection(connection);
 
             if (player is not null) {
-                var index = Packet!.InventoryIndex;
+                var index = received.InventoryIndex;
 
                 if (IsValidInventory(player, index)) {
-                    var manager = new ItemManager() {
-                        Player = player,
-                        PacketSender = sender,
-                        InstanceService = instances,
-                        Configuration = Configuration,
-                        ContentService = ContentService
-                    };
-
-                    manager.UseItem(index);
+                    ItemManager.UseItem(player, index);
                 }
             }
         }

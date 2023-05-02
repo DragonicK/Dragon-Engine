@@ -1,38 +1,31 @@
-﻿using Dragon.Network;
+﻿using Dragon.Core.Services;
+
+using Dragon.Network;
+using Dragon.Network.Messaging;
 using Dragon.Network.Messaging.SharedPackets;
 
-using Dragon.Game.Services;
 using Dragon.Game.Manager;
+using Dragon.Game.Network;
 
 namespace Dragon.Game.Routes;
 
-public sealed class UnequipItem {
-    public IConnection? Connection { get; set; }
-    public CpUnequipItem? Packet { get; set; }
-    public LoggerService? LoggerService { get; init; }
-    public ContentService? ContentService { get; init; }
-    public ConfigurationService? Configuration { get; init; }
-    public ConnectionService? ConnectionService { get; init; }
-    public PacketSenderService? PacketSenderService { get; init; }
+public sealed class UnequipItem : PacketRoute, IPacketRoute {
+    public MessageHeader Header => MessageHeader.UnequipItem;
 
-    public void Process() {
-        var sender = PacketSenderService!.PacketSender;
-        var instances = PacketSenderService!.InstanceService;
-        var repository = ConnectionService!.PlayerRepository;
+    private readonly ItemManager ItemManager;
 
-        if (Connection is not null) {
-            var player = repository!.FindByConnectionId(Connection.Id);
+    public UnequipItem(IServiceInjector injector) : base(injector) {
+        ItemManager = new ItemManager(injector);
+    }
+
+    public void Process(IConnection connection, object packet) {
+        var received = packet as CpUnequipItem;
+
+        if (received is not null) {
+            var player = FindByConnection(connection);
 
             if (player is not null) {
-                var manager = new ItemManager() {
-                    Player = player,
-                    PacketSender = sender,
-                    InstanceService = instances,
-                    Configuration = Configuration,
-                    ContentService = ContentService
-                };
-
-                manager.UnequipItem(Packet!.EquipmentType);
+                ItemManager.UnequipItem(player, received.EquipmentType);
             }
         }
     }

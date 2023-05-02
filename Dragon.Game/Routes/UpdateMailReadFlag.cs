@@ -1,23 +1,26 @@
-﻿using Dragon.Network;
+﻿using Dragon.Core.Services;
+
+using Dragon.Network;
 using Dragon.Network.Messaging.SharedPackets;
 
-using Dragon.Game.Services;
+using Dragon.Game.Network;
+using Dragon.Network.Messaging;
 
 namespace Dragon.Game.Routes;
 
-public class UpdateMailReadFlag {
-    public IConnection? Connection { get; set; }
-    public CpUpdateMailReadFlag? Packet { get; set; }
-    public ConnectionService? ConnectionService { get; set; }
+public class UpdateMailReadFlag : PacketRoute, IPacketRoute {
+    public MessageHeader Header => MessageHeader.UpdateMailReadFlag;
 
-    public void Process() {
-        var repository = ConnectionService!.PlayerRepository;
+    public UpdateMailReadFlag(IServiceInjector injector) : base(injector) { }
 
-        if (Connection is not null) {
-            var player = repository!.FindByConnectionId(Connection.Id);
+    public void Process(IConnection connection, object packet) {
+        var received = packet as CpUpdateMailReadFlag;
+
+        if (received is not null) {
+            var player = FindByConnection(connection);
 
             if (player is not null) {
-                player.Mails.UpdateReadFlag(Packet!.Id);
+                player.Mails.UpdateReadFlag(received.Id);
             }
         }
     }

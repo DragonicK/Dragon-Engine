@@ -1,25 +1,27 @@
-﻿using Dragon.Network;
+﻿using Dragon.Core.Services;
+
+using Dragon.Network;
+using Dragon.Network.Messaging;
 using Dragon.Network.Messaging.SharedPackets;
 
-using Dragon.Game.Services;
+using Dragon.Game.Network;
 
 namespace Dragon.Game.Routes;
 
-public sealed class ViewEquipmentVisibility {
-    public IConnection? Connection { get; set; }
-    public CpViewEquipmentVisibility? Packet { get; set; }
-    public ConnectionService? ConnectionService { get; init; }
-    public ConfigurationService? Configuration { get; init; }
+public sealed class ViewEquipmentVisibility : PacketRoute, IPacketRoute {
+    public MessageHeader Header => MessageHeader.ViewEquipmentVisibility;
 
-    public void Process() {
-        var repository = ConnectionService!.PlayerRepository;
+    public ViewEquipmentVisibility(IServiceInjector injector) : base(injector) { }
 
-        if (Connection is not null) {
-            var player = repository!.FindByConnectionId(Connection.Id);
+    public void Process(IConnection connection, object packet) {
+        var received = packet as CpViewEquipmentVisibility;
+
+        if (received is not null) {
+            var player = FindByConnection(connection);
 
             if (player is not null) {
-                player.Settings.ViewEquipment = Packet!.IsVisible;
+                player.Settings.ViewEquipment = received.IsVisible;
             }
-        }
+        }      
     }
 }
