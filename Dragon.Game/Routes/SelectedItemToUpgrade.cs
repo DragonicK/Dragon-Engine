@@ -1,46 +1,44 @@
-﻿using Dragon.Network;
+﻿using Dragon.Core.Services;
+
+using Dragon.Network;
+using Dragon.Network.Messaging;
 using Dragon.Network.Messaging.SharedPackets;
 
 using Dragon.Game.Players;
 using Dragon.Game.Manager;
-using Dragon.Game.Services;
+using Dragon.Game.Network;
 
 namespace Dragon.Game.Routes;
 
-public sealed class SelectedItemToUpgrade {
-    public IConnection? Connection { get; set; }
-    public CpSelectedItemToUpgrade? Packet { get; set; }
-    public ConfigurationService? Configuration { get; set; }
-    public ContentService? ContentService { get; set; }
-    public PacketSenderService? PacketSenderService { get; set; }
-    public ConnectionService? ConnectionService { get; set; }
+public sealed class SelectedItemToUpgrade : PacketRoute, IPacketRoute {
+    public MessageHeader Header { get; set; } = MessageHeader.SelectedItemToUpgrade;
 
-    public void Process() {
-        var sender = PacketSenderService!.PacketSender;
-        var repository = ConnectionService!.PlayerRepository;
+    private readonly ItemUpgradeManager ItemUpgradeManager;
 
-        if (Connection is not null) {
-            var player = repository!.FindByConnectionId(Connection.Id);
+    public SelectedItemToUpgrade(IServiceInjector injector) : base(injector) {
+        ItemUpgradeManager = new ItemUpgradeManager(injector);
+    }
+
+    public void Process(IConnection connection, object packet) {
+        var received = packet as CpSelectedItemToUpgrade;
+
+        if (received is not null) {
+            var player = GetPlayerRepository().FindByConnectionId(connection.Id);
 
             if (player is not null) {
-                if (IsValidInventory(player)) {
-
-                    var manager = new ItemUpgradeManager() {
-                        Configuration = Configuration,
-                        ContentService = ContentService,
-                        PacketSender = sender,
-                        Player = player
-                    };
-
-                    manager.SendUpgradeData(Packet!.InventoryIndex);
-
-                }
+                Execute(player, received);
             }
         }
     }
 
-    private bool IsValidInventory(IPlayer player) {
-        var inventoryIndex = Packet!.InventoryIndex;
+    private void Execute(IPlayer player, CpSelectedItemToUpgrade packet) {
+        if (IsValidInventory(player, packet)) {
+            ItemUpgradeManager.SendUpgradeData(player, packet.InventoryIndex);
+        }
+    }
+
+    private bool IsValidInventory(IPlayer player, CpSelectedItemToUpgrade packet) {
+        var inventoryIndex = packet.InventoryIndex;
 
         if (inventoryIndex < 1) {
             return false;

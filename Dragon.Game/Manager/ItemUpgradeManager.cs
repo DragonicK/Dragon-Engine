@@ -1,40 +1,49 @@
-﻿using Dragon.Core.Model;
+﻿using Dragon.Core.Services;
+
+using Dragon.Core.Model;
 using Dragon.Core.Model.Items;
 using Dragon.Core.Model.Upgrades;
 using Dragon.Core.Model.Characters;
 
 using Dragon.Game.Players;
 using Dragon.Game.Services;
-using Dragon.Game.Configurations;
 using Dragon.Game.Network.Senders;
 
 namespace Dragon.Game.Manager;
 
-public class ItemUpgradeManager {
-    public IPlayer? Player { get; init; }
-    public IConfiguration? Configuration { get; init; }
-    public IPacketSender? PacketSender { get; init; }
-    public ContentService? ContentService { get; init; }
+public sealed class ItemUpgradeManager {
+    public ContentService? ContentService { get; private set; }
+    public ConfigurationService? Configuration { get; private set; }
+    public PacketSenderService? PacketSenderService { get; private set; }
 
     private const int NextLevel = 1;
 
-    public void SendUpgradeData(int inventoryIndex) {
-        var item = GetItemFromInventory(inventoryIndex);
+    private readonly Random random;
+
+    public ItemUpgradeManager(IServiceInjector injector) {
+        injector.Inject(this);
+
+        random = new Random();
+    }
+
+    public void SendUpgradeData(IPlayer player, int inventoryIndex) {
+        var item = GetItemFromInventory(player, inventoryIndex);
+        var sender = GetPacketSender();
 
         if (item is not null) {
             var upgrade = GetUpgrade(item);
 
             if (upgrade is not null) {
-                ContinueSendData(upgrade, inventoryIndex);
+                ContinueSendData(sender, player, upgrade, inventoryIndex);
             }
             else {
-                PacketSender!.SendMessage(SystemMessage.ItemCannotBeUpgraded, QbColor.BrigthRed, Player!);
+                sender.SendMessage(SystemMessage.ItemCannotBeUpgraded, QbColor.BrigthRed, player);
             }
         }
     }
 
-    private void ContinueSendData(Upgrade upgrade, int inventoryIndex) {
-        var inventory = Player!.Inventories.FindByIndex(inventoryIndex);
+    private void ContinueSendData(IPacketSender sender, IPlayer player, Upgrade upgrade, int inventoryIndex) {
+        var inventory = player.Inventories.FindByIndex(inventoryIndex);
 
         if (inventory is not null) {
             var level = inventory.Level + NextLevel;
@@ -42,31 +51,33 @@ public class ItemUpgradeManager {
             if (level <= upgrade.MaximumLevel) {
                 var content = upgrade.ContentLevel[level];
 
-                PacketSender!.SendUpgradeData(Player, inventoryIndex, content);
+                sender.SendUpgradeData(player, inventoryIndex, content);
             }
             else {
-                PacketSender!.SendUpgradeData(Player, inventoryIndex);
+                sender.SendUpgradeData(player, inventoryIndex);
             }
         }
     }
 
-    public void StartUpgrade(int inventoryIndex) {
-        var item = GetItemFromInventory(inventoryIndex);
+    public void StartUpgrade(IPlayer player, int inventoryIndex) {
+        var item = GetItemFromInventory(player, inventoryIndex);
+        
+        var sender = GetPacketSender();
 
         if (item is not null) {
             var upgrade = GetUpgrade(item);
 
             if (upgrade is not null) {
-                ContinueUpgrade(item, upgrade, inventoryIndex);
+                ContinueUpgrade(sender, player, upgrade, inventoryIndex);
             }
             else {
-                PacketSender!.SendMessage(SystemMessage.ItemCannotBeUpgraded, QbColor.BrigthRed, Player!);
+                sender.SendMessage(SystemMessage.ItemCannotBeUpgraded, QbColor.BrigthRed, player);
             }
         }
     }
 
-    private void ContinueUpgrade(Item item, Upgrade upgrade, int inventoryIndex) {
-        var inventory = Player!.Inventories.FindByIndex(inventoryIndex);
+    private void ContinueUpgrade(IPacketSender sender, IPlayer player, Upgrade upgrade, int inventoryIndex) {
+        var inventory = player.Inventories.FindByIndex(inventoryIndex);
 
         if (inventory is not null) {
             var level = inventory.Level + NextLevel;
@@ -75,116 +86,116 @@ public class ItemUpgradeManager {
                 var content = upgrade.ContentLevel[level];
 
                 if (content is not null) {
-                    if (HasRequirements(content) && HasGold(content)) {
-                        TakeRequiredItems(content);
-                        TakeCurrency(content);
+                    if (HasRequirements(player, content) && HasGold(player, content)) {
+                        TakeRequiredItems(sender, player, content);
+                        TakeCurrency(sender, player, content);
 
-                        ProcessResult(GenerateRates(content), upgrade, inventory);
+                        ProcessResult(sender, player, GenerateRates(content), upgrade, inventory);
                     }
                     else {
-                        PacketSender!.SendMessage(SystemMessage.YouDoNotHaveEnoughMaterial, QbColor.Red, Player!);
+                        sender.SendMessage(SystemMessage.YouDoNotHaveEnoughMaterial, QbColor.Red, player);
                     }
                 }
             }
             else {
-                PacketSender!.SendMessage(SystemMessage.UpgradeMaximumLevel, QbColor.Gold, Player!);
+                sender.SendMessage(SystemMessage.UpgradeMaximumLevel, QbColor.Gold, player);
             }
         }
     }
 
-    private void ProcessResult(UpgradeResult result, Upgrade upgrade, CharacterInventory inventory) {
+    private void ProcessResult(IPacketSender sender, IPlayer player, UpgradeResult result, Upgrade upgrade, CharacterInventory inventory) {
         switch (result) {
             case UpgradeResult.Failed:
-                ProcessFail(upgrade, inventory);
+                ProcessFail(sender, player, upgrade, inventory);
 
                 break;
 
             case UpgradeResult.Reduce:
-                ProcessReduce(upgrade, inventory);
+                ProcessReduce(sender, player, upgrade, inventory);
 
                 break;
 
             case UpgradeResult.Success:
-                ProcessSuccess(upgrade, inventory);
+                ProcessSuccess(sender, player, upgrade, inventory);
 
                 break;
 
             case UpgradeResult.Break:
-                ProcessBreak(inventory);
+                ProcessBreak(sender, player, inventory);
 
                 break;
         }
     }
 
-    private void ProcessFail(Upgrade upgrade, CharacterInventory inventory) {
+    private void ProcessFail(IPacketSender sender, IPlayer player, Upgrade upgrade, CharacterInventory inventory) {
         var index = inventory.InventoryIndex;
 
-        PacketSender!.SendInventoryUpdate(Player!, index);
+        sender.SendInventoryUpdate(player, index);
 
-        PacketSender!.SendMessage(SystemMessage.UpgradeFailed, QbColor.Red, Player!);
+        sender.SendMessage(SystemMessage.UpgradeFailed, QbColor.Red, player);
 
         var content = GetNextContent(upgrade, inventory);
 
         if (content is not null) {
-            PacketSender!.SendUpgradeData(Player!, index, content);
+            sender.SendUpgradeData(player, index, content);
         }
         else {
-            PacketSender!.SendUpgradeData(Player!, index);
+            sender.SendUpgradeData(player, index);
         }
     }
 
-    private void ProcessReduce(Upgrade upgrade, CharacterInventory inventory) {
+    private void ProcessReduce(IPacketSender sender, IPlayer player, Upgrade upgrade, CharacterInventory inventory) {
         var index = inventory.InventoryIndex;
 
         if (inventory.Level > 0) {
             inventory.DecreaseLevel();
 
-            PacketSender!.SendInventoryUpdate(Player!, index);
+            sender.SendInventoryUpdate(player, index);
 
-            PacketSender!.SendMessage(SystemMessage.UpgradeFailedButReduced, QbColor.Red, Player!);
+            sender.SendMessage(SystemMessage.UpgradeFailedButReduced, QbColor.Red, player);
         }
         else {
-            PacketSender!.SendMessage(SystemMessage.UpgradeFailed, QbColor.Red, Player!);
+            sender.SendMessage(SystemMessage.UpgradeFailed, QbColor.Red, player);
         }
 
         var content = GetNextContent(upgrade, inventory);
 
         if (content is not null) {
-            PacketSender!.SendUpgradeData(Player!, index, content);
+            sender.SendUpgradeData(player, index, content);
         }
         else {
-            PacketSender!.SendUpgradeData(Player!, index);
+            sender.SendUpgradeData(player, index);
         }
     }
 
-    private void ProcessSuccess(Upgrade upgrade, CharacterInventory inventory) {
+    private void ProcessSuccess(IPacketSender sender, IPlayer player, Upgrade upgrade, CharacterInventory inventory) {
         var index = inventory.InventoryIndex;
 
         inventory.IncreaseLevel();
 
-        PacketSender!.SendInventoryUpdate(Player!, index);
+        sender.SendInventoryUpdate(player, index);
 
-        PacketSender!.SendMessage(SystemMessage.UpgradeSuccess, QbColor.BrigthGreen, Player!);
+        sender.SendMessage(SystemMessage.UpgradeSuccess, QbColor.BrigthGreen, player);
 
         var content = GetNextContent(upgrade, inventory);
 
         if (content is not null) {
-            PacketSender!.SendUpgradeData(Player!, index, content);
+            sender.SendUpgradeData(player, index, content);
         }
         else {
-            PacketSender!.SendUpgradeData(Player!, index);
+            sender.SendUpgradeData(player, index);
         }
     }
 
-    private void ProcessBreak(CharacterInventory inventory) {
+    private void ProcessBreak(IPacketSender sender, IPlayer player, CharacterInventory inventory) {
         var index = inventory.InventoryIndex;
 
         inventory.Clear();
 
-        PacketSender!.SendInventoryUpdate(Player!, index);
-        PacketSender!.SendMessage(SystemMessage.UpgradeBreak, QbColor.Red, Player!);
+        sender.SendInventoryUpdate(player, index);
+        sender.SendMessage(SystemMessage.UpgradeBreak, QbColor.Red, player);
 
-        PacketSender!.SendUpgradeData(Player!, 0);
+        sender.SendUpgradeData(player, 0);
     }
 
     private UpgradeLevel? GetNextContent(Upgrade upgrade, CharacterInventory inventory) {
@@ -197,8 +208,8 @@ public class ItemUpgradeManager {
         return null;
     }
 
-    private Item? GetItemFromInventory(int inventoryIndex) {
-        var inventory = Player!.Inventories.FindByIndex(inventoryIndex);
+    private Item? GetItemFromInventory(IPlayer player, int inventoryIndex) {
+        var inventory = player.Inventories.FindByIndex(inventoryIndex);
 
         if (inventory is not null) {
             var items = ContentService!.Items;
@@ -222,20 +233,19 @@ public class ItemUpgradeManager {
     }
 
     private UpgradeResult GenerateRates(UpgradeLevel content) {
-        var r = new Random();
-        var success = r.Next(1, 100);
+          var success = random.Next(1, 100);
 
         if (success <= content.Success) {
             return UpgradeResult.Success;
         }
         else {
-            var destroy = r.Next(1, 100);
+            var destroy = random.Next(1, 100);
 
             if (destroy <= content.Break) {
                 return UpgradeResult.Break;
             }
             else {
-                var reduce = r.Next(1, 100);
+                var reduce = random.Next(1, 100);
 
                 if (reduce <= content.Reduce) {
                     return UpgradeResult.Reduce;
@@ -246,15 +256,15 @@ public class ItemUpgradeManager {
         return UpgradeResult.Failed;
     }
 
-    private bool HasGold(UpgradeLevel content) {
-        return Player!.Currencies.Get(CurrencyType.Gold) >= content.Cost;
+    private bool HasGold(IPlayer player, UpgradeLevel content) {
+        return player.Currencies.Get(CurrencyType.Gold) >= content.Cost;
     }
 
-    private bool HasRequirements(UpgradeLevel content) {
+    private bool HasRequirements(IPlayer player, UpgradeLevel content) {
         var items = content.Requirements;
 
         for (var i = 0; i < items.Count; ++i) {
-            if (!HasItem(items[i])) {
+            if (!HasItem(player, items[i])) {
                 return false;
             }
         }
@@ -262,13 +272,13 @@ public class ItemUpgradeManager {
         return true;
     }
 
-    private bool HasItem(UpgradeRequirement required) {
+    private bool HasItem(IPlayer player, UpgradeRequirement required) {
         if (required.Id == 0) {
             return true;
         }
 
         var count = 0;
-        var inventories = Player!.Inventories.ToList();
+        var inventories = player.Inventories.ToList();
 
         for (var i = 0; i < inventories.Count; ++i) {
             if (inventories[i].ItemId == required.Id) {
@@ -283,21 +293,21 @@ public class ItemUpgradeManager {
         return false;
     }
 
-    private void TakeCurrency(UpgradeLevel content) {
-        Player!.Currencies.Subtract(CurrencyType.Gold, content.Cost);
-        PacketSender!.SendCurrencyUpdate(Player, CurrencyType.Gold);
+    private void TakeCurrency(IPacketSender sender, IPlayer player, UpgradeLevel content) {
+        player.Currencies.Subtract(CurrencyType.Gold, content.Cost);
+        sender.SendCurrencyUpdate(player, CurrencyType.Gold);
     }
 
-    private void TakeRequiredItems(UpgradeLevel content) {
+    private void TakeRequiredItems(IPacketSender sender, IPlayer player, UpgradeLevel content) {
         var items = content.Requirements;
 
         for (var i = 0; i < items.Count; ++i) {
-            TakeRequiredItem(items[i]);
+            TakeRequiredItem(sender, player, items[i]);
         }
     }
 
-    private void TakeRequiredItem(UpgradeRequirement required) {
-        var inventories = Player!.Inventories.ToList();
+    private void TakeRequiredItem(IPacketSender sender, IPlayer player, UpgradeRequirement required) {
+        var inventories = player.Inventories.ToList();
         var value = required.Amount;
         int rest;
 
@@ -321,7 +331,7 @@ public class ItemUpgradeManager {
                     inventory.Clear();
                 }
 
-                PacketSender!.SendInventoryUpdate(Player, inventory.InventoryIndex);
+                sender.SendInventoryUpdate(player, inventory.InventoryIndex);
 
                 if (rest == 0) {
                     return;
@@ -330,7 +340,11 @@ public class ItemUpgradeManager {
                     value = rest;
                 }
 
-            }
+            }    
         }
+    }
+
+    private IPacketSender GetPacketSender() {
+        return PacketSenderService!.PacketSender!;
     }
 }

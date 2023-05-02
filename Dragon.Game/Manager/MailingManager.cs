@@ -1,91 +1,95 @@
-﻿using Dragon.Database;
+﻿using Dragon.Core.Services;
 
 using Dragon.Core.Model;
 using Dragon.Core.Model.Mailing;
 using Dragon.Core.Model.Characters;
 
 using Dragon.Game.Players;
+using Dragon.Game.Services;
 using Dragon.Game.Characters;
 using Dragon.Game.Repository;
-using Dragon.Game.Configurations;
 using Dragon.Game.Network.Senders;
 
 namespace Dragon.Game.Manager;
 
-public class MailingManager {
-    public IPlayer? Player { get; init; }
-    public IPacketSender? PacketSender { get; init; }
-    public IConfiguration? Configuration { get; init; }
-    public IPlayerRepository? PlayerRepository { get; init; }
-    public IDatabaseFactory? Factory { get; init; }
+public sealed class MailingManager {
+    public DatabaseService? DatabaseService { get; private set; }
+    public ConfigurationService? Configuration { get; private set; }
+    public ConnectionService? ConnectionService { get; private set; }
+    public PacketSenderService? PacketSenderService { get; private set; }
 
-    public void ProcessMailing(CharacterMail mail, string name, int index, int amount) {
-        var receiver = PlayerRepository!.FindByName(name);
+    private readonly ICharacterDatabase CharacterDatabase;
+
+    public MailingManager(IServiceInjector injector) {
+        injector.Inject(this);
+
+        CharacterDatabase = new CharacterDatabase(Configuration!, DatabaseService!.DatabaseFactory!);
+    }
+
+    public void ProcessMailing(IPlayer player, CharacterMail mail, string name, int index, int amount) {
+        var receiver = GetPlayerRepository().FindByName(name);
+        var sender = GetPacketSender();
 
         if (receiver is not null) {
-            CreateMailToOnlinePlayer(mail, receiver, index, amount);
+            CreateMailToOnlinePlayer(sender, player, mail, receiver, index, amount);
         }
         else {
-            CreateMailToOfflinePlayer(mail, name, index, amount);
+            CreateMailToOfflinePlayer(sender, player, mail, name, index, amount);
         }
     }
 
-    private void CreateMailToOnlinePlayer(CharacterMail mail, IPlayer receiver, int index, int amount) {
-        var step = CreateMail(mail, index, amount);
+    private void CreateMailToOnlinePlayer(IPacketSender sender, IPlayer player, CharacterMail mail, IPlayer receiver, int index, int amount) {
+        var step = CreateMail(player, mail, index, amount);
 
         if (step != MailingOperationCode.Sended) {
-            PacketSender!.SendAlertMessage(Player!.GetConnection(), GetAlertMessageType(step), MenuResetType.None);
+            sender!.SendAlertMessage(player.GetConnection(), GetAlertMessageType(step), MenuResetType.None);
         }
         else {
-            if (CouldAttachCurrencyAndItem(mail, index, amount)) {
-                PacketSender!.SendCurrencyUpdate(Player!, CurrencyType.Gold);
-                PacketSender!.SendInventoryUpdate(Player!, index);
+            if (CouldAttachCurrencyAndItem(player, mail, index, amount)) {
+                sender.SendCurrencyUpdate(player, CurrencyType.Gold);
+                sender!.SendInventoryUpdate(player, index);
 
                 receiver.Mails.Add(mail);
 
-                PacketSender.SendMail(receiver, mail);
+                sender.SendMail(receiver, mail);
 
-                PacketSender!.SendMessage(SystemMessage.YouJustReceivedMail, QbColor.Gold, receiver);
+                sender.SendMessage(SystemMessage.YouJustReceivedMail, QbColor.Gold, receiver);
             }
         }
 
-        PacketSender!.SendMailOperationResult(Player!, step);
+        sender.SendMailOperationResult(player, step);
     }
 
-    private async void CreateMailToOfflinePlayer(CharacterMail mail, string name, int index, int amount) {
-        var step = CreateMail(mail, index, amount);
+    private async void CreateMailToOfflinePlayer(IPacketSender sender, IPlayer player, CharacterMail mail, string name, int index, int amount) {
+        var step = CreateMail(player, mail, index, amount);
 
         if (step != MailingOperationCode.Sended) {
-            PacketSender!.SendAlertMessage(Player!.GetConnection(), GetAlertMessageType(step), MenuResetType.None);
+            sender.SendAlertMessage(player.GetConnection(), GetAlertMessageType(step), MenuResetType.None);
         }
         else {
-            var database = new CharacterDatabase(Configuration!, Factory!);
-
-            var id = await database.GetCharacterIdAsync(name);
+            var id = await CharacterDatabase.GetCharacterIdAsync(name);
 
             if (id != 0) {
-                if (CouldAttachCurrencyAndItem(mail, index, amount)) {
+                if (CouldAttachCurrencyAndItem(player, mail, index, amount)) {
                     mail.ReceiverCharacterId = id;
 
-                    PacketSender!.SendCurrencyUpdate(Player!, CurrencyType.Gold);
-                    PacketSender!.SendInventoryUpdate(Player!, index);
+                    sender.SendCurrencyUpdate(player!, CurrencyType.Gold);
+                    sender!.SendInventoryUpdate(player!, index);
 
-                    await database.SaveMailAsync(mail);
+                    await CharacterDatabase.SaveMailAsync(mail);
                 }
             }
             else {
                 step = MailingOperationCode.InvalidReceiver;
             }
-
-            database.Dispose();
         }
 
-        PacketSender!.SendMailOperationResult(Player!, step);
+        sender.SendMailOperationResult(player, step);
     }
 
-    private MailingOperationCode CreateMail(CharacterMail mail, int index, int amount) {
+    private MailingOperationCode CreateMail(IPlayer player, CharacterMail mail, int index, int amount) {
         if (index > 0) {
-            var inventory = Player!.Inventories.FindByIndex(index);
+            var inventory = player.Inventories.FindByIndex(index);
 
             if (inventory is null) {
                 return MailingOperationCode.InvalidItem;
@@ -101,13 +105,13 @@ public class MailingManager {
         }
 
         mail.SendDate = DateTime.Now;
-        mail.SenderCharacterId = Player!.Character.CharacterId;
-        mail.SenderCharacterName = Player!.Character.Name;
+        mail.SenderCharacterId = player.Character.CharacterId;
+        mail.SenderCharacterName = player.Character.Name;
         mail.AttachCurrencyReceiveFlag = false;
         mail.AttachItemReceiveFlag = false;
 
         if (mail.AttachCurrency > 0) {
-            if (Player!.Currencies.Get(CurrencyType.Gold) < mail.AttachCurrency) {
+            if (player.Currencies.Get(CurrencyType.Gold) < mail.AttachCurrency) {
                 return MailingOperationCode.CurrencyIsNotEnough;
             }
         }
@@ -121,15 +125,15 @@ public class MailingManager {
         mail.ExpireDate = mail.SendDate.AddDays(Configuration!.Mail.TimeLimitInDays);
     }
 
-    private bool CouldAttachCurrencyAndItem(CharacterMail mail, int index, int amount) {
+    private bool CouldAttachCurrencyAndItem(IPlayer player, CharacterMail mail, int index, int amount) {
         if (mail.AttachCurrency > 0) {
-            if (!Player!.Currencies.Subtract(CurrencyType.Gold, mail.AttachCurrency)) {
+            if (!player.Currencies.Subtract(CurrencyType.Gold, mail.AttachCurrency)) {
                 return false;
             }
         }
 
         if (index > 0) {
-            var inventory = Player!.Inventories.FindByIndex(index);
+            var inventory = player.Inventories.FindByIndex(index);
 
             if (inventory is null) {
                 return false;
@@ -169,4 +173,11 @@ public class MailingManager {
         _ => AlertMessageType.None
     };
 
+    private IPlayerRepository GetPlayerRepository() {
+        return ConnectionService!.PlayerRepository!;
+    }
+
+    private IPacketSender GetPacketSender() {
+        return PacketSenderService!.PacketSender!;
+    }
 }

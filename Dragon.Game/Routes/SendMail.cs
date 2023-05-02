@@ -1,77 +1,72 @@
-﻿using Dragon.Network;
-using Dragon.Network.Messaging.SharedPackets;
-
+﻿using Dragon.Core.Services;
 using Dragon.Core.Model.Characters;
 
+using Dragon.Network;
+using Dragon.Network.Messaging;
+using Dragon.Network.Messaging.SharedPackets;
+
 using Dragon.Game.Manager;
-using Dragon.Game.Services;
+using Dragon.Game.Network;
+using Dragon.Game.Players;
 
 namespace Dragon.Game.Routes;
 
-public sealed class SendMail {
-    public IConnection? Connection { get; set; }
-    public CpSendMail? Packet { get; set; }
-    public LoggerService? LoggerService { get; init; }
-    public ContentService? ContentService { get; init; }
-    public ConfigurationService? Configuration { get; init; }
-    public ConnectionService? ConnectionService { get; init; }
-    public PacketSenderService? PacketSenderService { get; init; }
-    public DatabaseService? DatabaseService { get; init; }
+public sealed class SendMail : PacketRoute, IPacketRoute {
+    public MessageHeader Header => MessageHeader.SendMail;
 
-    public void Process() {
-        if (IsValidPacket()) {
-            var sender = PacketSenderService!.PacketSender;
-            var repository = ConnectionService!.PlayerRepository;
+    private readonly MailingManager MailingManager;
 
-            if (Connection is not null) {
-                var player = repository!.FindByConnectionId(Connection.Id);
+    public SendMail(IServiceInjector injector) : base(injector) {
+        MailingManager = new MailingManager(injector);
+    }
 
-                if (player is not null) {
+    public void Process(IConnection connection, object packet) {
+        var received = packet as CpSendMail;
 
-                    var receiver = Packet!.Receiver;
-                    var index = Packet!.AttachInventoryIndex;
-                    var amount = Packet!.AttachAmount;
+        if (received is not null) {
+            var player = GetPlayerRepository().FindByConnectionId(connection.Id);
 
-                    var mail = new CharacterMail() {
-                        Subject = Packet!.Subject,
-                        Content = Packet!.Content,
-                        AttachCurrency = Packet!.AttachCurrency
-                    };
-
-                    var manager = new MailingManager() {
-                        Player = player,
-                        PacketSender = sender,
-                        PlayerRepository = repository,
-                        Configuration = Configuration,
-                        Factory = DatabaseService!.DatabaseFactory
-                    };
-
-                    manager.ProcessMailing(mail, receiver, index, amount);
-
-                }
+            if (player is not null) {
+                Execute(player, received);
             }
+        }      
+    }
+
+    private void Execute(IPlayer player, CpSendMail packet) {
+        if (IsValidPacket(packet)) {
+            var receiver = packet.Receiver;
+            var amount = packet.AttachAmount;
+            var index = packet.AttachInventoryIndex;
+
+            var mail = new CharacterMail() {
+                Subject = packet.Subject,
+                Content = packet.Content,
+                AttachCurrency = packet.AttachCurrency
+            };
+
+            MailingManager.ProcessMailing(player, mail, receiver, index, amount);
         }
     }
 
-    private bool IsValidPacket() {
-        if (string.IsNullOrEmpty(Packet!.Receiver) || PassedMaximumLength(Packet!.Receiver)) {
+    private bool IsValidPacket(CpSendMail packet) {
+        if (string.IsNullOrEmpty(packet.Receiver) || PassedMaximumLength(packet.Receiver)) {
             return false;
         }
 
-        if (string.IsNullOrEmpty(Packet!.Subject) || PassedMaximumLength(Packet!.Subject)) {
+        if (string.IsNullOrEmpty(packet.Subject) || PassedMaximumLength(packet.Subject)) {
             return false;
         }
 
-        if (string.IsNullOrEmpty(Packet!.Content) || PassedMaximumLength(Packet!.Content)) {
+        if (string.IsNullOrEmpty(packet.Content) || PassedMaximumLength(packet.Content)) {
             return false;
         }
 
-        if (Packet!.AttachCurrency < 0) {
-            Packet!.AttachCurrency = 0;
+        if (packet.AttachCurrency < 0) {
+            packet.AttachCurrency = 0;
         }
 
-        if (Packet!.AttachAmount < 0) {
-            Packet!.AttachAmount = 0;
+        if (packet.AttachAmount < 0) {
+            packet.AttachAmount = 0;
         }
 
         return true;

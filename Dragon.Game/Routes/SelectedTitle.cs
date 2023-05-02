@@ -1,65 +1,70 @@
-﻿using Dragon.Network;
+﻿using Dragon.Core.Services;
+
+using Dragon.Network;
+using Dragon.Network.Messaging;
 using Dragon.Network.Messaging.SharedPackets;
 
-using Dragon.Game.Services;
 using Dragon.Game.Players;
+using Dragon.Game.Network;
 
 namespace Dragon.Game.Routes;
 
-public sealed class SelectedTitle {
-    public IConnection? Connection { get; set; }
+public sealed class SelectedTitle : PacketRoute, IPacketRoute {
+    public MessageHeader Header => MessageHeader.SelectedTitle;
+
+    public SelectedTitle(IServiceInjector injector) : base(injector) { }
+
     public PacketSelectedTitle? Packet { get; set; }
-    public PacketSenderService? PacketSenderService { get; init; }
-    public ConfigurationService? Configuration { get; init; }
-    public ConnectionService? ConnectionService { get; init; }
-    public LoggerService? LoggerService { get; init; }
-    public InstanceService? InstanceService { get; init; }
 
-    public void Process() {
-        var repository = ConnectionService!.PlayerRepository;
+    public void Process(IConnection connection, object packet) {
+        var received = packet as PacketSelectedTitle;
 
-        if (Connection is not null) {
-            var player = repository!.FindByConnectionId(Connection.Id);
+        if (received is not null) {
+            var player = GetPlayerRepository().FindByConnectionId(connection.Id);
 
             if (player is not null) {
-                var titles = player.Titles;
-                var index = Packet!.Index;
+                Execute(player, received);
+            }
+        }       
+    }
 
-                if (index == 0) {
-                    player.Character.TitleId = 0;
-                    player.Titles.Unequip();
-                }
-                else if (index >= 1 && index <= titles.Count) {
-                    index--;
+    private void Execute(IPlayer player, PacketSelectedTitle packet) {
+        var titles = player.Titles;
+        var index = packet.Index;
 
-                    var id = titles.GetId(index);
+        if (index == 0) {
+            player.Character.TitleId = 0;
+            player.Titles.Unequip();
+        }
+        else if (index >= 1 && index <= titles.Count) {
+            index--;
 
-                    if (id > 0) {
-                        player.Character.TitleId = id;
-                        player.Titles.Equip(id);
-                    }
-                }
+            var id = titles.GetId(index);
 
-                player.AllocateAttributes();
-
-                SendUpdate(player);
+            if (id > 0) {
+                player.Character.TitleId = id;
+                player.Titles.Equip(id);
             }
         }
+
+        player.AllocateAttributes();
+
+        SendUpdate(player);
     }
 
     private void SendUpdate(IPlayer player) {
-        var sender = PacketSenderService!.PacketSender;
+        var sender = GetPacketSender();
 
-        sender?.SendAttributes(player);
+        sender.SendAttributes(player);
 
-        var instances = PacketSenderService!.InstanceService!.Instances;
+        var instances = GetInstances();
         var instanceId = player.Character.Map;
 
-        if (instances.ContainsKey(instanceId)) {
-            var instance = instances[instanceId];
+        instances.TryGetValue(instanceId, out var instance);
 
-            sender?.SendPlayerVital(player, instance);
-            sender?.SendTitle(player, instance);
+        if (instance is not null) {
+            sender.SendPlayerVital(player, instance);
+            sender.SendTitle(player, instance);
         }
     }
 }
