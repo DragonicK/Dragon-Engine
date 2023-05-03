@@ -8,7 +8,7 @@ using Dragon.Game.Network.Senders;
 
 namespace Dragon.Game.Manager;
 
-public class PartyAcceptManager {
+public sealed class PartyAcceptManager {
     public PacketSenderService? PacketSenderService { get; private set; }
 
     public PartyAcceptManager(IServiceInjector injector) {

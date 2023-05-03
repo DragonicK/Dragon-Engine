@@ -4,7 +4,9 @@ using Dragon.Network.Messaging.DTO;
 using Dragon.Network.Messaging.SharedPackets;
 
 using Dragon.Core.Model;
+using Dragon.Core.Services;
 using Dragon.Core.Model.Shops;
+using Dragon.Core.Model.Chests;
 using Dragon.Core.Model.Premiums;
 using Dragon.Core.Model.Upgrades;
 using Dragon.Core.Model.Characters;
@@ -12,18 +14,23 @@ using Dragon.Core.Model.Characters;
 using Dragon.Game.Players;
 using Dragon.Game.Services;
 using Dragon.Game.Instances;
-using Dragon.Game.Configurations;
 using Dragon.Game.Instances.Chests;
-using Dragon.Core.Model.Chests;
 using Dragon.Game.Network.Senders;
 
 namespace Dragon.Game.Network;
 
 public sealed partial class PacketSender : IPacketSender {
-    public IOutgoingMessageWriter? Writer { get; set; }
-    public IConfiguration? Configuration { get; set; }
-    public PassphraseService? PassphraseService { get; set; }
-    public InstanceService? InstanceService { get; set; }
+    public IOutgoingMessageWriter Writer { get; private set; }
+    public InstanceService? InstanceService { get; private set; }
+    public ConfigurationService? Configuration { get; private set; }
+    public PassphraseService? PassphraseService { get; private set; }
+    public OutgoingMessageService? OutgoingMessageService { get; private set; }
+
+    public PacketSender(IServiceInjector injector) {
+        injector.Inject(this);
+
+        Writer = OutgoingMessageService!.OutgoingMessageWriter!;
+    }
 
     public void SendGettingMap(IPlayer player, bool isGettingMap) {
         var packet = new SpGettingMap() {

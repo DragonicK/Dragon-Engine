@@ -5,7 +5,7 @@ using System.Reflection;
 
 namespace Dragon.Game.Administrator;
 
-public class CommandRepository : ICommandRepository {
+public sealed class CommandRepository : ICommandRepository {
     private readonly Dictionary<AdministratorCommands, IAdministratorCommand> commands;
 
     public IAdministratorCommand? GetType(AdministratorCommands command) {

@@ -10,17 +10,20 @@ namespace Dragon.Game.Services;
 
 public sealed class EffectService : IService, IUpdatableService {
     public ServicePriority Priority => ServicePriority.Last;
+    public IServiceInjector? ServiceInjector { get; private set; }
     public ContentService? ContentService { get; private set; }
     public InstanceService? InstanceService { get; private set; }
     public ConnectionService? ConnectionService { get; private set; }
     public PacketSenderService? PacketSenderService { get; private set; }
+
+    private AuraManager? AuraManager;
 
     private const int AuraTick = 3000;
 
     private int deltaCount;
 
     public void Start() {
-
+        AuraManager = new AuraManager(ServiceInjector!);
     }
 
     public void Stop() {
@@ -102,7 +105,6 @@ public sealed class EffectService : IService, IUpdatableService {
 
     private void ProcessAura() {
         var repository = ConnectionService!.PlayerRepository;
-        var sender = PacketSenderService!.PacketSender;
 
         if (repository is not null) {
             var players = repository.GetPlayers();
@@ -111,7 +113,7 @@ public sealed class EffectService : IService, IUpdatableService {
                 if (player is not null) {
                     if (player.InGame) {
                         if (player.Auras.Count > 0) {
-                            ProcessAura(player, sender!);
+                            ProcessAura(player);
                         }
                     }
                 }
@@ -119,25 +121,16 @@ public sealed class EffectService : IService, IUpdatableService {
         }
     }
 
-    private void ProcessAura(IPlayer player, IPacketSender sender) {
-        var manager = new AuraManager() {
-            Player = player,
-            PacketSender = sender,
-            Effects = ContentService!.Effects,
-            InstanceService = InstanceService
-        };
-
-        manager.CheckPartyMemberAuras();
+    private void ProcessAura(IPlayer player) {
+        AuraManager?.CheckPartyMemberAuras(player);
     }
 
     private IInstance? GetInstance(IPlayer player) {
         var instanceId = player.Character.Map;
         var instances = InstanceService!.Instances;
 
-        if (instances.ContainsKey(instanceId)) {
-            return instances[instanceId];
-        }
+        instances.TryGetValue(instanceId, out var instance);
 
-        return null;
+        return instance;
     }
 }

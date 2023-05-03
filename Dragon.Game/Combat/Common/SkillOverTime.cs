@@ -1,7 +1,6 @@
 ﻿namespace Dragon.Game.Combat.Common;
 
-public struct SkillOverTime
-{
+public struct SkillOverTime {
     public int Id { get; set; }
     public int Value { get; set; }
     public int Duration { get; set; }
@@ -10,8 +9,7 @@ public struct SkillOverTime
     public int CasterId { get; set; }
     public SkillOverTimeType Type { get; set; }
 
-    public void Clear()
-    {
+    public void Clear() {
         Id = 0;
         Value = 0;
         Duration = 0;

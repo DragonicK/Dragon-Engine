@@ -1,10 +1,11 @@
-﻿using System.Net;
-using System.Net.Sockets;
-
+﻿using Dragon.Core.Logs;
 using Dragon.Core.GeoIpCountry;
-using Dragon.Core.Logs;
-using Dragon.Network.Incoming;
+
 using Dragon.Network.Outgoing;
+using Dragon.Network.Incoming;
+
+using System.Net;
+using System.Net.Sockets;
 
 namespace Dragon.Network;
 
@@ -18,9 +19,9 @@ public class EngineListener : IEngineListener {
     public IConnectionRepository ConnectionRepository { get; init; }
     public IIncomingMessageQueue IncomingMessageQueue { get; init; }
     public IOutgoingMessageWriter OutgoingMessageWriter { get; init; }
-    public EventHandler<IConnection> ConnectionApprovalEvent { get; set; }
-    public EventHandler<IConnection> ConnectionRefuseEvent { get; set; }
-    public EventHandler<IConnection> ConnectionDisconnectEvent { get; set; }
+    public EventHandler<IConnection>? ConnectionApprovalEvent { get; set; }
+    public EventHandler<IConnection>? ConnectionRefuseEvent { get; set; }
+    public EventHandler<IConnection>? ConnectionDisconnectEvent { get; set; }
 
     private const int IpAddressArraySplit = 4;
 

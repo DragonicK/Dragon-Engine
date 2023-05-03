@@ -1,11 +1,11 @@
 ﻿using Dragon.Core.Model;
 using Dragon.Core.Content;
+using Dragon.Core.Services;
 using Dragon.Core.Model.Items;
 using Dragon.Core.Model.Effects;
 using Dragon.Core.Model.DisplayIcon;
 
 using Dragon.Game.Players;
-using Dragon.Core.Services;
 using Dragon.Game.Messages;
 using Dragon.Game.Services;
 using Dragon.Game.Instances;

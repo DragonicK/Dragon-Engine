@@ -41,10 +41,6 @@ public interface IPacketSender {
     void SendDirection(IPlayer player, IInstance instance);
     void SendPlayerMovement(IPlayer player, MovementType movement, IInstance instance);
     void SendPlayerLeft(IPlayer player, IInstance instance, int index);
-    void SendMessage(Message message);
-    void SendMessage(Message message, IPlayer player);
-    void SendMessage(Message message, IInstance instance);
-    void SendMessageBubble(Bubble bubble, IInstance instance);
     void SendTitles(IPlayer player);
     void SendTitle(IPlayer player, IInstance instance);
     void SendExperience(IPlayer player, int experience, int maximum);

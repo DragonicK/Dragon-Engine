@@ -6,7 +6,7 @@ using Dragon.Game.Network.Senders;
 
 namespace Dragon.Game.Manager;
 
-public class PartyManager {
+public sealed class PartyManager {
     public int Id { get; set; }
     public IList<PartyMember> Members { get; set; }
     public IList<PartyInvitedMember> InvitedMembers { get; set; }

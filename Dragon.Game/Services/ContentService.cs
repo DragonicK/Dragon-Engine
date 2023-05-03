@@ -2,6 +2,8 @@
 using Dragon.Core.Model;
 using Dragon.Core.Content;
 using Dragon.Core.Services;
+using Dragon.Core.Serialization;
+
 using Dragon.Core.Model.Npcs;
 using Dragon.Core.Model.Maps;
 using Dragon.Core.Model.Shops;
@@ -25,7 +27,6 @@ using Dragon.Core.Model.Achievements;
 using Dragon.Core.Model.Conversations;
 using Dragon.Core.Model.EquipmentSets;
 using Dragon.Core.Model.NotificationIcons;
-using Dragon.Core.Serialization;
 
 using Dragon.Game.Administrator;
 using Dragon.Game.Instances;

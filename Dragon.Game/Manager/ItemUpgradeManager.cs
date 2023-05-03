@@ -1,6 +1,5 @@
-﻿using Dragon.Core.Services;
-
-using Dragon.Core.Model;
+﻿using Dragon.Core.Model;
+using Dragon.Core.Services;
 using Dragon.Core.Model.Items;
 using Dragon.Core.Model.Upgrades;
 using Dragon.Core.Model.Characters;

@@ -12,8 +12,7 @@ using Dragon.Game.Network.Senders;
 
 namespace Dragon.Game.Combat.Death;
 
-public class EntityDeath : IEntityDeath {
-    
+public sealed class EntityDeath : IEntityDeath {
     public ILogger? Logger { get; init; }
     public IPacketSender? PacketSender { get; init; }
     public ContentService? ContentService { get; init; }

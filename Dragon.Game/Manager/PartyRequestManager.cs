@@ -1,13 +1,14 @@
 ﻿using Dragon.Core.Model;
 using Dragon.Core.Services;
-using Dragon.Game.Network.Senders;
+
 using Dragon.Game.Parties;
 using Dragon.Game.Players;
 using Dragon.Game.Services;
+using Dragon.Game.Network.Senders;
 
 namespace Dragon.Game.Manager;
 
-public class PartyRequestManager {
+public sealed class PartyRequestManager {
     public InstanceService? InstanceService { get; private set; }
     public ConfigurationService? Configuration { get; private set; }
     public PacketSenderService? PacketSenderService { get; private set; }

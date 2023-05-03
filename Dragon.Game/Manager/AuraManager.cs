@@ -1,34 +1,33 @@
 ﻿using Dragon.Core.Model;
-using Dragon.Core.Content;
-using Dragon.Core.Model.Effects;
+using Dragon.Core.Services;
 
 using Dragon.Game.Parties;
 using Dragon.Game.Players;
 using Dragon.Game.Services;
-using Dragon.Game.Network.Senders;
 
 namespace Dragon.Game.Manager;
 
-public class AuraManager {
-    public IPlayer? Player { get; init; }
-    public IDatabase<Effect>? Effects { get; init; }
-    public IPacketSender? PacketSender { get; init; }
-    public InstanceService? InstanceService { get; init; }
+public sealed class AuraManager {
+    public ContentService? ContentService { get; private set; }
+    public InstanceService? InstanceService { get; private set; }
+    public PacketSenderService? PacketSenderService { get; private set; }
 
-    public void CheckPartyMemberAuras() {
-        var party = GetPartyManager();
+    private readonly GiveEffectManager EffectManager;
+
+    public AuraManager(IServiceInjector injector) {
+        injector.Inject(this);
+
+        EffectManager = new GiveEffectManager(injector);
+    }
+
+    public void CheckPartyMemberAuras(IPlayer player) {
+        var party = GetPartyManager(player);
 
         if (party is not null) {
-            var auras = Player!.Auras.ToList();
+            var auras = player.Auras.ToList();
 
-            var x = Player!.Character.X;
-            var y = Player!.Character.Y;
-
-            var manager = new GiveEffectManager() {
-                Effects = Effects,
-                PacketSender = PacketSender,
-                InstanceService = InstanceService
-            };
+            var x = player.Character.X;
+            var y = player.Character.Y;
 
             foreach (var aura in auras) {
                 var id = aura.Id;
@@ -45,11 +44,11 @@ public class AuraManager {
                                 var y2 = member.Player.Character.Y;
 
                                 if (IsInRange(range, x, y, x2, y2)) {
-                                    ApplyEffect(range, id, level, x, y, manager, member);
+                                    ApplyEffect(range, id, level, x, y, member);
                                 }
                                 else {
                                     if (member.Player.Effects.Contains(id)) {
-                                        RemoveEffect(id, manager, member);
+                                        RemoveEffect(id, member);
                                     }
                                 }
                             }
@@ -60,52 +59,40 @@ public class AuraManager {
         }
     }
 
-    public void ActivateAura(int id, int level, int range) {
-        var party = GetPartyManager();
-
-        var manager = new GiveEffectManager() {
-            Effects = Effects,
-            PacketSender = PacketSender,
-            InstanceService = InstanceService
-        };
+    public void ActivateAura(IPlayer player, int id, int level, int range) {
+        var party = GetPartyManager(player);
 
         if (party is not null) {
             var members = party.Members;
 
-            var x = Player!.Character.X;
-            var y = Player!.Character.Y;
+            var x = player.Character.X;
+            var y = player.Character.Y;
 
             foreach (var member in members) {
-                ApplyEffect(range, id, level, x, y, manager, member);
+                ApplyEffect(range, id, level, x, y, member);
             }
         }
         else {
-            manager.GiveEffect(Player!, id, level, 0, true);
+            EffectManager.GiveEffect(player, id, level, 0, true);
         }
     }
 
-    public void DeactivateAura(int id) {
-        var party = GetPartyManager();
-
-        var manager = new GiveEffectManager() {
-            Effects = Effects,
-            PacketSender = PacketSender,
-            InstanceService = InstanceService
-        };
+    public void DeactivateAura(IPlayer player, int id) {
+        var party = GetPartyManager(player);
 
         if (party is not null) {
             var members = party.Members;
 
             foreach (var member in members) {
-                RemoveEffect(id, manager, member);
+                RemoveEffect(id, member);
             }
         }
         else {
-            manager.RemoveEffect(Player!, id);
+            EffectManager.RemoveEffect(player, id);
         }
     }
 
-    private void ApplyEffect(int range, int id, int level, int x, int y, GiveEffectManager manager, PartyMember member) {
+    private void ApplyEffect(int range, int id, int level, int x, int y, PartyMember member) {
         if (!member.Disconnected) {
             var player = member.Player;
 
@@ -116,7 +103,7 @@ public class AuraManager {
 
                     if (!player.Effects.Contains(id)) {
                         if (IsInRange(range, x, y, x2, y2)) {
-                            manager.GiveEffect(player, id, level, 0, true);
+                            EffectManager.GiveEffect(player, id, level, 0, true);
                         }
                     }
                 }
@@ -124,32 +111,28 @@ public class AuraManager {
         }
     }
 
-    private void RemoveEffect(int id, GiveEffectManager manager, PartyMember member) {
+    private void RemoveEffect(int id, PartyMember member) {
         if (!member.Disconnected) {
             var player = member.Player;
 
             if (player is not null) {
-
                 if (player.Effects.Contains(id)) {
-                    manager.RemoveEffect(player, id);
+                    EffectManager.RemoveEffect(player, id);
                 }
             }
         }
     }
 
     private bool IsInRange(int range, int x1, int y1, int x2, int y2) {
-        var r = Convert.ToInt32(Math.Sqrt(Math.Pow((x1 - x2), 2) + Math.Pow((y1 - y2), 2)));
-        return r <= range;
+        return Convert.ToInt32(Math.Sqrt(Math.Pow((x1 - x2), 2) + Math.Pow((y1 - y2), 2))) <= range;
     }
 
-    private PartyManager? GetPartyManager() {
-        var id = Player!.PartyId;
+    private PartyManager? GetPartyManager(IPlayer player) {
+        var id = player.PartyId;
         var parties = InstanceService!.Parties;
 
-        if (parties.ContainsKey(id)) {
-            return parties[id];
-        }
+        parties.TryGetValue(id, out var party);
 
-        return null;
+        return party;
     }
 }

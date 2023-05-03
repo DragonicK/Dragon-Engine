@@ -1,7 +1,6 @@
 ﻿namespace Dragon.Game.Combat.Common;
 
-public enum DamagedType
-{
+public enum DamagedType { 
     Critical,
     Damage,
     Dodge,

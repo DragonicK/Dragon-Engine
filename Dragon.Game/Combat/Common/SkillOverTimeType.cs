@@ -1,7 +1,6 @@
 ﻿namespace Dragon.Game.Combat.Common;
 
-public enum SkillOverTimeType
-{
+public enum SkillOverTimeType {
     DamageOverTime,
     HealOverTime,
 }

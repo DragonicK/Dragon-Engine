@@ -2,12 +2,13 @@
 using Dragon.Core.Content;
 using Dragon.Core.Model.Items;
 using Dragon.Core.Model.Characters;
+
 using Dragon.Game.Players;
 using Dragon.Game.Network.Senders;
 
 namespace Dragon.Game.Manager;
 
-public class TradeManager {
+public sealed class TradeManager {
     public int Id { get; set; }
     public IPacketSender? PacketSender { get; init; }
     public IDatabase<Item>? Items { get; init; }
