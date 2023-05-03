@@ -1,75 +1,67 @@
-﻿using Dragon.Core.Model;
+﻿using Dragon.Core.Logs;
+using Dragon.Core.Model;
+using Dragon.Core.Services;
 using Dragon.Core.Model.Entity;
 
-using Dragon.Core.Logs;
+using Dragon.Game.Manager;
 using Dragon.Game.Players;
 using Dragon.Game.Services;
 using Dragon.Game.Instances;
-using Dragon.Game.Manager;
-using Dragon.Game.Configurations;
-using Dragon.Game.Repository;
 using Dragon.Game.Network.Senders;
 
 namespace Dragon.Game.Combat.Death;
 
 public sealed class EntityDeath : IEntityDeath {
-    public ILogger? Logger { get; init; }
-    public IPacketSender? PacketSender { get; init; }
-    public ContentService? ContentService { get; init; }
-    public IConfiguration? Configuration { get; init; }
-    public IPlayerRepository? PlayerRepository { get; init; }
-    public InstanceService? InstanceService { get; init; }
+    public LoggerService? LoggerService { get; private set; }
+    public ContentService? ContentService { get; private set; }
+    public InstanceService? InstanceService { get; private set; }
+    public ConfigurationService? Configuration { get; private set; }
+    public PacketSenderService? PacketSenderService { get; private set; }
 
+    private readonly ChestManager ChestManager;
+    private readonly ExperienceHandler ExpHandler;
 
-    private ExperienceHandler? expHandler;
+    public EntityDeath(IServiceInjector injector) {
+        injector.Inject(this);
 
+        ChestManager = new ChestManager(injector);
+        ExpHandler = new ExperienceHandler(injector);
+    }
+    
     public void Execute(IEntity attacker, IEntity receiver) {
-        if (expHandler is null) {
-            expHandler = new ExperienceHandler() {
-                Configuration = Configuration,
-                ContentService = ContentService
-            };
-        }
-
         var player = attacker as IPlayer;
         var entity = receiver as IInstanceEntity;
 
         if (player is not null && entity is not null) {
-            var instance = GetInstance(player)!;
+            var logger = GetLogger();
+            var sender = GetPacketSender();
+            var instance = GetInstance(player);
 
-            entity.IsDead = true;
+            if (instance is not null) {
+                entity.IsDead = true;
 
-            entity.Vitals.Set(Vital.HP, 0);
-            entity.Vitals.Set(Vital.MP, 0);
-            entity.Vitals.Set(Vital.Special, 0);
+                entity.Vitals.Set(Vital.HP, 0);
+                entity.Vitals.Set(Vital.MP, 0);
+                entity.Vitals.Set(Vital.Special, 0);
 
-            ClearEntityTarget(entity);
-            GiveAttackerExperience(player, entity, instance);
-            ClearInstancePlayerTargets(player, entity, instance);
+                ClearEntityTarget(entity);
+                GiveAttackerExperience(sender, player, entity, instance);
+                ClearInstancePlayerTargets(sender, player, entity, instance);
 
-            // remove effects
+                // remove effects
 
-            var agent = new ChestManager() {
-                Player = player,
-                PacketSender = PacketSender,
-                Configuration = Configuration,
-                Drops = ContentService!.Drops,
-                Chests = ContentService.Chests,
-                InstanceService = InstanceService,
-                PlayerRepository = PlayerRepository
-            };
+                var chest = ChestManager.CreateInstanceChest(player, entity, instance);
 
-            var chest = agent.CreateInstanceChest(player, entity, instance);
+                if (chest is not null) {
+                    if (chest.Items.Count > 0) {
+                        var index = instance.Add(chest);
 
-            if (chest is not null) {
-                if (chest.Items.Count > 0) {
-                    var index = instance.Add(chest);
-
-                    if (index > 0) {
-                        PacketSender!.SendChest(instance, chest);
-                    }
-                    else {
-                        Logger?.Write(WarningLevel.Warning, GetType().Name, "Failed to add chest to instance.");
+                        if (index > 0) {
+                            sender.SendChest(instance, chest);
+                        }
+                        else {
+                            logger.Write(WarningLevel.Warning, GetType().Name, "Failed to add chest to instance.");
+                        }
                     }
                 }
             }
@@ -81,7 +73,7 @@ public sealed class EntityDeath : IEntityDeath {
         entity.TargetType = TargetType.None;
     }
 
-    private void ClearInstancePlayerTargets(IPlayer attacker, IInstanceEntity entity, IInstance instance) {
+    private void ClearInstancePlayerTargets(IPacketSender sender, IPlayer attacker, IInstanceEntity entity, IInstance instance) {
         foreach (var player in instance.GetPlayers()) {
             if (player != attacker) {
                 if (player.TargetType == TargetType.Npc) {
@@ -89,32 +81,32 @@ public sealed class EntityDeath : IEntityDeath {
                         player.Target = null;
                         player.TargetType = TargetType.None;
 
-                        PacketSender!.SendTarget(player, TargetType.None, 0);
+                        sender.SendTarget(player, TargetType.None, 0);
                     }
                 }
             }
         }
     }
 
-    private void GiveAttackerExperience(IPlayer player, IInstanceEntity entity, IInstance instance) {
-        var exp = expHandler!.GetExperience(player, entity);
+    private void GiveAttackerExperience(IPacketSender sender, IPlayer player, IInstanceEntity entity, IInstance instance) {
+        var exp = ExpHandler.GetExperience(player, entity);
 
         if (exp > 0) {
             player.Character.Experience += exp;
 
-            if (expHandler.CheckForLevelUp(player)) { 
+            if (ExpHandler.CheckForLevelUp(player)) { 
                 player.AllocateAttributes();
 
-                PacketSender!.SendAttributes(player);
-                PacketSender!.SendPlayerVital(player, instance);
-                PacketSender!.SendPlayerDataTo(player, instance);
+                sender.SendAttributes(player);
+                sender.SendPlayerVital(player, instance);
+                sender.SendPlayerDataTo(player, instance);
             }
 
-            SendExperience(player);
+            SendExperience(sender, player);
         }
     }
 
-    private void SendExperience(IPlayer player) {
+    private void SendExperience(IPacketSender sender, IPlayer player) {
         var level = player.Character.Level;
         var experience = ContentService!.PlayerExperience;
 
@@ -134,17 +126,23 @@ public sealed class EntityDeath : IEntityDeath {
             player.Character.Experience = minimum;
         }
 
-        PacketSender!.SendExperience(player, minimum, maximum);
+        sender.SendExperience(player, minimum, maximum);
     }
 
     private IInstance? GetInstance(IPlayer player) {
         var instanceId = player!.Character.Map;
         var instances = InstanceService!.Instances;
 
-        if (instances.ContainsKey(instanceId)) {
-            return instances[instanceId];
-        }
+        instances.TryGetValue(instanceId, out var instance);
+      
+        return instance;
+    }
 
-        return null;
+    private ILogger GetLogger() {
+        return LoggerService!.Logger!;
+    }
+
+    private IPacketSender GetPacketSender() {
+        return PacketSenderService!.PacketSender!;
     }
 }

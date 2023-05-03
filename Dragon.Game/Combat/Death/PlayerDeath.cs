@@ -1,28 +1,26 @@
-﻿using Dragon.Core.Model.Entity;
+﻿using Dragon.Core.Services;
+using Dragon.Core.Model.Entity;
+
 using Dragon.Game.Services;
-using Dragon.Game.Configurations;
-using Dragon.Game.Repository;
-using Dragon.Game.Network.Senders;
 
 namespace Dragon.Game.Combat.Death;
 
-public class PlayerDeath : IEntityDeath {
-    public IPacketSender? PacketSender { get; init; }
-    public ContentService? ContentService { get; init; }
-    public IConfiguration? Configuration { get; init; }
-    public InstanceService? InstanceService { get; init; }
-    public IPlayerRepository? PlayerRepository { get; init; }
+public sealed class PlayerDeath : IEntityDeath {
+    public LoggerService? LoggerService { get; private set; }
+    public ContentService? ContentService { get; private set; }
+    public InstanceService? InstanceService { get; private set; }
+    public ConfigurationService? Configuration { get; private set; }
+    public PacketSenderService? PacketSenderService { get; private set; }
 
-    private ExperienceHandler? expHandler;
+    private readonly ExperienceHandler ExpHandler;
+
+    public PlayerDeath(IServiceInjector injector) {
+        injector.Inject(this);
+
+        ExpHandler = new ExperienceHandler(injector);
+    }
 
     public void Execute(IEntity? attacker, IEntity receiver) {
-        if (expHandler is null) {
-            expHandler = new ExperienceHandler() {
-                Configuration = Configuration,
-                ContentService = ContentService
-            };
-        }
-
         // remove experience
         // clear target
         // clear npc target
