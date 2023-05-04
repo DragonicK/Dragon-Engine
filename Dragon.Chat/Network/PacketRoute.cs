@@ -1,6 +1,11 @@
-﻿using Dragon.Core.Services;
+﻿using Dragon.Core.Logs;
+using Dragon.Core.Services;
 
+using Dragon.Network;
+
+using Dragon.Chat.Players;
 using Dragon.Chat.Services;
+using Dragon.Chat.Repository;
 
 namespace Dragon.Chat.Network;
 
@@ -11,10 +16,27 @@ public abstract class PacketRoute {
     public LoggerService? LoggerService { get; protected set; }
     public ConfigurationService? Configuration { get; protected set; }
     public ConnectionService? ConnectionService { get; protected set; }
+    public PacketSenderService? PacketSenderService { get; protected set; }
     public OutgoingMessageService? OutgoingMessageService { get; protected set; }
 
     public PacketRoute(IServiceInjector injector) {
         ServiceInjector = injector;
         ServiceInjector.Inject(this);
+    }
+
+    protected ILogger GetLogger() {
+        return LoggerService!.Logger!;
+    }
+
+    protected IPacketSender GetPacketSender() {
+        return PacketSenderService!.PacketSender!;
+    }
+
+    protected IPlayerRepository GetPlayerRepository() {
+        return ConnectionService!.PlayerRepository!;
+    }
+
+    protected IPlayer? FindByConnection(IConnection connection) {
+        return GetPlayerRepository().FindByConnection(connection);
     }
 }

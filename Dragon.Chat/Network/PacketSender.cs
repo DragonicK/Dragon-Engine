@@ -1,10 +1,16 @@
 ﻿using Dragon.Network;
 
 using Dragon.Chat.Messages;
+using Dragon.Core.Services;
 
 namespace Dragon.Chat.Network;
 
 public sealed class PacketSender : IPacketSender {
+
+    public PacketSender(IServiceInjector injector) {
+        injector.Inject(this);
+    }
+
     public void SendMessage(Message message) {
         //var packet = new PacketBroadcastMessage() {
         //    AccountLevel = message.AccountLevel,
@@ -32,7 +38,7 @@ public sealed class PacketSender : IPacketSender {
 
         //var msg = Writer!.CreateMessage(packet);
 
-        //msg.DestinationPeers.Add(player.GetConnection().Id);
+        //msg.DestinationPeers.Add(player.Connection.Id);
         //msg.TransmissionTarget = TransmissionTarget.Destination;
 
         //Writer.Enqueue(msg);
@@ -51,7 +57,7 @@ public sealed class PacketSender : IPacketSender {
         //var msg = Writer!.CreateMessage(packet);
 
         //foreach (var player in players) {
-        //    msg.DestinationPeers.Add(player.GetConnection().Id);
+        //    msg.DestinationPeers.Add(player.Connection.Id);
         //}
 
         //msg.TransmissionTarget = TransmissionTarget.Destination;

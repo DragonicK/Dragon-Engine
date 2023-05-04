@@ -46,6 +46,7 @@ Public Enum EnginePacket
     PAuthentication
     PAuthenticationResult
     PGameServerLogin
+    PChatServerLogin
     PModels
     PCharacterDelete
     PCharacterCreate
