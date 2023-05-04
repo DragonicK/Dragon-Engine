@@ -8,7 +8,7 @@ Public Sub SelfRessurect(ByVal RessurrectionType As RessurrectionType)
     Buffer.WriteLong CRessurrectSelf
     Buffer.WriteByte RessurrectionType
 
-    SendData Buffer.ToArray
+    SendGameMessage Buffer.ToArray
     Set Buffer = Nothing
 End Sub
 
@@ -19,7 +19,7 @@ Public Sub PlayerRessurrect(ByVal Confirmation As RessurrectionConfirmation)
     Buffer.WriteLong CRessurrectByPlayer
     Buffer.WriteByte Confirmation
 
-    SendData Buffer.ToArray
+    SendGameMessage Buffer.ToArray
     Set Buffer = Nothing
 
 End Sub

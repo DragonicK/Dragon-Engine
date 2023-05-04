@@ -64,7 +64,7 @@ Public Sub SendConversationOption(ByVal ConversationId As Long, ByVal ChatIndex 
     Buffer.WriteLong ChatIndex
     Buffer.WriteLong OptionValue
 
-    SendData Buffer.ToArray()
+    SendGameMessage Buffer.ToArray()
     
     Set Buffer = Nothing
 End Sub

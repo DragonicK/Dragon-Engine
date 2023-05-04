@@ -13,7 +13,7 @@ Public Sub SendMail(ByRef Mail As SendMailRec)
     Buffer.WriteLong Mail.AttachItemInventoryIndex
     Buffer.WriteLong Mail.AttachItemValue
 
-    SendData Buffer.ToArray()
+    SendGameMessage Buffer.ToArray()
 
     Set Buffer = Nothing
 End Sub
@@ -25,7 +25,7 @@ Public Sub SendUpdateMailReadFlag(ByVal MailIndex As Long)
     Buffer.WriteLong EnginePacket.PUpdateMailReadFlag
     Buffer.WriteLong Mail(MailIndex).Id
 
-    SendData Buffer.ToArray()
+    SendGameMessage Buffer.ToArray()
 
     Set Buffer = Nothing
 End Sub
@@ -50,7 +50,7 @@ Public Sub SendDeleteMail()
         Buffer.WriteLong Mail(Index).Id
     Next
 
-    SendData Buffer.ToArray()
+    SendGameMessage Buffer.ToArray()
 
     WaitingMailResponse = True
 
@@ -64,7 +64,7 @@ Public Sub SendReceiveMailCurrency(ByVal MailIndex As Long)
     Buffer.WriteLong EnginePacket.PReiceveMailCurrency
     Buffer.WriteLong Mail(MailIndex).Id
 
-    SendData Buffer.ToArray()
+    SendGameMessage Buffer.ToArray()
 
     Set Buffer = Nothing
 End Sub
@@ -76,7 +76,7 @@ Public Sub SendReceiveMailItem(ByVal MailIndex As Long)
     Buffer.WriteLong EnginePacket.PReceiveMailItem
     Buffer.WriteLong Mail(MailIndex).Id
 
-    SendData Buffer.ToArray()
+    SendGameMessage Buffer.ToArray()
 
     Set Buffer = Nothing
 End Sub

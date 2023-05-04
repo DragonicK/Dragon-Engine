@@ -7,7 +7,7 @@ Public Sub SendCloseChest()
 
     Buffer.WriteLong PCloseChest
 
-    SendData Buffer.ToArray()
+    SendGameMessage Buffer.ToArray()
 
     Set Buffer = Nothing
 End Sub
@@ -19,7 +19,7 @@ Public Sub SendTakeItemFromChest(ByVal ItemIndex As Long)
     Buffer.WriteLong PTakeItemFromChest
     Buffer.WriteLong ItemIndex
 
-    SendData Buffer.ToArray()
+    SendGameMessage Buffer.ToArray()
 
     Set Buffer = Nothing
 End Sub

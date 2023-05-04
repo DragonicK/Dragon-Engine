@@ -8,7 +8,7 @@ Public Sub SendCraftItem(ByVal RecipeIndex As Long)
     Buffer.WriteLong EnginePacket.PStartCraft
     Buffer.WriteLong RecipeIndex
     
-    SendData Buffer.ToArray()
+    SendGameMessage Buffer.ToArray()
     
     Set Buffer = Nothing
 End Sub
@@ -19,7 +19,7 @@ Public Sub SendCraftProcessCompleted()
     
     Buffer.WriteLong EnginePacket.PCompletedCraft
     
-    SendData Buffer.ToArray()
+    SendGameMessage Buffer.ToArray()
     
     Set Buffer = Nothing
 End Sub
@@ -28,7 +28,7 @@ Public Sub SendCraftStopProcess()
     Dim Buffer As clsBuffer
     Set Buffer = New clsBuffer
     Buffer.WriteLong EnginePacket.PStopCraft
-    SendData Buffer.ToArray()
+    SendGameMessage Buffer.ToArray()
     Set Buffer = Nothing
 End Sub
 
@@ -36,7 +36,7 @@ Public Sub SendRemoveCraft()
     Dim Buffer As clsBuffer
     Set Buffer = New clsBuffer
     Buffer.WriteLong EnginePacket.PDeleteCraft
-    SendData Buffer.ToArray()
+    SendGameMessage Buffer.ToArray()
     Set Buffer = Nothing
 End Sub
 

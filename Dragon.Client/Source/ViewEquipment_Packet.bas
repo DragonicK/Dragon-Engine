@@ -8,7 +8,7 @@ Public Sub SendRequestViewEquipment(ByVal Name As String)
     Buffer.WriteLong EnginePacket.PRequestViewEquipment
     Buffer.WriteString Name
     
-    SendData Buffer.ToArray()
+    SendGameMessage Buffer.ToArray()
     
     Set Buffer = Nothing
 End Sub

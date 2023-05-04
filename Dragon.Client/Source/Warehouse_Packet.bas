@@ -9,7 +9,7 @@ Public Sub SendDepositItem(ByVal InvSlot As Long, ByVal Amount As Long)
     Buffer.WriteLong InvSlot
     Buffer.WriteLong Amount
     
-    SendData Buffer.ToArray()
+    SendGameMessage Buffer.ToArray()
     
     Set Buffer = Nothing
 End Sub
@@ -22,7 +22,7 @@ Public Sub SendWithdrawItem(ByVal WarehouseSlot As Long, ByVal Amount As Long)
     Buffer.WriteLong WarehouseSlot
     Buffer.WriteLong Amount
     
-    SendData Buffer.ToArray()
+    SendGameMessage Buffer.ToArray()
     
     Set Buffer = Nothing
 End Sub
@@ -33,7 +33,7 @@ Public Sub SendCloseWarehouse()
     
     Buffer.WriteLong EnginePacket.PWarehouseClose
     
-    SendData Buffer.ToArray()
+    SendGameMessage Buffer.ToArray()
     
     Set Buffer = Nothing
     
@@ -48,7 +48,7 @@ Public Sub SendSwapWarehouseSlots(ByVal OldSlot As Long, ByVal NewSlot As Long)
     Buffer.WriteLong OldSlot
     Buffer.WriteLong NewSlot
     
-    SendData Buffer.ToArray()
+    SendGameMessage Buffer.ToArray()
     
     Set Buffer = Nothing
 End Sub

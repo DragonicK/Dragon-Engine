@@ -19,7 +19,7 @@ Public Sub LogoutGame()
         Call ClearAnimInstance(i)
     Next
 
-    DestroyTCP
+    DestroyGameClient
 
     For i = 1 To MAX_CHARS
         CharPendingExclusion(i) = False
@@ -61,7 +61,7 @@ Public Sub DestroyGame()
 
         DestroyDX8
 
-        Call DestroyTCP
+        Call DestroyGameClient
 
         ' destroy music & sound engines
         Destroy_Music

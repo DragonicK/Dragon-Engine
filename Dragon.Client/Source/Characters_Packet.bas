@@ -95,7 +95,7 @@ Public Sub SendUseChar(ByVal CharSlot As Long)
     Buffer.WriteLong EnginePacket.PCharacterBegin
     Buffer.WriteLong CharSlot
     
-    SendData Buffer.ToArray()
+    SendGameMessage Buffer.ToArray()
     Set Buffer = Nothing
 End Sub
 
@@ -105,6 +105,6 @@ Public Sub SendDeleteChar(ByVal CharSlot As Long)
     Buffer.WriteLong EnginePacket.PCharacterDelete
     Buffer.WriteLong CharSlot
     
-    SendData Buffer.ToArray()
+    SendGameMessage Buffer.ToArray()
     Set Buffer = Nothing
 End Sub

@@ -6,7 +6,7 @@ Public Sub SendGameLogin()
     Buffer.WriteLong EnginePacket.PGameServerLogin
     Buffer.WriteString LoginToken
     
-    SendData Buffer.ToArray()
+    SendGameMessage Buffer.ToArray()
     Set Buffer = Nothing
 End Sub
 
@@ -28,7 +28,7 @@ Public Sub SendAuthLogin(ByVal Name As String, ByVal Password As String)
     Buffer.WriteString MacAddressId
     Buffer.WriteString MotherBoardId
      
-    SendData Buffer.ToArray()
+    SendGameMessage Buffer.ToArray()
     Set Buffer = Nothing
 End Sub
 

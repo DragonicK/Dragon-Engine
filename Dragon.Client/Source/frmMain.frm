@@ -27,6 +27,13 @@ Begin VB.Form frmMain
    ScaleWidth      =   1280
    StartUpPosition =   2  'CenterScreen
    Visible         =   0   'False
+   Begin MSWinsockLib.Winsock ChatSocket 
+      Left            =   600
+      Top             =   240
+      _ExtentX        =   741
+      _ExtentY        =   741
+      _Version        =   393216
+   End
    Begin MSWinsockLib.Winsock Socket 
       Left            =   120
       Top             =   240
@@ -85,7 +92,8 @@ End Sub
 
 ' Winsock event
 Private Sub Socket_DataArrival(ByVal bytesTotal As Long)
-    If IsConnected Then
-        Call IncomingData(bytesTotal)
+    If IsGameConnected Then
+        Call ReceiveGameIncomingMessage(bytesTotal)
     End If
 End Sub
+

@@ -9,7 +9,7 @@ Public Sub SendBuyItem(ByVal ShopSlot As Long)
     Buffer.WriteLong ShopSlot
     Buffer.WriteLong 1
     
-    SendData Buffer.ToArray()
+    SendGameMessage Buffer.ToArray()
     
     Set Buffer = Nothing
 End Sub
@@ -22,7 +22,7 @@ Public Sub SendSellItem(ByVal InvSlot As Long, ByVal Amount As Long)
     Buffer.WriteLong InvSlot
     Buffer.WriteLong Amount
     
-    SendData Buffer.ToArray()
+    SendGameMessage Buffer.ToArray()
     
     Set Buffer = Nothing
 End Sub
@@ -33,7 +33,7 @@ Public Sub SendCloseShop()
     
     Buffer.WriteLong EnginePacket.PShopClose
     
-    SendData Buffer.ToArray()
+    SendGameMessage Buffer.ToArray()
     
     Set Buffer = Nothing
 End Sub

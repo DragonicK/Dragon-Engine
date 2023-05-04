@@ -201,7 +201,8 @@ Private Sub SendRollDiceResult(ByVal Rolled As Boolean)
     If Rolled Then Buffer.WriteByte 2
     If Not Rolled Then Buffer.WriteByte 1
 
-    SendData Buffer.ToArray()
+    SendGameMessage Buffer.ToArray()
+
 
     Set Buffer = Nothing
 End Sub

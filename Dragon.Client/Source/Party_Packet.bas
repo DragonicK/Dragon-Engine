@@ -8,7 +8,7 @@ Public Sub SendPartyRequest(ByVal Name As String)
     Buffer.WriteLong EnginePacket.PPartyRequest
     Buffer.WriteString Name
     
-    SendData Buffer.ToArray()
+    SendGameMessage Buffer.ToArray()
     
     Set Buffer = Nothing
 End Sub
@@ -19,7 +19,7 @@ Public Sub SendAcceptParty()
     
     Buffer.WriteLong EnginePacket.PAcceptParty
     
-    SendData Buffer.ToArray()
+    SendGameMessage Buffer.ToArray()
     
     Set Buffer = Nothing
 End Sub
@@ -30,7 +30,7 @@ Public Sub SendDeclineParty()
     
     Buffer.WriteLong EnginePacket.PDeclineParty
     
-    SendData Buffer.ToArray()
+    SendGameMessage Buffer.ToArray()
     
     Set Buffer = Nothing
 End Sub
@@ -41,7 +41,7 @@ Public Sub SendPartyLeave()
     
     Buffer.WriteLong EnginePacket.PPartyLeave
     
-    SendData Buffer.ToArray()
+    SendGameMessage Buffer.ToArray()
     
     Set Buffer = Nothing
 End Sub
@@ -53,7 +53,7 @@ Public Sub SendPartyKick(ByVal CharacterIndex As Long)
     Buffer.WriteLong EnginePacket.PPartyKick
     Buffer.WriteLong CharacterIndex
     
-    SendData Buffer.ToArray()
+    SendGameMessage Buffer.ToArray()
     
     Set Buffer = Nothing
 End Sub

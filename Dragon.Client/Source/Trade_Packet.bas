@@ -8,7 +8,7 @@ Public Sub SendTradeRequest(ByVal CharacterId As Long)
     Buffer.WriteLong EnginePacket.PTradeRequest
     Buffer.WriteLong CharacterId
     
-    SendData Buffer.ToArray
+    SendGameMessage Buffer.ToArray
     Set Buffer = Nothing
 End Sub
 
@@ -18,7 +18,7 @@ Public Sub SendAcceptTradeRequest()
     
     Buffer.WriteLong EnginePacket.PAcceptTradeRequest
     
-    SendData Buffer.ToArray()
+    SendGameMessage Buffer.ToArray()
     
     Set Buffer = Nothing
 End Sub
@@ -29,7 +29,7 @@ Public Sub SendDeclineTradeRequest()
     
     Buffer.WriteLong EnginePacket.PDeclineTradeRequest
     
-    SendData Buffer.ToArray()
+    SendGameMessage Buffer.ToArray()
     
     Set Buffer = Nothing
 End Sub
@@ -41,7 +41,7 @@ Public Sub SendSelectTradeCurrency(ByVal Value As Long)
     Buffer.WriteLong EnginePacket.PTradeCurrency
     Buffer.WriteLong Value
     
-    SendData Buffer.ToArray()
+    SendGameMessage Buffer.ToArray()
     
     Set Buffer = Nothing
 End Sub
@@ -52,7 +52,7 @@ Public Sub SendAcceptTrade()
     
     Buffer.WriteLong EnginePacket.PAcceptTrade
     
-    SendData Buffer.ToArray()
+    SendGameMessage Buffer.ToArray()
     
     Set Buffer = Nothing
 End Sub
@@ -63,7 +63,7 @@ Public Sub SendConfirmTrade()
     
     Buffer.WriteLong EnginePacket.PConfirmTrade
     
-    SendData Buffer.ToArray()
+    SendGameMessage Buffer.ToArray()
     
     Set Buffer = Nothing
 End Sub
@@ -74,7 +74,7 @@ Public Sub SendDeclineTrade()
     
     Buffer.WriteLong EnginePacket.PDeclineTrade
     
-    SendData Buffer.ToArray()
+    SendGameMessage Buffer.ToArray()
     
     Set Buffer = Nothing
 End Sub
@@ -87,7 +87,7 @@ Public Sub SendTradeItem(ByVal InvSlot As Long, ByVal Amount As Long)
     Buffer.WriteLong InvSlot
     Buffer.WriteLong Amount
     
-    SendData Buffer.ToArray()
+    SendGameMessage Buffer.ToArray()
     
     Set Buffer = Nothing
 End Sub
@@ -99,7 +99,7 @@ Public Sub SendUntradeItem(ByVal InvSlot As Long)
     Buffer.WriteLong EnginePacket.PUntradeItem
     Buffer.WriteLong InvSlot
     
-    SendData Buffer.ToArray()
+    SendGameMessage Buffer.ToArray()
     
     Set Buffer = Nothing
 End Sub

@@ -93,7 +93,7 @@ Public Sub Main()
     ' Randomize rnd's seed
     Randomize
 
-    Call TcpInit(AUTH_SERVER_IP, AUTH_SERVER_PORT)
+    Call GameClientInit(AUTH_SERVER_IP, AUTH_SERVER_PORT)
     Call InitMessages
 
     ' Reset values

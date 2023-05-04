@@ -12,7 +12,7 @@ Public Sub SendPlayerTarget(ByVal Target As Long, ByVal TargetType As Long)
     Buffer.WriteLong Target
     Buffer.WriteLong TargetType
 
-    SendData Buffer.ToArray()
+    SendGameMessage Buffer.ToArray()
 
     Set Buffer = Nothing
 End Sub

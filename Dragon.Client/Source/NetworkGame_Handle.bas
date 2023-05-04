@@ -1,4 +1,4 @@
-Attribute VB_Name = "Network_HandleData"
+Attribute VB_Name = "NetworkGame_Handle"
 Option Explicit
 
 Public HandleDataSub(EnginePacket.PPacketCount) As Long
@@ -126,7 +126,7 @@ Public Sub InitMessages()
     ' HandleDataSub(SStunned) = GetAddress(AddressOf HandleStunned)
 End Sub
 
-Sub HandleData(ByRef Data() As Byte)
+Public Sub HandleGamePacket(ByRef Data() As Byte)
     Dim Buffer As clsBuffer
     Dim MsgType As Long
 

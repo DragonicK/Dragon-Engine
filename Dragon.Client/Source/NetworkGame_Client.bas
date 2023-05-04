@@ -1,4 +1,4 @@
-Attribute VB_Name = "Network_TcpData"
+Attribute VB_Name = "NetworkGame_Client"
 Option Explicit
 
 ' ******************************************
@@ -8,7 +8,7 @@ Option Explicit
 ' ******************************************
 Private PlayerBuffer As clsBuffer
 
-Public Sub TcpInit(ByVal IP As String, ByVal Port As Long)
+Public Sub GameClientInit(ByVal IP As String, ByVal Port As Long)
     Set PlayerBuffer = Nothing
     Set PlayerBuffer = New clsBuffer
 
@@ -18,11 +18,11 @@ Public Sub TcpInit(ByVal IP As String, ByVal Port As Long)
     frmMain.Socket.RemotePort = Port
 End Sub
 
-Public Sub DestroyTCP()
+Public Sub DestroyGameClient()
     frmMain.Socket.Close
 End Sub
 
-Public Sub IncomingData(ByVal DataLength As Long)
+Public Sub ReceiveGameIncomingMessage(ByVal DataLength As Long)
     Dim Buffer() As Byte
     Dim pLength As Long
 
@@ -38,7 +38,7 @@ Public Sub IncomingData(ByVal DataLength As Long)
 
         If pLength <= PlayerBuffer.Length - 4 Then
             PlayerBuffer.ReadLong
-            HandleData PlayerBuffer.ReadBytes(pLength)
+            HandleGamePacket PlayerBuffer.ReadBytes(pLength)
         End If
 
         pLength = 0
@@ -53,12 +53,12 @@ Public Sub IncomingData(ByVal DataLength As Long)
     DoEvents
 End Sub
 
-Public Function ConnectToServer() As Boolean
+Public Function ConnectToGameServer() As Boolean
     Dim Wait As Long
 
     ' Check to see if we are already connected, if so just exit
-    If IsConnected Then
-        ConnectToServer = True
+    If IsGameConnected Then
+        ConnectToGameServer = True
         Exit Function
     End If
 
@@ -71,21 +71,21 @@ Public Function ConnectToServer() As Boolean
     SetStatus "Conectando ao servidor."
 
     ' Wait until connected or 3 seconds have passed and report the server being down
-    Do While (Not IsConnected) And (GetTickCount <= Wait + 3000)
+    Do While (Not IsGameConnected) And (GetTickCount <= Wait + 3000)
        DoEvents
     Loop
 
-    ConnectToServer = IsConnected
+    ConnectToGameServer = IsGameConnected
     
     HideWindows
     
     SetStatus vbNullString
 End Function
 
-Function IsConnected() As Boolean
+Function IsGameConnected() As Boolean
 
     If frmMain.Socket.State = sckConnected Then
-        IsConnected = True
+        IsGameConnected = True
     End If
 
 End Function
@@ -99,9 +99,8 @@ Function IsPlaying(ByVal Index As Long) As Boolean
 
 End Function
 
-Public Sub SendData(ByRef Data() As Byte)
-
-    If IsConnected Then
+Public Sub SendGameMessage(ByRef Data() As Byte)
+    If IsGameConnected Then
         Dim Length As Long
         Dim Ciphed() As Byte
            
@@ -157,7 +156,7 @@ Public Sub GetPing()
 
     Buffer.WriteLong EnginePacket.PCheckPing
 
-    SendData Buffer.ToArray()
+    SendGameMessage Buffer.ToArray()
 
     Set Buffer = Nothing
 End Sub

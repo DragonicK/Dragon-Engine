@@ -9,7 +9,7 @@ Public Sub SendSwapInventory(ByVal OldSlot As Long, ByVal NewSlot As Long)
     Buffer.WriteLong OldSlot
     Buffer.WriteLong NewSlot
 
-    SendData Buffer.ToArray()
+    SendGameMessage Buffer.ToArray()
     Set Buffer = Nothing
 End Sub
 
@@ -20,7 +20,7 @@ Public Sub SendUseItem(ByVal InvNum As Long)
     Buffer.WriteLong EnginePacket.PUseItem
     Buffer.WriteLong InvNum
     
-    SendData Buffer.ToArray()
+    SendGameMessage Buffer.ToArray()
     Set Buffer = Nothing
 End Sub
 
@@ -44,7 +44,7 @@ Public Sub SendDestroyItem(ByVal InvNum As Long)
     Buffer.WriteLong EnginePacket.PDestroyItem
     Buffer.WriteLong InvNum
     
-    SendData Buffer.ToArray()
+    SendGameMessage Buffer.ToArray()
     Set Buffer = Nothing
 End Sub
 

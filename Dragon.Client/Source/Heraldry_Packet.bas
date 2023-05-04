@@ -56,7 +56,7 @@ Public Sub SendUnequipHeraldry(ByVal Index As Long)
     Buffer.WriteLong EnginePacket.PUnequipHeraldry
     Buffer.WriteLong Index
 
-    SendData Buffer.ToArray()
+    SendGameMessage Buffer.ToArray()
     Set Buffer = Nothing
 End Sub
 
@@ -68,6 +68,6 @@ Public Sub SendEquipHeraldryIndex(ByVal Index As Long, ByVal InvSlot As Long)
     Buffer.WriteLong Index
     Buffer.WriteLong InvSlot
 
-    SendData Buffer.ToArray()
+    SendGameMessage Buffer.ToArray()
     Set Buffer = Nothing
 End Sub

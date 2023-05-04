@@ -12,7 +12,7 @@ Public Sub SendPlayerMovement()
     Buffer.WriteInteger Player(MyIndex).X
     Buffer.WriteInteger Player(MyIndex).Y
     
-    SendData Buffer.ToArray()
+    SendGameMessage Buffer.ToArray()
     
     Set Buffer = Nothing
 End Sub
@@ -25,7 +25,7 @@ Public Sub SendPlayerDirection()
     Buffer.WriteLong MyIndex
     Buffer.WriteLong GetPlayerDir(MyIndex)
     
-    SendData Buffer.ToArray()
+    SendGameMessage Buffer.ToArray()
     
     Set Buffer = Nothing
 End Sub
@@ -150,7 +150,7 @@ Public Sub CheckAttack()
 '
  '               Set Buffer = New clsBuffer
  '               Buffer.WriteLong CAttack
-  '              SendData Buffer.ToArray()
+  '              SendGameMessage Buffer.ToArray()
  '               Set Buffer = Nothing
  '           End If
  '       End If

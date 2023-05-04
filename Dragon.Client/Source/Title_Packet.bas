@@ -8,7 +8,7 @@ Public Sub SendSelectedTitle(ByVal Index As Long)
     Buffer.WriteLong EnginePacket.PSelectedTitle
     Buffer.WriteLong Index
     
-    SendData Buffer.ToArray()
+    SendGameMessage Buffer.ToArray()
 
     Set Buffer = Nothing
 End Sub

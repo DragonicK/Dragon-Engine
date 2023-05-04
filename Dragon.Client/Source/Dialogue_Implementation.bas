@@ -281,7 +281,7 @@ Public Sub DialogueHandler(ByVal Index As Long)
             ' send the packet
             'Player(MyIndex).MapGetTimer = GetTickCount
             'Buffer.WriteLong CMapGetItem
-            'SendData Buffer.ToArray()
+            'SendGameMessage Buffer.ToArray()
 
         Case DialogueTypeDeleteChar
             ' send the deletion

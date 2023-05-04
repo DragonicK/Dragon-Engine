@@ -25,7 +25,7 @@ Public Sub SendMapMessage(ByVal Text As String)
     Buffer.WriteLong ChatChannel.ChannelMap
     Buffer.WriteString Text
         
-    SendData Buffer.ToArray()
+    SendGameMessage Buffer.ToArray()
     
     Set Buffer = Nothing
 End Sub
@@ -38,7 +38,7 @@ Public Sub SendBroadcastMessage(ByVal Text As String)
     Buffer.WriteLong ChatChannel.ChannelGlobal
     Buffer.WriteString Text
     
-    SendData Buffer.ToArray()
+    SendGameMessage Buffer.ToArray()
     
     Set Buffer = Nothing
 End Sub
@@ -98,7 +98,7 @@ Public Sub SendPlayerMessage(ByVal Text As String, ByVal MsgTo As String)
     Buffer.WriteString Text
     Buffer.WriteString MsgTo
     
-    SendData Buffer.ToArray()
+    SendGameMessage Buffer.ToArray()
     
     Set Buffer = Nothing
 End Sub

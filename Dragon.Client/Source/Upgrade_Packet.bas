@@ -8,7 +8,7 @@ Public Sub SendSelectedItemToUpgrade(ByVal InventoryIndex As Long)
     Buffer.WriteLong EnginePacket.PSelectedItemToUpgrade
     Buffer.WriteLong InventoryIndex
 
-    SendData Buffer.ToArray()
+    SendGameMessage Buffer.ToArray()
     
     Set Buffer = Nothing
 End Sub
@@ -20,7 +20,7 @@ Public Sub SendStartUpgrade(ByVal InventoryIndex As Long)
     Buffer.WriteLong EnginePacket.PStartUpgrade
     Buffer.WriteLong InventoryIndex
 
-    SendData Buffer.ToArray()
+    SendGameMessage Buffer.ToArray()
     
     Set Buffer = Nothing
 End Sub

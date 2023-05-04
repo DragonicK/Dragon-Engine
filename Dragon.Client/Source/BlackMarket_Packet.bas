@@ -9,7 +9,7 @@ Public Sub SendRequestBlackMarketItems(ByVal Category As BlackMarketCategory, By
     Buffer.WriteLong Category
     Buffer.WriteLong Page
 
-    SendData Buffer.ToArray
+    SendGameMessage Buffer.ToArray
     Set Buffer = Nothing
 End Sub
 
@@ -22,7 +22,7 @@ Public Sub SendPurchaseCashShopItem(ByVal CashItemId As Long, ByVal Quantity As 
     Buffer.WriteLong Quantity
     Buffer.WriteString Target
     
-    SendData Buffer.ToArray()
+    SendGameMessage Buffer.ToArray()
     Set Buffer = Nothing
 End Sub
 

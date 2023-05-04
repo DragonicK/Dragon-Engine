@@ -12,7 +12,7 @@ Public Sub SendAddChar(ByVal Name As String, ByVal Sex As Long, ByVal ClassId As
     Buffer.WriteLong Sprite
     Buffer.WriteLong CharNum
     
-    SendData Buffer.ToArray()
+    SendGameMessage Buffer.ToArray()
     Set Buffer = Nothing
     
 End Sub

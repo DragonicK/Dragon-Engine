@@ -132,9 +132,9 @@ End Sub
 Public Sub Login(Name As String, Password As String)
     Call UpdateGameInstanceCipherKey
 
-    TcpInit AUTH_SERVER_IP, AUTH_SERVER_PORT
+    GameClientInit AUTH_SERVER_IP, AUTH_SERVER_PORT
 
-    If ConnectToServer Then
+    If ConnectToGameServer Then
         HideWindows
 
         Call SetStatus("Enviando informações de login.")
@@ -153,15 +153,15 @@ End Sub
 Public Sub AttemptLogin()
     Call UpdateGameInstanceCipherKey
     
-    TcpInit GameServerIp, GameServerPort
+    GameClientInit GameServerIp, GameServerPort
 
     ' send login packet
-    If ConnectToServer Then
+    If ConnectToGameServer Then
         Call SetStatus("Tentando conexão com o servidor de mundo.")
         Exit Sub
     End If
 
-    If Not IsConnected Then
+    If Not IsGameConnected Then
         ShowWindow GetWindowIndex("winLogin")
         ShowWindow GetWindowIndex("winLoginFooter")
         ShowDialogue "Problema de Conexao", "Não pode conectar-se ao game server.", "Tente novamente depois.", DialogueTypeAlert

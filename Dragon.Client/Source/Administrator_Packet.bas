@@ -368,7 +368,7 @@ Public Sub SendAdminWarp(ByVal X As Long, ByVal Y As Long)
     Buffer.WriteString Str(X)
     Buffer.WriteString Str(Y)
 
-    SendData Buffer.ToArray()
+    SendGameMessage Buffer.ToArray()
 
     Set Buffer = Nothing
 End Sub
@@ -385,7 +385,7 @@ Public Sub SendWarpTo(ByVal MapNum As Long)
     Buffer.WriteLong ParamCount
     Buffer.WriteString Str(MapNum)
 
-    SendData Buffer.ToArray()
+    SendGameMessage Buffer.ToArray()
 
     Set Buffer = Nothing
 End Sub
@@ -402,7 +402,7 @@ Public Sub SendWarpMeTo(ByVal Name As String)
     Buffer.WriteLong ParamCount
     Buffer.WriteString Name
 
-    SendData Buffer.ToArray()
+    SendGameMessage Buffer.ToArray()
 
     Set Buffer = Nothing
 End Sub
@@ -419,7 +419,7 @@ Public Sub SendWarpToMe(ByVal Name As String)
     Buffer.WriteLong ParamCount
     Buffer.WriteString Name
 
-    SendData Buffer.ToArray()
+    SendGameMessage Buffer.ToArray()
 
     Set Buffer = Nothing
 End Sub
@@ -436,7 +436,7 @@ Public Sub SendKick(ByVal Name As String)
     Buffer.WriteLong ParamCount
     Buffer.WriteString Name
 
-    SendData Buffer.ToArray()
+    SendGameMessage Buffer.ToArray()
     Set Buffer = Nothing
 End Sub
 
@@ -445,6 +445,6 @@ Private Sub CreateBuffer(ByRef Buffer As clsBuffer)
     Buffer.WriteLong EnginePacket.PSuperiorCommand
 End Sub
 Private Sub SendCommand(ByRef Buffer As clsBuffer)
-    SendData Buffer.ToArray()
+    SendGameMessage Buffer.ToArray()
     Set Buffer = Nothing
 End Sub

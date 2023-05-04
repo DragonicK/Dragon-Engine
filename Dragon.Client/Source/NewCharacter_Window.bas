@@ -140,7 +140,7 @@ End Sub
 
 Private Sub AddChar(Name As String, Sex As Long, Class As Long, Sprite As Long)
 
-    If ConnectToServer Then
+    If ConnectToGameServer Then
         HideWindows
         Call SetStatus("Enviando informações do personagem.")
         Call SendAddChar(Name, Sex, Class, Sprite)

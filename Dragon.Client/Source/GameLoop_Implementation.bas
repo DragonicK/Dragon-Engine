@@ -26,7 +26,7 @@ Public Sub GameLoop()
         End If
 
         If tmr25 < Tick Then
-            InGame = IsConnected
+            InGame = IsGameConnected
             Call CheckKeys    ' Check to make sure they aren't trying to auto do anything
 
             If GetForegroundWindow() = frmMain.hWnd Then

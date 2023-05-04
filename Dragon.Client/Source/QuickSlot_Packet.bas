@@ -10,7 +10,7 @@ Public Sub SendQuickSlotChange(ByVal SType As Long, ByVal InventoryIndex As Long
     Buffer.WriteLong InventoryIndex
     Buffer.WriteLong Index
 
-    SendData Buffer.ToArray()
+    SendGameMessage Buffer.ToArray()
 
     Set Buffer = Nothing
 End Sub
@@ -23,7 +23,7 @@ Public Sub SendSwapQuickSlot(ByVal OldSlot As Long, ByVal NewSlot As Long)
     Buffer.WriteLong OldSlot
     Buffer.WriteLong NewSlot
     
-    SendData Buffer.ToArray()
+    SendGameMessage Buffer.ToArray()
     
     Set Buffer = Nothing
 End Sub
@@ -51,7 +51,7 @@ Public Sub SendQuickSlotUse(ByVal Slot As Long)
     Buffer.WriteLong EnginePacket.PQuickSlotUse
     Buffer.WriteLong Slot
     
-    SendData Buffer.ToArray()
+    SendGameMessage Buffer.ToArray()
     
     Set Buffer = Nothing
 End Sub

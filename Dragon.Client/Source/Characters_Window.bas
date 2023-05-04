@@ -195,7 +195,7 @@ Private Sub ButtonModels_Close()
         CharEnabled(i) = True
     Next
 
-    DestroyTCP
+    DestroyGameClient
     HideWindows
 
     ShowWindow GetWindowIndex("winLogin")

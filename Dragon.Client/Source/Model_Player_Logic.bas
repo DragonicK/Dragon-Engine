@@ -366,7 +366,7 @@ Public Sub CastSpell(ByVal SpellSlot As Long)
                 Buffer.WriteLong EnginePacket.PCast
                 Buffer.WriteLong SpellSlot
 
-                SendData Buffer.ToArray()
+                SendGameMessage Buffer.ToArray()
                 Set Buffer = Nothing
 
                 SpellBuffer = SpellSlot

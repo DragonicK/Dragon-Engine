@@ -6,7 +6,7 @@ Public Sub SendPlayerRequestNewMap()
     Set Buffer = New clsBuffer
     Buffer.WriteLong CRequestNewMap
     Buffer.WriteLong GetPlayerDir(MyIndex)
-    SendData Buffer.ToArray()
+    SendGameMessage Buffer.ToArray()
     Set Buffer = Nothing
 End Sub
 

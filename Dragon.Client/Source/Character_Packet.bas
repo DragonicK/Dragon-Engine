@@ -8,7 +8,7 @@ Public Sub SendViewEquipmentVisibility(ByVal IsVisible As Boolean)
     Buffer.WriteLong EnginePacket.PViewEquipmentVisibility
     Buffer.WriteBoolean IsVisible
 
-    SendData Buffer.ToArray()
+    SendGameMessage Buffer.ToArray()
 
     Set Buffer = Nothing
 End Sub
@@ -20,7 +20,7 @@ Public Sub SendUnequip(ByVal eqNum As Long)
     Buffer.WriteLong EnginePacket.PUnequipItem
     Buffer.WriteLong eqNum
     
-    SendData Buffer.ToArray()
+    SendGameMessage Buffer.ToArray()
     
     Set Buffer = Nothing
 End Sub
@@ -32,7 +32,7 @@ Public Sub SendUseAttributePoint(ByVal StatNum As Byte)
     Buffer.WriteLong EnginePacket.PUseAttributePoint
     Buffer.WriteLong StatNum
     
-    SendData Buffer.ToArray()
+    SendGameMessage Buffer.ToArray()
     
     Set Buffer = Nothing
 End Sub
