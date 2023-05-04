@@ -1,6 +1,6 @@
 ﻿namespace Dragon.Network;
 
-public class NodeIpAddress : IpAddress {
+public sealed class NodeIpAddress : IpAddress {
     public int Id { get; set; }
     public string Name { get; set; }
 

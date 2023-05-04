@@ -4,6 +4,9 @@ Option Explicit
 Public GameServerPort As Long
 Public GameServerIp As String
 
+Public ChatServerPort As Long
+Public ChatServerIp As String
+
 Public CanDestroyGame As Boolean
 
 ' Loading Screen

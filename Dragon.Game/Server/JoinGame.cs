@@ -8,6 +8,8 @@ using Dragon.Game.Manager;
 using Dragon.Game.Players;
 using Dragon.Game.Services;
 using Dragon.Game.Network.Senders;
+using Dragon.Core.Jwt;
+using Dragon.Core.Model.Accounts;
 
 namespace Dragon.Game.Server;
 
@@ -23,6 +25,7 @@ public sealed class JoinGame {
     private readonly SkillManager SkillManager;
     private readonly WarperManager WarperManager;
     private readonly PartyReconnectManager PartyManager;
+    private readonly JwtTokenHandler JwtTokenHandler;
 
     public JoinGame(IServiceInjector injector) {
         injector.Inject(this);
@@ -30,6 +33,7 @@ public sealed class JoinGame {
         SkillManager = new SkillManager(injector);
         WarperManager = new WarperManager(injector);
         PartyManager = new PartyReconnectManager(injector);
+        JwtTokenHandler = new JwtTokenHandler(Configuration!.JwtSettings);   
     }
 
     public void Join(IPlayer player) {
@@ -165,12 +169,13 @@ public sealed class JoinGame {
         sender.SendTitles(player);
 
         ReJoinParty(player);
+        SendConnectToChatServer(sender, player);
 
-        sender!.SendInGame(player);
+        sender.SendInGame(player);
 
         player.InGame = true;
 
-        logger.Info(GetType().Name, $"{player!.Username} Joined Game");
+        logger.Info(GetType().Name, $"{player.Username} Joined Game");
     }
 
     private IClass? GetClass(IPlayer player) {
@@ -182,6 +187,20 @@ public sealed class JoinGame {
         }
 
         return null;
+    }
+
+    private void SendConnectToChatServer(IPacketSender sender, IPlayer player) {
+        var tokenData = new JwtTokenData() {
+            Character = player.Character.Name,
+            Username = player.Account.Username,
+            AccountId = player.Account.AccountId,
+            CharacterId = player.Character.CharacterId,
+            AccountLevel = player.Account.AccountLevelCode
+        };
+
+        var token = JwtTokenHandler.GerenateToken(tokenData);
+
+        sender.SendConnectChatServer(player, token);
     }
 
     private void SendExperience(IPacketSender sender, IPlayer player) {

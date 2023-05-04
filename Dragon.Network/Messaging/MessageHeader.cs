@@ -8,6 +8,7 @@ public enum MessageHeader {
     AuthenticationResult,
     GameServerLogin,
     ChatServerLogin,
+    ConnectChatServer,
     Characters,
     CharacterDelete,
     CharacterCreate,

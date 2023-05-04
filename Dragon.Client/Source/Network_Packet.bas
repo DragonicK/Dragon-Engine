@@ -9,6 +9,7 @@ Public Enum EnginePacket
     PAuthenticationResult
     PGameServerLogin
     PChatServerLogin
+    PConnectChatServer
     PModels
     PCharacterDelete
     PCharacterCreate
@@ -209,6 +210,7 @@ Public Sub InitMessages()
     HandleDataSub(EnginePacket.PUpdateCipherKey) = GetAddress(AddressOf HandleUpdateCipherKey)
     HandleDataSub(EnginePacket.PAlertMessage) = GetAddress(AddressOf HandleAlertMsg)
     HandleDataSub(EnginePacket.PAuthenticationResult) = GetAddress(AddressOf HandleAuthenticationResult)
+    HandleDataSub(EnginePacket.PConnectChatServer) = GetAddress(AddressOf HandleConnectChatServer)
     HandleDataSub(EnginePacket.PModels) = GetAddress(AddressOf HandlePlayerModels)
     HandleDataSub(EnginePacket.PGettingMap) = GetAddress(AddressOf HandleGettingMap)
     HandleDataSub(EnginePacket.PLoadMap) = GetAddress(AddressOf HandleLoadMap)

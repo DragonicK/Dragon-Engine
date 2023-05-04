@@ -45,8 +45,21 @@ public sealed partial class PacketSender : IPacketSender {
         Writer.Enqueue(msg);
     }
 
+    public void SendConnectChatServer(IPlayer player, string token) {
+        var packet = new SpConnectChatServer() {
+            Token = token
+        };
+
+        var msg = Writer.CreateMessage(packet);
+
+        msg.DestinationPeers.Add(player.Connection.Id);
+        msg.TransmissionTarget = TransmissionTarget.Destination;
+
+        Writer.Enqueue(msg);
+    }
+
     public void SendCharacters(IPlayer player) {
-        var maximum = Configuration.Character.Maximum;
+        var maximum = Configuration!.Character.Maximum;
 
         var packet = new SpCharacters() {
             Characters = new DataCharacter[maximum]

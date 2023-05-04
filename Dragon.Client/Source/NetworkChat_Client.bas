@@ -53,6 +53,28 @@ Public Sub ReceiveChatIncomingMessage(ByVal DataLength As Long)
     DoEvents
 End Sub
 
+Public Function ConnectToChatServer() As Boolean
+    Dim Wait As Long
+
+    ' Check to see if we are already connected, if so just exit
+    If IsChatConnected Then
+        ConnectToChatServer = True
+        Exit Function
+    End If
+
+    Wait = GetTickCount
+    
+    frmMain.ChatSocket.Close
+    frmMain.ChatSocket.Connect
+
+    ' Wait until connected or 3 seconds have passed and report the server being down
+    Do While (Not IsChatConnected) And (GetTickCount <= Wait + 2000)
+       DoEvents
+    Loop
+
+    ConnectToChatServer = IsChatConnected
+End Function
+
 Function IsChatConnected() As Boolean
     If frmMain.ChatSocket.State = sckConnected Then
         IsChatConnected = True
@@ -111,12 +133,17 @@ End Function
 Public Sub SendChatLogin()
     Dim Buffer As clsBuffer
     Set Buffer = New clsBuffer
-    
+
     Buffer.WriteLong EnginePacket.PChatServerLogin
     Buffer.WriteString ChatToken
-    
+
     SendChatMessage Buffer.ToArray()
     Set Buffer = Nothing
+End Sub
+
+Public Sub ChatServerAttemptLogin()
+    Call ChatClientInit(ChatServerIp, ChatServerPort)
+    Call ConnectToChatServer
 End Sub
 
 

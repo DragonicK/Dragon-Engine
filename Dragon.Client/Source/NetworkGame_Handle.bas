@@ -35,6 +35,19 @@ Error:
     DestroyGame
 End Sub
 
+Public Sub HandleConnectChatServer(ByVal Index As Long, ByRef Data() As Byte, ByVal StartAddr As Long, ByVal ExtraVar As Long)
+    Dim Buffer As clsBuffer
+    Set Buffer = New clsBuffer
+    
+    Buffer.WriteBytes Data
+   
+    ChatToken = Buffer.ReadString
+    
+    Set Buffer = Nothing
+    
+    Call ChatServerAttemptLogin
+End Sub
+
 Public Sub HandleHighIndex(ByVal Index As Long, ByRef Data() As Byte, ByVal StartAddr As Long, ByVal ExtraVar As Long)
     Dim Buffer As clsBuffer
 

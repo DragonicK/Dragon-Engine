@@ -15,9 +15,10 @@ public sealed class Player : IPlayer {
     public int InstanceId { get; set; }
     public AccountLevel AccountLevel { get; }
 
-    public Player(string username, long accountId, int accessLevel, IConnection connection) {
-        Name = string.Empty;
+    public Player(string username, string character, long characterId, long accountId, int accessLevel, IConnection connection) {
         Username = username;
+        Name = character;
+        CharacterId = characterId;
         AccountId = accountId;
         Connection = connection;
         AccountLevel = (AccountLevel)accessLevel;

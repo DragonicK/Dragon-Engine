@@ -25,7 +25,8 @@ public interface IPacketSender {
     void SendAlertMessage(IPlayer player, AlertMessageType alertMessage, MenuResetType resetType, bool kick = false, bool forced = false);
     void SendAlertMessage(IConnection connection, AlertMessageType alertMessage, MenuResetType resetType, bool kick = false, bool forced = false);
     void SendPlayerIndex(IPlayer player);
-    void SendServerConfiguration(IPlayer player);
+    void SendServerConfiguration(IPlayer player);       
+    void SendConnectChatServer(IPlayer player, string token);
     void SendLoadMap(IPlayer player);
     void SendInGame(IPlayer player);
     void SendPlayerData(IPlayer player);

@@ -21,7 +21,11 @@ namespace Dragon.Login.Routes;
 public sealed class Authentication : PacketRoute, IPacketRoute {
     public MessageHeader Header =>  MessageHeader.Authentication;
 
-    public Authentication(IServiceInjector injector) : base(injector) { }
+    private readonly JwtTokenHandler JwtTokenHandler;
+
+    public Authentication(IServiceInjector injector) : base(injector) {
+        JwtTokenHandler = new JwtTokenHandler(Configuration!.JwtSettings);
+    }
 
     public async void Process(IConnection connection, object packet) {
         var received = packet as CpAuthentication;
@@ -67,14 +71,12 @@ public sealed class Authentication : PacketRoute, IPacketRoute {
     private string GenerateToken(Account account) {
         var tokenData = new JwtTokenData() {
             CharacterId = 0,
-            Username = account!.Username,
-            AccountId = account!.AccountId,
-            AccountLevel = account!.AccountLevelCode
+            Username = account.Username,
+            AccountId = account.AccountId,
+            AccountLevel = account.AccountLevelCode
         };
 
-        var handler = new JwtTokenHandler(Configuration!.JwtSettings);
-
-        return handler.GerenateToken(tokenData);
+        return JwtTokenHandler.GerenateToken(tokenData);
     }
 
     private async Task<Account> GetAccountAsync(MembershipHandler handler, string username) {
@@ -112,16 +114,16 @@ public sealed class Authentication : PacketRoute, IPacketRoute {
     }
 
     private bool IsPassphraseOk(Account account, string passphrase) {
-        var salt = Hash.ComputeToHex(account?.Username + passphrase);
+        var salt = Hash.ComputeToHex(account.Username + passphrase);
         var password = Hash.ComputeToHex(passphrase + salt);
 
-        return account?.Passphrase.CompareTo(password) == 0;
+        return account.Passphrase.CompareTo(password) == 0;
     }
 
     private bool IsBanExpired(Account account) {
         var isExpired = true;
 
-        account?.AccountLock?.ForEach(
+        account.AccountLock?.ForEach(
             (x) => {
                 if (!x.Expired && !x.Permanent) {
                     x.Expired = IsDateExpired(x.ExpireDate);
@@ -141,8 +143,8 @@ public sealed class Authentication : PacketRoute, IPacketRoute {
     }
 
     private Task<int> UpdateLastLoginDataAsync(IConnection connection, MembershipHandler handler, Account account) {
-        account!.LastLoginDate = DateTime.Now;
-        account!.LastLoginIp = connection.IpAddress;
+        account.LastLoginDate = DateTime.Now;
+        account.LastLoginIp = connection.IpAddress;
 
         return handler.PutAccountAsync(account);
     }
@@ -154,17 +156,20 @@ public sealed class Authentication : PacketRoute, IPacketRoute {
     private void SendResult(IConnection connection, string token) {
         var writer = GetMessageWriter();
 
-        var server = Configuration!.GameServer;
+        var game = Configuration!.GameServer;
+        var chat = Configuration!.ChatServer;
 
         var p = new SpAuthenticationResult() {
-            IpAddress = server.Ip,
-            Port = server.Port,
+            GameServerIpAddress = game.Ip,
+            GameServerPort = game.Port,
+            ChatServerIpAddress = chat.Ip,
+            ChatServePort = chat.Port,
             Token = token
         };
 
-        var msg = writer!.CreateMessage(p);
+        var msg = writer.CreateMessage(p);
 
-        msg.DestinationPeers.Add(connection!.Id);
+        msg.DestinationPeers.Add(connection.Id);
         msg.TransmissionTarget = TransmissionTarget.Destination;
 
         writer.Enqueue(msg);
@@ -177,9 +182,9 @@ public sealed class Authentication : PacketRoute, IPacketRoute {
             AlertMessage = GetAlertMessage(result)
         };
 
-        var msg = writer!.CreateMessage(packet);
+        var msg = writer.CreateMessage(packet);
 
-        msg.DestinationPeers.Add(connection!.Id);
+        msg.DestinationPeers.Add(connection.Id);
         msg.TransmissionTarget = TransmissionTarget.Destination;
 
         writer.Enqueue(msg);
@@ -189,7 +194,7 @@ public sealed class Authentication : PacketRoute, IPacketRoute {
         var logger = GetLogger();
 
         if (uniqueKey.Length > 0) {
-            logger?.Warning(GetType().Name, $"Authentication: {GetString(result)} {username}");
+            logger.Warning(GetType().Name, $"Authentication: {GetString(result)} {username}");
         }
 
         return Task.CompletedTask;
@@ -198,7 +203,7 @@ public sealed class Authentication : PacketRoute, IPacketRoute {
     private Task WriteExceptionLog(string username, string message) {
         var logger = GetLogger();
 
-        logger?.Error(GetType().Name, $"Authentication: An error ocurred by {username} ... {message}");
+        logger.Error(GetType().Name, $"Authentication: An error ocurred by {username} ... {message}");
 
         return Task.CompletedTask;
     }
@@ -207,8 +212,8 @@ public sealed class Authentication : PacketRoute, IPacketRoute {
         return DatabaseService!.DatabaseFactory!;
     }
 
-    private ILogger? GetLogger() {
-        return LoggerService!.Logger;
+    private ILogger GetLogger() {
+        return LoggerService!.Logger!;
     }
 
     private IOutgoingMessageWriter GetMessageWriter() {

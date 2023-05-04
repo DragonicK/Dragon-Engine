@@ -16,6 +16,8 @@ public sealed class PlayerRepository : IPlayerRepository {
     public IPlayer Add(JwtTokenData jwtTokenData, IConnection connection) {
         var player = new Player(
             jwtTokenData.Username,
+            jwtTokenData.Character,
+            jwtTokenData.CharacterId,
             jwtTokenData.AccountId,
             jwtTokenData.AccountLevel,
             connection);

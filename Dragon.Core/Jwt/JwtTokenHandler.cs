@@ -1,5 +1,6 @@
 ﻿using System.Text;
 using System.Security.Claims;
+
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 
@@ -21,9 +22,9 @@ public sealed class JwtTokenHandler {
         var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256Signature);
         var handler = new JwtSecurityTokenHandler();
 
-        var claims = new ClaimsIdentity(new Claim[]
-            {
+        var claims = new ClaimsIdentity(new Claim[] {
                     new Claim("Username", jwtToken.Username),
+                    new Claim("Character",  jwtToken.Character),
                     new Claim("AccountId", jwtToken.AccountId.ToString()),
                     new Claim("CharacterId", jwtToken.CharacterId.ToString()),
                     new Claim("AccountLevel", jwtToken.AccountLevel.ToString())
@@ -70,12 +71,14 @@ public sealed class JwtTokenHandler {
         }
 
         var username = claims.FindFirst(x => x.Type == "Username");
+        var character = claims.FindFirst(x => x.Type == "Character");
         var accountId = claims.FindFirst(x => x.Type == "AccountId");
         var characterId = claims.FindFirst(x => x.Type == "CharacterId");
         var accountLevel = claims.FindFirst(x => x.Type == "AccountLevel");
 
         return new JwtTokenData() {
             Username = username is not null ? username.Value : string.Empty,
+            Character = character is not null ? character.Value : string.Empty,
             AccountId = accountId is not null ? int.Parse(accountId.Value) : 0,
             CharacterId = characterId is not null ? int.Parse(characterId.Value) : 0,
             AccountLevel = accountLevel is not null ? int.Parse(accountLevel.Value) : 0,

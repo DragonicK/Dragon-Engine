@@ -5,6 +5,7 @@ using Dragon.Core.Services;
 using Dragon.Core.GeoIpCountry;
 
 using Dragon.Chat.Services;
+using Dragon.Chat.Repository;
 
 namespace Dragon.Chat.Server;
 
@@ -25,6 +26,8 @@ public sealed class LeaveServer {
 
         GetRepository().RemoveFromId(id);
         GetIndexGenerator()?.Remove(id);
+
+        GetPlayerRepository().RemoveFromConnection(connection);
 
         logger?.Info(GetType().Name, $"Disconnected Id: {id} IpAddress: {ipAddress}");
     }
@@ -69,5 +72,9 @@ public sealed class LeaveServer {
 
     private IConnectionRepository GetRepository() {
         return ConnectionService!.ConnectionRepository!;
+    }
+
+    private IPlayerRepository GetPlayerRepository() {
+        return ConnectionService!.PlayerRepository!;
     }
 }

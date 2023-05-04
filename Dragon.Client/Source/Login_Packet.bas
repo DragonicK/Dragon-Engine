@@ -1,4 +1,6 @@
 Attribute VB_Name = "Login_Packet"
+Option Explicit
+
 Public Sub SendGameLogin()
     Dim Buffer As clsBuffer
     Set Buffer = New clsBuffer
@@ -29,6 +31,7 @@ Public Sub SendAuthLogin(ByVal Name As String, ByVal Password As String)
     Buffer.WriteString MotherBoardId
      
     SendGameMessage Buffer.ToArray()
+    
     Set Buffer = Nothing
 End Sub
 
@@ -40,6 +43,9 @@ Public Sub HandleAuthenticationResult(ByVal Index As Long, ByRef Data() As Byte,
     
     GameServerIp = Buffer.ReadString
     GameServerPort = Buffer.ReadLong
+    ChatServerIp = Buffer.ReadString
+    ChatServerPort = Buffer.ReadLong
+       
     LoginToken = Buffer.ReadString
     
     Set Buffer = Nothing
