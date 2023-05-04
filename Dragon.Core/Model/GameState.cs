@@ -3,5 +3,6 @@
 public enum GameState {
     None,
     Login,
-    Game
+    Game,
+    Chat
 }

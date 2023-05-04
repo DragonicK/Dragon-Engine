@@ -35,6 +35,6 @@ public sealed class Administrator : PacketRoute, IPacketRoute {
     }
 
     private ICommandRepository GetCommandRepository() {
-        return ContentService!.CommandRepository;
+        return ContentService!.CommandRepository!;
     }
 }

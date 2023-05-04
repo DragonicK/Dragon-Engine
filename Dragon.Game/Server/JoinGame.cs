@@ -1,12 +1,12 @@
 ﻿using Dragon.Core.Logs;
 using Dragon.Core.Model;
+using Dragon.Core.Services;
 using Dragon.Core.Model.Classes;
 
 using Dragon.Game.Combat;
 using Dragon.Game.Manager;
 using Dragon.Game.Players;
 using Dragon.Game.Services;
-using Dragon.Core.Services;
 using Dragon.Game.Network.Senders;
 
 namespace Dragon.Game.Server;
@@ -15,6 +15,7 @@ public sealed class JoinGame {
     public LoggerService? LoggerService { get; private set; }
     public ContentService? ContentService { get; private set; }
     public InstanceService? InstanceService { get; private set; }
+    public IServiceInjector? ServiceInjector { get; private set; }
     public ConfigurationService? Configuration { get; private set; }
     public ConnectionService? ConnectionService { get; private set; }
     public PacketSenderService? PacketSenderService { get; private set; }
@@ -32,13 +33,13 @@ public sealed class JoinGame {
     }
 
     public void Join(IPlayer player) {
-        var logger = GetLogger();
         var sender = GetPacketSender();
+        var logger = GetLogger();
 
-        player!.Combat = new PlayerCombat(player, Configuration!, GetPacketSender(), ContentService!, InstanceService!) {
-            PlayerRepository = ConnectionService!.PlayerRepository
-        };
-
+        if (ServiceInjector is not null) {
+            player.Combat = new PlayerCombat(ServiceInjector, player);
+        }
+  
         #region Titles
 
         player.Titles.Titles = ContentService!.Titles;

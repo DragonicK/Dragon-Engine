@@ -11,6 +11,7 @@ namespace Dragon.Game.Server;
 
 public sealed class LeaveGame {
     public LoggerService? LoggerService { get; private set; }
+    public InstanceService? InstanceService { get; private set; }
     public DatabaseService? DatabaseService { get; private set; }
     public ConfigurationService? Configuration { get; private set; }
     public PacketSenderService? PacketSenderService { get; private set; }
@@ -108,6 +109,6 @@ public sealed class LeaveGame {
     }
 
     private IDictionary<int, IInstance> GetInstances() {
-        return PacketSenderService!.InstanceService!.Instances;
+        return InstanceService!.Instances;
     }
 }
