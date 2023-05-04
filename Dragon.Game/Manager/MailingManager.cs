@@ -41,7 +41,7 @@ public sealed class MailingManager {
         var step = CreateMail(player, mail, index, amount);
 
         if (step != MailingOperationCode.Sended) {
-            sender!.SendAlertMessage(player.GetConnection(), GetAlertMessageType(step), MenuResetType.None);
+            sender!.SendAlertMessage(player, GetAlertMessageType(step), MenuResetType.None);
         }
         else {
             if (CouldAttachCurrencyAndItem(player, mail, index, amount)) {
@@ -63,7 +63,7 @@ public sealed class MailingManager {
         var step = CreateMail(player, mail, index, amount);
 
         if (step != MailingOperationCode.Sended) {
-            sender.SendAlertMessage(player.GetConnection(), GetAlertMessageType(step), MenuResetType.None);
+            sender.SendAlertMessage(player.Connection, GetAlertMessageType(step), MenuResetType.None);
         }
         else {
             var id = await CharacterDatabase.GetCharacterIdAsync(name);

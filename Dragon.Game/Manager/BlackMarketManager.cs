@@ -90,7 +90,7 @@ public sealed class BlackMarketManager {
                 else {
                     success = false;
 
-                    sender.SendAlertMessage(player.GetConnection(), AlertMessageType.InvalidRecipientName, MenuResetType.None);
+                    sender.SendAlertMessage(player, AlertMessageType.InvalidRecipientName, MenuResetType.None);
                 }
             }
 
@@ -98,7 +98,7 @@ public sealed class BlackMarketManager {
                 player.Account.Cash -= item.Price * amount;
 
                 sender.SendCash(player);
-                sender.SendAlertMessage(player.GetConnection(), AlertMessageType.SuccessPurchase, MenuResetType.None);
+                sender.SendAlertMessage(player, AlertMessageType.SuccessPurchase, MenuResetType.None);
             }
         }
     }

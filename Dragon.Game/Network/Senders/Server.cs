@@ -16,14 +16,14 @@ public sealed partial class PacketSender {
 
         var msg = Writer.CreateMessage(packet);
 
-        msg.DestinationPeers.Add(player.GetConnection().Id);
+        msg.DestinationPeers.Add(player.Connection.Id);
         msg.TransmissionTarget = TransmissionTarget.Destination;
 
         Writer.Enqueue(msg);
     }
 
     public void SendAlertMessage(IPlayer player, AlertMessageType alertMessage, MenuResetType resetType, bool kick = false, bool forced = false) {
-        SendAlertMessage(player.GetConnection(), alertMessage, resetType, kick, forced);
+        SendAlertMessage(player.Connection, alertMessage, resetType, kick, forced);
     }
 
     public void SendAlertMessage(IConnection connection, AlertMessageType alertMessage, MenuResetType resetType, bool kick = false, bool forced = false) {
@@ -60,7 +60,7 @@ public sealed partial class PacketSender {
 
         var msg = Writer.CreateMessage(packet);
 
-        msg.DestinationPeers.Add(player.GetConnection().Id);
+        msg.DestinationPeers.Add(player.Connection.Id);
         msg.TransmissionTarget = TransmissionTarget.Destination;
 
         Writer.Enqueue(msg);
@@ -73,7 +73,7 @@ public sealed partial class PacketSender {
 
         var msg = Writer.CreateMessage(packet);
 
-        msg.DestinationPeers.Add(player.GetConnection().Id);
+        msg.DestinationPeers.Add(player.Connection.Id);
         msg.TransmissionTarget = TransmissionTarget.Destination;
 
         Writer.Enqueue(msg);
@@ -111,7 +111,7 @@ public sealed partial class PacketSender {
 
         var msg = Writer!.CreateMessage(packet);
 
-        msg.DestinationPeers.Add(player.GetConnection().Id);
+        msg.DestinationPeers.Add(player.Connection.Id);
         msg.TransmissionTarget = TransmissionTarget.Destination;
 
         Writer.Enqueue(msg);

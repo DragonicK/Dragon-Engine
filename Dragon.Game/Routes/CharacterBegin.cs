@@ -39,7 +39,7 @@ public sealed class CharacterBegin : PacketRoute, IPacketRoute {
         var sender = GetPacketSender();
         var repository = GetPlayerRepository();
 
-        var player = repository.FindByConnectionId(connection.Id);
+        var player = repository.FindByConnection(connection);
 
         if (player is not null) {
             if (index < Configuration!.Character.Maximum) {

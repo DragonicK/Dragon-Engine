@@ -62,14 +62,14 @@ public sealed class Authentication : PacketRoute, IPacketRoute {
 
         if (player is not null) {
             Disconnect(sender, connection, AlertMessageType.DuplicatedLogin);
-            Disconnect(sender, player.GetConnection(), AlertMessageType.TryingToLogin);
+            Disconnect(sender, player.Connection, AlertMessageType.TryingToLogin);
 
             logger.Error(GetType().Name, $"Duplicated Entry {username}");
 
             // Wait about 1 second before disconnect.
             await Task.Delay(1000);
 
-            player.GetConnection().Disconnect();
+            player.Connection.Disconnect();
 
             repository.Remove(player);
         }

@@ -15,7 +15,6 @@ public interface IPlayer : IEntity {
     string MachineId { get; set; }
     string IpAddress { get; set; }
     AccountLevel AccountLevel { get; set; }
-    int IndexOnInstance { get; set; }
     bool IsWarehouseOpen { get; set; }
     int TradeId { get; set; }
     int PartyId { get; set; }
@@ -23,11 +22,7 @@ public interface IPlayer : IEntity {
     int Cash { get; set; }
     int ShopId { get; set; }
     bool InGame { get; set; }
-    IEntityAttribute Attributes { get; set; }
-    IEntityVital Vitals { get; set; }
-    IEntityCombat Combat { get; set; }
-    IEntity? Target { get; set; }
-    TargetType TargetType { get; set; }
+    IConnection Connection { get; set; }
     IList<CharacterPreview> Characters { get; set; }
     Character Character { get; set; }
     IClass Class { get; set; }
@@ -46,7 +41,6 @@ public interface IPlayer : IEntity {
     IPlayerSettings Settings { get; set; }
     IPlayerEquipment Equipments { get; set; }
     IPlayerInventory Inventories { get; set; }
-    IEntityEffect Effects { get; set; }
     IPlayerAchievementProgress AchievementsProgress { get; set; }
     IPlayerWarehouse Warehouse { get; set; }
     IPlayerPassive Passives { get; set; }

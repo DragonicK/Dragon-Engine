@@ -178,7 +178,7 @@ public sealed class PartyManager {
                     var player = member.Player;
 
                     if (player is not null) {
-                        list.Add(player.GetConnection().Id);
+                        list.Add(player.Connection.Id);
                     }
                 }
             }

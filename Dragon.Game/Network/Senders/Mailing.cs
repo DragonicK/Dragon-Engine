@@ -18,7 +18,7 @@ public sealed partial class PacketSender {
 
         var msg = Writer!.CreateMessage(packet);
 
-        msg.DestinationPeers.Add(player.GetConnection().Id);
+        msg.DestinationPeers.Add(player.Connection.Id);
         msg.TransmissionTarget = TransmissionTarget.Destination;
 
         Writer.Enqueue(msg);
@@ -60,7 +60,7 @@ public sealed partial class PacketSender {
 
         var msg = Writer!.CreateMessage(packet);
 
-        msg.DestinationPeers.Add(player.GetConnection().Id);
+        msg.DestinationPeers.Add(player.Connection.Id);
         msg.TransmissionTarget = TransmissionTarget.Destination;
 
         Writer.Enqueue(msg);
@@ -73,7 +73,7 @@ public sealed partial class PacketSender {
 
         var msg = Writer!.CreateMessage(packet);
 
-        msg.DestinationPeers.Add(player.GetConnection().Id);
+        msg.DestinationPeers.Add(player.Connection.Id);
         msg.TransmissionTarget = TransmissionTarget.Destination;
 
         Writer.Enqueue(msg);
@@ -88,7 +88,7 @@ public sealed partial class PacketSender {
 
         var msg = Writer!.CreateMessage(packet);
 
-        msg.DestinationPeers.Add(player.GetConnection().Id);
+        msg.DestinationPeers.Add(player.Connection.Id);
         msg.TransmissionTarget = TransmissionTarget.Destination;
 
         Writer.Enqueue(msg);
@@ -122,7 +122,7 @@ public sealed partial class PacketSender {
 
         var msg = Writer!.CreateMessage(packet);
 
-        msg.DestinationPeers.Add(player.GetConnection().Id);
+        msg.DestinationPeers.Add(player.Connection.Id);
         msg.TransmissionTarget = TransmissionTarget.Destination;
 
         Writer.Enqueue(msg);

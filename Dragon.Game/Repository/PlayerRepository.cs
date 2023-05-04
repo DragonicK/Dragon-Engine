@@ -6,7 +6,7 @@ using Dragon.Game.Players;
 
 namespace Dragon.Game.Repository;
 
-public class PlayerRepository : IPlayerRepository {
+public sealed class PlayerRepository : IPlayerRepository {
     private readonly Dictionary<int, IPlayer> players;
 
     public PlayerRepository(int capacity) {
@@ -27,7 +27,7 @@ public class PlayerRepository : IPlayerRepository {
 
     public void Remove(IPlayer? player) {
         if (player is not null) {
-            var key = player.GetConnection().Id;
+            var key = player.Connection.Id;
 
             players.Remove(key);
         }
@@ -61,16 +61,16 @@ public class PlayerRepository : IPlayerRepository {
             .FirstOrDefault(player => player.Character.CharacterId == id);
     }
 
-    public IPlayer? FindByConnectionId(int id) {
+    public IPlayer? FindByConnection(IConnection connection) {
         return players
            .Select(pair => pair.Value)
-           .FirstOrDefault(player => player.GetConnection().Id == id);
+           .FirstOrDefault(player => player.Connection == connection);
     }
 
     public IPlayer? RemoveFromConnectionId(int id) {
         var player = players
            .Select(pair => pair.Value)
-           .FirstOrDefault(player => player.GetConnection().Id == id);
+           .FirstOrDefault(player => player.Connection.Id == id);
 
         Remove(player);
 

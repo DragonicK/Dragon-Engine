@@ -52,6 +52,6 @@ public abstract class PacketRoute {
     }
 
     protected IPlayer? FindByConnection(IConnection connection) {
-        return GetPlayerRepository().FindByConnectionId(connection.Id);
+        return GetPlayerRepository().FindByConnection(connection);
     }
 }

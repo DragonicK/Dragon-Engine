@@ -15,7 +15,7 @@ public interface IPlayerRepository {
     IPlayer? FindByCharacterId(long id);
     IPlayer? FindByUsername(string username);
     IPlayer? FindByName(string name);
-    IPlayer? FindByConnectionId(int id);
+    IPlayer? FindByConnection(IConnection connection);
     IPlayer? RemoveFromConnectionId(int connectionId);
     IDictionary<int, IPlayer> GetPlayers();
 }

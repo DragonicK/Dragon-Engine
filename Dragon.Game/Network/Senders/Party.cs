@@ -27,7 +27,7 @@ public sealed partial class PacketSender {
     public void SendClosePartyInvitation(IPlayer player) {
         var msg = Writer!.CreateMessage(new SpClosePartyInvitation());
 
-        msg.DestinationPeers.Add(player.GetConnection().Id);
+        msg.DestinationPeers.Add(player.Connection.Id);
         msg.TransmissionTarget = TransmissionTarget.Destination;
 
         Writer.Enqueue(msg);
@@ -78,7 +78,7 @@ public sealed partial class PacketSender {
             var player = members[i].Player;
 
             if (player is not null) {
-                msg.DestinationPeers.Add(player.GetConnection().Id);
+                msg.DestinationPeers.Add(player.Connection.Id);
             }
         }
 
@@ -104,7 +104,7 @@ public sealed partial class PacketSender {
             var player = members[i].Player;
 
             if (player is not null) {
-                msg.DestinationPeers.Add(player.GetConnection().Id);
+                msg.DestinationPeers.Add(player.Connection.Id);
             }
         }
 
@@ -141,7 +141,7 @@ public sealed partial class PacketSender {
 
         var msg = Writer!.CreateMessage(packet);
 
-        msg.DestinationPeers.Add(player.GetConnection().Id);
+        msg.DestinationPeers.Add(player.Connection.Id);
         msg.TransmissionTarget = TransmissionTarget.Destination;
 
         Writer.Enqueue(msg);
