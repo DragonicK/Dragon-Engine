@@ -133,7 +133,7 @@ Sub HandleData(ByRef Data() As Byte)
     Set Buffer = New clsBuffer
     Buffer.WriteBytes Data()
 
-    If Buffer.ExecuteDecipher Then
+    If Buffer.ExecuteDecipher(GameInstance) Then
         MsgType = Buffer.ReadLong
 
         If MsgType < 0 Then
@@ -150,17 +150,9 @@ Sub HandleData(ByRef Data() As Byte)
         Exit Sub
 
     Else
-      '  MsgBox "Ocorreu um erro ao receber e processar os dados."
-        ' DestroyGame
-        
-        Dim XOXOTAS() As Byte
+        MsgBox "Ocorreu um erro ao receber e processar os dados."
 
-        XOXOTAS = Buffer.ToArray()
-        
-        Dim a As Long
-        
-       a = 10
-
+        DestroyGame
     End If
 
 Error:

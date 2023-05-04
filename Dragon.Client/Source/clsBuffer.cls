@@ -195,6 +195,6 @@ Public Function ToString() As String
     ToString = StrConv(Buffer, vbUnicode, LOCALE_BRAZIL)
 End Function
 
-Public Function ExecuteDecipher() As Boolean
-    ExecuteDecipher = Decipher(ByVal VarPtr(Buffer(0)), Count())
+Public Function ExecuteDecipher(ByVal InstanceIndex As Long) As Boolean
+    ExecuteDecipher = Decipher(InstanceIndex, ByVal VarPtr(Buffer(0)), Count())
 End Function

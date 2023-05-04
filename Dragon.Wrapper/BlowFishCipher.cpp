@@ -2,7 +2,7 @@
 
 namespace Dragon::Wrapper::Cryptography {
 
-	void BlowFishCipher::UpdateKey(unsigned char* udpatedKey, int length) {
+	void BlowFishCipher::UpdateKey(byte* udpatedKey, int length) {
 		memcpy_s(key, length, udpatedKey, length);
 	
 		const int size = 256 * sizeof(int);

@@ -130,7 +130,7 @@ Public Sub Resize_WinLoginFooter()
 End Sub
 
 Public Sub Login(Name As String, Password As String)
-    Call UpdateCipherKey
+    Call UpdateGameInstanceCipherKey
 
     TcpInit AUTH_SERVER_IP, AUTH_SERVER_PORT
 
@@ -151,7 +151,7 @@ Public Sub Login(Name As String, Password As String)
 End Sub
 
 Public Sub AttemptLogin()
-    Call UpdateCipherKey
+    Call UpdateGameInstanceCipherKey
     
     TcpInit GameServerIp, GameServerPort
 

@@ -11,6 +11,8 @@ Public Declare Sub ZeroMemory Lib "kernel32.dll" Alias "RtlZeroMemory" (Destinat
 Public Sub Main()
     MaxPlayerMail = 20
     InitializePlayerMails
+    
+    UpdateChatInstanceCipherKey
 
     ReDim DescText(1 To 1)
 

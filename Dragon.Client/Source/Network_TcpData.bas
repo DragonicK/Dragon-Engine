@@ -141,9 +141,9 @@ Private Function CreateEncryptedPacket(ByRef Data() As Byte) As Byte()
 
     CopyMemory Buffer(0), Data(0), Length
 
-    Call AppendCheckSum(ByVal VarPtr(Buffer(0)), 0, BufferLength)
+    Call AppendCheckSum(GameInstance, ByVal VarPtr(Buffer(0)), 0, BufferLength)
 
-    Call Cipher(ByVal VarPtr(Buffer(0)), BufferLength)
+    Call Cipher(GameInstance, ByVal VarPtr(Buffer(0)), BufferLength)
 
     CreateEncryptedPacket = Buffer
 

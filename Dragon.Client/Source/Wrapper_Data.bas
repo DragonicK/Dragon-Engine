@@ -27,16 +27,22 @@ Public Declare Function GetBoardId Lib "Dragon.Wrapper.dll" Alias "_GetBoardId@4
 Public Declare Function GetVideoId Lib "Dragon.Wrapper.dll" Alias "_GetVideoId@4" (ByRef Output As String) As Long
 Public Declare Function GetMacAddressId Lib "Dragon.Wrapper.dll" Alias "_GetMacAddressId@4" (ByRef Output As String) As Long
 
-Public Declare Sub Cipher Lib "Dragon.Wrapper.dll" Alias "_Cipher@8" (ByVal BufferLngPtr As Long, ByVal Length As Long)
-Public Declare Function Decipher Lib "Dragon.Wrapper.dll" Alias "_Decipher@8" (ByVal BufferLngPtr As Long, ByVal Length As Long) As Boolean
-Public Declare Sub UpdateKey Lib "Dragon.Wrapper.dll" Alias "_UpdateKey@8" (ByVal BufferLngPtr As Long, ByVal Length As Long)
-Public Declare Sub AppendCheckSum Lib "Dragon.Wrapper.dll" Alias "_AppendCheckSum@12" (ByVal BufferLngPtr As Long, ByVal offset As Long, ByVal Length As Long)
+Public Declare Sub Cipher Lib "Dragon.Wrapper.dll" Alias "_Cipher@12" (ByVal InstanceIndex As Long, ByVal BufferLngPtr As Long, ByVal Length As Long)
+Public Declare Function Decipher Lib "Dragon.Wrapper.dll" Alias "_Decipher@12" (ByVal InstanceIndex As Long, ByVal BufferLngPtr As Long, ByVal Length As Long) As Boolean
+Public Declare Sub UpdateKey Lib "Dragon.Wrapper.dll" Alias "_UpdateKey@12" (ByVal InstanceIndex As Long, ByVal BufferLngPtr As Long, ByVal Length As Long)
+Public Declare Sub AppendCheckSum Lib "Dragon.Wrapper.dll" Alias "_AppendCheckSum@16" (ByVal InstanceIndex As Long, ByVal BufferLngPtr As Long, ByVal offset As Long, ByVal Length As Long)
 
 ' The API uses 16 bytes fixed length key. Do not change.
 ' A API usa uma chave de tamanho fixa 16 bytes. Não trocar
 Public Const AesKeyLength As Long = 16
+Public Const CipherKeyLength As Long = 16
 
-Public CipherKey(0 To 15) As Byte
+Public GameInstanceCipherKey(0 To CipherKeyLength - 1) As Byte
+Public ChatInstanceCipherKey(0 To CipherKeyLength - 1) As Byte
+
+' BlowFishCipher Instance Index
+Public Const GameInstance As Long = 1
+Public Const ChatInstance As Long = 2
 
 ' Do not change variable order and types.
 ' Não trocar a ordem das variáveis e nem os tipos de dados.
@@ -75,25 +81,46 @@ Public Enum AesPaddingMode
     AesPaddingMode_ISO10126 = 5
 End Enum
 
-Public Sub UpdateCipherKey()
-    CipherKey(0) = &H6B
-    CipherKey(1) = &H60
-    CipherKey(2) = &HCB
-    CipherKey(3) = &H5B
-    CipherKey(4) = &H82
-    CipherKey(5) = &HCE
-    CipherKey(6) = &H90
-    CipherKey(7) = &HB1
-    CipherKey(8) = &HCC
-    CipherKey(9) = &H2B
-    CipherKey(10) = &H6C
-    CipherKey(11) = &H55
-    CipherKey(12) = &H6C
-    CipherKey(13) = &H6C
-    CipherKey(14) = &H6C
-    CipherKey(15) = &H6C
+Public Sub UpdateChatInstanceCipherKey()
+    ChatInstanceCipherKey(0) = &H6B
+    ChatInstanceCipherKey(1) = &H60
+    ChatInstanceCipherKey(2) = &HCB
+    ChatInstanceCipherKey(3) = &H5B
+    ChatInstanceCipherKey(4) = &H82
+    ChatInstanceCipherKey(5) = &HCE
+    ChatInstanceCipherKey(6) = &H90
+    ChatInstanceCipherKey(7) = &HB1
+    ChatInstanceCipherKey(8) = &HCC
+    ChatInstanceCipherKey(9) = &H2B
+    ChatInstanceCipherKey(10) = &H6C
+    ChatInstanceCipherKey(11) = &H55
+    ChatInstanceCipherKey(12) = &H6C
+    ChatInstanceCipherKey(13) = &H6C
+    ChatInstanceCipherKey(14) = &H6C
+    ChatInstanceCipherKey(15) = &H6C
+
+    Call UpdateKey(ChatInstance, ByVal VarPtr(ChatInstanceCipherKey(0)), CipherKeyLength)
+End Sub
+
+Public Sub UpdateGameInstanceCipherKey()
+    GameInstanceCipherKey(0) = &H6B
+    GameInstanceCipherKey(1) = &H60
+    GameInstanceCipherKey(2) = &HCB
+    GameInstanceCipherKey(3) = &H5B
+    GameInstanceCipherKey(4) = &H82
+    GameInstanceCipherKey(5) = &HCE
+    GameInstanceCipherKey(6) = &H90
+    GameInstanceCipherKey(7) = &HB1
+    GameInstanceCipherKey(8) = &HCC
+    GameInstanceCipherKey(9) = &H2B
+    GameInstanceCipherKey(10) = &H6C
+    GameInstanceCipherKey(11) = &H55
+    GameInstanceCipherKey(12) = &H6C
+    GameInstanceCipherKey(13) = &H6C
+    GameInstanceCipherKey(14) = &H6C
+    GameInstanceCipherKey(15) = &H6C
     
-    Call UpdateKey(ByVal VarPtr(CipherKey(0)), 16)
+    Call UpdateKey(GameInstance, ByVal VarPtr(GameInstanceCipherKey(0)), CipherKeyLength)
 End Sub
 
 Public Sub HandleUpdateCipherKey(ByVal Index As Long, ByRef Data() As Byte, ByVal StartAddr As Long, ByVal ExtraVar As Long)
@@ -109,9 +136,9 @@ Public Sub HandleUpdateCipherKey(ByVal Index As Long, ByRef Data() As Byte, ByVa
     Key = Buffer.ReadBytes(Count)
     GameState = Buffer.ReadLong
 
-    CopyMemory CipherKey(0), Key(0), 16
+    CopyMemory GameInstanceCipherKey(0), Key(0), CipherKeyLength
 
-    Call UpdateKey(ByVal VarPtr(CipherKey(0)), 16)
+    Call UpdateKey(GameInstance, ByVal VarPtr(GameInstanceCipherKey(0)), CipherKeyLength)
 
     If GameState = GameState_Login Then
         Call SendAuthLogin(Username, Passphrase)

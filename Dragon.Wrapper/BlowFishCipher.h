@@ -133,10 +133,16 @@ namespace Dragon::Wrapper::Cryptography {
 
     class BlowFishCipher {
     public:
-        static BlowFishCipher& Instance() {
-            static BlowFishCipher instance;
+        static BlowFishCipher& GameInstance() {
+            static BlowFishCipher gameInstance;
 
-            return instance;
+            return gameInstance;
+        }
+
+        static BlowFishCipher& ChatInstance() {
+            static BlowFishCipher chatInstance;
+
+            return chatInstance;
         }
 
         void UpdateKey(byte* udpatedKey, int length);

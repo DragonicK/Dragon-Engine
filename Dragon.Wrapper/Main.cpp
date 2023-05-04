@@ -12,6 +12,9 @@ using namespace Dragon::Wrapper::Cryptography;
 
 using namespace System::Runtime::InteropServices;
 
+const int GAME_INSTANCE = 1;
+const int CHAT_INSTANCE = 2;
+
 int ConvertStringToHexadecimal(System::String^ string, BSTR* output) {
 	auto buffer = Hash::Instance->Compute(string);
 	auto id = Hash::Instance->ConvertToHexadecimal(buffer);
@@ -191,20 +194,39 @@ int WINAPI GetMacAddressId(BSTR* output) {
 
 #pragma region BlowFishCipher 
 
-void WINAPI UpdateKey(unsigned char* buffer, int length) {
-	BlowFishCipher::Instance().UpdateKey(buffer, length);
+void WINAPI UpdateKey(int instanceIndex, unsigned char* buffer, int length) {
+	if (instanceIndex == GAME_INSTANCE) {
+		BlowFishCipher::GameInstance().UpdateKey(buffer, length);
+	}
+	else if (instanceIndex == CHAT_INSTANCE) {
+		BlowFishCipher::ChatInstance().UpdateKey(buffer, length);
+	}
 }
 
-void WINAPI Cipher(unsigned char* buffer, int length) {
-	BlowFishCipher::Instance().Cipher(buffer, 0, length);
+void WINAPI Cipher(int instanceIndex, unsigned char* buffer, int length) {
+	if (instanceIndex == GAME_INSTANCE) {
+		BlowFishCipher::GameInstance().Cipher(buffer, 0, length);
+	}
+	else if (instanceIndex == CHAT_INSTANCE) {
+		BlowFishCipher::ChatInstance().Cipher(buffer, 0, length);
+	}	
 }
 
-bool WINAPI Decipher(unsigned char* buffer, int length) {
-	return BlowFishCipher::Instance().Decipher(buffer, 0, length);
+bool WINAPI Decipher(int instanceIndex, unsigned char* buffer, int length) {
+	if (instanceIndex == GAME_INSTANCE) {
+		return BlowFishCipher::GameInstance().Decipher(buffer, 0, length);
+	}
+ 
+	return BlowFishCipher::ChatInstance().Decipher(buffer, 0, length);
 }
 
-void WINAPI AppendCheckSum(unsigned char* raw, int offset, int length) {
-	BlowFishCipher::Instance().AppendCheckSum(raw, offset, length);
+void WINAPI AppendCheckSum(int instanceIndex, unsigned char* raw, int offset, int length) {
+	if (instanceIndex == GAME_INSTANCE) {
+		BlowFishCipher::GameInstance().AppendCheckSum(raw, offset, length);
+	}
+	else if (instanceIndex == CHAT_INSTANCE) {
+		BlowFishCipher::ChatInstance().AppendCheckSum(raw, offset, length);
+	}	
 }
 
 #pragma endregion

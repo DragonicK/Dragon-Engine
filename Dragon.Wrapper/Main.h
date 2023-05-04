@@ -49,10 +49,10 @@ extern "C" {
 	__declspec(dllexport) int WINAPI GetVideoId(BSTR* output);
 	__declspec(dllexport) int WINAPI GetMacAddressId(BSTR* output);
 
-	__declspec(dllexport) void WINAPI Cipher(unsigned char* buffer, int length);
-	__declspec(dllexport) bool WINAPI Decipher(unsigned char* buffer, int length);
-	__declspec(dllexport) void WINAPI UpdateKey(unsigned char* buffer, int length);
-	__declspec(dllexport) void WINAPI AppendCheckSum(unsigned char* raw, int offset, int length);
+	__declspec(dllexport) void WINAPI Cipher(int instanceIndex, unsigned char* buffer, int length);
+	__declspec(dllexport) bool WINAPI Decipher(int instanceIndex, unsigned char* buffer, int length);
+	__declspec(dllexport) void WINAPI UpdateKey(int instanceIndex, unsigned char* buffer, int length);
+	__declspec(dllexport) void WINAPI AppendCheckSum(int instanceIndex, unsigned char* raw, int offset, int length);
 
 #ifdef __cplusplus
 }

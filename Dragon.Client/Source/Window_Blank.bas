@@ -1,4 +1,5 @@
 Attribute VB_Name = "Window_Blank"
+Option Explicit
 
 Public Sub CreateWindow_Blank()
     ' Create black background
