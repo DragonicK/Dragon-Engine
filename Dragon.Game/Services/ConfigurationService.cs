@@ -40,7 +40,6 @@ public sealed class ConfigurationService : IService, IConfiguration {
     public Trade Trade { get; set; }
     public Player Player { get; set; }
     public ProhibitedNames ProhibitedNames { get; set; }
-    public Message Messages { get; set; }
 
     public ConfigurationService() {
         BlackMarket = new BlackMarket();
@@ -53,7 +52,6 @@ public sealed class ConfigurationService : IService, IConfiguration {
         Player = new Player();
         Rates = new Rate();
         Trade = new Trade();
-        Messages = new Message();
         ChestDrop = new ChestDrop();
         Ressurrection = new Ressurrection();
         ProhibitedNames = new ProhibitedNames();

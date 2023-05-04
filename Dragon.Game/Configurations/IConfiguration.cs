@@ -34,7 +34,6 @@ public interface IConfiguration {
     Rate Rates { get; set; }
     Ressurrection Ressurrection { get; set; }
     Trade Trade { get; set; }
-    Message Messages { get; set; }
 
     #endregion
 }
