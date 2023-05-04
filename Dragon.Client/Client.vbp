@@ -193,6 +193,7 @@ Module=ChestLoot_Packet; Source\ChestLoot_Packet.bas
 Module=Enum_GameState; Source\Enum_GameState.bas
 Module=NetworkChat_Client; Source\NetworkChat_Client.bas
 Module=NetworkChat_Handle; Source\NetworkChat_Handle.bas
+Module=Wrapper_Packet; Source\Wrapper_Packet.bas
 IconForm="frmMain"
 Startup="Sub Main"
 HelpFile=""

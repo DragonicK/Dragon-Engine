@@ -13,7 +13,7 @@ Public Sub Main()
     InitializePlayerMails
     
     UpdateChatInstanceCipherKey
-
+    
     ReDim DescText(1 To 1)
 
     LoadMachineId
@@ -95,7 +95,7 @@ Public Sub Main()
 
     Call GameClientInit(AUTH_SERVER_IP, AUTH_SERVER_PORT)
     Call InitMessages
-
+    
     ' Reset values
     Ping = -1
 

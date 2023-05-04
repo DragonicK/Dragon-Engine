@@ -91,9 +91,15 @@ Private Sub Form_DblClick()
 End Sub
 
 ' Winsock event
-Private Sub Socket_DataArrival(ByVal bytesTotal As Long)
+Private Sub Socket_DataArrival(ByVal BytesTotal As Long)
     If IsGameConnected Then
-        Call ReceiveGameIncomingMessage(bytesTotal)
+        Call ReceiveGameIncomingMessage(BytesTotal)
+    End If
+End Sub
+
+Private Sub ChatSocket_DataArrival(ByVal BytesTotal As Long)
+    If IsChatConnected Then
+        Call ReceiveChatIncomingMessage(BytesTotal)
     End If
 End Sub
 

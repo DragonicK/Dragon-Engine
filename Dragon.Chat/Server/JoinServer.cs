@@ -37,7 +37,7 @@ public sealed class JoinServer {
         var writer = OutgoingMessageService!.OutgoingMessageWriter!;
 
         var msg = writer.CreateMessage(new SpUpdateCipherKey() {
-            GameState = GameState.Login,
+            GameState = GameState.Chat,
             Key = connection.CipherKey,
         });
 

@@ -1,5 +1,7 @@
 Attribute VB_Name = "Login_Window"
 Public LoginToken As String
+Public ChatToken As String
+
 Public Username As String
 Public Passphrase As String
 

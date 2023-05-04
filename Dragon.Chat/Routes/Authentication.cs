@@ -21,14 +21,14 @@ public sealed class Authentication : PacketRoute, IPacketRoute {
     }
 
     public void Process(IConnection connection, object packet) {
-        var received = packet as CpGameServerLogin;
+        var received = packet as CpChatServerLogin;
 
         if (received is not null) {
             Process(connection, received);
         }
     }
 
-    private void Process(IConnection connection, CpGameServerLogin packet) {
+    private void Process(IConnection connection, CpChatServerLogin packet) {
         var logger = GetLogger();
 
         var jwtToken = packet.Token;

@@ -8,13 +8,13 @@ Option Explicit
 ' ******************************************
 Private PlayerBuffer As clsBuffer
 
-Public Sub GameClientInit(ByVal IP As String, ByVal Port As Long)
+Public Sub GameClientInit(ByVal IpAddress As String, ByVal Port As Long)
     Set PlayerBuffer = Nothing
     Set PlayerBuffer = New clsBuffer
 
     ' connect
     frmMain.Socket.Close
-    frmMain.Socket.RemoteHost = IP
+    frmMain.Socket.RemoteHost = IpAddress
     frmMain.Socket.RemotePort = Port
 End Sub
 
