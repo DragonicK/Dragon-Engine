@@ -1,5 +1,6 @@
 ﻿using Dragon.Core.Model;
 using Dragon.Core.Content;
+using Dragon.Core.Services;
 using Dragon.Core.Model.Npcs;
 using Dragon.Core.Model.Skills;
 using Dragon.Core.Model.Entity;
@@ -10,29 +11,21 @@ using Dragon.Core.Model.Characters;
 using Dragon.Game.Players;
 using Dragon.Game.Services;
 using Dragon.Game.Instances;
-
+using Dragon.Game.Repository;
+using Dragon.Game.Combat.Death;
 using Dragon.Game.Combat.Common;
 using Dragon.Game.Combat.Handler;
-using Dragon.Game.Configurations;
-using Dragon.Game.Combat.Death;
-using Dragon.Game.Repository;
 using Dragon.Game.Network.Senders;
+using Dragon.Game.Network;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Dragon.Game.Combat;
 
-public class PlayerCombat : IEntityCombat {
-    public IPlayer Player { get; init; }
-    public IConfiguration Configuration { get; init; }
-    public IPlayerRepository? PlayerRepository { get; init; }
-    public IPacketSender PacketSender { get; private set; }
-    public IDatabase<Npc>? Npcs { get; private set; }
-    public IDatabase<Skill>? Skills { get; private set; }
-    public IDatabase<Effect>? Effects { get; private set; }
-    public IDatabase<GroupAttribute>? NpcAttributes { get; private set; }
+public sealed class PlayerCombat : IEntityCombat {
+    public ContentService? ContentService { get; private set; }
     public InstanceService? InstanceService { get; private set; }
-
-    public CharacterSkill? CurrentSlot { get; private set; }
-    public Skill? CurrentData { get; private set; }
+    public ConfigurationService? Configuration { get; private set; }
+    public PacketSenderService? PacketSenderService { get; private set; }
 
     public ISkillHandler Healing { get; private set; }
     public ISkillHandler HoT { get; private set; }
@@ -43,178 +36,123 @@ public class PlayerCombat : IEntityCombat {
     public IEntityDeath EntityDeath { get; private set; }
     public IEntityDeath PlayerDeath { get; private set; }
 
+    public CharacterSkill? CurrentSlot { get; private set; }
+    public Skill? CurrentData { get; private set; }
+
     public bool IsBufferedSkill { get; set; }
     public int BufferedSkillIndex { get; set; }
     public int BufferedSkillTime { get; set; }
 
-    public PlayerCombat(IPlayer player, IConfiguration configuration, IPacketSender sender, ContentService contentService, InstanceService instanceService) {
+    public readonly IPlayer Player;
+
+    public PlayerCombat(IServiceInjector injector, IPlayer player) {
+        injector.Inject(this);
+
         Player = player;
-        PacketSender = sender;
-        Configuration = configuration;
-        InstanceService = instanceService;
 
-        Npcs = contentService.Npcs;
-        Skills = contentService.Skills;
-        Effects = contentService.Effects;
-        NpcAttributes = contentService.NpcAttributes;
+        EntityDeath = new EntityDeath(injector);
+        PlayerDeath = new PlayerDeath(injector);
 
-        EntityDeath = new EntityDeath() {
-            PacketSender = sender,
-            Configuration = configuration,
-            ContentService = contentService,
-            InstanceService = instanceService,
-            PlayerRepository = PlayerRepository
-        };
-
-        PlayerDeath = new PlayerDeath() {
-            PacketSender = sender,
-            Configuration = configuration,
-            ContentService = contentService,
-            InstanceService = instanceService,
-            PlayerRepository = PlayerRepository
-        };
-
-        Healing = new Healing() {
-            Player = player,
-            Skills = Skills,
-            PacketSender = sender,
-            InstanceService = InstanceService
-        };
-
-        HoT = new HoT() {
-            Player = player,
-            Skills = Skills,
-            PacketSender = sender,
-            InstanceService = InstanceService
-        };
-
-        Damage = new Damage() {
-            Player = player,
-            Skills = Skills,
-            PacketSender = sender,
-            InstanceService = InstanceService,
-            EntityDeath = EntityDeath, 
-            PlayerDeath = PlayerDeath
-        };
-
-        DoT = new DoT() {
-            Player = player,
-            Skills = Skills,
-            PacketSender = sender,
-            InstanceService = InstanceService,
-            EntityDeath = EntityDeath,
-            PlayerDeath = PlayerDeath
-        };
-
-        Effect = new Buff() {
-            Player = player,
-            Skills = Skills,
-            Effects = Effects,
-            PacketSender = sender,
-            InstanceService = InstanceService
-        };
-
-        Aura = new Aura() {
-            Player = player,
-            Effects = Effects,
-            PacketSender = sender,
-            InstanceService = InstanceService
-        };
+        HoT = new HoT(injector, player);
+        Aura = new Aura(injector, player);
+        Effect = new Buff(injector, player);
+        Healing = new Healing(injector, player);
+        DoT = new DoT(injector, PlayerDeath, EntityDeath, player);
+        Damage = new Damage(injector, PlayerDeath, EntityDeath, player);
     }
 
-    public void BufferSkill(int slotIndex) {
-        if (Skills is not null) {
-            var inventory = Player.Skills.Get(slotIndex);
+    public void BufferSkill(int slotIndex) {   
+        var inventory = Player.Skills.Get(slotIndex);
 
-            if (inventory is not null) {
-                var id = inventory.SkillId;
+        if (inventory is not null) {
+            var sender = GetPacketSender();
+            var id = inventory.SkillId;
 
-                if (Skills.Contains(id)) {
-                    var data = Skills[id]!;
+            GetDatabaseSkills().TryGet(id, out var data);
 
-                    if (IsTargetDead()) {
-                        PacketSender!.SendClearCast(Player);
-                        PacketSender!.SendMessage(SystemMessage.InvalidTarget, QbColor.BrigthRed, Player!, new string[] { id.ToString() });
+            if (data is not null) {
+                if (IsTargetDead()) {
+                    sender.SendClearCast(Player);
+                    sender.SendMessage(SystemMessage.InvalidTarget, QbColor.BrigthRed, Player!, new string[] { id.ToString() });
 
-                        return;
-                    }
-
-                    if (!CouldCastOnSelf(inventory)) {
-                        PacketSender!.SendClearCast(Player);
-                        PacketSender!.SendMessage(SystemMessage.InvalidTarget, QbColor.BrigthRed, Player!, new string[] { id.ToString() });
-
-                        return;
-                    }
-
-                    if (!IsCostEnough(data.CostType, inventory.Cost)) {
-                        PacketSender!.SendClearCast(Player);
-                        PacketSender!.SendMessage(SystemMessage.InsuficientMana, QbColor.BrigthRed, Player!, new string[] { id.ToString() });
-
-                        return;
-                    }
-
-                    if (!IsTargetInRange(inventory)) {
-                        PacketSender!.SendClearCast(Player);
-                        PacketSender!.SendMessage(SystemMessage.InvalidRange, QbColor.BrigthRed, Player!);
-
-                        return;
-                    }
-
-                    PacketSender.SendAnimation(GetInstance()!, data.CastAnimationId, Player.GetX(), Player.GetY(), TargetType.Player, Player.IndexOnInstance, true);
-
-                    IsBufferedSkill = true;
-                    BufferedSkillIndex = slotIndex;
-                    BufferedSkillTime = Environment.TickCount + (inventory.CastTime * 1000);
+                    return;
                 }
+
+                if (!CouldCastOnSelf(inventory)) {
+                    sender.SendClearCast(Player);
+                    sender.SendMessage(SystemMessage.InvalidTarget, QbColor.BrigthRed, Player!, new string[] { id.ToString() });
+
+                    return;
+                }
+
+                if (!IsCostEnough(data.CostType, inventory.Cost)) {
+                    sender.SendClearCast(Player);
+                    sender.SendMessage(SystemMessage.InsuficientMana, QbColor.BrigthRed, Player!, new string[] { id.ToString() });
+
+                    return;
+                }
+
+                if (!IsTargetInRange(inventory)) {
+                    sender.SendClearCast(Player);
+                    sender.SendMessage(SystemMessage.InvalidRange, QbColor.BrigthRed, Player!);
+
+                    return;
+                }
+
+                sender.SendAnimation(GetInstance()!, data.CastAnimationId, Player.GetX(), Player.GetY(), TargetType.Player, Player.IndexOnInstance, true);
+
+                IsBufferedSkill = true;
+                BufferedSkillIndex = slotIndex;
+                BufferedSkillTime = Environment.TickCount + (inventory.CastTime * 1000);
             }
         }
     }
 
     public void CastSkill(int slotIndex) {
-        if (Skills is not null) {
-            var inventory = Player.Skills.Get(slotIndex);
+        var inventory = Player.Skills.Get(slotIndex);
 
-            if (inventory is not null) {
-                var id = inventory.SkillId;
+        if (inventory is not null) {
+            var sender = GetPacketSender();
+            var id = inventory.SkillId;
 
-                if (Skills.Contains(id)) {
-                    var data = Skills[id]!;
+            GetDatabaseSkills().TryGet(id, out var data);
 
-                    if (IsTargetDead()) {
-                        PacketSender!.SendMessage(SystemMessage.InvalidTarget, QbColor.BrigthRed, Player!, new string[] { id.ToString() });
+            if (data is not null) {
 
-                        return;
-                    }
+                if (IsTargetDead()) {
+                    sender.SendMessage(SystemMessage.InvalidTarget, QbColor.BrigthRed, Player!, new string[] { id.ToString() });
 
-                    if (!CouldCastOnSelf(inventory)) {
-                        PacketSender!.SendMessage(SystemMessage.InvalidTarget, QbColor.BrigthRed, Player!, new string[] { id.ToString() });
+                    return;
+                }
 
-                        return;
-                    }
+                if (!CouldCastOnSelf(inventory)) {
+                    sender.SendMessage(SystemMessage.InvalidTarget, QbColor.BrigthRed, Player!, new string[] { id.ToString() });
 
-                    if (!IsCostEnough(data.CostType, inventory.Cost)) {
-                        PacketSender!.SendMessage(SystemMessage.InsuficientMana, QbColor.BrigthRed, Player!, new string[] { id.ToString() });
+                    return;
+                }
 
-                        return;
-                    }
+                if (!IsCostEnough(data.CostType, inventory.Cost)) {
+                    sender.SendMessage(SystemMessage.InsuficientMana, QbColor.BrigthRed, Player!, new string[] { id.ToString() });
 
-                    if (!IsTargetInRange(inventory)) {
-                        PacketSender!.SendMessage(SystemMessage.InvalidRange, QbColor.BrigthRed, Player!);
+                    return;
+                }
 
-                        return;
-                    }         
+                if (!IsTargetInRange(inventory)) {
+                    sender.SendMessage(SystemMessage.InvalidRange, QbColor.BrigthRed, Player!);
 
-                    if (CouldSelectTargetByPrimaryEffect(data)) {
-                        CurrentSlot = inventory;
-                        CurrentData = data;
+                    return;
+                }
 
-                        var target = new Target() {
-                            Entity = Player!.Target,
-                            Type = Player!.TargetType
-                        };
+                if (CouldSelectTargetByPrimaryEffect(data)) {
+                    CurrentData = data;
+                    CurrentSlot = inventory;
 
-                        ExecuteSkill(inventory, data, target, slotIndex);
-                    }
+                    var target = new Target() {
+                        Entity = Player.Target,
+                        Type = Player.TargetType
+                    };
+
+                    ExecuteSkill(inventory, data, ref target, slotIndex);
                 }
             }
         }
@@ -229,15 +167,17 @@ public class PlayerCombat : IEntityCombat {
         CurrentData = null;
     }
 
-    private void ExecuteSkill(CharacterSkill inventory, Skill data, Target target, int inventoryIndex) {
+    private void ExecuteSkill(CharacterSkill inventory, Skill data, ref Target target, int inventoryIndex) {
         var instance = GetInstance();
 
         if (instance is not null) {
+            var sender = GetPacketSender();
+
             foreach (var (type, effect) in inventory.Effects) {
                 switch (type) {
                     case SkillEffectType.Damage:
-                        if (!Damage.CanSelect(target, effect)) {
-                            PacketSender!.SendMessage(SystemMessage.InvalidTarget, QbColor.BrigthRed, Player!);
+                        if (!Damage.CanSelect(ref target, effect)) {
+                            sender.SendMessage(SystemMessage.InvalidTarget, QbColor.BrigthRed, Player!);
 
                             continue;
                         }
@@ -245,8 +185,8 @@ public class PlayerCombat : IEntityCombat {
                         break;
 
                     case SkillEffectType.DoT:
-                        if (!DoT.CanSelect(target, effect)) {
-                            PacketSender!.SendMessage(SystemMessage.InvalidTarget, QbColor.BrigthRed, Player!);
+                        if (!DoT.CanSelect(ref target, effect)) {
+                            sender.SendMessage(SystemMessage.InvalidTarget, QbColor.BrigthRed, Player!);
 
                             continue;
                         }
@@ -257,14 +197,13 @@ public class PlayerCombat : IEntityCombat {
                         break;
                 }
 
-                ExecuteEffect(instance, type, effect, inventory, data, target, inventoryIndex);
+                ExecuteEffect(instance, type, effect, inventory, data, ref target, inventoryIndex);
             }
         }
     }
 
-    private void ExecuteEffect(IInstance instance, SkillEffectType type, SkillEffect? effect, CharacterSkill inventory, Skill data, Target target, int inventoryIndex) {
+    private void ExecuteEffect(IInstance instance, SkillEffectType type, SkillEffect? effect, CharacterSkill inventory, Skill data, ref Target target, int inventoryIndex) {
         if (effect is not null) {
-            IList<Target> targets;
             ISkillHandler? handler = null;
 
             switch (type) {
@@ -279,22 +218,31 @@ public class PlayerCombat : IEntityCombat {
             }
 
             if (handler is not null) {
-                targets = handler.GetTarget(target, instance, inventory, effect);
+               var targets = handler.GetTarget(ref target, instance, inventory, effect);
 
                 if (targets.Count > 0) {
+                    var sender = GetPacketSender();
+
                     for (var i = 0; i < targets.Count; ++i) {
-                        var lockType = targets[i].Type;
-                        var x = targets[i].Entity.GetX();
-                        var y = targets[i].Entity.GetY();
-                        var index = targets[i].Entity.IndexOnInstance;
+                        var enemy = targets[i];
+                        var entity = enemy.Entity;
 
-                        PacketSender.SendSkillCooldown(Player, inventoryIndex);
-                        PacketSender.SendAnimation(instance, data.AttackAnimationId, x, y, lockType, index, false);
+                        if (entity is not null) {
+                            var x = entity.GetX();
+                            var y = entity.GetY();
+                            var lockType = enemy.Type;
+                            var index = entity.IndexOnInstance;
 
-                        var damaged = handler.GetDamage(targets[i], inventory, type);
+                            sender.SendSkillCooldown(Player, inventoryIndex);
+                            sender.SendAnimation(instance, data.AttackAnimationId, x, y, lockType, index, false);
 
-                        handler.Inflict(damaged, targets[i], instance, effect);
+                            var damaged = handler.GetDamage(ref enemy, inventory, type);
+
+                            handler.Inflict(ref damaged, ref enemy, instance, effect);
+                        }
                     }
+
+                    handler.ResetTargets();
                 }
             }
         }
@@ -342,9 +290,9 @@ public class PlayerCombat : IEntityCombat {
     }
 
     private bool IsTargetDead() {
-        if (Player!.TargetType != TargetType.None) {
-            if (Player!.TargetType != TargetType.Chest) {
-                var target = Player!.Target;
+        if (Player.TargetType != TargetType.None) {
+            if (Player.TargetType != TargetType.Chest) {
+                var target = Player.Target;
 
                 if (target is not null) {
                     return target.Vitals.Get(Vital.HP) <= 0;
@@ -356,8 +304,8 @@ public class PlayerCombat : IEntityCombat {
     }
 
     private bool IsTargetInRange(int range) {
-        if (Player!.TargetType != TargetType.None) {
-            var target = Player!.Target;
+        if (Player.TargetType != TargetType.None) {
+            var target = Player.Target;
 
             if (target is not null) {
                 var x = Player.Character.X;
@@ -384,7 +332,7 @@ public class PlayerCombat : IEntityCombat {
             return true;
         }
 
-        return Player!.Vitals.Get((Vital)index) >= cost;
+        return Player.Vitals.Get((Vital)index) >= cost;
     }
 
     private Vital? GetFromCostType(SkillCostType costType) => costType switch {
@@ -400,19 +348,17 @@ public class PlayerCombat : IEntityCombat {
     }
 
     private IInstance? GetInstance() {
-        var instanceId = Player!.Character.Map;
+        var instanceId = Player.Character.Map;
         var instances = InstanceService!.Instances;
 
-        if (instances.ContainsKey(instanceId)) {
-            return instances[instanceId];
-        }
+        instances.TryGetValue(instanceId, out var instance);
 
-        return null;
+        return instance;
     }
 
     private bool CouldCastOnSelf(CharacterSkill inventory) {
-        if (Player!.TargetType == TargetType.Player) {
-            var target = Player!.Target;
+        if (Player.TargetType == TargetType.Player) {
+            var target = Player.Target;
 
             if (target == Player) {
                 var effects = inventory.Effects;
@@ -440,5 +386,13 @@ public class PlayerCombat : IEntityCombat {
         }
 
         return true;
+    }
+
+    private IPacketSender GetPacketSender() {
+        return PacketSenderService!.PacketSender!;
+    }
+
+    private IDatabase<Skill> GetDatabaseSkills() {
+        return ContentService!.Skills;
     }
 }

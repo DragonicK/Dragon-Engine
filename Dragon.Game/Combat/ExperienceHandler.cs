@@ -1,13 +1,18 @@
-﻿using Dragon.Game.Players;
+﻿using Dragon.Core.Services;
+
+using Dragon.Game.Players;
 using Dragon.Game.Services;
 using Dragon.Game.Instances;
-using Dragon.Game.Configurations;
 
 namespace Dragon.Game.Combat;
 
-public class ExperienceHandler {
-    public IConfiguration? Configuration { get; init; }
-    public ContentService? ContentService { get; init; }
+public sealed class ExperienceHandler {
+    public ContentService? ContentService { get; private set; }
+    public ConfigurationService? Configuration { get; private set; }
+
+    public ExperienceHandler(IServiceInjector injector) {
+        injector.Inject(this);
+    }
 
     public int GetExperience(IPlayer player, IInstanceEntity from) {
         var id = from.Id;

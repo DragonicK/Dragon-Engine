@@ -36,6 +36,7 @@ namespace Dragon.Game.Services;
 public sealed class ContentService : IService {
     public ServicePriority Priority => ServicePriority.Mid;
     public IServiceInjector? ServiceInjector { get; init; }
+    public IServiceContainer? ServiceContainer { get; init; }
     public ConfigurationService? Configuration { get; init; }
     public PacketSenderService? PacketSenderService { get; init; }
     public LoggerService? LoggerService { get; init; }
@@ -73,7 +74,6 @@ public sealed class ContentService : IService {
     public IDatabase<Shop> Shops { get; }
     public IDatabase<Quest> Quests { get; }
     public IDatabase<Drop> Drops { get; }
-    public ICommandRepository CommandRepository { get; }
     public Experience PlayerExperience { get; }
     public Experience GuildExperience { get; }
     public Experience PartyExperience { get; }
@@ -82,6 +82,7 @@ public sealed class ContentService : IService {
     public Experience SkillExperience { get; }
     public Experience TalentExperience { get; }
     public IDictionary<int, IInstance> Instances { get; set; }
+    public ICommandRepository? CommandRepository { get; private set; }
 
     public ContentService() {
         Instances = new Dictionary<int, IInstance>();
@@ -248,8 +249,6 @@ public sealed class ContentService : IService {
             Folder = "./Server/Drops"
         };
 
-        CommandRepository = new CommandRepository(ServiceInjector!);
-
         PlayerExperience = LoadExperience(new Experience(), "Player");
         GuildExperience = LoadExperience(new Experience(), "Guild");
         PartyExperience = LoadExperience(new Experience(), "Party");
@@ -300,6 +299,8 @@ public sealed class ContentService : IService {
         Drops.Load();
 
         LoadInstances();
+
+        CommandRepository = new CommandRepository(ServiceInjector!);
     }
 
     public void Stop() {

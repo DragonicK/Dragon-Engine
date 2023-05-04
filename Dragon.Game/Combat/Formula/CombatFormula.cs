@@ -7,10 +7,10 @@ public class CombatFormula : ICombatFormula {
     private const int MaximumResistChance = 100;
     private const int MaximumDodgeChance = 90;
 
-    private readonly Random r;
+    private readonly Random Random;
 
     public CombatFormula() {
-        r = new Random();
+        Random = new Random();
     }
 
     public bool CanCriticalAttack(IEntity attacker, IEntity receiver) {
@@ -23,7 +23,7 @@ public class CombatFormula : ICombatFormula {
             return false;
         }
 
-        return r.Next(0, 100) <= Convert.ToInt32(chance * 100);
+        return Random.Next(0, 100) <= Convert.ToInt32(chance * 100);
     }
 
     public bool CanDodgeAttack(IEntity attacker, IEntity receiver) {
@@ -42,7 +42,7 @@ public class CombatFormula : ICombatFormula {
             chance = 0;
         }
 
-        return r.Next(1, 100) <= chance;
+        return Random.Next(1, 100) <= chance;
     }
 
     public bool CanResistAttack(IEntity attacker, IEntity receiver) {
@@ -61,18 +61,18 @@ public class CombatFormula : ICombatFormula {
             chance = 0;
         }
 
-        return r.Next(1, 100) <= chance;
+        return Random.Next(1, 100) <= chance;
     }
 
     public bool CanResistBlind(IEntity attacker, IEntity receiver) {
-        throw new NotImplementedException();
+        return false;
     }
 
     public bool CanResistSilence(IEntity attacker, IEntity receiver) {
-        throw new NotImplementedException();
+        return false;
     }
 
     public bool CanResistStun(IEntity attacker, IEntity receiver) {
-        throw new NotImplementedException();
+        return false;
     }
 }

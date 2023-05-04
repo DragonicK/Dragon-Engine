@@ -1,8 +1,8 @@
-﻿using Dragon.Core.Content;
-using Dragon.Core.Model;
-using Dragon.Core.Model.Entity;
+﻿using Dragon.Core.Model;
+using Dragon.Core.Services;
 using Dragon.Core.Model.Npcs;
 using Dragon.Core.Model.Skills;
+using Dragon.Core.Model.Entity;
 using Dragon.Core.Model.Characters;
 
 using Dragon.Game.Players;
@@ -13,16 +13,28 @@ using Dragon.Game.Network.Senders;
 
 namespace Dragon.Game.Combat.Handler;
 
-public class DoT : ISkillHandler {
-    public IPlayer? Player { get; set; }
-    public IDatabase<Skill>? Skills { get; set; }
-    public IEntityDeath? PlayerDeath { get; init; }
-    public IEntityDeath? EntityDeath { get; init; }
-    public IPacketSender? PacketSender { get; set; }
-    public InstanceService? InstanceService { get; set; }
+public sealed class DoT : ISkillHandler {
+    public ContentService? ContentService { get; private set; }
+    public InstanceService? InstanceService { get; private set; }
+    public PacketSenderService? PacketSenderService { get; private set; }
 
-    public bool CanSelect(Target target, SkillEffect effect) {
-        if (Player!.Target is IInstanceEntity entity) {
+    private readonly IEntityDeath PlayerDeath;
+    private readonly IEntityDeath EntityDeath;
+    private readonly List<Target> Targets;
+    private readonly IPlayer Player;
+
+    public DoT(IServiceInjector injector, IEntityDeath playerDeath, IEntityDeath entityDeath, IPlayer player) {
+        injector.Inject(this);
+
+        PlayerDeath = playerDeath;
+        EntityDeath = entityDeath;
+        Player = player;
+
+        Targets = new List<Target>();
+    }
+
+    public bool CanSelect(ref Target target, SkillEffect effect) {
+        if (Player.Target is IInstanceEntity entity) {
             if (entity is not null) {
                 return entity.Behaviour == NpcBehaviour.Monster || entity.Behaviour == NpcBehaviour.Boss;
             }
@@ -31,7 +43,7 @@ public class DoT : ISkillHandler {
         return false;
     }
 
-    public Damaged GetDamage(Target target, CharacterSkill inventory, SkillEffectType type) {
+    public Damaged GetDamage(ref Target target, CharacterSkill inventory, SkillEffectType type) {
         var level = inventory.SkillLevel;
         var source = inventory.Effects[type];
 
@@ -45,10 +57,10 @@ public class DoT : ISkillHandler {
         var final = damage * (pAmplification + dAmplification);
 
         if (inventory.AttributeType == SkillAttributeType.Physic) {
-            final += Player!.Attributes.Get(SecondaryAttribute.Attack) - target.Entity.Attributes.Get(SecondaryAttribute.Defense);
+            final += Player!.Attributes.Get(SecondaryAttribute.Attack) - target.Entity!.Attributes.Get(SecondaryAttribute.Defense);
         }
         else if (inventory.AttributeType == SkillAttributeType.Magic) {
-            final += Player!.Attributes.Get(SecondaryAttribute.MagicAttack) - target.Entity.Attributes.Get(SecondaryAttribute.MagicDefense);
+            final += Player!.Attributes.Get(SecondaryAttribute.MagicAttack) - target.Entity!.Attributes.Get(SecondaryAttribute.MagicDefense);
         }
 
         return new Damaged() {
@@ -57,29 +69,27 @@ public class DoT : ISkillHandler {
         };
     }
 
-    public IList<Target> GetTarget(Target target, IInstance instance, CharacterSkill inventory, SkillEffect effect) {
-        var list = new List<Target>();
-
+    public IList<Target> GetTarget(ref Target target, IInstance instance, CharacterSkill inventory, SkillEffect effect) {
         var targetType = effect.TargetType;
         var range = inventory.Range;
 
         switch (targetType) {
             case SkillTargetType.Single:
-                if (CanSelect(target, effect)) {
-                    list.Add(target);
+                if (CanSelect(ref target, effect)) {
+                    Targets.Add(target);
                 }
 
                 break;
             case SkillTargetType.AoE:
-                SetAoETarget(list, instance, target, range);
+                SetAoETarget(instance, ref target, range);
 
                 break;
         }
 
-        return list;
+        return Targets;
     }
 
-    public void Inflict(Damaged damaged, Target target, IInstance instance, SkillEffect effect) {
+    public void Inflict(ref Damaged damaged, ref Target target, IInstance instance, SkillEffect effect) {
         if (target.Entity is not null) {
             var vital = GetFromVitalType(effect.VitalType);
 
@@ -87,24 +97,25 @@ public class DoT : ISkillHandler {
 
             target.Entity.Vitals.Set(vital, value - damaged.Value);
 
-            PacketSender!.SendInstanceEntityVital(instance, target.Entity.IndexOnInstance);
+            GetPacketSender().SendInstanceEntityVital(instance, target.Entity.IndexOnInstance);
 
             SendDamage(vital, damaged.Value, target.Entity, instance);
 
             target.Entity.IsDead = target.Entity.Vitals.Get(Vital.HP) <= 0;
 
-            if (!target.Entity.IsDead) {
-                if (target.Entity is IPlayer) {
-                    PlayerDeath?.Execute(Player, target.Entity);
-                }
-                else if (target.Entity is IInstanceEntity) {
-                    EntityDeath?.Execute(Player, target.Entity);
-                }
+            if (target.Entity.IsDead) {
+                var handler = target.Entity is IPlayer ? PlayerDeath : EntityDeath;
+
+                handler.Execute(Player, target.Entity);
             }
         }
     }
 
-    private void SetAoETarget(IList<Target> list, IInstance instance, Target primary, int range) {
+    public void ResetTargets() {
+        Targets.Clear();
+    }
+
+    private void SetAoETarget(IInstance instance, ref Target primary, int range) {
         if (primary.Entity is not null) {
             var x1 = primary.Entity.GetX();
             var y1 = primary.Entity.GetY();
@@ -120,8 +131,8 @@ public class DoT : ISkillHandler {
 
                     if (entity.Behaviour == NpcBehaviour.Monster || entity.Behaviour == NpcBehaviour.Boss) {
                         if (IsInRange(range, x1, y1, x2, y2)) {
-                            list.Add(new Target() {
-                                Entity = (IEntity)entity,
+                            Targets.Add(new Target() {
+                                Entity = entity,
                                 Type = TargetType.Npc
                             });
                         }
@@ -152,7 +163,7 @@ public class DoT : ISkillHandler {
             MessageType = ActionMessageType.Scroll
         };
 
-        PacketSender!.SendMessage(ref damage, instance);
+        GetPacketSender().SendMessage(ref damage, instance);
     }
 
     private QbColor GetColor(Vital vital) => vital switch {
@@ -161,4 +172,9 @@ public class DoT : ISkillHandler {
         Vital.Special => QbColor.Coral,
         _ => QbColor.HealingGreen
     };
+
+    private IPacketSender GetPacketSender() {
+        return PacketSenderService!.PacketSender!;
+    }
+
 }

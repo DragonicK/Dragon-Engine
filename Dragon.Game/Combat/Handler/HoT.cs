@@ -1,8 +1,8 @@
-﻿using Dragon.Core.Content;
-using Dragon.Core.Model;
-using Dragon.Core.Model.Entity;
+﻿using Dragon.Core.Model;
+using Dragon.Core.Services;
 using Dragon.Core.Model.Npcs;
 using Dragon.Core.Model.Skills;
+using Dragon.Core.Model.Entity;
 using Dragon.Core.Model.Characters;
 
 using Dragon.Game.Manager;
@@ -14,27 +14,37 @@ using Dragon.Game.Network.Senders;
 
 namespace Dragon.Game.Combat.Handler;
 
-public class HoT : ISkillHandler {
-    public IPlayer? Player { get; set; }
-    public IDatabase<Skill>? Skills { get; set; }
-    public IPacketSender? PacketSender { get; set; }
-    public InstanceService? InstanceService { get; set; }
+public sealed class HoT : ISkillHandler {
+    public ContentService? ContentService { get; private set; }
+    public InstanceService? InstanceService { get; private set; }
+    public PacketSenderService? PacketSenderService { get; private set; }
 
-    public bool CanSelect(Target target, SkillEffect effect) {
-        if (Player!.Target is IInstanceEntity entity) {
+    private readonly List<Target> Targets;
+    private readonly IPlayer Player;
+
+    public HoT(IServiceInjector injector, IPlayer player) {
+        injector.Inject(this);
+
+        Player = player;
+
+        Targets = new List<Target>();
+    }
+
+    public bool CanSelect(ref Target target, SkillEffect effect) {
+        if (Player.Target is IInstanceEntity entity) {
             if (entity is not null) {
                 return entity.Behaviour != NpcBehaviour.Monster && entity.Behaviour != NpcBehaviour.Boss;
             }
         }
 
-        if (Player!.Target is IPlayer) {
+        if (Player.Target is IPlayer) {
             return true;
         }
 
         return false;
     }
 
-    public Damaged GetDamage(Target target, CharacterSkill inventory, SkillEffectType type) {
+    public Damaged GetDamage(ref Target target, CharacterSkill inventory, SkillEffectType type) {
         var level = inventory.SkillLevel;
         var source = inventory.Effects[type];
 
@@ -60,61 +70,59 @@ public class HoT : ISkillHandler {
         };
     }
 
-    public IList<Target> GetTarget(Target target, IInstance instance, CharacterSkill inventory, SkillEffect effect) {
-        var list = new List<Target>();
-
+    public IList<Target> GetTarget(ref Target target, IInstance instance, CharacterSkill inventory, SkillEffect effect) {
         var targetType = effect.TargetType;
         var range = inventory.Range;
 
         switch (targetType) {
             case SkillTargetType.Caster:
-                list.Add(new Target() {
-                    Entity = Player!,
+                Targets.Add(new Target() {
+                    Entity = Player,
                     Type = TargetType.Player
                 });
 
                 break;
             case SkillTargetType.Single:
-                if (CanSelect(target, effect)) {
-                    list.Add(target);
+                if (CanSelect(ref target, effect)) {
+                    Targets.Add(target);
                 }
                 else {
-                    list.Add(new Target() {
-                        Entity = Player!,
+                    Targets.Add(new Target() {
+                        Entity = Player,
                         Type = TargetType.Player
                     });
                 }
 
                 break;
             case SkillTargetType.AoE:
-                if (CanSelect(target, effect)) {
-                    list.Add(target);
+                if (CanSelect(ref target, effect)) {
+                    Targets.Add(target);
                 }
                 else {
-                    list.Add(new Target() {
-                        Entity = Player!,
+                    Targets.Add(new Target() {
+                        Entity = Player,
                         Type = TargetType.Player
                     });
                 }
 
-                SetAoETarget(list, instance, target, range);
+                SetAoETarget(instance, ref target, range);
 
                 break;
             case SkillTargetType.Group:
-                list.Add(new Target() {
-                    Entity = Player!,
+                Targets.Add(new Target() {
+                    Entity = Player,
                     Type = TargetType.Player
                 });
 
-                SetGroupTarget(list, range);
+                SetGroupTarget(range);
 
                 break;
         }
 
-        return list;
+        return Targets;
     }
 
-    public void Inflict(Damaged damaged, Target target, IInstance instance, SkillEffect effect) {
+    public void Inflict(ref Damaged damaged, ref Target target, IInstance instance, SkillEffect effect) {
         if (target.Entity is not null) {
             var vital = GetFromVitalType(effect.VitalType);
 
@@ -124,7 +132,11 @@ public class HoT : ISkillHandler {
         }
     }
 
-    private void SetAoETarget(IList<Target> list, IInstance instance, Target primary, int range) {
+    public void ResetTargets() {
+        Targets.Clear();
+    }
+
+    private void SetAoETarget(IInstance instance, ref Target primary, int range) {
         if (primary.Entity is not null) {
             var players = instance.GetPlayers();
 
@@ -140,7 +152,7 @@ public class HoT : ISkillHandler {
                         y2 = player.Character.Y;
 
                         if (IsInRange(range, x1, y1, x2, y2)) {
-                            list.Add(new Target() {
+                            Targets.Add(new Target() {
                                 Entity = player,
                                 Type = TargetType.Player
                             });
@@ -158,8 +170,8 @@ public class HoT : ISkillHandler {
 
                     if (entity.Behaviour != NpcBehaviour.Monster && entity.Behaviour != NpcBehaviour.Boss) {
                         if (IsInRange(range, x1, y1, x2, y2)) {
-                            list.Add(new Target() {
-                                Entity = (IEntity)entity,
+                            Targets.Add(new Target() {
+                                Entity = entity,
                                 Type = TargetType.Npc
                             });
                         }
@@ -169,7 +181,7 @@ public class HoT : ISkillHandler {
         }
     }
 
-    private void SetGroupTarget(IList<Target> list, int range) {
+    private void SetGroupTarget(int range) {
         var party = GetPartyManager();
 
         if (party is not null) {
@@ -187,7 +199,7 @@ public class HoT : ISkillHandler {
                             var y2 = member.Player.Character.Y;
 
                             if (IsInRange(range, x1, y1, x2, y2)) {
-                                list.Add(new Target() {
+                                Targets.Add(new Target() {
                                     Entity = member.Player,
                                     Type = TargetType.Player
                                 });
@@ -217,7 +229,7 @@ public class HoT : ISkillHandler {
             MessageType = ActionMessageType.Scroll
         };
 
-        PacketSender!.SendMessage(ref damage, instance);
+        GetPacketSender().SendMessage(ref damage, instance);
     }
 
     private QbColor GetColor(Vital vital) => vital switch {
@@ -228,18 +240,19 @@ public class HoT : ISkillHandler {
     };
 
     private bool IsInRange(int range, int x1, int y1, int x2, int y2) {
-        var r = Convert.ToInt32(Math.Sqrt(Math.Pow((x1 - x2), 2) + Math.Pow((y1 - y2), 2)));
-        return r <= range;
+        return Convert.ToInt32(Math.Sqrt(Math.Pow((x1 - x2), 2) + Math.Pow((y1 - y2), 2))) <= range;
     }
 
     private PartyManager? GetPartyManager() {
         var id = Player!.PartyId;
         var parties = InstanceService!.Parties;
 
-        if (parties.ContainsKey(id)) {
-            return parties[id];
-        }
+        parties.TryGetValue(id, out var party);
+ 
+        return party;
+    }
 
-        return null;
+    private IPacketSender GetPacketSender() {
+        return PacketSenderService!.PacketSender!;
     }
 }
