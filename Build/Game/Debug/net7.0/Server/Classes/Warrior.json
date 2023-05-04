@@ -483,7 +483,13 @@
   ],
   "Equipments": [
     {
-      "Id": 0
+      "InventoryIndex": 0,
+      "Id": 0,
+      "Value": 0,
+      "Level": 0,
+      "Bound": false,
+      "AttributeId": 0,
+      "UpgradeId": 0
     }
   ]
 }
