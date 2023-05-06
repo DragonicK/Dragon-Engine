@@ -46,20 +46,20 @@
     "EnableSsl": false
   },
   "DatabaseMembership": {
-    "DataSource": "0.0.0.0",
+    "DataSource": "DRAGONICK-PC\\SQLEXPRESS",
     "Port": 1433,
     "UserId": "sa",
-    "Password": "default",
-    "Database": "EngineMembership",
+    "Password": "dwHandle",
+    "Database": "CrystalshireMembership",
     "MinPoolSize": 10,
     "MaxPoolSize": 100
   },
   "DatabaseServer": {
-    "DataSource": "0.0.0.0",
+    "DataSource": "DRAGONICK-PC\\SQLEXPRESS",
     "Port": 1433,
     "UserId": "sa",
-    "Password": "default",
-    "Database": "EngineServer",
+    "Password": "dwHandle",
+    "Database": "CrystalshireServer",
     "MinPoolSize": 10,
     "MaxPoolSize": 100
   },
