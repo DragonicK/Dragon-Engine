@@ -8,32 +8,33 @@ using Dragon.Game.Configurations.Data;
 
 namespace Dragon.Game.Configurations;
 public interface IConfiguration {
-    JwtSettings JwtSettings { get; set; }
-    bool Debug { get; set; }
-    bool ServerLogs { get; set; }
-    bool ConnectionLogs { get; set; }
-    int MaximumConnections { get; set; }
-    int TimeOut { get; set; }
-    IpAddress GameServer { get; set; }
-    DBConfiguration DatabaseMembership { get; set; }
-    DBConfiguration DatabaseServer { get; set; }
-    DBConfiguration DatabaseGame { get; set; }
-    BlockedCountry BlockedCountry { get; set; }
+    JwtSettings JwtSettings { get; }
+    bool Debug { get; }
+    bool ServerLogs { get; }
+    bool ConnectionLogs { get; }
+    int MaximumConnections { get; }
+    int TimeOut { get; }
+    IpAddress GameServer { get; }
+    DBConfiguration DatabaseMembership { get; }
+    DBConfiguration DatabaseServer { get; }
+    DBConfiguration DatabaseGame { get; }
+    BlockedCountry BlockedCountry { get; }
 
     #region Game Configuration
-    BlackMarket BlackMarket { get; set; }
-    Character Character { get; set; }
-    Craft Craft { get; set; }
-    Guild Guild { get; set; }
-    ChestDrop ChestDrop { get; set; }
-    Mail Mail { get; set; }
-    Map Map { get; set; }
-    Party Party { get; set; }
-    Player Player { get; set; }
-    ProhibitedNames ProhibitedNames { get; set; }
-    Rate Rates { get; set; }
-    Ressurrection Ressurrection { get; set; }
-    Trade Trade { get; set; }
+    BlackMarket BlackMarket { get; }
+    Character Character { get; }
+    Craft Craft { get; }
+    Guild Guild { get; }
+    ChestDrop ChestDrop { get; }
+    Mail Mail { get; }
+    Map Map { get;  }
+    Party Party { get; }
+    Player Player { get; }
+    ProhibitedNames ProhibitedNames { get; }
+    Rate Rates { get; }
+    Ressurrection Ressurrection { get; }
+    Trade Trade { get; }
+    Allocation Allocation { get; }
 
     #endregion
 }

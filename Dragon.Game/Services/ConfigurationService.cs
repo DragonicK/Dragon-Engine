@@ -38,8 +38,9 @@ public sealed class ConfigurationService : IService, IConfiguration {
     public Party Party { get; set; }
     public Ressurrection Ressurrection { get; set; }
     public Trade Trade { get; set; }
-    public Player Player { get; set; }
-    public ProhibitedNames ProhibitedNames { get; set; }
+    public Player Player { get; private set; }
+    public ProhibitedNames ProhibitedNames { get; private set; }
+    public Allocation Allocation { get; private set; }
 
     public ConfigurationService() {
         BlackMarket = new BlackMarket();
@@ -86,6 +87,11 @@ public sealed class ConfigurationService : IService, IConfiguration {
 
         TimeOut = 30;
         MaximumConnections = 1000;
+
+        Allocation = new Allocation() {
+            IncomingMessageAllocatedSize = ushort.MaxValue,
+            OutgoingMessageAllocatedSize = ushort.MaxValue,
+        };
     }
 
     public void Start() {

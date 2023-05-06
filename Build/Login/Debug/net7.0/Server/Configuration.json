@@ -6,7 +6,7 @@
     "ExpirationMinutes": 1
   },
   "Maintenance": false,
-  "Debug": true,
+  "Debug": false,
   "ServerLogs": true,
   "ConnectionLogs": true,
   "MaximumConnections": 1000,
@@ -46,20 +46,20 @@
     "EnableSsl": false
   },
   "DatabaseMembership": {
-    "DataSource": "DRAGONICK-PC\\SQLEXPRESS",
+    "DataSource": "0.0.0.0",
     "Port": 1433,
     "UserId": "sa",
-    "Password": "dwHandle",
-    "Database": "CrystalshireMembership",
+    "Password": "default",
+    "Database": "EngineMembership",
     "MinPoolSize": 10,
     "MaxPoolSize": 100
   },
   "DatabaseServer": {
-    "DataSource": "DRAGONICK-PC\\SQLEXPRESS",
+    "DataSource": "0.0.0.0",
     "Port": 1433,
     "UserId": "sa",
-    "Password": "dwHandle",
-    "Database": "CrystalshireServer",
+    "Password": "default",
+    "Database": "EngineServer",
     "MinPoolSize": 10,
     "MaxPoolSize": 100
   },
@@ -69,5 +69,9 @@
       "JP",
       "RU"
     ]
+  },
+  "Allocation": {
+    "OutgoingMessageAllocatedSize": 65535,
+    "IncomingMessageAllocatedSize": 65535
   }
 }

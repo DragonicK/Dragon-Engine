@@ -6,6 +6,7 @@ using Dragon.Core.Jwt;
 using Dragon.Core.Smtp;
 using Dragon.Core.Common;
 using Dragon.Core.GeoIpCountry;
+using Dragon.Login.Configurations.Data;
 
 namespace Dragon.Login.Configurations;
 
@@ -33,4 +34,5 @@ public interface IConfiguration {
     DBConfiguration DatabaseMembership { get; }
     DBConfiguration DatabaseServer { get; }
     BlockedCountry BlockedCountry { get; }
+    Allocation Allocation { get; }
 }

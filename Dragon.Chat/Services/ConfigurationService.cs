@@ -35,6 +35,7 @@ public sealed class ConfigurationService : IService, IConfiguration {
     public ClientVersion ClientVersion { get; set; }
     public BlockedCountry BlockedCountry { get; set; }
     public Message Message { get; set; }
+    public Allocation Allocation { get; set; }
 
     public ConfigurationService() {
         ServerLogs = true;
@@ -73,6 +74,15 @@ public sealed class ConfigurationService : IService, IConfiguration {
 
         BubblePoolCapacity = 2048;
         MessagePoolCapacity = 2048;
+
+        Allocation = new Allocation() {
+            BubblesAllocatedSize = 4096,
+            BubbleTextAllocatedSize = 64,
+            IncomingMessageAllocatedSize = ushort.MaxValue,
+            OutgoingMessageAllocatedSize = ushort.MaxValue,
+            TargetsAllocatedSize = short.MaxValue,
+            TargetListAllocatedSize = 128
+        };
     }
 
     public void Start() {

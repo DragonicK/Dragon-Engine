@@ -14,7 +14,7 @@ public sealed class TargetPool {
     }
 
     public Target GetNextTarget() {
-        index = index >= messages.Count ? 0 : ++index;
+        index = index >= messages.Count ? 0 : index++;
 
         return messages[index];
     }

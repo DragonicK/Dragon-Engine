@@ -12,34 +12,36 @@ using Dragon.Core.GeoIpCountry;
 using Dragon.Core.Serialization;
 
 using Dragon.Login.Configurations;
+using Dragon.Login.Configurations.Data;
 
 namespace Dragon.Login.Services;
 
 public sealed class ConfigurationService : IService, IConfiguration {
     public ServicePriority Priority => ServicePriority.First;
-    public JwtSettings JwtSettings { get; set; }
-    public bool Maintenance { get; set; }
-    public bool Debug { get; set; }
-    public bool ServerLogs { get; set; }
-    public bool ConnectionLogs { get; set; }
-    public int MaximumConnections { get; set; }
-    public bool UseEmailAsLogin { get; set; }
-    public bool UseGeoIp { get; set; }
-    public bool UseClientCheckSum { get; set; }
-    public bool IpBlock { get; set; }
-    public int IpBlockLifeTime { get; set; }
-    public int FilterCheckAccessTime { get; set; }
-    public int FilterIpLifeTime { get; set; }
-    public int IpMaxAttempt { get; set; }
-    public int IpMaxAccessCount { get; set; }
-    public IpAddress LoginServer { get; set; }
-    public IpAddress ChatServer { get; set; }
-    public IpAddress GameServer { get; set; }
-    public ClientVersion ClientVersion { get; set; }
-    public SmtpConfiguration Smtp { get; set; }
-    public DBConfiguration DatabaseMembership { get; set; }
-    public DBConfiguration DatabaseServer { get; set; }
-    public BlockedCountry BlockedCountry { get; set; }
+    public JwtSettings JwtSettings { get; private set; }
+    public bool Maintenance { get; private set; }
+    public bool Debug { get; private set; }
+    public bool ServerLogs { get; private set; }
+    public bool ConnectionLogs { get; private set; }
+    public int MaximumConnections { get; private set; }
+    public bool UseEmailAsLogin { get; private set; }
+    public bool UseGeoIp { get; private set; }
+    public bool UseClientCheckSum { get; private set; }
+    public bool IpBlock { get; private set; }
+    public int IpBlockLifeTime { get; private set; }
+    public int FilterCheckAccessTime { get; private set; }
+    public int FilterIpLifeTime { get; private set; }
+    public int IpMaxAttempt { get; private set; }
+    public int IpMaxAccessCount { get; private set; }
+    public IpAddress LoginServer { get; private set; }
+    public IpAddress ChatServer { get; private set; }
+    public IpAddress GameServer { get; private set; }
+    public ClientVersion ClientVersion { get; private set; }
+    public SmtpConfiguration Smtp { get; private set; }
+    public DBConfiguration DatabaseMembership { get; private set; }
+    public DBConfiguration DatabaseServer { get; private set; }
+    public BlockedCountry BlockedCountry { get; private set; }
+    public Allocation Allocation { get; private set; }
 
     public ConfigurationService() {
         ServerLogs = true;
@@ -91,6 +93,11 @@ public sealed class ConfigurationService : IService, IConfiguration {
         IpBlockLifeTime = 600000;
         FilterCheckAccessTime = 3000;
         FilterIpLifeTime = 120000;
+
+        Allocation = new Allocation() {
+            IncomingMessageAllocatedSize = ushort.MaxValue,
+            OutgoingMessageAllocatedSize = ushort.MaxValue,
+        };
     }
 
     public void Start() {

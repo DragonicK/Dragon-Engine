@@ -7,16 +7,18 @@ public sealed class BubblePool {
 
     private readonly IList<SpMessageBubble> bubbles;
 
-    public BubblePool(int capacity) {
+    public BubblePool(int capacity, int messageTextSize) {
         bubbles = new List<SpMessageBubble>(capacity);
 
         for (var i = 0; i < capacity; ++i) {
-            bubbles.Add(new SpMessageBubble());
+            bubbles.Add(new SpMessageBubble() {
+                Text = new byte[messageTextSize]
+            });
         }
     }
 
     public SpMessageBubble GetNextBubble() {
-        index = index >= bubbles.Count ? 0 : ++index;
+        index = index >= bubbles.Count ? 0 : index++;
 
         return bubbles[index];
     }

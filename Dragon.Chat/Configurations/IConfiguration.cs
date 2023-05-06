@@ -1,29 +1,31 @@
-﻿using Dragon.Network;
-
-using Dragon.Core.Jwt;
+﻿using Dragon.Core.Jwt;
 using Dragon.Core.Common;
 using Dragon.Core.GeoIpCountry;
+
+using Dragon.Network;
+
 using Dragon.Chat.Configurations.Data;
 
 namespace Dragon.Chat.Configurations;
 
 public interface IConfiguration {
-    JwtSettings JwtSettings { get; set; }
-    bool Maintenance { get; set; }
-    bool Debug { get; set; }
-    bool ServerLogs { get; set; }
-    bool ConnectionLogs { get; set; }
-    int MaximumConnections { get; set; }
-    bool UseGeoIp { get; set; }
-    bool UseClientCheckSum { get; set; }
-    bool IpBlock { get; set; }
-    int IpBlockLifeTime { get; set; }
-    int FilterCheckAccessTime { get; set; }
-    int FilterIpLifeTime { get; set; }
-    int IpMaxAttempt { get; set; }
-    int IpMaxAccessCount { get; set; }
-    IpAddress ChatServer { get; set; }
-    ClientVersion ClientVersion { get; set; }
-    BlockedCountry BlockedCountry { get; set; }
-    Message Message { get; set; }
+    JwtSettings JwtSettings { get; }
+    bool Maintenance { get; }
+    bool Debug { get; }
+    bool ServerLogs { get; }
+    bool ConnectionLogs { get; }
+    int MaximumConnections { get; }
+    bool UseGeoIp { get; }
+    bool UseClientCheckSum { get; }
+    bool IpBlock { get; }
+    int IpBlockLifeTime { get; }
+    int FilterCheckAccessTime { get; }
+    int FilterIpLifeTime { get; }
+    int IpMaxAttempt { get; }
+    int IpMaxAccessCount { get; }
+    IpAddress ChatServer { get; }
+    ClientVersion ClientVersion { get; }
+    BlockedCountry BlockedCountry { get;  }
+    Message Message { get; }
+    Allocation Allocation { get; }
 }

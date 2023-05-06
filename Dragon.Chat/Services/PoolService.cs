@@ -13,13 +13,22 @@ namespace Dragon.Chat.Services {
         public IEngineBufferPool? EngineBufferPool { get; private set; }
 
         public void Start() {
-            var bubbleCapacity = Configuration!.BubblePoolCapacity;
-            var messageCapacity = Configuration!.MessagePoolCapacity;
-            var maximumConnections = Configuration!.MaximumConnections;
+            var allocated = Configuration!.Allocation;
 
-            BubblePool = new BubblePool(bubbleCapacity);
-            TargetPool = new TargetPool(messageCapacity, maximumConnections);
-            EngineBufferPool = new EngineBufferPool(short.MaxValue);
+            var bubbleSize = allocated.BubblesAllocatedSize;
+            var bubbleTextSize = allocated.BubbleTextAllocatedSize;
+
+            BubblePool = new BubblePool(bubbleSize, bubbleTextSize);
+
+            var outgoingSize = allocated.OutgoingMessageAllocatedSize;
+            var incomingSize = allocated.IncomingMessageAllocatedSize;
+
+            EngineBufferPool = new EngineBufferPool(incomingSize);
+
+            var targetSize = allocated.TargetsAllocatedSize;
+            var targetListSize = allocated.TargetListAllocatedSize;
+
+            TargetPool = new TargetPool(targetSize, targetListSize);
         }
 
         public void Stop() {

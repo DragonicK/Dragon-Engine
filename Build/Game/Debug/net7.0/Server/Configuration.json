@@ -166,5 +166,9 @@
       "Administrator",
       "Administrador"
     ]
+  },
+  "Allocation": {
+    "OutgoingMessageAllocatedSize": 65535,
+    "IncomingMessageAllocatedSize": 65535
   }
 }
