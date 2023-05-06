@@ -3,6 +3,7 @@
 using Dragon.Core.Jwt;
 using Dragon.Core.Common;
 using Dragon.Core.GeoIpCountry;
+using Dragon.Chat.Configurations.Data;
 
 namespace Dragon.Chat.Configurations;
 
@@ -24,4 +25,5 @@ public interface IConfiguration {
     IpAddress ChatServer { get; set; }
     ClientVersion ClientVersion { get; set; }
     BlockedCountry BlockedCountry { get; set; }
+    Message Message { get; set; }
 }

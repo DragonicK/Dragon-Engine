@@ -1,7 +1,10 @@
-﻿using System.Reflection;
+﻿using Dragon.Network.Pool;
+
+using System.Reflection;
 
 namespace Dragon.Network.Messaging;
-public class MessageSerializer : ISerializer {
+
+public sealed class MessageSerializer : ISerializer {
 
     public byte[] Serialize<T>(T type) {
         var buffer = new ByteBuffer();
@@ -21,67 +24,128 @@ public class MessageSerializer : ISerializer {
         return buffer.ToArray();
     }
 
-    public object Deserialize(byte[] buffer, Type type) {
-        var _buffer = new ByteBuffer(buffer);
-        var t = Activator.CreateInstance(type)!;
+    public object Deserialize(IEngineBuffer buffer, Type type) {
+        var instance = Activator.CreateInstance(type)!;
 
-        ReadClass(t, _buffer);
+        buffer.Reader.PointToStart();
 
-        _buffer.Dispose();
+        ReadClass(instance, buffer);
 
-        return t;
+        return instance;
     }
 
-    private void ReadClass<T>(T type, ByteBuffer buffer) {
-        var properties = GetOrderedProperties(type);
-        ReadProperties(properties, type, buffer);
+    #region Read Class, Arrays & Properties 
+
+    private void ReadClass<T>(T instance, IEngineBuffer buffer) {
+        ReadProperties(GetRuntimeProperties(instance), instance, buffer);
     }
+
+    private void ReadProperties<T>(IEnumerable<PropertyInfo> properties, T instance, IEngineBuffer buffer) {
+        foreach (var property in properties) {
+            ReadProperty(property, instance, buffer);
+        }
+    }
+
+    private void ReadProperty<T>(PropertyInfo property, T instance, IEngineBuffer buffer) {
+        var type = property.PropertyType;
+        var reader = buffer.Reader;
+
+        if (type == typeof(bool)) {
+            property.SetValue(instance, reader.ReadBoolean());
+        }
+        else if (type == typeof(byte)) {
+            property.SetValue(instance, reader.ReadByte());
+        }
+        else if (type == typeof(short)) {
+            property.SetValue(instance, reader.ReadInt16());
+        }
+        else if (type == typeof(int)) {
+            property.SetValue(instance, reader.ReadInt32());
+        }
+        else if (type == typeof(string)) {
+            property.SetValue(instance, reader.ReadString());
+        }
+        else if (type.IsEnum) {
+            property.SetValue(instance, reader.ReadInt32());
+        }
+        else if (type.IsArray) {
+            ReadArray(property, instance, buffer);
+        }
+        else if (type.IsClass || type.IsValueType) {
+            var mInstance = Activator.CreateInstance(type);
+
+            ReadClass(mInstance, buffer);
+
+            property.SetValue(instance, mInstance);
+        }
+    }
+
+    private unsafe void ReadArray<T>(PropertyInfo propertyInfo, T obj, IEngineBuffer buffer) {
+        var array = propertyInfo.GetValue(obj, null) as Array;
+
+        var reader = buffer.Reader;
+        var length = reader.ReadInt32();
+
+        if (length > 0) {
+            if (array is not null) {
+                var arrayType = array.GetType().GetElementType();
+
+                if (arrayType is not null) {
+
+                    array = Array.CreateInstance(arrayType, length);
+
+                    if (arrayType == typeof(bool)) {
+                        var arr = (bool[])array;
+
+                        fixed (bool* p = arr) {
+                            reader.MemoryCopy(p, length, length);
+                        }
+                    }
+                    else if (arrayType == typeof(byte)) {
+                        var arr = (byte[])array;
+
+                        fixed (byte* p = arr) {
+                            reader.MemoryCopy(p, length, length);
+                        }
+                    }
+                    else if (arrayType == typeof(short)) {
+                        for (var i = 0; i < length; i++) {
+                            array.SetValue(reader.ReadInt16(), i);
+                        }
+                    }
+                    else if (arrayType == typeof(int)) {
+                        for (var i = 0; i < length; i++) {
+                            array.SetValue(reader.ReadInt32(), i);
+                        }
+                    }
+                    else if (arrayType == typeof(string)) {
+                        for (var i = 0; i < length; i++) {
+                            array.SetValue(reader.ReadString(), i);
+                        }
+                    }
+                    else {
+                        var mInstance = Activator.CreateInstance(arrayType);
+                        var mProperties = GetRuntimeProperties(mInstance);
+
+                        ReadProperties(mProperties, mInstance, buffer);
+                    }
+
+                    propertyInfo.SetValue(obj, array);
+                }
+            }
+        }
+    }
+
+    #endregion
 
     private void WriteClass<T>(T type, ByteBuffer buffer) {
-        var properties = GetOrderedProperties(type);
+        var properties = GetRuntimeProperties(type);
         WriteProperties(properties, type, buffer);
-    }
-
-    private void ReadProperties<T>(IEnumerable<PropertyInfo> properties, T type, ByteBuffer buffer) {
-        foreach (var property in properties) {
-            ReadProperty(property, type, buffer);
-        }
     }
 
     private void WriteProperties<T>(IEnumerable<PropertyInfo> properties, T type, ByteBuffer buffer) {
         foreach (var property in properties) {
             WriteProperty(property, type, buffer);
-        }
-    }
-
-    private void ReadProperty<T>(PropertyInfo property, T obj, ByteBuffer buffer) {
-        var type = property.PropertyType;
-
-        if (type == typeof(bool)) {
-            property.SetValue(obj, buffer.ReadBoolean());
-        }
-        else if (type == typeof(byte)) {
-            property.SetValue(obj, buffer.ReadByte());
-        }
-        else if (type == typeof(short)) {
-            property.SetValue(obj, buffer.ReadInt16());
-        }
-        else if (type == typeof(int)) {
-            property.SetValue(obj, buffer.ReadInt32());
-        }
-        else if (type == typeof(string)) {
-            property.SetValue(obj, buffer.ReadString());
-        }
-        else if (type.IsEnum) {
-            property.SetValue(obj, buffer.ReadInt32());
-        }
-        else if (type.IsArray) {
-            ReadArray(property, obj, buffer);
-        }
-        else if (type.IsClass || type.IsValueType) {
-            var t = Activator.CreateInstance(type);
-            ReadClass(t, buffer);
-            property.SetValue(obj, t);
         }
     }
 
@@ -154,77 +218,7 @@ public class MessageSerializer : ISerializer {
         }
     }
 
-    private void ReadArray<T>(PropertyInfo propertyInfo, T obj, ByteBuffer buffer) {
-        var array = propertyInfo.GetValue(obj, null) as Array;
-
-        var arrayType = array!.GetType().GetElementType()!;
-
-        int length = buffer.ReadInt32();
-
-        array = Array.CreateInstance(arrayType, length);
-
-        for (var i = 0; i < length; i++) {
-            if (arrayType == typeof(bool)) {
-                array.SetValue(buffer.ReadBoolean(), i);
-            }
-            else if (arrayType == typeof(byte)) {
-                array.SetValue(buffer.ReadByte(), i);
-            }
-            else if (arrayType == typeof(short)) {
-                array.SetValue(buffer.ReadInt16(), i);
-            }
-            else if (arrayType == typeof(int)) {
-                array.SetValue(buffer.ReadInt32(), i);
-            }
-            else if (arrayType == typeof(string)) {
-                array.SetValue(buffer.ReadString(), i);
-            }
-            else if (arrayType.IsEnum) {
-                array.SetValue(buffer.ReadInt32(), i);
-            }
-            else {
-                var value = Activator.CreateInstance(arrayType);
-                var properties = GetOrderedProperties(value);
-
-                foreach (var property in properties) {
-                    var type = property.PropertyType;
-
-                    if (type == typeof(bool)) {
-                        property.SetValue(value, buffer.ReadBoolean());
-                    }
-                    else if (type == typeof(byte)) {
-                        property.SetValue(value, buffer.ReadByte());
-                    }
-                    else if (type == typeof(short)) {
-                        property.SetValue(value, buffer.ReadInt16());
-                    }
-                    else if (type == typeof(int)) {
-                        property.SetValue(value, buffer.ReadInt32());
-                    }
-                    else if (type == typeof(string)) {
-                        property.SetValue(value, buffer.ReadString());
-                    }
-                    else if (type.IsEnum) {
-                        property.SetValue(value, buffer.ReadInt32());
-                    }
-                    else if (type.IsArray) {
-                        ReadArray(property, value, buffer);
-                    }
-                    else if (type.IsClass || type.IsValueType) {
-                        var t = Activator.CreateInstance(type);
-                        ReadClass(t, buffer);
-                        property.SetValue(obj, t);
-                    }
-
-                    array.SetValue(value, i);
-                }
-            }
-        }
-
-        propertyInfo.SetValue(obj, array);
-    }
-
-    private IEnumerable<PropertyInfo> GetOrderedProperties<T>(T obj) {
+    private IEnumerable<PropertyInfo> GetRuntimeProperties<T>(T obj) {
         return obj!.GetType().GetRuntimeProperties();
     }
 }

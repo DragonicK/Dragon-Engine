@@ -1,13 +1,16 @@
 ﻿using System.Net.Sockets;
+using System.Security.Cryptography;
 
 using Dragon.Core.Logs;
+
 using Dragon.Network.Security;
 using Dragon.Network.Incoming;
-using System.Security.Cryptography;
+
+using Dragon.Network.Pool;
 
 namespace Dragon.Network;
 
-public class Connection : IConnection {
+public sealed class Connection : IConnection {
     public int Id { get; set; }
     public bool Authenticated { get; set; }
     public string IpAddress { get; set; }
@@ -16,12 +19,13 @@ public class Connection : IConnection {
     public bool Connected => connected;
     public byte[] CipherKey { get; set; }
     public IEngineCrypto CryptoEngine { get; set; }
+    public IEngineBufferPool? EngineBufferPool { get; set; }
     public IIncomingMessageQueue? IncomingMessageQueue { get; set; }
     public EventHandler<IConnection>? OnDisconnect { get; set; }
 
     private const int ReceiveBufferSize = 1024;
 
-    private readonly byte[] data;
+    private readonly byte[] buffer;
     private readonly ByteBuffer reader;
 
     private bool connected = false;
@@ -29,8 +33,7 @@ public class Connection : IConnection {
     public Connection() {
         IpAddress = string.Empty;
 
-        data = new byte[ReceiveBufferSize];
-
+        buffer = new byte[ReceiveBufferSize];
         reader = new ByteBuffer(ReceiveBufferSize);
 
         CryptoEngine = new BlowFishCipher();
@@ -53,7 +56,7 @@ public class Connection : IConnection {
     }
 
     public void StartBeginReceive() {
-        Socket?.BeginReceive(data, 0, ReceiveBufferSize, SocketFlags.None, OnReceive, null);
+        Socket?.BeginReceive(buffer, 0, ReceiveBufferSize, SocketFlags.None, OnReceive, null);
     }
 
     private void OnReceive(IAsyncResult ar) {
@@ -66,8 +69,8 @@ public class Connection : IConnection {
             else {
                 var pLength = 0;
 
-                reader.Write(data, length);
-                Array.Clear(data, 0, length);
+                reader.Write(buffer, length);
+                Array.Clear(buffer, 0, length);
 
                 if (reader.Length() >= 4) {
                     pLength = reader.ReadInt32(false);
@@ -81,7 +84,15 @@ public class Connection : IConnection {
                     if (pLength <= reader.Length() - 4) {
                         reader.ReadInt32();
 
-                        IncomingMessageQueue?.Enqueue(this, Id, reader.ReadBytes(pLength));
+                        var sequence = EngineBufferPool?.GetNextBuffer();
+
+                        sequence!.Reset();
+
+                        reader.ReadBytes(sequence.Content, pLength);
+
+                        sequence.Length = pLength;
+
+                        IncomingMessageQueue?.Enqueue(this, Id, sequence);
                     }
 
                     pLength = 0;
@@ -97,7 +108,7 @@ public class Connection : IConnection {
 
                 reader.Trim();
 
-                Socket.BeginReceive(data, 0, ReceiveBufferSize, SocketFlags.None, OnReceive, null);
+                Socket.BeginReceive(buffer, 0, ReceiveBufferSize, SocketFlags.None, OnReceive, null);
             }
         }
         catch (Exception ex) {

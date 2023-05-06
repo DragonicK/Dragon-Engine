@@ -19,7 +19,8 @@ public sealed class ByteBuffer {
     }
 
     public ByteBuffer(byte[] arr) {
-        buffer = new MemoryStream(arr, 0, arr.Length);
+        buffer = new MemoryStream(arr.Length);
+        buffer.Write(arr, 0, arr.Length);
     }
 
     public byte[] ToArray() {
@@ -102,6 +103,13 @@ public sealed class ByteBuffer {
         }
 
         return values;
+    }
+
+    public void ReadBytes(byte[] content, int length) {
+        buffer.Position = readPos;
+        buffer.Read(content, 0, length);
+
+        readPos += length;
     }
 
     public byte ReadByte(bool peek = true) {

@@ -4,8 +4,8 @@ namespace Dragon.Network.Messaging.SharedPackets;
 
 public sealed class SpMessageBubble : IMessagePacket {
     public MessageHeader Header { get; set; } = MessageHeader.MessageBubble;
-    public int Target { get; set; }
+    public string Target { get; set; } = string.Empty;
     public TargetType TargetType { get; set; }
-    public string Text { get; set; } = string.Empty;
+    public byte[] Text { get; set; } = Array.Empty<byte>();
     public QbColor Color { get; set; }
 }

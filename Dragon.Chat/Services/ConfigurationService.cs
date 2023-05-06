@@ -9,6 +9,7 @@ using Dragon.Core.GeoIpCountry;
 using Dragon.Core.Serialization;
 
 using Dragon.Chat.Configurations;
+using Dragon.Chat.Configurations.Data;
 
 namespace Dragon.Chat.Services;
 
@@ -28,9 +29,12 @@ public sealed class ConfigurationService : IService, IConfiguration {
     public int FilterIpLifeTime { get; set; }
     public int IpMaxAttempt { get; set; }
     public int IpMaxAccessCount { get; set; }
+    public int BubblePoolCapacity { get; set; }
+    public int MessagePoolCapacity { get; set; }
     public IpAddress ChatServer { get; set; }
     public ClientVersion ClientVersion { get; set; }
     public BlockedCountry BlockedCountry { get; set; }
+    public Message Message { get; set; }
 
     public ConfigurationService() {
         ServerLogs = true;
@@ -62,6 +66,13 @@ public sealed class ConfigurationService : IService, IConfiguration {
         IpBlockLifeTime = 600000;
         FilterIpLifeTime = 120000;
         FilterCheckAccessTime = 3000;
+
+        Message = new Message() {
+            MaximumLength = byte.MaxValue
+        };
+
+        BubblePoolCapacity = 2048;
+        MessagePoolCapacity = 2048;
     }
 
     public void Start() {

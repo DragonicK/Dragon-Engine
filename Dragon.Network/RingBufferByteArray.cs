@@ -1,6 +1,8 @@
-﻿namespace Dragon.Network;
+﻿using Dragon.Network.Pool;
 
-public class RingBufferByteArray {
+namespace Dragon.Network;
+
+public sealed class RingBufferByteArray {
     private const int BufferSize = 256;
     private const int ListSize = 64;
 
@@ -12,6 +14,7 @@ public class RingBufferByteArray {
     public TransmissionTarget TransmissionTarget { get; set; }
     public List<int> DestinationPeers { get; set; }
     public int ExceptDestination { get; set; }
+    public IEngineBuffer? EngineBuffer { get; set; }
 
     public RingBufferByteArray() {
         ByteBuffer = new byte[BufferSize];
@@ -42,16 +45,10 @@ public class RingBufferByteArray {
         Length = length;
     }
 
-    public void GetContent(ref byte[] target, int offset) {
-        if (Length > target.Length) {
-            target = new byte[Length];
-        }
-
-        Buffer.BlockCopy(ByteBuffer, 0, target, offset, Length);
-    }
-
     public void Reset() {
         Connection = null;
+        EngineBuffer = null;
+
         DestinationPeers.Clear();
 
         Array.Clear(ByteBuffer, 0, ByteBuffer.Length);

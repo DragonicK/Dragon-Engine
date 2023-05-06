@@ -5,8 +5,8 @@ namespace Dragon.Network.Messaging.SharedPackets;
 public sealed class PacketBroadcastMessage : IMessagePacket {
     public MessageHeader Header { get; private set; } = MessageHeader.BroadcastMessage;
     public ChatChannel Channel { get; set; }
-    public string Text { get; set; } = string.Empty;
-    public string Name { get; set; } = string.Empty;
+    public byte[] Text { get; set; } = Array.Empty<byte>();
+    public byte[] Name { get; set; } = Array.Empty<byte>();
     public AccountLevel AccountLevel { get; set; }
-    public QbColor Color { get; set; }
+    public QbColor Color { get; set; } 
 }

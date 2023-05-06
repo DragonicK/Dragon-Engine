@@ -2,93 +2,96 @@
 
 using Dragon.Network;
 using Dragon.Network.Messaging;
+using Dragon.Network.Messaging.SharedPackets;
 
+using Dragon.Core.Model;
+using Dragon.Chat.Players;
 using Dragon.Chat.Network;
- 
+
 namespace Dragon.Chat.Routes;
+
 public sealed class BroadcastMessage : PacketRoute, IPacketRoute {
     public MessageHeader Header => MessageHeader.BroadcastMessage;
 
     public BroadcastMessage(IServiceInjector injector) : base(injector) { }
 
-    public void Process(IConnection connection, object packet) {
-        //var received = packet as PacketBroadcastMessage;
+    public void Process(IConnection connection, object packet) {     
+        var received = packet as PacketBroadcastMessage;
 
-        //var repository = ConnectionService!.PlayerRepository;
+        if (received is not null) {
+            var player = FindByConnection(connection);
 
-        //var player = repository!.FindByConnectionId(Connection.Id);
+            if (player is not null) {
+                var config = Configuration!.Message;
 
-        //if (player is not null) {
-        //    var config = Configuration!.Messages;
-        //    var text = Packet!.Text;
-        //    var channel = Packet!.Channel;
+                var text = received.Text;
+                var channel = received.Channel;
 
-        //    if (text.Length <= config.MaximumLength) {
+                if (text.Length <= config.MaximumLength) {
 
-        //        switch (channel) {
-        //            case ChatChannel.Map:
-        //                ProcessMapMessage(player);
-        //                break;
-        //            case ChatChannel.Global:
-        //                ProcessBroadcastMessage(player);
-        //                break;
-        //            case ChatChannel.Private:
-        //                ProcessPrivateMessage(player);
-        //                break;
-        //            case ChatChannel.Party:
-        //                ProcessPartyMessage(player);
-        //                break;
-        //            case ChatChannel.Guild:
-        //                ProcessGuildMessage(player);
-        //                break;
-        //        }
-        //    }
-        //}
+                    switch (channel) {
+                        case ChatChannel.Map:
+                            ProcessMapMessage(player, received);
+                            break;
+                        case ChatChannel.Global:
+                            ProcessBroadcastMessage(player, received);
+                            break;
+                        case ChatChannel.Private:
+                            ProcessPrivateMessage(player, received);
+                            break;
+                        case ChatChannel.Party:
+                            ProcessPartyMessage(player, received);
+                            break;
+                        case ChatChannel.Guild:
+                            ProcessLegionMessage(player, received);
+                            break;
+                    }
+                }
+            }
+        }
     }
 
-    //private void ProcessMapMessage(IPlayer player) {
-    //    var sender = PacketSenderService!.PacketSender;
-    //    var instance = GetInstance(player);
+    private void ProcessMapMessage(IPlayer player, PacketBroadcastMessage packet) {
+        var sender = GetPacketSender();
+        var repository = GetPlayerRepository();
 
-    //    if (instance is not null) {
-    //        var message = new Message() {
-    //            AccountLevel = player.AccountLevel,
-    //            Name = player.Character.Name,
-    //            Channel = ChatChannel.Map,
-    //            Color = QbColor.White,
-    //            Text = Packet!.Text
-    //        };
+        var players = repository.GetPlayers();
 
-    //        var buble = new Bubble() {
-    //            Color = QbColor.White,
-    //            TargetIndex = player.IndexOnInstance,
-    //            TargetType = TargetType.Player,
-    //            Text = Packet!.Text
-    //        };
+        var bubble = GetBubblePool().GetNextBubble();
+        var targets = GetTargetPool().GetNextTarget();
 
-    //        sender?.SendMessage(message, instance);
-    //        sender?.SendMessageBubble(buble, instance);
-    //    }
-    //}
+        targets.Reset();
 
-    //private void ProcessBroadcastMessage(IPlayer player) {
-    //    var sender = PacketSenderService!.PacketSender;
-    //    var instance = GetInstance(player);
+        // TODO
+        // Let text buffer as constant.
+        bubble.Text = new byte[packet.Text.Length];
+        bubble.Target = player.Name;
+        bubble.Color = QbColor.White;
+        bubble.TargetType = TargetType.Player;
 
-    //    if (instance is not null) {
-    //        var message = new Message() {
-    //            AccountLevel = player.AccountLevel,
-    //            Name = player.Character.Name,
-    //            Channel = ChatChannel.Global,
-    //            Color = QbColor.White,
-    //            Text = Packet!.Text
-    //        };
+        Buffer.BlockCopy(packet.Text, 0, bubble.Text, 0, bubble.Text.Length);
 
-    //        sender?.SendMessage(message);
-    //    }
-    //}
+        foreach (var (_, target) in players) {
+            if (target.InstanceId == player.InstanceId) {
+                targets.Players.Add(target);
+            }
+        }
 
-    //private void ProcessPrivateMessage(IPlayer player) {
+        packet.AccountLevel = player.AccountLevel;
+        packet.Color = QbColor.White;
+
+        sender.SendMessage(packet, targets.Players);
+        sender.SendMessageBubble(bubble, targets.Players);
+    }
+
+    private void ProcessBroadcastMessage(IPlayer player, PacketBroadcastMessage packet) {
+        packet.AccountLevel = player.AccountLevel;
+        packet.Color = QbColor.White;
+
+        GetPacketSender().SendMessage(packet);   
+    }
+
+    private void ProcessPrivateMessage(IPlayer player, PacketBroadcastMessage packet) {
     //    var sender = PacketSenderService!.PacketSender;
     //    var name = Packet!.Name.Trim();
 
@@ -115,26 +118,13 @@ public sealed class BroadcastMessage : PacketRoute, IPacketRoute {
     //            }
     //        }
     //    }
-    //}
+    }
 
-    //// TODO
-    //private void ProcessPartyMessage(IPlayer player) {
+    private void ProcessPartyMessage(IPlayer player, PacketBroadcastMessage packet) {
 
-    //}
+    }
 
-    //// TODO
-    //private void ProcessGuildMessage(IPlayer player) {
+    private void ProcessLegionMessage(IPlayer player, PacketBroadcastMessage packet) {
 
-    //}
-
-    //private IInstance? GetInstance(IPlayer player) {
-    //    var instances = InstanceService!.Instances;
-    //    var instanceId = player.Character.Map;
-
-    //    if (instances.ContainsKey(instanceId)) {
-    //        return instances[instanceId];
-    //    }
-
-    //    return null;
-    //}
+    }
 }

@@ -166,17 +166,5 @@
       "Administrator",
       "Administrador"
     ]
-  },
-  "Messages": {
-    "MaximumLength": 255,
-    "SayCooldown": 0,
-    "SayInterval": 0,
-    "SayCount": 0,
-    "WorldCooldown": 0,
-    "WorldInterval": 0,
-    "WorldCount": 0,
-    "PrivateCooldown": 0,
-    "PrivateInterval": 0,
-    "PrivateCount": 0
   }
 }

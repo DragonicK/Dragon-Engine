@@ -291,7 +291,6 @@ Public Sub HandleKeyPresses(ByVal KeyAscii As Integer)
         'If Not Windows(GetWindowIndex("winChat")).Window.Visible Then btnMenu_SkillTree
         Exit Sub
 
-
     Case 79, 111    ' o
         If Not Windows(GetWindowIndex("winChat")).Window.Visible Then ButtonMenu_Mail
         Exit Sub

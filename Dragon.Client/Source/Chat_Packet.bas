@@ -1,45 +1,76 @@
 Attribute VB_Name = "Chat_Packet"
 Option Explicit
 
-Public Sub HandleMessageBubble(ByVal Index As Long, ByRef Data() As Byte, ByVal StartAddr As Long, ByVal ExtraVar As Long)
-    Dim Buffer As clsBuffer, TargetType As Long, Target As Long, Message As String, Colour As Long
-    
-    Set Buffer = New clsBuffer
-    Buffer.WriteBytes Data()
-    
-    Target = Buffer.ReadLong
-    TargetType = Buffer.ReadLong
-    Message = Buffer.ReadString
-    Colour = Buffer.ReadLong
-        
-    AddChatBubble Target, TargetType, Message, Colour
-    
-    Set Buffer = Nothing
-End Sub
-
 Public Sub SendMapMessage(ByVal Text As String)
     Dim Buffer As clsBuffer
     Set Buffer = New clsBuffer
-    
+
     Buffer.WriteLong EnginePacket.PBroadcastMessage
     Buffer.WriteLong ChatChannel.ChannelMap
     Buffer.WriteString Text
-        
-    SendGameMessage Buffer.ToArray()
-    
+    Buffer.WriteString "Empty"
+    Buffer.WriteLong 0 ' AccountLevel
+    Buffer.WriteLong ColorType.White  ' Color
+
+    SendChatMessage Buffer.ToArray()
+
     Set Buffer = Nothing
 End Sub
 
 Public Sub SendBroadcastMessage(ByVal Text As String)
     Dim Buffer As clsBuffer
     Set Buffer = New clsBuffer
-    
+
     Buffer.WriteLong EnginePacket.PBroadcastMessage
     Buffer.WriteLong ChatChannel.ChannelGlobal
     Buffer.WriteString Text
+    Buffer.WriteString "Empty"
+    Buffer.WriteLong 0    ' AccountLevel
+    Buffer.WriteLong ColorType.White     ' Color
+
+    SendChatMessage Buffer.ToArray()
+
+    Set Buffer = Nothing
+End Sub
+
+Public Sub SendPlayerMessage(ByVal Text As String, ByVal MsgTo As String)
+    Dim Buffer As clsBuffer
+    Set Buffer = New clsBuffer
     
-    SendGameMessage Buffer.ToArray()
+    Buffer.WriteLong EnginePacket.PBroadcastMessage
+    Buffer.WriteLong ChatChannel.ChannelPrivate
+    Buffer.WriteString Text
+    Buffer.WriteString MsgTo
+    Buffer.WriteLong 0 ' AccountLevel
+    Buffer.WriteLong ColorType.White  ' Color
     
+    SendChatMessage Buffer.ToArray()
+    
+    Set Buffer = Nothing
+End Sub
+
+Public Sub HandleMessageBubble(ByVal Index As Long, ByRef Data() As Byte, ByVal StartAddr As Long, ByVal ExtraVar As Long)
+    Dim Buffer As clsBuffer, TargetType As Long, Target As String, Message As String, Colour As Long
+    Dim i As Long
+
+    Set Buffer = New clsBuffer
+    Buffer.WriteBytes Data()
+
+    Target = Trim$(Buffer.ReadString)
+    TargetType = Buffer.ReadLong
+    Message = Trim$(Buffer.ReadString)
+    Colour = Buffer.ReadLong
+
+    For i = 1 To Player_HighIndex
+        If LenB(Player(i).Name) > 0 Then
+            If Player(i).Name = Target Then
+                Exit For
+            End If
+        End If
+    Next
+
+    AddChatBubble i, TargetType, Message, Colour
+
     Set Buffer = Nothing
 End Sub
 
@@ -56,8 +87,8 @@ Public Sub HandleBroadcastMessage(ByVal Index As Long, ByRef Data() As Byte, ByV
     Buffer.WriteBytes Data()
 
     Channel = Buffer.ReadLong
-    Message = Buffer.ReadString
-    Name = Buffer.ReadString
+    Message = Trim$(Buffer.ReadString)
+    Name = Trim$(Buffer.ReadString)
     Access = Buffer.ReadLong
     Color = Buffer.ReadLong
 
@@ -87,20 +118,6 @@ Public Sub HandleBroadcastMessage(ByVal Index As Long, ByRef Data() As Byte, ByV
 
     ' add to the chat box
     AddText ColourChar & GetColStr(Color) & Header & Name & ": " & ColourChar & GetColStr(Grey) & Message, Grey, , Channel
-End Sub
-
-Public Sub SendPlayerMessage(ByVal Text As String, ByVal MsgTo As String)
-    Dim Buffer As clsBuffer
-    Set Buffer = New clsBuffer
-    
-    Buffer.WriteLong EnginePacket.PBroadcastMessage
-    Buffer.WriteLong ChatChannel.ChannelPrivate
-    Buffer.WriteString Text
-    Buffer.WriteString MsgTo
-    
-    SendGameMessage Buffer.ToArray()
-    
-    Set Buffer = Nothing
 End Sub
 
 Public Sub HandleSystemMessage(ByVal Index As Long, ByRef Data() As Byte, ByVal StartAddr As Long, ByVal ExtraVar As Long)

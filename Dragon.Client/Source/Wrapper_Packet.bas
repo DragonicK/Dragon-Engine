@@ -23,6 +23,9 @@ Public Sub HandleUpdateCipherKey(ByVal Index As Long, ByRef Data() As Byte, ByVa
     ElseIf GameState = GameState_Game Then
         CopyMemory GameInstanceCipherKey(0), Key(0), CipherKeyLength
         
+        ' Return cipher key to default
+        Call UpdateChatInstanceCipherKey
+        
         Call UpdateKey(GameInstance, ByVal VarPtr(GameInstanceCipherKey(0)), CipherKeyLength)
         Call SendGameLogin
         

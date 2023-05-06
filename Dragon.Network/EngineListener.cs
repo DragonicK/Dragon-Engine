@@ -1,6 +1,7 @@
 ﻿using Dragon.Core.Logs;
 using Dragon.Core.GeoIpCountry;
 
+using Dragon.Network.Pool;
 using Dragon.Network.Outgoing;
 using Dragon.Network.Incoming;
 
@@ -16,6 +17,7 @@ public class EngineListener : IEngineListener {
     public ILogger? Logger { get; set; }
     public IGeoIpAddress GeoIpAddress { get; init; }
     public IIndexGenerator IndexGenerator { get; init; }
+    public IEngineBufferPool EngineBufferPool { get; init; }
     public IConnectionRepository ConnectionRepository { get; init; }
     public IIncomingMessageQueue IncomingMessageQueue { get; init; }
     public IOutgoingMessageWriter OutgoingMessageWriter { get; init; }
@@ -68,6 +70,7 @@ public class EngineListener : IEngineListener {
 
                     connection.Socket = socket;
                     connection.IpAddress = ipAddress;
+                    connection.EngineBufferPool = EngineBufferPool;
                     connection.IncomingMessageQueue = IncomingMessageQueue;
                     connection.OnDisconnect += OnConnectionDisconnected;
 

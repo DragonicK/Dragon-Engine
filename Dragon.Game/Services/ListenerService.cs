@@ -8,6 +8,7 @@ namespace Dragon.Game.Services;
 
 public sealed class ListenerService : IService {
     public ServicePriority Priority => ServicePriority.Low;
+    public PoolService? PoolService { get; private set; }
     public IEngineListener? ServerListener { get; private set; }
     public IServiceContainer? ServiceContainer { get; private set; }
     public IServiceInjector? ServiceInjector { get; private set; }
@@ -26,10 +27,11 @@ public sealed class ListenerService : IService {
     private LeaveServer? LeaveServer;
 
     public void Start() {
+        var geoIp = GeoIpService!.GeoIpAddress;
+        var bufferPool = PoolService!.EngineBufferPool!;
+        var generator = ConnectionService!.IndexGenerator;
         var repository = ConnectionService!.ConnectionRepository;
         var queue = IncomingMessageService!.IncomingMessageQueue;
-        var geoIp = GeoIpService!.GeoIpAddress;
-        var generator = ConnectionService.IndexGenerator;
         var incomingMessage = IncomingMessageService.IncomingMessageQueue;
         var outgoingWriter = OutgoingMessageService!.OutgoingMessageWriter;
 
@@ -43,6 +45,7 @@ public sealed class ListenerService : IService {
             OutgoingMessageWriter = outgoingWriter!,
             ConnectionRepository = repository!,
             Logger = LoggerService!.Logger,
+            EngineBufferPool = bufferPool,
             IndexGenerator = generator!,
             GeoIpAddress = geoIp!
         };

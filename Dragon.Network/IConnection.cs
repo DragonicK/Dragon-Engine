@@ -1,4 +1,6 @@
 ﻿using System.Net.Sockets;
+
+using Dragon.Network.Pool;
 using Dragon.Network.Security;
 using Dragon.Network.Incoming;
 
@@ -12,6 +14,7 @@ public interface IConnection {
     string IpAddress { get; set; }
     bool Authenticated { get; set; }
     IEngineCrypto CryptoEngine { get; set; }
+    IEngineBufferPool? EngineBufferPool { get; set; }
     IIncomingMessageQueue? IncomingMessageQueue { get; set; }
     EventHandler<IConnection>? OnDisconnect { get; set; }
 

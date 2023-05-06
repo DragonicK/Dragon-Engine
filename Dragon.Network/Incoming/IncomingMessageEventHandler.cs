@@ -1,12 +1,13 @@
 ﻿using Dragon.Core.Logs;
 
+using Dragon.Network.Pool;
 using Dragon.Network.Messaging;
 
 using System.Diagnostics;
 
 namespace Dragon.Network.Incoming;
 
-public class IncomingMessageEventHandler : IIncomingMessageEventHandler {
+public sealed class IncomingMessageEventHandler : IIncomingMessageEventHandler {
     public IMessageRepository<MessageHeader> MessageRepository { get; }
     public IIncomingMessageParser IncomingMessageParser { get; }
     public ISerializer Serializer { get; }
@@ -26,42 +27,48 @@ public class IncomingMessageEventHandler : IIncomingMessageEventHandler {
 
     public void OnEvent(RingBufferByteArray buffer, long sequence, bool endOfBatch) {
         var connection = buffer.Connection!;
-        var bytes = new byte[buffer.Length];
-
-        buffer.GetContent(ref bytes, 0);
+        var pool = buffer.EngineBuffer;
+        
         buffer.Reset();
 
         var crypto = connection.CryptoEngine;
 
-        if (crypto.Decipher(bytes, 0, bytes.Length)) {
-            var value = BitConverter.ToInt32(bytes, 0);
+        if (crypto.Decipher(pool!.Content, 0, pool.Length)) {
+            var value = BitConverter.ToInt32(pool.Content, 0);
 
             if (Enum.IsDefined(typeof(MessageHeader), value)) {
-                Execute(value, bytes, connection);
+                Execute(value, pool, connection);
             }
             else {
-                WriteWarning(value, bytes, connection);
+                WriteWarning(value, pool.Length, connection);
             }
         }
         else {
-            Logger.Warning("Invalid CheckSum", $"From Id: {connection.Id} Length: {bytes.Length} ");
+            Logger.Warning("Invalid CheckSum", $"From Id: {connection.Id} Length: {pool.Length} ");
         }
     }
 
-    private void Execute(int value, byte[] buffer, IConnection connection) {
+    private void Execute(int value, IEngineBuffer buffer, IConnection connection) {
         var header = (MessageHeader)value;
 
         if (MessageRepository.Contains(header)) {
-            var type = MessageRepository.GetMessage(header);
-            var packet = Serializer.Deserialize(buffer, type);
+            try {
+                var type = MessageRepository.GetMessage(header);
+                var packet = Serializer.Deserialize(buffer, type);
 
-            IncomingMessageParser.Process(connection, packet);
+                IncomingMessageParser.Process(connection, packet);
+            }
+            catch (Exception ex) {
+                Console.WriteLine(ex.Message);
+                Console.WriteLine(ex.Source);
+                Console.WriteLine(ex.StackTrace);
+            }
         }
     }
 
-    private void WriteWarning(int value, byte[] buffer, IConnection connection) {
+    private void WriteWarning(int value, int length, IConnection connection) {
         if (Debugger.IsAttached) {
-            Logger.Warning("Invalid Header Received", $"From Id: {connection.Id} Header: {value} Length: {buffer.Length} ");
+            Logger.Warning("Invalid Header Received", $"From Id: {connection.Id} Header: {value} Length: {length} ");
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace Dragon.Network;
 
-public class IndexGenerator : IIndexGenerator {
+public sealed class IndexGenerator : IIndexGenerator {
     private readonly HashSet<int> indexes;
     private readonly int Maximum;
 

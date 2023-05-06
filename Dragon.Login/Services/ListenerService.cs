@@ -8,6 +8,7 @@ namespace Dragon.Login.Services;
 public sealed class ListenerService : IService {
     public ServicePriority Priority => ServicePriority.Low;
     public IEngineListener? ServerListener { get; private set; }
+    public PoolService? PoolService { get; private set; }
     public GeoIpService? GeoIpService { get; private set; }
     public LoggerService? LoggerService { get; private set; }
     public ConfigurationService? Configuration { get; private set; }
@@ -23,10 +24,11 @@ public sealed class ListenerService : IService {
     private LeaveServer? LeaveServer { get; set; }
 
     public void Start() {
+        var geoIp = GeoIpService!.GeoIpAddress;
+        var poolBuffer = PoolService!.EngineBufferPool;
+        var generator = ConnectionService!.IndexGenerator;
         var repository = ConnectionService!.ConnectionRepository;
         var queue = IncomingMessageService!.IncomingMessageQueue;
-        var geoIp = GeoIpService!.GeoIpAddress;
-        var generator = ConnectionService.IndexGenerator;
         var incomingMessage = IncomingMessageService.IncomingMessageQueue;
         var outgoingWriter = OutgoingMessageService!.OutgoingMessageWriter;
 
@@ -40,6 +42,7 @@ public sealed class ListenerService : IService {
             OutgoingMessageWriter = outgoingWriter!,
             ConnectionRepository = repository!,
             Logger = LoggerService!.Logger,
+            EngineBufferPool = poolBuffer,
             IndexGenerator = generator!,
             GeoIpAddress = geoIp!
         };

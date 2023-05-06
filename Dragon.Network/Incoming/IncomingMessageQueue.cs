@@ -1,8 +1,11 @@
 ﻿using Disruptor;
 using Disruptor.Dsl;
 
+using Dragon.Network.Pool;
+
 namespace Dragon.Network.Incoming;
-public class IncomingMessageQueue : IIncomingMessageQueue {
+
+public sealed class IncomingMessageQueue : IIncomingMessageQueue {
     private const int BufferSize = 4096;
 
     private RingBuffer<RingBufferByteArray>? ringbuffer;
@@ -28,15 +31,14 @@ public class IncomingMessageQueue : IIncomingMessageQueue {
         disruptor.Halt();
     }
 
-    public void Enqueue(IConnection connection, int fromId, byte[] buffer) {
+    public void Enqueue(IConnection connection, int fromId, IEngineBuffer buffer) {
         if (ringbuffer is not null) {
             var sequence = ringbuffer.Next();
             var entry = ringbuffer[sequence];
 
             entry.FromId = fromId;
             entry.Connection = connection;
-
-            entry.SetContent(buffer, buffer.Length);
+            entry.EngineBuffer = buffer;
 
             ringbuffer.Publish(sequence);
         }
