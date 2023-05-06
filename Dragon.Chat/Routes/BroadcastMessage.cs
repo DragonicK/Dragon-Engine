@@ -1,10 +1,10 @@
-﻿using Dragon.Core.Services;
+﻿using Dragon.Core.Model;
+using Dragon.Core.Services;
 
 using Dragon.Network;
 using Dragon.Network.Messaging;
 using Dragon.Network.Messaging.SharedPackets;
 
-using Dragon.Core.Model;
 using Dragon.Chat.Players;
 using Dragon.Chat.Network;
 
