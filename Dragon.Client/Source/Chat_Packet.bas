@@ -8,9 +8,9 @@ Public Sub SendMapMessage(ByVal Text As String)
     Buffer.WriteLong EnginePacket.PBroadcastMessage
     Buffer.WriteLong ChatChannel.ChannelMap
     Buffer.WriteString Text
-    Buffer.WriteString "Empty"
+    Buffer.WriteString GetPlayerName(MyIndex)
     Buffer.WriteLong 0 ' AccountLevel
-    Buffer.WriteLong ColorType.White  ' Color
+    Buffer.WriteLong ColorType.White ' Color
 
     SendChatMessage Buffer.ToArray()
 
@@ -24,9 +24,9 @@ Public Sub SendBroadcastMessage(ByVal Text As String)
     Buffer.WriteLong EnginePacket.PBroadcastMessage
     Buffer.WriteLong ChatChannel.ChannelGlobal
     Buffer.WriteString Text
-    Buffer.WriteString "Empty"
-    Buffer.WriteLong 0    ' AccountLevel
-    Buffer.WriteLong ColorType.White     ' Color
+    Buffer.WriteString GetPlayerName(MyIndex)
+    Buffer.WriteLong 0   ' AccountLevel
+    Buffer.WriteLong ColorType.White  ' Color
 
     SendChatMessage Buffer.ToArray()
 
@@ -51,7 +51,7 @@ End Sub
 
 Public Sub HandleMessageBubble(ByVal Index As Long, ByRef Data() As Byte, ByVal StartAddr As Long, ByVal ExtraVar As Long)
     Dim Buffer As clsBuffer, TargetType As Long, Target As String, Message As String, Colour As Long
-    Dim i As Long
+    Dim i As Long, IsOnline As Boolean
 
     Set Buffer = New clsBuffer
     Buffer.WriteBytes Data()
@@ -64,12 +64,15 @@ Public Sub HandleMessageBubble(ByVal Index As Long, ByRef Data() As Byte, ByVal 
     For i = 1 To Player_HighIndex
         If LenB(Player(i).Name) > 0 Then
             If Player(i).Name = Target Then
+                IsOnline = True
                 Exit For
             End If
         End If
     Next
 
-    AddChatBubble i, TargetType, Message, Colour
+    If IsOnline Then
+        AddChatBubble i, TargetType, Message, Colour
+    End If
 
     Set Buffer = Nothing
 End Sub
