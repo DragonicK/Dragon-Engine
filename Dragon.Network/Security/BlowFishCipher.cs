@@ -306,7 +306,7 @@ public sealed class BlowFishCipher : IEngineCrypto {
         int sum = 0;
         int i;
 
-        for (i = offset; i < raw.Length - 2; ++i)
+        for (i = offset; i < length - 2; ++i)
         {
             sum += raw[i];
         }
@@ -321,7 +321,7 @@ public sealed class BlowFishCipher : IEngineCrypto {
         int sum = 0;
         int i;
 
-        for (i = offset; i < data.Length - 2; ++i)
+        for (i = offset; i < length - 2; ++i)
         {
             sum += data[i];
         }
