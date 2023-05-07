@@ -60,6 +60,8 @@ Public Sub HandleMessageBubble(ByVal Index As Long, ByRef Data() As Byte, ByVal 
     TargetType = Buffer.ReadLong
     Message = Trim$(Buffer.ReadString)
     Colour = Buffer.ReadLong
+    
+    Message = Replace(Message, vbNullChar, vbNullString)
 
     For i = 1 To Player_HighIndex
         If LenB(Player(i).Name) > 0 Then

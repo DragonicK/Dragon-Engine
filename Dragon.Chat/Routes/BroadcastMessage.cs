@@ -28,7 +28,6 @@ public sealed class BroadcastMessage : PacketRoute, IPacketRoute {
                 var channel = received.Channel;
 
                 if (text.Length <= config.MaximumLength) {
-
                     switch (channel) {
                         case ChatChannel.Map:
                             ProcessMapMessage(player, received);
@@ -62,14 +61,18 @@ public sealed class BroadcastMessage : PacketRoute, IPacketRoute {
 
         targets.Reset();
 
-        // TODO
-        // Let text buffer as constant.
-        bubble.Text = new byte[packet.Text.Length];
         bubble.Target = player.Name;
         bubble.Color = QbColor.White;
         bubble.TargetType = TargetType.Player;
 
-        Buffer.BlockCopy(packet.Text, 0, bubble.Text, 0, bubble.Text.Length);
+        var bubbleSize = bubble.Text.Length;
+        var messageSize = packet.Text.Length;
+
+        var length = messageSize > bubbleSize ? bubbleSize : messageSize;
+
+        Array.Clear(bubble.Text);
+ 
+        Buffer.BlockCopy(packet.Text, 0, bubble.Text, 0, length);
 
         foreach (var (_, target) in players) {
             if (target.InstanceId == player.InstanceId) {
