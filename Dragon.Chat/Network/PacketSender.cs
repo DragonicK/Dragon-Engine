@@ -6,6 +6,7 @@ using Dragon.Network.Messaging.SharedPackets;
 
 using Dragon.Chat.Players;
 using Dragon.Chat.Services;
+using Dragon.Core.Model;
 
 namespace Dragon.Chat.Network;
 
@@ -60,6 +61,23 @@ public sealed class PacketSender : IPacketSender {
             msg.DestinationPeers.Add(player.Connection.Id);
         }
 
+        msg.TransmissionTarget = TransmissionTarget.Destination;
+
+        writer.Enqueue(msg);
+    }
+
+    public void SendMessage(SystemMessage message, QbColor color, IPlayer player, string[]? parameters = null) {
+        var packet = new SpSystemMessage() {
+            Color = color,
+            Message = message,
+            Parameters = parameters
+        };
+
+        var writer = GetOutgoingMessageWriter();
+
+        var msg = writer.CreateMessage(packet);
+
+        msg.DestinationPeers.Add(player.Connection.Id);
         msg.TransmissionTarget = TransmissionTarget.Destination;
 
         writer.Enqueue(msg);

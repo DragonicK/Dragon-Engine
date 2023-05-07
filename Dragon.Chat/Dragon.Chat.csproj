@@ -8,7 +8,12 @@
     <BaseOutputPath>..\Build\Chat</BaseOutputPath>
     <BaseIntermediateOutputPath />
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+    <ApplicationIcon>_chat.ico</ApplicationIcon>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="_chat.ico" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Dragon.Core\Dragon.Core.csproj" />

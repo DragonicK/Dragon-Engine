@@ -8,6 +8,8 @@ using Dragon.Network.Messaging.SharedPackets;
 using Dragon.Chat.Players;
 using Dragon.Chat.Network;
 
+using System.Text;
+
 namespace Dragon.Chat.Routes;
 
 public sealed class BroadcastMessage : PacketRoute, IPacketRoute {
@@ -28,21 +30,24 @@ public sealed class BroadcastMessage : PacketRoute, IPacketRoute {
                 var channel = received.Channel;
 
                 if (text.Length <= config.MaximumLength) {
+
+                    var sender = GetPacketSender();
+
                     switch (channel) {
                         case ChatChannel.Map:
-                            ProcessMapMessage(player, received);
+                            ProcessMapMessage(sender, player, received);
                             break;
                         case ChatChannel.Global:
-                            ProcessBroadcastMessage(player, received);
+                            ProcessBroadcastMessage(sender, player, received);
                             break;
                         case ChatChannel.Private:
-                            ProcessPrivateMessage(player, received);
+                            ProcessPrivateMessage(sender, player, received);
                             break;
                         case ChatChannel.Party:
-                            ProcessPartyMessage(player, received);
+                            ProcessPartyMessage(sender, player, received);
                             break;
                         case ChatChannel.Guild:
-                            ProcessLegionMessage(player, received);
+                            ProcessLegionMessage(sender, player, received);
                             break;
                     }
                 }
@@ -50,8 +55,7 @@ public sealed class BroadcastMessage : PacketRoute, IPacketRoute {
         }
     }
 
-    private void ProcessMapMessage(IPlayer player, PacketBroadcastMessage packet) {
-        var sender = GetPacketSender();
+    private void ProcessMapMessage(IPacketSender sender, IPlayer player, PacketBroadcastMessage packet) {
         var repository = GetPlayerRepository();
 
         var players = repository.GetPlayers();
@@ -71,7 +75,7 @@ public sealed class BroadcastMessage : PacketRoute, IPacketRoute {
         var length = messageSize > bubbleSize ? bubbleSize : messageSize;
 
         Array.Clear(bubble.Text);
- 
+
         Buffer.BlockCopy(packet.Text, 0, bubble.Text, 0, length);
 
         foreach (var (_, target) in players) {
@@ -80,54 +84,91 @@ public sealed class BroadcastMessage : PacketRoute, IPacketRoute {
             }
         }
 
-        packet.AccountLevel = player.AccountLevel;
         packet.Color = QbColor.White;
+        packet.AccountLevel = player.AccountLevel;
 
         sender.SendMessage(packet, targets.Players);
         sender.SendMessageBubble(bubble, targets.Players);
     }
 
-    private void ProcessBroadcastMessage(IPlayer player, PacketBroadcastMessage packet) {
-        packet.AccountLevel = player.AccountLevel;
+    private void ProcessBroadcastMessage(IPacketSender sender, IPlayer player, PacketBroadcastMessage packet) {
         packet.Color = QbColor.White;
+        packet.AccountLevel = player.AccountLevel;
 
-        GetPacketSender().SendMessage(packet);   
+        sender.SendMessage(packet);   
     }
 
-    private void ProcessPrivateMessage(IPlayer player, PacketBroadcastMessage packet) {
-    //    var sender = PacketSenderService!.PacketSender;
-    //    var name = Packet!.Name.Trim();
+    private void ProcessPrivateMessage(IPacketSender sender, IPlayer player, PacketBroadcastMessage packet) {
+        var length = packet.Name.Length;
 
-    //    if (!string.IsNullOrEmpty(name)) {
-    //        if (name.Length <= Configuration!.Player.MaximumNameLength) {
-    //            var repository = ConnectionService!.PlayerRepository;
-    //            var dest = repository!.FindByName(name);
+        if (length > 0) { 
+        var name = Encoding.ASCII.GetString(packet.Name);
 
-    //            if (dest is not null) {
-    //                if (dest.Character.CharacterId != player.Character.CharacterId) {
-    //                    var destMessage = new Message() {
-    //                        AccountLevel = player.AccountLevel,
-    //                        Channel = ChatChannel.Private,
-    //                        Name = player.Character.Name,
-    //                        Text = Packet!.Text,
-    //                        Color = QbColor.BrigthGreen
-    //                    };
+            if (!string.IsNullOrEmpty(name)) {
+                var repository = GetPlayerRepository();
+                var target = repository.FindByName(name);
 
-    //                    sender!.SendMessage(destMessage, dest);
-    //                }
-    //            }
-    //            else {
-    //                sender!.SendMessage(SystemMessage.PlayerIsNotOnline, QbColor.BrigthGreen, player);
-    //            }
-    //        }
-    //    }
+                if (target is not null) {
+                    if (target.CharacterId != player.CharacterId) {
+                        packet.Color = QbColor.BrigthGreen;
+                        packet.Channel = ChatChannel.Private;
+                        packet.AccountLevel = player.AccountLevel;
+
+                        packet.Name = new byte[length];
+
+                        for (var i = 0; i < length; ++i) {
+                            packet.Name[i] = (byte)player.Name[i];
+                        }
+
+                        sender.SendMessage(packet, target.Connection);
+                    }
+                }
+                else {
+                    sender.SendMessage(SystemMessage.PlayerIsNotOnline, QbColor.BrigthGreen, player);
+                }
+            }
+        }
     }
 
-    private void ProcessPartyMessage(IPlayer player, PacketBroadcastMessage packet) {
+    private void ProcessPartyMessage(IPacketSender sender, IPlayer player, PacketBroadcastMessage packet) {
+        var repository = GetPlayerRepository();
 
+        var players = repository.GetPlayers();
+
+        var targets = GetTargetPool().GetNextTarget();
+
+        targets.Reset();
+
+        foreach (var (_, target) in players) {
+            if (target.PartyId == player.PartyId) {
+                targets.Players.Add(target);
+            }
+        }
+
+        packet.Color = QbColor.White;
+        packet.AccountLevel = player.AccountLevel;
+
+        sender.SendMessage(packet, targets.Players);
     }
 
-    private void ProcessLegionMessage(IPlayer player, PacketBroadcastMessage packet) {
+    private void ProcessLegionMessage(IPacketSender sender, IPlayer player, PacketBroadcastMessage packet) {
+        var repository = GetPlayerRepository();
 
+        var players = repository.GetPlayers();
+
+        var targets = GetTargetPool().GetNextTarget();
+
+        targets.Reset();
+
+        foreach (var (_, target) in players) {
+            if (target.LegionId == player.LegionId) {
+                targets.Players.Add(target);
+            }
+        }
+
+        packet.Color = QbColor.White;
+        packet.AccountLevel = player.AccountLevel;
+
+        sender.SendMessage(packet, targets.Players);
     }
 }
