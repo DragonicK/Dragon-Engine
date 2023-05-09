@@ -1,6 +1,6 @@
 ﻿namespace Dragon.Core.Services;
 
-public class ServiceContainer : IServiceContainer {
+public sealed class ServiceContainer : IServiceContainer {
     private readonly Dictionary<Type, IService> container;
     public int Count => container.Count;
 

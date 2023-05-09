@@ -1,6 +1,6 @@
 ﻿namespace Dragon.Core.GeoIpCountry;
 
-public class GeoIpAddressReader : IGeoIpAddressReader {
+public sealed class GeoIpAddressReader : IGeoIpAddressReader {
 
     private readonly IGeoIpAddress geoIpAddress;
 

@@ -1,6 +1,6 @@
 ﻿namespace Dragon.Core.Smtp;
 
-public class SmtpConfiguration {
+public sealed class SmtpConfiguration {
     public bool Enabled { get; set; }
     public string Username { get; set; }
     public string Passphrase { get; set; }

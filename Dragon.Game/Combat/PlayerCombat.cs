@@ -1,23 +1,17 @@
 ﻿using Dragon.Core.Model;
 using Dragon.Core.Content;
 using Dragon.Core.Services;
-using Dragon.Core.Model.Npcs;
 using Dragon.Core.Model.Skills;
 using Dragon.Core.Model.Entity;
-using Dragon.Core.Model.Effects;
-using Dragon.Core.Model.Attributes;
 using Dragon.Core.Model.Characters;
 
 using Dragon.Game.Players;
 using Dragon.Game.Services;
 using Dragon.Game.Instances;
-using Dragon.Game.Repository;
 using Dragon.Game.Combat.Death;
 using Dragon.Game.Combat.Common;
 using Dragon.Game.Combat.Handler;
 using Dragon.Game.Network.Senders;
-using Dragon.Game.Network;
-using System.Security.Cryptography.X509Certificates;
 
 namespace Dragon.Game.Combat;
 
@@ -27,12 +21,13 @@ public sealed class PlayerCombat : IEntityCombat {
     public ConfigurationService? Configuration { get; private set; }
     public PacketSenderService? PacketSenderService { get; private set; }
 
-    public ISkillHandler Healing { get; private set; }
     public ISkillHandler HoT { get; private set; }
-    public ISkillHandler Damage { get; private set; }
     public ISkillHandler DoT { get; private set; }
-    public ISkillHandler Effect { get; private set; }
     public ISkillHandler Aura { get; private set; }
+    public ISkillHandler Damage { get; private set; }
+    public ISkillHandler Effect { get; private set; }
+    public ISkillHandler Healing { get; private set; }
+
     public IEntityDeath EntityDeath { get; private set; }
     public IEntityDeath PlayerDeath { get; private set; }
 

@@ -2,7 +2,7 @@
 
 namespace Dragon.Core.Cryptography;
 
-public class AES {
+public sealed class AES {
     public int KeySize { get; set; } = 128;
     public CipherMode CipherMode { get; set; }
     public PaddingMode PaddingMode { get; set; }

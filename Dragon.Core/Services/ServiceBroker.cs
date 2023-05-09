@@ -2,7 +2,7 @@
 
 namespace Dragon.Core.Services;
 
-public class ServiceBroker : IServiceBroker {
+public sealed class ServiceBroker : IServiceBroker {
 
     private readonly Dictionary<Type, IService> services;
 

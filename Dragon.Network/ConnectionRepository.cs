@@ -3,7 +3,7 @@ using System.Collections.Concurrent;
 
 namespace Dragon.Network;
 
-public class ConnectionRepository : IConnectionRepository {
+public sealed class ConnectionRepository : IConnectionRepository {
     public ConcurrentDictionary<int, IConnection> Connections { get; private set; }
 
     private readonly ILogger _logger;

@@ -1,6 +1,6 @@
 ﻿namespace Dragon.Core.Common;
 
-public class EngineDirectory {
+public sealed class EngineDirectory {
     private readonly List<string> directory;
 
     public EngineDirectory() {

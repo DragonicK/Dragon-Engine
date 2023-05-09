@@ -10,7 +10,7 @@ using System.Net.Sockets;
 
 namespace Dragon.Network;
 
-public class EngineListener : IEngineListener {
+public sealed class EngineListener : IEngineListener {
     public int Port { get; set; }
     public int BackLog { get; set; }
     public int MaximumConnections { get; set; }

@@ -2,7 +2,7 @@
 
 namespace Dragon.Core.GeoIpCountry;
 
-public class BlockedCountry {
+public sealed class BlockedCountry {
     public List<string> Countries { get; set; }
 
     [JsonIgnore]

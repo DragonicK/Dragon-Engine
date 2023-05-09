@@ -17,6 +17,7 @@ public sealed class InstanceService : IService, IUpdatableService {
     public IDictionary<int, IInstance> Instances { get; set; }
     public IDictionary<int, TradeManager> Trades { get; set; }
     public IDictionary<int, PartyManager> Parties { get; set; }
+
     public InstanceService() {
         Instances = new Dictionary<int, IInstance>();
         Trades = new Dictionary<int, TradeManager>();

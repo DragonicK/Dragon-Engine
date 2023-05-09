@@ -1,6 +1,6 @@
 ﻿namespace Dragon.Core.Logs;
 
-public class Description {
+public sealed class Description {
     public string Level { get; set; } = string.Empty;
     public string Date { get; private set; }
     public string Name { get; set; } = string.Empty;

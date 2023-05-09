@@ -1,6 +1,6 @@
 ﻿namespace Dragon.Core.GeoIpCountry;
 
-public class GeoIpAddress : IGeoIpAddress {
+public sealed class GeoIpAddress : IGeoIpAddress {
     private const int InitialCapacity = 200000;
 
     private readonly HashSet<Country> addresses;

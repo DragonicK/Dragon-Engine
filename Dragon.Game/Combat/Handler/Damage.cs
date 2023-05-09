@@ -11,7 +11,6 @@ using Dragon.Game.Instances;
 using Dragon.Game.Combat.Common;
 using Dragon.Game.Network.Senders;
 
-
 namespace Dragon.Game.Combat.Handler;
 
 public sealed class Damage : ISkillHandler {
