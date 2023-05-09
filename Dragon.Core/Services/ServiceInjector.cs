@@ -2,7 +2,7 @@
 
 namespace Dragon.Core.Services;
 
-public class ServiceInjector : IServiceInjector {
+public sealed class ServiceInjector : IServiceInjector {
 
     private readonly IServiceContainer _container;
 
@@ -13,7 +13,7 @@ public class ServiceInjector : IServiceInjector {
     public void Inject(object target) {
         InjectObject(target);
         InjectArray(target);
-        InjectContainer(target); 
+        InjectContainer(target);
         InjectInjector(target);
     }
 
@@ -27,9 +27,7 @@ public class ServiceInjector : IServiceInjector {
         foreach (var (name, propertyType) in values) {
             var property = properties.Where(p => p.Name == name).First();
 
-            var x = _container[propertyType];
-
-            property.SetValue(target, _container[propertyType]);
+            property?.SetValue(target, _container[propertyType]);
         }
     }
 
@@ -39,9 +37,7 @@ public class ServiceInjector : IServiceInjector {
               .Where(p => p.PropertyType == typeof(IService[]))
               .FirstOrDefault();
 
-        if (properties is not null) {
-            properties.SetValue(target, _container.ToArray());
-        }
+        properties?.SetValue(target, _container.ToArray());
     }
 
     private void InjectContainer(object target) {
@@ -50,9 +46,7 @@ public class ServiceInjector : IServiceInjector {
               .Where(p => p.PropertyType == typeof(IServiceContainer))
               .FirstOrDefault();
 
-        if (properties is not null) {
-            properties.SetValue(target, _container);
-        }
+        properties?.SetValue(target, _container);
     }
 
     private void InjectInjector(object target) {
@@ -61,9 +55,6 @@ public class ServiceInjector : IServiceInjector {
               .Where(p => p.PropertyType == typeof(IServiceInjector))
               .FirstOrDefault();
 
-
-        if (properties is not null) {
-            properties.SetValue(target, this);
-        }
+        properties?.SetValue(target, this);
     }
 }
