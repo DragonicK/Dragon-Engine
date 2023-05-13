@@ -415,7 +415,7 @@ public sealed class ChestManager {
                             var partyPlayer = member.Player;
 
                             if (CanAddCurrency(partyPlayer, currencyType, currency, out var rest)) {
-                                sender.SendCurrencyUpdate(player, currencyType);
+                                sender.SendCurrencyUpdate(partyPlayer, currencyType);
                                 sender.SendMessage(SystemMessage.ReceivedCurrency, QbColor.Gold, partyPlayer, new string[] { ((int)currencyType).ToString(), (currency - rest).ToString() });
                             }
                             else {
