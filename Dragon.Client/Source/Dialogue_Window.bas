@@ -19,7 +19,7 @@ Public Sub CreateWindow_Dialogue()
     CreateLabel WindowCount, "lblBody_2", 20, 90, 380, , "Please try again.", FontRegular, , Alignment.AlignCenter
     
     ' Buttons
-    CreateButton WindowCount, "btnNo", 20, 130, 188, 30, "NÃ£o", FontRegular, , , False, , , , , DesignTypes.DesignRed, DesignTypes.DesignRedHover, DesignTypes.DesignRedClick, , , GetAddress(AddressOf Dialogue_No)
+    CreateButton WindowCount, "btnNo", 20, 130, 188, 30, "Não", FontRegular, , , False, , , , , DesignTypes.DesignRed, DesignTypes.DesignRedHover, DesignTypes.DesignRedClick, , , GetAddress(AddressOf Dialogue_No)
     CreateButton WindowCount, "btnYes", 212, 130, 188, 30, "Sim", FontRegular, , , False, , , , , DesignTypes.DesignGreen, DesignTypes.DesignGreenHover, DesignTypes.DesignGreenClick, , , GetAddress(AddressOf Dialogue_Yes)
     
     ' Button OK
