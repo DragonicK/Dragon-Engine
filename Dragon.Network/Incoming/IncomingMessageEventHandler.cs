@@ -44,7 +44,9 @@ public sealed class IncomingMessageEventHandler : IIncomingMessageEventHandler {
             }
         }
         else {
-            Logger.Warning("Invalid CheckSum", $"From Id: {connection.Id} Length: {pool.Length} ");
+            var header = BitConverter.ToInt32(pool.Content, 0);
+
+            Logger.Warning("Invalid CheckSum", $"From Id: {connection.Id} Header: {header} Length: {pool.Length} ");
         }
     }
 
@@ -59,9 +61,10 @@ public sealed class IncomingMessageEventHandler : IIncomingMessageEventHandler {
                 IncomingMessageParser.Process(connection, packet);
             }
             catch (Exception ex) {
-                Console.WriteLine(ex.Message);
-                Console.WriteLine(ex.Source);
-                Console.WriteLine(ex.StackTrace);
+                Logger.Error("Packet Serializer", $"Header: {header}");
+                Logger.Error("Packet Serializer", $"{ex.Source}");
+                Logger.Error("Packet Serializer", $"{ex.Message}");
+                Logger.Error("Packet Serializer", $"{ex.StackTrace}");
             }
         }
     }
