@@ -5,6 +5,8 @@ public sealed class TargetPool {
 
     private readonly IList<Target> messages;
 
+    private readonly object _lock = new();
+
     public TargetPool(int capacity, int connectionCapacity) {
         messages = new List<Target>(capacity);
 
@@ -14,8 +16,10 @@ public sealed class TargetPool {
     }
 
     public Target GetNextTarget() {
-        index = index >= messages.Count ? 0 : index++;
+        lock (_lock) {
+            index = index >= messages.Count ? 0 : index++;
 
-        return messages[index];
+            return messages[index];
+        }
     }
 }

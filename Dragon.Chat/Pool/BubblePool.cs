@@ -7,6 +7,8 @@ public sealed class BubblePool {
 
     private readonly IList<SpMessageBubble> bubbles;
 
+    private readonly object _lock = new();
+
     public BubblePool(int capacity, int messageTextSize) {
         bubbles = new List<SpMessageBubble>(capacity);
 
@@ -18,8 +20,10 @@ public sealed class BubblePool {
     }
 
     public SpMessageBubble GetNextBubble() {
-        index = index >= bubbles.Count ? 0 : index++;
+        lock (_lock) {
+            index = index >= bubbles.Count ? 0 : index++;
 
-        return bubbles[index];
+            return bubbles[index];
+        }
     }
 }
