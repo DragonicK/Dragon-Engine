@@ -17,7 +17,7 @@ public sealed class EngineBufferPool : IEngineBufferPool {
 
     public IEngineBuffer GetNextBuffer() {
         lock (_lock) {
-            index = index >= buffers.Count ? 0 : index;
+            index = index >= buffers.Count ? 0 : index++;
 
             return buffers[index];
         }
