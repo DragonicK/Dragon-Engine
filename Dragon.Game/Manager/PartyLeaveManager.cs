@@ -17,7 +17,7 @@ public sealed class PartyLeaveManager {
         injector.Inject(this);
     }
 
-    public void ProcessLeaveRequest(PartyManager party, IPlayer player) {
+    public void ProcessLeaveRequest(Party party, IPlayer player) {
         var sender = GetPacketSender();
 
         var members = party.Members;
@@ -45,7 +45,7 @@ public sealed class PartyLeaveManager {
         }
     }
 
-    private void Leave(IPacketSender sender, PartyManager party, PartyMember member, IPlayer player) {
+    private void Leave(IPacketSender sender, Party party, PartyMember member, IPlayer player) {
         var members = party.Members;
 
         player.PartyId = 0;
@@ -80,7 +80,7 @@ public sealed class PartyLeaveManager {
         }
     }
 
-    private int GetNextLeader(PartyManager party) {
+    private int GetNextLeader(Party party) {
         var members = party.Members;
         var leader = party.LeaderIndex;
 

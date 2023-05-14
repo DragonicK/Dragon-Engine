@@ -1,6 +1,7 @@
 ﻿using Dragon.Core.Services;
 using Dragon.Core.Model.Entity;
 
+using Dragon.Game.Manager;
 using Dragon.Game.Services;
 
 namespace Dragon.Game.Combat.Death;
@@ -12,12 +13,12 @@ public sealed class PlayerDeath : IEntityDeath {
     public ConfigurationService? Configuration { get; private set; }
     public PacketSenderService? PacketSenderService { get; private set; }
 
-    private readonly ExperienceHandler ExpHandler;
+    private readonly ExperienceManager ExpHandler;
 
     public PlayerDeath(IServiceInjector injector) {
         injector.Inject(this);
 
-        ExpHandler = new ExperienceHandler(injector);
+        ExpHandler = new ExperienceManager(injector);
     }
 
     public void Execute(IEntity? attacker, IEntity receiver) {

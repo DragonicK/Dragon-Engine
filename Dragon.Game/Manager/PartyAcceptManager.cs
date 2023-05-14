@@ -15,7 +15,7 @@ public sealed class PartyAcceptManager {
         injector.Inject(this);
     }
 
-    public void ProcessAcceptRequest(PartyManager party, IPlayer player) {
+    public void ProcessAcceptRequest(Party party, IPlayer player) {
         var sender = GetPacketSender();
 
         var invitation = FindInvitation(party, player);
@@ -57,7 +57,7 @@ public sealed class PartyAcceptManager {
         }
     }
 
-    private static PartyInvitedMember? FindInvitation(PartyManager party, IPlayer player) {
+    private static PartyInvitedMember? FindInvitation(Party party, IPlayer player) {
         for (var i = 0; i < party.InvitedMembers.Count; ++i) {
             var member = party.InvitedMembers[i];
 

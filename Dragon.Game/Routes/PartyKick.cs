@@ -6,6 +6,7 @@ using Dragon.Game.Players;
 using Dragon.Game.Manager;
 using Dragon.Game.Network;
 using Dragon.Core.Services;
+using Dragon.Game.Parties;
 
 namespace Dragon.Game.Routes;
 
@@ -38,7 +39,7 @@ public sealed class PartyKick : PacketRoute, IPacketRoute {
         }
     }
 
-    private PartyManager? GetPartyManager(IPlayer player) {
+    private Party? GetPartyManager(IPlayer player) {
         var id = player.PartyId;
         var parties = InstanceService!.Parties;
 

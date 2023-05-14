@@ -5,6 +5,7 @@ using Dragon.Core.Model.Entity;
 
 using Dragon.Game.Manager;
 using Dragon.Game.Players;
+using Dragon.Game.Parties;
 using Dragon.Game.Services;
 using Dragon.Game.Instances;
 using Dragon.Game.Network.Senders;
@@ -19,13 +20,13 @@ public sealed class EntityDeath : IEntityDeath {
     public PacketSenderService? PacketSenderService { get; private set; }
 
     private readonly ChestManager ChestManager;
-    private readonly ExperienceHandler ExpHandler;
+    private readonly ExperienceManager ExpHandler;
 
     public EntityDeath(IServiceInjector injector) {
         injector.Inject(this);
 
         ChestManager = new ChestManager(injector);
-        ExpHandler = new ExperienceHandler(injector);
+        ExpHandler = new ExperienceManager(injector);
     }
     
     public void Execute(IEntity attacker, IEntity receiver) {
@@ -45,7 +46,14 @@ public sealed class EntityDeath : IEntityDeath {
                 entity.Vitals.Set(Vital.Special, 0);
 
                 ClearEntityTarget(entity);
-                GiveAttackerExperience(sender, player, entity, instance);
+
+                if (player.PartyId > 0) {
+                    GivePartyExperience(sender, player, entity, instance);
+                }
+                else {
+                    GivePlayerExperience(sender, player, entity, instance);
+                }
+
                 ClearInstancePlayerTargets(sender, player, entity, instance);
 
                 // remove effects
@@ -88,13 +96,31 @@ public sealed class EntityDeath : IEntityDeath {
         }
     }
 
-    private void GiveAttackerExperience(IPacketSender sender, IPlayer player, IInstanceEntity entity, IInstance instance) {
+    private void GivePartyExperience(IPacketSender sender, IPlayer player, IInstanceEntity entity, IInstance instance) {
+        var party = GetPartyManager(player);
+
+        if (party is not null) {
+            var members = party.Members;
+
+            foreach (var member in members) {
+                if (member.Player is not null) {
+                    if (!member.Disconnected) {
+                        if (player.Character.Map == member.Player.Character.Map) {
+                            GivePlayerExperience(sender, member.Player, entity, instance);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private void GivePlayerExperience(IPacketSender sender, IPlayer player, IInstanceEntity entity, IInstance instance) {
         var exp = ExpHandler.GetExperience(player, entity);
 
         if (exp > 0) {
             player.Character.Experience += exp;
 
-            if (ExpHandler.CheckForLevelUp(player)) { 
+            if (ExpHandler.CheckForLevelUp(player)) {
                 player.AllocateAttributes();
 
                 sender.SendAttributes(player);
@@ -129,6 +155,10 @@ public sealed class EntityDeath : IEntityDeath {
         sender.SendExperience(player, minimum, maximum);
     }
 
+    private ILogger GetLogger() {
+        return LoggerService!.Logger!;
+    }
+
     private IInstance? GetInstance(IPlayer player) {
         var instanceId = player!.Character.Map;
         var instances = InstanceService!.Instances;
@@ -138,11 +168,15 @@ public sealed class EntityDeath : IEntityDeath {
         return instance;
     }
 
-    private ILogger GetLogger() {
-        return LoggerService!.Logger!;
-    }
-
     private IPacketSender GetPacketSender() {
         return PacketSenderService!.PacketSender!;
+    }
+
+    private Party? GetPartyManager(IPlayer player) {
+        var parties = InstanceService!.Parties;
+
+        parties.TryGetValue(player.PartyId, out var party);
+
+        return party;
     }
 }

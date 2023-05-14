@@ -8,6 +8,7 @@ using Dragon.Network.Messaging.SharedPackets;
 using Dragon.Game.Network;
 using Dragon.Game.Manager;
 using Dragon.Game.Players;
+using Dragon.Game.Parties;
 
 namespace Dragon.Game.Routes;
 
@@ -51,7 +52,7 @@ public sealed class PartyRequest : PacketRoute, IPacketRoute {
         }
     }
 
-    private void InviteToParty(PartyManager party, IPlayer player, IPlayer invited) {
+    private void InviteToParty(Party party, IPlayer player, IPlayer invited) {
         if (player != invited) {
             PartyRequestManager.ProcessRequestInvite(party, player, invited);
         }
@@ -63,7 +64,7 @@ public sealed class PartyRequest : PacketRoute, IPacketRoute {
         }
     }
 
-    private PartyManager? GetPartyManager(IPlayer player) {
+    private Party? GetPartyManager(IPlayer player) {
         var id = player.TradeId;
         var parties = InstanceService!.Parties;
 

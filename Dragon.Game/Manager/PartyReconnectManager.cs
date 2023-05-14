@@ -43,7 +43,7 @@ public sealed class PartyReconnectManager {
         }
     }
 
-    private void SendReconnectedMessage(IPacketSender sender, PartyManager party, PartyMember except) {
+    private void SendReconnectedMessage(IPacketSender sender, Party party, PartyMember except) {
         var parameters = new string[] { except.Character };
 
         var members = party.Members;

@@ -9,12 +9,11 @@ using Dragon.Core.Model.Upgrades;
 using Dragon.Core.Model.Characters;
 using Dragon.Core.Model.DisplayIcon;
 using Dragon.Core.Model.BlackMarket;
-
-using Dragon.Game.Manager;
 using Dragon.Game.Players;
 using Dragon.Game.Messages;
 using Dragon.Game.Instances;
 using Dragon.Game.Instances.Chests;
+using Dragon.Game.Parties;
 
 namespace Dragon.Game.Network.Senders;
 
@@ -88,8 +87,8 @@ public interface IPacketSender {
     void SendPassiveUpdate(IPlayer player, CharacterPassive passive);
     void SendPartyInvite(IPlayer player, IPlayer invited);
     void SendClosePartyInvitation(IPlayer player);
-    void SendParty(PartyManager party);
-    void SendPartyData(PartyManager party);
+    void SendParty(Party party);
+    void SendPartyData(Party party);
     void SendPartyVital(IPlayer player);
     void SendPartyDisplayIcons(IPlayer player);
     void SendPartyLeave(IPlayer player);

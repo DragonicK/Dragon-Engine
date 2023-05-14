@@ -16,12 +16,12 @@ public sealed class InstanceService : IService, IUpdatableService {
     public PacketSenderService? PacketSenderService { get; private set; }
     public IDictionary<int, IInstance> Instances { get; set; }
     public IDictionary<int, TradeManager> Trades { get; set; }
-    public IDictionary<int, PartyManager> Parties { get; set; }
+    public IDictionary<int, Party> Parties { get; set; }
 
     public InstanceService() {
         Instances = new Dictionary<int, IInstance>();
         Trades = new Dictionary<int, TradeManager>();
-        Parties = new Dictionary<int, PartyManager>();
+        Parties = new Dictionary<int, Party>();
     }
 
     public void Start() {
@@ -69,7 +69,7 @@ public sealed class InstanceService : IService, IUpdatableService {
         for (var i = 1; i <= maximum; ++i) {
             if (!Parties.ContainsKey(i)) {
 
-                Parties.Add(i, new PartyManager(i, inviteTimeOut, maximumMembers, disconnectionTimeOut) {
+                Parties.Add(i, new Party(i, inviteTimeOut, maximumMembers, disconnectionTimeOut) {
                     PacketSender = PacketSenderService!.PacketSender,
                 });
 

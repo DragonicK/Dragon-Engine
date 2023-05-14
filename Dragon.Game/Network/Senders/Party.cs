@@ -3,9 +3,8 @@ using Dragon.Network.Messaging.DTO;
 using Dragon.Network.Messaging.SharedPackets;
 
 using Dragon.Core.Model;
-
-using Dragon.Game.Manager;
 using Dragon.Game.Players;
+using Dragon.Game.Parties;
 
 namespace Dragon.Game.Network;
 
@@ -33,7 +32,7 @@ public sealed partial class PacketSender {
         Writer.Enqueue(msg);
     }
 
-    public void SendParty(PartyManager party) {
+    public void SendParty(Party party) {
         var members = party.Members;
         var count = members.Count;
 
@@ -87,7 +86,7 @@ public sealed partial class PacketSender {
         Writer.Enqueue(msg);
     }
 
-    public void SendPartyData(PartyManager party) {
+    public void SendPartyData(Party party) {
         var members = party.Members;
         var count = members.Count;
 
@@ -147,7 +146,7 @@ public sealed partial class PacketSender {
         Writer.Enqueue(msg);
     }
 
-    private PartyManager? GetPartyManager(IPlayer player) {
+    private Party? GetPartyManager(IPlayer player) {
         var partyId = player.PartyId;
         var parties = InstanceService!.Parties;
 

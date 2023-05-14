@@ -127,7 +127,7 @@ public sealed class AuraManager {
         return Convert.ToInt32(Math.Sqrt(Math.Pow((x1 - x2), 2) + Math.Pow((y1 - y2), 2))) <= range;
     }
 
-    private PartyManager? GetPartyManager(IPlayer player) {
+    private Party? GetPartyManager(IPlayer player) {
         var id = player.PartyId;
         var parties = InstanceService!.Parties;
 

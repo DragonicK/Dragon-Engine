@@ -9,7 +9,6 @@ using Dragon.Core.Model.Characters;
 using Dragon.Core.Model.DisplayIcon;
 
 using Dragon.Game.Parties;
-using Dragon.Game.Manager;
 using Dragon.Game.Players;
 using Dragon.Game.Services;
 using Dragon.Game.Instances;
@@ -232,7 +231,7 @@ public sealed class Buff : ISkillHandler {
         return Convert.ToInt32(Math.Sqrt(Math.Pow((x1 - x2), 2) + Math.Pow((y1 - y2), 2))) <= range;
     }
 
-    private PartyManager? GetPartyManager() {
+    private Party? GetPartyManager() {
         var id = Player.PartyId;
         var parties = InstanceService!.Parties;
 

@@ -17,7 +17,7 @@ public sealed class PartyRequestManager {
         injector.Inject(this);
     }
 
-    public void ProcessRequestInvite(PartyManager party, IPlayer starter, IPlayer invited) {
+    public void ProcessRequestInvite(Party party, IPlayer starter, IPlayer invited) {
         var sender = GetPacketSender();
 
         var leader = party.GetLeader();

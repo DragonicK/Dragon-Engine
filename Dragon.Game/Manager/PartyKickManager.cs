@@ -17,7 +17,7 @@ public sealed class PartyKickManager {
         injector.Inject(this);
     }
 
-    public void ProcessKickRequest(PartyManager party, IPlayer player, int index) {
+    public void ProcessKickRequest(Party party, IPlayer player, int index) {
         var sender = GetPacketSender();
         var leader = party.GetLeader();
 
@@ -46,7 +46,7 @@ public sealed class PartyKickManager {
         }
     }
 
-    private void Leave(IPacketSender sender, PartyManager party, PartyMember? kicked) {
+    private void Leave(IPacketSender sender, Party party, PartyMember? kicked) {
         if (kicked is not null) {
             var members = party.Members;
 

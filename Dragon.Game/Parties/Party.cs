@@ -1,12 +1,11 @@
 ﻿using Dragon.Core.Model;
 
-using Dragon.Game.Parties;
 using Dragon.Game.Players;
 using Dragon.Game.Network.Senders;
 
-namespace Dragon.Game.Manager;
+namespace Dragon.Game.Parties;
 
-public sealed class PartyManager {
+public sealed class Party {
     public int Id { get; set; }
     public IList<PartyMember> Members { get; set; }
     public IList<PartyInvitedMember> InvitedMembers { get; set; }
@@ -26,7 +25,7 @@ public sealed class PartyManager {
 
     private readonly IList<PartyInvitedMember> list;
 
-    public PartyManager(int id, int acceptTimeOut, int maximumMembers, int disconnectionTimeOut) {
+    public Party(int id, int acceptTimeOut, int maximumMembers, int disconnectionTimeOut) {
         Id = id;
         AcceptTimeOut = acceptTimeOut;
         MaximumMembers = maximumMembers;
@@ -206,5 +205,4 @@ public sealed class PartyManager {
             list.Add(member);
         }
     }
-
 }

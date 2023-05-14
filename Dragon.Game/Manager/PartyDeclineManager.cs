@@ -15,7 +15,7 @@ public sealed class PartyDeclineManager {
         injector.Inject(this);
     }
 
-    public void ProcessDeclineRequest(PartyManager party, IPlayer player) {
+    public void ProcessDeclineRequest(Party party, IPlayer player) {
         var sender = GetPacketSender();
         var leader = party.GetLeader();
 

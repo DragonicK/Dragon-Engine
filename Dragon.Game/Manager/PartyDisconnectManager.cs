@@ -48,7 +48,7 @@ public sealed class PartyDisconnectManager {
         }
     }
 
-    private PartyManager? GetPartyManager(IPlayer player) {
+    private Party? GetPartyManager(IPlayer player) {
         var id = player.PartyId;
         var parties = GetParties();
 
@@ -63,7 +63,7 @@ public sealed class PartyDisconnectManager {
         return PacketSenderService!.PacketSender!;
     }
 
-    private IDictionary<int, PartyManager> GetParties() {
+    private IDictionary<int, Party> GetParties() {
         return InstanceService!.Parties;
     }
 }

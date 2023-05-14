@@ -10,6 +10,7 @@ using Dragon.Game.Instances;
 using Dragon.Game.Repository;
 using Dragon.Game.Network.Senders;
 using Dragon.Game.Instances.Chests;
+using Dragon.Game.Parties;
 
 namespace Dragon.Game.Manager;
 
@@ -400,7 +401,7 @@ public sealed class ChestManager {
         return false;
     }
 
-    private bool PartyShareCurrency(IPacketSender sender, IPlayer player, CurrencyType currencyType, int currencyValue, PartyManager party, int totalPlayers, out int restAdded) {
+    private bool PartyShareCurrency(IPacketSender sender, IPlayer player, CurrencyType currencyType, int currencyValue, Party party, int totalPlayers, out int restAdded) {
         var currency = currencyValue / totalPlayers;
         var currentMapId = player.Character.Map;
         var totalRest = 0;
@@ -470,7 +471,7 @@ public sealed class ChestManager {
         return instance;
     }
 
-    private PartyManager? GetParty(IPlayer player) {
+    private Party? GetParty(IPlayer player) {
         var parties = InstanceService!.Parties;
         var partyId = player.PartyId;
 
