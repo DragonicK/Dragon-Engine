@@ -48,10 +48,10 @@ public sealed class EntityDeath : IEntityDeath {
                 ClearEntityTarget(entity);
 
                 if (player.PartyId > 0) {
-                    GivePartyExperience(sender, player, entity, instance);
+                    ExpHandler.GivePartyExperience(player, entity, instance);
                 }
                 else {
-                    GivePlayerExperience(sender, player, entity, instance);
+                    ExpHandler.GivePlayerExperience(player, entity, instance);
                 }
 
                 ClearInstancePlayerTargets(sender, player, entity, instance);
@@ -96,65 +96,6 @@ public sealed class EntityDeath : IEntityDeath {
         }
     }
 
-    private void GivePartyExperience(IPacketSender sender, IPlayer player, IInstanceEntity entity, IInstance instance) {
-        var party = GetPartyManager(player);
-
-        if (party is not null) {
-            var members = party.Members;
-
-            foreach (var member in members) {
-                if (member.Player is not null) {
-                    if (!member.Disconnected) {
-                        if (player.Character.Map == member.Player.Character.Map) {
-                            GivePlayerExperience(sender, member.Player, entity, instance);
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    private void GivePlayerExperience(IPacketSender sender, IPlayer player, IInstanceEntity entity, IInstance instance) {
-        var exp = ExpHandler.GetExperience(player, entity);
-
-        if (exp > 0) {
-            player.Character.Experience += exp;
-
-            if (ExpHandler.CheckForLevelUp(player)) {
-                player.AllocateAttributes();
-
-                sender.SendAttributes(player);
-                sender.SendPlayerVital(player, instance);
-                sender.SendPlayerDataTo(player, instance);
-            }
-
-            SendExperience(sender, player);
-        }
-    }
-
-    private void SendExperience(IPacketSender sender, IPlayer player) {
-        var level = player.Character.Level;
-        var experience = ContentService!.PlayerExperience;
-
-        var maximum = 0;
-
-        if (level > 0) {
-            if (level <= experience.MaximumLevel) {
-                maximum = experience.Get(level);
-            }
-        }
-
-        var minimum = player.Character.Experience;
-
-        if (minimum >= maximum) {
-            minimum = maximum;
-
-            player.Character.Experience = minimum;
-        }
-
-        sender.SendExperience(player, minimum, maximum);
-    }
-
     private ILogger GetLogger() {
         return LoggerService!.Logger!;
     }
@@ -172,11 +113,5 @@ public sealed class EntityDeath : IEntityDeath {
         return PacketSenderService!.PacketSender!;
     }
 
-    private Party? GetPartyManager(IPlayer player) {
-        var parties = InstanceService!.Parties;
 
-        parties.TryGetValue(player.PartyId, out var party);
-
-        return party;
-    }
 }

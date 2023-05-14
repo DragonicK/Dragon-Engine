@@ -188,6 +188,22 @@ public sealed class Party {
         return null;
     }
 
+    public int GetMemberCountOnSameMap(IPlayer player) {
+        var count = 0;
+
+        foreach (var member in Members) {
+            if (member.Player is not null) {
+                if (!member.Disconnected) {
+                    if (player.Character.Map == member.Player.Character.Map) {
+                        count++;
+                    }
+                }
+            }
+        }
+
+        return count;
+    }
+
     private void CheckMember(PartyInvitedMember member) {
         if (member.Player is not null) {
             member.AcceptTimeOut++;

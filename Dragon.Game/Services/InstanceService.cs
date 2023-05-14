@@ -61,10 +61,10 @@ public sealed class InstanceService : IService, IUpdatableService {
     }
 
     public int RegisterParty() {
-        var maximum = Configuration!.Party.Maximum;
-        var inviteTimeOut = Configuration!.Party.InviteTimeOut;
-        var maximumMembers = Configuration!.Party.MaximumMembers;
-        var disconnectionTimeOut = Configuration!.Party.DisconnectionTimeOut;
+        var maximum = Configuration!.Group.Maximum;
+        var inviteTimeOut = Configuration!.Group.InviteTimeOut;
+        var maximumMembers = Configuration!.Group.MaximumMembers;
+        var disconnectionTimeOut = Configuration!.Group.DisconnectionTimeOut;
 
         for (var i = 1; i <= maximum; ++i) {
             if (!Parties.ContainsKey(i)) {

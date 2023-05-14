@@ -34,7 +34,7 @@ public sealed class ConfigurationService : IService, IConfiguration {
     public ChestDrop ChestDrop { get; set; }
     public Map Map { get; set; }
     public Mail Mail { get; set; }
-    public Party Party { get; set; }
+    public Group Group { get; set; }
     public Ressurrection Ressurrection { get; set; }
     public Trade Trade { get; set; }
     public Player Player { get; set; }
@@ -48,7 +48,7 @@ public sealed class ConfigurationService : IService, IConfiguration {
         Guild = new Guild();
         Mail = new Mail();
         Map = new Map();
-        Party = new Party();
+        Group = new Group();
         Player = new Player();
         Rates = new Rate();
         Trade = new Trade();

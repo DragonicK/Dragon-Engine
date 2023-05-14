@@ -28,7 +28,7 @@ public interface IConfiguration {
     ChestDrop ChestDrop { get; }
     Mail Mail { get; }
     Map Map { get;  }
-    Party Party { get; }
+    Group Group { get; }
     Player Player { get; }
     ProhibitedNames ProhibitedNames { get; }
     Rate Rates { get; }

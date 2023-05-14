@@ -45,7 +45,7 @@ public sealed class PartyRequestManager {
             }
 
             if (!failed) {
-                if (party.Members.Count >= Configuration!.Party.MaximumMembers) {
+                if (party.Members.Count >= Configuration!.Group.MaximumMembers) {
                     sender.SendMessage(SystemMessage.PartyIsFull, QbColor.BrigthRed, starter);
                 }
                 else {
