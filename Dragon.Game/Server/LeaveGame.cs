@@ -1,6 +1,8 @@
 ﻿using Dragon.Core.Logs;
 using Dragon.Core.Services;
 
+using Dragon.Database.Handler;
+
 using Dragon.Game.Players;
 using Dragon.Game.Manager;
 using Dragon.Game.Services;
@@ -16,56 +18,45 @@ public sealed class LeaveGame {
     public ConfigurationService? Configuration { get; private set; }
     public PacketSenderService? PacketSenderService { get; private set; }
 
+    private readonly MembershipHandler MembershipHandler;
+
+    private readonly AuraManager AuraManager;
     private readonly PartyDisconnectManager PartyManager;
 
     public LeaveGame(IServiceInjector injector) {
         injector.Inject(this);
 
+        var membership = Configuration!.DatabaseMembership;
+        var factory = DatabaseService!.DatabaseFactory!;
+
+        MembershipHandler = factory.GetMembershipHandler(membership);
+
+        AuraManager = new AuraManager(injector);
         PartyManager = new PartyDisconnectManager(injector);
     }
 
-    public async void Leave(IPlayer? player) {
+    public void Leave(IPlayer player) {
         var sender = GetPacketSender();
         var instances = GetInstances();
 
-        if (player!.Character is not null) {
-            var instanceId = player!.Character.Map;
-            var index = player!.IndexOnInstance;
+        if (player.Character is not null) {
+            var instanceId = player.Character.Map;
+            var index = player.IndexOnInstance;
 
             if (instances.TryGetValue(instanceId, out var instance)) {
                 var removed = instance.Remove(player);
 
                 if (removed) {
-                    sender?.SendPlayerLeft(player, instance, index);
-                    sender?.SendHighIndex(instance);
+                    sender.SendPlayerLeft(player, instance, index);
+                    sender.SendHighIndex(instance);
                 }
             }
 
-            var membership = Configuration!.DatabaseMembership;
-            var factory = DatabaseService!.DatabaseFactory!;
+            Save(player);
 
-            var handler = factory.GetMembershipHandler(membership);
+            ExecuteTradeDecline(player);
 
-            await handler.SaveFullAccountAsync(player.Account);
-            await handler.SaveCharacterAsync(player.Character);
-            await handler.SaveSettings(player.Settings.GetSettings());
-            await handler.SaveCraftAsync(player.Craft.GetCharacterCraft());
-            await handler.SaveCurrencyAsync(player.Currencies.ToList());
-            await handler.SaveInventoryAsync(player.Inventories.ToList());
-            await handler.SaveEquipmentAsync(player.Equipments.ToList());
-            await handler.SaveHeraldryAsync(player.Heraldries.ToList());
-            await handler.SaveWarehouseAsync(player.Warehouse.ToList());
-            await handler.SaveRecipesAsync(player.Recipes.ToList());
-            await handler.SaveQuickSlotAsync(player.QuickSlots.ToList());
-            await handler.SaveEffectsAsync(player.Effects.ToList());
-            await handler.SaveSkillsAsync(player.Skills.ToList());
-            await handler.SavePassivesAsync(player.Passives.ToList());
-            await handler.SaveMailsAsync(player.Mails.ToList());
-
-            var vitals = (IPlayerVital)player.Vitals;
-
-            await handler.SaveVitalAsync(vitals.Get());
-
+            ExecutePartyRemoveAura(player);
             ExecutePartyLeaveGame(player);
         }
 
@@ -73,30 +64,63 @@ public sealed class LeaveGame {
 
         // TODO
         //PartyCollectedItem.UpdateDisconnectedPlayer(player);
+    }
 
-        //var loot = new LootHandler(player);
-        //loot.CloseLoot(0, TargetType.None);
+    private async void Save(IPlayer player) {
+        await MembershipHandler.SaveFullAccountAsync(player.Account);
+        await MembershipHandler.SaveCharacterAsync(player.Character);
+        await MembershipHandler.SaveSettings(player.Settings.GetSettings());
+        await MembershipHandler.SaveCraftAsync(player.Craft.GetCharacterCraft());
+        await MembershipHandler.SaveCurrencyAsync(player.Currencies.ToList());
+        await MembershipHandler.SaveInventoryAsync(player.Inventories.ToList());
+        await MembershipHandler.SaveEquipmentAsync(player.Equipments.ToList());
+        await MembershipHandler.SaveHeraldryAsync(player.Heraldries.ToList());
+        await MembershipHandler.SaveWarehouseAsync(player.Warehouse.ToList());
+        await MembershipHandler.SaveRecipesAsync(player.Recipes.ToList());
+        await MembershipHandler.SaveQuickSlotAsync(player.QuickSlots.ToList());
+        await MembershipHandler.SaveEffectsAsync(player.Effects.ToList());
+        await MembershipHandler.SaveSkillsAsync(player.Skills.ToList());
+        await MembershipHandler.SavePassivesAsync(player.Passives.ToList());
+        await MembershipHandler.SaveMailsAsync(player.Mails.ToList());
 
-        //if (player.PartyId > 0) {
-        //    player.Auras.RemoveAllPartyAuras();
-        //}
+        var vitals = player.Vitals as IPlayerVital;
 
-        //if (player.TradeId > 0) {
-        //    var trade = Global.GetTrade(player.TradeId);
+        if (vitals is not null) {
+            await MembershipHandler.SaveVitalAsync(vitals.Get());
+        }
+    }
 
-        //    if (trade != null) {
-        //        trade.SendDisconnectedMessage();
-        //        trade.CancelTrade();
-        //    }
-        //}
+    private void ExecuteTradeDecline(IPlayer player) {
+        if (player.TradeId > 0) {
+            var trades = InstanceService!.Trades;
 
-        //player.Combat.Clear();
-        //player.Combat.Player = null;
+            trades.TryGetValue(player.TradeId, out var trade);
+
+            trade?.Decline();
+        }
     }
 
     private void ExecutePartyLeaveGame(IPlayer player) {
         if (player.PartyId > 0) {
             PartyManager.ProcessDisconnect(player);
+        }
+    }
+
+    private void ExecutePartyRemoveAura(IPlayer player) {
+        if (player.PartyId > 0) {
+            if (player.Auras.Count > 0) {
+                var auras = player.Auras.ToList();
+
+                for (var i = 0; i < auras.Count; ++i) {
+                    var aura = auras[i].Id;
+
+                    if (aura > 0) {
+                        player.Auras.Remove(aura);
+
+                        AuraManager.DeactivateAura(player, aura);
+                    }
+                }
+            }
         }
     }
 

@@ -145,5 +145,5 @@ public sealed class InstanceService : IService, IUpdatableService {
         foreach (var (_, instance) in Instances) {
             instance.Execute();  
         }
-    }
+    } 
 }
