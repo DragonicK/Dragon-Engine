@@ -19,7 +19,7 @@ public sealed class Connection : IConnection {
     public bool Connected => connected;
     public byte[] CipherKey { get; set; }
     public IEngineCrypto CryptoEngine { get; set; }
-    public IEngineBufferPool? EngineBufferPool { get; set; }
+    public IEngineBufferPool? IncomingEngineBufferPool { get; set; }
     public IIncomingMessageQueue? IncomingMessageQueue { get; set; }
     public EventHandler<IConnection>? OnDisconnect { get; set; }
 
@@ -84,7 +84,7 @@ public sealed class Connection : IConnection {
                     if (pLength <= reader.Length() - 4) {
                         reader.ReadInt32();
 
-                        var sequence = EngineBufferPool?.GetNextBuffer();
+                        var sequence = IncomingEngineBufferPool?.GetNextBuffer();
 
                         sequence!.Reset();
 

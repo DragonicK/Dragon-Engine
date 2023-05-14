@@ -14,7 +14,7 @@ public interface IConnection {
     string IpAddress { get; set; }
     bool Authenticated { get; set; }
     IEngineCrypto CryptoEngine { get; set; }
-    IEngineBufferPool? EngineBufferPool { get; set; }
+    IEngineBufferPool? IncomingEngineBufferPool { get; set; }
     IIncomingMessageQueue? IncomingMessageQueue { get; set; }
     EventHandler<IConnection>? OnDisconnect { get; set; }
 

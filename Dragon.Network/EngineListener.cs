@@ -70,7 +70,7 @@ public sealed class EngineListener : IEngineListener {
 
                     connection.Socket = socket;
                     connection.IpAddress = ipAddress;
-                    connection.EngineBufferPool = EngineBufferPool;
+                    connection.IncomingEngineBufferPool = EngineBufferPool;
                     connection.IncomingMessageQueue = IncomingMessageQueue;
                     connection.OnDisconnect += OnConnectionDisconnected;
 

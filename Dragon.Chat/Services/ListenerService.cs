@@ -24,7 +24,7 @@ public sealed class ListenerService : IService {
 
     public void Start() {
         var geoIp = GeoIpService!.GeoIpAddress;
-        var bufferPool = PoolService!.EngineBufferPool!; 
+        var bufferPool = PoolService!.IncomingEngineBufferPool!; 
         var generator = ConnectionService!.IndexGenerator;
         var repository = ConnectionService!.ConnectionRepository;
         var queue = IncomingMessageService!.IncomingMessageQueue;
