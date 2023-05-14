@@ -299,7 +299,6 @@ Public Sub CheckMovement()
                     Player(MyIndex).xOffset = PIC_X * -1
                     Call SetPlayerX(MyIndex, GetPlayerX(MyIndex) + 1)
 
-
                 End Select
 
                 If CurrentMap.TileData.Tile(GetPlayerX(MyIndex), GetPlayerY(MyIndex)).Type = TILE_TYPE_WARP Then

@@ -1,7 +1,7 @@
-﻿using Dragon.Network;
-using Dragon.Network.Messaging.SharedPackets;
+﻿using Dragon.Core.Model.BlackMarket;
 
-using Dragon.Core.Model.BlackMarket;
+using Dragon.Network;
+using Dragon.Network.Messaging.SharedPackets;
 
 using Dragon.Game.Players;
 

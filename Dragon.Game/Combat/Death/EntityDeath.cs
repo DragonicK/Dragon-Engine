@@ -5,7 +5,6 @@ using Dragon.Core.Model.Entity;
 
 using Dragon.Game.Manager;
 using Dragon.Game.Players;
-using Dragon.Game.Parties;
 using Dragon.Game.Services;
 using Dragon.Game.Instances;
 using Dragon.Game.Network.Senders;
@@ -56,6 +55,7 @@ public sealed class EntityDeath : IEntityDeath {
 
                 ClearInstancePlayerTargets(sender, player, entity, instance);
 
+                // TODO
                 // remove effects
 
                 var chest = ChestManager.CreateInstanceChest(player, entity, instance);
@@ -112,6 +112,4 @@ public sealed class EntityDeath : IEntityDeath {
     private IPacketSender GetPacketSender() {
         return PacketSenderService!.PacketSender!;
     }
-
-
 }

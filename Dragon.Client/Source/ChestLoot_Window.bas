@@ -239,8 +239,13 @@ Private Sub btnMenu_Loot()
 
     If Windows(WindowIndex).Window.Visible Then
         Call SendCloseChest
-        
+
         HideWindow WindowIndex
+
+        If MyTargetType = TargetTypeChest Then
+            MyTargetType = TargetTypeNone
+            MyTargetIndex = 0
+        End If
     End If
 
 End Sub
@@ -322,7 +327,11 @@ End Sub
 Public Sub CheckForCloseLoot()
     If Windows(WindowIndex).Window.Visible Then
         HideWindow WindowIndex
-        SendCloseChest
+    End If
+
+    If MyTargetType = TargetTypeChest Then
+        MyTargetType = TargetTypeNone
+        MyTargetIndex = 0
     End If
 End Sub
 

@@ -5,6 +5,7 @@ using Dragon.Game.Players;
 using Dragon.Game.Services;
 using Dragon.Game.Instances;
 using Dragon.Game.Network.Senders;
+using Dragon.Game.Instances.Chests;
 
 namespace Dragon.Game.Manager;
 
@@ -48,6 +49,14 @@ public sealed class PlayerMovementManager {
         player.Character.Direction = direction;
 
         if (CanMove(player, direction)) {
+            if (player.TargetType == TargetType.Chest) {
+                var chest = player.Target as IInstanceChest;
+
+                if (chest is not null) {
+                    chest.OpenedByCharacterId = 0;
+                }
+            }
+
             var (x, y) = GetNextCoordinate(direction, player.Character.X, player.Character.Y);
 
             player.Character.X = x;

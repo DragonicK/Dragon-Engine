@@ -1,8 +1,9 @@
-﻿using Dragon.Network;
+﻿using Dragon.Core.Model;
+
+using Dragon.Network;
 using Dragon.Network.Messaging.DTO;
 using Dragon.Network.Messaging.SharedPackets;
 
-using Dragon.Core.Model;
 using Dragon.Game.Players;
 using Dragon.Game.Parties;
 

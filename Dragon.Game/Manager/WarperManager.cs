@@ -61,7 +61,6 @@ public sealed class WarperManager {
     }
 
     private void RemoveFromLastInstance(IPacketSender sender, IPlayer player, IInstance instance) {
-        // Remove character from last instance.
         var instanceId = player.Character.Map;
 
         if (instanceId != instance.Id) {
@@ -89,13 +88,6 @@ public sealed class WarperManager {
 
             // TODO
             // map.SendCorpseTo(player);
-
-            //var action = new RequirementEntry() {
-            //    SecondaryType = (int)InstanceType.Enter,
-            //    Id = map.Id
-            //};
-
-            //AchievementEngine.CheckAchievement(player, AchievementPrimaryRequirement.Instance, action);
 
             player.Character.Map = instance.Id;
             player.Character.X = x;

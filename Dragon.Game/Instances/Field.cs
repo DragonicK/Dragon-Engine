@@ -3,6 +3,7 @@
 using Dragon.Core.Model;
 using Dragon.Core.Model.Maps;
 using Dragon.Core.Model.Npcs;
+using Dragon.Core.Model.Chests;
 
 using Dragon.Game.Players;
 using Dragon.Game.Regions;
@@ -133,9 +134,13 @@ public sealed class Field : IMap, IInstance {
             IndexGenerator.Remove(index);
 
             player.IndexOnInstance = 0;
+
             players.Remove(index);
 
             CalculateHighIndex();
+
+            CloseChestsWhenLeave(player);
+            ClearEntitiesTargetWhenLeave(player);
 
             return true;
         }
@@ -201,6 +206,22 @@ public sealed class Field : IMap, IInstance {
                 if (!entity.IsDead) {
                     if (entity.Behaviour != NpcBehaviour.Shopkeeper) {
                         ExecuteEntity(i);
+                    }
+                }
+            }
+        }
+
+        if (chests.Count > 0) {
+            foreach (var (id, chest) in chests) {
+                if (chest.OpenedByCharacterId == 0) {
+                    chest.RemainingTime--;
+
+                    if (chest.RemainingTime <= 0) {
+                        chest.State = ChestState.Empty;
+
+                        _sender.SendUpdateChestState(this, chest);
+
+                        chests.Remove(id);
                     }
                 }
             }
@@ -313,5 +334,28 @@ public sealed class Field : IMap, IInstance {
         entity.Direction = direction;
 
         _sender.SendInstanceEntityMove(this, movementType, index);
+    }
+
+    private void CloseChestsWhenLeave(IPlayer player) {
+        if (chests.Count > 0) {
+            var id = player.Character.CharacterId;
+
+            foreach (var (_, chest) in chests) {
+                if (chest.OpenedByCharacterId == id) {
+                    chest.OpenedByCharacterId = 0;
+                }
+            }
+        }
+    }
+
+    private void ClearEntitiesTargetWhenLeave(IPlayer player) {
+        if (Entities.Count > 0) {
+            foreach (var entity in Entities) {
+                if (entity.Target == player) {
+                    entity.Target = null;
+                    entity.TargetType = TargetType.None;
+                }
+            }
+        }
     }
 }

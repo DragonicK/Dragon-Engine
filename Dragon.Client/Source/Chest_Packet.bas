@@ -50,6 +50,12 @@ Public Sub HandleUpdateChestState(ByVal Index As Long, ByRef Data() As Byte, ByV
 
                 If .State = ChestState_Empty Then
                     .AlreadyLooted = True
+
+                    If MyTargetType = TargetTypeChest Then
+                        If MyTargetIndex = Id Then
+                             Call CloseTargetWindow
+                        End If
+                    End If
                 End If
 
                 Exit For

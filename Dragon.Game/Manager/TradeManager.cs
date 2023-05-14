@@ -555,7 +555,7 @@ public sealed class TradeManager {
         return count;
     }
 
-    private void Destroy() {
+    public void Destroy() {
         if (Starter is not null) {
             Starter.TradeId = 0;
             PacketSender!.SendCloseTrade(Starter);
