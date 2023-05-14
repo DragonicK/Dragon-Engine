@@ -43,7 +43,7 @@ Public Sub HandlePremiumService(ByVal Index As Long, ByRef Data() As Byte, ByVal
 
     Set Buffer = New clsBuffer
     Buffer.WriteBytes Data
-     
+
     Id = Buffer.ReadLong
 
     Index = GetServiceIndexFromId(Id)
@@ -57,9 +57,8 @@ Public Sub HandlePremiumService(ByVal Index As Long, ByRef Data() As Byte, ByVal
         Call SetServiceName(Index, Buffer.ReadString)
         Call SetServiceEndTime(Index, Buffer.ReadString)
 
-        Call SetServiceTalentExpRate(Index, 0)
-
         Call SetServiceCharacterExpRate(Index, Buffer.ReadLong)
+        Call SetServiceTalentExpRate(Index, Buffer.ReadLong)
         Call SetServicePartyExpRate(Index, Buffer.ReadLong)
         Call SetServiceGuildExpRate(Index, Buffer.ReadLong)
         Call SetServiceSkillExpRate(Index, Buffer.ReadLong)
@@ -75,7 +74,7 @@ Public Sub HandlePremiumService(ByVal Index As Long, ByRef Data() As Byte, ByVal
             Call SetServiceItemDropRate(Index, n, Buffer.ReadLong)
         Next
     End If
-    
+
     ServiceCount = GetServiceCount
 
     Call AllocateServiceRates
