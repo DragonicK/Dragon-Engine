@@ -69,6 +69,7 @@ Public Enum SystemMessage
     ChestIsOpenedByAnotherPlayer
     ReceivedCurrency
     ReceivedItem
+    ReceivedExperience
 End Enum
 
 Public Function GetSystemMessage(ByVal Header As SystemMessage, ByVal ParamCount As Long, ByRef Parameters() As String) As String
@@ -380,6 +381,13 @@ Public Function GetSystemMessage(ByVal Header As SystemMessage, ByVal ParamCount
             Else
                 GetSystemMessage = "Você obteve " & Value & " itens."
             End If
+        End If
+        
+    Case SystemMessage.ReceivedExperience
+        If ParamCount >= 1 Then
+            Value = Val(Parameters(1))
+
+            GetSystemMessage = "Você obteve " & Value & " experiência."
         End If
 
 
