@@ -300,7 +300,7 @@ public partial class FormProperty : Form {
 
         _property.Fog = fog;
 
-        LabelRed.Text = $"Green: {fog.Green}";
+        LabelGreen.Text = $"Green: {fog.Green}";
     }
 
     private void ScrollBlue_Scroll(object sender, ScrollEventArgs e) {
@@ -310,7 +310,7 @@ public partial class FormProperty : Form {
 
         _property.Fog = fog;
 
-        LabelRed.Text = $"Blue: {fog.Blue}";
+        LabelBlue.Text = $"Blue: {fog.Blue}";
     }
 
     #endregion
