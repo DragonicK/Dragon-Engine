@@ -7,7 +7,7 @@ using Dragon.Database.Context;
 
 namespace Dragon.Database.Handler;
 
-public class MembershipHandler : IDisposable {
+public sealed class MembershipHandler : IDisposable {
     private readonly MembershipContext Context;
     private bool disposed = false;
 

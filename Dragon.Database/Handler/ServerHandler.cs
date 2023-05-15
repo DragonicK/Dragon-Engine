@@ -2,7 +2,7 @@
 
 namespace Dragon.Database.Handler;
 
-public class ServerHandler : IDisposable {
+public sealed class ServerHandler : IDisposable {
     private readonly ServerContext Context;
     private bool disposed = false;
 

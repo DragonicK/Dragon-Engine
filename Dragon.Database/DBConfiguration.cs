@@ -2,7 +2,7 @@
 
 namespace Dragon.Database;
 
-public class DBConfiguration {
+public sealed class DBConfiguration {
     public string DataSource { get; set; }
     public int Port { get; set; }
     public string UserId { get; set; }

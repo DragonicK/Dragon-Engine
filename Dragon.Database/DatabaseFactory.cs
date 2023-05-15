@@ -3,7 +3,7 @@ using Dragon.Database.Context;
 
 namespace Dragon.Database;
 
-public class DatabaseFactory : IDatabaseFactory {
+public sealed class DatabaseFactory : IDatabaseFactory {
     public MembershipHandler GetMembershipHandler(DBConfiguration dBConfiguration) {
         var options = ContextOptions.GetMembershipOptions(dBConfiguration);
         var context = new MembershipContext(options);

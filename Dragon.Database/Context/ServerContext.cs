@@ -2,7 +2,7 @@
 
 namespace Dragon.Database.Context;
 
-public class ServerContext : DbContext {
+public sealed class ServerContext : DbContext {
 
     public ServerContext(DbContextOptions<ServerContext> options) : base(options) {
 

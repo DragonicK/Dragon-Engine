@@ -5,7 +5,7 @@ using Dragon.Core.Model.Characters;
 
 namespace Dragon.Database.Context;
 
-public class MembershipContext : DbContext {
+public sealed class MembershipContext : DbContext {
     public DbSet<Account>? Accounts { get; set; }
     public DbSet<AccountAuthentication>? AccountAuthentication { get; set; }
     public DbSet<AccountCupom>? AccountCupom { get; set; }

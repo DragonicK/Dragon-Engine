@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+
 using Dragon.Database.Context;
 
 namespace Dragon.Database;
