@@ -157,6 +157,8 @@ Public Enum EnginePacket
     PSortChestItemList
     PUpdateChestItemList
     PEnableChestTakeItem
+    PRollDiceItem
+    PRollDiceClose
     PRollDiceResult
 
     PPacketCount
@@ -164,12 +166,10 @@ End Enum
 
 ' Packets sent by client to server
 Public Enum ClientPackets
-    CRequestNewMap = 5000
-           
+   ' CRequestNewMap = 5000
+  
     CRessurrectSelf
     CRessurrectByPlayer
-    
-    CAttack
     
     ' Make sure CMsgCOUNT is below everything else
     CMsgCOUNT
@@ -191,7 +191,6 @@ Public Enum ServerPackets
     SRessurrection
     
     SAttack
-    SRollDiceItem
     
     SStunned
     ' Make sure SMsgCOUNT is below everything else
@@ -309,9 +308,9 @@ Public Sub InitMessages()
     HandleDataSub(EnginePacket.PUpdateChestItemList) = GetAddress(AddressOf HandleUpdateChestItemList)
     HandleDataSub(EnginePacket.PUpdateChestState) = GetAddress(AddressOf HandleUpdateChestState)
     HandleDataSub(EnginePacket.PEnableChestTakeItem) = GetAddress(AddressOf HandleEnableChestTakeItem)
-
-    '
-    ' HandleDataSub(SRollDiceItem) = GetAddress(AddressOf HandleRollDiceItem)
+    HandleDataSub(EnginePacket.PRollDiceItem) = GetAddress(AddressOf HandleRollDiceItem)
+    HandleDataSub(EnginePacket.PRollDiceClose) = GetAddress(AddressOf HandleCloseRollDice)
+    
     ' HandleDataSub(SNpcAttack) = GetAddress(AddressOf HandleNpcAttack)
     ' HandleDataSub(SSound) = GetAddress(AddressOf HandleSound)
     ' HandleDataSub(SPlayerAchievement) = GetAddress(AddressOf HandlePlayerAchievement)

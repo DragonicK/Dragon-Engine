@@ -1,23 +1,27 @@
-Attribute VB_Name = "modLootDice"
+Attribute VB_Name = "Dice_Window"
 Option Explicit
 
-Private Type ItemLootRec
-    Num As Long
+Private Const ProgressBarSizeStep As Single = 7.3
+
+Public Type RolledItemRec
+    Id As Long
     Value As Long
     Level As Long
+    Bound As Boolean
+    AttributeId As Long
+    UpgradeId As Long
 End Type
-
-Private Const ProgressBarSizeStep As Single = 7.3
 
 Private Visible As Boolean
 Private WindowIndex As Long
 Private RemainingTime As Long
-Private ItemLoot As ItemLootRec
+Private RolledItem As RolledItemRec
+Private RemainingTimeControlIndex As Long
 
 Public Sub CreateWindow_LootDice()
     Dim i As Long, Y As Long
     ' Create window
-    CreateWindow "winLootDice", "LOTERIA", zOrder_Win, 0, 0, 252, 185, 0, False, Fonts.FontRegular, , 2, 7, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, , , , , , , , , , , GetAddress(AddressOf DrawLootDice)
+    CreateWindow "winDice", "LOTERIA", zOrder_Win, 0, 0, 252, 185, 0, False, Fonts.FontRegular, , 2, 7, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, , , , , , , , , , , GetAddress(AddressOf DrawLootDice)
     ' Centralise it
     CentraliseWindow WindowCount
 
@@ -29,8 +33,10 @@ Public Sub CreateWindow_LootDice()
     CreateButton WindowCount, "btnClose", Windows(WindowCount).Window.Width - 33, 11, 22, 22, , , , , , , Tex_GUI(TextureControl_CloseNormal), Tex_GUI(TextureControl_CloseHover), Tex_GUI(TextureControl_CloseClick), , , , , , GetAddress(AddressOf btnMenu_LootDice)
 
     CreatePictureBox WindowCount, "picIcon", 15, 60, 32, 32, , , , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, , GetAddress(AddressOf ShowLootDescription), , GetAddress(AddressOf ShowLootDescription)
+
     CreateLabel WindowCount, "lblItemName", 55, 62, 190, 20, "", FontRegular, Coral, Alignment.AlignLeft
     CreateLabel WindowCount, "lblItemCount", 55, 74, 190, 20, "", FontRegular, White, Alignment.AlignLeft
+
     CreatePictureBox WindowCount, "picName", 47, 60, 190, 32, , , , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, , GetAddress(AddressOf ShowLootDescription), , GetAddress(AddressOf ShowLootDescription)
 
     CreateLabel WindowCount, "lblRemainingTime", 15, 95, 220, 20, "Tempo Restante: 180", FontRegular, White, Alignment.AlignRight
@@ -41,20 +47,8 @@ Public Sub CreateWindow_LootDice()
     WindowIndex = WindowCount
     RemainingTime = -1
 
-End Sub
+    RemainingTimeControlIndex = GetControlIndex("winDice", "lblRemainingTime")
 
-Private Sub Button_RollDice()
-    Call SendRollDiceResult(True)
-    RemainingTime = -1
-    HideWindow WindowIndex
-    Visible = False
-End Sub
-
-Private Sub Button_Pass()
-    Call SendRollDiceResult(False)
-    RemainingTime = -1
-    HideWindow WindowIndex
-    Visible = False
 End Sub
 
 Private Sub DrawLootDice()
@@ -70,10 +64,26 @@ Private Sub DrawLootDice()
     End If
 End Sub
 
+Private Sub Button_RollDice()
+    Call SendRollDiceResult(True)
+    
+    RemainingTime = -1
+    HideWindow WindowIndex
+    Visible = False
+End Sub
+
+Private Sub Button_Pass()
+    Call SendRollDiceResult(False)
+    
+    RemainingTime = -1
+    HideWindow WindowIndex
+    Visible = False
+End Sub
+
 Private Sub btnMenu_LootDice()
     Dim curWindow As Long
 
-    curWindow = GetWindowIndex("winLootDice")
+    curWindow = GetWindowIndex("winDice")
 
     If Windows(curWindow).Window.Visible Then
         Call SendRollDiceResult(False)
@@ -83,7 +93,7 @@ Private Sub btnMenu_LootDice()
 End Sub
 
 Private Sub ShowLootDescription()
-    If ItemLoot.Num <= 0 Then
+    If RolledItem.Id <= 0 Then
         Exit Sub
     End If
 
@@ -105,28 +115,49 @@ Private Sub ShowLootDescription()
     If Y + Windows(WinDescription).Window.Height >= ScreenHeight Then
         Y = ScreenHeight - Windows(WinDescription).Window.Height
     End If
-    
+
     Dim Inventory As InventoryRec
-    
-    Inventory.Num = ItemLoot.Num
-    Inventory.Level = ItemLoot.Level
+
+    Inventory.Num = RolledItem.Id
+    Inventory.Level = RolledItem.Level
+    Inventory.Bound = RolledItem.Bound
+    Inventory.UpgradeId = RolledItem.UpgradeId
+    Inventory.AttributeId = RolledItem.AttributeId
 
     Call ShowItemDesc(X, Y, Inventory)
 
 End Sub
 
-Private Sub UpdateItem()
+Private Sub SetControlImage(ByVal TextureNum As Long)
+    Dim i As Long, ControlIndex As Long
+
+    ControlIndex = GetControlIndex("winDice", "picIcon")
+
+    For i = 0 To entStates.state_Count - 1
+        Windows(WindowIndex).Controls(ControlIndex).image(i) = TextureNum
+    Next
+
+End Sub
+
+Public Sub SetRollDiceVisibility(ByVal IsVisible As Boolean)
+    Visible = IsVisible
+End Sub
+
+Public Sub UpdateRolledItem(ByVal IncomingRemainingTime As Long, ByRef IncomingItem As RolledItemRec)
     Dim ControlNameIndex As Long
     Dim ControlCountIndex As Long
     Dim ItemNum As Long, ItemValue As Long, ItemLevel As Long, Rarity As Long
 
-    ControlNameIndex = GetControlIndex("winLootDice", "lblItemName")
-    ControlCountIndex = GetControlIndex("winLootDice", "lblItemCount")
-
-    ItemNum = ItemLoot.Num
-    ItemValue = ItemLoot.Value
-    ItemLevel = ItemLoot.Level
-
+    RemainingTime = IncomingRemainingTime
+    RolledItem = IncomingItem
+    
+    ControlNameIndex = GetControlIndex("winDice", "lblItemName")
+    ControlCountIndex = GetControlIndex("winDice", "lblItemCount")
+        
+    ItemNum = IncomingItem.Id
+    ItemValue = IncomingItem.Value
+    ItemLevel = IncomingItem.Level
+    
     Rarity = GetRarityColor(Item(ItemNum).Rarity)
 
     If ItemLevel > 0 Then
@@ -140,6 +171,7 @@ Private Sub UpdateItem()
     Windows(WindowIndex).Controls(ControlNameIndex).TextColourHover = Rarity
 
     Windows(WindowIndex).Controls(ControlCountIndex).Text = "Quantidade: " & ItemValue
+    
     Call SetControlImage(Tex_Item(Item(ItemNum).IconId))
 
 End Sub
@@ -155,54 +187,10 @@ Public Sub ProcessRollDice()
                 Visible = False
             End If
 
-            Windows(WindowIndex).Controls(GetControlIndex("winLootDice", "lblRemainingTime")).Text = "Tempo Restante: " & RemainingTime
+            Windows(WindowIndex).Controls(RemainingTimeControlIndex).Text = "Tempo Restante: " & RemainingTime
         End If
     End If
 End Sub
 
-Private Sub SetControlImage(ByVal TextureNum As Long)
-    Dim i As Long, ControlIndex As Long
-
-    ControlIndex = GetControlIndex("winLootDice", "picIcon")
-
-    For i = 0 To entStates.state_Count - 1
-        Windows(WindowIndex).Controls(ControlIndex).image(i) = TextureNum
-    Next
-
-End Sub
-
-Public Sub HandleRollDiceItem(ByVal Index As Long, ByRef Data() As Byte, ByVal StartAddr As Long, ByVal ExtraVar As Long)
-    Dim Buffer As clsBuffer
-    Set Buffer = New clsBuffer
-
-    Buffer.WriteBytes Data
-
-    Visible = Buffer.ReadByte
-    RemainingTime = Buffer.ReadLong
-    ItemLoot.Num = Buffer.ReadLong
-    ItemLoot.Value = Buffer.ReadLong
-    ItemLoot.Level = Buffer.ReadLong
-
-    If Visible Then
-        Call UpdateItem
-        ShowWindow WindowIndex
-    Else
-        HideWindow WindowIndex
-    End If
-
-    Set Buffer = Nothing
-End Sub
-
-Private Sub SendRollDiceResult(ByVal Rolled As Boolean)
-    Dim Buffer As clsBuffer
-    Set Buffer = New clsBuffer
-
-    Buffer.WriteLong PRollDiceResult
-    If Rolled Then Buffer.WriteByte 2
-    If Not Rolled Then Buffer.WriteByte 1
-
-    SendGameMessage Buffer.ToArray()
 
 
-    Set Buffer = Nothing
-End Sub

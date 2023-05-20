@@ -56,7 +56,6 @@ Public Sub GameLoop()
 
             If CanMoveNow Then
                 Call CheckMovement    ' Check if player is trying to move
-                Call CheckAttack   ' Check to see if player is trying to attack
             End If
 
             For i = 1 To MAX_BYTE
