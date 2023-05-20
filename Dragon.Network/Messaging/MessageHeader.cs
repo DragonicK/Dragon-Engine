@@ -156,5 +156,7 @@ public enum MessageHeader {
     SortChestItemList,
     UpdateChestItemList,
     EnableChestTakeItem,
+    RollDiceItem,
+    RollDiceClose,
     RollDiceResult
 }
