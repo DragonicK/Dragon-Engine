@@ -291,7 +291,7 @@ Private Sub SetControlResultItem(ByVal TextureNum As Long)
     ControlIndexItem = GetControlIndex("winCraft", "picItemResult")
 
     For i = 0 To entStates.state_Count - 1
-        Windows(WindowIndex).Controls(ControlIndexItem).image(i) = Tex_Item(TextureNum)
+        Windows(WindowIndex).Controls(ControlIndexItem).Image(i) = Tex_Item(TextureNum)
     Next
 End Sub
 

@@ -416,8 +416,11 @@ public sealed class MembershipHandler : IDisposable {
 
                 await Context.SaveChangesAsync();
             }
+            if (item.Id > 0 && item.TitleId == 0) {
+                Context.CharacterTitle!.Remove(item);
+            }
             else if (item.Id > 0) {
-                Context.Entry(item).State = EntityState.Modified;
+                //Context.Entry(item).State = EntityState.Modified;
             }
         }
 

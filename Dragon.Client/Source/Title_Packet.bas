@@ -36,6 +36,7 @@ Public Sub HandlePlayerTitles(ByVal Index As Long, ByRef Data() As Byte, ByVal S
     Set Buffer = Nothing
 
     Call UpdateTitleCount(TitleCount)
+    Call AllocateTitleAttributeDescription
 End Sub
 
 Public Sub HandleTitle(ByVal Index As Long, ByRef Data() As Byte, ByVal StartAddr As Long, ByVal ExtraVar As Long)
@@ -55,5 +56,4 @@ Public Sub HandleTitle(ByVal Index As Long, ByRef Data() As Byte, ByVal StartAdd
     If Index = MyIndex Then
         Call UpdateActiveTitle(GetPlayerTitle(MyIndex))
     End If
-
 End Sub

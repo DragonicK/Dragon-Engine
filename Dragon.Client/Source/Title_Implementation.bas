@@ -2,6 +2,7 @@ Attribute VB_Name = "Title_Implementation"
 Option Explicit
 
 Public MaxPlayerTitles As Long
+
 ' Titulos do personagem.
 Private Titles() As Long
 
@@ -34,4 +35,5 @@ End Sub
 Public Sub InitializePlayerTitles()
     ReDim Titles(1 To MaxPlayerTitles)
 End Sub
+
 

@@ -28,6 +28,10 @@ Private Const DescriptionY As Integer = 73
 ' Quantidade máxima de items na lista.
 Private Const MaxTitleList As Byte = 9
 
+Private Const NoTitleSelected As String = "Sem exibição de título ativado"
+Private Const MaximumTitlesDescription As String = "Títulos Totais"
+Private Const TotalAttributesDescription As String = "Atributos Totais dos Títulos"
+
 Public Function IsTitleVisible() As Boolean
     IsTitleVisible = Windows(WindowIndex).Window.Visible
 End Function
@@ -42,7 +46,7 @@ End Sub
 
 Public Sub CreateWindow_Title()
 ' Create the window
-    CreateWindow "winTitle", "TÍTULOS", zOrder_Win, 0, 0, 208, 520, 0, , Fonts.FontRegular, , 3, 5, DesignTypes.DesignWindowWithTopBarAndDoubleNavBar, DesignTypes.DesignWindowWithTopBarAndDoubleNavBar, DesignTypes.DesignWindowWithTopBarAndDoubleNavBar, , , , , , , , , , , GetAddress(AddressOf RenderWindowTitle)
+    CreateWindow "winTitle", "TÍTULOS", zOrder_Win, 0, 0, 512, 520, 0, , Fonts.FontRegular, , 3, 5, DesignTypes.DesignWindowWithTopBarAndDoubleNavBar, DesignTypes.DesignWindowWithTopBarAndDoubleNavBar, DesignTypes.DesignWindowWithTopBarAndDoubleNavBar, , , , , , , , , , , GetAddress(AddressOf RenderWindowTitle)
 
     ' Centralise it
     CentraliseWindow WindowCount
@@ -54,8 +58,8 @@ Public Sub CreateWindow_Title()
     CreateButton WindowCount, "btnClose", Windows(WindowCount).Window.Width - 33, 11, 22, 22, , , , , , , Tex_GUI(TextureControl_CloseNormal), Tex_GUI(TextureControl_CloseHover), Tex_GUI(TextureControl_CloseClick), , , , , , GetAddress(AddressOf Button_CloseTitle)
 
     ' Labels
-    CreateLabel WindowCount, "lblTitleCount", 0, 49, 205, , "Títulos: 0/" & MaxPlayerTitles, FontRegular, Gold, Alignment.AlignCenter
-    CreateLabel WindowCount, "lblTitleActivated", 0, 76, 205, , "Nenhum", FontRegular, ColorType.White, Alignment.AlignCenter
+    CreateLabel WindowCount, "lblTitleCount", 0, 49, 512, , MaximumTitlesDescription & ": 0/" & MaxPlayerTitles, FontRegular, Gold, Alignment.AlignCenter
+    CreateLabel WindowCount, "lblTitleActivated", 0, 76, 512, , NoTitleSelected, FontRegular, ColorType.White, Alignment.AlignCenter
 
     ' PictureBox
     CreatePictureBox WindowCount, "picList" & 1, ListX, ListY + (ListOffsetY * 1), 154, 28, , , , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, , GetAddress(AddressOf PicList1_MouseMove), GetAddress(AddressOf PicList1_Click), GetAddress(AddressOf PicList1_MouseMove)
@@ -73,16 +77,16 @@ Public Sub CreateWindow_Title()
     CreatePictureBox WindowCount, "invisble", 0, 0, 0, 0, , , , , , , , , , , , , , , , GetAddress(AddressOf Draw_Title)
     
     ' Buttons
-    CreateButton WindowCount, "btnActivate", ListX, ListY + 390, 80, 28, "ATIVAR", FontRegular, White, , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf Button_Activate)
-    CreateButton WindowCount, "btnDisable", 110, ListY + 390, 80, 28, "DESATIVAR", FontRegular, White, , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf Button_Disable)
+    CreateButton WindowCount, "btnActivate", ListX, ListY + 390, 90, 28, "ATIVAR", FontRegular, White, , , , , , , DesignTypes.DesignGreen, DesignTypes.DesignGreenHover, DesignTypes.DesignGreenClick, , , GetAddress(AddressOf Button_Activate)
+    CreateButton WindowCount, "btnDisable", 110, ListY + 390, 90, 28, "DESATIVAR", FontRegular, White, , , , , , , DesignTypes.DesignGreen, DesignTypes.DesignGreenHover, DesignTypes.DesignGreenClick, , , GetAddress(AddressOf Button_Disable)
 
     'Arrow
     CreateButton WindowCount, "btnUp", 184, ListY + (ListOffsetY * 1), 15, 15, , , , , , , Tex_GUI(44), Tex_GUI(45), Tex_GUI(46), , , , , , GetAddress(AddressOf MoveListToUp)
     CreateButton WindowCount, "btnDown", 184, ListY + (ListOffsetY * 10 + 20), 15, 15, , , , , , , Tex_GUI(47), Tex_GUI(48), Tex_GUI(49), , , , , , GetAddress(AddressOf MoveListToDown)
 
     'Scroll
-    CreateButton WindowCount, "ScrollUp", 186, ListY + (ListOffsetY * 1 + 15), 8, 157, , , , , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf MoveListToUp)
-    CreateButton WindowCount, "ScrollDown", 186, ListY + 206, 8, 157, , , , , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf MoveListToDown)
+    CreateButton WindowCount, "ScrollUp", 188, ListY + 2 + (ListOffsetY * 1 + 15), 8, 157, , , , , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf MoveListToUp)
+    CreateButton WindowCount, "ScrollDown", 188, ListY + 208, 8, 157, , , , , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf MoveListToDown)
 
     ' Set de WindowIndex variable to avoid search for index.
     WindowIndex = WindowCount
@@ -98,8 +102,10 @@ Private Sub Button_Activate()
 
     Index = SelectedButtonList + TitleListIndex
 
-    If GetTitle(Index) > 0 Then
-        Call SendSelectedTitle(Index)
+    If Index > 0 Then
+        If GetTitle(Index) > 0 Then
+            Call SendSelectedTitle(Index)
+        End If
     End If
 End Sub
 
@@ -115,8 +121,14 @@ Private Sub RenderWindowTitle()
     yO = Windows(WindowIndex).Window.Top
     Width = Windows(WindowIndex).Window.Width
 
-    
-    'RenderDesign DesignTypes.desWin_AincradMenu, xO, yO + 70, Width, 30
+    RenderText Font(Fonts.FontRegular), TotalAttributesDescription, xO + 260, yO + 110, ColorType.Gold
+
+    For i = 1 To MaximumAllocatedDescription
+        If TitleAllocatedDescription(i) <> vbNullString Then
+            RenderText Font(Fonts.FontRegular), TitleAllocatedDescription(i), xO + 250, yO + 120 + (i * 13), ColorType.Gold
+        End If
+    Next
+
 End Sub
 
 Private Sub Draw_Title()
@@ -386,13 +398,13 @@ Public Sub ClearTitleWindow()
 
     Call ClearTitles
 
-    Windows(WindowIndex).Controls(GetControlIndex("winTitle", "lblTitleActivated")).Text = "Nenhum"
+    Windows(WindowIndex).Controls(GetControlIndex("winTitle", "lblTitleActivated")).Text = NoTitleSelected
     Windows(WindowIndex).Controls(GetControlIndex("winTitle", "lblTitleActivated")).TextColour = White
-    Windows(WindowIndex).Controls(GetControlIndex("winTitle", "lblTitleCount")).Text = "Títulos: 0/" & MaxPlayerTitles
+    Windows(WindowIndex).Controls(GetControlIndex("winTitle", "lblTitleCount")).Text = MaximumTitlesDescription & ": 0/" & MaxPlayerTitles
 End Sub
 
 Public Sub UpdateTitleCount(ByVal TitleCount As Long)
-    Windows(WindowIndex).Controls(GetControlIndex("winTitle", "lblTitleCount")).Text = "Títulos: " & TitleCount & "/" & MaxPlayerTitles
+    Windows(WindowIndex).Controls(GetControlIndex("winTitle", "lblTitleCount")).Text = MaximumTitlesDescription & ": " & TitleCount & "/" & MaxPlayerTitles
 End Sub
 
 Public Sub UpdateActiveTitle(ByVal TitleNum As Long)
@@ -405,7 +417,7 @@ Public Sub UpdateActiveTitle(ByVal TitleNum As Long)
         Colour = ColorType.Gold
         Name = Title(TitleNum).Name
     Else
-        Name = "Nenhum"
+        Name = NoTitleSelected
     End If
 
     Windows(WindowIndex).Controls(ControlIndex).Text = Name

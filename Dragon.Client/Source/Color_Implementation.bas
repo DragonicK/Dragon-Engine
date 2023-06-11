@@ -19,7 +19,7 @@ Public Enum ColorType
     Yellow
     White
     DarkBrown
-    Gold
+    gold
     LightGreen
     Purple
     Coral
@@ -67,7 +67,7 @@ Public Function GetRarityColor(ByVal Rarity As Long) As Long
     Case 5    ' Ancient
         GetRarityColor = Pink
     Case 6    ' Legendary
-        GetRarityColor = Gold
+        GetRarityColor = gold
     Case 7   ' Ethereal
         GetRarityColor = BrightRed
     End Select
@@ -109,7 +109,7 @@ Public Function DX8Colour(ByVal ColourNum As ColorType, ByVal Alpha As Long) As 
         DX8Colour = D3DColorARGB(Alpha, 255, 255, 255)
     Case ColorType.DarkBrown
         DX8Colour = D3DColorARGB(Alpha, 98, 84, 52)
-    Case ColorType.Gold
+    Case ColorType.gold
         DX8Colour = D3DColorARGB(Alpha, 255, 215, 0)
     Case ColorType.LightGreen
         DX8Colour = D3DColorARGB(Alpha, 124, 205, 80)
