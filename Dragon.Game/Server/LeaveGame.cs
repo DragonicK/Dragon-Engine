@@ -69,6 +69,7 @@ public sealed class LeaveGame {
     private async void Save(IPlayer player) {
         await MembershipHandler.SaveFullAccountAsync(player.Account);
         await MembershipHandler.SaveCharacterAsync(player.Character);
+        await MembershipHandler.SavePrimaryAttributesAsync(player.PrimaryAttributes.GetPrimaryAttributes());
         await MembershipHandler.SaveSettings(player.Settings.GetSettings());
         await MembershipHandler.SaveCraftAsync(player.Craft.GetCharacterCraft());
         await MembershipHandler.SaveCurrencyAsync(player.Currencies.ToList());
@@ -82,6 +83,7 @@ public sealed class LeaveGame {
         await MembershipHandler.SaveSkillsAsync(player.Skills.ToList());
         await MembershipHandler.SavePassivesAsync(player.Passives.ToList());
         await MembershipHandler.SaveMailsAsync(player.Mails.ToList());
+        await MembershipHandler.SaveTitlesAsync(player.Titles.ToList());
 
         var vitals = player.Vitals as IPlayerVital;
 

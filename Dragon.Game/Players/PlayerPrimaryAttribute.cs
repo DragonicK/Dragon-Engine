@@ -81,4 +81,8 @@ public sealed class PlayerPrimaryAttribute : IPlayerPrimaryAttribute {
         PrimaryAttribute.Will => _attribute.Will,
         _ => 0
     };
+
+    public CharacterPrimaryAttribute GetPrimaryAttributes() {
+        return _attribute;
+    }
 }

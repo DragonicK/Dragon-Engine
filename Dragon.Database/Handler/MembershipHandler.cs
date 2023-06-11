@@ -407,6 +407,36 @@ public sealed class MembershipHandler : IDisposable {
         return await Context.SaveChangesAsync();
     }
 
+    public async Task<int> SaveTitlesAsync(IList<CharacterTitle> list) {
+        for (var i = 0; i < list.Count; i++) {
+            var item = list[i];
+
+            if (item.Id == 0) {
+                Context.CharacterTitle!.Add(item);
+
+                await Context.SaveChangesAsync();
+            }
+            else if (item.Id > 0) {
+                Context.Entry(item).State = EntityState.Modified;
+            }
+        }
+
+        return await Context.SaveChangesAsync();
+    }
+
+    public async Task<int> SavePrimaryAttributesAsync(CharacterPrimaryAttribute attribute) {
+        if (attribute.Id == 0) {
+            Context.CharacterPrimaryAttribute!.Add(attribute);
+
+            await Context.SaveChangesAsync();
+        }
+        else if (attribute.Id > 0) {
+            Context.Entry(attribute).State = EntityState.Modified;
+        }
+
+        return await Context.SaveChangesAsync();
+    }
+
     #endregion
 
     public async Task<Account> GetFullAccountAsync(string username) {

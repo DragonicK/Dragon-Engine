@@ -13,7 +13,7 @@ public sealed class PlayerTitle : IPlayerTitle {
 
     public int Count => _titles.Count;
 
-    private readonly long characterId;
+    private long characterId;
     private readonly GroupAttribute defaultUpgrade;
     private readonly IList<CharacterTitle> _titles;
 
