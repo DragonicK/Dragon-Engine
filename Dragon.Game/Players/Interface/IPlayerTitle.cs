@@ -16,7 +16,6 @@ public interface IPlayerTitle {
     int GetId(int index);
     bool Contains(int id);
     int[] ToArrayId();
-    void Equip(int id);
-    void Unequip();
+    void UpdateAttributes();
     IList<CharacterTitle> ToList();
 }

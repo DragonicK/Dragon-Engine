@@ -4,6 +4,7 @@ using Dragon.Core.Services;
 using Dragon.Game.Players;
 using Dragon.Game.Services;
 using Dragon.Game.Network.Senders;
+using Dragon.Game.Instances;
 
 namespace Dragon.Game.Administrator.Commands;
 
@@ -50,6 +51,21 @@ public sealed class AddTitle : IAdministratorCommand {
                 var result = player!.Titles.Add(id);
 
                 if (result) {
+                    player.Titles.UpdateAttributes();
+
+                    player.AllocateAttributes();
+
+                    sender.SendAttributes(player);
+
+                    var instances = GetInstances();
+                    var instanceId = player.Character.Map;
+
+                    instances.TryGetValue(instanceId, out var instance);
+
+                    if (instance is not null) {
+                        sender.SendPlayerVital(player, instance);
+                    }
+
                     sender.SendTitles(player);
                 }
             }
@@ -58,6 +74,11 @@ public sealed class AddTitle : IAdministratorCommand {
             sender.SendMessage(SystemMessage.PlayerIsNotOnline, QbColor.Red, administrator);
         }
     }
+
+    private IDictionary<int, IInstance> GetInstances() {
+        return InstanceService!.Instances!;
+    }
+
 
     private IPacketSender GetPacketSender() {
         return PacketSenderService!.PacketSender!;

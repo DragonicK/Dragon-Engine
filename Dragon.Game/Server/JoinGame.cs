@@ -48,12 +48,8 @@ public sealed class JoinGame {
         player.Titles.Titles = ContentService!.Titles;
         player.Titles.TitleAttributes = ContentService!.TitleAttributes;
 
-        var titleId = player.Character.TitleId;
-
-        if (titleId > 0) {
-            player.Titles.Equip(titleId);
-        }
-
+        player.Titles.UpdateAttributes();
+    
         #endregion
 
         #region Inventories

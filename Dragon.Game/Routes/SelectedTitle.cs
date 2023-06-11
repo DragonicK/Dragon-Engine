@@ -34,7 +34,6 @@ public sealed class SelectedTitle : PacketRoute, IPacketRoute {
 
         if (index == 0) {
             player.Character.TitleId = 0;
-            player.Titles.Unequip();
         }
         else if (index >= 1 && index <= titles.Count) {
             index--;
@@ -43,11 +42,8 @@ public sealed class SelectedTitle : PacketRoute, IPacketRoute {
 
             if (id > 0) {
                 player.Character.TitleId = id;
-                player.Titles.Equip(id);
             }
         }
-
-        player.AllocateAttributes();
 
         SendUpdate(player);
     }
@@ -55,15 +51,12 @@ public sealed class SelectedTitle : PacketRoute, IPacketRoute {
     private void SendUpdate(IPlayer player) {
         var sender = GetPacketSender();
 
-        sender.SendAttributes(player);
-
         var instances = GetInstances();
         var instanceId = player.Character.Map;
 
         instances.TryGetValue(instanceId, out var instance);
 
         if (instance is not null) {
-            sender.SendPlayerVital(player, instance);
             sender.SendTitle(player, instance);
         }
     }

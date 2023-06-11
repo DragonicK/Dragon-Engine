@@ -48,12 +48,6 @@ public sealed class ChangeActiveTitle : IAdministratorCommand {
             if (titles.Contains(id)) {
                 player.Character.TitleId = id;
 
-                player.Titles.Equip(id);
-
-                player.AllocateAttributes();
-
-                sender.SendAttributes(player);
-
                 var instanceId = player.Character.Map;
                 var instances = InstanceService!.Instances;
 
@@ -61,7 +55,6 @@ public sealed class ChangeActiveTitle : IAdministratorCommand {
 
                 if (instance is not null) {
                     sender.SendTitle(player, instance);
-                    sender.SendPlayerVital(player, instance);
                 }
             }
         }

@@ -13,15 +13,18 @@ public sealed class PlayerTitle : IPlayerTitle {
 
     public int Count => _titles.Count;
 
-    private long characterId;
-    private readonly GroupAttribute upgrade;
+    private readonly long characterId;
+    private readonly GroupAttribute defaultUpgrade;
     private readonly IList<CharacterTitle> _titles;
+
+
+    private const int FirstLevel = 1;
 
     public PlayerTitle(long characterId, IList<CharacterTitle> titles) {
         this._titles = titles;
         this.characterId = characterId;
 
-        upgrade = new GroupAttribute();
+        defaultUpgrade = new GroupAttribute();
         Attributes = new EntityAttribute();
     }
 
@@ -66,38 +69,42 @@ public sealed class PlayerTitle : IPlayerTitle {
         return _titles;
     }
 
-    public void Equip(int id) {
-        var title = GetTitle(id);
-
-        if (title is not null) {
-            var attributes = GetAttribute(title.Id);
-
-            if (attributes is not null) {
-                Attributes.Clear();
-                Attributes.Add(1, attributes, upgrade);
-            }
-        }
-    }
-
-    public void Unequip() {
+    public void UpdateAttributes() {
         Attributes.Clear();
+
+        foreach(var inventory in _titles) {
+            var id = inventory.TitleId;
+
+            if (id > 0) {
+                var title = GetTitleData(id);
+
+                if (title is not null) {
+                    var attributes = GetAttributeData(title.Id);
+
+                    if (attributes is not null) {
+                        Attributes.Clear();
+                        Attributes.Add(FirstLevel, attributes, defaultUpgrade);
+                    }
+                }
+            }
+        } 
     }
 
-    private Title? GetTitle(int id) {
+    private Title? GetTitleData(int id) {
         if (Titles is not null) {
-            if (Titles!.Contains(id)) {
-                return Titles[id];
-            }
+            Titles.TryGet(id, out var title);
+
+            return title;
         }
 
         return null;
     }
 
-    private GroupAttribute? GetAttribute(int id) {
+    private GroupAttribute? GetAttributeData(int id) {
         if (TitleAttributes is not null) {
-            if (TitleAttributes!.Contains(id)) {
-                return TitleAttributes[id];
-            }
+            TitleAttributes.TryGet(id, out var attribute);
+
+            return attribute;
         }
 
         return null;
