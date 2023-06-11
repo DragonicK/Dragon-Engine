@@ -1,10 +1,12 @@
 Attribute VB_Name = "NewCharacter_Window"
 Option Explicit
 
+Private WindowIndex As Long
+
 Public Sub CreateWindow_NewChar()
 
     ' Create window
-    CreateWindow "winNewChar", "Novo Personagem", zOrder_Win, 0, 0, 440, 224, 0, False, Fonts.FontRegular, , 2, 6, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, , , , , , , , , False
+    CreateWindow "winNewModel", "Novo Personagem", zOrder_Win, 0, 0, 440, 224, 0, False, Fonts.FontRegular, , 2, 6, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, DesignTypes.DesignWindowWithTopBar, , , , , , , , , False
     
     ' Centralise it
     CentraliseWindow WindowCount
@@ -47,15 +49,16 @@ Public Sub CreateWindow_NewChar()
     CreatePictureBox WindowCount, "picScene", 20, 60, 96, 96, , , , , Tex_GUI(11), Tex_GUI(11), Tex_GUI(11), , , , , , , , , GetAddress(AddressOf NewChar_OnDraw)
 
     ' Set the active control
-    SetActiveControl GetWindowIndex("winNewChar"), GetControlIndex("winNewChar", "txtName")
+    SetActiveControl GetWindowIndex("winNewModel"), GetControlIndex("winNewModel", "txtName")
+    
+    WindowIndex = WindowCount
 End Sub
 
 Private Sub NewChar_OnDraw()
     Dim imageFace As Long, imageChar As Long, xO As Long, yO As Long
 
-    xO = Windows(GetWindowIndex("winNewChar")).Window.Left
-    yO = Windows(GetWindowIndex("winNewChar")).Window.Top
-
+    xO = Windows(WindowIndex).Window.Left
+    yO = Windows(WindowIndex).Window.Top
 
     If NewCharGender = SEX_MALE Then
         imageFace = Tex_Face(Class(NewCharClass).MaleSprite(NewCharSprite))
@@ -106,30 +109,35 @@ End Sub
 Private Sub CheckNewChar_Male()
     NewCharSprite = 1
     NewCharGender = SEX_MALE
-    Windows(GetWindowIndex("winNewChar")).Controls(GetControlIndex("winNewChar", "lblSex")).Text = "Masculino"
+    
+    Windows(WindowIndex).Controls(GetControlIndex("winNewModel", "lblSex")).Text = "Masculino"
 End Sub
 
 Private Sub CheckNewChar_Female()
     NewCharSprite = 1
     NewCharGender = SEX_FEMALE
-    Windows(GetWindowIndex("winNewChar")).Controls(GetControlIndex("winNewChar", "lblSex")).Text = "Feminino"
+    
+    Windows(WindowIndex).Controls(GetControlIndex("winNewModel", "lblSex")).Text = "Feminino"
 End Sub
 
 Private Sub ButtonNewChar_Cancel()
-    Windows(GetWindowIndex("winNewChar")).Controls(GetControlIndex("winNewChar", "txtName")).Text = vbNullString
-    Windows(GetWindowIndex("winNewChar")).Controls(GetControlIndex("winNewChar", "CheckMale")).Value = 1
-    Windows(GetWindowIndex("winNewChar")).Controls(GetControlIndex("winNewChar", "CheckFemale")).Value = 0
+    Windows(WindowIndex).Controls(GetControlIndex("winNewModel", "txtName")).Text = vbNullString
+    Windows(WindowIndex).Controls(GetControlIndex("winNewModel", "CheckMale")).Value = 1
+    Windows(WindowIndex).Controls(GetControlIndex("winNewModel", "CheckFemale")).Value = 0
+    
     NewCharSprite = 1
     NewCharGender = SEX_MALE
+    
     HideWindows
+    
     ShowWindow GetWindowIndex("winClasses")
 End Sub
 
 Private Sub ButtonNewChar_Accept()
     Dim Name As String
-    Name = Windows(GetWindowIndex("winNewChar")).Controls(GetControlIndex("winNewChar", "txtName")).Text
+    Name = Windows(WindowIndex).Controls(GetControlIndex("winNewModel", "txtName")).Text
     
-    If Len(Windows(GetWindowIndex("winNewChar")).Controls(GetControlIndex("winNewChar", "txtName")).Text) >= 5 Then
+    If Len(Windows(WindowIndex).Controls(GetControlIndex("winNewModel", "txtName")).Text) >= 5 Then
         HideWindows
         AddChar Name, NewCharGender, NewCharClass, NewCharSprite
     Else

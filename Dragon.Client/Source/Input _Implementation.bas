@@ -124,14 +124,12 @@ Public Sub HandleKeyPresses(ByVal KeyAscii As Integer)
         CloseComboMenu
 
         If Windows(GetWindowIndex("winEscMenu")).Window.Visible Then
-            ' hide it
-            HideWindow GetWindowIndex("winBlank")
-            HideWindow GetWindowIndex("winEscMenu")
+            Call HideEscapeMenu
+            
             Exit Sub
         Else
-            ' show them
-            ShowWindow GetWindowIndex("winBlank"), True
-            ShowWindow GetWindowIndex("winEscMenu"), True
+            Call ShowEscapeMenu
+        
             Exit Sub
         End If
     End If

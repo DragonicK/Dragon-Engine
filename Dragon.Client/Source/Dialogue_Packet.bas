@@ -32,7 +32,7 @@ Public Sub HandleAlertMsg(ByVal Index As Long, ByRef Data() As Byte, ByVal Start
         Case MenuCount.MenuClass
             ShowWindow GetWindowIndex("winClasses")
         Case MenuCount.MenuNewChar
-            ShowWindow GetWindowIndex("winNewChar")
+            ShowWindow GetWindowIndex("winNewModel")
         Case MenuCount.MenuMain
             ShowWindow GetWindowIndex("winLogin")
             ShowWindow GetWindowIndex("winLoginFooter")

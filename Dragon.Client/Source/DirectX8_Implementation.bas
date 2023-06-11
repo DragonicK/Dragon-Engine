@@ -33,7 +33,7 @@ Public Type GeomRec
 End Type
 
 Public Type Vertex
-    x As Single
+    X As Single
     Y As Single
     Z As Single
     RHW As Single
@@ -292,7 +292,7 @@ Public Sub RenderTexture(Texture As Long, ByVal PositionX As Long, ByVal Positio
     RenderGeom PositionX, PositionY, SourceX, SourceY, Width, Height, SourceWidth, SourceHeight, Colour, offset
 End Sub
 
-Public Sub RenderGeom(ByVal x As Long, ByVal Y As Long, ByVal sX As Single, ByVal sY As Single, ByVal W As Long, ByVal H As Long, ByVal sW As Single, ByVal sH As Single, Optional ByVal Colour As Long = -1, Optional ByVal offset As Boolean = False)
+Public Sub RenderGeom(ByVal X As Long, ByVal Y As Long, ByVal sX As Single, ByVal sY As Single, ByVal W As Long, ByVal H As Long, ByVal sW As Single, ByVal sH As Single, Optional ByVal Colour As Long = -1, Optional ByVal offset As Boolean = False)
     Dim i As Long
 
     If CurrentTexture = 0 Then Exit Sub
@@ -303,11 +303,11 @@ Public Sub RenderGeom(ByVal x As Long, ByVal Y As Long, ByVal sX As Single, ByVa
 
     If mClip.Right <> 0 Then
         If mClip.Top <> 0 Then
-            If mClip.Left > x Then
-                sX = sX + (mClip.Left - x) / (W / sW)
-                sW = sW - (mClip.Left - x) / (W / sW)
-                W = W - (mClip.Left - x)
-                x = mClip.Left
+            If mClip.Left > X Then
+                sX = sX + (mClip.Left - X) / (W / sW)
+                sW = sW - (mClip.Left - X) / (W / sW)
+                W = W - (mClip.Left - X)
+                X = mClip.Left
             End If
 
             If mClip.Top > Y Then
@@ -317,9 +317,9 @@ Public Sub RenderGeom(ByVal x As Long, ByVal Y As Long, ByVal sX As Single, ByVa
                 Y = mClip.Top
             End If
 
-            If mClip.Right < x + W Then
-                sW = sW - (x + W - mClip.Right) / (W / sW)
-                W = -x + mClip.Right
+            If mClip.Right < X + W Then
+                sW = sW - (X + W - mClip.Right) / (W / sW)
+                W = -X + mClip.Right
             End If
 
             If mClip.Bottom < Y + H Then
@@ -334,30 +334,30 @@ Public Sub RenderGeom(ByVal x As Long, ByVal Y As Long, ByVal sX As Single, ByVa
         End If
     End If
 
-    Call GeomCalc(Box, CurrentTexture, x, Y, W, H, sX, sY, sW, sH, Colour)
+    Call GeomCalc(Box, CurrentTexture, X, Y, W, H, sX, sY, sW, sH, Colour)
     Call D3DDevice.DrawPrimitiveUP(D3DPT_TRIANGLESTRIP, 2, Box(0), Len(Box(0)))
 End Sub
 
-Public Sub GeomCalc(ByRef Geom() As Vertex, ByVal TextureNum As Long, ByVal x As Single, ByVal Y As Single, ByVal W As Integer, ByVal H As Integer, ByVal sX As Single, ByVal sY As Single, ByVal sW As Single, ByVal sH As Single, ByVal Colour As Long)
+Public Sub GeomCalc(ByRef Geom() As Vertex, ByVal TextureNum As Long, ByVal X As Single, ByVal Y As Single, ByVal W As Integer, ByVal H As Integer, ByVal sX As Single, ByVal sY As Single, ByVal sW As Single, ByVal sH As Single, ByVal Colour As Long)
     sW = (sW + sX) / mTexture(TextureNum).W + 0.000003
     sH = (sH + sY) / mTexture(TextureNum).H + 0.000003
     sX = sX / mTexture(TextureNum).W + 0.000003
     sY = sY / mTexture(TextureNum).H + 0.000003
-    Geom(0) = MakeVertex(x, Y, 0, 1, Colour, 1, sX, sY)
-    Geom(1) = MakeVertex(x + W, Y, 0, 1, Colour, 0, sW, sY)
-    Geom(2) = MakeVertex(x, Y + H, 0, 1, Colour, 0, sX, sH)
-    Geom(3) = MakeVertex(x + W, Y + H, 0, 1, Colour, 0, sW, sH)
+    Geom(0) = MakeVertex(X, Y, 0, 1, Colour, 1, sX, sY)
+    Geom(1) = MakeVertex(X + W, Y, 0, 1, Colour, 0, sW, sY)
+    Geom(2) = MakeVertex(X, Y + H, 0, 1, Colour, 0, sX, sH)
+    Geom(3) = MakeVertex(X + W, Y + H, 0, 1, Colour, 0, sW, sH)
 End Sub
 
-Private Sub GeomSetBox(ByVal x As Single, ByVal Y As Single, ByVal W As Integer, ByVal H As Integer, ByVal Colour As Long)
-    Box(0) = MakeVertex(x, Y, 0, 1, Colour, 0, 0, 0)
-    Box(1) = MakeVertex(x + W, Y, 0, 1, Colour, 0, 0, 0)
-    Box(2) = MakeVertex(x, Y + H, 0, 1, Colour, 0, 0, 0)
-    Box(3) = MakeVertex(x + W, Y + H, 0, 1, Colour, 0, 0, 0)
+Private Sub GeomSetBox(ByVal X As Single, ByVal Y As Single, ByVal W As Integer, ByVal H As Integer, ByVal Colour As Long)
+    Box(0) = MakeVertex(X, Y, 0, 1, Colour, 0, 0, 0)
+    Box(1) = MakeVertex(X + W, Y, 0, 1, Colour, 0, 0, 0)
+    Box(2) = MakeVertex(X, Y + H, 0, 1, Colour, 0, 0, 0)
+    Box(3) = MakeVertex(X + W, Y + H, 0, 1, Colour, 0, 0, 0)
 End Sub
 
-Public Function MakeVertex(x As Single, Y As Single, Z As Single, RHW As Single, Colour As Long, Specular As Long, tu As Single, tv As Single) As Vertex
-    MakeVertex.x = x
+Public Function MakeVertex(X As Single, Y As Single, Z As Single, RHW As Single, Colour As Long, Specular As Long, tu As Single, tv As Single) As Vertex
+    MakeVertex.X = X
     MakeVertex.Y = Y
     MakeVertex.Z = Z
     MakeVertex.RHW = RHW
@@ -373,7 +373,7 @@ Public Sub DrawFade()
 End Sub
 
 Public Sub DrawFog()
-    Dim fogNum As Long, Colour As Long, x As Long, Y As Long, RenderState As Long
+    Dim fogNum As Long, Colour As Long, X As Long, Y As Long, RenderState As Long
     fogNum = 0
 
     If fogNum <= 0 Or fogNum > Count_Fog Then Exit Sub
@@ -393,10 +393,10 @@ Public Sub DrawFog()
         D3DDevice.SetRenderState D3DRS_DESTBLEND, D3DBLEND_INVSRCCOLOR
     End Select
 
-    For x = 0 To 4
+    For X = 0 To 4
         For Y = 0 To 3
             'RenderTexture Tex_Fog(fogNum), (x * 256) + fogOffsetX, (y * 256) + fogOffsetY, 0, 0, 256, 256, 256, 256, colour
-            RenderTexture Tex_Fog(fogNum), (x * 256), (Y * 256), 0, 0, 256, 256, 256, 256, Colour
+            RenderTexture Tex_Fog(fogNum), (X * 256), (Y * 256), 0, 0, 256, 256, 256, 256, Colour
         Next
     Next
 
@@ -427,7 +427,7 @@ Public Sub DrawBars()
             ' alive?
             If MapNpc(i).Vital(Vitals.HP) > 0 And MapNpc(i).Vital(Vitals.HP) < MapNpc(i).MaxVital(Vitals.HP) Then
                 ' lock to npc
-                tmpX = MapNpc(i).x * PIC_X + MapNpc(i).xOffset + 16 - (Width / 2)
+                tmpX = MapNpc(i).X * PIC_X + MapNpc(i).xOffset + 16 - (Width / 2)
                 tmpY = MapNpc(i).Y * PIC_Y + MapNpc(i).yOffset + 35
 
                 ' calculate the width to fill
@@ -495,7 +495,7 @@ End Sub
 
 ' Main Loop
 Public Sub Render_Graphics()
-    Dim x As Long, Y As Long, i As Long, bgColour As Long
+    Dim X As Long, Y As Long, i As Long, bgColour As Long
     Dim PosX As Long, PosY As Long
     Dim Right As Long, Bottom As Long
     Dim PlayerX As Long, PlayerY As Long
@@ -559,7 +559,7 @@ Public Sub Render_Graphics()
             If Not GetNpcDead(i) Then
                 Call ProcessNpcMovements(i)
 
-                PosX = MapNpc(i).x * 32
+                PosX = MapNpc(i).X * 32
                 PosY = MapNpc(i).Y * 32
 
                 If PlayerX < PosX + Right And PlayerY < PosY + Bottom Then
@@ -589,7 +589,7 @@ Public Sub Render_Graphics()
         ' Npc Upper
         For i = 1 To Npc_HighIndex
             If Not GetNpcDead(i) Then
-                PosX = MapNpc(i).x * 32
+                PosX = MapNpc(i).X * 32
                 PosY = MapNpc(i).Y * 32
 
                 If PlayerX < PosX + Right And PlayerY < PosY + Bottom Then
@@ -646,7 +646,7 @@ Public Sub Render_Graphics()
         For i = 1 To Npc_HighIndex
             If Not MapNpc(i).Dead Then
                 If MapNpc(i).Num > 0 Then
-                    PosX = MapNpc(i).x * 32
+                    PosX = MapNpc(i).X * 32
                     PosY = MapNpc(i).Y * 32
 
                     If PlayerX < PosX + Right And PlayerY < PosY + Bottom Then
@@ -866,7 +866,7 @@ Public Sub ResizeGUI()
     CentraliseWindow GetWindowIndex("winModels")
     CentraliseWindow GetWindowIndex("winDialogue")
     CentraliseWindow GetWindowIndex("winClasses")
-    CentraliseWindow GetWindowIndex("winNewChar")
+    CentraliseWindow GetWindowIndex("winNewModel")
     CentraliseWindow GetWindowIndex("winEscMenu")
     CentraliseWindow GetWindowIndex("winInventory")
     CentraliseWindow GetWindowIndex("winCharacter")

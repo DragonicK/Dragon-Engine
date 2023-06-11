@@ -1,4 +1,8 @@
 Attribute VB_Name = "Classes_Window"
+Option Explicit
+
+Private WindowIndex As Long
+
 Public Sub CreateWindow_Classes()
 
     ' Create window
@@ -34,26 +38,30 @@ Public Sub CreateWindow_Classes()
     ' Overlay
     CreatePictureBox WindowCount, "picOverlay", 0, 0, 0, 0, , , , , , , , , , , , , , , , GetAddress(AddressOf Classes_DrawText)
     
-    
+    WindowIndex = WindowCount
 End Sub
 
 Public Sub ShowClasses()
     HideWindows
+    
     NewCharClass = 1
     NewCharSprite = 1
     NewCharGender = SEX_MALE
-    Windows(GetWindowIndex("winClasses")).Controls(GetControlIndex("winClasses", "lblClassName")).Text = Trim$(Class(NewCharClass).Name)
-    Windows(GetWindowIndex("winNewChar")).Controls(GetControlIndex("winNewChar", "txtName")).Text = vbNullString
-    Windows(GetWindowIndex("winNewChar")).Controls(GetControlIndex("winNewChar", "CheckMale")).Value = 1
-    Windows(GetWindowIndex("winNewChar")).Controls(GetControlIndex("winNewChar", "CheckFemale")).Value = 0
-    ShowWindow GetWindowIndex("winClasses")
+    
+    Windows(WindowIndex).Controls(GetControlIndex("winClasses", "lblClassName")).Text = Trim$(Class(NewCharClass).Name)
+    
+    Windows(GetWindowIndex("winNewModel")).Controls(GetControlIndex("winNewModel", "txtName")).Text = vbNullString
+    Windows(GetWindowIndex("winNewModel")).Controls(GetControlIndex("winNewModel", "CheckMale")).Value = 1
+    Windows(GetWindowIndex("winNewModel")).Controls(GetControlIndex("winNewModel", "CheckFemale")).Value = 0
+    
+    ShowWindow WindowIndex
 End Sub
 
 Private Sub Classes_DrawFace()
     Dim imageFace As Long, xO As Long, yO As Long
 
-    xO = Windows(GetWindowIndex("winClasses")).Window.Left
-    yO = Windows(GetWindowIndex("winClasses")).Window.Top
+    xO = Windows(WindowIndex).Window.Left
+    yO = Windows(WindowIndex).Window.Top
 
     If NewCharClass = 0 Then NewCharClass = 1
 
@@ -72,10 +80,10 @@ Private Sub Classes_DrawFace()
 End Sub
 
 Private Sub Classes_DrawText()
-    Dim image As Long, Text As String, xO As Long, yO As Long, TextArray() As String, i As Long, Count As Long, Y As Long, X As Long
+    Dim Image As Long, Text As String, xO As Long, yO As Long, TextArray() As String, i As Long, Count As Long, Y As Long, X As Long
 
-    xO = Windows(GetWindowIndex("winClasses")).Window.Left
-    yO = Windows(GetWindowIndex("winClasses")).Window.Top
+    xO = Windows(WindowIndex).Window.Left
+    yO = Windows(WindowIndex).Window.Top
 
     Select Case NewCharClass
     Case 1    ' Warrior
@@ -108,7 +116,7 @@ Private Sub ButtonClasses_Left()
         NewCharClass = NewCharClass - 1
     End If
 
-    Windows(GetWindowIndex("winClasses")).Controls(GetControlIndex("winClasses", "lblClassName")).Text = UCase$(Class(NewCharClass).Name)
+    Windows(WindowIndex).Controls(GetControlIndex("winClasses", "lblClassName")).Text = UCase$(Class(NewCharClass).Name)
 End Sub
 
 Private Sub ButtonClasses_Right()
@@ -116,12 +124,12 @@ Private Sub ButtonClasses_Right()
         NewCharClass = NewCharClass + 1
     End If
 
-    Windows(GetWindowIndex("winClasses")).Controls(GetControlIndex("winClasses", "lblClassName")).Text = UCase$(Class(NewCharClass).Name)
+    Windows(WindowIndex).Controls(GetControlIndex("winClasses", "lblClassName")).Text = UCase$(Class(NewCharClass).Name)
 End Sub
 
 Private Sub ButtonClasses_Accept()
-    HideWindow GetWindowIndex("winClasses")
-    ShowWindow GetWindowIndex("winNewChar")
+    HideWindow WindowIndex
+    ShowWindow GetWindowIndex("winNewModel")
 End Sub
 
 Private Sub ButtonClasses_Close()
