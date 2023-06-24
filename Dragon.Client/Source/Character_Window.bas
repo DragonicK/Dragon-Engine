@@ -29,9 +29,9 @@ Public Sub CreateWindow_Character()
     CreateButton WindowCount, "btnCharacter", 25, 42, 100, 26, "PERSONAGEM", FontRegular, Green, , , , , , , , , , , , GetAddress(AddressOf ShowCharacter_Click)
     CreateButton WindowCount, "btnAttributes", 135, 42, 100, 26, "ATRIBUTOS", FontRegular, , , , , , , , , , , , , GetAddress(AddressOf ShowAttributes_Click)
 
-    CreateButton WindowCount, "btnDefaultAttribute", 0, 72, 80, 26, "BÁSICO", FontRegular, Green, , False, , , , , , , , , , GetAddress(AddressOf ButtonDefaultPage_Click)
-    CreateButton WindowCount, "btnSpecialAttribute", 85, 72, 80, 26, "ESPECIAL", FontRegular, White, , False, , , , , , , , , , GetAddress(AddressOf ButtonSpecialPage_Click)
-    CreateButton WindowCount, "btnElementalAttribute", 170, 72, 80, 26, "ELEMENTAL", FontRegular, White, , False, , , , , , , , , , GetAddress(AddressOf ButtonElementalPage_Click)
+    CreateButton WindowCount, "btnDefaultAttribute", 0, 70, 80, 26, "BÁSICO", FontRegular, Green, , False, , , , , , , , , , GetAddress(AddressOf ButtonDefaultPage_Click)
+    CreateButton WindowCount, "btnSpecialAttribute", 85, 70, 80, 26, "ESPECIAL", FontRegular, White, , False, , , , , , , , , , GetAddress(AddressOf ButtonSpecialPage_Click)
+    CreateButton WindowCount, "btnElementalAttribute", 170, 70, 80, 26, "ELEMENTAL", FontRegular, White, , False, , , , , , , , , , GetAddress(AddressOf ButtonElementalPage_Click)
 
     ' Labels
     CreateLabel WindowCount, "lblName", 50, 115, 156, 16, "NOME LV. 50", FontRegular, White, Alignment.AlignCenter
@@ -88,7 +88,6 @@ Private Sub Button_ViewVisibility()
     End With
     
 End Sub
-
 
 Private Sub ButtonDefaultPage_Click()
     Dim DefaultIndex As Long
@@ -253,8 +252,8 @@ Private Sub SetAllEquipmentPosition()
 
 End Sub
 
-Private Sub SetEquipmentPosition(ByVal Equip As PlayerEquipments, ByVal X As Long, ByVal Y As Long)
-    EquipmentPosition(Equip).X = X
+Private Sub SetEquipmentPosition(ByVal Equip As PlayerEquipments, ByVal x As Long, ByVal Y As Long)
+    EquipmentPosition(Equip).x = x
     EquipmentPosition(Equip).Y = Y
 End Sub
 
@@ -316,7 +315,7 @@ Private Sub Character_MouseDown()
 End Sub
 
 Private Sub Character_MouseMove()
-    Dim EquipSlot As PlayerEquipments, X As Long, Y As Long
+    Dim EquipSlot As PlayerEquipments, x As Long, Y As Long
 
     ' exit out early if dragging
     If DragBox.Type <> PartNone Then Exit Sub
@@ -325,16 +324,16 @@ Private Sub Character_MouseMove()
 
     If EquipSlot >= PlayerEquipments.EquipWeapon Then
         ' calc position
-        X = Windows(WindowIndex).Window.Left - Windows(GetWindowIndex("winDescription")).Window.Width - 2
+        x = Windows(WindowIndex).Window.Left - Windows(GetWindowIndex("winDescription")).Window.Width - 2
         Y = Windows(WindowIndex).Window.Top
 
         ' offscreen?
-        If X < 0 Then
+        If x < 0 Then
             ' switch to right
-            X = Windows(WindowIndex).Window.Left + Windows(WindowIndex).Window.Width + 2
+            x = Windows(WindowIndex).Window.Left + Windows(WindowIndex).Window.Width + 2
         End If
         ' go go go
-        ShowEqDesc X, Y, EquipSlot
+        ShowEqDesc x, Y, EquipSlot
     End If
 End Sub
 
@@ -370,17 +369,14 @@ Private Sub RenderCharacter()
     yO = Windows(WindowIndex).Window.Top
     Width = Windows(WindowIndex).Window.Width
 
-    '
-    'RenderDesign DesignTypes.desWin_AincradMenu, xO, yO + 70, Width, 30
-       
     If Not IsShowingAttributes Then
         For i = 1 To PlayerEquipments.PlayerEquipment_Count - 1
-            RenderTexture Tex_GUI(54 + i), xO + EquipmentPosition(i).X, yO + EquipmentPosition(i).Y, 0, 0, 34, 34, 34, 34
+            RenderTexture Tex_GUI(54 + i), xO + EquipmentPosition(i).x, yO + EquipmentPosition(i).Y, 0, 0, 34, 34, 34, 34
 
             ItemNum = GetPlayerEquipmentId(i)
 
             If ItemNum > 0 And ItemNum <= MaximumItems Then
-                RenderTexture Tex_Item(Item(ItemNum).IconId), xO + EquipmentPosition(i).X - 1, yO + EquipmentPosition(i).Y - 1, 0, 0, PIC_X, PIC_Y, PIC_X, PIC_Y
+                RenderTexture Tex_Item(Item(ItemNum).IconId), xO + EquipmentPosition(i).x - 1, yO + EquipmentPosition(i).Y - 1, 0, 0, PIC_X, PIC_Y, PIC_X, PIC_Y
             End If
         Next
     Else
@@ -409,7 +405,7 @@ Private Function GetEquipmentSlotFromPosition(StartX As Long, StartY As Long) As
             With TempRec
                 .Top = StartY + EquipmentPosition(i).Y
                 .Bottom = .Top + PIC_Y
-                .Left = StartX + EquipmentPosition(i).X
+                .Left = StartX + EquipmentPosition(i).x
                 .Right = .Left + PIC_X
             End With
 
@@ -444,62 +440,62 @@ Private Sub SetChildWindowVisible(ByVal Visible As Boolean)
 
 End Sub
 
-Private Sub RenderDefaultAttributes(ByVal X As Long, ByVal Y As Long)
-    RenderText Font(Fonts.FontRegular), "Ataque: " & MyAttributes.Attack, X, Y, ColorType.Gold
-    RenderText Font(Fonts.FontRegular), "Defesa: " & MyAttributes.Defense, X, Y + 15, ColorType.Gold
-    RenderText Font(Fonts.FontRegular), "Precisão: " & MyAttributes.Accuracy, X, Y + 30, ColorType.Gold
-    RenderText Font(Fonts.FontRegular), "Evasão: " & MyAttributes.Evasion, X, Y + 45, ColorType.Gold
-    RenderText Font(Fonts.FontRegular), "Aparo: " & MyAttributes.Parry, X, Y + 60, ColorType.Gold
-    RenderText Font(Fonts.FontRegular), "Bloqueio: " & MyAttributes.Block, X, Y + 75, ColorType.Gold
+Private Sub RenderDefaultAttributes(ByVal x As Long, ByVal Y As Long)
+    RenderText Font(Fonts.FontRegular), "Ataque: " & MyAttributes.Attack, x, Y, ColorType.White
+    RenderText Font(Fonts.FontRegular), "Defesa: " & MyAttributes.Defense, x, Y + 15, ColorType.White
+    RenderText Font(Fonts.FontRegular), "Precisão: " & MyAttributes.Accuracy, x, Y + 30, ColorType.White
+    RenderText Font(Fonts.FontRegular), "Evasão: " & MyAttributes.Evasion, x, Y + 45, ColorType.White
+    RenderText Font(Fonts.FontRegular), "Aparo: " & MyAttributes.Parry, x, Y + 60, ColorType.White
+    RenderText Font(Fonts.FontRegular), "Bloqueio: " & MyAttributes.Block, x, Y + 75, ColorType.White
 
-    RenderText Font(Fonts.FontRegular), "Ataque Mágico: " & MyAttributes.MagicAttack, X, Y + 105, ColorType.Gold
-    RenderText Font(Fonts.FontRegular), "Defesa Mágica: " & MyAttributes.MagicDefense, X, Y + 120, ColorType.Gold
-    RenderText Font(Fonts.FontRegular), "Precisão Mágica: " & MyAttributes.MagicAccuracy, X, Y + 135, ColorType.Gold
-    RenderText Font(Fonts.FontRegular), "Resistência Mágica: " & MyAttributes.MagicResist, X, Y + 150, ColorType.Gold
-    RenderText Font(Fonts.FontRegular), "Concentração: " & MyAttributes.Concentration, X, Y + 165, ColorType.Gold
+    RenderText Font(Fonts.FontRegular), "Ataque Mágico: " & MyAttributes.MagicAttack, x, Y + 105, ColorType.White
+    RenderText Font(Fonts.FontRegular), "Defesa Mágica: " & MyAttributes.MagicDefense, x, Y + 120, ColorType.White
+    RenderText Font(Fonts.FontRegular), "Precisão Mágica: " & MyAttributes.MagicAccuracy, x, Y + 135, ColorType.White
+    RenderText Font(Fonts.FontRegular), "Resistência Mágica: " & MyAttributes.MagicResist, x, Y + 150, ColorType.White
+    RenderText Font(Fonts.FontRegular), "Concentração: " & MyAttributes.Concentration, x, Y + 165, ColorType.White
 
-    RenderText Font(Fonts.FontRegular), "Taxa Crítica: " & MyAttributes.CritRate & "%", X, Y + 195, ColorType.Gold
-    RenderText Font(Fonts.FontRegular), "Dano Crítico: " & MyAttributes.CritDamage & "%", X, Y + 210, ColorType.Gold
-    RenderText Font(Fonts.FontRegular), "Resistência Taxa Crítica: " & MyAttributes.ResistCritRate & "%", X, Y + 225, ColorType.Gold
-    RenderText Font(Fonts.FontRegular), "Resistência Dano Crítico: " & MyAttributes.ResistCritDamage & "%", X, Y + 240, ColorType.Gold
+    RenderText Font(Fonts.FontRegular), "Taxa Crítica: " & MyAttributes.CritRate & "%", x, Y + 195, ColorType.White
+    RenderText Font(Fonts.FontRegular), "Dano Crítico: " & MyAttributes.CritDamage & "%", x, Y + 210, ColorType.White
+    RenderText Font(Fonts.FontRegular), "Resistência Taxa Crítica: " & MyAttributes.ResistCritRate & "%", x, Y + 225, ColorType.White
+    RenderText Font(Fonts.FontRegular), "Resistência Dano Crítico: " & MyAttributes.ResistCritDamage & "%", x, Y + 240, ColorType.White
 End Sub
 
-Private Sub RenderSpecialAttributes(ByVal X As Long, ByVal Y As Long)
-    RenderText Font(Fonts.FontRegular), "Amplificação: " & MyAttributes.Amplification & "%", X, Y, ColorType.Gold
-    RenderText Font(Fonts.FontRegular), "Potência de Cura: " & MyAttributes.HealingPower & "%", X, Y + 15, ColorType.Gold
-    RenderText Font(Fonts.FontRegular), "Dano Final: " & MyAttributes.FinalDamage & "%", X, Y + 30, ColorType.Gold
-    RenderText Font(Fonts.FontRegular), "Supressão de Dano: " & MyAttributes.DamageSuppression & "%", X, Y + 45, ColorType.Gold
-    RenderText Font(Fonts.FontRegular), "Inimizade: " & MyAttributes.Enmity & "%", X, Y + 60, ColorType.Gold
+Private Sub RenderSpecialAttributes(ByVal x As Long, ByVal Y As Long)
+    RenderText Font(Fonts.FontRegular), "Amplificação: " & MyAttributes.Amplification & "%", x, Y, ColorType.White
+    RenderText Font(Fonts.FontRegular), "Potência de Cura: " & MyAttributes.HealingPower & "%", x, Y + 15, ColorType.White
+    RenderText Font(Fonts.FontRegular), "Dano Final: " & MyAttributes.FinalDamage & "%", x, Y + 30, ColorType.White
+    RenderText Font(Fonts.FontRegular), "Supressão de Dano: " & MyAttributes.DamageSuppression & "%", x, Y + 45, ColorType.White
+    RenderText Font(Fonts.FontRegular), "Inimizade: " & MyAttributes.Enmity & "%", x, Y + 60, ColorType.White
 
-    RenderText Font(Fonts.FontRegular), "Velocidade de Ataque: " & MyAttributes.AttackSpeed & "%", X, Y + 90, ColorType.Gold
-    RenderText Font(Fonts.FontRegular), "Velocidade de Conjuração: " & MyAttributes.CastSpeed & "%", X, Y + 105, ColorType.Gold
+    RenderText Font(Fonts.FontRegular), "Velocidade de Ataque: " & MyAttributes.AttackSpeed & "%", x, Y + 90, ColorType.White
+    RenderText Font(Fonts.FontRegular), "Velocidade de Conjuração: " & MyAttributes.CastSpeed & "%", x, Y + 105, ColorType.White
 
-    RenderText Font(Fonts.FontRegular), "Ataque Adicional PvE: " & MyAttributes.PveAttack & "%", X, Y + 135, ColorType.Gold
-    RenderText Font(Fonts.FontRegular), "Defesa Adicional PvE: " & MyAttributes.PveDefense & "%", X, Y + 150, ColorType.Gold
-    RenderText Font(Fonts.FontRegular), "Ataque Adicional PvP: " & MyAttributes.PvpAttack & "%", X, Y + 165, ColorType.Gold
-    RenderText Font(Fonts.FontRegular), "Defesa Adicional PvP: " & MyAttributes.PvpDefense & "%", X, Y + 180, ColorType.Gold
+    RenderText Font(Fonts.FontRegular), "Ataque Adicional PvE: " & MyAttributes.PveAttack & "%", x, Y + 135, ColorType.White
+    RenderText Font(Fonts.FontRegular), "Defesa Adicional PvE: " & MyAttributes.PveDefense & "%", x, Y + 150, ColorType.White
+    RenderText Font(Fonts.FontRegular), "Ataque Adicional PvP: " & MyAttributes.PvpAttack & "%", x, Y + 165, ColorType.White
+    RenderText Font(Fonts.FontRegular), "Defesa Adicional PvP: " & MyAttributes.PvpDefense & "%", x, Y + 180, ColorType.White
 
-    RenderText Font(Fonts.FontRegular), "Resistência ao silêncio: " & MyAttributes.SilenceResistance, X, Y + 210, ColorType.Gold
-    RenderText Font(Fonts.FontRegular), "Resistência à cegueira: " & MyAttributes.BlindResistance, X, Y + 225, ColorType.Gold
-    RenderText Font(Fonts.FontRegular), "Resistência ao atordoamento: " & MyAttributes.StunResistance, X, Y + 240, ColorType.Gold
-    RenderText Font(Fonts.FontRegular), "Resistência à queda: " & MyAttributes.StumbleResistance, X, Y + 255, ColorType.Gold
+    RenderText Font(Fonts.FontRegular), "Resistência ao silêncio: " & MyAttributes.SilenceResistance, x, Y + 210, ColorType.White
+    RenderText Font(Fonts.FontRegular), "Resistência à cegueira: " & MyAttributes.BlindResistance, x, Y + 225, ColorType.White
+    RenderText Font(Fonts.FontRegular), "Resistência ao atordoamento: " & MyAttributes.StunResistance, x, Y + 240, ColorType.White
+    RenderText Font(Fonts.FontRegular), "Resistência à queda: " & MyAttributes.StumbleResistance, x, Y + 255, ColorType.White
     
 End Sub
 
-Private Sub RenderElementalAttributes(ByVal X As Long, ByVal Y As Long)
-    RenderText Font(Fonts.FontRegular), "Dano Adicional Fogo: " & MyAttributes.ElementAttack(Elements.Element_Fire), X, Y, ColorType.Gold
-    RenderText Font(Fonts.FontRegular), "Dano Adicional Água: " & MyAttributes.ElementAttack(Elements.Element_Water), X, Y + 15, ColorType.Gold
-    RenderText Font(Fonts.FontRegular), "Dano Adicional Terra: " & MyAttributes.ElementAttack(Elements.Element_Earth), X, Y + 30, ColorType.Gold
-    RenderText Font(Fonts.FontRegular), "Dano Adicional Vento: " & MyAttributes.ElementAttack(Elements.Element_Wind), X, Y + 45, ColorType.Gold
-    RenderText Font(Fonts.FontRegular), "Dano Adicional Luz: " & MyAttributes.ElementAttack(Elements.Element_Light), X, Y + 60, ColorType.Gold
-    RenderText Font(Fonts.FontRegular), "Dano Adicional Trevas: " & MyAttributes.ElementAttack(Elements.Element_Dark), X, Y + 75, ColorType.Gold
+Private Sub RenderElementalAttributes(ByVal x As Long, ByVal Y As Long)
+    RenderText Font(Fonts.FontRegular), "Dano Adicional Fogo: " & MyAttributes.ElementAttack(Elements.Element_Fire), x, Y, ColorType.White
+    RenderText Font(Fonts.FontRegular), "Dano Adicional Água: " & MyAttributes.ElementAttack(Elements.Element_Water), x, Y + 15, ColorType.White
+    RenderText Font(Fonts.FontRegular), "Dano Adicional Terra: " & MyAttributes.ElementAttack(Elements.Element_Earth), x, Y + 30, ColorType.White
+    RenderText Font(Fonts.FontRegular), "Dano Adicional Vento: " & MyAttributes.ElementAttack(Elements.Element_Wind), x, Y + 45, ColorType.White
+    RenderText Font(Fonts.FontRegular), "Dano Adicional Luz: " & MyAttributes.ElementAttack(Elements.Element_Light), x, Y + 60, ColorType.White
+    RenderText Font(Fonts.FontRegular), "Dano Adicional Trevas: " & MyAttributes.ElementAttack(Elements.Element_Dark), x, Y + 75, ColorType.White
     
-    RenderText Font(Fonts.FontRegular), "Redução de Dano Fogo: " & MyAttributes.ElementDefense(Elements.Element_Fire), X, Y + 105, ColorType.Gold
-    RenderText Font(Fonts.FontRegular), "Redução de Dano Água: " & MyAttributes.ElementDefense(Elements.Element_Water), X, Y + 120, ColorType.Gold
-    RenderText Font(Fonts.FontRegular), "Redução de Dano Terra: " & MyAttributes.ElementDefense(Elements.Element_Earth), X, Y + 135, ColorType.Gold
-    RenderText Font(Fonts.FontRegular), "Redução de Dano Vento: " & MyAttributes.ElementDefense(Elements.Element_Wind), X, Y + 150, ColorType.Gold
-    RenderText Font(Fonts.FontRegular), "Redução de Dano Luz: " & MyAttributes.ElementDefense(Elements.Element_Light), X, Y + 165, ColorType.Gold
-    RenderText Font(Fonts.FontRegular), "Redução de Dano Trevas: " & MyAttributes.ElementDefense(Elements.Element_Dark), X, Y + 180, ColorType.Gold
+    RenderText Font(Fonts.FontRegular), "Redução de Dano Fogo: " & MyAttributes.ElementDefense(Elements.Element_Fire), x, Y + 105, ColorType.White
+    RenderText Font(Fonts.FontRegular), "Redução de Dano Água: " & MyAttributes.ElementDefense(Elements.Element_Water), x, Y + 120, ColorType.White
+    RenderText Font(Fonts.FontRegular), "Redução de Dano Terra: " & MyAttributes.ElementDefense(Elements.Element_Earth), x, Y + 135, ColorType.White
+    RenderText Font(Fonts.FontRegular), "Redução de Dano Vento: " & MyAttributes.ElementDefense(Elements.Element_Wind), x, Y + 150, ColorType.White
+    RenderText Font(Fonts.FontRegular), "Redução de Dano Luz: " & MyAttributes.ElementDefense(Elements.Element_Light), x, Y + 165, ColorType.White
+    RenderText Font(Fonts.FontRegular), "Redução de Dano Trevas: " & MyAttributes.ElementDefense(Elements.Element_Dark), x, Y + 180, ColorType.White
 End Sub
 
 Private Function IsTwoHandedStyleEquipped() As Boolean
