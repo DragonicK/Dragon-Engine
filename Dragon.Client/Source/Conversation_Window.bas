@@ -322,11 +322,11 @@ End Sub
 
 Private Sub RenderMainText(ByRef Text As String)
     If LenB(Text) > 0 Then
-        Dim Width As Long, X As Long, Y As Long
+        Dim Width As Long, x As Long, Y As Long
         Dim tWidth As Long
 
         Width = MainTextWidth
-        X = Windows(WindowIndex).Window.Left + MainTextX
+        x = Windows(WindowIndex).Window.Left + MainTextX
         Y = Windows(WindowIndex).Window.Top + MainTextY
 
         tWidth = TextWidth(Font(Fonts.FontRegular), Text)
@@ -344,13 +344,13 @@ Private Sub RenderMainText(ByRef Text As String)
             For i = 1 To TextLineCount
                 tWidth = TextWidth(Font(Fonts.FontRegular), TextArray(i))
 
-                RenderText Font(Fonts.FontRegular), TextArray(i), X + (Width * 0.5) - (tWidth * 0.5), Y + yOffset, White
+                RenderText Font(Fonts.FontRegular), TextArray(i), x + (Width * 0.5) - (tWidth * 0.5), Y + yOffset, White
                 yOffset = yOffset + 14
             Next
         Else
             tWidth = TextWidth(Font(Fonts.FontRegular), Text)
 
-            RenderText Font(Fonts.FontRegular), Text, X + (Width * 0.5) - (tWidth * 0.5), Y, White
+            RenderText Font(Fonts.FontRegular), Text, x + (Width * 0.5) - (tWidth * 0.5), Y, White
         End If
     End If
 

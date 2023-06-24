@@ -1,7 +1,7 @@
 Attribute VB_Name = "Currency_Description"
 Option Explicit
 
-Public Sub ShowCurrencyDesc(ByRef X As Long, ByRef Y As Long, ByVal CurType As CurrencyType, ByVal CurrencyValue As Long)
+Public Sub ShowCurrencyDesc(ByRef x As Long, ByRef Y As Long, ByVal CurType As CurrencyType, ByVal CurrencyValue As Long)
     Dim Colour As Long, i As Long
     Dim WindowIndex As Long
     Dim CurrentHeight As Long
@@ -22,7 +22,7 @@ Public Sub ShowCurrencyDesc(ByRef X As Long, ByRef Y As Long, ByVal CurType As C
     CurrentHeight = Windows(WindowIndex).Window.Height
 
     ' set position
-    Windows(WindowIndex).Window.Left = X
+    Windows(WindowIndex).Window.Left = x
     Windows(WindowIndex).Window.Top = Y
     Windows(WindowIndex).Window.Width = 225
 

@@ -3,7 +3,7 @@ Option Explicit
 
 Private Multiplier As String
 
-Public Sub ShowAttributeEffectDesc(X As Long, Y As Long, ByVal Target As Long, ByVal TargetType, ByVal PartyMemberIndex As Long, Slot As Long)
+Public Sub ShowAttributeEffectDesc(x As Long, Y As Long, ByVal Target As Long, ByVal TargetType, ByVal PartyMemberIndex As Long, Slot As Long)
     If Slot = 0 Then
         Exit Sub
     End If
@@ -44,7 +44,7 @@ Public Sub ShowAttributeEffectDesc(X As Long, Y As Long, ByVal Target As Long, B
     WindowIndex = GetWindowIndex("winDescription")
 
     ' set position
-    Windows(WindowIndex).Window.Left = X
+    Windows(WindowIndex).Window.Left = x
     Windows(WindowIndex).Window.Top = Y
     Windows(WindowIndex).Window.Width = 225
 

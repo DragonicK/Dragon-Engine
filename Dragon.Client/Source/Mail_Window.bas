@@ -39,7 +39,7 @@ Private Const PictureBackLeft As Long = 55
 Private Const PictureBackTop As Long = 98
 Private Const PictureBackOffSetY As Long = 30
 
-Private Const CheckBoxLeft As Long = 20
+Private Const CheckBoxLeft As Long = 25
 Private Const CheckBoxTop As Long = 102
 Private Const CheckBoxOffSetY As Long = 30
 

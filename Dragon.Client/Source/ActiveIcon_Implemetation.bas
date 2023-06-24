@@ -62,7 +62,7 @@ Public Sub DrawTargetActiveIcons()
     Dim IconIndex As Long
     Dim DurationText As String
     Dim Duration As Long
-    Dim X As Long, Y As Long
+    Dim x As Long, Y As Long
     Dim Index As Long
 
     Index = MyTargetIndex
@@ -73,7 +73,7 @@ Public Sub DrawTargetActiveIcons()
 
     Dim Inventory As InventoryRec
 
-    X = Windows(WindowIndex).Window.Left + 5
+    x = Windows(WindowIndex).Window.Left + 5
     Y = Windows(WindowIndex).Window.Top + 40
 
     Count = 1
@@ -99,9 +99,9 @@ Public Sub DrawTargetActiveIcons()
                     DurationText = vbNullString
                 End If
 
-                Call DrawActiveIcon(X, Y, GetPlayerIconType(Index, IconIndex), IconId, DurationText, Count, 24, 24)
+                Call DrawActiveIcon(x, Y, GetPlayerIconType(Index, IconIndex), IconId, DurationText, Count, 24, 24)
 
-                If IsActiveIconSelected(X, Y, 24, 24, Count) Then
+                If IsActiveIconSelected(x, Y, 24, 24, Count) Then
                     Select Case GetPlayerIconType(Index, IconIndex)
                     Case IconType.IconType_Skill
 
@@ -109,13 +109,13 @@ Public Sub DrawTargetActiveIcons()
                         Inventory.Num = GetPlayerIconId(Index, IconIndex)
                         Inventory.Level = GetPlayerIconLevel(Index, IconIndex)
 
-                        Call ShowItemDesc(X, Y + 25, Inventory)
+                        Call ShowItemDesc(x, Y + 25, Inventory)
 
                     Case IconType.IconType_Effect
-                        Call ShowAttributeEffectDesc(X, Y + 25, MyTargetIndex, MyTargetType, 0, IconIndex)
+                        Call ShowAttributeEffectDesc(x, Y + 25, MyTargetIndex, MyTargetType, 0, IconIndex)
 
                     Case IconType.IconType_Custom
-                           Call ShowNotificationIconDescription(X - 95, Y + 100, GetNotificationIcon(GetPlayerIconId(Index, IconIndex)))
+                           Call ShowNotificationIconDescription(x - 95, Y + 100, GetNotificationIcon(GetPlayerIconId(Index, IconIndex)))
 
                     End Select
                 End If
@@ -149,9 +149,9 @@ Public Sub DrawTargetActiveIcons()
                     DurationText = vbNullString
                 End If
 
-                Call DrawActiveIcon(X, Y, GetNpcIconType(Index, IconIndex), IconId, DurationText, Count, 24, 24)
+                Call DrawActiveIcon(x, Y, GetNpcIconType(Index, IconIndex), IconId, DurationText, Count, 24, 24)
 
-                If IsActiveIconSelected(X, Y, 24, 24, Count) Then
+                If IsActiveIconSelected(x, Y, 24, 24, Count) Then
                     Select Case GetNpcIconType(Index, IconIndex)
                     Case IconType.IconType_Skill
 
@@ -159,13 +159,13 @@ Public Sub DrawTargetActiveIcons()
                         Inventory.Num = GetNpcIconId(Index, IconIndex)
                         Inventory.Level = GetNpcIconLevel(Index, IconIndex)
 
-                        Call ShowItemDesc(X, Y + 25, Inventory)
+                        Call ShowItemDesc(x, Y + 25, Inventory)
 
                     Case IconType.IconType_Effect
-                        Call ShowAttributeEffectDesc(X, Y + 25, MyTargetIndex, MyTargetType, 0, IconIndex)
+                        Call ShowAttributeEffectDesc(x, Y + 25, MyTargetIndex, MyTargetType, 0, IconIndex)
 
                     Case IconType.IconType_Custom
-                        Call ShowNotificationIconDescription(X - 95, Y + 100, GetNotificationIcon(GetNpcIconId(Index, IconIndex)))
+                        Call ShowNotificationIconDescription(x - 95, Y + 100, GetNotificationIcon(GetNpcIconId(Index, IconIndex)))
 
                     End Select
                 End If
@@ -177,11 +177,11 @@ Public Sub DrawTargetActiveIcons()
 
 End Sub
 
-Public Sub DrawActiveIcon(ByVal X As Long, ByVal Y As Long, ByVal ActiveIconType As IconType, ByVal ObjectId As Long, DurationText As String, ByVal PositionCount As Long, ByVal Width As Long, ByVal Heigth As Long)
+Public Sub DrawActiveIcon(ByVal x As Long, ByVal Y As Long, ByVal ActiveIconType As IconType, ByVal ObjectId As Long, DurationText As String, ByVal PositionCount As Long, ByVal Width As Long, ByVal Heigth As Long)
     Dim Left As Long, Top As Long, IconId As Long
 
     Top = Y + ActiveIconTop + ((ActiveIconOffsetY + Heigth) * ((PositionCount - 1) \ ActiveIconColumns))
-    Left = X + ActiveIconLeft + ((ActiveIconOffsetX + Width) * (((PositionCount - 1) Mod ActiveIconColumns)))
+    Left = x + ActiveIconLeft + ((ActiveIconOffsetX + Width) * (((PositionCount - 1) Mod ActiveIconColumns)))
 
     Select Case ActiveIconType
     Case IconType.IconType_Item

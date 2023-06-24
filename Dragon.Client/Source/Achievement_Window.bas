@@ -142,15 +142,15 @@ End Sub
 Private Sub List1_MouseMove()
     Dim ItemIndex As Long
     Dim AchievementId As Long
-    Dim X As Long, Y As Long
+    Dim x As Long, Y As Long
 
     ItemIndex = ((PageIndex - 1) * MaxAchievementList) + 1
 
     If CanDrawPageItem(CategoryIndex, ItemIndex) Then
         AchievementId = GetAchievementByCategory(CategoryIndex, ItemIndex)
 
-        Call SetWinDescriptionPosition(X, Y)
-        Call ShowAchievementDesc(X, Y, AchievementId, GetPlayerAchievement(AchievementId))
+        Call SetWinDescriptionPosition(x, Y)
+        Call ShowAchievementDesc(x, Y, AchievementId, GetPlayerAchievement(AchievementId))
     End If
 End Sub
 
@@ -169,15 +169,15 @@ End Sub
 Private Sub List2_MouseMove()
     Dim ItemIndex As Long
     Dim AchievementId As Long
-    Dim X As Long, Y As Long
+    Dim x As Long, Y As Long
 
     ItemIndex = ((PageIndex - 1) * MaxAchievementList) + 2
 
     If CanDrawPageItem(CategoryIndex, ItemIndex) Then
         AchievementId = GetAchievementByCategory(CategoryIndex, ItemIndex)
 
-        Call SetWinDescriptionPosition(X, Y)
-        Call ShowAchievementDesc(X, Y, AchievementId, GetPlayerAchievement(AchievementId))
+        Call SetWinDescriptionPosition(x, Y)
+        Call ShowAchievementDesc(x, Y, AchievementId, GetPlayerAchievement(AchievementId))
     End If
 End Sub
 
@@ -195,15 +195,15 @@ End Sub
 Private Sub List3_MouseMove()
     Dim ItemIndex As Long
     Dim AchievementId As Long
-    Dim X As Long, Y As Long
+    Dim x As Long, Y As Long
 
     ItemIndex = ((PageIndex - 1) * MaxAchievementList) + 3
 
     If CanDrawPageItem(CategoryIndex, ItemIndex) Then
         AchievementId = GetAchievementByCategory(CategoryIndex, ItemIndex)
 
-        Call SetWinDescriptionPosition(X, Y)
-        Call ShowAchievementDesc(X, Y, AchievementId, GetPlayerAchievement(AchievementId))
+        Call SetWinDescriptionPosition(x, Y)
+        Call ShowAchievementDesc(x, Y, AchievementId, GetPlayerAchievement(AchievementId))
     End If
 End Sub
 
@@ -221,15 +221,15 @@ End Sub
 Private Sub List4_MouseMove()
     Dim ItemIndex As Long
     Dim AchievementId As Long
-    Dim X As Long, Y As Long
+    Dim x As Long, Y As Long
 
     ItemIndex = ((PageIndex - 1) * MaxAchievementList) + 4
 
     If CanDrawPageItem(CategoryIndex, ItemIndex) Then
         AchievementId = GetAchievementByCategory(CategoryIndex, ItemIndex)
 
-        Call SetWinDescriptionPosition(X, Y)
-        Call ShowAchievementDesc(X, Y, AchievementId, GetPlayerAchievement(AchievementId))
+        Call SetWinDescriptionPosition(x, Y)
+        Call ShowAchievementDesc(x, Y, AchievementId, GetPlayerAchievement(AchievementId))
     End If
 End Sub
 
@@ -247,15 +247,15 @@ End Sub
 Private Sub List5_MouseMove()
     Dim ItemIndex As Long
     Dim AchievementId As Long
-    Dim X As Long, Y As Long
+    Dim x As Long, Y As Long
 
     ItemIndex = ((PageIndex - 1) * MaxAchievementList) + 5
 
     If CanDrawPageItem(CategoryIndex, ItemIndex) Then
         AchievementId = GetAchievementByCategory(CategoryIndex, ItemIndex)
 
-        Call SetWinDescriptionPosition(X, Y)
-        Call ShowAchievementDesc(X, Y, AchievementId, GetPlayerAchievement(AchievementId))
+        Call SetWinDescriptionPosition(x, Y)
+        Call ShowAchievementDesc(x, Y, AchievementId, GetPlayerAchievement(AchievementId))
     End If
 End Sub
 
@@ -273,27 +273,27 @@ End Sub
 Private Sub List6_MouseMove()
     Dim ItemIndex As Long
     Dim AchievementId As Long
-    Dim X As Long, Y As Long
+    Dim x As Long, Y As Long
 
     ItemIndex = ((PageIndex - 1) * MaxAchievementList) + 6
 
     If CanDrawPageItem(CategoryIndex, ItemIndex) Then
         AchievementId = GetAchievementByCategory(CategoryIndex, ItemIndex)
 
-        Call SetWinDescriptionPosition(X, Y)
-        Call ShowAchievementDesc(X, Y, AchievementId, GetPlayerAchievement(AchievementId))
+        Call SetWinDescriptionPosition(x, Y)
+        Call ShowAchievementDesc(x, Y, AchievementId, GetPlayerAchievement(AchievementId))
     End If
 End Sub
 
-Private Sub SetWinDescriptionPosition(ByRef X As Long, ByRef Y As Long)
+Private Sub SetWinDescriptionPosition(ByRef x As Long, ByRef Y As Long)
 ' calc position
-    X = Windows(WindowIndex).Window.Left - Windows(GetWindowIndex("winDescription")).Window.Width - 2
+    x = Windows(WindowIndex).Window.Left - Windows(GetWindowIndex("winDescription")).Window.Width - 2
     Y = Windows(WindowIndex).Window.Top
 
     ' offscreen?
-    If X < 0 Then
+    If x < 0 Then
         ' switch to right
-        X = Windows(WindowIndex).Window.Left + Windows(WindowIndex).Window.Width + 2
+        x = Windows(WindowIndex).Window.Left + Windows(WindowIndex).Window.Width + 2
     End If
 End Sub
 
@@ -1046,7 +1046,7 @@ Private Sub ShowRewardItemDescription(ByVal CurrentX As Long, ByVal CurrentY As 
 
             Dim Inventory As InventoryRec
             Dim ItemId As Long
-            Dim X As Long, Y As Long
+            Dim x As Long, Y As Long
 
             ItemId = Reward.Id
 
@@ -1057,12 +1057,12 @@ Private Sub ShowRewardItemDescription(ByVal CurrentX As Long, ByVal CurrentY As 
             Inventory.AttributeId = Reward.AttributeId
             Inventory.UpgradeId = Reward.UpgradeId
 
-            Call SetWinDescriptionPosition(X, Y)
+            Call SetWinDescriptionPosition(x, Y)
 
             If Item(ItemId).Type = ItemType.ItemType_Heraldry Then
-                Call ShowHeraldryDescription(X, Y, Inventory, Item(ItemId).Price)
+                Call ShowHeraldryDescription(x, Y, Inventory, Item(ItemId).Price)
             Else
-                ShowItemDesc X, Y, Inventory
+                ShowItemDesc x, Y, Inventory
             End If
 
         End If
@@ -1077,10 +1077,10 @@ Private Sub ShowRewardTitleDescription(ByVal CurrentX As Long, ByVal CurrentY As
 
     If currMouseX >= CurrentX And currMouseX <= Right Then
         If currMouseY >= CurrentY And currMouseY <= Bottom Then
-            Dim X As Long, Y As Long
+            Dim x As Long, Y As Long
 
-            Call SetWinDescriptionPosition(X, Y)
-            Call ShowTitleDesc(X, Y, Reward.Id)
+            Call SetWinDescriptionPosition(x, Y)
+            Call ShowTitleDesc(x, Y, Reward.Id)
         End If
     End If
 End Sub
@@ -1093,13 +1093,13 @@ Private Sub ShowRewardCurrencyDescription(ByVal CurrentX As Long, ByVal CurrentY
 
     If currMouseX >= CurrentX And currMouseX <= Right Then
         If currMouseY >= CurrentY And currMouseY <= Bottom Then
-            Dim X As Long, Y As Long
+            Dim x As Long, Y As Long
             Dim CurData As CurrencyRec
 
             CurData = GetCurrencyData(Reward.Id)
 
-            Call SetWinDescriptionPosition(X, Y)
-            Call ShowCurrencyDesc(X, Y, CurData.Id, Reward.Value)
+            Call SetWinDescriptionPosition(x, Y)
+            Call ShowCurrencyDesc(x, Y, CurData.Id, Reward.Value)
         End If
     End If
 End Sub

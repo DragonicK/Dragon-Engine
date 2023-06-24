@@ -3,7 +3,7 @@ Option Explicit
 
 Private HasAttributes As Boolean
 
-Public Sub ShowAchievementDesc(X As Long, Y As Long, ByVal AchievementId As Long, ByVal Acquired As Byte)
+Public Sub ShowAchievementDesc(x As Long, Y As Long, ByVal AchievementId As Long, ByVal Acquired As Byte)
     Dim Colour As Long
     Dim WindowIndex As Long, ControlIndex As Long
     Dim ControlType As Long
@@ -14,7 +14,7 @@ Public Sub ShowAchievementDesc(X As Long, Y As Long, ByVal AchievementId As Long
     WindowIndex = GetWindowIndex("winDescription")
 
     ' set position
-    Windows(WindowIndex).Window.Left = X
+    Windows(WindowIndex).Window.Left = x
     Windows(WindowIndex).Window.Top = Y
     Windows(WindowIndex).Window.Width = 225
 

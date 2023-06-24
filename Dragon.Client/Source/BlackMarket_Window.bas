@@ -264,19 +264,19 @@ Private Sub ShowItemDescription(ByVal Index As Long)
         Exit Sub
     End If
 
-    Dim X As Long, Y As Long
+    Dim x As Long, Y As Long
     Dim WinDescription As Long
 
     WinDescription = GetWindowIndex("winDescription")
 
     ' calc position
-    X = Windows(WindowIndex).Window.Left - Windows(WinDescription).Window.Width - 2
+    x = Windows(WindowIndex).Window.Left - Windows(WinDescription).Window.Width - 2
     Y = Windows(WindowIndex).Window.Top
 
     ' offscreen?
-    If X < 0 Then
+    If x < 0 Then
         ' switch to right
-        X = Windows(WindowIndex).Window.Left + Windows(WindowIndex).Window.Width + 2
+        x = Windows(WindowIndex).Window.Left + Windows(WindowIndex).Window.Width + 2
     End If
 
     If Y + Windows(WinDescription).Window.Height >= ScreenHeight Then
@@ -291,7 +291,7 @@ Private Sub ShowItemDescription(ByVal Index As Long)
     Inventory.AttributeId = BlackMarketItems(Index).AttributeId
     Inventory.UpgradeId = BlackMarketItems(Index).UpgradeId
 
-    Call ShowItemDesc(X, Y, Inventory)
+    Call ShowItemDesc(x, Y, Inventory)
 End Sub
 
 Private Sub ButtonSelectItem1_Click()

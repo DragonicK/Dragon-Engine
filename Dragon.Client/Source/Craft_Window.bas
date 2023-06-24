@@ -291,7 +291,7 @@ Private Sub SetControlResultItem(ByVal TextureNum As Long)
     ControlIndexItem = GetControlIndex("winCraft", "picItemResult")
 
     For i = 0 To entStates.state_Count - 1
-        Windows(WindowIndex).Controls(ControlIndexItem).Image(i) = Tex_Item(TextureNum)
+        Windows(WindowIndex).Controls(ControlIndexItem).image(i) = Tex_Item(TextureNum)
     Next
 End Sub
 
@@ -339,10 +339,10 @@ Private Sub ResultItem_MouseMove()
         ItemLevel = Recipe(SelectedRecipeNum).RewardItem.Level
 
         If ItemNum > 0 Then
-            Dim X As Long, Y As Long
+            Dim x As Long, Y As Long
             Dim Inventory As InventoryRec
 
-            Call SetWinDescriptionPosition(X, Y)
+            Call SetWinDescriptionPosition(x, Y)
 
             Inventory.Num = ItemNum
             Inventory.Level = ItemLevel
@@ -351,9 +351,9 @@ Private Sub ResultItem_MouseMove()
 
             If Inventory.Num > 0 And Inventory.Num <= MaximumItems Then
                 If Item(Inventory.Num).Type = ItemType_Heraldry Then
-                    Call ShowHeraldryDescription(X, Y, Inventory, Item(Inventory.Num).Price)
+                    Call ShowHeraldryDescription(x, Y, Inventory, Item(Inventory.Num).Price)
                 Else
-                    Call ShowItemDesc(X, Y, Inventory)
+                    Call ShowItemDesc(x, Y, Inventory)
                 End If
             End If
 
@@ -362,49 +362,49 @@ Private Sub ResultItem_MouseMove()
 End Sub
 
 Private Sub Requirement1_MouseMove()
-    Dim X As Long, Y As Long
+    Dim x As Long, Y As Long
 
-    Call SetWinDescriptionPosition(X, Y)
-    Call ShowRequirementItemDesc(X, Y, 1)
+    Call SetWinDescriptionPosition(x, Y)
+    Call ShowRequirementItemDesc(x, Y, 1)
 End Sub
 Private Sub Requirement2_MouseMove()
-    Dim X As Long, Y As Long
+    Dim x As Long, Y As Long
 
-    Call SetWinDescriptionPosition(X, Y)
-    Call ShowRequirementItemDesc(X, Y, 2)
+    Call SetWinDescriptionPosition(x, Y)
+    Call ShowRequirementItemDesc(x, Y, 2)
 End Sub
 Private Sub Requirement3_MouseMove()
-    Dim X As Long, Y As Long
+    Dim x As Long, Y As Long
 
-    Call SetWinDescriptionPosition(X, Y)
-    Call ShowRequirementItemDesc(X, Y, 3)
+    Call SetWinDescriptionPosition(x, Y)
+    Call ShowRequirementItemDesc(x, Y, 3)
 End Sub
 Private Sub Requirement4_MouseMove()
-    Dim X As Long, Y As Long
+    Dim x As Long, Y As Long
 
-    Call SetWinDescriptionPosition(X, Y)
-    Call ShowRequirementItemDesc(X, Y, 4)
+    Call SetWinDescriptionPosition(x, Y)
+    Call ShowRequirementItemDesc(x, Y, 4)
 End Sub
 Private Sub Requirement5_MouseMove()
-    Dim X As Long, Y As Long
+    Dim x As Long, Y As Long
 
-    Call SetWinDescriptionPosition(X, Y)
-    Call ShowRequirementItemDesc(X, Y, 5)
+    Call SetWinDescriptionPosition(x, Y)
+    Call ShowRequirementItemDesc(x, Y, 5)
 End Sub
 
-Private Sub SetWinDescriptionPosition(ByRef X As Long, ByRef Y As Long)
+Private Sub SetWinDescriptionPosition(ByRef x As Long, ByRef Y As Long)
     Dim WinDescription As Long
     
     WinDescription = GetWindowIndex("winDescription")
     
     ' calc position
-    X = Windows(WindowIndex).Window.Left - Windows(WinDescription).Window.Width - 2
+    x = Windows(WindowIndex).Window.Left - Windows(WinDescription).Window.Width - 2
     Y = Windows(WindowIndex).Window.Top
 
     ' offscreen?
-    If X < 0 Then
+    If x < 0 Then
         ' switch to right
-        X = Windows(WindowIndex).Window.Left + Windows(WindowIndex).Window.Width + 2
+        x = Windows(WindowIndex).Window.Left + Windows(WindowIndex).Window.Width + 2
     End If
 
     If Y + Windows(WinDescription).Window.Height >= ScreenHeight Then
@@ -413,7 +413,7 @@ Private Sub SetWinDescriptionPosition(ByRef X As Long, ByRef Y As Long)
 
 End Sub
 
-Private Sub ShowRequirementItemDesc(ByVal X As Long, ByVal Y As Long, ByVal RequirementIndex As Long)
+Private Sub ShowRequirementItemDesc(ByVal x As Long, ByVal Y As Long, ByVal RequirementIndex As Long)
     Dim ItemNum As Long, ItemLevel As Long
 
     If GetCraftType() > CraftType.CraftType_None Then
@@ -426,7 +426,7 @@ Private Sub ShowRequirementItemDesc(ByVal X As Long, ByVal Y As Long, ByVal Requ
                 Inventory.Num = ItemNum
                 Inventory.Level = Recipe(SelectedRecipeNum).RequiredItem(RequirementIndex).Level
 
-                Call ShowItemDesc(X, Y, Inventory)
+                Call ShowItemDesc(x, Y, Inventory)
             End If
         End If
     End If

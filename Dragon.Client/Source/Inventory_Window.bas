@@ -36,7 +36,7 @@ Public Sub CreateWindow_Inventory()
     CreateButton WindowCount, "btnInventoryTab5", 12 + (4 * 36), 43, 26, 26, "5", FontRegular, White, , , , , , , , , , , , GetAddress(AddressOf Button_InventoryTab5_Click)
 
     ' Gold amount
-    CreateLabel WindowCount, "lblGold", 15, 353, 150, , "Ouro: 0", FontRegular, Gold
+    CreateLabel WindowCount, "lblGold", 15, 355, 150, , "Ouro: 0", FontRegular, Gold
     
     WindowIndex = WindowCount
     InventoryentoryTabIndex = 0
@@ -219,7 +219,7 @@ Private Sub Inventory_DblClick()
 End Sub
 
 Private Sub Inventory_MouseMove()
-    Dim InvNum As Long, X As Long, Y As Long, i As Long
+    Dim InvNum As Long, x As Long, Y As Long, i As Long
 
     ' exit out early if dragging
     If DragBox.Type <> PartNone Then Exit Sub
@@ -237,22 +237,22 @@ Private Sub Inventory_MouseMove()
         Next
 
         ' calc position
-        X = Windows(WindowIndex).Window.Left - Windows(GetWindowIndex("winDescription")).Window.Width - 2
+        x = Windows(WindowIndex).Window.Left - Windows(GetWindowIndex("winDescription")).Window.Width - 2
         Y = Windows(WindowIndex).Window.Top
 
         ' offscreen?
-        If X < 0 Then
+        If x < 0 Then
             ' switch to right
-            X = Windows(WindowIndex).Window.Left + Windows(WindowIndex).Window.Width + 2
+            x = Windows(WindowIndex).Window.Left + Windows(WindowIndex).Window.Width + 2
         End If
 
         ' go go go
-        ShowInvDesc X, Y, InvNum
+        ShowInvDesc x, Y, InvNum
     End If
 End Sub
 
 Private Sub DrawInventory()
-    Dim xO As Long, yO As Long, Width As Long, Height As Long, i As Long, Y As Long, ItemNum As Long, ItemPic As Long, X As Long, Top As Long, Left As Long, Amount As String
+    Dim xO As Long, yO As Long, Width As Long, Height As Long, i As Long, Y As Long, ItemNum As Long, ItemPic As Long, x As Long, Top As Long, Left As Long, Amount As String
     Dim Colour As Long, skipItem As Boolean, amountModifier As Long, tmpItem As Long
     Dim CurrentInventoryIndex As Long, n As Long
 
@@ -311,8 +311,8 @@ Private Sub DrawInventory()
             Left = xO + InvLeft + ((InvOffsetX + 32) * (((i - 1) Mod InvColumns)))
 
             Y = Top + 8
-            X = Left + 13
-            RenderText Font(Fonts.FontRegular), "X", X, Y, Gold
+            x = Left + 13
+            RenderText Font(Fonts.FontRegular), "X", x, Y, Gold
         End If
 
         ItemNum = GetInventoryItemNum(i + CurrentInventoryIndex)
@@ -333,12 +333,12 @@ Private Sub DrawInventory()
                         ' If item is a stack - draw the amount you have
                         If GetInventoryItemValue(i + CurrentInventoryIndex) > 1 Then
                             Y = Top + 21
-                            X = Left + 1
+                            x = Left + 1
                             Amount = GetInventoryItemValue(i + CurrentInventoryIndex) - amountModifier
 
                             ' Draw currency but with k, m, b etc. using a convertion function
                             Colour = GetCurrencyColor(Amount)
-                            RenderText Font(Fonts.FontRegular), ConvertCurrency(Amount), X, Y, Colour
+                            RenderText Font(Fonts.FontRegular), ConvertCurrency(Amount), x, Y, Colour
                         End If
                     End If
                 End If
@@ -386,7 +386,7 @@ Public Sub UpdateInventoryCurrency()
     End If
 End Sub
 
-Public Sub ShowInvDesc(X As Long, Y As Long, InvNum As Long)
+Public Sub ShowInvDesc(x As Long, Y As Long, InvNum As Long)
 
     If InvNum <= 0 Or InvNum > MaxInventory Then Exit Sub
     Dim ItemNum As Long
@@ -404,9 +404,9 @@ Public Sub ShowInvDesc(X As Long, Y As Long, InvNum As Long)
          Inventory.UpgradeId = GetInventoryItemUpgradeId(InvNum)
     
         If Item(ItemNum).Type = ItemType.ItemType_Heraldry Then
-            Call ShowHeraldryDescription(X, Y, Inventory, Item(ItemNum).Price)
+            Call ShowHeraldryDescription(x, Y, Inventory, Item(ItemNum).Price)
         Else
-            ShowItemDesc X, Y, Inventory
+            ShowItemDesc x, Y, Inventory
         End If
     End If
 End Sub
