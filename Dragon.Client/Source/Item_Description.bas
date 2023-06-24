@@ -6,7 +6,7 @@ Private Const DecreaseText As String = "Redução"
 Private Color As Long
 Private EnabledEffect As Boolean
 
-Public Sub ShowItemDesc(X As Long, Y As Long, ByRef Inventory As InventoryRec)
+Public Sub ShowItemDesc(x As Long, Y As Long, ByRef Inventory As InventoryRec)
     Dim Colour As Long, i As Long
     Dim WindowIndex As Long
     Dim CurrentHeight As Long
@@ -23,7 +23,7 @@ Public Sub ShowItemDesc(X As Long, Y As Long, ByRef Inventory As InventoryRec)
     CurrentHeight = Windows(WindowIndex).Window.Height
 
     ' set position
-    Windows(WindowIndex).Window.Left = X
+    Windows(WindowIndex).Window.Left = x
     Windows(WindowIndex).Window.Top = Y
     Windows(WindowIndex).Window.Width = 225
 
@@ -136,6 +136,7 @@ Public Sub ShowItemDesc(X As Long, Y As Long, ByRef Inventory As InventoryRec)
     ElseIf Item(Inventory.Num).Type = ItemType.ItemType_Heraldry Then
         If Inventory.AttributeId = 0 Then
             AddDescInfo "Os atributos estão ocultos."
+            AddDescInfo "Botão Direito: Inspecionar.", ColorType.Gold
         End If
     End If
 
@@ -218,6 +219,7 @@ Private Sub AddEquipmentDescValues(ByVal ItemNum As Long, ByVal Level As Long, B
 
     If AttributeId = 0 Then
         AddDescInfo "Os atributos estão ocultos."
+        AddDescInfo "Botão Direito: Inspecionar.", ColorType.Gold
     Else
         ' Adiciona os atributos do equipamento.
         If AttributeId > 0 And AttributeId <= MaxEquipmentAttributes Then

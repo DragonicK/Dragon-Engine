@@ -16,6 +16,10 @@ Private SelectedButtonList As Long
 ' Número do título selecionado na lista.
 Private SelectedTitleNum As Long
 
+Private DescriptionScrollLineIndex As Long
+
+Private Const MaximumDescriptionLines As Long = 25
+
 ' Lista de títulos.
 Private Const ListOffsetY As Integer = 35
 Private Const ListX As Integer = 15
@@ -28,9 +32,9 @@ Private Const DescriptionY As Integer = 73
 ' Quantidade máxima de items na lista.
 Private Const MaxTitleList As Byte = 9
 
-Private Const NoTitleSelected As String = "Sem exibição de título ativado"
+Private Const NoTitleSelected As String = "Nenhum título selecionado para exibição"
 Private Const MaximumTitlesDescription As String = "Títulos Totais"
-Private Const TotalAttributesDescription As String = "Atributos Totais dos Títulos"
+Private Const TotalAttributesDescription As String = "Atributos Totais"
 
 Public Function IsTitleVisible() As Boolean
     IsTitleVisible = Windows(WindowIndex).Window.Visible
@@ -88,8 +92,13 @@ Public Sub CreateWindow_Title()
     CreateButton WindowCount, "ScrollUp", 188, ListY + 2 + (ListOffsetY * 1 + 15), 8, 157, , , , , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf MoveListToUp)
     CreateButton WindowCount, "ScrollDown", 188, ListY + 208, 8, 157, , , , , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf MoveListToDown)
 
+    'Description Scroll
+    CreateButton WindowCount, "ScrollUp", 490, ListY + 2 + (ListOffsetY * 1 + 15), 8, 157, , , , , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf MoveDescriptionListToUp)
+    CreateButton WindowCount, "ScrollDown", 490, ListY + 208, 8, 157, , , , , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf MoveDescriptionListToDown)
+
     ' Set de WindowIndex variable to avoid search for index.
     WindowIndex = WindowCount
+    DescriptionScrollLineIndex = 1
 End Sub
 
 ' hide/show title
@@ -116,16 +125,21 @@ End Sub
 Private Sub RenderWindowTitle()
     Dim xO As Long, yO As Long, Width As Long
     Dim i As Long, ItemNum As Long
+    Dim Counter As Long
 
     xO = Windows(WindowIndex).Window.Left
     yO = Windows(WindowIndex).Window.Top
     Width = Windows(WindowIndex).Window.Width
 
-    RenderText Font(Fonts.FontRegular), TotalAttributesDescription, xO + 260, yO + 110, ColorType.Gold
+    RenderText Font(Fonts.FontRegular), TotalAttributesDescription, xO + 310, yO + 110, ColorType.Coral
 
-    For i = 1 To MaximumAllocatedDescription
+    For i = DescriptionScrollLineIndex To MaximumAllocatedDescription
         If TitleAllocatedDescription(i) <> vbNullString Then
-            RenderText Font(Fonts.FontRegular), TitleAllocatedDescription(i), xO + 250, yO + 120 + (i * 13), ColorType.Gold
+            Counter = Counter + 1
+
+            RenderText Font(Fonts.FontRegular), TitleAllocatedDescription(i), xO + 250, yO + 120 + (Counter * 13), ColorType.White
+
+            If Counter >= MaximumDescriptionLines Then Exit Sub
         End If
     Next
 
@@ -151,7 +165,7 @@ Private Sub Draw_Title()
         End If
 
         If TitleNum > 0 And TitleNum <= MaximumTitles Then
-            RenderText Font(Fonts.FontRegular), Title(TitleNum).Name, xO + ListX + 7, yO + ListY + 5 + (ListOffsetY * i), Colour
+            RenderText Font(Fonts.FontRegular), Title(TitleNum).Name, xO + ListX + 9, yO + ListY + 9 + (ListOffsetY * i), Colour
         End If
     Next
 
@@ -170,10 +184,10 @@ Private Sub PicList1_MouseMove()
     Id = GetTitle(1 + TitleListIndex)
 
     If Id >= 1 And Id <= MaximumTitles Then
-        Dim X As Long, Y As Long
+        Dim x As Long, Y As Long
 
-        Call SetWinDescriptionPosition(X, Y)
-        Call ShowTitleDesc(X, Y, Id)
+        Call SetWinDescriptionPosition(x, Y)
+        Call ShowTitleDesc(x, Y, Id)
     End If
 End Sub
 Private Sub PicList2_Click()
@@ -189,10 +203,10 @@ Private Sub PicList2_MouseMove()
     Id = GetTitle(2 + TitleListIndex)
 
     If Id >= 1 And Id <= MaximumTitles Then
-        Dim X As Long, Y As Long
+        Dim x As Long, Y As Long
 
-        Call SetWinDescriptionPosition(X, Y)
-        Call ShowTitleDesc(X, Y, Id)
+        Call SetWinDescriptionPosition(x, Y)
+        Call ShowTitleDesc(x, Y, Id)
     End If
 End Sub
 Private Sub PicList3_Click()
@@ -208,10 +222,10 @@ Private Sub PicList3_MouseMove()
     Id = GetTitle(3 + TitleListIndex)
 
     If Id >= 1 And Id <= MaximumTitles Then
-        Dim X As Long, Y As Long
+        Dim x As Long, Y As Long
 
-        Call SetWinDescriptionPosition(X, Y)
-        Call ShowTitleDesc(X, Y, Id)
+        Call SetWinDescriptionPosition(x, Y)
+        Call ShowTitleDesc(x, Y, Id)
     End If
 End Sub
 
@@ -228,10 +242,10 @@ Private Sub PicList4_MouseMove()
     Id = GetTitle(4 + TitleListIndex)
 
     If Id >= 1 And Id <= MaximumTitles Then
-        Dim X As Long, Y As Long
+        Dim x As Long, Y As Long
 
-        Call SetWinDescriptionPosition(X, Y)
-        Call ShowTitleDesc(X, Y, Id)
+        Call SetWinDescriptionPosition(x, Y)
+        Call ShowTitleDesc(x, Y, Id)
     End If
 End Sub
 
@@ -248,10 +262,10 @@ Private Sub PicList5_MouseMove()
     Id = GetTitle(5 + TitleListIndex)
 
     If Id >= 1 And Id <= MaximumTitles Then
-        Dim X As Long, Y As Long
+        Dim x As Long, Y As Long
 
-        Call SetWinDescriptionPosition(X, Y)
-        Call ShowTitleDesc(X, Y, Id)
+        Call SetWinDescriptionPosition(x, Y)
+        Call ShowTitleDesc(x, Y, Id)
     End If
 End Sub
 
@@ -268,10 +282,10 @@ Private Sub PicList6_MouseMove()
     Id = GetTitle(6 + TitleListIndex)
 
     If Id >= 1 And Id <= MaximumTitles Then
-        Dim X As Long, Y As Long
+        Dim x As Long, Y As Long
 
-        Call SetWinDescriptionPosition(X, Y)
-        Call ShowTitleDesc(X, Y, Id)
+        Call SetWinDescriptionPosition(x, Y)
+        Call ShowTitleDesc(x, Y, Id)
     End If
 End Sub
 
@@ -288,10 +302,10 @@ Private Sub PicList7_MouseMove()
     Id = GetTitle(7 + TitleListIndex)
 
     If Id >= 1 And Id <= MaximumTitles Then
-        Dim X As Long, Y As Long
+        Dim x As Long, Y As Long
 
-        Call SetWinDescriptionPosition(X, Y)
-        Call ShowTitleDesc(X, Y, Id)
+        Call SetWinDescriptionPosition(x, Y)
+        Call ShowTitleDesc(x, Y, Id)
     End If
 End Sub
 
@@ -308,10 +322,10 @@ Private Sub PicList8_MouseMove()
     Id = GetTitle(8 + TitleListIndex)
 
     If Id >= 1 And Id <= MaximumTitles Then
-        Dim X As Long, Y As Long
+        Dim x As Long, Y As Long
 
-        Call SetWinDescriptionPosition(X, Y)
-        Call ShowTitleDesc(X, Y, Id)
+        Call SetWinDescriptionPosition(x, Y)
+        Call ShowTitleDesc(x, Y, Id)
     End If
 End Sub
 
@@ -328,10 +342,10 @@ Private Sub PicList9_MouseMove()
     Id = GetTitle(9 + TitleListIndex)
 
     If Id >= 1 And Id <= MaximumTitles Then
-        Dim X As Long, Y As Long
+        Dim x As Long, Y As Long
 
-        Call SetWinDescriptionPosition(X, Y)
-        Call ShowTitleDesc(X, Y, Id)
+        Call SetWinDescriptionPosition(x, Y)
+        Call ShowTitleDesc(x, Y, Id)
     End If
 End Sub
 
@@ -348,22 +362,22 @@ Private Sub PicList10_MouseMove()
     Id = GetTitle(10 + TitleListIndex)
 
     If Id >= 1 And Id <= MaximumTitles Then
-        Dim X As Long, Y As Long
+        Dim x As Long, Y As Long
 
-        Call SetWinDescriptionPosition(X, Y)
-        Call ShowTitleDesc(X, Y, Id)
+        Call SetWinDescriptionPosition(x, Y)
+        Call ShowTitleDesc(x, Y, Id)
     End If
 End Sub
 
-Private Sub SetWinDescriptionPosition(ByRef X As Long, ByRef Y As Long)
+Private Sub SetWinDescriptionPosition(ByRef x As Long, ByRef Y As Long)
 ' calc position
-    X = Windows(WindowIndex).Window.Left - Windows(GetWindowIndex("winDescription")).Window.Width - 2
+    x = Windows(WindowIndex).Window.Left - Windows(GetWindowIndex("winDescription")).Window.Width - 2
     Y = Windows(WindowIndex).Window.Top
 
     ' offscreen?
-    If X < 0 Then
+    If x < 0 Then
         ' switch to right
-        X = Windows(WindowIndex).Window.Left + Windows(WindowIndex).Window.Width + 2
+        x = Windows(WindowIndex).Window.Left + Windows(WindowIndex).Window.Width + 2
     End If
 End Sub
 
@@ -373,9 +387,21 @@ Private Sub MoveListToUp()
     End If
 End Sub
 
+Private Sub MoveDescriptionListToUp()
+    If DescriptionScrollLineIndex > 1 Then
+        DescriptionScrollLineIndex = DescriptionScrollLineIndex - 1
+    End If
+End Sub
+
 Private Sub MoveListToDown()
     If TitleListIndex < (MaxPlayerTitles - MaxTitleList) Then
         TitleListIndex = TitleListIndex + 1
+    End If
+End Sub
+
+Private Sub MoveDescriptionListToDown()
+    If DescriptionScrollLineIndex < MaximumAllocatedDescription Then
+        DescriptionScrollLineIndex = DescriptionScrollLineIndex + 1
     End If
 End Sub
 

@@ -6,7 +6,7 @@ Private Const DecreaseText As String = "Redução"
 Private Color As Long
 Private EnabledEffect As Boolean
 
-Public Sub ShowViewEquipmentDescription(X As Long, Y As Long, ByRef Inventory As InventoryRec)
+Public Sub ShowViewEquipmentDescription(x As Long, Y As Long, ByRef Inventory As InventoryRec)
     Dim Colour As Long, i As Long
     Dim WindowIndex As Long
     Dim CurrentHeight As Long
@@ -23,7 +23,7 @@ Public Sub ShowViewEquipmentDescription(X As Long, Y As Long, ByRef Inventory As
     CurrentHeight = Windows(WindowIndex).Window.Height
 
     ' set position
-    Windows(WindowIndex).Window.Left = X
+    Windows(WindowIndex).Window.Left = x
     Windows(WindowIndex).Window.Top = Y
     Windows(WindowIndex).Window.Width = 225
 
@@ -133,6 +133,7 @@ Public Sub ShowViewEquipmentDescription(X As Long, Y As Long, ByRef Inventory As
     ElseIf Item(Inventory.Num).Type = ItemType.ItemType_Heraldry Then
         If Inventory.AttributeId = 0 Then
             AddDescInfo "Os atributos estão ocultos."
+            AddDescInfo "Botão Direito: Inspecionar.", ColorType.Gold
         End If
     End If
 
@@ -215,6 +216,7 @@ Private Sub AddEquipmentDescValues(ByVal ItemNum As Long, ByVal Level As Long, B
 
     If AttributeId = 0 Then
         AddDescInfo "Os atributos estão ocultos."
+        AddDescInfo "Botão Direito: Inspecionar.", ColorType.Gold
     Else
         ' Adiciona os atributos do equipamento.
         If AttributeId > 0 And AttributeId <= MaxEquipmentAttributes Then
@@ -239,13 +241,13 @@ Private Sub AddEquipmentDescValues(ByVal ItemNum As Long, ByVal Level As Long, B
 End Sub
 
 Private Sub AddItemDescValues(ByRef mAttributes As AttributesRec, ByRef uAttributes As AttributesRec, ByVal Level As Long)
-    ' Quando o efeito está ativo, desenha o texto em branco.
+' Quando o efeito está ativo, desenha o texto em branco.
     If EnabledEffect Then
         Color = White
     Else
         Color = Grey
     End If
-    
+
     Call AddText(mAttributes.Stat(Stats.Strength), Level, uAttributes.Stat(Stats.Strength), "Força")
     Call AddText(mAttributes.Stat(Stats.Agility), Level, uAttributes.Stat(Stats.Agility), "Agilidade")
     Call AddText(mAttributes.Stat(Stats.Constitution), Level, uAttributes.Stat(Stats.Constitution), "Constituição")
@@ -312,9 +314,9 @@ Private Sub AddItemSetEffectDescValues(ByVal EquipmentSetId As Long, ByVal Index
 
     If EquipmentSet(EquipmentSetId).Effect(Index).PieceCount > 0 Then
         Dim Value As Long
-        
+
         Value = GetPlayerItemSetCount(EquipmentSetId)
-        
+
         If GetPlayerItemSetCount(EquipmentSetId) >= EquipmentSet(EquipmentSetId).Effect(Index).PieceCount Then
             EnabledEffect = True
         Else
@@ -322,11 +324,11 @@ Private Sub AddItemSetEffectDescValues(ByVal EquipmentSetId As Long, ByVal Index
         End If
 
         AddDescInfo GetItemSetCountText(EquipmentSet(EquipmentSetId).Effect(Index).PieceCount), BrightBlue
-        
+
         If AttributeId > 0 And AttributeId <= MaxEquipmentSetAttributes Then
             Call AddItemDescValues(EquipmentSetAttributes(AttributeId), EquipmentSetAttributes(AttributeId), 0)
         End If
- 
+
     End If
 End Sub
 
