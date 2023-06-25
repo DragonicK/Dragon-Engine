@@ -56,7 +56,7 @@
     "StumbleResistance": 0
   },
   "Unique": {
-    "CritRate": 0.0,
+    "CritRate": 0,
     "CritDamage": 0.1,
     "ResistCritRate": 0,
     "ResistCritDamage": 0,
@@ -64,7 +64,7 @@
     "FinalDamage": 0,
     "Amplification": 0,
     "DamageSuppression": 0,
-    "Enmity": 8,
+    "Enmity": 0,
     "AttackSpeed": 0,
     "CastSpeed": 0,
     "PveAttack": 0,
