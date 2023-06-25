@@ -26,37 +26,37 @@
   "X": 10,
   "Y": 10,
   "Vital": {
-    "HP": 100,
-    "MP": 100,
+    "HP": 80,
+    "MP": 220,
     "Special": 0
   },
   "Primary": {
-    "Strength": 15,
-    "Agility": 16,
-    "Constitution": 17,
+    "Strength": 5,
+    "Agility": 5,
+    "Constitution": 3,
     "Intelligence": 18,
-    "Spirit": 19,
-    "Will": 20
+    "Spirit": 6,
+    "Will": 4
   },
   "Secondary": {
-    "Attack": 150,
-    "Defense": 0,
-    "Accuracy": 0,
-    "Evasion": 0,
+    "Attack": 5,
+    "Defense": 3,
+    "Accuracy": 3,
+    "Evasion": 3,
     "Parry": 0,
     "Block": 0,
-    "MagicAttack": 150,
-    "MagicDefense": 0,
-    "MagicAccuracy": 0,
-    "MagicResist": 0,
-    "Concentration": 0,
+    "MagicAttack": 25,
+    "MagicDefense": 12,
+    "MagicAccuracy": 24,
+    "MagicResist": 5,
+    "Concentration": 10,
     "SilenceResistance": 0,
     "BlindResistance": 0,
     "StunResistance": 0,
     "StumbleResistance": 0
   },
   "Unique": {
-    "CritRate": 0.1,
+    "CritRate": 0.0,
     "CritDamage": 0.1,
     "ResistCritRate": 0,
     "ResistCritDamage": 0,
@@ -64,7 +64,7 @@
     "FinalDamage": 0,
     "Amplification": 0,
     "DamageSuppression": 0,
-    "Enmity": 0,
+    "Enmity": 8,
     "AttackSpeed": 0,
     "CastSpeed": 0,
     "PveAttack": 0,
@@ -93,35 +93,35 @@
   "VitalGrowth": {
     "HP": {
       "Attributes": {
-        "Level": 100,
-        "Strength": 1,
-        "Agility": 1,
-        "Constitution": 1,
-        "Intelligence": 1,
-        "Spirit": 1,
-        "Will": 1
+        "Level": 50,
+        "Strength": 0,
+        "Agility": 0,
+        "Constitution": 5,
+        "Intelligence": 0,
+        "Spirit": 0,
+        "Will": 0
       }
     },
     "MP": {
       "Attributes": {
-        "Level": 100,
-        "Strength": 1,
-        "Agility": 1,
-        "Constitution": 1,
-        "Intelligence": 1,
-        "Spirit": 1,
-        "Will": 1
+        "Level": 50,
+        "Strength": 0,
+        "Agility": 0,
+        "Constitution": 3,
+        "Intelligence": 17,
+        "Spirit": 0,
+        "Will": 0
       }
     },
     "Special": {
       "Attributes": {
-        "Level": 100,
-        "Strength": 1,
-        "Agility": 1,
-        "Constitution": 1,
-        "Intelligence": 1,
-        "Spirit": 1,
-        "Will": 1
+        "Level": 0,
+        "Strength": 0,
+        "Agility": 0,
+        "Constitution": 0,
+        "Intelligence": 0,
+        "Spirit": 0,
+        "Will": 0
       }
     }
   },
@@ -129,56 +129,56 @@
     "Attack": {
       "Attributes": {
         "Level": 1,
-        "Strength": 5,
-        "Agility": 5,
-        "Constitution": 5,
-        "Intelligence": 5,
-        "Spirit": 5,
-        "Will": 5
+        "Strength": 1,
+        "Agility": 0,
+        "Constitution": 0,
+        "Intelligence": 0,
+        "Spirit": 0,
+        "Will": 0
       }
     },
     "Defense": {
       "Attributes": {
         "Level": 1,
-        "Strength": 5,
-        "Agility": 5,
-        "Constitution": 5,
-        "Intelligence": 5,
-        "Spirit": 5,
-        "Will": 5
+        "Strength": 0,
+        "Agility": 0,
+        "Constitution": 1,
+        "Intelligence": 0,
+        "Spirit": 0,
+        "Will": 0
       }
     },
     "Accuracy": {
       "Attributes": {
         "Level": 1,
-        "Strength": 5,
-        "Agility": 5,
-        "Constitution": 5,
-        "Intelligence": 5,
-        "Spirit": 5,
-        "Will": 5
+        "Strength": 0,
+        "Agility": 3,
+        "Constitution": 0,
+        "Intelligence": 0,
+        "Spirit": 0,
+        "Will": 0
       }
     },
     "Evasion": {
       "Attributes": {
         "Level": 1,
-        "Strength": 5,
-        "Agility": 5,
-        "Constitution": 5,
-        "Intelligence": 5,
-        "Spirit": 5,
-        "Will": 5
+        "Strength": 0,
+        "Agility": 6,
+        "Constitution": 0,
+        "Intelligence": 0,
+        "Spirit": 0,
+        "Will": 0
       }
     },
     "Parry": {
       "Attributes": {
-        "Level": 1,
-        "Strength": 5,
-        "Agility": 5,
-        "Constitution": 5,
-        "Intelligence": 5,
-        "Spirit": 5,
-        "Will": 5
+        "Level": 0,
+        "Strength": 0,
+        "Agility": 0,
+        "Constitution": 0,
+        "Intelligence": 0,
+        "Spirit": 0,
+        "Will": 0
       }
     },
     "Block": {
@@ -194,45 +194,45 @@
     },
     "MagicAttack": {
       "Attributes": {
-        "Level": 1,
+        "Level": 5,
         "Strength": 0,
         "Agility": 0,
         "Constitution": 0,
         "Intelligence": 10,
-        "Spirit": 1,
-        "Will": 1
+        "Spirit": 0,
+        "Will": 0
       }
     },
     "MagicDefense": {
       "Attributes": {
-        "Level": 0,
+        "Level": 3,
         "Strength": 0,
         "Agility": 0,
         "Constitution": 0,
-        "Intelligence": 0,
+        "Intelligence": 3,
         "Spirit": 0,
         "Will": 0
       }
     },
     "MagicAccuracy": {
       "Attributes": {
-        "Level": 0,
+        "Level": 3,
         "Strength": 0,
         "Agility": 0,
         "Constitution": 0,
-        "Intelligence": 0,
+        "Intelligence": 1,
         "Spirit": 0,
-        "Will": 0
+        "Will": 3
       }
     },
     "MagicResist": {
       "Attributes": {
-        "Level": 0,
+        "Level": 3,
         "Strength": 0,
         "Agility": 0,
         "Constitution": 0,
-        "Intelligence": 0,
-        "Spirit": 0,
+        "Intelligence": 3,
+        "Spirit": 3,
         "Will": 0
       }
     },
@@ -310,7 +310,7 @@
         "Strength": 0,
         "Agility": 0,
         "Constitution": 0,
-        "Intelligence": 0,
+        "Intelligence": 0.001,
         "Spirit": 0,
         "Will": 0
       }
