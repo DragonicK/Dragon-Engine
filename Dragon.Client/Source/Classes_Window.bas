@@ -80,7 +80,7 @@ Private Sub Classes_DrawFace()
 End Sub
 
 Private Sub Classes_DrawText()
-    Dim Image As Long, Text As String, xO As Long, yO As Long, TextArray() As String, i As Long, Count As Long, Y As Long, X As Long
+    Dim image As Long, Text As String, xO As Long, yO As Long, TextArray() As String, i As Long, Count As Long, Y As Long, x As Long
 
     xO = Windows(WindowIndex).Window.Left
     yO = Windows(WindowIndex).Window.Top
@@ -103,9 +103,9 @@ Private Sub Classes_DrawText()
     Y = yO + 80
     
     For i = 1 To Count
-        X = xO + 132
+        x = xO + 132
         
-        RenderText Font(Fonts.FontRegular), TextArray(i), X, Y, White
+        RenderText Font(Fonts.FontRegular), TextArray(i), x, Y, White
         
         Y = Y + 14
     Next
@@ -116,7 +116,7 @@ Private Sub ButtonClasses_Left()
         NewCharClass = NewCharClass - 1
     End If
 
-    Windows(WindowIndex).Controls(GetControlIndex("winClasses", "lblClassName")).Text = UCase$(Class(NewCharClass).Name)
+    Windows(WindowIndex).Controls(GetControlIndex("winClasses", "lblClassName")).Text = Trim$(Class(NewCharClass).Name)
 End Sub
 
 Private Sub ButtonClasses_Right()
@@ -124,7 +124,7 @@ Private Sub ButtonClasses_Right()
         NewCharClass = NewCharClass + 1
     End If
 
-    Windows(WindowIndex).Controls(GetControlIndex("winClasses", "lblClassName")).Text = UCase$(Class(NewCharClass).Name)
+    Windows(WindowIndex).Controls(GetControlIndex("winClasses", "lblClassName")).Text = Trim$(Class(NewCharClass).Name)
 End Sub
 
 Private Sub ButtonClasses_Accept()
