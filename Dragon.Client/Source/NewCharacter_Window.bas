@@ -137,11 +137,11 @@ Private Sub ButtonNewChar_Accept()
     Dim Name As String
     Name = Windows(WindowIndex).Controls(GetControlIndex("winNewModel", "txtName")).Text
     
-    If Len(Windows(WindowIndex).Controls(GetControlIndex("winNewModel", "txtName")).Text) >= 5 Then
+    If Len(Windows(WindowIndex).Controls(GetControlIndex("winNewModel", "txtName")).Text) >= 4 Then
         HideWindows
         AddChar Name, NewCharGender, NewCharClass, NewCharSprite
     Else
-        ShowDialogue "Error!", "O Nome escolhido não atente aos critérios,", "Verifique o nome e tente novamente.", DialogueTypeAlert
+        ShowDialogue "Error!", "O Nome escolhido não atente aos critérios,", "O nome deve ser maior que 4 caracteres.", DialogueTypeAlert
     End If
 
 End Sub
