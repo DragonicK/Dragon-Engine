@@ -40,18 +40,18 @@ Public Sub CreateWindow_Character()
     ' Attributes
     CreateLabel WindowCount, "lblLabel_1", 60, 252, 138, , "Força:", FontRegular, White, Alignment.AlignLeft
     CreateLabel WindowCount, "lblLabel_2", 60, 272, 138, , "Agilidade:", FontRegular, White, Alignment.AlignLeft
-    CreateLabel WindowCount, "lblLabel_3", 60, 292, 138, , "Destreza:", FontRegular, White, Alignment.AlignLeft
-    CreateLabel WindowCount, "lblLabel_4", 60, 312, 138, , "Constituição:", FontRegular, White, Alignment.AlignLeft
-    CreateLabel WindowCount, "lblLabel_5", 60, 332, 138, , "Inteligência:", FontRegular, White, Alignment.AlignLeft
-    CreateLabel WindowCount, "lblLabel_6", 60, 352, 138, , "Espírito:", FontRegular, White, Alignment.AlignLeft
+    CreateLabel WindowCount, "lblLabel_3", 60, 292, 138, , "Constituição:", FontRegular, White, Alignment.AlignLeft
+    CreateLabel WindowCount, "lblLabel_4", 60, 312, 138, , "Inteligência:", FontRegular, White, Alignment.AlignLeft
+    CreateLabel WindowCount, "lblLabel_5", 60, 332, 138, , "Espírito:", FontRegular, White, Alignment.AlignLeft
+    CreateLabel WindowCount, "lblLabel_6", 60, 352, 138, , "Vontade:", FontRegular, White, Alignment.AlignLeft
     CreateLabel WindowCount, "lblPoints", 60, 382, 138, , "DISPONÍVEL: 100", FontRegular, Gold, Alignment.AlignLeft
 
-    CreateLabel WindowCount, "lblStat_1", 138, 252, 138, , "0", FontRegular, White, Alignment.AlignLeft
-    CreateLabel WindowCount, "lblStat_2", 138, 272, 138, , "0", FontRegular, White, Alignment.AlignLeft
-    CreateLabel WindowCount, "lblStat_3", 138, 292, 138, , "0", FontRegular, White, Alignment.AlignLeft
-    CreateLabel WindowCount, "lblStat_4", 138, 312, 138, , "0", FontRegular, White, Alignment.AlignLeft
-    CreateLabel WindowCount, "lblStat_5", 138, 332, 138, , "0", FontRegular, White, Alignment.AlignLeft
-    CreateLabel WindowCount, "lblStat_6", 138, 352, 138, , "0", FontRegular, White, Alignment.AlignLeft
+    CreateLabel WindowCount, "lblStat_1", 148, 252, 138, , "0", FontRegular, White, Alignment.AlignLeft
+    CreateLabel WindowCount, "lblStat_2", 148, 272, 138, , "0", FontRegular, White, Alignment.AlignLeft
+    CreateLabel WindowCount, "lblStat_3", 148, 292, 138, , "0", FontRegular, White, Alignment.AlignLeft
+    CreateLabel WindowCount, "lblStat_4", 148, 312, 138, , "0", FontRegular, White, Alignment.AlignLeft
+    CreateLabel WindowCount, "lblStat_5", 148, 332, 138, , "0", FontRegular, White, Alignment.AlignLeft
+    CreateLabel WindowCount, "lblStat_6", 148, 352, 138, , "0", FontRegular, White, Alignment.AlignLeft
 
     ' Buttons
     CreateButton WindowCount, "btnStat_1", 180, 252, 16, 16, , , , , , , Tex_GUI(47), Tex_GUI(48), Tex_GUI(49), , , , , , GetAddress(AddressOf Character_SpendPoint1)
