@@ -8,24 +8,24 @@ Private Const Decrease As String = "Diminui"
 ' Slot da skill usado para descrição.
 Private SkillSlot As Long
 
-Public Sub ShowPlayerSkillDesc(X As Long, Y As Long, ByVal SlotNum As Long, ByVal Passive As Boolean)
+Public Sub ShowPlayerSkillDesc(x As Long, Y As Long, ByVal SlotNum As Long, ByVal Passive As Boolean)
     If SlotNum <= 0 Or SlotNum > MaxPlayerSkill Then
         Exit Sub
     End If
 
     If Passive Then
         If PlayerPassive(SlotNum).Id > 0 And PlayerPassive(SlotNum).Id <= MaximumSkills Then
-            ShowSkillDesc X, Y, SlotNum, PlayerPassive(SlotNum).Id, PlayerPassive(SlotNum).Level
+            ShowSkillDesc x, Y, SlotNum, PlayerPassive(SlotNum).Id, PlayerPassive(SlotNum).Level
         End If
     Else
         If PlayerSkill(SlotNum).Id > 0 And PlayerSkill(SlotNum).Id <= MaximumSkills Then
-            ShowSkillDesc X, Y, SlotNum, PlayerSkill(SlotNum).Id, PlayerSkill(SlotNum).Level
+            ShowSkillDesc x, Y, SlotNum, PlayerSkill(SlotNum).Id, PlayerSkill(SlotNum).Level
         End If
     End If
 
 End Sub
 
-Public Sub ShowSkillDesc(X As Long, Y As Long, ByVal Slot As Long, SkillNum As Long, Optional SkillLevel As Long = 0, Optional SkillTreeIndex As Long = 0, Optional TalentIndex As Long = 0)
+Public Sub ShowSkillDesc(x As Long, Y As Long, ByVal Slot As Long, SkillNum As Long, Optional SkillLevel As Long = 0, Optional SkillTreeIndex As Long = 0, Optional TalentIndex As Long = 0)
     Dim Colour As Long
     Dim WindowIndex As Long, ControlIndex As Long
 
@@ -36,9 +36,9 @@ Public Sub ShowSkillDesc(X As Long, Y As Long, ByVal Slot As Long, SkillNum As L
     WindowIndex = GetWindowIndex("winDescription")
 
     ' set position
-    Windows(WindowIndex).Window.Left = X
+    Windows(WindowIndex).Window.Left = x
     Windows(WindowIndex).Window.Top = Y
-    Windows(WindowIndex).Window.Width = X
+    Windows(WindowIndex).Window.Width = x
     Windows(WindowIndex).Window.Width = 260
 
     ' show the window
@@ -199,7 +199,7 @@ Private Sub AddPassiveImprovements(ByVal PassiveId As Long, ByVal Level As Long,
             Text = " o dano em "
         Case SkillEffectType.SkillEffectType_Heal
             Text = " a cura em "
-        Case SkillEffectType.SkillEffectType_DoT
+        Case SkillEffectType.SkillEffectType_Dot
             Text = " o dano em "
         Case SkillEffectType.SkillEffectType_HoT
             Text = " a cura em "
@@ -381,7 +381,7 @@ Private Sub AddSkillEffectInfo(ByVal SkillNum As Long, ByVal Level As Long)
                     AddDescInfo "Recupera o (a) " & GetSkillTargetTypeName(SkillEffects.Effect(EffectIndex).TargetType, False) & " com " & Damage & " de " & GetSkillVitalTypeName(SkillEffects.Effect(EffectIndex).VitalType) & "."
                 End If
 
-            Case SkillEffectType.SkillEffectType_DoT
+            Case SkillEffectType.SkillEffectType_Dot
                 If SkillEffects.Element > 0 Then
                     AddDescInfo "Infligi o (a) " & GetSkillTargetTypeName(SkillEffects.Effect(EffectIndex).TargetType, False) & " com " & Damage & " de dano"
                     AddDescInfo "adicional de " & GetSkillElementTypeName(SkillEffects.Element) & " a cada " & Interval & " segundo(s)"
@@ -672,7 +672,7 @@ Public Function GetSkillEffectTypeName(ByVal EffectType As SkillEffectType) As S
         GetSkillEffectTypeName = "Buff"
     Case SkillEffectType.SkillEffectType_Damage
         GetSkillEffectTypeName = "Dano"
-    Case SkillEffectType.SkillEffectType_DoT
+    Case SkillEffectType.SkillEffectType_Dot
         GetSkillEffectTypeName = "Dano ao longo do tempo"
     Case SkillEffectType.SkillEffectType_Heal
         GetSkillEffectTypeName = "Cura"

@@ -7,6 +7,9 @@ Public Sub LogoutGame()
     isLogging = True
     InGame = False
 
+    ClearPlayerSkills
+    ClearPlayerPassives
+    ClearPlayerQuickSlots
     ClearData
     ClearParty
     ClearServices

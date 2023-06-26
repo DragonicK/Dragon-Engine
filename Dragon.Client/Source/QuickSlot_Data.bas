@@ -11,3 +11,14 @@ Public Type QuickSlotRec
     SType As Byte
     Value As Long
 End Type
+
+Public Sub ClearPlayerQuickSlots()
+    Dim i As Long
+
+    For i = 1 To MaximumQuickSlot
+        QuickSlot(i).Slot = 0
+        QuickSlot(i).SType = 0
+        QuickSlot(i).Value = 0
+    Next
+
+End Sub
