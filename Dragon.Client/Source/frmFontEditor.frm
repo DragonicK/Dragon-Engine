@@ -721,8 +721,8 @@ Private Sub Form_Load()
 
     ReDim FontNames(1 To Fonts.Fonts_Count - 1)
     
-    FontNames(1) = "FontRegular"
-    FontNames(2) = "OpenSans_Damage"
+    FontNames(1) = "regular"
+    FontNames(2) = "damage"
 
     ComboFonts.Clear
 
