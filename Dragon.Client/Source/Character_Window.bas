@@ -54,12 +54,12 @@ Public Sub CreateWindow_Character()
     CreateLabel WindowCount, "lblStat_6", 148, 352, 138, , "0", FontRegular, White, Alignment.AlignLeft
 
     ' Buttons
-    CreateButton WindowCount, "btnStat_1", 180, 252, 16, 16, , , , , , , Tex_GUI(47), Tex_GUI(48), Tex_GUI(49), , , , , , GetAddress(AddressOf Character_SpendPoint1)
-    CreateButton WindowCount, "btnStat_2", 180, 272, 16, 16, , , , , , , Tex_GUI(47), Tex_GUI(48), Tex_GUI(49), , , , , , GetAddress(AddressOf Character_SpendPoint2)
-    CreateButton WindowCount, "btnStat_3", 180, 292, 16, 16, , , , , , , Tex_GUI(47), Tex_GUI(48), Tex_GUI(49), , , , , , GetAddress(AddressOf Character_SpendPoint3)
-    CreateButton WindowCount, "btnStat_4", 180, 312, 16, 16, , , , , , , Tex_GUI(47), Tex_GUI(48), Tex_GUI(49), , , , , , GetAddress(AddressOf Character_SpendPoint4)
-    CreateButton WindowCount, "btnStat_5", 180, 332, 16, 16, , , , , , , Tex_GUI(47), Tex_GUI(48), Tex_GUI(49), , , , , , GetAddress(AddressOf Character_SpendPoint5)
-    CreateButton WindowCount, "btnStat_6", 180, 352, 16, 16, , , , , , , Tex_GUI(47), Tex_GUI(48), Tex_GUI(49), , , , , , GetAddress(AddressOf Character_SpendPoint6)
+    CreateButton WindowCount, "btnStat_1", 180, 252, 16, 16, , , , , , , Tex_GUI(33), Tex_GUI(34), Tex_GUI(35), , , , , , GetAddress(AddressOf Character_SpendPoint1)
+    CreateButton WindowCount, "btnStat_2", 180, 272, 16, 16, , , , , , , Tex_GUI(33), Tex_GUI(34), Tex_GUI(35), , , , , , GetAddress(AddressOf Character_SpendPoint2)
+    CreateButton WindowCount, "btnStat_3", 180, 292, 16, 16, , , , , , , Tex_GUI(33), Tex_GUI(34), Tex_GUI(35), , , , , , GetAddress(AddressOf Character_SpendPoint3)
+    CreateButton WindowCount, "btnStat_4", 180, 312, 16, 16, , , , , , , Tex_GUI(33), Tex_GUI(34), Tex_GUI(35), , , , , , GetAddress(AddressOf Character_SpendPoint4)
+    CreateButton WindowCount, "btnStat_5", 180, 332, 16, 16, , , , , , , Tex_GUI(33), Tex_GUI(34), Tex_GUI(35), , , , , , GetAddress(AddressOf Character_SpendPoint5)
+    CreateButton WindowCount, "btnStat_6", 180, 352, 16, 16, , , , , , , Tex_GUI(33), Tex_GUI(34), Tex_GUI(35), , , , , , GetAddress(AddressOf Character_SpendPoint6)
 
     ' fake buttons
     CreatePictureBox WindowCount, "btnGreyStat_1", 180, 252, 15, 15, False, , , , Tex_GUI(30), Tex_GUI(31), Tex_GUI(32)
