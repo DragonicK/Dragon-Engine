@@ -106,7 +106,6 @@ End Function
 Public Sub DrawMapGround()
     Dim i As Long
     Dim PlayerX As Long, PlayerY As Long
-    Dim Right As Long, Bottom As Long
     Dim TileX As Long, TileY As Long
     Dim X As Long, Y As Long
 
@@ -137,22 +136,15 @@ Public Sub DrawMapGround()
             Y = TileView.Top * PIC_Y + Camera.Top
         End If
     End If
-
-    PlayerX = GetPlayerX(MyIndex) * 32
-    PlayerY = GetPlayerY(MyIndex) * 32
-    Right = Camera.Right * 2
-    Bottom = Camera.Bottom * 2
+    
+    PlayerX = Player(MyIndex).xOffset + (GetPlayerX(MyIndex) * 32)
+    PlayerY = Player(MyIndex).yOffset + (GetPlayerY(MyIndex) * 32)
 
     For i = 1 To MaxGroundParallax
         TileX = GroundParallax(i).X
         TileY = GroundParallax(i).Y
 
-        ' Desenha somente o que pode ser visto.
-        If PlayerX < TileX + Right And PlayerY < TileY + Bottom Then
-            If TileX < PlayerX + Right And TileY < PlayerY + Bottom Then
-                RenderParallaxTexture GroundParallax(i).Texture, TileX - X, TileY - Y, 0, 0, TileSize, TileSize, TileSize, TileSize
-            End If
-        End If
+        RenderParallaxTexture GroundParallax(i).Texture, TileX - X, TileY - Y, 0, 0, TileSize, TileSize, TileSize, TileSize
     Next
 
 End Sub
@@ -160,7 +152,6 @@ End Sub
 Public Sub DrawMapFringe()
     Dim i As Long
     Dim PlayerX As Long, PlayerY As Long
-    Dim Right As Long, Bottom As Long
     Dim TileX As Long, TileY As Long
     Dim X As Long, Y As Long
 
@@ -192,21 +183,14 @@ Public Sub DrawMapFringe()
         End If
     End If
 
-    PlayerX = GetPlayerX(MyIndex) * 32
-    PlayerY = GetPlayerY(MyIndex) * 32
-    Right = Camera.Right * 2
-    Bottom = Camera.Bottom * 2
+    PlayerX = Player(MyIndex).xOffset + (GetPlayerX(MyIndex) * 32)
+    PlayerY = Player(MyIndex).yOffset + (GetPlayerY(MyIndex) * 32)
 
     For i = 1 To MaxGroundParallax
         TileX = FringeParallax(i).X
         TileY = FringeParallax(i).Y
 
-        ' Desenha somente o que pode ser visto.
-        If PlayerX < TileX + Right And PlayerY < TileY + Bottom Then
-            If TileX < PlayerX + Right And TileY < PlayerY + Bottom Then
-                RenderParallaxTexture FringeParallax(i).Texture, TileX - X, TileY - Y, 0, 0, TileSize, TileSize, TileSize, TileSize
-            End If
-        End If
+        RenderParallaxTexture FringeParallax(i).Texture, TileX - X, TileY - Y, 0, 0, TileSize, TileSize, TileSize, TileSize
     Next
 
 End Sub
@@ -333,19 +317,6 @@ Public Sub UpdateCamera()
         End If
 
         EndX = StartX + (TileWidth + 1) + 1
-
-        If EndX > CurrentMap.MapData.MaxX Then
-            OffsetX = 32
-
-            If EndX = CurrentMap.MapData.MaxX + 1 Then
-                If Player(MyIndex).xOffset < 0 Then
-                    OffsetX = Player(MyIndex).xOffset + PIC_X
-                End If
-            End If
-
-            EndX = CurrentMap.MapData.MaxX
-            StartX = EndX - TileWidth - 1
-        End If
     Else
         EndX = StartX + (TileWidth + 1) + 1
     End If
@@ -364,19 +335,6 @@ Public Sub UpdateCamera()
         End If
 
         EndY = StartY + (TileHeight + 1) + 1
-
-        If EndY > CurrentMap.MapData.MaxY Then
-            OffSetY = 32
-
-            If EndY = CurrentMap.MapData.MaxY + 1 Then
-                If Player(MyIndex).yOffset < 0 Then
-                    OffSetY = Player(MyIndex).yOffset + PIC_Y
-                End If
-            End If
-
-            EndY = CurrentMap.MapData.MaxY
-            StartY = EndY - TileHeight - 1
-        End If
     Else
         EndY = StartY + (TileHeight + 1) + 1
     End If
