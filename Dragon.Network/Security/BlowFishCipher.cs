@@ -132,7 +132,7 @@ public sealed class BlowFishCipher : IEngineCrypto {
     private const int KeyLength = 16;
 
     private byte[] cipherKey = new byte[] { 0x6b, 0x60, 0xcb, 0x5b, 0x82, 0xce, 0x90, 0xb1, 0xcc, 0x2b, 0x6c, 0x55, 0x6c, 0x6c, 0x6c, 0x6c };
-    
+
     private int[] pArray;
     private int[][] sBoxes;
 
@@ -162,16 +162,14 @@ public sealed class BlowFishCipher : IEngineCrypto {
         int blockNumber = length >> 3;
         int p;
 
-        for (int k = 0; k < blockNumber; k++)
-        {
+        for (int k = 0; k < blockNumber; k++) {
             p = offset + (k << 3);
 
             int xl = ByteArrayToInteger(buffer, p);
             int xr = ByteArrayToInteger(buffer, p + 4);
             int tmp;
 
-            for (int i = 0; i < 16; i++)
-            {
+            for (int i = 0; i < 16; i++) {
                 xl = xl ^ pArray[i];
                 xr = F(xl) ^ xr;
                 tmp = xl;
@@ -195,16 +193,14 @@ public sealed class BlowFishCipher : IEngineCrypto {
         int blocks = length >> 3;
         int p;
 
-        for (int k = 0; k < blocks; k++)
-        {
+        for (int k = 0; k < blocks; k++) {
             p = offset + (k << 3);
 
             int lb = ByteArrayToInteger(buffer, p);
             int rb = ByteArrayToInteger(buffer, p + 4);
             int tmp;
 
-            for (int i = 17; i > 1; i--)
-            {
+            for (int i = 17; i > 1; i--) {
                 lb ^= pArray[i];
                 rb = F(lb) ^ rb;
                 tmp = lb;
@@ -229,16 +225,13 @@ public sealed class BlowFishCipher : IEngineCrypto {
     private void InitArrays() {
         var keyIndex = 0;
 
-        for (int i = 0; i < 18; i++)
-        {
+        for (int i = 0; i < 18; i++) {
             int data = 0;
 
-            for (int j = 0; j < 4; j++)
-            {
+            for (int j = 0; j < 4; j++) {
                 data = data << 8 | cipherKey[keyIndex++] & 0xFF;
 
-                if (keyIndex >= KeyLength)
-                {
+                if (keyIndex >= KeyLength) {
                     keyIndex = 0;
                 }
             }
@@ -248,23 +241,20 @@ public sealed class BlowFishCipher : IEngineCrypto {
 
         var buffer = new byte[8];
 
-        for (int i = 0; i < 18; i += 2)
-        {
+        for (int i = 0; i < 18; i += 2) {
             Cipher(buffer, 0, buffer.Length);
 
             pArray[i] = ByteArrayToInteger(buffer, 0);
             pArray[i + 1] = ByteArrayToInteger(buffer, 4);
         }
 
-        for (int i = 0; i < 4; i++)
-        {
+        for (int i = 0; i < 4; i++) {
             InitSBox(buffer, sBoxes[i]);
         }
     }
 
     private void InitSBox(byte[] buffer, int[] sBox) {
-        for (int j = 0; j < 256; j += 2)
-        {
+        for (int j = 0; j < 256; j += 2) {
             Cipher(buffer, 0, buffer.Length);
 
             sBox[j] = ByteArrayToInteger(buffer, 0);
@@ -306,8 +296,7 @@ public sealed class BlowFishCipher : IEngineCrypto {
         int sum = 0;
         int i;
 
-        for (i = offset; i < length - 2; ++i)
-        {
+        for (i = offset; i < length - 2; ++i) {
             sum += raw[i];
         }
 
@@ -321,8 +310,7 @@ public sealed class BlowFishCipher : IEngineCrypto {
         int sum = 0;
         int i;
 
-        for (i = offset; i < length - 2; ++i)
-        {
+        for (i = offset; i < length - 2; ++i) {
             sum += data[i];
         }
 

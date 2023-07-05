@@ -32,7 +32,6 @@ public sealed class ByteBuffer {
     }
 
     public void Flush() {
-        buffer.Flush();
         buffer.SetLength(0);
         buffer.Position = 0;
         readPos = 0;
@@ -49,12 +48,12 @@ public sealed class ByteBuffer {
         }
     }
 
-    public void Write(byte[] values, int size) {
-        if (buffer.Length + size > buffer.Capacity) {
-            buffer.Capacity = (int)(buffer.Length + size);
+    public void Write(byte[] values, int length) {
+        if (buffer.Length + length > buffer.Capacity) {
+            buffer.Capacity = (int)(buffer.Length + length);
         }
 
-        buffer.Write(values, 0, size);
+        buffer.Write(values, 0, length);
     }
 
     public void Write(byte[] values) {
