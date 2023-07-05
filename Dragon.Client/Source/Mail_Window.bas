@@ -70,8 +70,8 @@ Public Sub CreateWindow_Mail()
     ' Close button
     CreateButton WindowCount, "btnClose", Windows(WindowCount).Window.Width - 33, 11, 22, 22, , , , , , , Tex_GUI(TextureControl_CloseNormal), Tex_GUI(TextureControl_CloseHover), Tex_GUI(TextureControl_CloseClick), , , , , , GetAddress(AddressOf ButtonMenu_Mail)
 
-    CreateButton WindowCount, "btnRead", 0, 42, 200, 26, "LER", FontRegular, Green, , , , , , , , , , , , GetAddress(AddressOf Button_ShowRead)
-    CreateButton WindowCount, "btnWrite", 200, 42, 200, 26, "ESCREVER", FontRegular, , , , , , , , , , , , , GetAddress(AddressOf Button_ShowWrite)
+    CreateButton WindowCount, "btnRead", 0, 42, 200, 26, "RECEBER CORREIO", FontRegular, Green, , , , , , , , , , , , GetAddress(AddressOf Button_ShowRead)
+    CreateButton WindowCount, "btnWrite", 200, 42, 200, 26, "ENVIAR CORREIO", FontRegular, , , , , , , , , , , , , GetAddress(AddressOf Button_ShowWrite)
 
     ' Read Mail
     CreatePictureBox WindowCount, "picSender", ReadingMailLeft, PictureSenderTop, 310, 25, False, , , , , , , DesignTypes.DesignTextBox, DesignTypes.DesignTextBox, DesignTypes.DesignTextBox
@@ -368,19 +368,19 @@ Public Sub ButtonMenu_Mail()
     If Windows(WindowIndex).Window.Visible Then
         InMail = False
         HideWindow WindowIndex
-        
-        CanMoveNow = True
 
+        CanMoveNow = True
+        CanSwapInvItems = True
     Else
         InMail = True
         ReadingMailIndex = 0
-        
+
         CanMoveNow = False
-        
+
         Call SetMailPageCount
         Call CanEnableMailCheckBox
         Call ChangeWindowMailState(WindowMailState_Listing)
-        
+
         ShowWindow WindowIndex, , False
     End If
 End Sub
@@ -456,8 +456,6 @@ Private Sub Draw_Mail()
     xO = Windows(WindowIndex).Window.Left
     yO = Windows(WindowIndex).Window.Top
     Width = Windows(WindowIndex).Window.Width
-
-    
 
     If MailingWindowState = WindowMailState.WindowMailState_Listing Then
         If MaxPlayerMail > 0 Then
