@@ -37,6 +37,8 @@ Public Declare Sub AppendCheckSum Lib "Dragon.Wrapper.dll" Alias "_AppendCheckSu
 Public Const AesKeyLength As Long = 16
 Public Const CipherKeyLength As Long = 16
 
+Public Const AES256HashLength As Long = 32
+
 Public GameInstanceCipherKey(0 To CipherKeyLength - 1) As Byte
 Public ChatInstanceCipherKey(0 To CipherKeyLength - 1) As Byte
 

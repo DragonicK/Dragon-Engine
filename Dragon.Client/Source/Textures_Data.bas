@@ -178,6 +178,7 @@ Private Function CheckFilePassword(ByVal Password As String) As Boolean
     Dim DecryptedLength As Long
     Dim Success As Boolean
     Dim i As Long
+    
 
     EncryptedLength = ReadInt32()
 
@@ -192,12 +193,12 @@ Private Function CheckFilePassword(ByVal Password As String) As Boolean
     CreateKey Password, ByVal VarPtr(Settings.Key(0))
     CreateIv Password, ByVal VarPtr(Settings.IV(0))
 
-    ReDim Decrypted(1024)
+    ReDim Decrypted(AES256HashLength - 1)
 
     Success = Decrypt(ByVal VarPtr(Settings), ByVal VarPtr(Encrypted(0)), EncryptedLength, ByVal VarPtr(Decrypted(0)), ByVal VarPtr(DecryptedLength))
 
     If Success Then
-        Dim ComputedHash(1024) As Byte
+        Dim ComputedHash(AES256HashLength - 1) As Byte
         Dim ComputedHashLength As Long
 
         ComputedHashLength = Compute(DefaultText, ByVal VarPtr(ComputedHash(0)))
@@ -222,7 +223,7 @@ Public Function CheckEquality(ByRef First() As Byte, ByVal FirstLength As Long, 
         Exit Function
     End If
     
-    For i = 0 To FirstLength
+    For i = 0 To AES256HashLength - 1
        If First(i) <> Second(i) Then
             Exit Function
         End If
