@@ -195,6 +195,7 @@ Module=Wrapper_Packet; Source\Wrapper_Packet.bas
 Module=Dice_Packet; Source\Dice_Packet.bas
 Module=Dice_Window; Source\Dice_Window.bas
 Module=Title_AllocatedAttributes; Source\Title_AllocatedAttributes.bas
+Class=clsAttribute; Source\clsAttribute.cls
 IconForm="frmMain"
 Startup="Sub Main"
 HelpFile=""

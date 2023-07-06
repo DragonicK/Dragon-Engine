@@ -51,7 +51,7 @@ Public Sub CreateWindow_ItemUpgrade()
     CreateButton WindowCount, "btnCancel", 250, 355, 100, 26, "CANCELAR", FontRegular, White, , , , , , , DesignTypes.DesignGrey, DesignTypes.DesignGreyHover, DesignTypes.DesignGreyClick, , , GetAddress(AddressOf Button_CancelUpgrade)
 
     CreateLabel WindowCount, "lblItem", 0, ItemSlotY - 20, 400, 16, "Vazio", FontRegular, , Alignment.AlignCenter
-    CreateLabel WindowCount, "lblRequirement", 150, RequirementY - 20, 200, 16, "Itens Necessários", FontRegular, , Alignment.AlignLeft
+    CreateLabel WindowCount, "lblRequirement", 140, RequirementY - 20, 200, 16, "Itens Necessários", FontRegular, , Alignment.AlignLeft
 
     ' Botões invisíveis para retirada dos items.
     CreatePictureBox WindowCount, "picBlank", ItemSlotX, ItemSlotY, 34, 34, , , , , , , , , , , , GetAddress(AddressOf Item_MouseMove), GetAddress(AddressOf RemoveItem), GetAddress(AddressOf Item_MouseMove)

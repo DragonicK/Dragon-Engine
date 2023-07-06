@@ -191,6 +191,8 @@ Public DragBox As EntityPartRec
 Public zOrder_Win As Long
 Public zOrder_Con As Long
 
+Private Const LeftAndRightPaddingMultiplierValue As Long = 5
+
 Public Sub CreateEntity(winNum As Long, zOrder As Long, Name As String, tType As EntityTypes, ByRef Design() As Long, ByRef image() As Long, ByRef EntityCallBack() As Long, _
                         Optional Left As Long, Optional Top As Long, Optional Width As Long, Optional Height As Long, Optional Visible As Boolean = True, Optional CanDrag As Boolean, Optional Max As Long, _
                         Optional Min As Long, Optional Value As Long, Optional Text As String, Optional Align As Byte, Optional Font As Long = Fonts.FontRegular, Optional TextColour As Long = White, _
@@ -450,10 +452,10 @@ Public Sub RenderEntity(winNum As Long, entNum As Long)
                 If .Align = Alignment.AlignCenter Then
 
                     ' Check if need to word wrap
-                    If TextWidth(Font(.Font), .Text) > .Width Then
+                    If TextWidth(Font(.Font), .Text) > .Width - (LeftAndRightPaddingMultiplierValue * .xOffset) Then
 
                         ' Wrap text
-                        WordWrap_Array .Text, .Width, TextArray()
+                        WordWrap_Array .Text, .Width - (LeftAndRightPaddingMultiplierValue * .xOffset), TextArray()
 
                         ' Render text
                         Count = UBound(TextArray)
@@ -462,17 +464,17 @@ Public Sub RenderEntity(winNum As Long, entNum As Long)
                             Left = .Left + (.Width \ 2) - (TextWidth(Font(.Font), TextArray(i)) \ 2)
 
                             If i = Count Then
-                                RenderText Font(.Font), TextArray(i) & taddText, Left + xO, .Top + yO + yOffset, .TextColour, .Alpha
+                                RenderText Font(.Font), TextArray(i) & taddText, Left + xO + .xOffset, .Top + yO + yOffset + .yOffset, .TextColour, .Alpha
                             Else
-                                RenderText Font(.Font), TextArray(i), Left + xO, .Top + yO + yOffset, .TextColour, .Alpha
+                                RenderText Font(.Font), TextArray(i), Left + xO + .xOffset, .Top + yO + yOffset + .yOffset, .TextColour, .Alpha
                             End If
 
-                            yOffset = yOffset + 14
+                            yOffset = yOffset + 15
                         Next
                     Else
                         ' Just one line
                         Left = .Left + (.Width \ 2) - (TextWidth(Font(.Font), .Text) \ 2)
-                        RenderText Font(.Font), .Text & taddText, Left + xO, .Top + yO, .TextColour, .Alpha
+                        RenderText Font(.Font), .Text & taddText, Left + xO + .xOffset, .Top + yO + .yOffset, .TextColour, .Alpha
 
                     End If
 
