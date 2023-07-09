@@ -58,8 +58,7 @@ public sealed class Authentication : PacketRoute, IPacketRoute {
 
             player.Connection.Disconnect();
 
-            // Wait about 1 second before disconnect.
-            await Task.Delay(1000);
+            await WaitOneSecondBeforeDisconnect();
 
             repository.Remove(player);
         }
@@ -74,5 +73,9 @@ public sealed class Authentication : PacketRoute, IPacketRoute {
 
     private void Disconnect(IConnection connection) {
         connection.Disconnect();
+    }
+
+    private async Task WaitOneSecondBeforeDisconnect() {
+        await Task.Delay(1000);
     }
 }
