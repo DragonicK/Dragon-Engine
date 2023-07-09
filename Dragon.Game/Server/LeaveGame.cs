@@ -1,8 +1,6 @@
 ﻿using Dragon.Core.Logs;
 using Dragon.Core.Services;
 
-using Dragon.Database.Handler;
-
 using Dragon.Game.Players;
 using Dragon.Game.Manager;
 using Dragon.Game.Services;
@@ -18,18 +16,11 @@ public sealed class LeaveGame {
     public ConfigurationService? Configuration { get; private set; }
     public PacketSenderService? PacketSenderService { get; private set; }
 
-    private readonly MembershipHandler MembershipHandler;
-
     private readonly AuraManager AuraManager;
     private readonly PartyDisconnectManager PartyManager;
 
     public LeaveGame(IServiceInjector injector) {
         injector.Inject(this);
-
-        var membership = Configuration!.DatabaseMembership;
-        var factory = DatabaseService!.DatabaseFactory!;
-
-        MembershipHandler = factory.GetMembershipHandler(membership);
 
         AuraManager = new AuraManager(injector);
         PartyManager = new PartyDisconnectManager(injector);
@@ -67,29 +58,36 @@ public sealed class LeaveGame {
     }
 
     private async Task Save(IPlayer player) {
-        await MembershipHandler.SaveFullAccountAsync(player.Account);
-        await MembershipHandler.SaveCharacterAsync(player.Character);
-        await MembershipHandler.SavePrimaryAttributesAsync(player.PrimaryAttributes.GetPrimaryAttributes());
-        await MembershipHandler.SaveSettings(player.Settings.GetSettings());
-        await MembershipHandler.SaveCraftAsync(player.Craft.GetCharacterCraft());
-        await MembershipHandler.SaveCurrencyAsync(player.Currencies.ToList());
-        await MembershipHandler.SaveInventoryAsync(player.Inventories.ToList());
-        await MembershipHandler.SaveEquipmentAsync(player.Equipments.ToList());
-        await MembershipHandler.SaveHeraldryAsync(player.Heraldries.ToList());
-        await MembershipHandler.SaveWarehouseAsync(player.Warehouse.ToList());
-        await MembershipHandler.SaveRecipesAsync(player.Recipes.ToList());
-        await MembershipHandler.SaveQuickSlotAsync(player.QuickSlots.ToList());
-        await MembershipHandler.SaveEffectsAsync(player.Effects.ToList());
-        await MembershipHandler.SaveSkillsAsync(player.Skills.ToList());
-        await MembershipHandler.SavePassivesAsync(player.Passives.ToList());
-        await MembershipHandler.SaveMailsAsync(player.Mails.ToList());
-        await MembershipHandler.SaveTitlesAsync(player.Titles.ToList());
+        var membership = Configuration!.DatabaseMembership;
+        var factory = DatabaseService!.DatabaseFactory!;
+
+        var handler = factory.GetMembershipHandler(membership);
+
+        await handler.SaveFullAccountAsync(player.Account);
+        await handler.SaveCharacterAsync(player.Character);
+        await handler.SavePrimaryAttributesAsync(player.PrimaryAttributes.GetPrimaryAttributes());
+        await handler.SaveSettings(player.Settings.GetSettings());
+        await handler.SaveCraftAsync(player.Craft.GetCharacterCraft());
+        await handler.SaveCurrencyAsync(player.Currencies.ToList());
+        await handler.SaveInventoryAsync(player.Inventories.ToList());
+        await handler.SaveEquipmentAsync(player.Equipments.ToList());
+        await handler.SaveHeraldryAsync(player.Heraldries.ToList());
+        await handler.SaveWarehouseAsync(player.Warehouse.ToList());
+        await handler.SaveRecipesAsync(player.Recipes.ToList());
+        await handler.SaveQuickSlotAsync(player.QuickSlots.ToList());
+        await handler.SaveEffectsAsync(player.Effects.ToList());
+        await handler.SaveSkillsAsync(player.Skills.ToList());
+        await handler.SavePassivesAsync(player.Passives.ToList());
+        await handler.SaveMailsAsync(player.Mails.ToList());
+        await handler.SaveTitlesAsync(player.Titles.ToList());
 
         var vitals = player.Vitals as IPlayerVital;
 
         if (vitals is not null) {
-            await MembershipHandler.SaveVitalAsync(vitals.Get());
+            await handler.SaveVitalAsync(vitals.Get());
         }
+
+        handler.Dispose();
     }
 
     private void ExecuteTradeDecline(IPlayer player) {

@@ -2,7 +2,7 @@ Attribute VB_Name = "GameLoop_Implementation"
 Option Explicit
 
 Public Sub GameLoop()
-    Dim FrameTime As Long, Tick As Long, TickFPS As Long, FPS As Long, i As Long, WalkTimer As Long, X As Long, Y As Long
+    Dim FrameTime As Long, Tick As Long, TickFPS As Long, FPS As Long, i As Long, WalkTimer As Long, x As Long, Y As Long
     Dim tmr25 As Long, tmr1000, tmr10000 As Long, tmr100 As Long, mapTimer As Long, chatTmr As Long, targetTmr As Long, fogTmr As Long, barTmr As Long
     Dim barDifference As Long, fadeTmr As Long
 

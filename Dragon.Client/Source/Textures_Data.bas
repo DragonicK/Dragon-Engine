@@ -179,7 +179,6 @@ Private Function CheckFilePassword(ByVal Password As String) As Boolean
     Dim Success As Boolean
     Dim i As Long
     
-
     EncryptedLength = ReadInt32()
 
     ReDim Encrypted(0 To EncryptedLength - 1)

@@ -17,11 +17,9 @@ public sealed class CharacterBegin : PacketRoute, IPacketRoute {
     public MessageHeader Header => MessageHeader.CharacterBegin;
 
     private readonly JoinGame JoinGame;
-    private readonly ICharacterDatabase Database;
 
     public CharacterBegin(IServiceInjector injector) : base(injector) {
         JoinGame = new JoinGame(injector);
-        Database = new CharacterDatabase(Configuration!, DatabaseService!.DatabaseFactory!);
     }
 
     public void Process(IConnection connection, object packet) {
@@ -71,11 +69,16 @@ public sealed class CharacterBegin : PacketRoute, IPacketRoute {
         var success = false;
         var characterId = player.Characters[index].CharacterId;
 
+        var database = new CharacterDatabase(Configuration!, DatabaseService!.DatabaseFactory!); ;
+
         try {
-            success = await Database.LoadCharacterAsync(characterId, player);
+            success = await database.LoadCharacterAsync(characterId, player);
         }
         catch (Exception ex) {
             await WriteExceptionLog(logger, player.Username, ex.Message);
+        }
+        finally {
+            database.Dispose();
         }
 
         return success;

@@ -9,6 +9,7 @@ public sealed class Party {
     public int Id { get; set; }
     public IList<PartyMember> Members { get; set; }
     public IList<PartyInvitedMember> InvitedMembers { get; set; }
+    public IList<PartyItem> ChestItems { get; set; }
     public IPacketSender? PacketSender { get; set; }
     public int LeaderIndex { get; set; }
     public int Level { get; set; }
@@ -21,6 +22,7 @@ public sealed class Party {
     private readonly int DisconnectionTimeOut;
     private readonly int MaximumMembers;
 
+    private const int MaximumPartyItems = 16;
     private const int MinimumPartyMember = 2;
 
     private readonly IList<PartyInvitedMember> list;
@@ -34,6 +36,7 @@ public sealed class Party {
         Members = new List<PartyMember>(MaximumMembers);
         list = new List<PartyInvitedMember>(MaximumMembers);
         InvitedMembers = new List<PartyInvitedMember>(MaximumMembers);
+        ChestItems = new List<PartyItem>(MaximumPartyItems);
     }
 
     public IPlayer? GetLeader() {

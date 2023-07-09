@@ -5,12 +5,12 @@ using Dragon.Core.Model.Drops;
 using Dragon.Core.Model.Chests;
 
 using Dragon.Game.Players;
+using Dragon.Game.Parties;
 using Dragon.Game.Services;
 using Dragon.Game.Instances;
 using Dragon.Game.Repository;
 using Dragon.Game.Network.Senders;
 using Dragon.Game.Instances.Chests;
-using Dragon.Game.Parties;
 
 namespace Dragon.Game.Manager;
 
