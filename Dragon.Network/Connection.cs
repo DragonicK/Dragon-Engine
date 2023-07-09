@@ -76,6 +76,8 @@ public sealed class Connection : IConnection {
                     pLength = reader.ReadInt32(false);
 
                     if (pLength <= 0) {
+                        Socket.BeginReceive(buffer, 0, ReceiveBufferSize, SocketFlags.None, OnReceive, null);
+
                         return;
                     }
                 }
@@ -101,6 +103,8 @@ public sealed class Connection : IConnection {
                         pLength = reader.ReadInt32(false);
 
                         if (pLength < 0) {
+                            Socket.BeginReceive(buffer, 0, ReceiveBufferSize, SocketFlags.None, OnReceive, null);
+
                             return;
                         }
                     }

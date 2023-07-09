@@ -30,7 +30,6 @@ public sealed class BroadcastMessage : PacketRoute, IPacketRoute {
                 var channel = received.Channel;
 
                 if (text.Length <= config.MaximumLength) {
-
                     var sender = GetPacketSender();
 
                     switch (channel) {
@@ -101,8 +100,8 @@ public sealed class BroadcastMessage : PacketRoute, IPacketRoute {
     private void ProcessPrivateMessage(IPacketSender sender, IPlayer player, PacketBroadcastMessage packet) {
         var length = packet.Name.Length;
 
-        if (length > 0) { 
-        var name = Encoding.ASCII.GetString(packet.Name);
+        if (length > 0) {
+            var name = Encoding.ASCII.GetString(packet.Name);
 
             if (!string.IsNullOrEmpty(name)) {
                 var repository = GetPlayerRepository();

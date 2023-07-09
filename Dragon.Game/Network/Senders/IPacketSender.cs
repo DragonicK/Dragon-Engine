@@ -19,7 +19,7 @@ using Dragon.Game.Instances.Chests;
 namespace Dragon.Game.Network.Senders;
 
 public interface IPacketSender {
-    void SendPing(IPlayer player);
+    void SendPing(IConnection connection);
     void SendGettingMap(IPlayer player, bool isGettingMap);
     void SendCharacters(IPlayer player);
     void SendAlertMessage(IPlayer player, AlertMessageType alertMessage, MenuResetType resetType, bool kick = false, bool forced = false);

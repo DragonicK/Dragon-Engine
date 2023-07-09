@@ -15,6 +15,6 @@ public sealed class Ping : PacketRoute, IPacketRoute {
     }
 
     public void Process(IConnection connection, object packet) {
- 
+        GetPacketSender().SendPing(connection);
     }
 }

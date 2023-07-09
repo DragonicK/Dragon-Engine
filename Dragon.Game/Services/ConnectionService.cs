@@ -6,7 +6,7 @@ using Dragon.Game.Repository;
 
 namespace Dragon.Game.Services;
 
-public sealed class ConnectionService : IService, IUpdatableService {
+public sealed class ConnectionService : IService {
     public ServicePriority Priority => ServicePriority.High;
     public IConnectionRepository? ConnectionRepository { get; private set; }
     public IPlayerRepository? PlayerRepository { get; private set; }
@@ -26,11 +26,7 @@ public sealed class ConnectionService : IService, IUpdatableService {
     }
 
     public void Stop() {
+        ConnectionRepository?.DisconnectAll();
         ConnectionRepository?.Clear();
-    }
-
-    public void Update(int deltaTime) {
-
-
     }
 }

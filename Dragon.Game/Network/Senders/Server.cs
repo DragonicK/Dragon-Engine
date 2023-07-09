@@ -9,14 +9,14 @@ using Dragon.Game.Players;
 namespace Dragon.Game.Network;
 public sealed partial class PacketSender {
 
-    public void SendPing(IPlayer player) {
+    public void SendPing(IConnection connection) {
         var packet = new PacketPing() {
             ClienteRequest = true
         };
 
         var msg = Writer.CreateMessage(packet);
 
-        msg.DestinationPeers.Add(player.Connection.Id);
+        msg.DestinationPeers.Add(connection.Id);
         msg.TransmissionTarget = TransmissionTarget.Destination;
 
         Writer.Enqueue(msg);

@@ -35,7 +35,7 @@ public sealed class LeaveGame {
         PartyManager = new PartyDisconnectManager(injector);
     }
 
-    public void Leave(IPlayer player) {
+    public async void Leave(IPlayer player) {
         var sender = GetPacketSender();
         var instances = GetInstances();
 
@@ -52,7 +52,7 @@ public sealed class LeaveGame {
                 }
             }
 
-            Save(player);
+            await Save(player);
 
             ExecuteTradeDecline(player);
 
@@ -66,7 +66,7 @@ public sealed class LeaveGame {
         //PartyCollectedItem.UpdateDisconnectedPlayer(player);
     }
 
-    private async void Save(IPlayer player) {
+    private async Task Save(IPlayer player) {
         await MembershipHandler.SaveFullAccountAsync(player.Account);
         await MembershipHandler.SaveCharacterAsync(player.Character);
         await MembershipHandler.SavePrimaryAttributesAsync(player.PrimaryAttributes.GetPrimaryAttributes());
