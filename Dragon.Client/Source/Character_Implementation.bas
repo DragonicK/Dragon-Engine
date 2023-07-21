@@ -2,7 +2,7 @@ Attribute VB_Name = "Character_Implementation"
 Option Explicit
 
 Public Type EquipmentPositionRec
-    X As Long
+    x As Long
     Y As Long
 End Type
 
@@ -152,10 +152,10 @@ Sub SetPlayerMap(ByVal Index As Long, ByVal MapNum As Long)
     Player(Index).Map = MapNum
 End Sub
 Function GetPlayerX(ByVal Index As Long) As Long
-    GetPlayerX = Player(Index).X
+    GetPlayerX = Player(Index).x
 End Function
-Sub SetPlayerX(ByVal Index As Long, ByVal X As Long)
-    Player(Index).X = X
+Sub SetPlayerX(ByVal Index As Long, ByVal x As Long)
+    Player(Index).x = x
 End Sub
 Function GetPlayerY(ByVal Index As Long) As Long
     GetPlayerY = Player(Index).Y
@@ -408,8 +408,23 @@ Sub SetPlayerDead(ByVal Index As Long, ByVal Dead As Boolean)
     Player(Index).Dead = Dead
 End Sub
 
-
 ' ########################################
+Public Sub ClearPlayerEquipments()
+    Dim i As Long
+
+    For i = 1 To PlayerEquipments.PlayerEquipment_Count - 1
+        Call ClearPlayerEquipment(i)
+    Next
+End Sub
+
+Public Sub ClearPlayerEquipment(ByVal EquipmentSlot As PlayerEquipments)
+    Equipment(EquipmentSlot).Num = 0
+    Equipment(EquipmentSlot).Level = 0
+    Equipment(EquipmentSlot).Bound = 0
+    Equipment(EquipmentSlot).AttributeId = 0
+    Equipment(EquipmentSlot).UpgradeId = 0
+End Sub
+
 Public Function GetPlayerEquipmentId(ByVal EquipmentSlot As PlayerEquipments) As Long
     GetPlayerEquipmentId = Equipment(EquipmentSlot).Num
 End Function

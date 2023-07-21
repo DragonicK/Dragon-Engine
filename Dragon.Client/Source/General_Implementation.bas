@@ -16,6 +16,7 @@ Public Sub LogoutGame()
     ClearCraft
     ClearChests
     ClearInventories
+    ClearPlayerEquipments
 
     For i = 1 To MAX_BYTE
         Call ClearAnimInstance(i)
