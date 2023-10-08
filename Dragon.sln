@@ -13,8 +13,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dragon.Editor", "Dragon.Edi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dragon.Model", "Dragon.Model\Dragon.Model.csproj", "{D85B056B-F8B9-482D-B716-D45035E371A2}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Dragon.Wrapper", "Dragon.Wrapper\Dragon.Wrapper.vcxproj", "{330AEEBA-EF7F-4036-A385-3EAF8D0EA20F}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dragon.Network", "Dragon.Network\Dragon.Network.csproj", "{750CA2CA-A9D1-40BD-9A95-0F2AE966F2DE}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dragon.Database", "Dragon.Database\Dragon.Database.csproj", "{3DD06BC0-7FCD-4F61-90C3-0994893743D2}"
@@ -27,7 +25,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dragon.Animator", "Dragon.A
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dragon.Fonts", "Dragon.Fonts\Dragon.Fonts.csproj", "{27B55D7F-9AD1-4AC3-81E8-B4D2640F5AC5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dragon.Chat", "Dragon.Chat\Dragon.Chat.csproj", "{A6DDEFFD-B2F9-4C0F-A905-B19009595D7B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dragon.Chat", "Dragon.Chat\Dragon.Chat.csproj", "{A6DDEFFD-B2F9-4C0F-A905-B19009595D7B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -99,18 +97,6 @@ Global
 		{D85B056B-F8B9-482D-B716-D45035E371A2}.Release|x64.Build.0 = Release|Any CPU
 		{D85B056B-F8B9-482D-B716-D45035E371A2}.Release|x86.ActiveCfg = Release|Any CPU
 		{D85B056B-F8B9-482D-B716-D45035E371A2}.Release|x86.Build.0 = Release|Any CPU
-		{330AEEBA-EF7F-4036-A385-3EAF8D0EA20F}.Debug|Any CPU.ActiveCfg = Debug|x64
-		{330AEEBA-EF7F-4036-A385-3EAF8D0EA20F}.Debug|Any CPU.Build.0 = Debug|x64
-		{330AEEBA-EF7F-4036-A385-3EAF8D0EA20F}.Debug|x64.ActiveCfg = Debug|x64
-		{330AEEBA-EF7F-4036-A385-3EAF8D0EA20F}.Debug|x64.Build.0 = Debug|x64
-		{330AEEBA-EF7F-4036-A385-3EAF8D0EA20F}.Debug|x86.ActiveCfg = Debug|Win32
-		{330AEEBA-EF7F-4036-A385-3EAF8D0EA20F}.Debug|x86.Build.0 = Debug|Win32
-		{330AEEBA-EF7F-4036-A385-3EAF8D0EA20F}.Release|Any CPU.ActiveCfg = Release|x64
-		{330AEEBA-EF7F-4036-A385-3EAF8D0EA20F}.Release|Any CPU.Build.0 = Release|x64
-		{330AEEBA-EF7F-4036-A385-3EAF8D0EA20F}.Release|x64.ActiveCfg = Release|x64
-		{330AEEBA-EF7F-4036-A385-3EAF8D0EA20F}.Release|x64.Build.0 = Release|x64
-		{330AEEBA-EF7F-4036-A385-3EAF8D0EA20F}.Release|x86.ActiveCfg = Release|Win32
-		{330AEEBA-EF7F-4036-A385-3EAF8D0EA20F}.Release|x86.Build.0 = Release|Win32
 		{750CA2CA-A9D1-40BD-9A95-0F2AE966F2DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{750CA2CA-A9D1-40BD-9A95-0F2AE966F2DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{750CA2CA-A9D1-40BD-9A95-0F2AE966F2DE}.Debug|x64.ActiveCfg = Debug|Any CPU
