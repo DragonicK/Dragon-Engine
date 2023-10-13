@@ -15,16 +15,18 @@ public sealed class OutgoingMessageService : IService {
     public ISerializer? Serializer { get; private set; }
     public ConnectionService? ConnectionService { get; private set; }
     public ConfigurationService? Configuration { get; private set; }
+    public PoolService? PoolService { get; private set; }
 
     public void Start() {
         var repository = ConnectionService!.ConnectionRepository!;
+        var bufferPool = PoolService!.EngineBufferPool!;
 
         Serializer = new MessageSerializer();
 
         OutgoingMessagePublisher = new OutgoingMessagePublisher(repository);
         OutgoingMessageEventHandler = new OutgoingMessageEventHandler( OutgoingMessagePublisher);
         OutgoingMessageQueue = new OutgoingMessageQueue(OutgoingMessageEventHandler);
-        OutgoingMessageWriter = new OutgoingMessageWriter(OutgoingMessageQueue, Serializer);
+        OutgoingMessageWriter = new OutgoingMessageWriter(OutgoingMessageQueue, bufferPool, Serializer);
 
         OutgoingMessageQueue.Start();
     }

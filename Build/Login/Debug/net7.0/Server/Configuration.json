@@ -50,7 +50,7 @@
     "Port": 1433,
     "UserId": "sa",
     "Password": "dwHandle",
-    "Database": "CrystalshireMembership",
+    "Database": "EngineMembership",
     "MinPoolSize": 10,
     "MaxPoolSize": 100
   },
@@ -59,7 +59,7 @@
     "Port": 1433,
     "UserId": "sa",
     "Password": "dwHandle",
-    "Database": "CrystalshireServer",
+    "Database": "EngineServer",
     "MinPoolSize": 10,
     "MaxPoolSize": 100
   },

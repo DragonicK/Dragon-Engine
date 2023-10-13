@@ -3,6 +3,6 @@
 namespace Dragon.Network;
 
 public interface ISerializer {
-    public byte[] Serialize<T>(T type);
-    object Deserialize(IEngineBuffer buffer, Type type);
+    public IEngineBufferWriter Serialize<T>(T type, IEngineBufferWriter buffer);
+    object Deserialize(IEngineBufferReader buffer, Type type);
 }

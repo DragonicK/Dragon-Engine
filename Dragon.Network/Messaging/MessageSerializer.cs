@@ -1,72 +1,89 @@
-﻿using Dragon.Network.Pool;
+﻿using System.Reflection;
 
-using System.Reflection;
+using Dragon.Network.Pool;
 
 namespace Dragon.Network.Messaging;
 
 public sealed class MessageSerializer : ISerializer {
 
-    public byte[] Serialize<T>(T type) {
-        var buffer = new ByteBuffer();
+    public IEngineBufferWriter Serialize<T>(T type, IEngineBufferWriter buffer) {
+        AddEmptyBytesOfPacketSize(buffer);
 
-        // Write packet data.
         WriteClass(type, buffer);
 
-        // Add padding to checksum and cipher.
-        var length = buffer.Length() + 4;
+        return AddCheckSumPadding(buffer);
+    }
+
+    private static void AddEmptyBytesOfPacketSize(IEngineBufferWriter buffer) {
+        buffer.Write(0);
+    }
+
+    /// <summary>
+    /// Add padding to checksum and cipher.
+    /// </summary>
+    /// <param name="buffer"></param>
+    private static IEngineBufferWriter AddCheckSumPadding(IEngineBufferWriter buffer) {
+        var firstBytes = sizeof(int);
+
+        var length = buffer.Length - firstBytes;
 
         length += 8 - length % 8;
 
-        var remaining = length - buffer.Length();
+        var remaining = length - buffer.Length;
 
-        buffer.WriteEmptyBytes(remaining);
+        buffer.WriteEmptyBytes(remaining + firstBytes);
 
-        return buffer.ToArray();
+        return buffer;
     }
 
-    public object Deserialize(IEngineBuffer buffer, Type type) {
+    public object Deserialize(IEngineBufferReader buffer, Type type) {
         var instance = Activator.CreateInstance(type)!;
 
-        buffer.Reader.PointToStart();
+        buffer.ResetPosition();
 
         ReadClass(instance, buffer);
 
         return instance;
     }
 
-    #region Read Class, Arrays & Properties 
+    #region Read 
 
-    private void ReadClass<T>(T instance, IEngineBuffer buffer) {
+    private void ReadClass<T>(T instance, IEngineBufferReader buffer) {
         ReadProperties(GetRuntimeProperties(instance), instance, buffer);
     }
 
-    private void ReadProperties<T>(IEnumerable<PropertyInfo> properties, T instance, IEngineBuffer buffer) {
+    private void ReadProperties<T>(IEnumerable<PropertyInfo> properties, T instance, IEngineBufferReader buffer) {
         foreach (var property in properties) {
             ReadProperty(property, instance, buffer);
         }
     }
 
-    private void ReadProperty<T>(PropertyInfo property, T instance, IEngineBuffer buffer) {
+    private void ReadProperty<T>(PropertyInfo property, T instance, IEngineBufferReader buffer) {
         var type = property.PropertyType;
-        var reader = buffer.Reader;
 
         if (type == typeof(bool)) {
-            property.SetValue(instance, reader.ReadBoolean());
+            property.SetValue(instance, buffer.ReadBoolean());
         }
         else if (type == typeof(byte)) {
-            property.SetValue(instance, reader.ReadByte());
+            property.SetValue(instance, buffer.ReadByte());
         }
         else if (type == typeof(short)) {
-            property.SetValue(instance, reader.ReadInt16());
+            property.SetValue(instance, buffer.ReadInt16());
         }
         else if (type == typeof(int)) {
-            property.SetValue(instance, reader.ReadInt32());
+            property.SetValue(instance, buffer.ReadInt32());
+        }
+        else if (type == typeof(long)) {
+            property.SetValue(instance, buffer.ReadInt64());
         }
         else if (type == typeof(string)) {
-            property.SetValue(instance, reader.ReadString());
+            property.SetValue(instance, buffer.ReadString());
+        }
+        else if (type == typeof(float)) {
+            property.SetValue(instance, buffer.ReadFloat());
         }
         else if (type.IsEnum) {
-            property.SetValue(instance, reader.ReadInt32());
+            property.SetValue(instance, buffer.ReadInt32());
         }
         else if (type.IsArray) {
             ReadArray(property, instance, buffer);
@@ -80,11 +97,9 @@ public sealed class MessageSerializer : ISerializer {
         }
     }
 
-    private unsafe void ReadArray<T>(PropertyInfo propertyInfo, T obj, IEngineBuffer buffer) {
+    private unsafe void ReadArray<T>(PropertyInfo propertyInfo, T obj, IEngineBufferReader buffer) {
         var array = propertyInfo.GetValue(obj, null) as Array;
-
-        var reader = buffer.Reader;
-        var length = reader.ReadInt32();
+        var length = buffer.ReadInt32();
 
         if (length > 0) {
             if (array is not null) {
@@ -98,29 +113,39 @@ public sealed class MessageSerializer : ISerializer {
                         var arr = (bool[])array;
 
                         fixed (bool* p = arr) {
-                            reader.MemoryCopy(p, length, length);
+                            buffer.MemoryCopy(p, length, length);
                         }
                     }
                     else if (arrayType == typeof(byte)) {
                         var arr = (byte[])array;
 
                         fixed (byte* p = arr) {
-                            reader.MemoryCopy(p, length, length);
+                            buffer.MemoryCopy(p, length, length);
                         }
                     }
                     else if (arrayType == typeof(short)) {
                         for (var i = 0; i < length; i++) {
-                            array.SetValue(reader.ReadInt16(), i);
+                            array.SetValue(buffer.ReadInt16(), i);
                         }
                     }
                     else if (arrayType == typeof(int)) {
                         for (var i = 0; i < length; i++) {
-                            array.SetValue(reader.ReadInt32(), i);
+                            array.SetValue(buffer.ReadInt32(), i);
+                        }
+                    }
+                    else if (arrayType == typeof(long)) {
+                        for (var i = 0; i < length; i++) {
+                            array.SetValue(buffer.ReadInt64(), i);
+                        }
+                    }
+                    else if (arrayType == typeof(float)) {
+                        for (var i = 0; i < length; i++) {
+                            array.SetValue(buffer.ReadFloat(), i);
                         }
                     }
                     else if (arrayType == typeof(string)) {
                         for (var i = 0; i < length; i++) {
-                            array.SetValue(reader.ReadString(), i);
+                            array.SetValue(buffer.ReadString(), i);
                         }
                     }
                     else {
@@ -138,18 +163,20 @@ public sealed class MessageSerializer : ISerializer {
 
     #endregion
 
-    private void WriteClass<T>(T type, ByteBuffer buffer) {
+    #region Write 
+
+    private void WriteClass<T>(T type, IEngineBufferWriter buffer) {
         var properties = GetRuntimeProperties(type);
         WriteProperties(properties, type, buffer);
     }
 
-    private void WriteProperties<T>(IEnumerable<PropertyInfo> properties, T type, ByteBuffer buffer) {
+    private void WriteProperties<T>(IEnumerable<PropertyInfo> properties, T type, IEngineBufferWriter buffer) {
         foreach (var property in properties) {
             WriteProperty(property, type, buffer);
         }
     }
 
-    private void WriteProperty<T>(PropertyInfo property, T obj, ByteBuffer buffer) {
+    private void WriteProperty<T>(PropertyInfo property, T obj, IEngineBufferWriter buffer) {
         var type = property.PropertyType;
         var value = property.GetValue(obj, null);
 
@@ -166,6 +193,12 @@ public sealed class MessageSerializer : ISerializer {
             else if (type == typeof(int)) {
                 buffer.Write((int)value);
             }
+            else if (type == typeof(long)) {
+                buffer.Write((long)value);
+            }
+            else if (type == typeof(float)) {
+                buffer.Write((float)value);
+            }
             else if (type == typeof(string)) {
                 buffer.Write((string)value);
             }
@@ -181,7 +214,7 @@ public sealed class MessageSerializer : ISerializer {
         }
     }
 
-    private void WriteArray(Array array, ByteBuffer buffer) {
+    private void WriteArray(Array array, IEngineBufferWriter buffer) {
         buffer.Write(array.Length);
 
         for (var i = 0; i < array.Length; i++) {
@@ -202,6 +235,12 @@ public sealed class MessageSerializer : ISerializer {
                 else if (type == typeof(int)) {
                     buffer.Write((int)item);
                 }
+                else if (type == typeof(long)) {
+                    buffer.Write((long)item);
+                }
+                else if (type == typeof(float)) {
+                    buffer.Write((float)item);
+                }
                 else if (type == typeof(string)) {
                     buffer.Write((string)item);
                 }
@@ -218,7 +257,9 @@ public sealed class MessageSerializer : ISerializer {
         }
     }
 
-    private IEnumerable<PropertyInfo> GetRuntimeProperties<T>(T obj) {
+    #endregion
+
+    private static IEnumerable<PropertyInfo> GetRuntimeProperties<T>(T obj) {
         return obj!.GetType().GetRuntimeProperties();
     }
 }

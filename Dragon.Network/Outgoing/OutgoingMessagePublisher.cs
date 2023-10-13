@@ -1,4 +1,6 @@
-﻿namespace Dragon.Network.Outgoing;
+﻿using Dragon.Network.Pool;
+
+namespace Dragon.Network.Outgoing;
 
 public class OutgoingMessagePublisher : IOutgoingMessagePublisher {
     public IConnectionRepository ConnectionRepository { get; }
@@ -7,23 +9,23 @@ public class OutgoingMessagePublisher : IOutgoingMessagePublisher {
         ConnectionRepository = connectionRepository;
     }
 
-    public void Broadcast(TransmissionTarget peers, IList<int> destination, int exceptDestination, byte[] buffer, int length) {
+    public void Broadcast(TransmissionTarget peers, IList<int> destination, int exceptDestination, IEngineBufferWriter buffer) {
         switch (peers) {
             case TransmissionTarget.Destination:
-                Broadcast(ref destination, ref buffer, length);
+                Broadcast(destination, buffer);
                 break;
 
             case TransmissionTarget.Broadcast:
-                Broadcast(ref buffer, length);
+                Broadcast(buffer);
                 break;
 
             case TransmissionTarget.BroadcastExcept:
-                Broadcast(ref destination, exceptDestination, ref buffer, length);
+                Broadcast(destination, exceptDestination, buffer);
                 break;
         }
     }
 
-    private void Broadcast(ref IList<int> destination, int except, ref byte[] buffer, int length) {
+    private void Broadcast(IList<int> destination, int except, IEngineBufferWriter buffer) {
         for (var i = 0; i < destination.Count; i++) {
             var id = destination[i];
 
@@ -32,48 +34,48 @@ public class OutgoingMessagePublisher : IOutgoingMessagePublisher {
 
                 if (connection is not null) {
                     if (connection.Connected) {
-                        Send(ref buffer, connection, length);
+                        Send(connection, buffer);
                     }
                 }
             }
         }
     }
 
-    private void Broadcast(ref IList<int> destination, ref byte[] buffer, int length) {
-        IConnection connection;
-
+    private void Broadcast(IList<int> destination, IEngineBufferWriter buffer) {
         for (var i = 0; i < destination.Count; i++) {
-            connection = ConnectionRepository.GetFromId(destination[i]);
+            var connection = ConnectionRepository.GetFromId(destination[i]);
 
             if (connection is not null) {
                 if (connection.Connected) {
-                    Send(ref buffer, connection, length);
+                    Send(connection, buffer);
                 }
             }
         }
     }
 
-    private void Broadcast(ref byte[] buffer, int length) {
+    private void Broadcast(IEngineBufferWriter buffer) {
         foreach (var (_, connection) in ConnectionRepository) {
             if (connection is not null) {
                 if (connection.Connected) {
-                    Send(ref buffer, connection, length);
+                    Send(connection, buffer);
                 }
             }
         }
     }
 
-    private void Send(ref byte[] buffer, IConnection connection, int length) {
+    private void Send(IConnection connection, IEngineBufferWriter buffer) {
         var crypto = connection.CryptoEngine;
+
+        var length = buffer.Length;
 
         var tmp = new byte[length];
 
-        Buffer.BlockCopy(buffer, 0, tmp, 0, length);
+        Buffer.BlockCopy(buffer.Content, 0, tmp, 0, length);
 
         crypto.AppendCheckSum(tmp, 0, length);
         crypto.Cipher(tmp, 4, length);
 
-        IntegerToByteArray(length - 4, ref tmp, 0);
+        IntegerToByteArray(length - 4, tmp, 0);
 
         connection.Send(tmp, length);
 
@@ -84,7 +86,7 @@ public class OutgoingMessagePublisher : IOutgoingMessagePublisher {
         }
     }
      
-    private void IntegerToByteArray(int value, ref byte[] buffer, int offset) {
+    private void IntegerToByteArray(int value, byte[] buffer, int offset) {
         buffer[offset] = (byte)(value & 0xFF);
         buffer[offset + 1] = (byte)(value >> 8 & 0xFF);
         buffer[offset + 2] = (byte)(value >> 16 & 0xFF);

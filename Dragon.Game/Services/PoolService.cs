@@ -15,7 +15,7 @@ public sealed class PoolService : IService {
         var outgoingSize = allocated.OutgoingMessageAllocatedSize;
         var incomingSize = allocated.IncomingMessageAllocatedSize;
 
-        EngineBufferPool = new EngineBufferPool(incomingSize);
+        EngineBufferPool = new EngineBufferPool(incomingSize, outgoingSize);
     }
 
     public void Stop() {

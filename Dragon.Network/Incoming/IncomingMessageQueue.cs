@@ -31,14 +31,15 @@ public sealed class IncomingMessageQueue : IIncomingMessageQueue {
         disruptor.Halt();
     }
 
-    public void Enqueue(IConnection connection, int fromId, IEngineBuffer buffer) {
+    public void Enqueue(IConnection connection, int fromId, IEngineBufferReader buffer) {
         if (ringbuffer is not null) {
             var sequence = ringbuffer.Next();
             var entry = ringbuffer[sequence];
 
             entry.FromId = fromId;
             entry.Connection = connection;
-            entry.EngineBuffer = buffer;
+
+            entry.SetIncomingContent(buffer);
 
             ringbuffer.Publish(sequence);
         }

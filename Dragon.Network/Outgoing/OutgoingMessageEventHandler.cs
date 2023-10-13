@@ -12,8 +12,7 @@ public class OutgoingMessageEventHandler : IOutgoingMessageEventHandler {
             buffer.TransmissionTarget,
             buffer.DestinationPeers,
             buffer.ExceptDestination,
-            buffer.ByteBuffer,
-            buffer.Length
+            buffer.BufferWriter!
         );
 
         buffer.Reset();

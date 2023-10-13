@@ -1,5 +1,6 @@
 ﻿namespace Dragon.Network.Pool;
 
 public interface IEngineBufferPool {
-    IEngineBuffer GetNextBuffer();
+    IEngineBufferReader GetNextBufferReader();
+    IEngineBufferWriter GetNextBufferWriter();
 }

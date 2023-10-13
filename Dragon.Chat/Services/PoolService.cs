@@ -10,7 +10,7 @@ namespace Dragon.Chat.Services {
         public ConfigurationService? Configuration { get; private set; }
         public BubblePool? BubblePool { get; private set; }  
         public TargetPool? TargetPool { get; private set; }
-        public IEngineBufferPool? IncomingEngineBufferPool { get; private set; }
+        public IEngineBufferPool? EngineBufferPool { get; private set; }
 
         public void Start() {
             var allocated = Configuration!.Allocation;
@@ -23,7 +23,7 @@ namespace Dragon.Chat.Services {
             var outgoingSize = allocated.OutgoingMessageAllocatedSize;
             var incomingSize = allocated.IncomingMessageAllocatedSize;
 
-            IncomingEngineBufferPool = new EngineBufferPool(incomingSize);
+            EngineBufferPool = new EngineBufferPool(incomingSize, outgoingSize);
 
             var targetSize = allocated.TargetsAllocatedSize;
             var targetListSize = allocated.TargetListAllocatedSize;

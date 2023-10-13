@@ -27,7 +27,7 @@ public sealed class IncomingMessageEventHandler : IIncomingMessageEventHandler {
 
     public void OnEvent(RingBufferByteArray buffer, long sequence, bool endOfBatch) {
         var connection = buffer.Connection!;
-        var pool = buffer.EngineBuffer;
+        var pool = buffer.BufferReader;
         
         buffer.Reset();
 
@@ -50,7 +50,7 @@ public sealed class IncomingMessageEventHandler : IIncomingMessageEventHandler {
         }
     }
 
-    private void Execute(int value, IEngineBuffer buffer, IConnection connection) {
+    private void Execute(int value, IEngineBufferReader buffer, IConnection connection) {
         var header = (MessageHeader)value;
 
         if (MessageRepository.Contains(header)) {

@@ -26,7 +26,7 @@ public sealed class Connection : IConnection {
     private const int ReceiveBufferSize = 1024;
 
     private readonly byte[] buffer;
-    private readonly ByteBuffer reader;
+    private readonly PacketBuffer Packet;
 
     private bool connected = false;
 
@@ -34,7 +34,7 @@ public sealed class Connection : IConnection {
         IpAddress = string.Empty;
 
         buffer = new byte[ReceiveBufferSize];
-        reader = new ByteBuffer(ReceiveBufferSize);
+        Packet = new PacketBuffer(ReceiveBufferSize);
 
         CryptoEngine = new BlowFishCipher();
 
@@ -67,13 +67,14 @@ public sealed class Connection : IConnection {
                 Disconnect();
             }
             else {
+                Packet.Write(buffer, length);
+
+                Array.Clear(buffer);
+
                 var pLength = 0;
 
-                reader.Write(buffer, length);
-                Array.Clear(buffer, 0, length);
-
-                if (reader.Length() >= 4) {
-                    pLength = reader.ReadInt32(false);
+                if (Packet.Length() >= 4) {
+                    pLength = Packet.ReadInt32(false);
 
                     if (pLength <= 0) {
                         Socket.BeginReceive(buffer, 0, ReceiveBufferSize, SocketFlags.None, OnReceive, null);
@@ -82,15 +83,15 @@ public sealed class Connection : IConnection {
                     }
                 }
 
-                while (pLength > 0 && pLength <= reader.Length() - 4) {
-                    if (pLength <= reader.Length() - 4) {
-                        reader.ReadInt32();
+                while (pLength > 0 && pLength <= Packet.Length() - 4) {
+                    if (pLength <= Packet.Length() - 4) {
+                        Packet.ReadInt32();
 
-                        var sequence = IncomingEngineBufferPool?.GetNextBuffer();
+                        var sequence = IncomingEngineBufferPool?.GetNextBufferReader();
 
                         sequence!.Reset();
 
-                        reader.ReadBytes(sequence.Content, pLength);
+                        Packet.ReadBytes(sequence.Content, pLength);
 
                         sequence.Length = pLength;
 
@@ -99,8 +100,8 @@ public sealed class Connection : IConnection {
 
                     pLength = 0;
 
-                    if (reader.Length() >= 4) {
-                        pLength = reader.ReadInt32(false);
+                    if (Packet.Length() >= 4) {
+                        pLength = Packet.ReadInt32(false);
 
                         if (pLength < 0) {
                             Socket.BeginReceive(buffer, 0, ReceiveBufferSize, SocketFlags.None, OnReceive, null);
@@ -110,7 +111,7 @@ public sealed class Connection : IConnection {
                     }
                 }
 
-                reader.Trim();
+                Packet.Trim();
 
                 Socket.BeginReceive(buffer, 0, ReceiveBufferSize, SocketFlags.None, OnReceive, null);
             }
