@@ -12,6 +12,9 @@
 ###############################################################################
 #*.cs     diff=csharp
 
+# Normalize EOL for all files that Git considers text files.
+* text=auto eol=lf
+
 ###############################################################################
 # Set the merge driver for project and solution files
 #
