@@ -1,0 +1,329 @@
+[gd_scene load_steps=25 format=3 uid="uid://ccjy2rbmg0lv1"]
+
+[ext_resource type="Script" path="res://Scripts/Main.cs" id="1_egh6o"]
+[ext_resource type="Texture2D" uid="uid://c6h8mpnckrm5" path="res://Assets/Images/AionBackground.png" id="1_xnq1e"]
+[ext_resource type="Shader" path="res://Shaders/Fog.gdshader" id="2_bq7cx"]
+[ext_resource type="Texture2D" uid="uid://bsbguiuvvr8qh" path="res://Assets/Images/Empty.png" id="3_f04ip"]
+[ext_resource type="Theme" uid="uid://cgk783at2a7x4" path="res://Assets/Themes/Dark/Dark.theme" id="4_cyb0a"]
+[ext_resource type="FontFile" uid="uid://rss5xrsdfmrc" path="res://Assets/Fonts/JetBrainsMono-Regular.ttf" id="4_gpr37"]
+[ext_resource type="Texture2D" uid="uid://bclyr64csul1d" path="res://Assets/Images/Container.png" id="5_646eo"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ykdo4"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_hhte0"]
+content_margin_left = 5.0
+content_margin_top = 0.0
+content_margin_right = 5.0
+content_margin_bottom = 0.0
+texture = ExtResource("3_f04ip")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_43qc7"]
+content_margin_left = 0.0
+content_margin_top = 0.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
+texture = ExtResource("1_xnq1e")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_n5xub"]
+shader = ExtResource("2_bq7cx")
+shader_parameter/OCTAVES = 3
+shader_parameter/alpha_power = 1.0
+shader_parameter/noise_scale = 4.0
+shader_parameter/color = Vector4(1, 1, 0.595, 0.85)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_hom31"]
+texture = ExtResource("5_646eo")
+texture_margin_left = 3.0
+texture_margin_top = 3.0
+texture_margin_right = 3.0
+texture_margin_bottom = 3.0
+modulate_color = Color(1, 1, 1, 0.403922)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_2p4x1"]
+content_margin_left = 6.0
+content_margin_top = 6.0
+content_margin_right = 6.0
+content_margin_bottom = 6.0
+texture = ExtResource("3_f04ip")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_8s53p"]
+content_margin_left = 3.0
+content_margin_top = 3.0
+content_margin_right = 3.0
+content_margin_bottom = 3.0
+texture = ExtResource("5_646eo")
+texture_margin_left = 3.0
+texture_margin_top = 3.0
+texture_margin_right = 3.0
+texture_margin_bottom = 3.0
+
+[sub_resource type="Theme" id="Theme_uhkvb"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_dhy60"]
+font = ExtResource("4_gpr37")
+font_size = 14
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4vm34"]
+content_margin_left = 0.0
+content_margin_top = 0.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
+bg_color = Color(0.0784314, 0.0784314, 0.0784314, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_blend = true
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+shadow_size = 1
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0d7bo"]
+content_margin_left = 2.0
+content_margin_top = 2.0
+content_margin_right = 2.0
+content_margin_bottom = 2.0
+bg_color = Color(0.305882, 0.647059, 0, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+corner_detail = 6
+
+[sub_resource type="Theme" id="Theme_l66yo"]
+default_font = ExtResource("4_gpr37")
+default_font_size = 0
+ProgressBar/colors/font_color = Color(0.94902, 0.94902, 0.94902, 1)
+ProgressBar/colors/font_outline_color = Color(1, 1, 1, 1)
+ProgressBar/font_sizes/font_size = 1
+ProgressBar/fonts/font = ExtResource("4_gpr37")
+ProgressBar/styles/background = SubResource("StyleBoxFlat_4vm34")
+ProgressBar/styles/fill = SubResource("StyleBoxFlat_0d7bo")
+
+[sub_resource type="LabelSettings" id="LabelSettings_4pxc4"]
+font = ExtResource("4_gpr37")
+font_size = 14
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2ht20"]
+content_margin_left = 2.0
+content_margin_top = 2.0
+content_margin_right = 2.0
+content_margin_bottom = 2.0
+bg_color = Color(0.0784314, 0.0784314, 0.0784314, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+corner_detail = 20
+shadow_size = 1
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_a7yv8"]
+content_margin_left = 0.0
+content_margin_top = 0.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
+bg_color = Color(0, 0.517647, 1, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+corner_detail = 6
+
+[sub_resource type="Theme" id="Theme_s8bkf"]
+default_font = ExtResource("4_gpr37")
+ProgressBar/colors/font_color = Color(1, 1, 1, 1)
+ProgressBar/colors/font_outline_color = Color(1, 1, 0, 0.992157)
+ProgressBar/constants/outline_size = 0
+ProgressBar/font_sizes/font_size = 1
+ProgressBar/fonts/font = ExtResource("4_gpr37")
+ProgressBar/styles/background = SubResource("StyleBoxFlat_2ht20")
+ProgressBar/styles/fill = SubResource("StyleBoxFlat_a7yv8")
+
+[sub_resource type="LabelSettings" id="LabelSettings_0xwy2"]
+font = ExtResource("4_gpr37")
+font_size = 14
+font_color = Color(1, 0.627451, 0.356863, 1)
+
+[node name="MainContainer" type="PanelContainer"]
+texture_filter = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxTexture_ykdo4")
+script = ExtResource("1_egh6o")
+
+[node name="V-MainContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Header" type="PanelContainer" parent="V-MainContainer"]
+custom_minimum_size = Vector2(0, 35)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_hhte0")
+
+[node name="MarginContainer" type="MarginContainer" parent="V-MainContainer/Header"]
+layout_mode = 2
+theme_override_constants/margin_right = 5
+
+[node name="HBoxContainer" type="HBoxContainer" parent="V-MainContainer/Header/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 4
+theme_override_constants/separation = 5
+
+[node name="Button-Minimize" type="Button" parent="V-MainContainer/Header/MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 4
+theme = ExtResource("4_cyb0a")
+text = "_"
+
+[node name="Button-Close" type="Button" parent="V-MainContainer/Header/MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 4
+theme = ExtResource("4_cyb0a")
+text = "X"
+
+[node name="Body" type="PanelContainer" parent="V-MainContainer"]
+custom_minimum_size = Vector2(0, 390)
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxTexture_43qc7")
+
+[node name="ColorRect" type="ColorRect" parent="V-MainContainer/Body"]
+texture_filter = 1
+material = SubResource("ShaderMaterial_n5xub")
+layout_mode = 2
+
+[node name="ContentMargin" type="MarginContainer" parent="V-MainContainer/Body"]
+layout_mode = 2
+theme_override_constants/margin_left = 25
+theme_override_constants/margin_top = 25
+theme_override_constants/margin_right = 25
+theme_override_constants/margin_bottom = 25
+
+[node name="ContentNews" type="PanelContainer" parent="V-MainContainer/Body/ContentMargin"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_hom31")
+
+[node name="V-News" type="VBoxContainer" parent="V-MainContainer/Body/ContentMargin/ContentNews"]
+layout_mode = 2
+
+[node name="Footer" type="PanelContainer" parent="V-MainContainer"]
+texture_filter = 1
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+size_flags_vertical = 8
+theme_override_styles/panel = SubResource("StyleBoxTexture_2p4x1")
+
+[node name="FooterBackground" type="PanelContainer" parent="V-MainContainer/Footer"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_8s53p")
+
+[node name="HSplitContainer" type="HSplitContainer" parent="V-MainContainer/Footer/FooterBackground"]
+layout_mode = 2
+theme = SubResource("Theme_uhkvb")
+theme_override_constants/separation = 0
+split_offset = 550
+dragger_visibility = 1
+
+[node name="MarginProgressBar" type="MarginContainer" parent="V-MainContainer/Footer/FooterBackground/HSplitContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+
+[node name="V-ProgressBar" type="VBoxContainer" parent="V-MainContainer/Footer/FooterBackground/HSplitContainer/MarginProgressBar"]
+layout_mode = 2
+theme_override_constants/separation = -5
+alignment = 1
+
+[node name="H-Download" type="HSplitContainer" parent="V-MainContainer/Footer/FooterBackground/HSplitContainer/MarginProgressBar/V-ProgressBar"]
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="Label" type="Label" parent="V-MainContainer/Footer/FooterBackground/HSplitContainer/MarginProgressBar/V-ProgressBar/H-Download"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme = ExtResource("4_cyb0a")
+text = "Download:
+"
+label_settings = SubResource("LabelSettings_dhy60")
+
+[node name="ProgressBar" type="ProgressBar" parent="V-MainContainer/Footer/FooterBackground/HSplitContainer/MarginProgressBar/V-ProgressBar/H-Download"]
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+size_flags_vertical = 4
+theme = SubResource("Theme_l66yo")
+value = 25.0
+show_percentage = false
+
+[node name="H-Progress" type="HSplitContainer" parent="V-MainContainer/Footer/FooterBackground/HSplitContainer/MarginProgressBar/V-ProgressBar"]
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="Label" type="Label" parent="V-MainContainer/Footer/FooterBackground/HSplitContainer/MarginProgressBar/V-ProgressBar/H-Progress"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme = ExtResource("4_cyb0a")
+text = "Progresso:
+"
+label_settings = SubResource("LabelSettings_4pxc4")
+
+[node name="ProgressBar" type="ProgressBar" parent="V-MainContainer/Footer/FooterBackground/HSplitContainer/MarginProgressBar/V-ProgressBar/H-Progress"]
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+size_flags_vertical = 4
+theme = SubResource("Theme_s8bkf")
+value = 25.0
+show_percentage = false
+
+[node name="MarginStatus" type="MarginContainer" parent="V-MainContainer/Footer/FooterBackground/HSplitContainer/MarginProgressBar/V-ProgressBar"]
+layout_mode = 2
+theme_override_constants/margin_left = 3
+theme_override_constants/margin_top = 5
+
+[node name="ContentStatus" type="Label" parent="V-MainContainer/Footer/FooterBackground/HSplitContainer/MarginProgressBar/V-ProgressBar/MarginStatus"]
+layout_mode = 2
+text = "Dowloading: Update3-x-3.content
+"
+label_settings = SubResource("LabelSettings_0xwy2")
+
+[node name="MarginButton" type="MarginContainer" parent="V-MainContainer/Footer/FooterBackground/HSplitContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="V-Buttons" type="VBoxContainer" parent="V-MainContainer/Footer/FooterBackground/HSplitContainer/MarginButton"]
+layout_mode = 2
+
+[node name="ButtonStart" type="Button" parent="V-MainContainer/Footer/FooterBackground/HSplitContainer/MarginButton/V-Buttons"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+theme = ExtResource("4_cyb0a")
+text = "Iniciar"
+
+[node name="ButtonCheck" type="Button" parent="V-MainContainer/Footer/FooterBackground/HSplitContainer/MarginButton/V-Buttons"]
+custom_minimum_size = Vector2(0, 28)
+layout_mode = 2
+theme = ExtResource("4_cyb0a")
+text = "Verificar Arquivos"
+
+[connection signal="gui_input" from="V-MainContainer/Header" to="." method="OnHeaderGuiInput"]
+[connection signal="pressed" from="V-MainContainer/Header/MarginContainer/HBoxContainer/Button-Minimize" to="." method="OnButtonMinimizePressed"]
+[connection signal="pressed" from="V-MainContainer/Header/MarginContainer/HBoxContainer/Button-Close" to="." method="OnButtonClosePressed"]

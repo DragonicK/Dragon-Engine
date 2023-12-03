@@ -1,0 +1,19 @@
+﻿Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dragon.Launcher", "Dragon.Launcher.csproj", "{40C8B659-6EFB-4B1C-8BDF-DFB6DBD1CC81}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+	Debug|Any CPU = Debug|Any CPU
+	ExportDebug|Any CPU = ExportDebug|Any CPU
+	ExportRelease|Any CPU = ExportRelease|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{40C8B659-6EFB-4B1C-8BDF-DFB6DBD1CC81}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{40C8B659-6EFB-4B1C-8BDF-DFB6DBD1CC81}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{40C8B659-6EFB-4B1C-8BDF-DFB6DBD1CC81}.ExportDebug|Any CPU.ActiveCfg = ExportDebug|Any CPU
+		{40C8B659-6EFB-4B1C-8BDF-DFB6DBD1CC81}.ExportDebug|Any CPU.Build.0 = ExportDebug|Any CPU
+		{40C8B659-6EFB-4B1C-8BDF-DFB6DBD1CC81}.ExportRelease|Any CPU.ActiveCfg = ExportRelease|Any CPU
+		{40C8B659-6EFB-4B1C-8BDF-DFB6DBD1CC81}.ExportRelease|Any CPU.Build.0 = ExportRelease|Any CPU
+	EndGlobalSection
+EndGlobal
